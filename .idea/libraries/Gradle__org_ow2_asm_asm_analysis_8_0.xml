@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: org.ow2.asm:asm-analysis:8.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm-analysis/8.0/57b12c6a9e14788f63ee3c6c0132fadcce1727d0/asm-analysis-8.0.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm-analysis/8.0/5de4c5db2e99e48e8f21cde63d0064fb4c3bba79/asm-analysis-8.0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm-analysis/8.0/4d2e2a74691b78de99d2b401bc1057cfd95d7cd/asm-analysis-8.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

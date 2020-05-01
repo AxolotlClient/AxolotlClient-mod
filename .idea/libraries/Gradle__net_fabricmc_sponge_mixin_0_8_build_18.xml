@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: net.fabricmc:sponge-mixin:0.8+build.18">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../.gradle/caches/modules-2/files-2.1/net.fabricmc/sponge-mixin/0.8+build.18/af077ad2845a00cde186fa2c99c4dd32bd2a2766/sponge-mixin-0.8+build.18.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../.gradle/caches/modules-2/files-2.1/net.fabricmc/sponge-mixin/0.8+build.18/a9f6c9248074b8c7b5fc56fadae07bf34ac3467c/sponge-mixin-0.8+build.18-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../.gradle/caches/modules-2/files-2.1/net.fabricmc/sponge-mixin/0.8+build.18/b472e22c7cf81f107587065e8424a8c81be91cb7/sponge-mixin-0.8+build.18-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

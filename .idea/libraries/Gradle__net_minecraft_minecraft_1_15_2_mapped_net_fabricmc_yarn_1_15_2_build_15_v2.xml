@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: net.minecraft:minecraft:1.15.2-mapped-net.fabricmc.yarn-1.15.2+build.15-v2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../.gradle/caches/fabric-loom/1.15.2-mapped-net.fabricmc.yarn-1.15.2+build.15-v2/minecraft-1.15.2-mapped-net.fabricmc.yarn-1.15.2+build.15-v2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../.gradle/caches/fabric-loom/1.15.2-mapped-net.fabricmc.yarn-1.15.2+build.15-v2/minecraft-1.15.2-mapped-net.fabricmc.yarn-1.15.2+build.15-v2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Gradle: net.fabricmc.fabric-api:fabric-renderer-indigo:0.2.22+203491ea38@net.fabricmc.yarn.1_15_2.1.15.2+build.15-v2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../ld-config/.gradle/loom-cache/remapped_mods/fabric-renderer-indigo-0.2.22+203491ea38@net.fabricmc.yarn.1_15_2.1.15.2+build.15-v2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

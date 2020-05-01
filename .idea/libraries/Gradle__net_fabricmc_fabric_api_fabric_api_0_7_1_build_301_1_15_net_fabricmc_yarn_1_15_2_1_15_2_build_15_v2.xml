@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Gradle: net.fabricmc.fabric-api:fabric-api:0.7.1+build.301-1.15@net.fabricmc.yarn.1_15_2.1.15.2+build.15-v2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/.gradle/loom-cache/remapped_mods/fabric-api-0.7.1+build.301-1.15@net.fabricmc.yarn.1_15_2.1.15.2+build.15-v2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

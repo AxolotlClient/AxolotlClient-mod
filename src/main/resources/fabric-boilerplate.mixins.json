@@ -3,9 +3,7 @@
 	"package": "net.logandark.boilerplate.mixin",
 	"compatibilityLevel": "JAVA_8",
 	"mixins": [],
-	"client": [
-		"ExampleMixin"
-	],
+	"client": ["AntiCoronavirus"],
 	"injectors": {
 		"defaultRequire": 1
 	}

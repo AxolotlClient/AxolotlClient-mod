@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: me.shedaniel.cloth:config-2:2.9.3@net.fabricmc.yarn.1_15_2.1.15.2+build.15-v2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../ld-config/.gradle/loom-cache/remapped_mods/config-2-2.9.3@net.fabricmc.yarn.1_15_2.1.15.2+build.15-v2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../ld-config/.gradle/loom-cache/remapped_mods/config-2-2.9.3@net.fabricmc.yarn.1_15_2.1.15.2+build.15-v2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

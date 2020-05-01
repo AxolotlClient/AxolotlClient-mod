@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id="ld-config" external.linked.project.path="$USER_HOME$/ld-config" external.root.project.path="$USER_HOME$/ld-config" external.system.id="GRADLE" external.system.module.group="net.logandark" external.system.module.version="1.0.0" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$USER_HOME$/ld-config">
+      <excludeFolder url="file://$USER_HOME$/ld-config/.gradle" />
+      <excludeFolder url="file://$USER_HOME$/ld-config/build" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
