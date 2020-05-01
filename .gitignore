@@ -6,7 +6,7 @@
 
 # fabric
 
-/run/
+/run/*
 !/run/options.txt
 /run_server/
 /minecraft/
