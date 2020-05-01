@@ -1,5 +1,5 @@
 version:2230
-autoJump:true
+autoJump:false
 autoSuggestions:true
 chatColors:true
 chatLinks:true
@@ -57,7 +57,7 @@ tutorialStep:movement
 mouseWheelSensitivity:1.0
 rawMouseInput:true
 glDebugVerbosity:1
-skipMultiplayerWarning:false
+skipMultiplayerWarning:true
 key_key.attack:key.mouse.left
 key_key.use:key.mouse.right
 key_key.forward:key.keyboard.w
@@ -71,11 +71,11 @@ key_key.drop:key.keyboard.q
 key_key.inventory:key.keyboard.e
 key_key.chat:key.keyboard.t
 key_key.playerlist:key.keyboard.tab
-key_key.pickItem:key.mouse.middle
+key_key.pickItem:key.keyboard.p
 key_key.command:key.keyboard.slash
 key_key.screenshot:key.keyboard.f2
 key_key.togglePerspective:key.keyboard.f5
-key_key.smoothCamera:key.keyboard.unknown
+key_key.smoothCamera:key.keyboard.f8
 key_key.fullscreen:key.keyboard.f11
 key_key.spectatorOutlines:key.keyboard.unknown
 key_key.swapHands:key.keyboard.f
