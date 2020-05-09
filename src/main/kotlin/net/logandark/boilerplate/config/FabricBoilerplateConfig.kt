@@ -2,16 +2,11 @@ package net.logandark.boilerplate.config
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonPrimitive
-import io.github.prospector.modmenu.api.ConfigScreenFactory
-import io.github.prospector.modmenu.api.ModMenuApi
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder
 import net.logandark.boilerplate.FabricBoilerplate
 import net.logandark.config.Config
 
-object FabricBoilerplateConfig : Config("fabric-boilerplate.json", 1), ModMenuApi {
-	override fun getModId() = FabricBoilerplate.modid
-	override fun getModConfigScreenFactory() = ConfigScreenFactory(::createConfigScreen)
-
+object FabricBoilerplateConfig : Config("fabric-boilerplate.json", 1) {
 	val example = add(
 		object : ConfigOption<Boolean>(
 			FabricBoilerplate.identifier("example"),

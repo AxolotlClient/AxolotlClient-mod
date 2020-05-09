@@ -31,7 +31,7 @@
 		"modmenu": [
 			{
 				"adapter": "kotlin",
-				"value": "net.logandark.boilerplate.config.FabricBoilerplateConfig"
+				"value": "net.logandark.boilerplate.config.FabricBoilerplateModMenu"
 			}
 		]
 	},
