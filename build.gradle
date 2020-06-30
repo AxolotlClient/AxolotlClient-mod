@@ -29,10 +29,10 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
 
 	// ModMenu
-	modImplementation "io.github.prospector:modmenu:1.10.1+build.30"
+	modImplementation "io.github.prospector:modmenu:1.12.2+build.17"
 
 	// config
-	modImplementation "me.shedaniel.cloth:config-2:2.13.4"
+	modImplementation "me.shedaniel.cloth:config-2:4.5.6"
 	modImplementation("net.logandark:ld-config:1.0.0") {
 		transitive = false
 	}

@@ -5,6 +5,7 @@ import com.google.gson.JsonPrimitive
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder
 import net.logandark.boilerplate.FabricBoilerplate
 import net.logandark.config.Config
+import net.minecraft.text.TranslatableText
 
 object FabricBoilerplateConfig : Config("fabric-boilerplate.json", 1) {
 	val example = add(
@@ -16,7 +17,7 @@ object FabricBoilerplateConfig : Config("fabric-boilerplate.json", 1) {
 		) {
 			override fun makeEntry(entryBuilder: ConfigEntryBuilder) =
 				entryBuilder
-					.startBooleanToggle(translationKey, get())
+					.startBooleanToggle(TranslatableText(translationKey), get())
 					.setDefaultValue(defaultValue)
 					.setSaveConsumer(this::set)
 					.build()

@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.mojang:datafixerupper:3.0.25">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../.gradle/caches/modules-2/files-2.1/com.mojang/datafixerupper/3.0.25/b3e9ae66d5a69b4aa43d9dbe1e2b2d1401251343/datafixerupper-3.0.25.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../.gradle/caches/modules-2/files-2.1/com.mojang/datafixerupper/3.0.25/9a4f9605319b6da180c7b50bf6da6551f95b2e6c/datafixerupper-3.0.25-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

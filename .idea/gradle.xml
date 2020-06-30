@@ -15,7 +15,6 @@
         <option name="testRunner" value="PLATFORM" />
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleJvm" value="DCEVM" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
@@ -24,9 +23,10 @@
         <option name="useQualifiedModuleNames" value="true" />
       </GradleProjectSettings>
       <GradleProjectSettings>
+        <option name="delegatedBuild" value="true" />
+        <option name="testRunner" value="GRADLE" />
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$/../ld-config" />
-        <option name="gradleJvm" value="DCEVM" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$/../ld-config" />
