@@ -1,37 +1,29 @@
 {
 	"schemaVersion": 1,
-	"id": "fabric-boilerplate",
+	"id": "branding",
 	"version": "${version}",
 
-	"name": "Fabric Boilerplate",
-	"description": "Congrats, you made it work!",
+	"name": "Branding",
+	"description": "Makes Minecraft think it's not modded",
 	"authors": ["LoganDark"],
 	"contact": {
-		"sources": "https://github.com/LoganDark/fabric-boilerplate",
-		"website": "https://github.com/LoganDark/fabric-boilerplate",
-		"issues": "https://github.com/LoganDark/fabric-boilerplate/issues"
+		"sources": "https://github.com/LoganDark/fabric-branding",
+		"website": "https://github.com/LoganDark/fabric-branding",
+		"issues": "https://github.com/LoganDark/fabric-branding/issues"
 	},
 
 	"custom": {},
 
 	"license": "GPLv3",
-	"icon": "assets/fabric-boilerplate/icon.png",
+	"icon": "assets/branding/icon.png",
 
 	"environment": "*",
-	"entrypoints": {
-		"main": [
-			{
-				"adapter": "kotlin",
-				"value": "net.logandark.boilerplate.FabricBoilerplate"
-			}
-		]
-	},
+	"entrypoints": {},
 
-	"mixins": ["fabric-boilerplate.mixins.json"],
+	"mixins": ["branding.mixins.json"],
 
 	"depends": {
-		"fabricloader": ">=0.8.8",
-		"fabric-language-kotlin": ">=1.3.71+build.1",
+		"fabricloader": "*",
 		"minecraft": "1.16.x"
 	},
 	"suggests": {}

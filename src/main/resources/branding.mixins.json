@@ -1,0 +1,15 @@
+{
+	"required": true,
+	"package": "net.logandark.branding.mixin",
+	"compatibilityLevel": "JAVA_8",
+	"mixins": ["MixinMinecraftServer"],
+	"client": [
+		"MixinClientBrandRetriever",
+		"MixinMinecraftClient",
+		"MixinIntegratedServer"
+	],
+	"server": [],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

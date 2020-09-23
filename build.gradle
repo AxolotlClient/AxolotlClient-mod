@@ -22,17 +22,6 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	// Fabric API. This is technically optional, but you probably want it anyway.
-	//modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	// add "fabric": "*" to "depends" in fabric.mod.json if this is added
-
-	modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
-
-	// ModMenu, requires Fabric API
-	//modImplementation("io.github.prospector:modmenu:1.14.6+build.31") {
-	//	exclude module: 'fabric-api' // includes bad Fabric API
-	//}
-
 	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
 	// You may need to force-disable transitiveness on them.
 }
