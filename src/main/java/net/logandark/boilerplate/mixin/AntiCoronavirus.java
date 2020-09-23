@@ -8,7 +8,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(SplashTextResourceSupplier.class)
-// Mixins HAVE to be written in java due to constraints in the mixin system.
 public abstract class AntiCoronavirus {
 	@Inject(
 		at = @At("HEAD"),

@@ -15,6 +15,27 @@
       <option name="HTML_SPACE_INSIDE_EMPTY_TAG" value="true" />
       <option name="HTML_DO_NOT_INDENT_CHILDREN_OF" value="" />
     </HTMLCodeStyleSettings>
+    <JSCodeStyleSettings version="0">
+      <option name="USE_SEMICOLON_AFTER_STATEMENT" value="false" />
+      <option name="FORCE_SEMICOLON_STYLE" value="true" />
+      <option name="SPACE_BEFORE_TYPE_COLON" value="true" />
+      <option name="SPACE_BEFORE_GENERATOR_MULT" value="true" />
+      <option name="SPACE_BEFORE_PROPERTY_COLON" value="true" />
+      <option name="ALIGN_OBJECT_PROPERTIES" value="2" />
+      <option name="ALIGN_VAR_STATEMENTS" value="1" />
+      <option name="SPACE_AFTER_DOTS_IN_REST_PARAMETER" value="true" />
+      <option name="USE_DOUBLE_QUOTES" value="false" />
+      <option name="FORCE_QUOTE_STYlE" value="true" />
+      <option name="ENFORCE_TRAILING_COMMA" value="Remove" />
+      <option name="VAR_DECLARATION_WRAP" value="2" />
+      <option name="OBJECT_LITERAL_WRAP" value="2" />
+      <option name="SPACES_WITHIN_OBJECT_LITERAL_BRACES" value="true" />
+      <option name="SPACES_WITHIN_IMPORTS" value="true" />
+      <option name="ALIGN_IMPORTS" value="true" />
+      <option name="CHAINED_CALL_DOT_ON_NEW_LINE" value="false" />
+      <option name="SPACES_WITHIN_INTERPOLATION_EXPRESSIONS" value="true" />
+      <option name="BLACKLIST_IMPORTS" value="rxjs,rxjs/Rx" />
+    </JSCodeStyleSettings>
     <JSON>
       <option name="ARRAY_WRAPPING" value="5" />
     </JSON>
@@ -24,11 +45,43 @@
       <option name="NAMES_COUNT_TO_USE_IMPORT_ON_DEMAND" value="9999" />
     </JavaCodeStyleSettings>
     <JetCodeStyleSettings>
+      <option name="PACKAGES_TO_USE_STAR_IMPORTS">
+        <value />
+      </option>
       <option name="ALIGN_IN_COLUMNS_CASE_BRANCH" value="true" />
       <option name="NAME_COUNT_TO_USE_STAR_IMPORT" value="2147483647" />
       <option name="NAME_COUNT_TO_USE_STAR_IMPORT_FOR_MEMBERS" value="2147483647" />
+      <option name="WRAP_ELVIS_EXPRESSIONS" value="0" />
       <option name="CODE_STYLE_DEFAULTS" value="KOTLIN_OFFICIAL" />
     </JetCodeStyleSettings>
+    <Properties>
+      <option name="SPACES_AROUND_KEY_VALUE_DELIMITER" value="true" />
+      <option name="KEEP_BLANK_LINES" value="true" />
+    </Properties>
+    <RsCodeStyleSettings>
+      <option name="PRESERVE_PUNCTUATION" value="true" />
+    </RsCodeStyleSettings>
+    <TypeScriptCodeStyleSettings version="0">
+      <option name="USE_SEMICOLON_AFTER_STATEMENT" value="false" />
+      <option name="FORCE_SEMICOLON_STYLE" value="true" />
+      <option name="SPACE_BEFORE_TYPE_COLON" value="true" />
+      <option name="SPACE_BEFORE_GENERATOR_MULT" value="true" />
+      <option name="SPACE_BEFORE_PROPERTY_COLON" value="true" />
+      <option name="ALIGN_OBJECT_PROPERTIES" value="2" />
+      <option name="ALIGN_VAR_STATEMENTS" value="1" />
+      <option name="SPACE_AFTER_DOTS_IN_REST_PARAMETER" value="true" />
+      <option name="USE_DOUBLE_QUOTES" value="false" />
+      <option name="FORCE_QUOTE_STYlE" value="true" />
+      <option name="ENFORCE_TRAILING_COMMA" value="Remove" />
+      <option name="VAR_DECLARATION_WRAP" value="2" />
+      <option name="OBJECT_LITERAL_WRAP" value="2" />
+      <option name="SPACES_WITHIN_OBJECT_LITERAL_BRACES" value="true" />
+      <option name="SPACES_WITHIN_IMPORTS" value="true" />
+      <option name="ALIGN_IMPORTS" value="true" />
+      <option name="CHAINED_CALL_DOT_ON_NEW_LINE" value="false" />
+      <option name="SPACES_WITHIN_INTERPOLATION_EXPRESSIONS" value="true" />
+      <option name="IMPORT_SORT_MODULE_NAME" value="true" />
+    </TypeScriptCodeStyleSettings>
     <XML>
       <option name="XML_SPACE_INSIDE_EMPTY_TAG" value="true" />
     </XML>
@@ -81,9 +134,7 @@
       <option name="KEEP_BLANK_LINES_IN_CODE" value="1" />
       <indentOptions>
         <option name="INDENT_SIZE" value="4" />
-        <option name="CONTINUATION_INDENT_SIZE" value="4" />
         <option name="USE_TAB_CHARACTER" value="true" />
-        <option name="SMART_TABS" value="true" />
       </indentOptions>
     </codeStyleSettings>
     <codeStyleSettings language="JavaScript">
@@ -148,6 +199,16 @@
         <option name="SMART_TABS" value="true" />
       </indentOptions>
     </codeStyleSettings>
+    <codeStyleSettings language="Rust">
+      <option name="KEEP_BLANK_LINES_IN_DECLARATIONS" value="1" />
+      <option name="KEEP_BLANK_LINES_IN_CODE" value="1" />
+      <option name="ALIGN_MULTILINE_PARAMETERS" value="false" />
+      <option name="ALIGN_MULTILINE_PARAMETERS_IN_CALLS" value="false" />
+      <indentOptions>
+        <option name="USE_TAB_CHARACTER" value="true" />
+        <option name="SMART_TABS" value="true" />
+      </indentOptions>
+    </codeStyleSettings>
     <codeStyleSettings language="SCSS">
       <indentOptions>
         <option name="INDENT_SIZE" value="4" />
@@ -198,7 +259,7 @@
     </codeStyleSettings>
     <codeStyleSettings language="kotlin">
       <option name="CODE_STYLE_DEFAULTS" value="KOTLIN_OFFICIAL" />
-      <option name="RIGHT_MARGIN" value="120" />
+      <option name="VARIABLE_ANNOTATION_WRAP" value="2" />
       <indentOptions>
         <option name="CONTINUATION_INDENT_SIZE" value="4" />
         <option name="USE_TAB_CHARACTER" value="true" />

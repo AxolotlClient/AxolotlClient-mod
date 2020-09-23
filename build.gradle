@@ -1,6 +1,5 @@
 plugins {
 	id 'fabric-loom'
-	id 'maven-publish'
 	id "org.jetbrains.kotlin.jvm"
 }
 
@@ -24,18 +23,15 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	//modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	// add "fabric": "*" to "depends" in fabric.mod.json if this is added
 
 	modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
 
-	// ModMenu
-	modImplementation "io.github.prospector:modmenu:1.12.2+build.17"
-
-	// config
-	modImplementation "me.shedaniel.cloth:config-2:4.5.6"
-	modImplementation("net.logandark:ld-config:1.0.0") {
-		transitive = false
-	}
+	// ModMenu, requires Fabric API
+	//modImplementation("io.github.prospector:modmenu:1.14.6+build.31") {
+	//	exclude module: 'fabric-api' // includes bad Fabric API
+	//}
 
 	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
 	// You may need to force-disable transitiveness on them.
@@ -65,34 +61,12 @@ tasks.withType(JavaCompile) {
 // if it is present.
 // If you remove this task, sources will not be generated.
 task sourcesJar(type: Jar, dependsOn: classes) {
-	classifier = "sources"
+	archiveClassifier.set("sources")
 	from sourceSets.main.allSource
 }
 
 jar {
 	from "LICENSE"
-}
-
-// configure the maven publication
-publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			// add all the jars that should be included when publishing to maven
-			artifact(remapJar) {
-				builtBy remapJar
-			}
-
-			artifact(sourcesJar) {
-				builtBy remapSourcesJar
-			}
-		}
-	}
-
-	// select the repositories you want to publish to
-	repositories {
-		// uncomment to publish to the local maven
-		// mavenLocal()
-	}
 }
 
 compileKotlin.kotlinOptions.jvmTarget = "1.8"

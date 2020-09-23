@@ -4,6 +4,7 @@
 	"compatibilityLevel": "JAVA_8",
 	"mixins": [],
 	"client": ["AntiCoronavirus"],
+	"server": [],
 	"injectors": {
 		"defaultRequire": 1
 	}
