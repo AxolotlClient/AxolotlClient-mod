@@ -18,8 +18,8 @@ public class MixinMinecraftClient {
 		return false;
 	}
 
-	@Redirect(
-		method = "method_1509", // "Is Modded" lambda in addSystemDetailsToCrashReport
+	/*@Redirect(
+		method = "addSystemDetailsToCrashReport(Lnet/minecraft/util/SystemDetails;Lnet/minecraft/client/MinecraftClient;Lnet/minecraft/client/resource/language/LanguageManager;Ljava/lang/String;Lnet/minecraft/client/option/GameOptions;)Lnet/minecraft/util/SystemDetails;", // "Is Modded" lambda in addSystemDetailsToCrashReport
 		at = @At(
 			value = "INVOKE",
 			target = "Ljava/lang/Class;getSigners()[Ljava/lang/Object;"
@@ -28,7 +28,7 @@ public class MixinMinecraftClient {
 	)
 	private static Object[] onGetSigners(Class aClass) {
 		return new Object[0]; // not null
-	}
+	}*/
 
 	@Redirect(
 		method = "<init>",

@@ -1,4 +1,4 @@
-version:2580
+version:2730
 autoJump:false
 autoSuggestions:true
 chatColors:true
@@ -18,6 +18,7 @@ fullscreen:false
 bobView:true
 toggleCrouch:false
 toggleSprint:false
+darkMojangStudiosBackground:false
 mouseSensitivity:0.5
 fov:0.0
 screenEffectScale:1.0
@@ -49,7 +50,7 @@ overrideWidth:0
 overrideHeight:0
 heldItemTooltips:true
 chatHeightFocused:1.0
-chatDelay: 0.0
+chatDelay:0.0
 chatHeightUnfocused:0.44366195797920227
 chatScale:1.0
 chatWidth:1.0
@@ -58,11 +59,14 @@ useNativeTransport:true
 mainHand:right
 attackIndicator:1
 narrator:0
-tutorialStep:movement
+tutorialStep:none
 mouseWheelSensitivity:1.0
 rawMouseInput:true
 glDebugVerbosity:1
 skipMultiplayerWarning:true
+hideMatchedNames:true
+joinedFirstServer:false
+hideBundleTutorial:false
 syncChunkWrites:false
 key_key.attack:key.mouse.left
 key_key.use:key.mouse.right
@@ -79,6 +83,7 @@ key_key.chat:key.keyboard.t
 key_key.playerlist:key.keyboard.tab
 key_key.pickItem:key.keyboard.p
 key_key.command:key.keyboard.slash
+key_key.socialInteractions:key.keyboard.p
 key_key.screenshot:key.keyboard.f2
 key_key.togglePerspective:key.keyboard.f5
 key_key.smoothCamera:key.keyboard.f8

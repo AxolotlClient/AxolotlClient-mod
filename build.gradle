@@ -1,10 +1,10 @@
 plugins {
-	id 'fabric-loom'
+	id 'fabric-loom' version '0.8-SNAPSHOT'
 	id "org.jetbrains.kotlin.jvm"
 }
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_16
+targetCompatibility = JavaVersion.VERSION_16
 
 archivesBaseName = project.archives_base_name
 version = project.mod_version
@@ -13,7 +13,7 @@ group = project.maven_group
 minecraft {}
 
 repositories {
-	maven { url = "http://maven.fabricmc.net/" }
+	maven { url = "https://maven.fabricmc.net/" }
 }
 
 dependencies {
@@ -29,13 +29,8 @@ dependencies {
 processResources {
 	inputs.property "version", project.version
 
-	from(sourceSets.main.resources.srcDirs) {
-		include "fabric.mod.json"
+	filesMatching("fabric.mod.json") {
 		expand "version": project.version
-	}
-
-	from(sourceSets.main.resources.srcDirs) {
-		exclude "fabric.mod.json"
 	}
 }
 
@@ -58,4 +53,4 @@ jar {
 	from "LICENSE"
 }
 
-compileKotlin.kotlinOptions.jvmTarget = "1.8"
+compileKotlin.kotlinOptions.jvmTarget = "16"
