@@ -1,12 +1,14 @@
 {
 	"required": true,
 	"package": "net.logandark.branding.mixin",
-	"compatibilityLevel": "JAVA_16",
-	"mixins": ["MixinMinecraftServer"],
+	"compatibilityLevel": "JAVA_17",
+	"mixins": [
+		"MixinMinecraftServer",
+		"MixinModStatus"
+	],
 	"client": [
 		"MixinClientBrandRetriever",
-		"MixinMinecraftClient",
-		"MixinIntegratedServer"
+		"MixinMinecraftClient"
 	],
 	"server": [],
 	"injectors": {

@@ -1,10 +1,9 @@
 plugins {
-	id 'fabric-loom' version '0.8-SNAPSHOT'
-	id "org.jetbrains.kotlin.jvm"
+	id 'fabric-loom' version '0.10.+'
 }
 
-sourceCompatibility = JavaVersion.VERSION_16
-targetCompatibility = JavaVersion.VERSION_16
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 archivesBaseName = project.archives_base_name
 version = project.mod_version
@@ -53,4 +52,3 @@ jar {
 	from "LICENSE"
 }
 
-compileKotlin.kotlinOptions.jvmTarget = "16"

@@ -10,25 +10,20 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(MinecraftClient.class)
 public class MixinMinecraftClient {
+
 	/**
-	 * @author LoganDark
+	 * @author meohreag
+	 * @reason Customize Window title for use in AxolotlClient
 	 */
 	@Overwrite
-	public boolean isModded() {
-		return false;
-	}
+	private String getWindowTitle() {
 
-	/*@Redirect(
-		method = "addSystemDetailsToCrashReport(Lnet/minecraft/util/SystemDetails;Lnet/minecraft/client/MinecraftClient;Lnet/minecraft/client/resource/language/LanguageManager;Ljava/lang/String;Lnet/minecraft/client/option/GameOptions;)Lnet/minecraft/util/SystemDetails;", // "Is Modded" lambda in addSystemDetailsToCrashReport
-		at = @At(
-			value = "INVOKE",
-			target = "Ljava/lang/Class;getSigners()[Ljava/lang/Object;"
-		),
-		remap = false
-	)
-	private static Object[] onGetSigners(Class aClass) {
-		return new Object[0]; // not null
-	}*/
+		StringBuilder stringBuilder = new StringBuilder("AxolotlClient");
+		stringBuilder.append(" ");
+		stringBuilder.append(SharedConstants.getGameVersion().getName());
+
+		return stringBuilder.toString();
+	}
 
 	@Redirect(
 		method = "<init>",
@@ -38,13 +33,7 @@ public class MixinMinecraftClient {
 		)
 	)
 	private String redirectVersion(RunArgs.Game game) {
-		//String version = game.version;
-
-		//if (version.equals("Fabric")) {
 		return SharedConstants.getGameVersion().getName();
-		//}
-
-		//return version;
 	}
 
 	@Redirect(
