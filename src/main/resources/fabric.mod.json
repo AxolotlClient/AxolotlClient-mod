@@ -26,5 +26,10 @@
 		"fabricloader": "*",
 		"minecraft": "1.18.x"
 	},
+	"conflicts": {
+		"wurst": "*",
+		"meteor-client": "*",
+		"optifabric": "*"
+	},
 	"suggests": {}
 }
