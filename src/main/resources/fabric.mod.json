@@ -1,23 +1,23 @@
 {
 	"schemaVersion": 1,
-	"id": "branding",
+	"id": "axolotlclient-branding",
 	"version": "${version}",
 
-	"name": "Branding",
-	"description": "Makes Minecraft think it's not modded",
-	"authors": ["LoganDark"],
+	"name": "AxolotlClient-Branding",
+	"description": "Minecraft Branding for AxolotlClient",
+	"authors": ["moehreag", "Formal Author: LoganDark"],
 	"contact": {
-		"sources": "https://github.com/LoganDark/fabric-branding",
-		"website": "https://github.com/LoganDark/fabric-branding",
-		"issues": "https://github.com/LoganDark/fabric-branding/issues"
+		"sources": "https://github.com/moehreag/AxolotlClient-branding",
+		"homepage": "https://github.com/moehreag/AxolotlClient",
+		"issues": "https://github.com/moehreag/AxolotlClient-branding/issues"
 	},
 
 	"custom": {},
 
-	"license": "GPLv3",
+	"license": "GPLv3+",
 	"icon": "assets/branding/icon.png",
 
-	"environment": "*",
+	"environment": "client",
 	"entrypoints": {},
 
 	"mixins": ["branding.mixins.json"],
