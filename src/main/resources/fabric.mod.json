@@ -12,7 +12,12 @@
 		"issues": "https://github.com/moehreag/AxolotlClient-branding/issues"
 	},
 
-	"custom": {},
+	"custom": {
+		"modmenu": {
+			"badges": [ "library" ],
+			"discord": "https://discord.gg/9Q3brQVQZN"
+		}
+	},
 
 	"license": "GPLv3+",
 	"icon": "assets/branding/icon.png",
