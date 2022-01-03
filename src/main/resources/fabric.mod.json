@@ -1,11 +1,11 @@
 {
 	"schemaVersion": 1,
-	"id": "axolotlclient-branding",
+	"id": "axolotlclient",
 	"version": "${version}",
 
 	"name": "AxolotlClient-Branding",
-	"description": "Minecraft Branding for AxolotlClient",
-	"authors": ["moehreag", "Formal Author: LoganDark"],
+	"description": "Special features of AxolotlClient",
+	"authors": ["moehreag", "Parts included by LoganDark"],
 	"contact": {
 		"sources": "https://github.com/moehreag/AxolotlClient-branding",
 		"homepage": "https://github.com/moehreag/AxolotlClient",
@@ -14,7 +14,6 @@
 
 	"custom": {
 		"modmenu": {
-			"badges": [ "library" ],
 			"discord": "https://discord.gg/9Q3brQVQZN"
 		}
 	},
@@ -23,7 +22,9 @@
 	"icon": "assets/branding/icon.png",
 
 	"environment": "client",
-	"entrypoints": {},
+	"entrypoints": {
+		"client": ["io.github.moehreag.branding.Axolotlclient"]
+	},
 
 	"mixins": ["branding.mixins.json"],
 

@@ -1,4 +1,4 @@
-package net.logandark.branding.mixin;
+package io.github.moehreag.branding.mixin;
 
 import net.minecraft.obfuscate.DontObfuscate;
 import net.minecraft.server.MinecraftServer;

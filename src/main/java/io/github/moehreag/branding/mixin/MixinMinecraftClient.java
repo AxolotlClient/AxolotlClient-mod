@@ -1,4 +1,4 @@
-package net.logandark.branding.mixin;
+package io.github.moehreag.branding.mixin;
 
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
