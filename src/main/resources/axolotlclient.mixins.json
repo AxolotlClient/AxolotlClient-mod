@@ -10,8 +10,9 @@
 	"client": [
 		"MixinClientBrandRetriever",
 		"MixinMinecraftClient",
-		"MixinPlayerEntity",
-		"MixinLivingEntityRenderer"
+		"MixinPlayerEntityRenderer",
+		"MixinLivingEntityRenderer",
+		"MixinMinecraftClientGame"
 	],
 	"server": [],
 	"injectors": {

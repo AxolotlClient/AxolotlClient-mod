@@ -1,10 +1,14 @@
 package io.github.moehreag.branding;
 
+import net.minecraft.client.MinecraftClient;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -63,11 +67,11 @@ public class NetworkHelper {
 
 
 
-	private void Get() throws Exception {
+	private boolean Get(UUID uuid) throws Exception {
 
 		System.out.println("*** Sending GET ***");
 
-		String url = "http://moehreag.duckdns.org";
+		String url = "http://moehreag.duckdns.org:5000/axolotlclient-api/"+uuid;
 		HttpsURLConnection client = getHttpsClient(url);
 
 		int responseCode = client.getResponseCode();
@@ -86,42 +90,44 @@ public class NetworkHelper {
 
 			System.out.println(response.toString());
 
+			if ("true" == response.substring(2)){
+				return true;
+			} else {return false;}
 		}
-
 	}
 
 
 
-	private void Post() throws Exception {
+	private void Put(UUID uuid, Boolean state) throws Exception {
 
-		System.out.println("*** Sending Http POST ***");
-		String url = "https://moehreag.duckdns.org";
-		String urlParameters = "param1=a&param2=b&param3=c";
-		byte[] postData = urlParameters.getBytes(StandardCharsets.UTF_8);
-		int postDataLength = postData.length;
+		System.out.println("*** Sending Http PUT ***");
+		String url = "https://moehreag.duckdns.org:5000/axolotlclient-api/"+uuid.toString();
+		String urlParameters = "data="+state;
+		byte[] putData = urlParameters.getBytes(StandardCharsets.UTF_8);
+		int putDataLength = putData.length;
 
 
 
 		HttpsURLConnection client = getHttpsClient(url);
-		client.setRequestMethod("POST");
+		client.setRequestMethod("PUT");
 		client.setDoOutput(true);
 		client.setInstanceFollowRedirects(false);
 		client.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 		client.setRequestProperty("charset", "utf-8");
-		client.setRequestProperty("Content-Length", Integer.toString(postDataLength));
+		client.setRequestProperty("Content-Length", Integer.toString(putDataLength));
 		client.setUseCaches(false);
 
 
 
 		try (OutputStream os = client.getOutputStream()) {
-			os.write(postData);
+			os.write(putData);
 		}
 
 
 
 		int responseCode = client.getResponseCode();
-		System.out.println("POST request to URL: " + url);
-		System.out.println("POST Parameters    : " + urlParameters);
+		System.out.println("PUT request to URL: " + url);
+		System.out.println("PUT Parameters    : " + urlParameters);
 		System.out.println("Response Code      : " + responseCode);
 
 
@@ -143,14 +149,28 @@ public class NetworkHelper {
 
 
 
-	public static void main(String[] args) throws Exception {
+	public static boolean getOnline(UUID uuid) throws Exception {
 
-		NetworkHelper obj = new NetworkHelper();
-
-		obj.Get();
-
-		obj.Post();
-
+		//NetworkHelper obj = new NetworkHelper();
+		return true;//obj.Get(uuid);
 	}
 
+	public static void setOnline(){
+		NetworkHelper obj = new NetworkHelper();
+		try {
+			obj.Put(MinecraftClient.getInstance().player.getUuid(), true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void setOffline(){
+		NetworkHelper obj = new NetworkHelper();
+		try {
+			assert MinecraftClient.getInstance().player != null;
+			//obj.Put(MinecraftClient.getInstance().player.getUuid(), false);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

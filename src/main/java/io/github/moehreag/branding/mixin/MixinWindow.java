@@ -11,6 +11,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinWindow {
 	@Inject(method = "close", at = @At("HEAD"))
 	private void AxolotlClientLogout(CallbackInfo ci){
-		NetworkHelper.logout();
+		NetworkHelper.setOffline();
 	}
 }

@@ -13,3 +13,4 @@ out/
 /run/*
 /run_server/*
 /minecraft/
+run/options.txt

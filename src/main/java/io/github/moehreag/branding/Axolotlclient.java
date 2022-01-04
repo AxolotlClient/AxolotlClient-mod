@@ -3,6 +3,7 @@ package io.github.moehreag.branding;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 import static com.google.gson.JsonParser.parseReader;
+
 import draylar.omegaconfig.OmegaConfig;
 import draylar.omegaconfiggui.OmegaConfigGui;
 import net.fabricmc.api.ClientModInitializer;
@@ -45,15 +46,18 @@ public class Axolotlclient implements ClientModInitializer {
 	}
 
 	public static boolean isUsingClient(UUID uuid){
+		assert MinecraftClient.getInstance().player != null;
 		if (uuid == MinecraftClient.getInstance().player.getUuid()){
 			return true;
-		} else if (){
-
+		} else {
+			try {
+				if (NetworkHelper.getOnline(uuid)){
+					return true;
+				}
+			} catch (Exception e) {}
 		}
 
 		return false;
 	}
-
-
 
 }

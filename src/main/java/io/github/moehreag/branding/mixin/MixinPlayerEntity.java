@@ -1,7 +1,6 @@
 package io.github.moehreag.branding.mixin;
 
 import com.mojang.authlib.GameProfile;
-import net.fabricmc.loader.api.FabricLoader;
 import io.github.moehreag.branding.Axolotlclient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.LiteralText;
