@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 public abstract class MixinMinecraftServer {
 	/**
 	 * @author LoganDark
+	 * @reason Change integrated server brand
 	 */
 	@Overwrite(remap = false)
 	@DontObfuscate

@@ -20,6 +20,7 @@ import java.util.UUID;
 public class Axolotlclient implements ClientModInitializer {
 
 	public static final AxolotlclientConfig CONFIG = OmegaConfig.register(AxolotlclientConfig.class);
+	public static String onlinePlayers = "";
 
 	@Override
 	public void onInitializeClient(){
@@ -50,14 +51,8 @@ public class Axolotlclient implements ClientModInitializer {
 		if (uuid == MinecraftClient.getInstance().player.getUuid()){
 			return true;
 		} else {
-			try {
-				if (NetworkHelper.getOnline(uuid)){
-					return true;
-				}
-			} catch (Exception e) {}
+			return NetworkHelper.getOnline(uuid);
 		}
-
-		return false;
 	}
 
 }

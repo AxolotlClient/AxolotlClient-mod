@@ -9,6 +9,7 @@ public class MixinModStatus {
 
 	/**
 	 * @author moehreag
+	 * @reason Remove mod signs because they're ugly
 	 */
 	@Overwrite
 	public boolean isModded(){

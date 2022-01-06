@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 public abstract class MixinClientBrandRetriever {
 	/**
 	 * @author moehreag
+	 * @reason Modify client brand
 	 */
 	@Overwrite(remap = false)
 	@DontObfuscate
