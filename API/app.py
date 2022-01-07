@@ -36,9 +36,9 @@ class UserManager(Resource):
         except Exception as _: uuid = None
 
         if not uuid:
-            users = User.query.all()
-            return jsonify(users_schema.dump(users))
-            #return jsonify({ 'Message': 'Failure! Must provide the user UUID' })
+            #users = User.query.all()
+            #return jsonify(users_schema.dump(users))
+            return jsonify({ 'Message': 'Failure! Must provide the user UUID' })
         try:
             user = User.query.get(uuid)
         except Exception as _:
