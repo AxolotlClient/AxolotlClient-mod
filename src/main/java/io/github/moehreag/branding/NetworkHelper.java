@@ -42,7 +42,8 @@ public class NetworkHelper {
 				}
 				System.out.println(response);
 				if (response.toString().contains("\"online\":true")){
-					Axolotlclient.onlinePlayers.concat(uuid.toString());
+					Axolotlclient.onlinePlayers  = Axolotlclient.onlinePlayers + " " + uuid.toString();
+					System.out.println(Axolotlclient.onlinePlayers);
 
 					return true;
 				}
@@ -53,7 +54,7 @@ public class NetworkHelper {
 			ex.printStackTrace();
 		}
 
-		Axolotlclient.otherPlayers.concat(uuid.toString());
+		Axolotlclient.otherPlayers = Axolotlclient.otherPlayers + " " + uuid.toString();
 		System.out.println("Other Players: "+Axolotlclient.otherPlayers);
 		return false;
 	}
