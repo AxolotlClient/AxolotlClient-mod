@@ -21,6 +21,7 @@ public class Axolotlclient implements ClientModInitializer {
 
 	public static final AxolotlclientConfig CONFIG = OmegaConfig.register(AxolotlclientConfig.class);
 	public static String onlinePlayers = "";
+	public static String otherPlayers = "";
 
 	@Override
 	public void onInitializeClient(){

@@ -11,9 +11,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
 
-#if not os.path.exists("users.db"):
-    #db.create_all()
-
 
 class User(db.Model):
     id = db.Column(db.Integer)
@@ -56,27 +53,7 @@ class UserManager(Resource):
         user = User(uuid, online)
         db.session.add(user)
         db.session.commit()
-        return jsonify({'Message':'Success! User {uuid} inserted.'})
-
-    #@staticmethod
-    #def put():
-        #try: id = request.args['id']
-        #except Exception as _: id = None
-        #if not id:
-            #return jsonify({ 'Message': 'Must provide the user ID' })
-        #user = User.query.get(id)
-
-        #uuid = request.json['uuid']
-        #online = request.json['online']
-
-        #user.uuid = uuid
-        #user.online = online
-
-
-        #db.session.commit()
-        #return jsonify({
-            #'Message': f'User {first_name} {last_name} altered.'
-        #})
+        return jsonify({'Message':'Success! User '+uuid+' inserted.'})
 
     @staticmethod
     def delete():
@@ -89,10 +66,10 @@ class UserManager(Resource):
         db.session.delete(user)
         db.session.commit()
 
-        return jsonify({'Message':'Success! User {uuid} deleted.'})
+        return jsonify({'Message':'Success! User '+uuid+' deleted.'})
 
 
-api.add_resource(UserManager, '/axolotlclient-api/')
+api.add_resource(UserManager, '/axolotlclient-api')
 
 
 if __name__ == '__main__':
