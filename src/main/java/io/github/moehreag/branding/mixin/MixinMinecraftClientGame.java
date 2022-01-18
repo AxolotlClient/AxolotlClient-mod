@@ -1,5 +1,6 @@
 package io.github.moehreag.branding.mixin;
 
+import io.github.moehreag.branding.Axolotlclient;
 import io.github.moehreag.branding.NetworkHelper;
 import net.minecraft.client.MinecraftClientGame;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,5 +19,6 @@ public class MixinMinecraftClientGame {
 	@Inject(method = "onLeaveGameSession", at=@At("HEAD"))
 	public void logout(CallbackInfo ci){
 		NetworkHelper.setOffline();
+		Axolotlclient.otherPlayers = "";
 	}
 }

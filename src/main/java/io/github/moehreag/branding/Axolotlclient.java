@@ -23,6 +23,9 @@ public class Axolotlclient implements ClientModInitializer {
 	public static String onlinePlayers = "";
 	public static String otherPlayers = "";
 
+	//Debugging...
+	//public static Integer tickTime = 0;
+
 	@Override
 	public void onInitializeClient(){
 		if(Files.exists(FabricLoader.getInstance().getConfigDir().resolve("Axolotlclient.json"))) recoverOldConfig();
@@ -55,5 +58,19 @@ public class Axolotlclient implements ClientModInitializer {
 			return NetworkHelper.getOnline(uuid);
 		}
 	}
+
+	//For Debugging purposes
+	/*
+	public static void TickClient(){
+
+		if (tickTime >=200){
+
+			System.out.println("Cleared Cache of Other Players!");
+			otherPlayers = "";
+			tickTime = 0;
+		}
+		tickTime++;
+
+	}*/
 
 }

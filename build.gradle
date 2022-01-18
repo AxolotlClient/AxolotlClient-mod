@@ -37,9 +37,6 @@ dependencies {
 	modImplementation("com.github.Draylar.omega-config:omega-config-gui:${project.omega_config_version}")
 	modRuntimeOnly ("com.terraformersmc:modmenu:${project.modmenu_version}")
 
-	// https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient
-	implementation 'org.apache.httpcomponents.client5:httpclient5:5.1.2'
-
 
 	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
 	// You may need to force-disable transitiveness on them.

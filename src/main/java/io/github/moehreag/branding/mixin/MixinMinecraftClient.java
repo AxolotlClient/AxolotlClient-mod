@@ -8,6 +8,12 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+/* Debugging...
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import io.github.moehreag.branding.Axolotlclient;
+*/
+
 @Mixin(MinecraftClient.class)
 public class MixinMinecraftClient {
 
@@ -18,11 +24,7 @@ public class MixinMinecraftClient {
 	@Overwrite
 	private String getWindowTitle() {
 
-		StringBuilder stringBuilder = new StringBuilder("AxolotlClient");
-		stringBuilder.append(" ");
-		stringBuilder.append(SharedConstants.getGameVersion().getName());
-
-		return stringBuilder.toString();
+		return "AxolotlClient" + " " +SharedConstants.getGameVersion().getName();
 	}
 
 	@Redirect(
@@ -56,4 +58,11 @@ public class MixinMinecraftClient {
 
 		return versionType;
 	}
+
+	/*
+	//For Debugging purposes
+	@Inject(method = "tick", at = @At("HEAD"))
+	public void TickClient(CallbackInfo ci){
+		Axolotlclient.TickClient();
+	}*/
 }

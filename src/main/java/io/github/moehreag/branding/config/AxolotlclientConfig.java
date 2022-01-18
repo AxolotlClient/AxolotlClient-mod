@@ -1,6 +1,5 @@
 package io.github.moehreag.branding.config;
 
-import com.sun.jna.StringArray;
 import draylar.omegaconfig.api.Config;
 
 public class AxolotlclientConfig implements Config {

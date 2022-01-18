@@ -10,7 +10,8 @@
 	"client": [
 		"MixinClientBrandRetriever",
 		"MixinMinecraftClient",
-		"MixinPlayerListHud",
+		"MixinPlayerListEntry",
+		"MixinPlayerEntity",
 		"MixinLivingEntityRenderer",
 		"MixinMinecraftClientGame"
 	],

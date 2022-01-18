@@ -13,14 +13,20 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PlayerEntity.class)
-public class MixinPlayerEntity {
+public abstract class MixinPlayerEntity {
 
 	@Shadow @Final private GameProfile gameProfile;
 
+
 	@Inject(method = "getName", at = @At("RETURN"), cancellable = true)
-	private void fakeName(CallbackInfoReturnable<Text> cir) {
-		if (Axolotlclient.CONFIG.showBadge && Axolotlclient.isUsingClient(this.gameProfile.getId())) {
-			cir.setReturnValue(new LiteralText("✵ " + this.gameProfile.getName()));
-		}
+	private void addBadge(CallbackInfoReturnable<Text> cir) {
+		try {
+			if (Axolotlclient.CONFIG.showBadge && Axolotlclient.isUsingClient(this.gameProfile.getId())) {
+				cir.setReturnValue(new LiteralText("✵ " + this.gameProfile.getName()));
+				cir.cancel();
+			}
+		} catch (Exception e){cir.setReturnValue(new LiteralText(this.gameProfile.getName()));}
 	}
+
+
 }

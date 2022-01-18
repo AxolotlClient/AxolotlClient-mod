@@ -33,6 +33,7 @@
 		"minecraft": "1.18.x"
 	},
 	"conflicts": {
+		"inertia": "*",
 		"wurst": "*",
 		"meteor-client": "*",
 		"optifabric": "*"
