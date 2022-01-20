@@ -1,12 +1,15 @@
 package io.github.moehreag.branding.mixin;
 
+import io.github.moehreag.branding.Axolotlclient;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /* Debugging...
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -59,10 +62,9 @@ public class MixinMinecraftClient {
 		return versionType;
 	}
 
-	/*
-	//For Debugging purposes
+
 	@Inject(method = "tick", at = @At("HEAD"))
 	public void TickClient(CallbackInfo ci){
 		Axolotlclient.TickClient();
-	}*/
+	}
 }

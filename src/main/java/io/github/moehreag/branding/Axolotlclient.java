@@ -23,8 +23,8 @@ public class Axolotlclient implements ClientModInitializer {
 	public static String onlinePlayers = "";
 	public static String otherPlayers = "";
 
-	//Debugging...
-	//public static Integer tickTime = 0;
+
+	public static Integer tickTime = 0;
 
 	@Override
 	public void onInitializeClient(){
@@ -59,18 +59,17 @@ public class Axolotlclient implements ClientModInitializer {
 		}
 	}
 
-	//For Debugging purposes
-	/*
+
 	public static void TickClient(){
 
-		if (tickTime >=200){
+		if (tickTime >=6000){
 
-			System.out.println("Cleared Cache of Other Players!");
+			//System.out.println("Cleared Cache of Other Players!");
 			otherPlayers = "";
 			tickTime = 0;
 		}
 		tickTime++;
 
-	}*/
+	}
 
 }

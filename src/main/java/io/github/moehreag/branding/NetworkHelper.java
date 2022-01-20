@@ -13,38 +13,54 @@ import java.util.concurrent.CompletableFuture;
 
 public class NetworkHelper {
 
+	public static int maxRequests = 3;
+	public static int requests;
+
 	public static boolean getOnline(UUID uuid){
 
 		if (Axolotlclient.onlinePlayers.contains(uuid.toString())){
 			return true;
 		} else if (Axolotlclient.otherPlayers.contains(uuid.toString())){
 			return false;
-		}else {return getUser(uuid);}
+		}else {
+			new Thread(() -> {
+				getUser(uuid);
+				return;
+			}).start();
+			boolean online = Axolotlclient.onlinePlayers.contains(uuid.toString()) ? true : false;
+			return online;
+		}
+			//return getUser(uuid);}
 	}
+
+
 
 	public static boolean getUser(UUID uuid){
 
-		try{
 
-			final HttpClient client = HttpClient.newBuilder().build();
-			HttpRequest request = HttpRequest.newBuilder()
-				.GET()
-				.uri(URI.create("https://moehreag.duckdns.org/axolotlclient-api/?uuid="+uuid))
-				.build();
+			try{
 
-			CompletableFuture<HttpResponse<String>> response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString());
 
-			String body = response.thenApply(HttpResponse::body).get();
+				final HttpClient client = HttpClient.newBuilder().build();
+				HttpRequest request = HttpRequest.newBuilder()
+					.GET()
+					.uri(URI.create("https://moehreag.duckdns.org/axolotlclient-api/?uuid="+uuid))
+					.build();
 
-			if (body.contains("true")){    //(response.toString().contains("true")){
-				Axolotlclient.onlinePlayers  = Axolotlclient.onlinePlayers + " " + uuid;
-				//System.out.println(Axolotlclient.onlinePlayers);
-				return true;
+				CompletableFuture<HttpResponse<String>> response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString());
+
+				String body = response.thenApplyAsync(HttpResponse::body).get();
+
+
+				if (body.contains("true")){    //(response.toString().contains("true")){
+					Axolotlclient.onlinePlayers  = Axolotlclient.onlinePlayers + " " + uuid;
+					//System.out.println(Axolotlclient.onlinePlayers);
+					return true;
+				}
+
+			} catch (Exception ex){
+				ex.printStackTrace();
 			}
-
-		} catch (Exception ex){
-			ex.printStackTrace();
-		}
 
 		Axolotlclient.otherPlayers = Axolotlclient.otherPlayers + " " + uuid.toString();
 		//System.out.println("Other Players: "+Axolotlclient.otherPlayers);
