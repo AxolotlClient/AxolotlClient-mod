@@ -23,7 +23,6 @@ repositories {
 		name = "TerraformersMC"
 		url = "https://maven.terraformersmc.com/releases/"
 	}
-	mavenCentral()
 }
 
 dependencies {

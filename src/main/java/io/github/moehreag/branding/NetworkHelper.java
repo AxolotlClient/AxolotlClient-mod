@@ -13,9 +13,6 @@ import java.util.concurrent.CompletableFuture;
 
 public class NetworkHelper {
 
-	public static int maxRequests = 3;
-	public static int requests;
-
 	public static boolean getOnline(UUID uuid){
 
 		if (Axolotlclient.onlinePlayers.contains(uuid.toString())){
@@ -27,15 +24,14 @@ public class NetworkHelper {
 				getUser(uuid);
 				return;
 			}).start();
-			boolean online = Axolotlclient.onlinePlayers.contains(uuid.toString()) ? true : false;
-			return online;
+			return Axolotlclient.onlinePlayers.contains(uuid.toString());
 		}
 			//return getUser(uuid);}
 	}
 
 
 
-	public static boolean getUser(UUID uuid){
+	public static void getUser(UUID uuid){
 
 
 			try{
@@ -55,7 +51,6 @@ public class NetworkHelper {
 				if (body.contains("true")){    //(response.toString().contains("true")){
 					Axolotlclient.onlinePlayers  = Axolotlclient.onlinePlayers + " " + uuid;
 					//System.out.println(Axolotlclient.onlinePlayers);
-					return true;
 				}
 
 			} catch (Exception ex){
@@ -64,7 +59,6 @@ public class NetworkHelper {
 
 		Axolotlclient.otherPlayers = Axolotlclient.otherPlayers + " " + uuid.toString();
 		//System.out.println("Other Players: "+Axolotlclient.otherPlayers);
-		return false;
 	}
 
 	public static void setOnline() {
