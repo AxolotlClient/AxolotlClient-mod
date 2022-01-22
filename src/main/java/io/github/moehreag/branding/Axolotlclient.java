@@ -43,6 +43,8 @@ public class Axolotlclient implements ClientModInitializer {
 			badmod = "Meteor Client";
 		} else if (FabricLoader.getInstance().isModLoaded("wurst")) {
 			badmod = "Wurst Client";
+		} else if (FabricLoader.getInstance().isModLoaded("baritone")) {
+			badmod = "Baritone";
 		} else {
 			OmegaConfigGui.registerConfigScreen(Axolotlclient.CONFIG);
 			showWarning = false;

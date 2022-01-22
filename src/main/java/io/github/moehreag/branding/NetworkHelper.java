@@ -20,16 +20,15 @@ public class NetworkHelper {
 			return false;
 		}else {
 			final Thread get = new Thread(() -> {
-				while(!Thread.currentThread().isInterrupted()) {
+				while (!Thread.interrupted()) {
 					getUser(uuid);
-				}});
+					break;
+				}
+				});
 			get.start();
-			get.interrupt();
 			return Axolotlclient.onlinePlayers.contains(uuid.toString());
 		}
 	}
-
-
 
 	public static void getUser(UUID uuid){
 
@@ -80,7 +79,7 @@ public class NetworkHelper {
 
 		try{
 			HttpRequest request = HttpRequest.newBuilder()
-				.uri(URI.create("https://moehreag.duckdns.org/axolotlclient-api?uuid="+uuid))
+				.uri(URI.create("https://moehreag.duckdns.org/axolotlclient-api/?uuid="+uuid))
 				.method("DELETE", HttpRequest.BodyPublishers.noBody())
 				.build();
 
