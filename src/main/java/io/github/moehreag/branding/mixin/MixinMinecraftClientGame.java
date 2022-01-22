@@ -13,12 +13,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinMinecraftClientGame {
 	@Inject(method = "onStartGameSession", at = @At("HEAD"))
 	public void startup(CallbackInfo ci){
-			NetworkHelper.setOnline();
+		if(!Axolotlclient.TitleDisclaimer){NetworkHelper.setOnline();}
 	}
 
 	@Inject(method = "onLeaveGameSession", at=@At("HEAD"))
 	public void logout(CallbackInfo ci){
-		NetworkHelper.setOffline();
-		Axolotlclient.otherPlayers = "";
+		if(!Axolotlclient.TitleDisclaimer) {
+			NetworkHelper.setOffline();
+			Axolotlclient.otherPlayers = "";
+		}
 	}
 }

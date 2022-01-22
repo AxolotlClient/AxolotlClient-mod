@@ -8,7 +8,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 
 public class NetworkHelper {
@@ -20,13 +19,14 @@ public class NetworkHelper {
 		} else if (Axolotlclient.otherPlayers.contains(uuid.toString())){
 			return false;
 		}else {
-			new Thread(() -> {
-				getUser(uuid);
-				return;
-			}).start();
+			final Thread get = new Thread(() -> {
+				while(!Thread.currentThread().isInterrupted()) {
+					getUser(uuid);
+				}});
+			get.start();
+			get.interrupt();
 			return Axolotlclient.onlinePlayers.contains(uuid.toString());
 		}
-			//return getUser(uuid);}
 	}
 
 
@@ -43,14 +43,10 @@ public class NetworkHelper {
 					.uri(URI.create("https://moehreag.duckdns.org/axolotlclient-api/?uuid="+uuid))
 					.build();
 
-				CompletableFuture<HttpResponse<String>> response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString());
+				HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-				String body = response.thenApplyAsync(HttpResponse::body).get();
-
-
-				if (body.contains("true")){    //(response.toString().contains("true")){
+				if (response.body().contains("true")){
 					Axolotlclient.onlinePlayers  = Axolotlclient.onlinePlayers + " " + uuid;
-					//System.out.println(Axolotlclient.onlinePlayers);
 				}
 
 			} catch (Exception ex){
@@ -58,7 +54,6 @@ public class NetworkHelper {
 			}
 
 		Axolotlclient.otherPlayers = Axolotlclient.otherPlayers + " " + uuid.toString();
-		//System.out.println("Other Players: "+Axolotlclient.otherPlayers);
 	}
 
 	public static void setOnline() {

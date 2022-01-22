@@ -8,6 +8,8 @@
 		"MixinWindow"
 	],
 	"client": [
+		"MixinCrashReport",
+		"MixinTitleScreen",
 		"MixinClientBrandRetriever",
 		"MixinMinecraftClient",
 		"MixinPlayerListHud",

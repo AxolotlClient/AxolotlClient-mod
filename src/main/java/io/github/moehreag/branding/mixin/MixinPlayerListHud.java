@@ -22,7 +22,7 @@ public abstract class MixinPlayerListHud {
 	@Inject(method = "getPlayerName", at = @At("RETURN"), cancellable = true)
 	public void addBadge(PlayerListEntry entry, CallbackInfoReturnable<Text> cir){
 
-		if (Axolotlclient.CONFIG.showBadge && Axolotlclient.isUsingClient(entry.getProfile().getId())){
+		if (!Axolotlclient.TitleDisclaimer && Axolotlclient.CONFIG.showBadge && Axolotlclient.isUsingClient(entry.getProfile().getId())){
 
 		cir.setReturnValue(entry.getDisplayName() != null ? new LiteralText("✵ ").append(applyGameModeFormatting(
 			entry,

@@ -3,7 +3,7 @@
 	"id": "axolotlclient",
 	"version": "${version}",
 
-	"name": "AxolotlClient-Branding",
+	"name": "AxolotlClient",
 	"description": "Special features of AxolotlClient",
 	"authors": ["moehreag", "Parts included by LoganDark"],
 	"contact": {
@@ -33,9 +33,6 @@
 		"minecraft": "1.18.x"
 	},
 	"conflicts": {
-		"inertia": "*",
-		"wurst": "*",
-		"meteor-client": "*",
 		"optifabric": "*"
 	},
 	"suggests": {}

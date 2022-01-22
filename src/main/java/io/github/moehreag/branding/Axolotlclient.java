@@ -24,12 +24,30 @@ public class Axolotlclient implements ClientModInitializer {
 	public static String otherPlayers = "";
 
 
+	public static boolean showWarning = true;
+	public static boolean TitleDisclaimer = false;
+	public static String badmod;
+
 	public static Integer tickTime = 0;
 
 	@Override
 	public void onInitializeClient(){
 		if(Files.exists(FabricLoader.getInstance().getConfigDir().resolve("Axolotlclient.json"))) recoverOldConfig();
-		OmegaConfigGui.registerConfigScreen(Axolotlclient.CONFIG);
+
+
+		if (FabricLoader.getInstance().isModLoaded("ares")){
+			badmod = "Ares Client";
+		} else if (FabricLoader.getInstance().isModLoaded("inertia")) {
+			badmod = "Inertia Client";
+		} else if (FabricLoader.getInstance().isModLoaded("meteor-client")) {
+			badmod = "Meteor Client";
+		} else if (FabricLoader.getInstance().isModLoaded("wurst")) {
+			badmod = "Wurst Client";
+		} else {
+			OmegaConfigGui.registerConfigScreen(Axolotlclient.CONFIG);
+			showWarning = false;
+			badmod = null;
+		}
 	}
 
 	public void recoverOldConfig() {

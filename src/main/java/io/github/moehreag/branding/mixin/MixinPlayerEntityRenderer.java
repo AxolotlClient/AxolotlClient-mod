@@ -21,10 +21,9 @@ public abstract class MixinPlayerEntityRenderer{
 
 		AbstractClientPlayerEntity player = args.get(0);
 
-		if(Axolotlclient.CONFIG.showBadge && Axolotlclient.isUsingClient(player.getUuid())){
 
-		if (Axolotlclient.CONFIG.showBadge && Axolotlclient.isUsingClient(abstractClientPlayerEntity.getUuid())) {
-			text = new LiteralText("✵ ").append(text);
+		if(!Axolotlclient.TitleDisclaimer && Axolotlclient.CONFIG.showBadge && Axolotlclient.isUsingClient(player.getUuid())){
+
 			args.set(1, new LiteralText("✵ ").append((Text) args.get(1)));
 		}
 	}
