@@ -1,6 +1,7 @@
-package io.github.moehreag.branding.mixin;
+package io.github.moehreag.axolotlclient.mixin;
 
-import io.github.moehreag.branding.NetworkHelper;
+import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.NetworkHelper;
 import net.minecraft.client.util.Window;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -11,6 +12,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinWindow {
 	@Inject(method = "close", at = @At("HEAD"))
 	private void AxolotlClientLogout(CallbackInfo ci){
-		NetworkHelper.setOffline();
+		if (Axolotlclient.features) NetworkHelper.setOffline();
 	}
 }

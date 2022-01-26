@@ -1,7 +1,7 @@
-package io.github.moehreag.branding.mixin;
+package io.github.moehreag.axolotlclient.mixin;
 
 
-import io.github.moehreag.branding.Axolotlclient;
+import io.github.moehreag.axolotlclient.Axolotlclient;
 import net.minecraft.util.crash.CrashReport;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,6 +18,10 @@ public class MixinCrashReport {
 			if (Axolotlclient.TitleDisclaimer){
 				builder.append("Unsupported Mods were found!\n");
 				builder.append("Suspected mod: ").append(Axolotlclient.badmod);
+			} else if (!Axolotlclient.features) {
+				builder.append("The mod is being used outside of Axolotlclient!\n");
+				builder.append("No support whatsoever will be given!");
+
 			} else {
 				builder.append("No unsupported Mods found…\n");
 				builder.append("No clear sign why his crashed…");

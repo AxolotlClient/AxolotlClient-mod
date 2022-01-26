@@ -1,39 +1,39 @@
-package io.github.moehreag.branding;
+package io.github.moehreag.axolotlclient;
 
-import com.google.gson.JsonObject;
-import com.google.gson.stream.JsonReader;
-import static com.google.gson.JsonParser.parseReader;
-
-import draylar.omegaconfig.OmegaConfig;
-import draylar.omegaconfiggui.OmegaConfigGui;
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
-import io.github.moehreag.branding.config.AxolotlclientConfig;
+import io.github.moehreag.axolotlclient.config.AxolotlclientConfig;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.util.Identifier;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.UUID;
 
 
 public class Axolotlclient implements ClientModInitializer {
 
-	public static final AxolotlclientConfig CONFIG = OmegaConfig.register(AxolotlclientConfig.class);
+	public static AxolotlclientConfig CONFIG;
 	public static String onlinePlayers = "";
 	public static String otherPlayers = "";
+
+	public static final Identifier FONT = new Identifier("axolotlclient", "default");
+
+	public static String badge = "✵";
 
 
 	public static boolean showWarning = true;
 	public static boolean TitleDisclaimer = false;
+	public static boolean features = false;
 	public static String badmod;
 
 	public static Integer tickTime = 0;
 
 	@Override
 	public void onInitializeClient(){
-		if(Files.exists(FabricLoader.getInstance().getConfigDir().resolve("Axolotlclient.json"))) recoverOldConfig();
 
+		System.out.println(Arrays.toString(FabricLoader.getInstance().getLaunchArguments(false)));
 
 		if (FabricLoader.getInstance().isModLoaded("ares")){
 			badmod = "Ares Client";
@@ -45,24 +45,16 @@ public class Axolotlclient implements ClientModInitializer {
 			badmod = "Wurst Client";
 		} else if (FabricLoader.getInstance().isModLoaded("baritone")) {
 			badmod = "Baritone";
-		} else {
-			OmegaConfigGui.registerConfigScreen(Axolotlclient.CONFIG);
+		} else if (FabricLoader.getInstance().isModLoaded("xaerominimap")) {
+			badmod = "Xaero's Minimap";
+		} else if (FabricLoader.getInstance().isDevelopmentEnvironment() ||
+			Arrays.toString(FabricLoader.getInstance().getLaunchArguments(false)).contains("Axolotlclient")){
+			features = true;
+
+			AutoConfig.register(AxolotlclientConfig.class, JanksonConfigSerializer::new);
+			CONFIG = AutoConfig.getConfigHolder(AxolotlclientConfig.class).getConfig();
 			showWarning = false;
 			badmod = null;
-		}
-	}
-
-	public void recoverOldConfig() {
-
-		try {
-			JsonReader reader = new JsonReader(new FileReader("config/Axolotlclient.json"));
-			JsonObject conf = parseReader(reader).getAsJsonObject();
-
-			CONFIG.showOwnNametag = conf.get("showOwnNametag").getAsBoolean();
-			CONFIG.showBadge = conf.get("showBadge").getAsBoolean();
-
-		} catch (IOException e) {
-			throw new RuntimeException("Can't read settings for Axolotlclient!");
 		}
 	}
 

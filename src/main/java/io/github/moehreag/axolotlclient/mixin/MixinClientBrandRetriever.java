@@ -1,4 +1,4 @@
-package io.github.moehreag.branding.mixin;
+package io.github.moehreag.axolotlclient.mixin;
 
 import net.minecraft.client.ClientBrandRetriever;
 import net.minecraft.obfuscate.DontObfuscate;

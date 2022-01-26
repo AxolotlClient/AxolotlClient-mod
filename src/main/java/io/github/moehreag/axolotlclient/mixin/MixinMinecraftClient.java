@@ -1,6 +1,6 @@
-package io.github.moehreag.branding.mixin;
+package io.github.moehreag.axolotlclient.mixin;
 
-import io.github.moehreag.branding.Axolotlclient;
+import io.github.moehreag.axolotlclient.Axolotlclient;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;

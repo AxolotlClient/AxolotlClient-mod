@@ -19,11 +19,12 @@
 	},
 
 	"license": "GPLv3+",
-	"icon": "assets/branding/icon.png",
+	"icon": "assets/axolotlclient/icon.png",
 
 	"environment": "client",
 	"entrypoints": {
-		"client": ["io.github.moehreag.branding.Axolotlclient"]
+		"client": ["io.github.moehreag.axolotlclient.Axolotlclient"],
+		"modmenu": ["io.github.moehreag.axolotlclient.config.ModMenuIntegration"]
 	},
 
 	"mixins": ["axolotlclient.mixins.json"],

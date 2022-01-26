@@ -1,4 +1,4 @@
-package io.github.moehreag.branding;
+package io.github.moehreag.axolotlclient;
 
 import net.minecraft.client.MinecraftClient;
 

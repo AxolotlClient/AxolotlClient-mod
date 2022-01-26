@@ -1,4 +1,4 @@
-package io.github.moehreag.branding.mixin;
+package io.github.moehreag.axolotlclient.mixin;
 
 import net.minecraft.util.ModStatus;
 import org.spongepowered.asm.mixin.Mixin;

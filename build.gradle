@@ -13,8 +13,7 @@ minecraft {}
 
 repositories {
 	maven { url = "https://maven.fabricmc.net/" }
-	maven { url 'https://jitpack.io' }
-	maven {
+		maven {
 		name = "Shedaniel's Maven"
 		url = "https://maven.shedaniel.me/"
 	}
@@ -33,11 +32,10 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	include("com.github.Draylar.omega-config:omega-config-gui:${project.omega_config_version}")
-	include("com.github.Draylar.omega-config:omega-config-base:${project.omega_config_version}")
-	modImplementation("com.github.Draylar.omega-config:omega-config-base:${project.omega_config_version}")
-	modImplementation("com.github.Draylar.omega-config:omega-config-gui:${project.omega_config_version}")
-	modRuntimeOnly ("com.terraformersmc:modmenu:${project.modmenu_version}")
+	modApi("me.shedaniel.cloth:cloth-config-fabric:6.1.50") {
+		exclude(group: "net.fabricmc.fabric-api")
+	}
+	modImplementation ("com.terraformersmc:modmenu:${project.modmenu_version}")
 
 
 	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
