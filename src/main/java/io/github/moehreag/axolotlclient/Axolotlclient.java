@@ -7,6 +7,8 @@ import net.fabricmc.loader.api.FabricLoader;
 import io.github.moehreag.axolotlclient.config.AxolotlclientConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;
 import java.util.UUID;
@@ -14,14 +16,14 @@ import java.util.UUID;
 
 public class Axolotlclient implements ClientModInitializer {
 
+	public static final Logger LOGGER = LogManager.getLogger("Axolotlclient");
+
 	public static AxolotlclientConfig CONFIG;
 	public static String onlinePlayers = "";
 	public static String otherPlayers = "";
 
 	public static final Identifier FONT = new Identifier("axolotlclient", "default");
-
 	public static String badge = "✵";
-
 
 	public static boolean showWarning = true;
 	public static boolean TitleDisclaimer = false;
@@ -32,8 +34,6 @@ public class Axolotlclient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient(){
-
-		System.out.println(Arrays.toString(FabricLoader.getInstance().getLaunchArguments(false)));
 
 		if (FabricLoader.getInstance().isModLoaded("ares")){
 			badmod = "Ares Client";
@@ -49,12 +49,17 @@ public class Axolotlclient implements ClientModInitializer {
 			badmod = "Xaero's Minimap";
 		} else if (FabricLoader.getInstance().isDevelopmentEnvironment() ||
 			Arrays.toString(FabricLoader.getInstance().getLaunchArguments(false)).contains("Axolotlclient")){
-			features = true;
 
 			AutoConfig.register(AxolotlclientConfig.class, JanksonConfigSerializer::new);
 			CONFIG = AutoConfig.getConfigHolder(AxolotlclientConfig.class).getConfig();
+
+			io.github.moehreag.axolotlclient.util.DiscordRPC.startup();
+
+			features = true;
 			showWarning = false;
 			badmod = null;
+
+			LOGGER.info("Axolotlclient Initialized");
 		}
 	}
 

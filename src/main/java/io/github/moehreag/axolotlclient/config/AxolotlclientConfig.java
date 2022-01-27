@@ -14,6 +14,8 @@ public class AxolotlclientConfig implements ConfigData {
 	public Badges badgeOptions = new Badges();
 	public static class Badges {
 
+		public boolean showChatBadge = true;
+
 		public boolean CustomBadge = false;
 
 

@@ -18,6 +18,8 @@ repositories {
 		url = "https://maven.shedaniel.me/"
 	}
 
+	maven { url 'https://jitpack.io' }
+
 	maven {
 		name = "TerraformersMC"
 		url = "https://maven.terraformersmc.com/releases/"
@@ -36,6 +38,8 @@ dependencies {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 	modImplementation ("com.terraformersmc:modmenu:${project.modmenu_version}")
+
+	implementation include('com.github.Vatuu:discord-rpc:1.6.2')
 
 
 	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
