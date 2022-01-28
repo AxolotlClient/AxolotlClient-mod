@@ -1,20 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <annotationProcessing>
-      <profile name="Gradle Imported" enabled="true">
-        <outputRelativeToContentRoot value="true" />
-        <option name="defaultObfuscationEnv" value="named:intermediary" />
-        <option name="inMapFileNamedIntermediary" value="$USER_HOME$/.gradle/caches/fabric-loom/1.18.1/net.fabricmc.yarn.1_18_1.1.18.1+build.12-v2/mappings.tiny" />
-        <option name="outMapFileNamedIntermediary" value="$PROJECT_DIR$/build/loom-cache/mixin-map-net.fabricmc.yarn.1_18_1.1.18.1+build.12-v2.1.tiny" />
-        <option name="outRefMapFile" value="$PROJECT_DIR$/build/classes/java/main/AxolotlClient-refmap.json" />
-        <processorPath useClasspath="false">
-          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.ea.async/ea-async/1.2.3/5296844868c1edade4e37a92d8a9aab671f42d5a/ea-async-1.2.3.jar" />
-          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.25/da76ca59f6a57ee3102f8f9bd9cee742973efa8a/slf4j-api-1.7.25.jar" />
-        </processorPath>
-        <module name="AxolotlClient-branding.main" />
-      </profile>
-    </annotationProcessing>
     <bytecodeTargetLevel target="17">
       <module name="ld-config.main" target="1.8" />
       <module name="ld-config.test" target="1.8" />

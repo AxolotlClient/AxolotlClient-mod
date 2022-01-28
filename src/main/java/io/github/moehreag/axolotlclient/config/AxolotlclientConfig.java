@@ -7,7 +7,15 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.Tooltip;
 
 @Config(name = "Axolotlclient")
 public class AxolotlclientConfig implements ConfigData {
-	public boolean showOwnNametag = false;
+
+	@ConfigEntry.Gui.CollapsibleObject
+	public nametagConf NametagConf = new nametagConf();
+	public static class nametagConf {
+		public boolean showOwnNametag = false;
+
+		public boolean useShadows = false;
+	}
+
 	public boolean showBadge = true;
 
 	@ConfigEntry.Gui.CollapsibleObject
@@ -25,5 +33,14 @@ public class AxolotlclientConfig implements ConfigData {
 
 	@Tooltip(count = 3)
 	public String OwnName = "";
+
+	@ConfigEntry.Gui.CollapsibleObject
+	public rpcConfig RPCConfig = new rpcConfig();
+	public static class rpcConfig {
+
+		public boolean enableRPC = true;
+
+		public boolean showActivity = true;
+	}
 
 }

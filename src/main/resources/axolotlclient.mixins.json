@@ -16,6 +16,7 @@
 		"MixinMinecraftClientGame",
 		"MixinPlayerEntityRenderer",
 		"MixinPlayerListHud",
+		"MixinEntityRenderer",
 		"MixinTitleScreen"
 	],
 	"server": [],

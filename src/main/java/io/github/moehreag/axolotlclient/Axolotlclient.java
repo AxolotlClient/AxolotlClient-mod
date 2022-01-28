@@ -53,7 +53,7 @@ public class Axolotlclient implements ClientModInitializer {
 			AutoConfig.register(AxolotlclientConfig.class, JanksonConfigSerializer::new);
 			CONFIG = AutoConfig.getConfigHolder(AxolotlclientConfig.class).getConfig();
 
-			io.github.moehreag.axolotlclient.util.DiscordRPC.startup();
+			if (CONFIG.RPCConfig.enableRPC) io.github.moehreag.axolotlclient.util.DiscordRPC.startup();
 
 			features = true;
 			showWarning = false;
@@ -64,7 +64,7 @@ public class Axolotlclient implements ClientModInitializer {
 	}
 
 	public static boolean showOwnNametag() {
-		return CONFIG.showOwnNametag;
+		return CONFIG.NametagConf.showOwnNametag;
 	}
 
 	public static boolean isUsingClient(UUID uuid){

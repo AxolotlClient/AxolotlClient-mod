@@ -1,6 +1,8 @@
 {
 	"text.autoconfig.Axolotlclient.title": "Axolotlclient Configuration",
-	"text.autoconfig.Axolotlclient.option.showOwnNametag": "Show your own Nametag",
+	"text.autoconfig.Axolotlclient.option.NametagConf": "Nametag Options",
+	"text.autoconfig.Axolotlclient.option.NametagConf.showOwnNametag": "Show your own Nametag",
+	"text.autoconfig.Axolotlclient.option.NametagConf.useShadows": "Force enable Shadows in Nametags",
 	"text.autoconfig.Axolotlclient.option.showBadge": "Show Player Badges",
 	"text.autoconfig.Axolotlclient.option.badgeOptions":"Badge Options",
 	"text.autoconfig.Axolotlclient.option.badgeOptions.showChatBadge": "Show Badges in Chat",
@@ -10,5 +12,8 @@
 	"text.autoconfig.Axolotlclient.option.OwnName": "Change your own name",
 	"text.autoconfig.Axolotlclient.option.OwnName.@Tooltip[0]": "Leave Empty for defeault!",
 	"text.autoconfig.Axolotlclient.option.OwnName.@Tooltip[1]" :"Only meant to be used as a 'NickHider'-solution (Chat doesn't work yet).",
-	"text.autoconfig.Axolotlclient.option.OwnName.@Tooltip[2]":"Also only visible to you."
+	"text.autoconfig.Axolotlclient.option.OwnName.@Tooltip[2]":"Also only visible to you.",
+	"text.autoconfig.Axolotlclient.option.RPCConfig": "RPC Options",
+	"text.autoconfig.Axolotlclient.option.RPCConfig.enableRPC": "Enable Discord RPC",
+	"text.autoconfig.Axolotlclient.option.RPCConfig.showActivity": "Show Activity in Discord"
 }
