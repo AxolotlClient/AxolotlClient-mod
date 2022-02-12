@@ -23,6 +23,8 @@ public class MixinChatHud {
 
 		LiteralText editedMessage = new LiteralText("");
 
+		if(!message.getString().contains("<")){return message;}
+
 		String sender = message.getString().split(">")[0].split("<")[1];
 
 		if (Objects.equals(sender, MinecraftClient.getInstance().player.getName().getString())){

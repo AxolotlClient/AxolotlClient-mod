@@ -28,18 +28,12 @@ public abstract class MixinPlayerEntityRenderer{
 		AbstractClientPlayerEntity player = args.get(0);
 
 		if(Axolotlclient.features && Axolotlclient.CONFIG.showBadge && Axolotlclient.isUsingClient(player.getUuid())){
-			if (Axolotlclient.CONFIG.hideOwnName && player.getUuid() == (MinecraftClient.getInstance().player != null ? MinecraftClient.getInstance().player.getUuid() : null)){
+			if (player.getUuid() == (MinecraftClient.getInstance().player != null ? MinecraftClient.getInstance().player.getUuid() : null)){
 
-				args.set(1, new LiteralText(Axolotlclient.CONFIG.badgeOptions.CustomBadge ? Axolotlclient.CONFIG.badgeOptions.badgeText + " ":Axolotlclient.badge + " ").setStyle(Style.EMPTY.withFont(Axolotlclient.FONT)).append(new LiteralText(Axolotlclient.CONFIG.hideOwnName ? Axolotlclient.CONFIG.OwnName: args.get(1)).setStyle(((Text) args.get(1)).shallowCopy().getStyle().withFont(Axolotlclient.FONT))));
-
+				args.set(1, new LiteralText(Axolotlclient.CONFIG.badgeOptions.CustomBadge ? Axolotlclient.CONFIG.badgeOptions.badgeText + " ":Axolotlclient.badge + " ").setStyle(Style.EMPTY.withFont(Axolotlclient.FONT)).append(Axolotlclient.CONFIG.hideOwnName ? new LiteralText(Axolotlclient.CONFIG.OwnName): args.get(1)).setStyle(((Text) args.get(1)).shallowCopy().getStyle().withFont(Axolotlclient.FONT)));
 
 			} else {
-
-				System.out.println((Text) args.get(1));
-
 				args.set(1, (Axolotlclient.CONFIG.badgeOptions.CustomBadge ? new LiteralText(Axolotlclient.CONFIG.badgeOptions.badgeText+ " ").append(Axolotlclient.CONFIG.hideOtherNames ? new LiteralText(Axolotlclient.CONFIG.otherName) : args.get(1)):badgesText));
-
-
 			}
 		}
 	}
