@@ -42,6 +42,8 @@ public class Util {
 		if(!Objects.equals(lastgame, game) && game.equals("")) game = lastgame;
 		else lastgame = game;
 
+		if (game==null){game="";}
+
 		return game;
 	}
 

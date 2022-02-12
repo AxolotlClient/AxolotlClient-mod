@@ -13,17 +13,20 @@ ma = Marshmallow(app)
 
 
 class User(db.Model):
-    id = db.Column(db.Integer)
     uuid = db.Column(db.String(32), unique=True, primary_key = True)
     online = db.Column(db.Boolean())
+    friends = db.relationship('Friend', backref='user')
 
     def __init__(self, uuid, online):
         self.uuid = uuid
         self.online = online
 
+class Friend(db.Model):
+    uuid = db.Column(db.String(32), db.ForeignKey('user.uuid'), primary_key = True, unique = True)
+
 class UserSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'uuid', 'online')
+        fields = ('id', 'uuid', 'online', 'friends')
 
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
@@ -36,7 +39,8 @@ class UserManager(Resource):
         except Exception as _: uuid = None
 
         if not uuid:
-            #users = User.query.all()
+            users = User.query.all()
+            print(users_schema.dump(users))
             #return jsonify(users_schema.dump(users))
             return jsonify({ 'Message': 'Failure! Must provide the user UUID' })
         try:

@@ -31,8 +31,14 @@ public class AxolotlclientConfig implements ConfigData {
 		public String badgeText = "";
 	}
 
+	public boolean hideOwnName = false;
 	@Tooltip(count = 3)
 	public String OwnName = "";
+
+	public boolean hideOtherNames = false;
+	public String otherName= "Player";
+
+	public boolean fullBed = false;
 
 	@ConfigEntry.Gui.CollapsibleObject
 	public rpcConfig RPCConfig = new rpcConfig();

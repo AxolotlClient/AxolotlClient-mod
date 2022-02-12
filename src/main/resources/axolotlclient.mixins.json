@@ -10,14 +10,15 @@
 	"client": [
 		"MixinClientBrandRetriever",
 		"MixinCrashReport",
-		"MixinInGameHud",
+		"MixinChatHud",
 		"MixinLivingEntityRenderer",
 		"MixinMinecraftClient",
 		"MixinMinecraftClientGame",
 		"MixinPlayerEntityRenderer",
 		"MixinPlayerListHud",
 		"MixinEntityRenderer",
-		"MixinTitleScreen"
+		"MixinTitleScreen",
+		"MixinBedBlock"
 	],
 	"server": [],
 	"injectors": {

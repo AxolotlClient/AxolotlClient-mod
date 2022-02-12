@@ -7,8 +7,8 @@ import net.fabricmc.loader.api.FabricLoader;
 import io.github.moehreag.axolotlclient.config.AxolotlclientConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.UUID;
@@ -16,7 +16,7 @@ import java.util.UUID;
 
 public class Axolotlclient implements ClientModInitializer {
 
-	public static final Logger LOGGER = LogManager.getLogger("Axolotlclient");
+	public static final Logger LOGGER = LoggerFactory.getLogger("Axolotlclient");
 
 	public static AxolotlclientConfig CONFIG;
 	public static String onlinePlayers = "";

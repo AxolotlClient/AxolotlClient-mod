@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '0.10.+'
+	id 'fabric-loom' version '0.11.+'
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -8,8 +8,6 @@ targetCompatibility = JavaVersion.VERSION_17
 archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
-
-minecraft {}
 
 repositories {
 	maven { url = "https://maven.fabricmc.net/" }
