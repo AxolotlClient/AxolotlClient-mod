@@ -29,22 +29,20 @@ public abstract class MixinPlayerListHud {
 
 		if (!Util.getGame().toLowerCase().contains("skyblock")) {
 
-			if (Axolotlclient.features && Axolotlclient.CONFIG.showBadge && Axolotlclient.isUsingClient(entry.getProfile().getId())) {
+			if (Axolotlclient.features && Axolotlclient.CONFIG.badgeOptions.showBadge && Axolotlclient.isUsingClient(entry.getProfile().getId())) {
 
 				assert MinecraftClient.getInstance().player != null;
-
-				//System.out.println(entry.getProfile().getId());
 
 				if(Objects.equals(entry.getProfile().getName(), MinecraftClient.getInstance().player.getName().asString())){
 					cir.setReturnValue(new LiteralText(Axolotlclient.CONFIG.badgeOptions.CustomBadge ?
 						Axolotlclient.CONFIG.badgeOptions.badgeText + " " :
 						Axolotlclient.badge).setStyle(Style.EMPTY.withFont(Axolotlclient.FONT)).append(
 						entry.getDisplayName() != null ?
-							this.applyGameModeFormatting(entry, (Axolotlclient.CONFIG.hideOwnName ?
-								new LiteralText(Axolotlclient.CONFIG.OwnName).shallowCopy() :
+							this.applyGameModeFormatting(entry, (Axolotlclient.CONFIG.NickHider.hideOwnName ?
+								new LiteralText(Axolotlclient.CONFIG.NickHider.OwnName).shallowCopy() :
 								entry.getDisplayName().shallowCopy())) :
-							this.applyGameModeFormatting(entry, Team.decorateName(entry.getScoreboardTeam(), new LiteralText(Axolotlclient.CONFIG.hideOwnName ?
-								Axolotlclient.CONFIG.OwnName :
+							this.applyGameModeFormatting(entry, Team.decorateName(entry.getScoreboardTeam(), new LiteralText(Axolotlclient.CONFIG.NickHider.hideOwnName ?
+								Axolotlclient.CONFIG.NickHider.OwnName :
 								entry.getProfile().getName())))));
 				} else {
 
@@ -52,14 +50,18 @@ public abstract class MixinPlayerListHud {
 						Axolotlclient.CONFIG.badgeOptions.badgeText + " " :
 						Axolotlclient.badge).setStyle(Style.EMPTY.withFont(Axolotlclient.FONT)).append(
 						entry.getDisplayName() != null ?
-							this.applyGameModeFormatting(entry, (Axolotlclient.CONFIG.hideOtherNames ?
-								new LiteralText(Axolotlclient.CONFIG.otherName).shallowCopy() :
+							this.applyGameModeFormatting(entry, (Axolotlclient.CONFIG.NickHider.hideOtherNames ?
+								new LiteralText(Axolotlclient.CONFIG.NickHider.otherName).shallowCopy() :
 								entry.getDisplayName().shallowCopy())) :
-							this.applyGameModeFormatting(entry, Team.decorateName(entry.getScoreboardTeam(), new LiteralText(Axolotlclient.CONFIG.hideOtherNames ?
-								Axolotlclient.CONFIG.otherName :
+							this.applyGameModeFormatting(entry, Team.decorateName(entry.getScoreboardTeam(), new LiteralText(Axolotlclient.CONFIG.NickHider.hideOtherNames ?
+								Axolotlclient.CONFIG.NickHider.otherName :
 								entry.getProfile().getName())))));
 				}
+
+
 				cir.cancel();
+			} else if(Axolotlclient.CONFIG.NickHider.hideOtherNames){
+				cir.setReturnValue(new LiteralText(Axolotlclient.CONFIG.NickHider.otherName));
 			}
 		}
 	}

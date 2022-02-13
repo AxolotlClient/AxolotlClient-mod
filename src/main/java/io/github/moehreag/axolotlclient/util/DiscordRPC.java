@@ -24,19 +24,22 @@ public class DiscordRPC {
 
 	public static void update(){
 
+		if(Axolotlclient.CONFIG!=null && !Axolotlclient.CONFIG.RPCConfig.enableRPC){shutdown();}
+
 		if (MinecraftClient.getInstance().world == null){
 
 
 			menu();
 		} else {
 
+			assert Axolotlclient.CONFIG != null;
 			if (Axolotlclient.CONFIG.RPCConfig.enableRPC) inGame();
 		}
 	}
 
 	public static void menu(){
 
-		if (Axolotlclient.CONFIG.RPCConfig.enableRPC) {
+		if (Axolotlclient.CONFIG!=null &&  Axolotlclient.CONFIG.RPCConfig.enableRPC) {
 			if (!Objects.equals(rpcstate, "menu"))
 				time = System.currentTimeMillis() / 1000L;
 

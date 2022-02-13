@@ -22,15 +22,19 @@ public class MixinChatHud {
 		LiteralText name = new LiteralText("");
 
 		LiteralText editedMessage = new LiteralText("");
+		String sender;
 
-		if(!message.getString().contains("<")){return message;}
-
-		String sender = message.getString().split(">")[0].split("<")[1];
+		if (message.getString().contains(">")){
+			sender = message.getString().split(">")[0].split("<")[1];
+		} else if (message.getString().contains(":")){
+			sender = message.getString().split(":")[0];
+			if (sender.contains(" "))return message;
+		} else {return message;}
 
 		if (Objects.equals(sender, MinecraftClient.getInstance().player.getName().getString())){
-			name.append(Axolotlclient.CONFIG.hideOwnName ? new LiteralText(Axolotlclient.CONFIG.OwnName): MinecraftClient.getInstance().player.getName());
+			name.append(Axolotlclient.CONFIG.NickHider.hideOwnName ? new LiteralText(Axolotlclient.CONFIG.NickHider.OwnName): MinecraftClient.getInstance().player.getName());
 		} else {
-			name.append(new LiteralText(Axolotlclient.CONFIG.hideOtherNames ? Axolotlclient.CONFIG.otherName: sender));
+			name.append(new LiteralText(Axolotlclient.CONFIG.NickHider.hideOtherNames ? Axolotlclient.CONFIG.NickHider.otherName: sender));
 		}
 
 			String[] msg = message.getString().split(message.getString().split(">")[0].split("<")[1]);

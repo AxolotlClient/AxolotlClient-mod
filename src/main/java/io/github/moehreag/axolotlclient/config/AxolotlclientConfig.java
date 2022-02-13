@@ -8,7 +8,8 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.Tooltip;
 @Config(name = "Axolotlclient")
 public class AxolotlclientConfig implements ConfigData {
 
-	@ConfigEntry.Gui.CollapsibleObject
+	@ConfigEntry.Category("Nametag Options")
+	@ConfigEntry.Gui.TransitiveObject
 	public nametagConf NametagConf = new nametagConf();
 	public static class nametagConf {
 		public boolean showOwnNametag = false;
@@ -16,11 +17,13 @@ public class AxolotlclientConfig implements ConfigData {
 		public boolean useShadows = false;
 	}
 
-	public boolean showBadge = true;
 
-	@ConfigEntry.Gui.CollapsibleObject
+
+	@ConfigEntry.Category("Badge Options")
+	@ConfigEntry.Gui.TransitiveObject
 	public Badges badgeOptions = new Badges();
 	public static class Badges {
+		public boolean showBadge = true;
 
 		public boolean showChatBadge = true;
 
@@ -31,16 +34,25 @@ public class AxolotlclientConfig implements ConfigData {
 		public String badgeText = "";
 	}
 
-	public boolean hideOwnName = false;
-	@Tooltip(count = 3)
-	public String OwnName = "";
+	@ConfigEntry.Category("NickHider Options")
+	@ConfigEntry.Gui.TransitiveObject
+	public nh NickHider = new nh();
+	public static class nh {
+		public boolean hideOwnName = false;
+		public String OwnName = "";
 
-	public boolean hideOtherNames = false;
-	public String otherName= "Player";
+		public boolean hideOtherNames = false;
+		public String otherName = "Player";
 
+		public boolean hideOwnSkin = false;
+		public boolean hideOtherSkins = false;
+
+	}
 	public boolean fullBed = false;
 
-	@ConfigEntry.Gui.CollapsibleObject
+
+	@ConfigEntry.Category("Discord RPC")
+	@ConfigEntry.Gui.TransitiveObject
 	public rpcConfig RPCConfig = new rpcConfig();
 	public static class rpcConfig {
 
