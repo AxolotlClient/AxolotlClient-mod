@@ -19,8 +19,8 @@
 	"text.autoconfig.Axolotlclient.option.NickHider.hideOwnSkin": "Hide your skin",
 	"text.autoconfig.Axolotlclient.option.NickHider.hideOtherSkins": "Hide other Skins",
 
-
-	"text.autoconfig.Axolotlclient.option.fullBed": "Use a full Hitbox for Beds (like 1.8)",
+	"text.autoconfig.Axolotlclient.category.Other": "Other Options",
+	"text.autoconfig.Axolotlclient.option.General.fullBed": "Use a full Hitbox for Beds (like 1.8)",
 
 
 	"text.autoconfig.Axolotlclient.category.Discord RPC": "Discord RPC Options",

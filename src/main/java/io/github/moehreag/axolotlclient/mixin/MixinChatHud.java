@@ -45,9 +45,10 @@ public class MixinChatHud {
 			String[] msg = message.getString().split(sender);
 			for (String s : msg) {
 				editedMessage.append(s);
+				/*
 				if (Objects.equals(s, msg[0]) && Axolotlclient.CONFIG.badgeOptions.showChatBadge && Axolotlclient.onlinePlayers.contains(sender)) {
 					editedMessage.append(Axolotlclient.badge);
-				}
+				}*/
 				if (!Objects.equals(s, msg[msg.length - 1])) {
 					editedMessage.append(name);
 				}
@@ -55,7 +56,7 @@ public class MixinChatHud {
 
 
 		if (!editedMessage.getString().split(":")[0].contains("<") && editedMessage.getString().split(":")[0].contains("] " ) && !editedMessage.getString().contains("[NPC]")){
-			editedMessage = new LiteralText(editedMessage.getString().split("] ")[1]);
+			editedMessage = new LiteralText(editedMessage.getString().split("] ")[editedMessage.getString().split("] ").length-1]);
 		}
 
 

@@ -25,7 +25,7 @@ public class AxolotlclientConfig implements ConfigData {
 	public static class Badges {
 		public boolean showBadge = true;
 
-		public boolean showChatBadge = true;
+		//public boolean showChatBadge = true;
 
 		public boolean CustomBadge = false;
 
@@ -48,7 +48,13 @@ public class AxolotlclientConfig implements ConfigData {
 		public boolean hideOtherSkins = false;
 
 	}
-	public boolean fullBed = false;
+
+	@ConfigEntry.Category("Other")
+	@ConfigEntry.Gui.TransitiveObject
+	public other General = new other();
+	public static class other {
+		public boolean fullBed = false;
+	}
 
 
 	@ConfigEntry.Category("Discord RPC")

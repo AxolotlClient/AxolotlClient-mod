@@ -19,7 +19,7 @@ public class OldBed {
 	protected static final VoxelShape WEST_SHAPE;
 
 	public static VoxelShape getShape(Direction direction) {
-		if (!Axolotlclient.CONFIG.fullBed)
+		if (!Axolotlclient.CONFIG.General.fullBed)
 			return null;
 
 		return switch (direction) {
@@ -41,10 +41,10 @@ public class OldBed {
 		LEG_2_SHAPE = Block.createCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 3.0D, 16.0D);
 		LEG_3_SHAPE = Block.createCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 3.0D, 16.0D);
 		LEG_4_SHAPE = Block.createCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 3.0D, 16.0D);
-		NORTH_SHAPE = VoxelShapes.union(TOP_SHAPE, new VoxelShape[]{LEG_1_SHAPE, LEG_3_SHAPE});
-		SOUTH_SHAPE = VoxelShapes.union(TOP_SHAPE, new VoxelShape[]{LEG_2_SHAPE, LEG_4_SHAPE});
-		WEST_SHAPE = VoxelShapes.union(TOP_SHAPE, new VoxelShape[]{LEG_1_SHAPE, LEG_2_SHAPE});
-		EAST_SHAPE = VoxelShapes.union(TOP_SHAPE, new VoxelShape[]{LEG_3_SHAPE, LEG_4_SHAPE});
+		NORTH_SHAPE = VoxelShapes.union(TOP_SHAPE, LEG_1_SHAPE, LEG_3_SHAPE);
+		SOUTH_SHAPE = VoxelShapes.union(TOP_SHAPE, LEG_2_SHAPE, LEG_4_SHAPE);
+		WEST_SHAPE = VoxelShapes.union(TOP_SHAPE, LEG_1_SHAPE, LEG_2_SHAPE);
+		EAST_SHAPE = VoxelShapes.union(TOP_SHAPE, LEG_3_SHAPE, LEG_4_SHAPE);
 	}
 
 
