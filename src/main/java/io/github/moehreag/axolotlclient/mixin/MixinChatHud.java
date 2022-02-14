@@ -37,9 +37,9 @@ public class MixinChatHud {
 			} else {return message;}
 
 			if (Objects.equals(sender, MinecraftClient.getInstance().player.getName().getString())) {
-				name.append(Axolotlclient.CONFIG.NickHider.hideOwnName ? new LiteralText(Axolotlclient.CONFIG.NickHider.OwnName) : MinecraftClient.getInstance().player.getName());
+				name.append(Axolotlclient.CONFIG.NickHider.hideOwnName ? new LiteralText(Axolotlclient.CONFIG.NickHider.OwnName) : MinecraftClient.getInstance().player.getName()).setStyle(message.getStyle());
 			} else {
-				name.append(new LiteralText(Axolotlclient.CONFIG.NickHider.hideOtherNames ? Axolotlclient.CONFIG.NickHider.otherName : sender));
+				name.append(new LiteralText(Axolotlclient.CONFIG.NickHider.hideOtherNames ? Axolotlclient.CONFIG.NickHider.otherName : sender).setStyle(message.getStyle()));
 			}
 
 			String[] msg = message.getString().split(sender);
