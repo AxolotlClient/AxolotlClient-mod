@@ -1,5 +1,6 @@
 package io.github.moehreag.axolotlclient;
 
+import io.github.moehreag.axolotlclient.util.Util;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
@@ -78,6 +79,12 @@ public class Axolotlclient implements ClientModInitializer {
 
 
 	public static void TickClient(){
+
+		if(tickTime % 20 == 0){
+			if(MinecraftClient.getInstance().getCurrentServerEntry() != null){
+				Util.getRealTimeServerPing(MinecraftClient.getInstance().getCurrentServerEntry());
+			}
+		}
 
 		if (tickTime >=6000){
 

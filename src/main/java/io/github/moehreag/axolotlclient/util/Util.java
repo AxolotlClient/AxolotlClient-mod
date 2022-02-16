@@ -2,20 +2,40 @@ package io.github.moehreag.axolotlclient.util;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.Address;
+import net.minecraft.client.network.AllowedAddressResolver;
+import net.minecraft.client.network.ServerAddress;
+import net.minecraft.client.network.ServerInfo;
+import net.minecraft.network.ClientConnection;
+import net.minecraft.network.NetworkState;
+import net.minecraft.network.listener.ClientQueryPacketListener;
+import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket;
+import net.minecraft.network.packet.c2s.query.QueryPingC2SPacket;
+import net.minecraft.network.packet.c2s.query.QueryRequestC2SPacket;
+import net.minecraft.network.packet.s2c.query.QueryPongS2CPacket;
+import net.minecraft.network.packet.s2c.query.QueryResponseS2CPacket;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.ScoreboardPlayerScore;
 import net.minecraft.scoreboard.Team;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.stream.Collectors;
 
 public class Util {
+
+	private static final ThreadPoolExecutor REALTIME_PINGER = new ScheduledThreadPoolExecutor(3, new ThreadFactoryBuilder().setNameFormat("Real Time Server Pinger #%d").setDaemon(true).build());
+	public static int currentServerPing;
 
 	public static String lastgame;
 	public static String game;
@@ -82,4 +102,60 @@ public class Util {
 
 		return lines;
 	}
+
+
+
+	//Indicatia removed this feature...
+	//We still need it :(
+	public static void getRealTimeServerPing(ServerInfo server)
+	{
+		REALTIME_PINGER.submit(() ->
+		{
+			try
+			{
+				var address = ServerAddress.parse(server.address);
+				var optional = AllowedAddressResolver.DEFAULT.resolve(address).map(Address::getInetSocketAddress);
+
+
+				if (optional.isPresent())
+				{
+
+					ClientConnection manager = ClientConnection.connect( optional.get(), false);
+					manager.setPacketListener(new ClientQueryPacketListener()
+					{
+						@Override
+						public void onResponse(QueryResponseS2CPacket packet) {
+							this.currentSystemTime = net.minecraft.util.Util.getMeasuringTimeMs();
+							manager.send(new QueryPingC2SPacket(this.currentSystemTime));
+						}
+
+						@Override
+						public void onPong(QueryPongS2CPacket packet) {
+							var time = this.currentSystemTime;
+							var latency = net.minecraft.util.Util.getMeasuringTimeMs();
+							Util.currentServerPing = (int) (latency - time);
+							manager.disconnect(new LiteralText(""));
+						}
+
+						private long currentSystemTime = 0L;
+
+						@Override
+						public void onDisconnected(Text reason) {
+
+						}
+
+						@Override
+						public ClientConnection getConnection()
+						{
+							return manager;
+						}
+					});
+					manager.send(new HandshakeC2SPacket(address.getAddress(), address.getPort(), NetworkState.STATUS));
+					manager.send(new QueryRequestC2SPacket());
+				}
+			}
+			catch (Exception ignored){}
+		});
+	}
+
 }

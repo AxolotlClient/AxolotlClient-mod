@@ -32,12 +32,7 @@ public class MixinMinecraftClient {
 	}
 
 	@Redirect(
-		method = "<init>",
-		at = @At(
-			value = "FIELD",
-			target = "Lnet/minecraft/client/RunArgs$Game;version:Ljava/lang/String;"
-		)
-	)
+		method = "<init>", at = @At(value = "FIELD", target = "Lnet/minecraft/client/RunArgs$Game;version:Ljava/lang/String;"))
 	private String redirectVersion(RunArgs.Game game) {
 		return SharedConstants.getGameVersion().getName();
 	}
