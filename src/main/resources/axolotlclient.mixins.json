@@ -1,29 +1,16 @@
 {
-	"required": true,
-	"package": "io.github.moehreag.axolotlclient.mixin",
-	"compatibilityLevel": "JAVA_17",
-	"mixins": [
-		"MixinMinecraftServer",
-		"MixinModStatus",
-		"MixinWindow"
-	],
-	"client": [
-		"MixinPingHUDOsmium",
-		"MixinPingKronHUD",
-		"MixinClientBrandRetriever",
-		"MixinCrashReport",
-		"MixinChatHud",
-		"MixinLivingEntityRenderer",
-		"MixinMinecraftClient",
-		"MixinMinecraftClientGame",
-		"MixinPlayerEntityRenderer",
-		"MixinPlayerListHud",
-		"MixinEntityRenderer",
-		"MixinTitleScreen",
-		"MixinBedBlock"
-	],
-	"server": [],
-	"injectors": {
-		"defaultRequire": 1
-	}
+  "required": true,
+  "minVersion": "0.8",
+  "package": "io.github.moehreag.axolotlclient.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+  ],
+  "client": [
+    "TitleScreenMixin",
+    "ClientBrandRetrieverMixin",
+    "MinecraftClientMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }

@@ -1,40 +1,31 @@
 {
-	"schemaVersion": 1,
-	"id": "axolotlclient",
-	"version": "${version}",
-
-	"name": "AxolotlClient",
-	"description": "Special features of AxolotlClient",
-	"authors": ["moehreag", "Parts included by LoganDark"],
-	"contact": {
-		"sources": "https://github.com/moehreag/AxolotlClient-branding",
-		"homepage": "https://github.com/moehreag/AxolotlClient",
-		"issues": "https://github.com/moehreag/AxolotlClient-branding/issues"
-	},
-
-	"custom": {
-		"modmenu": {
-			"discord": "https://discord.gg/9Q3brQVQZN"
-		}
-	},
-
-	"license": "GPLv3+",
-	"icon": "assets/axolotlclient/icon.png",
-
-	"environment": "client",
-	"entrypoints": {
-		"client": ["io.github.moehreag.axolotlclient.Axolotlclient"],
-		"modmenu": ["io.github.moehreag.axolotlclient.config.ModMenuIntegration"]
-	},
-
-	"mixins": ["axolotlclient.mixins.json"],
-
-	"depends": {
-		"fabricloader": "*",
-		"minecraft": "1.18.x"
-	},
-	"conflicts": {
-		"optifabric": "*"
-	},
-	"suggests": {}
+  "schemaVersion": 1,
+  "id": "axolotlclient",
+  "version": "${version}",
+  "name": "Axolotlclient",
+  "description": "hmm",
+  "authors": [
+    "moehreag"
+  ],
+  "contact": {
+    "homepage": "https://legacyfabric.net/",
+    "sources": "https://github.com/Legacy-Fabric/fabric-example-mod"
+  },
+  "license": "CC0-1.0",
+  "icon": "assets/axolotlclient/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["io.github.moehreag.axolotlclient.Axolotlclient"],
+    "modmenu": ["io.github.moehreag.axolotlclient.config.ModMenuIntegration"]
+  },
+  "mixins": [
+    "axolotlclient.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.12.0",
+    "minecraft": "1.8.9"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
 }

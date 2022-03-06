@@ -1,23 +1,19 @@
 package io.github.moehreag.axolotlclient;
 
-import io.github.moehreag.axolotlclient.util.Util;
-import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
-import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.loader.api.FabricLoader;
 import io.github.moehreag.axolotlclient.config.AxolotlclientConfig;
-import net.minecraft.client.MinecraftClient;
+import io.github.moehreag.axolotlclient.config.ConfigHandler;
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Identifier;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;
-import java.util.UUID;
 
 
-public class Axolotlclient implements ClientModInitializer {
+public class Axolotlclient implements ModInitializer {
 
-	public static final Logger LOGGER = LoggerFactory.getLogger("Axolotlclient");
+	public static Logger LOGGER = LogManager.getLogger("Axolotlclient");
 
 	public static AxolotlclientConfig CONFIG;
 	public static String onlinePlayers = "";
@@ -34,7 +30,7 @@ public class Axolotlclient implements ClientModInitializer {
 	public static Integer tickTime = 0;
 
 	@Override
-	public void onInitializeClient(){
+	public void onInitialize() {
 
 		if (FabricLoader.getInstance().isModLoaded("ares")){
 			badmod = "Ares Client";
@@ -49,11 +45,11 @@ public class Axolotlclient implements ClientModInitializer {
 		} else if (FabricLoader.getInstance().isModLoaded("xaerominimap")) {
 			badmod = "Xaero's Minimap";
 		} else if (FabricLoader.getInstance().isDevelopmentEnvironment() ||
-			Arrays.toString(FabricLoader.getInstance().getLaunchArguments(false)).contains("Axolotlclient")){
+				Arrays.toString(FabricLoader.getInstance().getLaunchArguments(false)).contains("Axolotlclient")){
 
-			AutoConfig.register(AxolotlclientConfig.class, JanksonConfigSerializer::new);
-			CONFIG = AutoConfig.getConfigHolder(AxolotlclientConfig.class).getConfig();
+			ConfigHandler.init();
 
+			LOGGER.info(CONFIG);
 			if (CONFIG.RPCConfig.enableRPC) io.github.moehreag.axolotlclient.util.DiscordRPC.startup();
 
 			features = true;
@@ -62,38 +58,7 @@ public class Axolotlclient implements ClientModInitializer {
 
 			LOGGER.info("Axolotlclient Initialized");
 		}
-	}
 
-	public static boolean showOwnNametag() {
-		return CONFIG.NametagConf.showOwnNametag;
-	}
-
-	public static boolean isUsingClient(UUID uuid){
-		assert MinecraftClient.getInstance().player != null;
-		if (uuid == MinecraftClient.getInstance().player.getUuid()){
-			return true;
-		} else {
-			return NetworkHelper.getOnline(uuid);
-		}
-	}
-
-
-	public static void TickClient(){
-
-		if(tickTime % 20 == 0){
-			if(MinecraftClient.getInstance().getCurrentServerEntry() != null){
-				Util.getRealTimeServerPing(MinecraftClient.getInstance().getCurrentServerEntry());
-			}
-		}
-
-		if (tickTime >=6000){
-
-			//System.out.println("Cleared Cache of Other Players!");
-			otherPlayers = "";
-			tickTime = 0;
-		}
-		tickTime++;
 
 	}
-
 }

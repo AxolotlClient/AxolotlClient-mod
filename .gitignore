@@ -1,17 +1,27 @@
 # gradle
-
 .gradle/
 build/
 out/
+classes/
 
-#idea
+# eclipse
+*.launch
 
+# idea
 .idea/
+*.iml
+*.ipr
+*.iws
+
+# vscode
+.settings/
+.vscode/
+bin/
+.classpath
+.project
 
 # fabric
+run/
 
-/run/*
-/run_server/*
-/minecraft/
-run/options.txt
-run/options.txt
+# macos
+*.DS_Store
