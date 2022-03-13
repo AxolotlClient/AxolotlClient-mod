@@ -19,23 +19,14 @@ public class NetworkHelper {
 		} else if (Axolotlclient.otherPlayers.contains(uuid.toString())){
 			return false;
 		}else {
-			final Thread get = new Thread(() -> {
-				while (!Thread.interrupted()) {
-					getUser(uuid);
-					break;
-				}
-				});
+			final Thread get = new Thread(() -> getUser(uuid));
 			get.start();
 			return Axolotlclient.onlinePlayers.contains(uuid.toString());
 		}
 	}
 
 	public static void getUser(UUID uuid){
-
-
 			try{
-
-
 				final HttpClient client = HttpClient.newBuilder().build();
 				HttpRequest request = HttpRequest.newBuilder()
 					.GET()

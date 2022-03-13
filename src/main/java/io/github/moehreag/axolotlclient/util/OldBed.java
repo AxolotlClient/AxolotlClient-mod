@@ -19,7 +19,7 @@ public class OldBed {
 	protected static final VoxelShape WEST_SHAPE;
 
 	public static VoxelShape getShape(Direction direction) {
-		if (!Axolotlclient.CONFIG.General.fullBed)
+		if (!Axolotlclient.features || !Axolotlclient.CONFIG.General.fullBed)
 			return null;
 
 		return switch (direction) {

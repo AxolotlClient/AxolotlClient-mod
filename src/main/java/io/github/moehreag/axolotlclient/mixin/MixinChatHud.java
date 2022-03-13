@@ -45,10 +45,6 @@ public class MixinChatHud {
 			String[] msg = message.getString().split(sender);
 			for (String s : msg) {
 				editedMessage.append(s);
-				/*
-				if (Objects.equals(s, msg[0]) && Axolotlclient.CONFIG.badgeOptions.showChatBadge && Axolotlclient.onlinePlayers.contains(sender)) {
-					editedMessage.append(Axolotlclient.badge);
-				}*/
 				if (!Objects.equals(s, msg[msg.length - 1])) {
 					editedMessage.append(name);
 				}

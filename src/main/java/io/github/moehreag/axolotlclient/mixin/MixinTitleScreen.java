@@ -19,9 +19,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(TitleScreen.class)
 public abstract class MixinTitleScreen extends Screen{
 
-	private static final int textX = 200;
-	private static final int textY = 5;
-
 	protected MixinTitleScreen() {
 		super(null);
 	}
@@ -53,8 +50,8 @@ public abstract class MixinTitleScreen extends Screen{
 	public void addDisclaimer(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci){
 		if(Axolotlclient.TitleDisclaimer){
 			TitleScreen.drawCenteredText(matrices, this.textRenderer, "You are playing at your own risk with unsupported Mods",
-				textX, textY, 0xFFCC8888);
-			TitleScreen.drawCenteredText(matrices, this.textRenderer, "Things could break!", textX, textY+ 10, 0xFFCC8888);
+				this.width/2, 5, 0xFFCC8888);
+			TitleScreen.drawCenteredText(matrices, this.textRenderer, "Things could break!", this.width/2, 15, 0xFFCC8888);
 		}
 	}
 }

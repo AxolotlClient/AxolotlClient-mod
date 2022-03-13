@@ -107,6 +107,8 @@ key_key.hotbar.6:key.keyboard.6
 key_key.hotbar.7:key.keyboard.7
 key_key.hotbar.8:key.keyboard.8
 key_key.hotbar.9:key.keyboard.9
+key_keys.kronhud.edithud:key.keyboard.right.shift
+key_keys.osmium.MenuKey:key.keyboard.right.shift
 soundCategory_master:1.0
 soundCategory_music:0.0
 soundCategory_record:1.0

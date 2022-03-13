@@ -1,11 +1,11 @@
 package io.github.moehreag.axolotlclient;
 
+import io.github.moehreag.axolotlclient.config.AxolotlclientConfig;
 import io.github.moehreag.axolotlclient.util.Util;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
-import io.github.moehreag.axolotlclient.config.AxolotlclientConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
@@ -65,7 +65,7 @@ public class Axolotlclient implements ClientModInitializer {
 	}
 
 	public static boolean showOwnNametag() {
-		return CONFIG.NametagConf.showOwnNametag;
+		return CONFIG != null && CONFIG.NametagConf.showOwnNametag;
 	}
 
 	public static boolean isUsingClient(UUID uuid){

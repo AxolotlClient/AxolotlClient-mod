@@ -32,8 +32,7 @@ public class DiscordRPC {
 			menu();
 		} else {
 
-			assert Axolotlclient.CONFIG != null;
-			if (Axolotlclient.CONFIG.RPCConfig.enableRPC) inGame();
+			if (Axolotlclient.CONFIG != null && Axolotlclient.CONFIG.RPCConfig.enableRPC) inGame();
 		}
 	}
 
