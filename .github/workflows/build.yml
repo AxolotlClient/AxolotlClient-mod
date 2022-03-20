@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         java: [
-            "8",  # Minecraft default
+            "17",  # Minecraft default
           ]
     runs-on: ubuntu-latest
     steps:

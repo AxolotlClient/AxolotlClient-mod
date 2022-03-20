@@ -20,11 +20,28 @@ public class ConfigHandler {
         if(!Files.exists(confPath)) {
 
             Axolotlclient.CONFIG = new AxolotlclientConfig(
-                    new AxolotlclientConfig.nametagConf(),
-                    new AxolotlclientConfig.Badges(),
-                    new AxolotlclientConfig.nh(),
+                    new AxolotlclientConfig.nametagConf(
+                            false,
+                            false
+                    ),
+                    new AxolotlclientConfig.Badges(
+                            true,
+                            false,
+                            ""
+                    ),
+                    new AxolotlclientConfig.nh(
+                            false,
+                            "",
+                            false,
+                            "Player",
+                            false,
+                            false
+                    ),
                     new AxolotlclientConfig.other(),
-                    new AxolotlclientConfig.rpcConfig()
+                    new AxolotlclientConfig.rpcConfig(
+                            true,
+                            true
+                    )
             );
             save();
 
@@ -43,6 +60,5 @@ public class ConfigHandler {
         } catch (Exception ignored){}
 
     }
-
 
 }

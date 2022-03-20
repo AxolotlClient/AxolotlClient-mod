@@ -2,13 +2,16 @@ package io.github.moehreag.axolotlclient;
 
 import io.github.moehreag.axolotlclient.config.AxolotlclientConfig;
 import io.github.moehreag.axolotlclient.config.ConfigHandler;
+import io.github.moehreag.axolotlclient.util.Util;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;
+import java.util.UUID;
 
 
 public class Axolotlclient implements ModInitializer {
@@ -59,6 +62,34 @@ public class Axolotlclient implements ModInitializer {
 			LOGGER.info("Axolotlclient Initialized");
 		}
 
+
+	}
+
+	public static boolean isUsingClient(UUID uuid){
+		assert MinecraftClient.getInstance().player != null;
+		if (uuid == MinecraftClient.getInstance().player.getUuid()){
+			return true;
+		} else {
+			return NetworkHelper.getOnline(uuid);
+		}
+	}
+
+
+	public static void TickClient(){
+
+		if(tickTime % 20 == 0){
+			if(MinecraftClient.getInstance().getCurrentServerEntry() != null){
+				Util.getRealTimeServerPing(MinecraftClient.getInstance().getCurrentServerEntry());
+			}
+		}
+
+		if (tickTime >=6000){
+
+			//System.out.println("Cleared Cache of Other Players!");
+			otherPlayers = "";
+			tickTime = 0;
+		}
+		tickTime++;
 
 	}
 }

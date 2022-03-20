@@ -8,7 +8,8 @@
   "client": [
     "TitleScreenMixin",
     "ClientBrandRetrieverMixin",
-    "MinecraftClientMixin"
+    "MinecraftClientMixin",
+    "PlayerRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

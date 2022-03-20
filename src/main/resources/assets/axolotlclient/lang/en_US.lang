@@ -2,6 +2,32 @@ language.name=English
 language.region=US
 language.code=en_US
 
-axolotlclient.config.title=Axolotlclient Configuration
-axolotlclient.config=Axolotlclient Options
+config=Axolotlclient Options
+
+general=General...
+general.title=General Options
+
+badges=Badge Options...
+badges.title=Badge Options
+customBadgeDesc=Custom Badge Text:
+customBadge=Custom Badges
+showBadge=Show Badges
+
+nametagConf=Nametag Options...
+nametagConf.title=Nametag Options
+showOwnNametag=Show Own Nametag
+forceShadows=Force Shadows
+
+nickHider=NickHider Options...
+nickHiderConf.title=NickHider Options
+hideOwnName=Hide Own Name
+hideOtherNames=Hide Others' Names
+hideOwnSkin=Hide Own Skin
+hideOtherSkins=Hide Others' Skins
+
+rpcConf=DiscordRPC Options...
+rpcConf.title=DiscordRPC Options
+enableRPC=Enable RPC
+showActivity=Show Activity
+
 back=Back
