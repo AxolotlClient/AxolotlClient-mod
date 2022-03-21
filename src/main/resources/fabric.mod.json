@@ -3,15 +3,15 @@
   "id": "axolotlclient",
   "version": "${version}",
   "name": "Axolotlclient",
-  "description": "hmm",
+  "description": "Mod for Axolotlclient",
   "authors": [
     "moehreag"
   ],
   "contact": {
-    "homepage": "https://legacyfabric.net/",
-    "sources": "https://github.com/Legacy-Fabric/fabric-example-mod"
+    "homepage": "https://moehreag.duckdns.org/",
+    "sources": "https://github.com/moehreag/Axolotlclient-branding/tree/1.8.9"
   },
-  "license": "CC0-1.0",
+  "license": "LGPL-3.0-or-later",
   "icon": "assets/axolotlclient/icon.png",
   "environment": "*",
   "entrypoints": {

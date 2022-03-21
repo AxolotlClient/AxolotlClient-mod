@@ -9,7 +9,6 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
-import java.util.Objects;
 import java.util.UUID;
 
 
@@ -48,7 +47,7 @@ public class NetworkHelper {
     public static void setOnline() {
 
         try {
-            UUID uuid = Objects.requireNonNull(MinecraftClient.getInstance().player).getUuid();
+            UUID uuid = MinecraftClient.getInstance().player.getUuid();
 
             CloseableHttpClient client = HttpClients.createDefault();
             HttpPost post = new HttpPost("https://moehreag.duckdns.org/axolotlclient-api/");
@@ -61,14 +60,15 @@ public class NetworkHelper {
                 Axolotlclient.LOGGER.info("Sucessfully logged in at Axolotlclient!");
             }
             client.close();
-        } catch (Exception e) {System.out.println("Exception");e.printStackTrace();}
+        } catch (Exception e) {Axolotlclient.LOGGER.error("Error while logging in!");}
     }
 
     public static void setOffline(){
 
-        UUID uuid = Objects.requireNonNull(MinecraftClient.getInstance().player).getUuid();
+
 
         try{
+            UUID uuid = MinecraftClient.getInstance().player.getUuid();
             CloseableHttpClient client = HttpClients.createDefault();
             HttpDelete delete = new HttpDelete("https://moehreag.duckdns.org/axolotlclient-api/?uuid="+uuid.toString());
             HttpResponse response= client.execute(delete);
@@ -78,7 +78,7 @@ public class NetworkHelper {
             }
 
         } catch (Exception ex){
-            ex.printStackTrace();
+            Axolotlclient.LOGGER.error("Error while logging off!");
         }
 
     }

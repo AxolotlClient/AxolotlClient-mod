@@ -60,6 +60,7 @@ public class MinecraftClientMixin {
 
     @Inject(method = "tick", at = @At("HEAD"))
     public void tickClient(CallbackInfo ci){
+        Axolotlclient.TickClient();
         DiscordRPC.update();
     }
 

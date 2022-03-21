@@ -1,16 +1,20 @@
 package io.github.moehreag.axolotlclient;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.config.AxolotlclientConfig;
 import io.github.moehreag.axolotlclient.config.ConfigHandler;
 import io.github.moehreag.axolotlclient.util.Util;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.resource.Resource;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.awt.*;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -23,8 +27,7 @@ public class Axolotlclient implements ModInitializer {
 	public static String onlinePlayers = "";
 	public static String otherPlayers = "";
 
-	public static final Identifier FONT = new Identifier("axolotlclient", "textures/badge.png");
-	public static String badge = "✵";
+	public static final Identifier badgeIcon = new Identifier("axolotlclient", "textures/badge.png");
 
 	public static boolean showWarning = true;
 	public static boolean TitleDisclaimer = false;
@@ -91,5 +94,23 @@ public class Axolotlclient implements ModInitializer {
 		}
 		tickTime++;
 
+	}
+
+	public static void addBadge(Entity entity, double d, double e, double f){
+		if(entity instanceof PlayerEntity){
+
+			if(Axolotlclient.CONFIG.badgeOptions.showBadge && Axolotlclient.isUsingClient(entity.getUuid())) {
+				MinecraftClient.getInstance().getTextureManager().bindTexture(Axolotlclient.badgeIcon);
+
+				int x = -(MinecraftClient.getInstance().textRenderer.getStringWidth(entity.getName().asFormattedString())/2 + (Axolotlclient.CONFIG.badgeOptions.CustomBadge ? MinecraftClient.getInstance().textRenderer.getStringWidth(Axolotlclient.CONFIG.badgeOptions.badgeText): 10));
+
+				GlStateManager.color4f(1, 1, 1, 1);
+
+				if(Axolotlclient.CONFIG.badgeOptions.CustomBadge) MinecraftClient.getInstance().textRenderer.draw(Axolotlclient.CONFIG.badgeOptions.badgeText, x, 0 ,-1, Axolotlclient.CONFIG.NametagConf.useShadows);
+				else DrawableHelper.drawTexture(x, 0, 0, 0, 8, 8, 8, 8);
+
+
+			}
+		}
 	}
 }
