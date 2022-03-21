@@ -10,6 +10,7 @@ import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.awt.*;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -22,7 +23,7 @@ public class Axolotlclient implements ModInitializer {
 	public static String onlinePlayers = "";
 	public static String otherPlayers = "";
 
-	public static final Identifier FONT = new Identifier("axolotlclient", "default");
+	public static final Identifier FONT = new Identifier("axolotlclient", "textures/badge.png");
 	public static String badge = "✵";
 
 	public static boolean showWarning = true;
@@ -52,7 +53,6 @@ public class Axolotlclient implements ModInitializer {
 
 			ConfigHandler.init();
 
-			LOGGER.info(CONFIG);
 			if (CONFIG.RPCConfig.enableRPC) io.github.moehreag.axolotlclient.util.DiscordRPC.startup();
 
 			features = true;

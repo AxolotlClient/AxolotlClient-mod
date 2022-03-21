@@ -1,6 +1,7 @@
 package io.github.moehreag.axolotlclient.mixin;
 
 import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.NetworkHelper;
 import io.github.moehreag.axolotlclient.util.DiscordRPC;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
@@ -39,18 +40,21 @@ public class MinecraftClientMixin {
 
     @Inject(method = "startGame", at = @At("HEAD"))
     public void startup(String worldName, String string, LevelInfo levelInfo, CallbackInfo ci){
-        //DiscordRPC.startup();
+        DiscordRPC.startup();
     }
 
 
-    @ModifyArg(method = "initializeGame", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;<init>(Lnet/minecraft/client/options/GameOptions;Lnet/minecraft/util/Identifier;Lnet/minecraft/client/texture/TextureManager;Z)V"), index = 1)
+    /*@ModifyArg(method = "initializeGame", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;<init>(Lnet/minecraft/client/options/GameOptions;Lnet/minecraft/util/Identifier;Lnet/minecraft/client/texture/TextureManager;Z)V"), index = 1)
     public Identifier modifyFontTexture(Identifier fontTexture){
         return Axolotlclient.FONT;
-    }
+    }*/
+
+
 
 
     @Inject(method = "stop", at = @At("HEAD"))
     public void stop(CallbackInfo ci){
+        if (Axolotlclient.features) NetworkHelper.setOffline();
         DiscordRPC.shutdown();
     }
 

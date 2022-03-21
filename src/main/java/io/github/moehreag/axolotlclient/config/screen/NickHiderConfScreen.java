@@ -30,6 +30,9 @@ public class NickHiderConfScreen extends ConfScreen {
         ownName = new TextFieldWidget(3, this.width / 2 - 155, this.height / 6 + 96 + 10);
         otherName = new TextFieldWidget(4, this.width / 2 + 5, this.height / 6 + 96 + 10);
 
+        ownName.write(CONFIG.NickHider.OwnName);
+        otherName.write(CONFIG.NickHider.otherName);
+
         this.buttons.add(new BooleanButtonWidget(5, this.width / 2 - 155, this.height / 6 + 120 + 16, "hideOwnSkin", CONFIG.NickHider.hideOwnSkin));
         this.buttons.add(new BooleanButtonWidget(6, this.width / 2 + 5, this.height / 6 + 120 + 16, "hideOtherSkins", CONFIG.NickHider.hideOtherSkins));
 

@@ -6,7 +6,11 @@
   "mixins": [
   ],
   "client": [
+    "LivingEntityRendererMixin",
+    "EntityRendererMixin",
+    "SelectWorldScreenMixin",
     "TitleScreenMixin",
+    "MultiplayerScreenMixin",
     "ClientBrandRetrieverMixin",
     "MinecraftClientMixin",
     "PlayerRendererMixin"

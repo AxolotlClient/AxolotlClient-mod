@@ -9,6 +9,6 @@ public class BooleanButtonWidget extends ButtonWidget {
     }
 
     public BooleanButtonWidget(int id, int x, int y, int width, int height, String key, boolean option) {
-        super(id, x, y, width, height, I18n.translate(key) + ": "+ I18n.translate("options."+(option?"off":"on")));
+        super(id, x, y, width, height, I18n.translate(key) + ": "+ I18n.translate("options."+(option?"on":"off")));
     }
 }

@@ -1,7 +1,5 @@
 package io.github.moehreag.axolotlclient.config.screen;
 
-import static io.github.moehreag.axolotlclient.Axolotlclient.CONFIG;
-
 import io.github.moehreag.axolotlclient.config.widgets.BooleanButtonWidget;
 import io.github.moehreag.axolotlclient.config.widgets.TextFieldWidget;
 import net.minecraft.client.MinecraftClient;
@@ -9,6 +7,8 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.resource.language.I18n;
 import org.lwjgl.input.Keyboard;
+
+import static io.github.moehreag.axolotlclient.Axolotlclient.CONFIG;
 
 public class BadgeConfScreen extends ConfScreen {
 
@@ -28,6 +28,7 @@ public class BadgeConfScreen extends ConfScreen {
         this.buttons.add(new BooleanButtonWidget(1, this.width / 2 - 155, this.height / 6 + 72 - 6, "showBadge" , CONFIG.badgeOptions.showBadge));
         this.buttons.add(new BooleanButtonWidget(2, this.width / 2 + 5, this.height / 6 + 72 - 6, "customBadge", CONFIG.badgeOptions.CustomBadge));
         badgeField = new TextFieldWidget(3, this.width / 2 + 5, this.height / 6 + 96 + 10);
+        badgeField.write(CONFIG.badgeOptions.badgeText);
 
     }
 

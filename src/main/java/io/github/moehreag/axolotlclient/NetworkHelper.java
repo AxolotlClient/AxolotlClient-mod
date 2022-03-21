@@ -47,9 +47,8 @@ public class NetworkHelper {
 
     public static void setOnline() {
 
-        UUID uuid = Objects.requireNonNull(MinecraftClient.getInstance().player).getUuid();
-
         try {
+            UUID uuid = Objects.requireNonNull(MinecraftClient.getInstance().player).getUuid();
 
             CloseableHttpClient client = HttpClients.createDefault();
             HttpPost post = new HttpPost("https://moehreag.duckdns.org/axolotlclient-api/");
@@ -62,7 +61,7 @@ public class NetworkHelper {
                 Axolotlclient.LOGGER.info("Sucessfully logged in at Axolotlclient!");
             }
             client.close();
-        } catch (Exception e) {System.out.println("Exception");}
+        } catch (Exception e) {System.out.println("Exception");e.printStackTrace();}
     }
 
     public static void setOffline(){
