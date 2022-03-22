@@ -5,7 +5,6 @@ import io.github.moehreag.axolotlclient.NetworkHelper;
 import io.github.moehreag.axolotlclient.util.DiscordRPC;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
-import net.minecraft.util.Identifier;
 import net.minecraft.world.level.LevelInfo;
 import org.lwjgl.opengl.Display;
 import org.spongepowered.asm.mixin.Final;
@@ -13,7 +12,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -40,17 +38,9 @@ public class MinecraftClientMixin {
 
     @Inject(method = "startGame", at = @At("HEAD"))
     public void startup(String worldName, String string, LevelInfo levelInfo, CallbackInfo ci){
+        if(Axolotlclient.features) NetworkHelper.setOnline();
         DiscordRPC.startup();
     }
-
-
-    /*@ModifyArg(method = "initializeGame", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;<init>(Lnet/minecraft/client/options/GameOptions;Lnet/minecraft/util/Identifier;Lnet/minecraft/client/texture/TextureManager;Z)V"), index = 1)
-    public Identifier modifyFontTexture(Identifier fontTexture){
-        return Axolotlclient.FONT;
-    }*/
-
-
-
 
     @Inject(method = "stop", at = @At("HEAD"))
     public void stop(CallbackInfo ci){
@@ -62,6 +52,11 @@ public class MinecraftClientMixin {
     public void tickClient(CallbackInfo ci){
         Axolotlclient.TickClient();
         DiscordRPC.update();
+    }
+
+    @Inject(method = "initializeGame", at = @At("TAIL"))
+    public void onLaunch(CallbackInfo ci){
+        if(Axolotlclient.features) NetworkHelper.setOnline();
     }
 
 }

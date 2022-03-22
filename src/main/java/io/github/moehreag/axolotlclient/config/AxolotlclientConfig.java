@@ -35,20 +35,15 @@ public class AxolotlclientConfig {
 
     public nh NickHider;
     public static class nh {
-        public boolean hideOwnName;
-        public String OwnName;
-
-        public boolean hideOtherNames;
-        public String otherName;
+        public boolean hideNames;
+        public String Name;
 
         public boolean hideOwnSkin;
         public boolean hideOtherSkins;
 
-        public nh(boolean hideOwnName, String OwnName, boolean hideOtherNames, String otherName, boolean hideOwnSkin, boolean hideOtherSkins){
-            this.hideOwnName = hideOwnName;
-            this.OwnName = OwnName;
-            this.hideOtherNames = hideOtherNames;
-            this.otherName = otherName;
+        public nh(boolean hideNames, String Name, boolean hideOwnSkin, boolean hideOtherSkins){
+            this.hideNames = hideNames;
+            this.Name = Name;
             this.hideOwnSkin = hideOwnSkin;
             this.hideOtherSkins = hideOtherSkins;
         }

@@ -6,6 +6,8 @@ config=Axolotlclient Options
 
 general=General...
 general.title=General Options
+resetConf=Reset Configuration
+resetConfTooltip=This will delete the current Configuration file! Proceed with Caution!
 
 badges=Badge Options...
 badges.title=Badge Options
@@ -20,8 +22,8 @@ forceShadows=Force Shadows
 
 nickHider=NickHider Options...
 nickHiderConf.title=NickHider Options
-hideOwnName=Hide Own Name
-hideOtherNames=Hide Others' Names
+hideNames=Hide Names
+nameDesc=Name to hide as:
 hideOwnSkin=Hide Own Skin
 hideOtherSkins=Hide Others' Skins
 

@@ -31,8 +31,6 @@ public class ConfigHandler {
                     ),
                     new AxolotlclientConfig.nh(
                             false,
-                            "",
-                            false,
                             "Player",
                             false,
                             false

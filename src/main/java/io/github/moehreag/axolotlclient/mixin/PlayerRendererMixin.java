@@ -14,13 +14,13 @@ public class PlayerRendererMixin {
 
     @ModifyArgs(method = "method_10209(Lnet/minecraft/client/network/AbstractClientPlayerEntity;DDDLjava/lang/String;FD)V",
     at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/LivingEntityRenderer;method_10209(Lnet/minecraft/entity/Entity;DDDLjava/lang/String;FD)V"))
-    public void addBadge(Args args){
+    public void modifiyName(Args args){
         if(Axolotlclient.CONFIG != null) {
             AbstractClientPlayerEntity player = args.get(0);
-            if (Axolotlclient.CONFIG.NickHider.hideOtherNames && Axolotlclient.features) {
+            if (Axolotlclient.CONFIG.NickHider.hideNames && Axolotlclient.features) {
                 assert MinecraftClient.getInstance().player != null;
                 if (player.getName() != MinecraftClient.getInstance().player.getName()) {
-                    args.set(4, Axolotlclient.CONFIG.NickHider.otherName);
+                    args.set(4, Axolotlclient.CONFIG.NickHider.Name);
                 }
             }
         }

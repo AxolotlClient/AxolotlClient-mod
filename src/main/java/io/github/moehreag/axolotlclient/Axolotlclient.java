@@ -10,7 +10,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.resource.Resource;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,6 +27,7 @@ public class Axolotlclient implements ModInitializer {
 	public static String otherPlayers = "";
 
 	public static final Identifier badgeIcon = new Identifier("axolotlclient", "textures/badge.png");
+	public static Identifier sky = new Identifier("axolotlclient", "textures/badge.png");
 
 	public static boolean showWarning = true;
 	public static boolean TitleDisclaimer = false;
@@ -96,13 +96,15 @@ public class Axolotlclient implements ModInitializer {
 
 	}
 
-	public static void addBadge(Entity entity, double d, double e, double f){
+	public static void addBadge(Entity entity){
 		if(entity instanceof PlayerEntity){
 
 			if(Axolotlclient.CONFIG.badgeOptions.showBadge && Axolotlclient.isUsingClient(entity.getUuid())) {
 				MinecraftClient.getInstance().getTextureManager().bindTexture(Axolotlclient.badgeIcon);
 
-				int x = -(MinecraftClient.getInstance().textRenderer.getStringWidth(entity.getName().asFormattedString())/2 + (Axolotlclient.CONFIG.badgeOptions.CustomBadge ? MinecraftClient.getInstance().textRenderer.getStringWidth(Axolotlclient.CONFIG.badgeOptions.badgeText): 10));
+				int x = -(MinecraftClient.getInstance().textRenderer.getStringWidth(
+						Axolotlclient.CONFIG.NickHider.hideNames ? Axolotlclient.CONFIG.NickHider.Name: entity.getName().asFormattedString()
+				)/2 + (Axolotlclient.CONFIG.badgeOptions.CustomBadge ? MinecraftClient.getInstance().textRenderer.getStringWidth(Axolotlclient.CONFIG.badgeOptions.badgeText): 10));
 
 				GlStateManager.color4f(1, 1, 1, 1);
 
