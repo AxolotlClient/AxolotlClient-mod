@@ -7,11 +7,9 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 
 public class NametagConfScreen extends ConfScreen {
-    protected Screen parent;
 
-    public NametagConfScreen(Screen parent){
+    public NametagConfScreen(){
         super("nametagConf.title");
-        this.parent = parent;
     }
 
     @Override

@@ -12,13 +12,10 @@ import static io.github.moehreag.axolotlclient.Axolotlclient.CONFIG;
 
 public class BadgeConfScreen extends ConfScreen {
 
-    private TextFieldWidget badgeField;
+    private TextFieldWidget badgeField;;
 
-    protected Screen parent;
-
-    public BadgeConfScreen(Screen parent) {
+    public BadgeConfScreen() {
         super("badges.title");
-        this.parent = parent;
     }
 
     @Override

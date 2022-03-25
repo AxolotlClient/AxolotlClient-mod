@@ -3,6 +3,7 @@ package io.github.moehreag.axolotlclient.mixin;
 import io.github.moehreag.axolotlclient.Axolotlclient;
 import io.github.moehreag.axolotlclient.NetworkHelper;
 import io.github.moehreag.axolotlclient.util.DiscordRPC;
+import io.github.moehreag.axolotlclient.util.SkyResourceLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
 import net.minecraft.world.level.LevelInfo;
@@ -34,6 +35,11 @@ public class MinecraftClientMixin {
             method = "<init>", at = @At(value = "FIELD", target = "Lnet/minecraft/client/RunArgs$Game;version:Ljava/lang/String;"))
     private String redirectVersion(RunArgs.Game game) {
         return "1.8.9";
+    }
+
+    @Inject(method = "<init>", at = @At("TAIL"))
+    private void getRunArgs(RunArgs args, CallbackInfo ci){
+        SkyResourceLoader.resourcePath = args.directories.resourcePackDir;
     }
 
     @Inject(method = "startGame", at = @At("HEAD"))

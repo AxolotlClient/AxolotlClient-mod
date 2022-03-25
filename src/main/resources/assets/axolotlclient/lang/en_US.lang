@@ -32,4 +32,8 @@ rpcConf.title=DiscordRPC Options
 enableRPC=Enable RPC
 showActivity=Show Activity
 
+cursedConf=Cursed Options...
+cursedConf.title=Cursed Options
+rotateWorld=Rotate the World
+
 back=Back

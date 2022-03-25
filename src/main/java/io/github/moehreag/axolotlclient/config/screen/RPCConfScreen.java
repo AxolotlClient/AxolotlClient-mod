@@ -9,9 +9,8 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 public class RPCConfScreen extends ConfScreen {
     protected Screen parent;
 
-    public RPCConfScreen(Screen parent){
+    public RPCConfScreen(){
         super("rpcConf.title");
-        this.parent = parent;
     }
 
     @Override

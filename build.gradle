@@ -45,7 +45,7 @@ dependencies {
 	}
 
 	implementation include ('com.github.Vatuu:discord-rpc:1.6.2')
-	implementation include("net.legacyfabric.legacy-fabric-api:legacy-fabric-resource-loader-v1:1.0.0+1e58a10239")
+	//implementation include("net.legacyfabric.legacy-fabric-api:legacy-fabric-resource-loader-v1:1.0.0+1e58a10239")
 
 	modImplementation files("libs/legacy-modmenu-1.1.0-dev.jar")
 	//modImplementation include ('io.github.boogiemonster101:rewoven-modmenu:1.0.0+1.8.9')

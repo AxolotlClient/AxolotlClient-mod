@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "fabricskyboxes-1.8",
+  "version": "${version}",
+  "name": "Fabricskyboxes 1.8",
+  "description": "",
+  "authors": [
+    "AMereBagatelle",
+    "moehreag"
+  ],
+  "contact": {},
+  "license": "LGPL-3.0",
+  "icon": "assets/fabricskyboxes-1.8/icon.png",
+  "environment": "*",
+  "entrypoints": {},
+  "mixins": [
+    "fabricskyboxes-1.8.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.12.12",
+    "minecraft": "1.18.2"
+  }
+}

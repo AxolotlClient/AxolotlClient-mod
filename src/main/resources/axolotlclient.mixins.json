@@ -14,6 +14,8 @@
     "ClientBrandRetrieverMixin",
     "MinecraftClientMixin",
     "WorldRendererMixin",
+    "TextureManagerMixin",
+    "ReloadableResourceManagerImplMixin",
     "PlayerRendererMixin"
   ],
   "injectors": {

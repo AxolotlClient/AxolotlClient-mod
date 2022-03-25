@@ -30,6 +30,7 @@ public class AxolotlclientConfigScreen extends Screen {
         this.buttons.add(new ButtonWidget(3, this.width / 2 - 155, this.height / 6 + 96 - 6, 150, 20, I18n.translate("nametagConf")));
         this.buttons.add(new ButtonWidget(4, this.width / 2 + 5, this.height / 6 + 96 - 6, 150, 20, I18n.translate("nickHider")));
         this.buttons.add(new ButtonWidget(5, this.width / 2 - 155, this.height / 6 + 120 - 6, 150, 20, I18n.translate("rpcConf")));
+        this.buttons.add(new ButtonWidget(6, this.width / 2 + 5, this.height / 6 + 120 - 6, 150, 20, I18n.translate("cursedConf")));
 
         this.buttons.add(new ButtonWidget(0, this.width / 2 - 100, this.height / 6 + 168, I18n.translate("back")));
     }
@@ -49,11 +50,12 @@ public class AxolotlclientConfigScreen extends Screen {
         }
 
         switch (button.id){
-            case 1: this.client.openScreen(new GeneralConfScreen(this)); break;
-            case 2: this.client.openScreen(new BadgeConfScreen(this)); break;
-            case 3: this.client.openScreen(new NametagConfScreen(this)); break;
-            case 4: this.client.openScreen(new NickHiderConfScreen(this)); break;
-            case 5: this.client.openScreen(new RPCConfScreen(this)); break;
+            case 1: this.client.openScreen(new GeneralConfScreen()); break;
+            case 2: this.client.openScreen(new BadgeConfScreen()); break;
+            case 3: this.client.openScreen(new NametagConfScreen()); break;
+            case 4: this.client.openScreen(new NickHiderConfScreen()); break;
+            case 5: this.client.openScreen(new RPCConfScreen()); break;
+            case 6: this.client.openScreen(new CursedConfScreen()); break;
         }
     }
 }

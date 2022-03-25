@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ServerInfo;
+import net.minecraft.client.texture.Texture;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.NetworkState;
 import net.minecraft.network.ServerAddress;
@@ -20,24 +21,32 @@ import net.minecraft.scoreboard.ScoreboardPlayerScore;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 
 import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.stream.Collectors;
 
 public class Util {
 
+    private static Map<Identifier, Texture> textures;
+
     private static final ThreadPoolExecutor REALTIME_PINGER = new ScheduledThreadPoolExecutor(3, new ThreadFactoryBuilder().setNameFormat("Real Time Server Pinger #%d").setDaemon(true).build());
     public static int currentServerPing;
 
     public static String lastgame;
     public static String game;
+
+
+    public static Map<Identifier, Texture> getTextures(){
+        return textures;
+    }
+
+    public static void setTextures(Map<Identifier, Texture> textures){
+        Util.textures =textures;
+    }
 
     public static String getGame(){
 

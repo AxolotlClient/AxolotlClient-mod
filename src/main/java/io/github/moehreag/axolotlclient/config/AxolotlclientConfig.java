@@ -53,7 +53,10 @@ public class AxolotlclientConfig {
     public other General;
     public static class other {
 
-        public other() {
+        public boolean customSky;
+
+        public other(boolean customSky) {
+            this.customSky=customSky;
 
         }
     }
@@ -62,9 +65,9 @@ public class AxolotlclientConfig {
     public rpcConfig RPCConfig;
     public static class rpcConfig {
 
-        public boolean enableRPC = true;
+        public boolean enableRPC;
 
-        public boolean showActivity = true;
+        public boolean showActivity;
 
         public rpcConfig(boolean enableRPC, boolean showActivity){
             this.enableRPC = enableRPC;
@@ -72,12 +75,22 @@ public class AxolotlclientConfig {
         }
     }
 
-    public AxolotlclientConfig(nametagConf nametagConf, Badges badges, nh nickHider, other other, rpcConfig rpcConfig){
+    public cursed Cursed;
+    public static class cursed {
+        public boolean rotateWorld;
+
+        public cursed(boolean rotateWorld){
+            this.rotateWorld = rotateWorld;
+        }
+    }
+
+    public AxolotlclientConfig(nametagConf nametagConf, Badges badges, nh nickHider, other other, rpcConfig rpcConfig, cursed cursed){
         this.NametagConf = nametagConf;
         this.badgeOptions = badges;
         this.General = other;
         this.RPCConfig = rpcConfig;
         this.NickHider = nickHider;
+        this.Cursed = cursed;
     }
 
 }
