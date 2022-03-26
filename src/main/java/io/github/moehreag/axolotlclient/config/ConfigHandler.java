@@ -35,6 +35,8 @@ public class ConfigHandler {
                         false
                 ),
                 new AxolotlclientConfig.other(
+                        true,
+                        4,
                         true
                 ),
                 new AxolotlclientConfig.rpcConfig(

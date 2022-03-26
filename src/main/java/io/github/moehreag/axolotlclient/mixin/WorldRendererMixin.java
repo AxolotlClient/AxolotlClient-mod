@@ -1,6 +1,5 @@
 package io.github.moehreag.axolotlclient.mixin;
 
-
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.Axolotlclient;
 import io.github.moehreag.axolotlclient.modules.sky.SkyboxManager;
@@ -10,14 +9,20 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.dimension.Dimension;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+/**
+ * This implementation of custom skies is based on the FabricSkyBoxes mod by AMereBagatelle
+ * https://github.com/AMereBagatelle/FabricSkyBoxes
+ **/
 @Mixin(WorldRenderer.class)
 public abstract class WorldRendererMixin {
 
@@ -106,29 +111,31 @@ public abstract class WorldRendererMixin {
             GlStateManager.color4f(1.0F, 1.0F, 1.0F, n);
             GlStateManager.rotatef(-90.0F, 0.0F, 1.0F, 0.0F);
             GlStateManager.rotatef(this.world.getSkyAngle(f) * 360.0F, 1.0F, 0.0F, 0.0F);
-            float o = 30.0F;
-            MinecraftClient.getInstance().getTextureManager().bindTexture(SUN);
-            bufferBuilder.begin(7, VertexFormats.POSITION_TEXTURE);
-            bufferBuilder.vertex((-o), 100.0, (-o)).texture(0.0, 0.0).next();
-            bufferBuilder.vertex(o, 100.0, (-o)).texture(1.0, 0.0).next();
-            bufferBuilder.vertex(o, 100.0, o).texture(1.0, 1.0).next();
-            bufferBuilder.vertex(-o, 100.0, o).texture(0.0, 1.0).next();
-            tessellator.draw();
-            o = 20.0F;
-            MinecraftClient.getInstance().getTextureManager().bindTexture(MOON_PHASES);
-            int x = this.world.getMoonPhase();
-            int t = x % 4;
-            int u = x / 4 % 2;
-            float s = (float)(t) / 4.0F;
-            float v = (float)(u) / 2.0F;
-            float w = (float)(t + 1) / 4.0F;
-            float y = (float)(u + 1) / 2.0F;
-            bufferBuilder.begin(7, VertexFormats.POSITION_TEXTURE);
-            bufferBuilder.vertex((-o), -100.0, o).texture(w, y).next();
-            bufferBuilder.vertex(o, -100.0, o).texture(s, y).next();
-            bufferBuilder.vertex(o, -100.0, (-o)).texture(s, v).next();
-            bufferBuilder.vertex((-o), -100.0, (-o)).texture(w, v).next();
-            tessellator.draw();
+            if(Axolotlclient.CONFIG.General.showSunMoon) {
+                float o = 30.0F;
+                MinecraftClient.getInstance().getTextureManager().bindTexture(SUN);
+                bufferBuilder.begin(7, VertexFormats.POSITION_TEXTURE);
+                bufferBuilder.vertex((-o), 100.0, (-o)).texture(0.0, 0.0).next();
+                bufferBuilder.vertex(o, 100.0, (-o)).texture(1.0, 0.0).next();
+                bufferBuilder.vertex(o, 100.0, o).texture(1.0, 1.0).next();
+                bufferBuilder.vertex(-o, 100.0, o).texture(0.0, 1.0).next();
+                tessellator.draw();
+                o = 20.0F;
+                MinecraftClient.getInstance().getTextureManager().bindTexture(MOON_PHASES);
+                int x = this.world.getMoonPhase();
+                int t = x % 4;
+                int u = x / 4 % 2;
+                float s = (float) (t) / 4.0F;
+                float v = (float) (u) / 2.0F;
+                float w = (float) (t + 1) / 4.0F;
+                float y = (float) (u + 1) / 2.0F;
+                bufferBuilder.begin(7, VertexFormats.POSITION_TEXTURE);
+                bufferBuilder.vertex((-o), -100.0, o).texture(w, y).next();
+                bufferBuilder.vertex(o, -100.0, o).texture(s, y).next();
+                bufferBuilder.vertex(o, -100.0, (-o)).texture(s, v).next();
+                bufferBuilder.vertex((-o), -100.0, (-o)).texture(w, v).next();
+                tessellator.draw();
+            }
             GlStateManager.disableTexture();
             float z = this.world.method_3707(f) * n;
             if (z > 0.0F) {
@@ -193,6 +200,11 @@ public abstract class WorldRendererMixin {
     @Inject(method = "method_9924", at = @At("TAIL"))
     public void decurse(CallbackInfo ci){
         if(Axolotlclient.CONFIG.Cursed.rotateWorld)GlStateManager.popMatrix();
+    }
+
+    @Redirect(method = "method_9910", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/dimension/Dimension;getCloudHeight()F"))
+    public float getCloudHeight(Dimension instance){
+        return instance.getCloudHeight();
     }
 
 }

@@ -58,4 +58,10 @@ public class NickHiderConfScreen extends ConfScreen {
         name.tick();
         super.tick();
     }
+
+    @Override
+    protected void mouseClicked(int mouseX, int mouseY, int button) {
+        name.mouseClicked(mouseX, mouseY, button);
+        super.mouseClicked(mouseX, mouseY, button);
+    }
 }

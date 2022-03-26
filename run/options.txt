@@ -14,8 +14,8 @@ difficulty:2
 fancyGraphics:true
 ao:2
 renderClouds:false
-resourcePacks:["testpack"]
-incompatibleResourcePacks:[]
+resourcePacks:["Flare 32x-1.16+ - [sky only]"]
+incompatibleResourcePacks:["Flare 32x-1.16+ - [sky only]"]
 lastServer:
 lang:en_US
 chatVisibility:0
@@ -90,6 +90,7 @@ key_key.hotbar.6:7
 key_key.hotbar.7:8
 key_key.hotbar.8:9
 key_key.hotbar.9:10
+key_zoomKey:46
 soundCategory_master:0.4668874
 soundCategory_music:0.0
 soundCategory_record:0.45774648

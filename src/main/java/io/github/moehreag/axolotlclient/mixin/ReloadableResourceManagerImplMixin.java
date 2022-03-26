@@ -16,7 +16,6 @@ public class ReloadableResourceManagerImplMixin {
 
     @Inject(method = "reload", at=@At("TAIL"))
     public void loadSkies(List<ResourcePack> resourcePacks, CallbackInfo ci){
-        Axolotlclient.sky_textures=null;
         SkyResourceManager.reload(resourcePacks);
     }
 }

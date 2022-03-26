@@ -3,13 +3,10 @@ package io.github.moehreag.axolotlclient;
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.config.AxolotlclientConfig;
 import io.github.moehreag.axolotlclient.config.ConfigHandler;
-import io.github.moehreag.axolotlclient.mixin.TextureManagerMixin;
-import io.github.moehreag.axolotlclient.util.SkyResourceLoader;
-import io.github.moehreag.axolotlclient.util.SkyResourceManager;
+import io.github.moehreag.axolotlclient.modules.zoom.Zoom;
 import io.github.moehreag.axolotlclient.util.Util;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
-import net.legacyfabric.fabric.impl.resource.loader.ResourceManagerHelperImpl;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.entity.Entity;
@@ -31,8 +28,6 @@ public class Axolotlclient implements ModInitializer {
 	public static String otherPlayers = "";
 
 	public static final Identifier badgeIcon = new Identifier("axolotlclient", "textures/badge.png");
-	public static Identifier sky = new Identifier("axolotlclient", "textures/badge.png");
-	public static Identifier[] sky_textures = new Identifier[6];
 
 	public static boolean showWarning = true;
 	public static boolean TitleDisclaimer = false;
@@ -66,6 +61,8 @@ public class Axolotlclient implements ModInitializer {
 			features = true;
 			showWarning = false;
 			badmod = null;
+
+			Zoom.init();
 
 			LOGGER.info("Axolotlclient Initialized");
 		}

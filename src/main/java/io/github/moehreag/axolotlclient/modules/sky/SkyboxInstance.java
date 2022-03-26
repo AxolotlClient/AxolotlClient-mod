@@ -1,9 +1,7 @@
 package io.github.moehreag.axolotlclient.modules.sky;
 
-import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
 import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.moehreag.axolotlclient.Axolotlclient;
 import io.github.moehreag.axolotlclient.modules.sky.texture.SkyboxTexture;
 import io.github.moehreag.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
@@ -13,33 +11,22 @@ import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.texture.Texture;
 import net.minecraft.util.Identifier;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
+
+/**
+ * This implementation of custom skies is based on the FabricSkyBoxes mod by AMereBagatelle
+ * https://github.com/AMereBagatelle/FabricSkyBoxes
+ **/
 
 public class SkyboxInstance {
 
     JsonObject object;
-    double alpha = 0.1;
+    float alpha = 251;
     Identifier[] textures = new Identifier[6];
+    int[] fade = new int[4];
 
     // ! These are the options variables.  Do not mess with these.
-    //protected Fade fade = Fade.ZERO;
     protected float maxAlpha = 1f;
-    protected float transitionSpeed = 1;
-    protected boolean changeFog = false;
-    //protected RGBA fogColors = RGBA.ZERO;
-    protected boolean renderSunSkyColorTint = true;
-    protected boolean shouldRotate = false;
-    protected List<String> weather = new ArrayList<>();
-    protected List<Identifier> biomes = new ArrayList<>();
-    //protected Decorations decorations = Decorations.DEFAULT;
-    /**
-     * Stores identifiers of <b>worlds</b>, not dimension types.
-     */
-    protected List<Identifier> worlds = new ArrayList<>();
-    //protected List<MinMaxEntry> yRanges = Lists.newArrayList();
-    //protected List<MinMaxEntry> zRanges = Lists.newArrayList();
-    //protected List<MinMaxEntry> xRanges = Lists.newArrayList();
 
     public SkyboxInstance(JsonObject json){
         this.object = json;
@@ -51,110 +38,83 @@ public class SkyboxInstance {
         this.textures[3] = new Identifier(textures.get("top").getAsString());
         this.textures[4] = new Identifier(textures.get("east").getAsString());
         this.textures[5] = new Identifier(textures.get("west").getAsString());
+        this.fade[0] = props.get("fade").getAsJsonObject().get("startFadeIn").getAsInt();
+        this.fade[1] = props.get("fade").getAsJsonObject().get("endFadeIn").getAsInt();
+        this.fade[2] = props.get("fade").getAsJsonObject().get("startFadeOut").getAsInt();
+        this.fade[3] = props.get("fade").getAsJsonObject().get("endFadeOut").getAsInt();
     }
 
-    /*public final float getAlpha() {
-        if (!fade.isAlwaysOn()) {
-            int currentTime = (int) Objects.requireNonNull(MinecraftClient.getInstance().world).getTimeOfDay() % 24000; // modulo so that it's bound to 24000
-            int durationIn = Utils.getTicksBetween(this.fade.getStartFadeIn(), this.fade.getEndFadeIn());
-            int durationOut = Utils.getTicksBetween(this.fade.getStartFadeOut(), this.fade.getEndFadeOut());
 
-            int startFadeIn = this.fade.getStartFadeIn() % 24000;
-            int endFadeIn = this.fade.getEndFadeIn() % 24000;
 
-            if (endFadeIn < startFadeIn) {
-                endFadeIn += 24000;
-            }
+    public float getAlpha(){
 
-            int startFadeOut = this.fade.getStartFadeOut() % 24000;
-            int endFadeOut = this.fade.getEndFadeOut() % 24000;
+        int currentTime = (int) Objects.requireNonNull(MinecraftClient.getInstance().world).getTimeOfDay() % 24000; // modulo so that it's bound to 24000
+        int durationIn = Util.getTicksBetween(fade[0], fade[1]);
+        int durationOut = Util.getTicksBetween(fade[2], fade[3]);
 
-            if (startFadeOut < endFadeIn) {
-                startFadeOut += 24000;
-            }
+        int startFadeIn = fade[0] % 24000;
+        int endFadeIn = fade[1] % 24000;
 
-            if (endFadeOut < startFadeOut) {
-                endFadeOut += 24000;
-            }
+        if (endFadeIn < startFadeIn) {
+            endFadeIn += 24000;
+        }
 
-            int tempInTime = currentTime;
+        int startFadeOut = fade[2] % 24000;
+        int endFadeOut = fade[3] % 24000;
 
-            if (tempInTime < startFadeIn) {
-                tempInTime += 24000;
-            }
+        if (startFadeOut < endFadeIn) {
+            startFadeOut += 24000;
+        }
 
-            int tempFullTime = currentTime;
+        if (endFadeOut < startFadeOut) {
+            endFadeOut += 24000;
+        }
 
-            if (tempFullTime < endFadeIn) {
-                tempFullTime += 24000;
-            }
+        int tempInTime = currentTime;
 
-            int tempOutTime = currentTime;
+        if (tempInTime < startFadeIn) {
+            tempInTime += 24000;
+        }
 
-            if (tempOutTime < startFadeOut) {
-                tempOutTime += 24000;
-            }
+        int tempFullTime = currentTime;
 
-            float maxPossibleAlpha;
+        if (tempFullTime < endFadeIn) {
+            tempFullTime += 24000;
+        }
 
-            if (startFadeIn < tempInTime && endFadeIn >= tempInTime) {
-                maxPossibleAlpha = 1f - (((float) (endFadeIn - tempInTime)) / durationIn); // fading in
+        int tempOutTime = currentTime;
 
-            } else if (endFadeIn < tempFullTime && startFadeOut >= tempFullTime) {
-                maxPossibleAlpha = 1f; // fully faded in
+        if (tempOutTime < startFadeOut) {
+            tempOutTime += 24000;
+        }
 
-            } else if (startFadeOut < tempOutTime && endFadeOut >= tempOutTime) {
-                maxPossibleAlpha = (float) (endFadeOut - tempOutTime) / durationOut; // fading out
+        float maxPossibleAlpha;
 
-            } else {
-                maxPossibleAlpha = 0f; // default not showing
-            }
+        if (startFadeIn < tempInTime && endFadeIn >= tempInTime) {
+            maxPossibleAlpha = 1f - (((float) (endFadeIn - tempInTime)) / durationIn); // fading in
 
-            maxPossibleAlpha *= maxAlpha;
-            if (checkBiomes() && checkXRanges() && checkYRanges() && checkZRanges() && checkWeather() && checkEffect()) { // check if environment is invalid
-                if (alpha >= maxPossibleAlpha) {
-                    alpha = maxPossibleAlpha;
-                } else {
-                    alpha += transitionSpeed;
-                    if (alpha > maxPossibleAlpha) alpha = maxPossibleAlpha;
-                }
-            } else {
-                if (alpha > 0f) {
-                    alpha -= transitionSpeed;
-                    if (alpha < 0f) alpha = 0f;
-                } else {
-                    alpha = 0f;
-                }
-            }
+        } else if (endFadeIn < tempFullTime && startFadeOut >= tempFullTime) {
+            maxPossibleAlpha = 1f; // fully faded in
+
+        } else if (startFadeOut < tempOutTime && endFadeOut >= tempOutTime) {
+            maxPossibleAlpha = (float) (endFadeOut - tempOutTime) / durationOut; // fading out
+
         } else {
-            alpha = 1f;
+            maxPossibleAlpha = 0f; // default not showing
         }
 
-        if (alpha > SkyboxManager.MINIMUM_ALPHA) {
-            if (changeFog) {
-                SkyboxManager.shouldChangeFog = true;
-                SkyboxManager.fogRed = this.fogColors.getRed();
-                SkyboxManager.fogBlue = this.fogColors.getBlue();
-                SkyboxManager.fogGreen = this.fogColors.getGreen();
-            }
-            if (!renderSunSkyColorTint) {
-                SkyboxManager.renderSunriseAndSet = false;
-            }
-        }
+        maxPossibleAlpha *= maxAlpha;
 
-        // sanity checks
-        if (alpha < 0f) alpha = 0f;
-        if (alpha > 1f) alpha = 1f;
-
-        return alpha;
-    }*/
+        return  Math.round(maxPossibleAlpha * 255 * 100000)/100000F;
+    }
 
     public void renderSkybox(){
+        this.alpha = getAlpha();
+
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
 
         for (int i = 0; i < 6; ++i) {
-            //MinecraftClient.getInstance().getTextureManager().bindTexture(Axolotlclient.sky_textures[i]);
             Texture texture = Util.getTextures().get(textures[i]);
             if(texture==null){
                 texture = new SkyboxTexture(textures[i], i);

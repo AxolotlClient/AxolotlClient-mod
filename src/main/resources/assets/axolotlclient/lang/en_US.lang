@@ -6,6 +6,9 @@ config=Axolotlclient Options
 
 general=General...
 general.title=General Options
+customSky=Custom Skies
+showSunMoon=Custom Sky Sun & Moon
+zoomDivisorDesc=Zoom Divisor:
 resetConf=Reset Configuration
 resetConfTooltip=This will delete the current Configuration file! Proceed with Caution!
 

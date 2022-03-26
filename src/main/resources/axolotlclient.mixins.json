@@ -15,6 +15,7 @@
     "MinecraftClientMixin",
     "WorldRendererMixin",
     "TextureManagerMixin",
+    "GameRendererMixin",
     "ReloadableResourceManagerImplMixin",
     "PlayerRendererMixin"
   ],

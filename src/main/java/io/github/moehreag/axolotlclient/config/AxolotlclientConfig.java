@@ -54,9 +54,13 @@ public class AxolotlclientConfig {
     public static class other {
 
         public boolean customSky;
+        public boolean showSunMoon;
+        public float zoomDivisor;
 
-        public other(boolean customSky) {
+        public other(boolean customSky, float zoomDivisor, boolean showSunMoon) {
             this.customSky=customSky;
+            this.showSunMoon=showSunMoon;
+            this.zoomDivisor=zoomDivisor;
 
         }
     }

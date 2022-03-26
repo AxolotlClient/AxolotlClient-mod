@@ -1,6 +1,5 @@
 package io.github.moehreag.axolotlclient.modules.sky;
 
-import io.github.moehreag.axolotlclient.Axolotlclient;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.ArrayList;
@@ -9,11 +8,11 @@ import java.util.function.Predicate;
 
 public class SkyboxManager {
 
-    public static final double MINIMUM_ALPHA = 0.001;
+    public static final double MINIMUM_ALPHA = 0.01;
 
     private final ArrayList<SkyboxInstance> skyboxes = new ArrayList<>();
     private final ArrayList<SkyboxInstance> active_skies = new ArrayList<>();
-    private final Predicate<? super SkyboxInstance> renderPredicate = (skybox) -> !this.active_skies.contains(skybox) && skybox.alpha >= MINIMUM_ALPHA;
+    private final Predicate<? super SkyboxInstance> renderPredicate = (skybox) -> !this.active_skies.contains(skybox) && skybox.getAlpha() >= MINIMUM_ALPHA;
 
     public void addSkybox(SkyboxInstance skybox){skyboxes.add(Objects.requireNonNull(skybox));}
 
@@ -22,7 +21,7 @@ public class SkyboxManager {
     public void renderSkyboxes(){
         this.skyboxes.stream().filter(this.renderPredicate).forEach(this.active_skies::add);
         this.active_skies.forEach(SkyboxInstance::renderSkybox);
-        //this.active_skies.removeIf((skybox) -> skybox.getAlpha() <= MINIMUM_ALPHA);
+        this.active_skies.removeIf((skybox) -> skybox.getAlpha() <= MINIMUM_ALPHA);
     }
 
     @ApiStatus.Internal
