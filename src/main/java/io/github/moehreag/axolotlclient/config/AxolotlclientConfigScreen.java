@@ -50,12 +50,12 @@ public class AxolotlclientConfigScreen extends Screen {
         }
 
         switch (button.id){
-            case 1: this.client.openScreen(new GeneralConfScreen()); break;
-            case 2: this.client.openScreen(new BadgeConfScreen()); break;
-            case 3: this.client.openScreen(new NametagConfScreen()); break;
-            case 4: this.client.openScreen(new NickHiderConfScreen()); break;
-            case 5: this.client.openScreen(new RPCConfScreen()); break;
-            case 6: this.client.openScreen(new CursedConfScreen()); break;
+            case 1: this.client.openScreen(new GeneralConfScreen(new AxolotlclientConfigScreen(parent))); break;
+            case 2: this.client.openScreen(new BadgeConfScreen(new AxolotlclientConfigScreen(parent))); break;
+            case 3: this.client.openScreen(new NametagConfScreen(new AxolotlclientConfigScreen(parent))); break;
+            case 4: this.client.openScreen(new NickHiderConfScreen(new AxolotlclientConfigScreen(parent))); break;
+            case 5: this.client.openScreen(new RPCConfScreen(new AxolotlclientConfigScreen(parent))); break;
+            case 6: this.client.openScreen(new CursedConfScreen(new AxolotlclientConfigScreen(parent))); break;
         }
     }
 }

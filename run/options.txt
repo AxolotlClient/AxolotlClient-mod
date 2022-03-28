@@ -1,5 +1,5 @@
 invertYMouse:false
-mouseSensitivity:0.5
+mouseSensitivity:0.45070422
 fov:0.5
 gamma:1.0
 saturation:0.0
@@ -14,8 +14,8 @@ difficulty:2
 fancyGraphics:true
 ao:2
 renderClouds:false
-resourcePacks:["Flare 32x-1.16+ - [sky only]"]
-incompatibleResourcePacks:["Flare 32x-1.16+ - [sky only]"]
+resourcePacks:["sky_1.16.zip"]
+incompatibleResourcePacks:["sky_1.16.zip"]
 lastServer:
 lang:en_US
 chatVisibility:0
@@ -89,8 +89,9 @@ key_key.hotbar.5:6
 key_key.hotbar.6:7
 key_key.hotbar.7:8
 key_key.hotbar.8:9
-key_key.hotbar.9:10
-key_zoomKey:46
+key_key.hotbar.9:33
+key_key.zoom:46
+key_key.openHud:54
 soundCategory_master:0.4668874
 soundCategory_music:0.0
 soundCategory_record:0.45774648

@@ -9,9 +9,11 @@ import net.minecraft.client.resource.language.I18n;
 public class ConfScreen extends Screen {
 
     private final String title;
+    private final Screen parent;
 
-    public ConfScreen(String title){
+    public ConfScreen(String title, Screen parent){
         this.title = title;
+        this.parent=parent;
     }
 
     @Override
@@ -27,7 +29,7 @@ public class ConfScreen extends Screen {
     protected void buttonClicked(ButtonWidget button) {
         if(button.id == 0){
             ConfigHandler.save();
-            this.client.openScreen(new AxolotlclientConfigScreen());
+            this.client.openScreen(parent);
         }
         super.buttonClicked(button);
     }

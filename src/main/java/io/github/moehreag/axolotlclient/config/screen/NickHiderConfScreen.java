@@ -14,8 +14,8 @@ public class NickHiderConfScreen extends ConfScreen {
 
     private TextFieldWidget name;
 
-    public NickHiderConfScreen(){
-        super("nickHiderConf.title");
+    public NickHiderConfScreen(Screen parent){
+        super("nickHiderConf.title", parent);
     }
 
     @Override

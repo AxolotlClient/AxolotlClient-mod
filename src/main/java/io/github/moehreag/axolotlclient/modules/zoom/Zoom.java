@@ -4,50 +4,50 @@ import io.github.moehreag.axolotlclient.Axolotlclient;
 import net.legacyfabric.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.options.KeyBinding;
-import net.minecraft.util.math.MathHelper;
-
-import java.util.Objects;
 
 
 //Based on https://github.com/LogicalGeekBoy/logical_zoom/blob/master/src/main/java/com/logicalgeekboy/logical_zoom/LogicalZoom.java
 public class Zoom {
 
     public static boolean zoomed;
-    //private static boolean smoothCameraEnabled;
     private static float fadeFactor;
-    private static final float step=0.01F;
-    private static float lastFadeFactor;
+    private static final float step=0.01F*(Axolotlclient.CONFIG.General.zoomDivisor/4);
+    private static float originalSensitivity;
     private static KeyBinding keyBinding;
-    private static final MinecraftClient mc = MinecraftClient.getInstance();
 
     public static void init(){
-        keyBinding = new KeyBinding("zoomKey", 46, "category.axolotlclient");
+        keyBinding = new KeyBinding("key.zoom", 46, "category.axolotlclient");
 
         KeyBindingHelper.registerKeyBinding(keyBinding);
         zoomed = false;
         fadeFactor=1F;
-        //smoothCameraEnabled = false;
     }
 
     public static boolean isZoomed(){
         return keyBinding.isPressed();
     }
 
-    public static float getFov(float current, float delta){
-        //startFade(Axolotlclient.CONFIG.General.zoomDivisor);
+    public static float getFov(float current){
         decreaseFov();
         return current / fadeFactor;
+    }
+
+    public static void decreaseSensitivity(){
+        originalSensitivity=MinecraftClient.getInstance().options.sensitivity;
+        MinecraftClient.getInstance().options.sensitivity /= Axolotlclient.CONFIG.General.zoomDivisor;
+    }
+
+    public static void restoreSensitivity(){
+        MinecraftClient.getInstance().options.sensitivity=originalSensitivity;
     }
 
     public static void manageZoom() {
         if (zoomStarting()) {
             zoomStarted();
-            //enableSmoothCamera();
         }
 
         if (zoomStopping()) {
             zoomStopped();
-            //resetSmoothCamera();
         }
     }
 
@@ -61,21 +61,14 @@ public class Zoom {
     }
 
     private static void zoomStarted() {
-        //smoothCameraEnabled = isSmoothCamera();
         zoomed = true;
+        if(Axolotlclient.CONFIG.General.decreaseSensitivity)decreaseSensitivity();
     }
 
     private static void zoomStopped() {
         zoomed = false;
+        if(Axolotlclient.CONFIG.General.decreaseSensitivity)restoreSensitivity();
     }
-
-    /*private static void resetSmoothCamera() {
-        if (smoothCameraEnabled) {
-            enableSmoothCamera();
-        } else {
-            disableSmoothCamera();
-        }
-    }*/
 
     public static boolean isFadingOut(){
         return fadeFactor>1F;
@@ -83,9 +76,9 @@ public class Zoom {
 
     public static void decreaseFov(){
         if(isZoomed()){
-            if(fadeFactor <Axolotlclient.CONFIG.General.zoomDivisor) fadeFactor+=step;
+            if(fadeFactor <Axolotlclient.CONFIG.General.zoomDivisor) fadeFactor+=step;//*(Axolotlclient.CONFIG.General.zoomDivisor/2);
         } else {
-            if(fadeFactor > 1F) fadeFactor-=step;
+            if(fadeFactor > 1F) fadeFactor-=step;//*(Axolotlclient.CONFIG.General.zoomDivisor/2);
             else fadeFactor = 1F;
         }
     }

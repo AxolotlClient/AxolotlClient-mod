@@ -7,6 +7,7 @@ import io.github.moehreag.axolotlclient.config.widgets.BooleanButtonWidget;
 import io.github.moehreag.axolotlclient.config.widgets.TextFieldWidget;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.resource.language.I18n;
 
@@ -20,8 +21,8 @@ public class GeneralConfScreen extends ConfScreen {
     private String tooltip;
     private TextFieldWidget zoomDivisor;
 
-    public GeneralConfScreen(){
-        super("general.title");
+    public GeneralConfScreen(Screen parent){
+        super("general.title", parent);
     }
 
     @Override
@@ -31,7 +32,9 @@ public class GeneralConfScreen extends ConfScreen {
         this.buttons.add(new BooleanButtonWidget(1, this.width / 2 - 155, this.height / 6 + 72 -6, "customSky", CONFIG.General.customSky));
         this.buttons.add(new BooleanButtonWidget(2, this.width / 2 - 155, this.height / 6 + 96 -6, "showSunMoon", CONFIG.General.showSunMoon));
 
-        zoomDivisor = new TextFieldWidget(3, this.width / 2 + 110, this.height / 6 + 72 -6, 40);
+        this.buttons.add(new BooleanButtonWidget(4, this.width / 2 + 5, this.height / 6 + 96 -6, "decreaseSensitivity", CONFIG.General.decreaseSensitivity));
+
+        zoomDivisor = new TextFieldWidget(3, this.width / 2 + 115, this.height / 6 + 72 -6, 40);
 
 
         this.buttons.add(new ButtonWidget(99, this.width / 2 + 5, this.height / 6 + 120 + 16, 150, 20, I18n.translate("resetConf")){
@@ -68,6 +71,7 @@ public class GeneralConfScreen extends ConfScreen {
         if(button.id>0){
             if(button.id==1) CONFIG.General.customSky=!CONFIG.General.customSky;
             if(button.id==2) CONFIG.General.showSunMoon=!CONFIG.General.showSunMoon;
+            if(button.id==4) CONFIG.General.decreaseSensitivity=!CONFIG.General.decreaseSensitivity;
             if(button.id==99) {
                 try {
                     Files.deleteIfExists(FabricLoader.getInstance().getConfigDir().resolve("Axolotlclient.json"));

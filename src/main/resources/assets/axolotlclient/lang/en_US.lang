@@ -9,6 +9,7 @@ general.title=General Options
 customSky=Custom Skies
 showSunMoon=Custom Sky Sun & Moon
 zoomDivisorDesc=Zoom Divisor:
+decreaseSensitivity=Reduce Sensitivity
 resetConf=Reset Configuration
 resetConfTooltip=This will delete the current Configuration file! Proceed with Caution!
 
@@ -38,5 +39,13 @@ showActivity=Show Activity
 cursedConf=Cursed Options...
 cursedConf.title=Cursed Options
 rotateWorld=Rotate the World
+
+category.axolotlclient=AxolotlClient
+key.zoom=Zoom
+key.openHud=Open Hud Editor
+
+hud.snapping=Snapping
+hud.configuration=Configuration
+hud.clientOptions=Client Options
 
 back=Back

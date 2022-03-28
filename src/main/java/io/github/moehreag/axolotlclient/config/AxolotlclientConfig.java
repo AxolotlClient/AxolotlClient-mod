@@ -19,8 +19,6 @@ public class AxolotlclientConfig {
     public static class Badges {
         public boolean showBadge;
 
-        //public boolean showChatBadge = true;
-
         public boolean CustomBadge;
 
 
@@ -56,11 +54,13 @@ public class AxolotlclientConfig {
         public boolean customSky;
         public boolean showSunMoon;
         public float zoomDivisor;
+        public boolean decreaseSensitivity;
 
-        public other(boolean customSky, float zoomDivisor, boolean showSunMoon) {
+        public other(boolean customSky, float zoomDivisor, boolean showSunMoon, boolean decreaseSensitivity) {
             this.customSky=customSky;
             this.showSunMoon=showSunMoon;
             this.zoomDivisor=zoomDivisor;
+            this.decreaseSensitivity=decreaseSensitivity;
 
         }
     }

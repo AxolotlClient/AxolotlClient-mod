@@ -13,7 +13,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.dimension.Dimension;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 import org.spongepowered.asm.mixin.Mixin;
@@ -122,7 +121,7 @@ public abstract class GameRendererMixin {
     public void setZoom(float tickDelta, boolean changingFov, CallbackInfoReturnable<Float> cir){
         Zoom.manageZoom();
         if(Zoom.isZoomed()||Zoom.isFadingOut()){
-            cir.setReturnValue(Zoom.getFov(cir.getReturnValue(), tickDelta));
+            cir.setReturnValue(Zoom.getFov(cir.getReturnValue()));
             //cir.cancel();
         }
 

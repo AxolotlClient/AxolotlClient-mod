@@ -33,6 +33,7 @@ dependencies {
 	// If you know for a fact you don't, it's not required and can be safely removed.
 	modImplementation include ("net.legacyfabric.legacy-fabric-api:legacy-fabric-api:${fabric_version}") {
 		exclude module: "fabric-loader-1.8.9"
+		include "net.legacyfabric.legacy-fabric-api:legacy-fabric-keybinding-api-v1:1.0.0+1e58a10239"
 	}
 
 
@@ -45,7 +46,8 @@ dependencies {
 	}
 
 	implementation include ('com.github.Vatuu:discord-rpc:1.6.2')
-	//implementation include("net.legacyfabric.legacy-fabric-api:legacy-fabric-resource-loader-v1:1.0.0+1e58a10239")
+	implementation include("net.legacyfabric.legacy-fabric-api:legacy-fabric-resource-loader-v1:1.0.0+1e58a10239")
+	//compileOnly include("net.legacyfabric.legacy-fabric-api:legacy-fabric-keybinding-api-v1:1.0.0+1e58a10239")
 
 	modImplementation files("libs/legacy-modmenu-1.1.0-dev.jar")
 	//modImplementation include ('io.github.boogiemonster101:rewoven-modmenu:1.0.0+1.8.9')

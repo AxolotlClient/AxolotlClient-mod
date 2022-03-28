@@ -14,8 +14,8 @@ public class BadgeConfScreen extends ConfScreen {
 
     private TextFieldWidget badgeField;;
 
-    public BadgeConfScreen() {
-        super("badges.title");
+    public BadgeConfScreen(Screen parent) {
+        super("badges.title", parent);
     }
 
     @Override

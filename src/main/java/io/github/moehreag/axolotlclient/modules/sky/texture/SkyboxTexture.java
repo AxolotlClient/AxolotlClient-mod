@@ -16,6 +16,8 @@ import java.io.InputStream;
 public class SkyboxTexture extends ResourceTexture {
 
     public Orientation side;
+    public int height;
+    public int width;
 
     public SkyboxTexture(Identifier identifier, int orientation) {
         super(identifier);
@@ -43,13 +45,11 @@ public class SkyboxTexture extends ResourceTexture {
 
         switch (this.side){
             case TOP:
+            case WEST:
                 g2D.rotate(Math.toRadians(270), widthOfImage / (float)2, heightOfImage / (float)2);
                 break;
             case EAST:
                 g2D.rotate(Math.toRadians(90), widthOfImage / (float)2, heightOfImage / (float)2);
-                break;
-            case WEST:
-                g2D.rotate(Math.toRadians(270), widthOfImage / (float)2, heightOfImage / (float)2);
                 break;
             case SOUTH:
                 g2D.rotate(Math.toRadians(180), widthOfImage / (float)2, heightOfImage / (float)2);
@@ -69,7 +69,11 @@ public class SkyboxTexture extends ResourceTexture {
         try {
             Resource resource = manager.getResource(this.field_6555);
             inputStream = resource.getInputStream();
-            BufferedImage bufferedImage = rotateToOrientation(TextureUtil.create(inputStream));
+            BufferedImage bufferedImage;
+            if(side!=null)bufferedImage = rotateToOrientation(TextureUtil.create(inputStream));
+            else bufferedImage = TextureUtil.create(inputStream);
+            width=bufferedImage.getWidth();
+            height=bufferedImage.getHeight();
 
             boolean bl = false;
             boolean bl2 = false;
@@ -93,6 +97,14 @@ public class SkyboxTexture extends ResourceTexture {
 
         }
 
+    }
+
+    public int getHeight(){
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
     }
 
     public enum Orientation {

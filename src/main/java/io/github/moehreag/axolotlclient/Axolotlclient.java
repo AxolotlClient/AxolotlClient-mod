@@ -3,6 +3,7 @@ package io.github.moehreag.axolotlclient;
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.config.AxolotlclientConfig;
 import io.github.moehreag.axolotlclient.config.ConfigHandler;
+import io.github.moehreag.axolotlclient.modules.hud.HudManager;
 import io.github.moehreag.axolotlclient.modules.zoom.Zoom;
 import io.github.moehreag.axolotlclient.util.Util;
 import net.fabricmc.api.ModInitializer;
@@ -63,6 +64,7 @@ public class Axolotlclient implements ModInitializer {
 			badmod = null;
 
 			Zoom.init();
+			HudManager.init();
 
 			LOGGER.info("Axolotlclient Initialized");
 		}
@@ -81,6 +83,8 @@ public class Axolotlclient implements ModInitializer {
 
 
 	public static void TickClient(){
+
+		HudManager.tick();
 
 		if(tickTime % 20 == 0){
 			if(MinecraftClient.getInstance().getCurrentServerEntry() != null){

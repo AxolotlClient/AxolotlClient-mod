@@ -8,8 +8,8 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 
 public class NametagConfScreen extends ConfScreen {
 
-    public NametagConfScreen(){
-        super("nametagConf.title");
+    public NametagConfScreen(Screen parent){
+        super("nametagConf.title", parent);
     }
 
     @Override

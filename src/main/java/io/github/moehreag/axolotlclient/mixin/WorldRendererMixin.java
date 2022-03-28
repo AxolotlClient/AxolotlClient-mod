@@ -38,6 +38,10 @@ public abstract class WorldRendererMixin {
 
     @Shadow private ClientWorld world;
 
+    @Shadow private int field_1925;
+
+    @Shadow private AdvancedVertexBuffer field_10827;
+
     @Inject(method = "method_9891", at=@At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;disableTexture()V"), cancellable = true)
     public void sky(float f, int ih, CallbackInfo ci){
         if(Axolotlclient.features && Axolotlclient.CONFIG.General.customSky){
@@ -159,36 +163,6 @@ public abstract class WorldRendererMixin {
             GlStateManager.popMatrix();
             GlStateManager.disableTexture();
             GlStateManager.color3f(0.0F, 0.0F, 0.0F);
-            double d = MinecraftClient.getInstance().player.getCameraPosVec(f).y - this.world.getHorizonHeight();
-            if (d < 0.0) {
-                GlStateManager.pushMatrix();
-                GlStateManager.translatef(0.0F, 12.0F, 0.0F);
-
-                GlStateManager.popMatrix();
-                float q = -((float)(d + 65.0));
-                bufferBuilder.begin(7, VertexFormats.POSITION_COLOR);
-                bufferBuilder.vertex(-1.0, q, 1.0).color(0, 0, 0, 255).next();
-                bufferBuilder.vertex(1.0, q, 1.0).color(0, 0, 0, 255).next();
-                bufferBuilder.vertex(1.0, -1.0, 1.0).color(0, 0, 0, 255).next();
-                bufferBuilder.vertex(-1.0, -1.0, 1.0).color(0, 0, 0, 255).next();
-                bufferBuilder.vertex(-1.0, -1.0, -1.0).color(0, 0, 0, 255).next();
-                bufferBuilder.vertex(1.0, -1.0, -1.0).color(0, 0, 0, 255).next();
-                bufferBuilder.vertex(1.0, q, -1.0).color(0, 0, 0, 255).next();
-                bufferBuilder.vertex(-1.0, q, -1.0).color(0, 0, 0, 255).next();
-                bufferBuilder.vertex(1.0, -1.0, -1.0).color(0, 0, 0, 255).next();
-                bufferBuilder.vertex(1.0, -1.0, 1.0).color(0, 0, 0, 255).next();
-                bufferBuilder.vertex(1.0, q, 1.0).color(0, 0, 0, 255).next();
-                bufferBuilder.vertex(1.0, q, -1.0).color(0, 0, 0, 255).next();
-                bufferBuilder.vertex(-1.0, q, -1.0).color(0, 0, 0, 255).next();
-                bufferBuilder.vertex(-1.0, q, 1.0).color(0, 0, 0, 255).next();
-                bufferBuilder.vertex(-1.0, -1.0, 1.0).color(0, 0, 0, 255).next();
-                bufferBuilder.vertex(-1.0, -1.0, -1.0).color(0, 0, 0, 255).next();
-                bufferBuilder.vertex(-1.0, -1.0, -1.0).color(0, 0, 0, 255).next();
-                bufferBuilder.vertex(-1.0, -1.0, 1.0).color(0, 0, 0, 255).next();
-                bufferBuilder.vertex(1.0, -1.0, 1.0).color(0, 0, 0, 255).next();
-                bufferBuilder.vertex(1.0, -1.0, -1.0).color(0, 0, 0, 255).next();
-                tessellator.draw();
-            }
 
             GlStateManager.enableTexture();
             GlStateManager.depthMask(true);
@@ -199,7 +173,7 @@ public abstract class WorldRendererMixin {
 
     @Inject(method = "method_9924", at = @At("TAIL"))
     public void decurse(CallbackInfo ci){
-        if(Axolotlclient.CONFIG.Cursed.rotateWorld)GlStateManager.popMatrix();
+        if(Axolotlclient.features && Axolotlclient.CONFIG.Cursed.rotateWorld)GlStateManager.popMatrix();
     }
 
     @Redirect(method = "method_9910", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/dimension/Dimension;getCloudHeight()F"))

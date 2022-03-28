@@ -17,8 +17,7 @@ public class ModMenuIntegration implements ModMenuApi {
     @Override
 	public Function<Screen, ? extends Screen> getConfigScreenFactory() {
 
-        if(MinecraftClient.getInstance().player != null)return parent -> (Screen) new AxolotlclientConfigScreen(new ModListScreen(new GameMenuScreen()));
-        else return parent -> (Screen) new AxolotlclientConfigScreen(new ModListScreen(new TitleScreen()));
+        return parent -> (Screen) new AxolotlclientConfigScreen();
 	}
 
 

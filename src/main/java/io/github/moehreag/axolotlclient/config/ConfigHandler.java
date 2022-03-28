@@ -36,7 +36,8 @@ public class ConfigHandler {
                 ),
                 new AxolotlclientConfig.other(
                         true,
-                        4,
+                        6,
+                        true,
                         true
                 ),
                 new AxolotlclientConfig.rpcConfig(
@@ -49,7 +50,7 @@ public class ConfigHandler {
         );
 
         try {
-            Axolotlclient.CONFIG = gson.fromJson(new String(Files.readAllBytes(confPath)), AxolotlclientConfig.class);
+            AxolotlclientConfig readConfig = gson.fromJson(new String(Files.readAllBytes(confPath)), AxolotlclientConfig.class);
         } catch (Exception ignored){}
         save();
 

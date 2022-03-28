@@ -3,11 +3,12 @@ package io.github.moehreag.axolotlclient.config.screen;
 import io.github.moehreag.axolotlclient.Axolotlclient;
 import io.github.moehreag.axolotlclient.config.widgets.BooleanButtonWidget;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 
 public class CursedConfScreen extends ConfScreen{
-    public CursedConfScreen() {
-        super("cursedConf.title");
+    public CursedConfScreen(Screen parent) {
+        super("cursedConf.title", parent);
     }
 
     @Override

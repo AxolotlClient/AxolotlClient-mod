@@ -6,6 +6,11 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.function.Predicate;
 
+/**
+ * This implementation of custom skies is based on the FabricSkyBoxes mod by AMereBagatelle
+ * https://github.com/AMereBagatelle/FabricSkyBoxes
+ **/
+
 public class SkyboxManager {
 
     public static final double MINIMUM_ALPHA = 0.01;
@@ -24,7 +29,6 @@ public class SkyboxManager {
         this.active_skies.removeIf((skybox) -> skybox.getAlpha() <= MINIMUM_ALPHA);
     }
 
-    @ApiStatus.Internal
     public void clearSkyboxes() {
         skyboxes.clear();
         active_skies.clear();
