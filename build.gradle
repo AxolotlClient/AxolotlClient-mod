@@ -36,13 +36,9 @@ dependencies {
 	modImplementation ("com.terraformersmc:modmenu:${project.modmenu_version}")
 
 	modImplementation files("libs/KronHUD-2.0.2-dev.jar")
-	modImplementation files("libs/osmium-1.3.1-1.18.1.jar")
+	//modImplementation files("libs/osmium-1.3.1-1.18.1.jar.d")
 
 	implementation include('com.github.Vatuu:discord-rpc:1.6.2')
-
-
-	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
-	// You may need to force-disable transitiveness on them.
 }
 
 processResources {
