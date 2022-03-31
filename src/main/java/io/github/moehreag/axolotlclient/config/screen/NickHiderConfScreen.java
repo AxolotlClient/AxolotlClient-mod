@@ -22,13 +22,13 @@ public class NickHiderConfScreen extends ConfScreen {
     public void init() {
         super.init();
         Keyboard.enableRepeatEvents(true);
-        this.buttons.add(new BooleanButtonWidget(1, this.width / 2 - 155, this.height / 6 + 72 - 6, "hideNames" , CONFIG.NickHider.hideNames));
+        this.buttons.add(new BooleanButtonWidget(1, this.width / 2 - 155, this.height / 6 + 72 - 6, "hideNames" , CONFIG.hideNames));
         name = new TextFieldWidget(3, this.width / 2 - 155, this.height / 6 + 96 + 10);
 
-        name.write(CONFIG.NickHider.Name);
+        name.write(CONFIG.name.get());
 
-        this.buttons.add(new BooleanButtonWidget(5, this.width / 2 - 155, this.height / 6 + 120 + 16, "hideOwnSkin", CONFIG.NickHider.hideOwnSkin));
-        this.buttons.add(new BooleanButtonWidget(6, this.width / 2 + 5, this.height / 6 + 120 + 16, "hideOtherSkins", CONFIG.NickHider.hideOtherSkins));
+        this.buttons.add(new BooleanButtonWidget(5, this.width / 2 - 155, this.height / 6 + 120 + 16, "hideOwnSkin", CONFIG.hideOwnSkin));
+        this.buttons.add(new BooleanButtonWidget(6, this.width / 2 + 5, this.height / 6 + 120 + 16, "hideOtherSkins", CONFIG.hideOtherSkins));
 
     }
 
@@ -45,9 +45,9 @@ public class NickHiderConfScreen extends ConfScreen {
     protected void buttonClicked(ButtonWidget button) {
         super.buttonClicked(button);
         if(button.id>0){
-            if(button.id==1) CONFIG.NickHider.hideNames=!CONFIG.NickHider.hideNames;
-            if(button.id==5) CONFIG.NickHider.hideOwnSkin=!CONFIG.NickHider.hideOwnSkin;
-            if(button.id==6) CONFIG.NickHider.hideOtherSkins=!CONFIG.NickHider.hideOtherSkins;
+            if(button.id==1) CONFIG.hideNames.toggle();
+            if(button.id==5) CONFIG.hideOwnSkin.toggle();
+            if(button.id==6) CONFIG.hideOtherSkins.toggle();
 
             MinecraftClient.getInstance().openScreen(this);
         }

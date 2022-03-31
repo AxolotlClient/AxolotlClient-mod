@@ -24,7 +24,7 @@ public class DiscordRPC {
 
     public static void update(){
 
-        if(Axolotlclient.CONFIG!=null && !Axolotlclient.CONFIG.RPCConfig.enableRPC){shutdown();}
+        if(Axolotlclient.CONFIG!=null && !Axolotlclient.CONFIG.enableRPC.get()){shutdown();}
 
         if (MinecraftClient.getInstance().world == null){
 
@@ -33,13 +33,13 @@ public class DiscordRPC {
         } else {
 
             assert Axolotlclient.CONFIG != null;
-            if (Axolotlclient.CONFIG.RPCConfig.enableRPC) inGame();
+            if (Axolotlclient.CONFIG.enableRPC.get()) inGame();
         }
     }
 
     public static void menu(){
 
-        if (Axolotlclient.CONFIG!=null &&  Axolotlclient.CONFIG.RPCConfig.enableRPC) {
+        if (Axolotlclient.CONFIG!=null &&  Axolotlclient.CONFIG.enableRPC.get()) {
             if (!Objects.equals(rpcstate, "menu"))
                 time = System.currentTimeMillis() / 1000L;
 
@@ -64,7 +64,7 @@ public class DiscordRPC {
 
             DiscordRichPresence rpc = new DiscordRichPresence.Builder(MinecraftClient.getInstance().getCurrentServerEntry().address)
                     .setBigImage("icon", "Axolotlclient " + MinecraftClient.getInstance().getGameVersion())
-                    .setDetails(Axolotlclient.CONFIG.RPCConfig.showActivity ? game: "")
+                    .setDetails(Axolotlclient.CONFIG.showActivity.get() ? game: "")
                     .setStartTimestamps(time)
                     .build();
             net.arikia.dev.drpc.DiscordRPC.discordUpdatePresence(rpc);
@@ -76,7 +76,7 @@ public class DiscordRPC {
 
             DiscordRichPresence rpc = new DiscordRichPresence.Builder("Having fun!")
                     .setBigImage("icon", "Axolotlclient " + MinecraftClient.getInstance().getGameVersion())
-                    .setDetails(Axolotlclient.CONFIG.RPCConfig.showActivity ? "Singleplayer": "")
+                    .setDetails(Axolotlclient.CONFIG.showActivity.get() ? "Singleplayer": "")
                     .setStartTimestamps(time)
                     .build();
             net.arikia.dev.drpc.DiscordRPC.discordUpdatePresence(rpc);

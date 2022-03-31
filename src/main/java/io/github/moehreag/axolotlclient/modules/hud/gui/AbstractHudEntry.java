@@ -1,45 +1,46 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui;
 
+import io.github.moehreag.axolotlclient.config.options.BooleanOption;
+import io.github.moehreag.axolotlclient.config.options.DoubleOption;
+import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.util.Color;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawUtil;
 import io.github.moehreag.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.Window;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class AbstractHudEntry extends DrawUtil {
 
-    public boolean enabled;
-    public double x;
-    public double y;
     public int width;
     public int height;
 
-    /*protected KronBoolean enabled = new KronBoolean("enabled", null, false);
-    public KronDouble scale = new KronDouble("scale", null, 1, 0.1F, 2);
-    protected KronColor textColor = new KronColor("textcolor", null, "#FFFFFFFF");
-    protected KronBoolean shadow = new KronBoolean("shadow", null, getShadowDefault());
-    protected KronBoolean background = new KronBoolean("background", null, true);
-    protected KronColor backgroundColor = new KronColor("backgroundcolor", null, "#64000000");
-    private KronDouble x = new KronDouble("x", null, getDefaultX(), 0, 1);
-    private KronDouble y = new KronDouble("y", null, getDefaultY(), 0, 1);
+    protected BooleanOption enabled = new BooleanOption("enabled",false);
+    public DoubleOption scale = new DoubleOption("scale", 1, 0.1F, 2);
+    //protected KronColor textColor = new KronColor("textcolor", null, "#FFFFFFFF");
+    protected BooleanOption shadow = new BooleanOption("shadow",  getShadowDefault());
+    protected BooleanOption background = new BooleanOption("background",  true);
+    //protected KronColor backgroundColor = new KronColor("backgroundcolor", null, "#64000000");
+    private DoubleOption x = new DoubleOption("x", getDefaultX(), 0, 1);
+    private DoubleOption y = new DoubleOption("y", getDefaultY(), 0, 1);
 
-    private List<IConfigBase> options;
+    private List<Option> options;
 
-    public int width;
-    public int height;
     protected boolean hovered = false;
     protected MinecraftClient client = MinecraftClient.getInstance();
-    protected Window window = new Window(client);
+    protected Window window;
 
 
-    */public AbstractHudEntry(int width, int height) {
+    public AbstractHudEntry(int width, int height) {
         this.width = width;
         this.height = height;
+        //window=new Window(client);
     }
 
     public static int floatToInt(float percent, int max, int offset) {
@@ -58,7 +59,7 @@ public abstract class AbstractHudEntry extends DrawUtil {
 
     public abstract void renderPlaceholder();
 
-    /*public void renderPlaceholderBackground() {
+    public void renderPlaceholderBackground() {
         if (hovered) {
             fillRect(getScaledBounds(), Color.SELECTOR_BLUE);
         } else {
@@ -88,16 +89,16 @@ public abstract class AbstractHudEntry extends DrawUtil {
     }
 
     public void setX(int x) {
-        this.x.setDoubleValue(intToFloat(x, (int) window.getScaledWidth(),
+        this.x.set(intToFloat(x, (int)new Window(client).getScaledWidth(),
                 Math.round(width * getScale())));
     }
 
     public int getY() {
-       return getScaledPos().y();
+       return getScaledPos().y;
     }
 
     public void setY(int y) {
-        this.y.setDoubleValue(intToFloat(y, client.getWindow().getScaledHeight(),
+        this.y.set(intToFloat(y, (int) new Window(client).getScaledHeight(),
                 Math.round(height * getScale())));
     }
 
@@ -114,20 +115,20 @@ public abstract class AbstractHudEntry extends DrawUtil {
     }
 
     public Rectangle getScaledBounds() {
-        return new Rectangle(getX(), getY(), Math.round(width * (float) scale.getDoubleValue()),
-                Math.round(height * (float) scale.getDoubleValue()));
-    }*/
+        return new Rectangle(getX(), getY(), Math.round(width * (float) scale.get()),
+                Math.round(height * (float) scale.get()));
+    }
 
     /**
      * Gets the hud's bounds when the matrix has already been scaled.
      * @return The bounds.
      */
-    /*public Rectangle getBounds() {
+    public Rectangle getBounds() {
         return new Rectangle(getPos().x, getPos().y, width, height);
     }
 
     public float getScale() {
-        return (float) scale.getDoubleValue();
+        return (float) scale.get();
     }
 
     public void scale() {
@@ -143,18 +144,18 @@ public abstract class AbstractHudEntry extends DrawUtil {
     }
 
     public DrawPosition getScaledPos(float scale) {
-        int scaledX = floatToInt((float) x.getDoubleValue(), client.getWindow().getScaledWidth(),
+        int scaledX = floatToInt((float) x.get(), (int) new Window(client).getScaledWidth(),
                 Math.round(width * scale));
-        int scaledY = floatToInt((float) y.getDoubleValue(), client.getWindow().getScaledHeight(),
+        int scaledY = floatToInt((float) y.get(), (int) new Window(client).getScaledHeight(),
                 Math.round(height * scale));
         return new DrawPosition(scaledX, scaledY);
     }
 
-    public List<GuiConfigsBase.ConfigOptionWrapper> getOptionWrappers() {
+    /*public List<GuiConfigsBase.ConfigOptionWrapper> getOptionWrappers() {
         return GuiConfigsBase.ConfigOptionWrapper.createFor(getOptions());
-    }
+    }*/
 
-    public List<IConfigBase> getOptions() {
+    public List<Option> getOptions() {
         if (options == null) {
             options = new ArrayList<>();
             addConfigOptions(options);
@@ -162,20 +163,20 @@ public abstract class AbstractHudEntry extends DrawUtil {
         return options;
     }
 
-    public List<IConfigBase> getAllOptions() {
-        List<IConfigBase> options = new ArrayList<>(getOptions());
+    public List<Option> getAllOptions() {
+        List<Option> options = new ArrayList<>(getOptions());
         options.add(x);
         options.add(y);
         return options;
     }
 
-    public void addConfigOptions(List<IConfigBase> options) {
+    public void addConfigOptions(List<Option> options) {
         options.add(enabled);
         options.add(scale);
     }
 
     public boolean isEnabled() {
-        return enabled.getBooleanValue();
+        return enabled.get();
     }
 
     public String getNameKey() {
@@ -183,11 +184,14 @@ public abstract class AbstractHudEntry extends DrawUtil {
     }
 
     public String getName() {
-        return StringUtils.translate(getNameKey());
+        return I18n.translate(getNameKey());
     }
 
     public void toggle() {
-        enabled.toggleBooleanValue();
-    }*/
+        enabled.toggle();
+    }
 
+    public void setHovered(boolean value) {
+        hovered=value;
+    }
 }

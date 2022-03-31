@@ -1,13 +1,10 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
+import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Util;
 
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ScoreboardHud extends AbstractHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "scoreboardhud");
@@ -162,17 +159,17 @@ public class ScoreboardHud extends AbstractHudEntry {
                 }
             }
         }
-    }
+    }*/
 
     @Override
-    public void addConfigOptions(List<IConfigBase> options) {
+    public void addConfigOptions(List<Option> options) {
         super.addConfigOptions(options);
         options.add(background);
-        options.add(topColor);
-        options.add(backgroundColor);
+        /*options.add(topColor);
+        options.add(backgroundColor);*/
         options.add(shadow);
-        options.add(scores);
-        options.add(scoreColor);
+        /*options.add(scores);
+        options.add(scoreColor);*/
     }
 
     @Override
@@ -183,6 +180,6 @@ public class ScoreboardHud extends AbstractHudEntry {
     @Override
     public boolean movable() {
         return true;
-    }*/
+    }
 
 }

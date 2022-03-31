@@ -17,10 +17,10 @@ public class PlayerRendererMixin {
     public void modifiyName(Args args){
         if(Axolotlclient.CONFIG != null) {
             AbstractClientPlayerEntity player = args.get(0);
-            if (Axolotlclient.CONFIG.NickHider.hideNames && Axolotlclient.features) {
+            if (Axolotlclient.CONFIG.hideNames.get() && Axolotlclient.features) {
                 assert MinecraftClient.getInstance().player != null;
                 if (player.getName() != MinecraftClient.getInstance().player.getName()) {
-                    args.set(4, Axolotlclient.CONFIG.NickHider.Name);
+                    args.set(4, Axolotlclient.CONFIG.name);
                 }
             }
         }

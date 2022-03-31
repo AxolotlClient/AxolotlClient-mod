@@ -1,13 +1,11 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
+import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.MathHelper;
 
-import java.util.ArrayList;
-import java.util.Optional;
+import java.util.List;
 
 public class KeystrokeHud extends AbstractHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "keystrokehud");
@@ -87,14 +85,14 @@ public class KeystrokeHud extends AbstractHudEntry {
             stroke.render(matrices);
         }
         matrices.pop();
-    }
+    }*/
 
     @Override
     public boolean tickable() {
         return true;
     }
 
-    @Override
+    /*@Override
     public void tick() {
         DrawPosition pos = getPos();
         if (keystrokes == null) {
@@ -136,7 +134,7 @@ public class KeystrokeHud extends AbstractHudEntry {
 
             drawString(matrices, client.textRenderer, word, x, y, stroke.getFGColor().color(), shadow.getBooleanValue());
         });
-    }
+    }*/
 
     @Override
     public Identifier getId() {
@@ -149,17 +147,17 @@ public class KeystrokeHud extends AbstractHudEntry {
     }
 
     @Override
-    public void addConfigOptions(List<IConfigBase> options) {
+    public void addConfigOptions(List<Option> options) {
         super.addConfigOptions(options);
-        options.add(textColor);
-        options.add(pressedTextColor);
+        /*options.add(textColor);
+        options.add(pressedTextColor);*/
         options.add(shadow);
         options.add(background);
-        options.add(backgroundColor);
-        options.add(pressedBackgroundColor);
+        /*options.add(backgroundColor);
+        options.add(pressedBackgroundColor);*/
     }
 
-    public class Keystroke {
+    /*public class Keystroke {
         public final KeyBinding key;
         public final KeystrokeRenderer render;
         public Rectangle bounds;

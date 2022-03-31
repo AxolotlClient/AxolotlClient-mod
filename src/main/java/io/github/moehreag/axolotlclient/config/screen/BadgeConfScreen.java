@@ -22,10 +22,10 @@ public class BadgeConfScreen extends ConfScreen {
     public void init(){
         super.init();
         Keyboard.enableRepeatEvents(true);
-        this.buttons.add(new BooleanButtonWidget(1, this.width / 2 - 155, this.height / 6 + 72 - 6, "showBadge" , CONFIG.badgeOptions.showBadge));
-        this.buttons.add(new BooleanButtonWidget(2, this.width / 2 + 5, this.height / 6 + 72 - 6, "customBadge", CONFIG.badgeOptions.CustomBadge));
+        this.buttons.add(new BooleanButtonWidget(1, this.width / 2 - 155, this.height / 6 + 72 - 6, "showBadge" , CONFIG.showBadges));
+        this.buttons.add(new BooleanButtonWidget(2, this.width / 2 + 5, this.height / 6 + 72 - 6, "customBadge", CONFIG.customBadge));
         badgeField = new TextFieldWidget(3, this.width / 2 + 5, this.height / 6 + 96 + 10);
-        badgeField.write(CONFIG.badgeOptions.badgeText);
+        badgeField.write(CONFIG.badgeText.get());
 
     }
 
@@ -45,14 +45,14 @@ public class BadgeConfScreen extends ConfScreen {
     protected void buttonClicked(ButtonWidget button) {
         super.buttonClicked(button);
         if(button.id == 0){
-            CONFIG.badgeOptions.badgeText = badgeField.getText();
+            CONFIG.badgeText.set(badgeField.getText());
         } else {
             switch (button.id) {
                 case 1:
-                    CONFIG.badgeOptions.showBadge = !CONFIG.badgeOptions.showBadge;
+                    CONFIG.showBadges.toggle();
                     break;
                 case 2:
-                    CONFIG.badgeOptions.CustomBadge = !CONFIG.badgeOptions.CustomBadge;
+                    CONFIG.customBadge.toggle();
                     break;
             }
             MinecraftClient.getInstance().openScreen(this);

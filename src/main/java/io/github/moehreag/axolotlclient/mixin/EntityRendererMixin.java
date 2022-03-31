@@ -21,7 +21,7 @@ public class EntityRendererMixin<T extends Entity> {
 
     @Redirect(method = "method_6917", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Ljava/lang/String;III)I"))
     public int forceShadows(TextRenderer instance, String text, int x, int y, int color){
-        instance.draw(text, x, y, color, Axolotlclient.CONFIG.NametagConf.useShadows);
+        instance.draw(text, x, y, color, Axolotlclient.CONFIG.useShadows.get());
         return 0;
     }
 

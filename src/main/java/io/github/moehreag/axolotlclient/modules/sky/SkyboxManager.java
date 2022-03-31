@@ -38,5 +38,9 @@ public class SkyboxManager {
         return INSTANCE;
     }
 
+    public boolean hasSkyBoxes(){
+        return !active_skies.isEmpty();
+    }
+
 
 }

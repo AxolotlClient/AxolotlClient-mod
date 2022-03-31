@@ -1,7 +1,8 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
+import io.github.moehreag.axolotlclient.config.options.BooleanOption;
+import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
@@ -11,8 +12,8 @@ import java.util.List;
 public class ArrowHud extends AbstractHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "arrowhud");
     private int arrows = 0;
-    /*private KronBoolean dynamic = new KronBoolean("dynamic", ID.getPath(), false);
-    private KronBoolean allArrowTypes = new KronBoolean("allArrowTypes", ID.getPath(), false);*/
+    private BooleanOption dynamic = new BooleanOption("dynamic", false);
+    private BooleanOption allArrowTypes = new BooleanOption("allArrowTypes", false);
     private ItemStack currentArrow = new ItemStack(Items.ARROW);
 
     public ArrowHud() {
@@ -76,13 +77,13 @@ public class ArrowHud extends AbstractHudEntry {
         matrices.pop();*/
     }
 
-    /*@Override
-    public void addConfigOptions(List<IConfigBase> options) {
+    @Override
+    public void addConfigOptions(List<Option> options) {
         super.addConfigOptions(options);
-        options.add(textColor);
+        //options.add(textColor);
         options.add(shadow);
         options.add(background);
-        options.add(backgroundColor);
+        //options.add(backgroundColor);
         options.add(dynamic);
         options.add(allArrowTypes);
     }
@@ -95,6 +96,6 @@ public class ArrowHud extends AbstractHudEntry {
     @Override
     public Identifier getId() {
         return ID;
-    }*/
+    }
 
 }

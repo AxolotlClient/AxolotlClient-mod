@@ -1,14 +1,9 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
+import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.texture.Sprite;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffectUtil;
 import net.minecraft.util.Identifier;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PotionsHud extends AbstractHudEntry {
@@ -21,17 +16,7 @@ public class PotionsHud extends AbstractHudEntry {
 
     @Override
     public void render() {
-
-    }
-
-    @Override
-    public void renderPlaceholder() {
-
-    }
-
-    /*@Override
-    public void render(MatrixStack matrices) {
-        matrices.push();
+        /*matrices.push();
         scale(matrices);
         ArrayList<StatusEffectInstance> effects = new ArrayList<>(client.player.getStatusEffects());
         if (!effects.isEmpty()) {
@@ -59,13 +44,13 @@ public class PotionsHud extends AbstractHudEntry {
                 lastY += 20;
             }
         }
-        matrices.pop();
+        matrices.pop();*/
 
     }
 
     @Override
-    public void renderPlaceholder(MatrixStack matrices) {
-        matrices.push();
+    public void renderPlaceholder() {
+        /*matrices.push();
         renderPlaceholderBackground(matrices);
         scale(matrices);
         DrawPosition pos = getPos();
@@ -79,13 +64,13 @@ public class PotionsHud extends AbstractHudEntry {
         drawString(matrices, client.textRenderer, StatusEffectUtil.durationToString(effect, 1), pos.x() + 20,
                 pos.y() + 7, Color.WHITE.color(), shadow.getBooleanValue());
         hovered = false;
-        matrices.pop();
+        matrices.pop();*/
     }
 
     @Override
-    public void addConfigOptions(List<IConfigBase> options) {
+    public void addConfigOptions(List<Option> options) {
         super.addConfigOptions(options);
-        options.add(textColor);
+        //options.add(textColor);
         options.add(shadow);
     }
 
@@ -97,6 +82,6 @@ public class PotionsHud extends AbstractHudEntry {
     @Override
     public Identifier getId() {
         return ID;
-    }*/
+    }
 
 }

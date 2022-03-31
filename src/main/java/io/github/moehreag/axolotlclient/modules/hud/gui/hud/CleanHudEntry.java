@@ -1,7 +1,10 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
 
+import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
+import io.github.moehreag.axolotlclient.modules.hud.util.Color;
+import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
 
 import java.util.List;
 
@@ -17,37 +20,35 @@ public abstract class CleanHudEntry extends AbstractHudEntry {
 
     @Override
     public void render() {
-        /*matrices.push();
-        scale(matrices);
+
+        scale();
         DrawPosition pos = getPos();
-        if (background.getBooleanValue()) {
-            fillRect(matrices, getBounds(), backgroundColor.getColor());
+        if (background.get()) {
+            //fillRect(getBounds(), backgroundColor.getColor());
+            fillRect(getBounds(), new Color(-1));
         }
-        drawCenteredString(matrices, client.textRenderer, getValue(), new DrawPosition(pos.x() + (Math.round(width) / 2),
-                pos.y() + (Math.round((float) height / 2)) - 4), textColor.getColor(), shadow.getBooleanValue());
-        matrices.pop();*/
+        drawCenteredString(client.textRenderer, getValue(), new DrawPosition(pos.x + (Math.round(width) / 2),
+                pos.y + (Math.round((float) height / 2)) - 4), -1, shadow.get());
     }
 
     @Override
     public void renderPlaceholder() {
-        /*matrices.push();
-        renderPlaceholderBackground(matrices);
-        scale(matrices);
+        renderPlaceholderBackground();
+        scale();
         DrawPosition pos = getPos();
-        drawCenteredString(matrices, client.textRenderer, getPlaceholder(),
-                new DrawPosition(pos.x() + (Math.round(width) / 2),
-                pos.y() + (Math.round((float) height / 2)) - 4), textColor.getColor(), shadow.getBooleanValue());
-        matrices.pop();
-        hovered = false;*/
+        drawCenteredString(client.textRenderer, getPlaceholder(),
+                new DrawPosition(pos.x + (Math.round(width) / 2),
+                pos.y + (Math.round((float) height / 2)) - 4), -1, shadow.get());
+        hovered = false;
     }
 
-    /*@Override
-    public void addConfigOptions(List<IConfigBase> options) {
+    @Override
+    public void addConfigOptions(List<Option> options) {
         super.addConfigOptions(options);
-        options.add(textColor);
+        //options.add(textColor);
         options.add(shadow);
         options.add(background);
-        options.add(backgroundColor);
+        //options.add(backgroundColor);
     }
 
     @Override
@@ -57,6 +58,6 @@ public abstract class CleanHudEntry extends AbstractHudEntry {
 
     public abstract String getValue();
 
-    public abstract String getPlaceholder();*/
+    public abstract String getPlaceholder();
 
 }

@@ -45,7 +45,7 @@ public class AxolotlclientConfigScreen extends Screen {
     @Override
     protected void buttonClicked(ButtonWidget button) {
         if(button.id == 0){
-            ConfigHandler.save();
+            ConfigManager.save();
             this.client.openScreen(parent);
         }
 

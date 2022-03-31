@@ -24,7 +24,7 @@ public class CursedConfScreen extends ConfScreen{
 
         if(button.id>0){
 
-            if(button.id==1)Axolotlclient.CONFIG.Cursed.rotateWorld=!Axolotlclient.CONFIG.Cursed.rotateWorld;
+            if(button.id==1)Axolotlclient.CONFIG.rotateWorld.toggle();
 
             MinecraftClient.getInstance().openScreen(this);
         }
@@ -34,6 +34,6 @@ public class CursedConfScreen extends ConfScreen{
     public void init() {
         super.init();
 
-        this.buttons.add(new BooleanButtonWidget(1, this.width / 2 - 155, this.height / 6 + 48 - 6, "rotateWorld", Axolotlclient.CONFIG.Cursed.rotateWorld));
+        this.buttons.add(new BooleanButtonWidget(1, this.width / 2 - 155, this.height / 6 + 48 - 6, "rotateWorld", Axolotlclient.CONFIG.rotateWorld));
     }
 }

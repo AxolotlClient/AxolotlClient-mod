@@ -1,100 +1,66 @@
 package io.github.moehreag.axolotlclient.config;
 
+import io.github.moehreag.axolotlclient.config.options.BooleanOption;
+import io.github.moehreag.axolotlclient.config.options.FloatOption;
+import io.github.moehreag.axolotlclient.config.options.Option;
+import io.github.moehreag.axolotlclient.config.options.StringOption;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class AxolotlclientConfig {
 
-    public nametagConf NametagConf;
-    public static class nametagConf {
-        public boolean showOwnNametag;
+    public final BooleanOption showOwnNametag = new BooleanOption("showOwnNametag", false);
+    public final BooleanOption useShadows = new BooleanOption("useShadows", false);
 
-        public boolean useShadows;
+    public final BooleanOption showBadges = new BooleanOption("showBadges", true);
+    public final BooleanOption customBadge = new BooleanOption("customBadge", false);
+    public final StringOption badgeText = new StringOption("badgeText", "");
 
-        public nametagConf(boolean showOwnNametag, boolean useShadows) {
-            this.showOwnNametag = showOwnNametag;
-            this.useShadows = useShadows;
-        }
+    public final StringOption name = new StringOption("name", "Player");
+    public final BooleanOption hideNames = new BooleanOption("hideNames", false);
+    public final BooleanOption hideOwnSkin = new BooleanOption("hideOwnSkin", false);
+    public final BooleanOption hideOtherSkins = new BooleanOption("hideOtherSkins", false);
+
+    public final BooleanOption customSky = new BooleanOption("customSky", true);
+    public final BooleanOption showSunMoon = new BooleanOption("showSunMoon", true);
+    public final FloatOption zoomDivisor = new FloatOption("zoomDivisor", 1F, 10F, 4F);
+    public final BooleanOption decreaseSensitivity = new BooleanOption("decreaseSensitivity", true);
+
+    public final BooleanOption enableRPC = new BooleanOption("enableRPC", true);
+    public final BooleanOption showActivity = new BooleanOption("showActivity", true);
+
+    public final BooleanOption rotateWorld = new BooleanOption("rotateWorld", false);
+
+    private final List<Option> options = new ArrayList<>();
+
+    public void add(Option option){
+        options.add(option);
     }
 
 
-    public Badges badgeOptions;
-    public static class Badges {
-        public boolean showBadge;
-
-        public boolean CustomBadge;
-
-
-        public String badgeText;
-
-        public Badges(boolean showBadge, boolean customBadge, String badgeText){
-            this.showBadge=showBadge;
-            this.CustomBadge=customBadge;
-            this.badgeText=badgeText;
-        }
-    }
-
-    public nh NickHider;
-    public static class nh {
-        public boolean hideNames;
-        public String Name;
-
-        public boolean hideOwnSkin;
-        public boolean hideOtherSkins;
-
-        public nh(boolean hideNames, String Name, boolean hideOwnSkin, boolean hideOtherSkins){
-            this.hideNames = hideNames;
-            this.Name = Name;
-            this.hideOwnSkin = hideOwnSkin;
-            this.hideOtherSkins = hideOtherSkins;
-        }
-
-    }
-
-    public other General;
-    public static class other {
-
-        public boolean customSky;
-        public boolean showSunMoon;
-        public float zoomDivisor;
-        public boolean decreaseSensitivity;
-
-        public other(boolean customSky, float zoomDivisor, boolean showSunMoon, boolean decreaseSensitivity) {
-            this.customSky=customSky;
-            this.showSunMoon=showSunMoon;
-            this.zoomDivisor=zoomDivisor;
-            this.decreaseSensitivity=decreaseSensitivity;
-
-        }
+    public List<Option> get(){
+        return options;
     }
 
 
-    public rpcConfig RPCConfig;
-    public static class rpcConfig {
+    public void init(){
+        add(showOwnNametag);
+        add(useShadows);
 
-        public boolean enableRPC;
+        add(showBadges);
+        add(customBadge);
+        add(badgeText);
 
-        public boolean showActivity;
+        add(name);
+        add(hideNames);
+        add(hideOwnSkin);
+        add(hideOtherSkins);
 
-        public rpcConfig(boolean enableRPC, boolean showActivity){
-            this.enableRPC = enableRPC;
-            this.showActivity = showActivity;
-        }
-    }
-
-    public cursed Cursed;
-    public static class cursed {
-        public boolean rotateWorld;
-
-        public cursed(boolean rotateWorld){
-            this.rotateWorld = rotateWorld;
-        }
-    }
-
-    public AxolotlclientConfig(nametagConf nametagConf, Badges badges, nh nickHider, other other, rpcConfig rpcConfig, cursed cursed){
-        this.NametagConf = nametagConf;
-        this.badgeOptions = badges;
-        this.General = other;
-        this.RPCConfig = rpcConfig;
-        this.NickHider = nickHider;
-        this.Cursed = cursed;
+        add(customSky);
+        add(showSunMoon);
+        add(zoomDivisor);
+        add(decreaseSensitivity);
     }
 
 }

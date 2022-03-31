@@ -8,7 +8,7 @@ general=General...
 general.title=General Options
 customSky=Custom Skies
 showSunMoon=Custom Sky Sun & Moon
-zoomDivisorDesc=Zoom Divisor:
+zoomDivisor=Zoom Divisor
 decreaseSensitivity=Reduce Sensitivity
 resetConf=Reset Configuration
 resetConfTooltip=This will delete the current Configuration file! Proceed with Caution!
@@ -22,7 +22,7 @@ showBadge=Show Badges
 nametagConf=Nametag Options...
 nametagConf.title=Nametag Options
 showOwnNametag=Show Own Nametag
-forceShadows=Force Shadows
+useShadows=Force Shadows
 
 nickHider=NickHider Options...
 nickHiderConf.title=NickHider Options

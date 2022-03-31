@@ -16,8 +16,8 @@ public class RPCConfScreen extends ConfScreen {
     @Override
     public void init() {
         super.init();
-        this.buttons.add(new BooleanButtonWidget(1, this.width / 2 - 155, this.height / 6 + 72 - 6, "enableRPC", Axolotlclient.CONFIG.RPCConfig.enableRPC));
-        this.buttons.add(new BooleanButtonWidget(2, this.width / 2 + 5, this.height / 6 + 72 - 6, "showActivity", Axolotlclient.CONFIG.RPCConfig.showActivity));
+        this.buttons.add(new BooleanButtonWidget(1, this.width / 2 - 155, this.height / 6 + 72 - 6, "enableRPC", Axolotlclient.CONFIG.enableRPC));
+        this.buttons.add(new BooleanButtonWidget(2, this.width / 2 + 5, this.height / 6 + 72 - 6, "showActivity", Axolotlclient.CONFIG.showActivity));
     }
 
     @Override
@@ -29,8 +29,8 @@ public class RPCConfScreen extends ConfScreen {
     protected void buttonClicked(ButtonWidget button) {
         super.buttonClicked(button);
         if(button.id>0){
-            if(button.id==1)Axolotlclient.CONFIG.RPCConfig.enableRPC=!Axolotlclient.CONFIG.RPCConfig.enableRPC;
-            if(button.id==2)Axolotlclient.CONFIG.RPCConfig.showActivity=!Axolotlclient.CONFIG.RPCConfig.showActivity;
+            if(button.id==1)Axolotlclient.CONFIG.enableRPC.toggle();
+            if(button.id==2)Axolotlclient.CONFIG.showActivity.toggle();
             MinecraftClient.getInstance().openScreen(this);
         }
     }

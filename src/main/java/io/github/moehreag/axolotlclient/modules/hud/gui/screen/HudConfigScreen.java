@@ -1,19 +1,20 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.screen;
 
+import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import net.minecraft.client.gui.screen.Screen;
 
 import java.util.List;
 
-public class HudConfigScreen {//extends GuiConfigsBase {
+public class HudConfigScreen {
 
-    /*private AbstractHudEntry hud;
+    private AbstractHudEntry hud;
 
     public HudConfigScreen(AbstractHudEntry hud, Screen parent) {
-        super(10, 20, "kronhud", parent, hud.getNameKey());
+        //super(10, 20, "kronhud", parent, hud.getNameKey());
         this.hud = hud;
     }
 
-    @Override
+    /*@Override
     protected WidgetListConfigOptions createListWidget(int listX, int listY) {
         return new ListWidget(listX, listY,
                 this.getBrowserWidth(), this.getBrowserHeight(), this.getConfigWidth(), this.getZOffset(), this.useKeybindSearch(), this);

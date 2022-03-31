@@ -1,14 +1,19 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
 
+import io.github.moehreag.axolotlclient.config.options.BooleanOption;
+import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.util.Identifier;
+
+import java.util.List;
 
 public class BossBarHud extends AbstractHudEntry {
 
-    /*public static final Identifier ID = new Identifier("kronhud", "bossbarhud");
+    public static final Identifier ID = new Identifier("kronhud", "bossbarhud");
     private static final Identifier BARS_TEXTURE = new Identifier("textures/gui/bars.png");
-    private final BossBar placeholder = new CustomBossBar(new LiteralText("Boss bar"), BossBar.Color.WHITE, BossBar.Style.PROGRESS);
+    /*private final BossBar placeholder = new CustomBossBar(new LiteralText("Boss bar"), BossBar.Color.WHITE, BossBar.Style.PROGRESS);
     private final BossBar placeholder2 = Util.make(() -> {
         BossBar boss = new CustomBossBar(new LiteralText("More boss bars..."), BossBar.Color.PURPLE, BossBar.Style.PROGRESS);
         boss.setPercent(0.45F);
@@ -17,10 +22,10 @@ public class BossBarHud extends AbstractHudEntry {
 
     private Map<UUID, ClientBossBar> bossBars;*/
     private final MinecraftClient client;
-    /*private ConfigBoolean text = new KronBoolean("text", ID.getPath(), true);
-    private ConfigBoolean bar = new KronBoolean("bar", ID.getPath(), true);
+    private BooleanOption text = new BooleanOption("text", true);
+    private BooleanOption bar = new BooleanOption("bar", true);
     // TODO custom colour
-*/
+
     public BossBarHud() {
         super(184, 80);
         client = MinecraftClient.getInstance();
@@ -100,7 +105,7 @@ public class BossBarHud extends AbstractHudEntry {
                 client.textRenderer.draw(matrices, text, textX, textY, textColor.getColor().color());
             }
         }
-    }
+    }*/
 
     @Override
     public Identifier getId() {
@@ -113,16 +118,16 @@ public class BossBarHud extends AbstractHudEntry {
     }
 
     @Override
-    public void addConfigOptions(List<IConfigBase> options) {
+    public void addConfigOptions(List<Option> options) {
         super.addConfigOptions(options);
         options.add(text);
-        options.add(textColor);
+        //options.add(textColor);
         options.add(shadow);
         options.add(bar);
     }
 
-    public static class CustomBossBar extends BossBar {
-        public CustomBossBar(Text name, Color color, Style style) {
+    /*public static class CustomBossBar extends BossBar {
+        /*public CustomBossBar(Text name, Color color, Style style) {
             super(MathHelper.randomUuid(), name, color, style);
         }
     }*/

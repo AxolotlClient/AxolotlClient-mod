@@ -44,7 +44,7 @@ public abstract class WorldRendererMixin {
 
     @Inject(method = "method_9891", at=@At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;disableTexture()V"), cancellable = true)
     public void sky(float f, int ih, CallbackInfo ci){
-        if(Axolotlclient.features && Axolotlclient.CONFIG.General.customSky){
+        if(Axolotlclient.features && Axolotlclient.CONFIG.customSky.get() && SkyboxManager.getInstance().hasSkyBoxes()){
 
             GlStateManager.disableFog();
             GlStateManager.depthMask(false);
@@ -64,7 +64,7 @@ public abstract class WorldRendererMixin {
             GlStateManager.rotatef(this.world.getSkyAngle(f) * 360.0F, 1.0F, 0.0F, 0.0F);
 
 
-            if(!Axolotlclient.CONFIG.Cursed.rotateWorld)GlStateManager.popMatrix();
+            if(!Axolotlclient.CONFIG.rotateWorld.get())GlStateManager.popMatrix();
             GlStateManager.disableTexture();
             Vec3d vec3d = this.world.method_3631(MinecraftClient.getInstance().getCameraEntity(), f);
             float g = (float)vec3d.x;
@@ -115,7 +115,7 @@ public abstract class WorldRendererMixin {
             GlStateManager.color4f(1.0F, 1.0F, 1.0F, n);
             GlStateManager.rotatef(-90.0F, 0.0F, 1.0F, 0.0F);
             GlStateManager.rotatef(this.world.getSkyAngle(f) * 360.0F, 1.0F, 0.0F, 0.0F);
-            if(Axolotlclient.CONFIG.General.showSunMoon) {
+            if(Axolotlclient.CONFIG.showSunMoon.get()) {
                 float o = 30.0F;
                 MinecraftClient.getInstance().getTextureManager().bindTexture(SUN);
                 bufferBuilder.begin(7, VertexFormats.POSITION_TEXTURE);
@@ -173,7 +173,7 @@ public abstract class WorldRendererMixin {
 
     @Inject(method = "method_9924", at = @At("TAIL"))
     public void decurse(CallbackInfo ci){
-        if(Axolotlclient.features && Axolotlclient.CONFIG.Cursed.rotateWorld)GlStateManager.popMatrix();
+        if(Axolotlclient.features && Axolotlclient.CONFIG.rotateWorld.get())GlStateManager.popMatrix();
     }
 
     @Redirect(method = "method_9910", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/dimension/Dimension;getCloudHeight()F"))

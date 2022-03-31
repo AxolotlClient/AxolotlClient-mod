@@ -2,6 +2,7 @@ package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
 
 
+import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import net.minecraft.util.Identifier;
 
@@ -26,11 +27,6 @@ public class CrosshairHud extends AbstractHudEntry {
 
     @Override
     public void render() {
-
-    }
-
-    @Override
-    public void renderPlaceholder() {
 
     }
 
@@ -165,9 +161,9 @@ public class CrosshairHud extends AbstractHudEntry {
         }
         return defaultColor.getColor();
     }
-
+*/
     @Override
-    public void renderPlaceholder(MatrixStack matrices) {
+    public void renderPlaceholder() {
         // Shouldn't need this...
     }
 
@@ -182,18 +178,18 @@ public class CrosshairHud extends AbstractHudEntry {
     }
 
     @Override
-    public void addConfigOptions(List<IConfigBase> options) {
+    public void addConfigOptions(List<Option> options) {
         super.addConfigOptions(options);
-        options.add(type);
+        /*options.add(type);
         options.add(showInF5);
         options.add(defaultColor);
         options.add(entityColor);
         options.add(containerColor);
         options.add(attackIndicatorBackgroundColor);
-        options.add(attackIndicatorForegroundColor);
+        options.add(attackIndicatorForegroundColor);*/
     }
 
-    @AllArgsConstructor
+    /*@AllArgsConstructor
     public enum Crosshair implements IConfigOptionListEntry {
         CROSS("cross"),
         DOT("dot"),

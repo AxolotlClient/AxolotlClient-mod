@@ -1,11 +1,10 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
+import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.util.Identifier;
 
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
+import java.util.List;
 
 public class CoordsHud extends AbstractHudEntry {
 
@@ -224,16 +223,16 @@ public class CoordsHud extends AbstractHudEntry {
                 break;
         }
         return direction;
-    }
+    }*/
 
     @Override
-    public void addConfigOptions(List<IConfigBase> options) {
+    public void addConfigOptions(List<Option> options) {
         super.addConfigOptions(options);
         options.add(background);
-        options.add(backgroundColor);
+        /*options.add(backgroundColor);
         options.add(firstColor);
         options.add(secondColor);
-        options.add(decimalPlaces);
+        options.add(decimalPlaces);*/
     }
 
     @Override
@@ -244,6 +243,6 @@ public class CoordsHud extends AbstractHudEntry {
     @Override
     public Identifier getId() {
         return ID;
-    }*/
+    }
 
 }

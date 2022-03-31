@@ -7,7 +7,7 @@ public class IPHud extends CleanHudEntry {
 
     public static final Identifier ID = new Identifier("kronhud", "iphud");
 
-    /*public IPHud() {
+    public IPHud() {
         super(115, 13);
     }
 
@@ -31,5 +31,5 @@ public class IPHud extends CleanHudEntry {
     @Override
     public String getPlaceholder() {
         return "singleplayer";
-    }*/
+    }
 }

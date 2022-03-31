@@ -1,14 +1,9 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
+import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.moehreag.axolotlclient.modules.hud.util.ItemUtil;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.Style;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Language;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,22 +24,12 @@ public class ItemUpdateHud extends AbstractHudEntry {
         added = new ArrayList<>();
     }
 
-    @Override
-    public void render() {
-
-    }
-
-    @Override
-    public void renderPlaceholder() {
-
-    }
-
-    /*public void update() {
-        this.removed = ItemUtil.removeOld(removed, timeout.getIntegerValue() * 1000);
+    public void update() {
+        /*this.removed = ItemUtil.removeOld(removed, timeout.getIntegerValue() * 1000);
         this.added = ItemUtil.removeOld(added, timeout.getIntegerValue() * 1000);
         updateAdded();
         updateRemoved();
-        oldItems = ItemUtil.storageFromItem(ItemUtil.getItems(client));
+        oldItems = ItemUtil.storageFromItem(ItemUtil.getItems(client));*/
     }
 
     @Override
@@ -59,7 +44,7 @@ public class ItemUpdateHud extends AbstractHudEntry {
         }
     }
 
-    private void updateAdded() {
+    /*private void updateAdded() {
         List<ItemUtil.ItemStorage> added = ItemUtil.compare(ItemUtil.storageFromItem(ItemUtil.getItems(client)), oldItems);
         ArrayList<ItemUtil.TimedItemStorage> timedAdded = new ArrayList<>();
         for (ItemUtil.ItemStorage stack : added) {
@@ -77,9 +62,9 @@ public class ItemUpdateHud extends AbstractHudEntry {
             }
         }
         this.added.sort((o1, o2) -> Float.compare(o1.getPassedTime(), o2.getPassedTime()));
-    }
+    }*/
 
-    private void updateRemoved() {
+    /*private void updateRemoved() {
         List<ItemUtil.ItemStorage> removed = ItemUtil.compare(oldItems, ItemUtil.storageFromItem(ItemUtil.getItems(client)));
         List<ItemUtil.TimedItemStorage> timed = ItemUtil.untimedToTimed(removed);
         for (ItemUtil.TimedItemStorage stack : timed) {
@@ -94,11 +79,11 @@ public class ItemUpdateHud extends AbstractHudEntry {
             }
         }
         this.removed.sort((o1, o2) -> Float.compare(o1.getPassedTime(), o2.getPassedTime()));
-    }
+    }*/
 
     @Override
-    public void render(MatrixStack matrices) {
-        matrices.push();
+    public void render() {
+        /*matrices.push();
         scale(matrices);
         DrawPosition pos = getPos();
         int lastY = 1;
@@ -147,12 +132,12 @@ public class ItemUpdateHud extends AbstractHudEntry {
             lastY = lastY + client.textRenderer.fontHeight + 2;
             i++;
         }
-        matrices.pop();
+        matrices.pop();*/
     }
 
     @Override
-    public void renderPlaceholder(MatrixStack matrices) {
-        matrices.push();
+    public void renderPlaceholder() {
+        /*matrices.push();
         renderPlaceholderBackground(matrices);
         scale(matrices);
         DrawPosition pos = getPos();
@@ -185,14 +170,14 @@ public class ItemUpdateHud extends AbstractHudEntry {
                     Formatting.RED.getColorValue());
         }
         hovered = false;
-        matrices.pop();
+        matrices.pop();*/
     }
 
     @Override
-    public void addConfigOptions(List<IConfigBase> options) {
+    public void addConfigOptions(List<Option> options) {
         super.addConfigOptions(options);
         options.add(shadow);
-        options.add(timeout);
+        //options.add(timeout);
     }
 
     @Override
@@ -203,7 +188,7 @@ public class ItemUpdateHud extends AbstractHudEntry {
     @Override
     public boolean movable() {
         return true;
-    }*/
+    }
 
 }
 

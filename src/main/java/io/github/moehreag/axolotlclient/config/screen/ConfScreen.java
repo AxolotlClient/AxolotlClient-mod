@@ -1,7 +1,6 @@
 package io.github.moehreag.axolotlclient.config.screen;
 
-import io.github.moehreag.axolotlclient.config.AxolotlclientConfigScreen;
-import io.github.moehreag.axolotlclient.config.ConfigHandler;
+import io.github.moehreag.axolotlclient.config.ConfigManager;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.resource.language.I18n;
@@ -28,7 +27,7 @@ public class ConfScreen extends Screen {
     @Override
     protected void buttonClicked(ButtonWidget button) {
         if(button.id == 0){
-            ConfigHandler.save();
+            ConfigManager.save();
             this.client.openScreen(parent);
         }
         super.buttonClicked(button);

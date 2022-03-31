@@ -1,26 +1,34 @@
 package io.github.moehreag.axolotlclient.modules.hud;
 
+import io.github.moehreag.axolotlclient.Axolotlclient;
 import io.github.moehreag.axolotlclient.config.AxolotlclientConfigScreen;
+import io.github.moehreag.axolotlclient.config.options.BooleanOption;
+import io.github.moehreag.axolotlclient.config.screen.ScreenBuilder;
 import io.github.moehreag.axolotlclient.config.widgets.BooleanButtonWidget;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.moehreag.axolotlclient.modules.hud.gui.screen.ConfigScreen;
 import io.github.moehreag.axolotlclient.modules.hud.snapping.SnappingHelper;
+import io.github.moehreag.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.resource.language.I18n;
 
+import java.util.List;
 import java.util.Optional;
 
 public class HudEditScreen extends Screen {
 
-    private boolean snapping;
+    private BooleanOption snapping = new BooleanOption("snapping", true);
+    private AbstractHudEntry current;
     private final HudManager manager;
     private boolean mouseDown;
+    private SnappingHelper snap;
 
     public HudEditScreen(){
-        snapping=true;
-        manager = new HudManager();
+        snapping.setDefaults();
+        updateSnapState();
+        manager = HudManager.getINSTANCE();
         mouseDown = false;
     }
 
@@ -28,11 +36,12 @@ public class HudEditScreen extends Screen {
     public void render(int mouseX, int mouseY, float tickDelta) {
         this.renderBackground();
         super.render(mouseX, mouseY, tickDelta);
-        /*Optional<AbstractHudEntry> entry = manager.getEntryXY(mouseX, mouseY);
-        entry.ifPresent(abstractHudEntry -> abstractHudEntry.setHovered(true));*/
+        Optional<AbstractHudEntry> entry = manager.getEntryXY(mouseX, mouseY);
+        entry.ifPresent(abstractHudEntry -> abstractHudEntry.setHovered(true));
         manager.renderPlaceholder();
-        if (mouseDown && snapping) {
-            //SnappingHelper.renderSnaps();
+        if (mouseDown && snapping.get()) {
+            if(snap == null)updateSnapState();
+            else snap.renderSnaps();
         }
 
     }
@@ -55,17 +64,28 @@ public class HudEditScreen extends Screen {
 
     }
 
+    private void updateSnapState() {
+        if (snapping.get() && current != null) {
+            List<Rectangle> bounds = manager.getAllBounds();
+            bounds.remove(current.getScaledBounds());
+            snap = new SnappingHelper(bounds, current.getScaledBounds());
+        } else if (snap != null) {
+            snap = null;
+        }
+    }
+
 
 
     @Override
     protected void buttonClicked(ButtonWidget button) {
         super.buttonClicked(button);
         if(button.id==1){
-            snapping=!snapping;
+            snapping.toggle();
+            MinecraftClient.getInstance().openScreen(this);
         }
-        MinecraftClient.getInstance().openScreen(this);
-        if(button.id==3)MinecraftClient.getInstance().openScreen(new AxolotlclientConfigScreen(this));
-        if(button.id==2)MinecraftClient.getInstance().openScreen(new ConfigScreen(this));
+
+        if(button.id==3)MinecraftClient.getInstance().openScreen(new ScreenBuilder(this));
+        if(button.id==2)MinecraftClient.getInstance().openScreen(new ConfigScreen(this, manager));
     }
 
     @Override

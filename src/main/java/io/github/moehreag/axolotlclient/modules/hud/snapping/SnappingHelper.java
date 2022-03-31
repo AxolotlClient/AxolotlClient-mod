@@ -15,7 +15,7 @@ public class SnappingHelper {
     private final HashSet<Integer> x = new HashSet<>();
     private final HashSet<Integer> y = new HashSet<>();
     private static final Color LINE_COLOR = Color.SELECTOR_BLUE;
-    private Rectangle current;
+    private final Rectangle current;
     private final MinecraftClient client;
     private final Window window;
 

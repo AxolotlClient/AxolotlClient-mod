@@ -1,5 +1,6 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
+import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import net.minecraft.util.Identifier;
 
@@ -62,7 +63,7 @@ public class ArmorHud extends AbstractHudEntry {
         hovered = false;
         matrices.pop();*/
     }
-/*
+
     @Override
     public boolean movable() {
         return true;
@@ -74,12 +75,12 @@ public class ArmorHud extends AbstractHudEntry {
     }
 
     @Override
-    public void addConfigOptions(List<IConfigBase> options) {
+    public void addConfigOptions(List<Option> options) {
         super.addConfigOptions(options);
-        options.add(textColor);
+        //options.add(textColor);
         options.add(shadow);
         options.add(background);
-        options.add(backgroundColor);
-    }*/
+        //options.add(backgroundColor);
+    }
 
 }

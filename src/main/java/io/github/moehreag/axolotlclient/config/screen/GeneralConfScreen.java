@@ -2,7 +2,7 @@ package io.github.moehreag.axolotlclient.config.screen;
 
 import com.google.common.collect.Lists;
 import io.github.moehreag.axolotlclient.Axolotlclient;
-import io.github.moehreag.axolotlclient.config.ConfigHandler;
+import io.github.moehreag.axolotlclient.config.ConfigManager;
 import io.github.moehreag.axolotlclient.config.widgets.BooleanButtonWidget;
 import io.github.moehreag.axolotlclient.config.widgets.TextFieldWidget;
 import net.fabricmc.loader.api.FabricLoader;
@@ -29,10 +29,10 @@ public class GeneralConfScreen extends ConfScreen {
     public void init() {
         super.init();
 
-        this.buttons.add(new BooleanButtonWidget(1, this.width / 2 - 155, this.height / 6 + 72 -6, "customSky", CONFIG.General.customSky));
-        this.buttons.add(new BooleanButtonWidget(2, this.width / 2 - 155, this.height / 6 + 96 -6, "showSunMoon", CONFIG.General.showSunMoon));
+        this.buttons.add(new BooleanButtonWidget(1, this.width / 2 - 155, this.height / 6 + 72 -6, "customSky", CONFIG.customSky));
+        this.buttons.add(new BooleanButtonWidget(2, this.width / 2 - 155, this.height / 6 + 96 -6, "showSunMoon", CONFIG.showSunMoon));
 
-        this.buttons.add(new BooleanButtonWidget(4, this.width / 2 + 5, this.height / 6 + 96 -6, "decreaseSensitivity", CONFIG.General.decreaseSensitivity));
+        this.buttons.add(new BooleanButtonWidget(4, this.width / 2 + 5, this.height / 6 + 96 -6, "decreaseSensitivity", CONFIG.decreaseSensitivity));
 
         zoomDivisor = new TextFieldWidget(3, this.width / 2 + 115, this.height / 6 + 72 -6, 40);
 
@@ -46,7 +46,7 @@ public class GeneralConfScreen extends ConfScreen {
             }
         });
 
-        zoomDivisor.write(String.valueOf(Axolotlclient.CONFIG.General.zoomDivisor));
+        zoomDivisor.write(String.valueOf(Axolotlclient.CONFIG.zoomDivisor.get()));
         zoomDivisor.setEditable(true);
     }
 
@@ -65,18 +65,18 @@ public class GeneralConfScreen extends ConfScreen {
     protected void buttonClicked(ButtonWidget button) {
         super.buttonClicked(button);
         if(button.id == 0){
-            CONFIG.General.zoomDivisor = Float.parseFloat(zoomDivisor.getText());
+            CONFIG.zoomDivisor.set(Float.parseFloat(zoomDivisor.getText()));
         }
 
         if(button.id>0){
-            if(button.id==1) CONFIG.General.customSky=!CONFIG.General.customSky;
-            if(button.id==2) CONFIG.General.showSunMoon=!CONFIG.General.showSunMoon;
-            if(button.id==4) CONFIG.General.decreaseSensitivity=!CONFIG.General.decreaseSensitivity;
+            if(button.id==1) CONFIG.customSky.toggle();
+            if(button.id==2) CONFIG.showSunMoon.toggle();
+            if(button.id==4) CONFIG.decreaseSensitivity.toggle();
             if(button.id==99) {
                 try {
                     Files.deleteIfExists(FabricLoader.getInstance().getConfigDir().resolve("Axolotlclient.json"));
                 } catch (IOException ignored) {}
-                ConfigHandler.init();
+                ConfigManager.load();
             }
 
             MinecraftClient.getInstance().openScreen(this);

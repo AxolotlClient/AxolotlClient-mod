@@ -14,8 +14,8 @@ public class NametagConfScreen extends ConfScreen {
 
     @Override
     public void init() {
-        this.buttons.add(new BooleanButtonWidget(1, this.width / 2 - 155, this.height / 6 + 72 - 6, "showOwnNametag", Axolotlclient.CONFIG.NametagConf.showOwnNametag));
-        this.buttons.add(new BooleanButtonWidget(2, this.width / 2 + 5, this.height / 6 + 72 - 6, "forceShadows", Axolotlclient.CONFIG.NametagConf.useShadows));
+        this.buttons.add(new BooleanButtonWidget(1, this.width / 2 - 155, this.height / 6 + 72 - 6, "showOwnNametag", Axolotlclient.CONFIG.showOwnNametag));
+        this.buttons.add(new BooleanButtonWidget(2, this.width / 2 + 5, this.height / 6 + 72 - 6, "forceShadows", Axolotlclient.CONFIG.useShadows));
         super.init();
     }
 
@@ -29,8 +29,8 @@ public class NametagConfScreen extends ConfScreen {
         super.buttonClicked(button);
 
         if(button.id>0){
-            if(button.id==1)Axolotlclient.CONFIG.NametagConf.showOwnNametag=!Axolotlclient.CONFIG.NametagConf.showOwnNametag;
-            if(button.id==2)Axolotlclient.CONFIG.NametagConf.useShadows=!Axolotlclient.CONFIG.NametagConf.useShadows;
+            if(button.id==1)Axolotlclient.CONFIG.showOwnNametag.toggle();
+            if(button.id==2)Axolotlclient.CONFIG.useShadows.toggle();
             MinecraftClient.getInstance().openScreen(this);
         }
     }

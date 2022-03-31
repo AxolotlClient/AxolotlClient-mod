@@ -1,11 +1,12 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
+import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.util.Identifier;
 
 public class PingHud extends CleanHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "pinghud");
 
-    /*public PingHud() {
+    public PingHud() {
         // super(x, y, scale);
         super();
     }
@@ -27,5 +28,10 @@ public class PingHud extends CleanHudEntry {
     @Override
     public Identifier getId() {
         return ID;
-    }*/
+    }
+
+    @Override
+    protected double getDefaultX() {
+        return 150;
+    }
 }

@@ -14,8 +14,8 @@ difficulty:2
 fancyGraphics:true
 ao:2
 renderClouds:false
-resourcePacks:["sky_1.16.zip"]
-incompatibleResourcePacks:["sky_1.16.zip"]
+resourcePacks:[]
+incompatibleResourcePacks:[]
 lastServer:
 lang:en_US
 chatVisibility:0

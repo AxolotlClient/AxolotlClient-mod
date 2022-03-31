@@ -1,9 +1,12 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
 
+import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
+
+import java.util.List;
 
 public class ActionBarHud extends AbstractHudEntry {
 
@@ -64,7 +67,7 @@ public class ActionBarHud extends AbstractHudEntry {
         client.textRenderer.draw(matrices, placeholder,  (float)getPos().x() + Math.round((float) width /2) - (float) client.textRenderer.getWidth(placeholder) /2, (float)getPos().y() + 3, textColor.getColor().color());
         matrices.pop();
         hovered = false;
-    }
+    }*/
 
     @Override
     public Identifier getId() {
@@ -77,9 +80,9 @@ public class ActionBarHud extends AbstractHudEntry {
     }
 
     @Override
-    public void addConfigOptions(List<IConfigBase> options){
+    public void addConfigOptions(List<Option> options){
         super.addConfigOptions(options);
         options.add(shadow);
-        options.add(timeShown);
-    }*/
+        //options.add(timeShown);
+    }
 }

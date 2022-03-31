@@ -1,17 +1,23 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
+import io.github.moehreag.axolotlclient.config.options.BooleanOption;
+import io.github.moehreag.axolotlclient.config.options.Option;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CPSHud extends CleanHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "cpshud");
 
-    /*private KronBoolean fromKeybindings = new KronBoolean("cpskeybind", ID.getPath(), false);
-    private KronBoolean rmb = new KronBoolean("rightcps", ID.getPath(), false);
+    private BooleanOption fromKeybindings = new BooleanOption("cpskeybind", false);
+    private BooleanOption rmb = new BooleanOption("rightcps", false);
 
     public CPSHud() {
         super();
-        KronHudHooks.MOUSE_INPUT.register((window, button, action, mods) -> {
-            if (!fromKeybindings.getBooleanValue()) {
+        /*KronHudHooks.MOUSE_INPUT.register((window, button, action, mods) -> {
+            if (!fromKeybindings.get()) {
                 if (button == 0) {
                     ClickList.LEFT.click();
                 } else if (button == 1) {
@@ -20,14 +26,14 @@ public class CPSHud extends CleanHudEntry {
             }
         });
         KronHudHooks.KEYBIND_PRESS.register((key) -> {
-            if (fromKeybindings.getBooleanValue()) {
+            if (fromKeybindings.get()) {
                 if (key.equals(client.options.keyAttack)) {
                     ClickList.LEFT.click();
                 } else if (key.equals(client.options.keyUse)) {
                     ClickList.RIGHT.click();
                 }
             }
-        });
+        });*/
     }
 
     @Override
@@ -43,7 +49,7 @@ public class CPSHud extends CleanHudEntry {
 
     @Override
     public String getValue() {
-        if (rmb.getBooleanValue()) {
+        if (rmb.get()) {
             return ClickList.LEFT.clicks() + " | " + ClickList.RIGHT.clicks() + " CPS";
         } else {
             return ClickList.LEFT.clicks() + " CPS";
@@ -52,7 +58,7 @@ public class CPSHud extends CleanHudEntry {
 
     @Override
     public String getPlaceholder() {
-        if (rmb.getBooleanValue()) {
+        if (rmb.get()) {
             return "0 | 0 CPS";
         } else {
             return "0 CPS";
@@ -65,7 +71,7 @@ public class CPSHud extends CleanHudEntry {
     }
 
     @Override
-    public void addConfigOptions(List<IConfigBase> options) {
+    public void addConfigOptions(List<Option> options) {
         super.addConfigOptions(options);
         options.add(fromKeybindings);
         options.add(rmb);
@@ -75,24 +81,24 @@ public class CPSHud extends CleanHudEntry {
 
         public static ClickList LEFT = new ClickList();
         public static ClickList RIGHT = new ClickList();
-        private List<Long> clicks;
+        private final List<Long> clicks;
 
         public ClickList() {
             clicks = new ArrayList<Long>();
         }
 
         public void update() {
-            clicks.removeIf((click) -> Util.getMeasuringTimeMs() - click > 1000);
+            clicks.removeIf((click) -> MinecraftClient.getTime() - click > 1000);
         }
 
         public void click() {
-            clicks.add(Util.getMeasuringTimeMs());
+            clicks.add(MinecraftClient.getTime());
         }
 
         public int clicks() {
             return clicks.size();
         }
 
-    }*/
+    }
 
 }

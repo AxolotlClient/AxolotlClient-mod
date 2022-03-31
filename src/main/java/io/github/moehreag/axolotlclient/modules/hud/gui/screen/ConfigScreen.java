@@ -1,62 +1,26 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.screen;
 
+import io.github.moehreag.axolotlclient.Axolotlclient;
 import io.github.moehreag.axolotlclient.modules.hud.HudEditScreen;
+import io.github.moehreag.axolotlclient.modules.hud.HudManager;
+import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.resource.language.I18n;
 
-// Based around https://github.com/maruohon/minihud/blob/fabric_1.16_snapshots_temp/src/main/java/fi/dy/masa/minihud/gui/GuiShapeManager.java
-// Licensed under GNU LGPL
-public class ConfigScreen extends Screen {//extends GuiListBase<AbstractHudEntry, HudEntryWidget, HudListWidget>
-        //implements ISelectionListener<AbstractHudEntry> {
+import java.util.concurrent.atomic.AtomicInteger;
+
+public class ConfigScreen extends Screen {
 
     private final Screen parent;
+    private final  HudManager manager;
 
 
-    public ConfigScreen(Screen parent){
+    public ConfigScreen(Screen parent, HudManager manager){
         this.parent=parent;
+        this.manager = manager;
     }
-
-    /*public ConfigScreen(Screen parent) {
-        super(10, 20);
-        setParent(parent);
-        useTitleHierarchy = false;
-        title = StringUtils.translate("button.kronhud.configuration");
-    }
-
-    @Override
-    protected HudListWidget createListWidget(int listX, int listY) {
-        return new HudListWidget(listX, listY, getBrowserWidth(), getBrowserHeight(), this, this);
-    }
-
-    @Override
-    public boolean onKeyTyped(int keyCode, int scanCode, int modifiers) {
-        if (this.getListWidget().onKeyTyped(keyCode, scanCode, modifiers)) {
-            return true;
-        }
-
-        if (keyCode == KeyCodes.KEY_ESCAPE) {
-            GuiBase.openGui(getParent());
-            return true;
-        }
-
-        return false;
-    }
-
-    @Override
-    protected int getBrowserWidth() {
-        return this.width - 20;
-    }
-
-    @Override
-    protected int getBrowserHeight() {
-        return this.height - 37;
-    }
-
-    @Override
-    public void onSelectionChange(AbstractHudEntry hud) {
-    }*/
 
     @Override
     public void render(int mouseX, int mouseY, float tickDelta) {
@@ -87,7 +51,7 @@ public class ConfigScreen extends Screen {//extends GuiListBase<AbstractHudEntry
     @Override
     protected void buttonClicked(ButtonWidget button) {
         super.buttonClicked(button);
-        if(button.id==0)MinecraftClient.getInstance().openScreen(new HudEditScreen());
+        if(button.id==0)MinecraftClient.getInstance().openScreen(parent!=null?parent: new HudEditScreen());
     }
 
     @Override
@@ -104,6 +68,13 @@ public class ConfigScreen extends Screen {//extends GuiListBase<AbstractHudEntry
                 100, 20,
                 I18n.translate("back")
         ));
+
+        AtomicInteger id= new AtomicInteger(1);
+        manager.getEntries().forEach((AbstractHudEntry entry) -> {
+            MinecraftClient.getInstance().textRenderer.drawWithShadow(entry.getNameKey(), 0, 0, -1);
+            this.buttons.add(new ButtonWidget(id.getAndIncrement(), entry.getX(), entry.getY(), 60, 20, entry.getName()));
+            Axolotlclient.LOGGER.info(entry.getNameKey());
+        });
     }
 
     @Override
@@ -113,5 +84,10 @@ public class ConfigScreen extends Screen {//extends GuiListBase<AbstractHudEntry
 
     @Override
     public void removed() {
+    }
+
+    @Override
+    public boolean shouldPauseGame() {
+        return false;
     }
 }
