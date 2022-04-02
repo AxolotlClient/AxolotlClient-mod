@@ -1,12 +1,15 @@
 package io.github.moehreag.axolotlclient.config.screen;
 
 import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.config.options.BooleanOption;
 import io.github.moehreag.axolotlclient.config.options.Option;
+import io.github.moehreag.axolotlclient.config.screen.widgets.CustomWidget;
 import io.github.moehreag.axolotlclient.config.screen.widgets.OptionWidget;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +30,8 @@ public class ScreenBuilder extends Screen {
     @Override
     public void render(int mouseX, int mouseY, float tickDelta) {
         super.render(mouseX, mouseY, tickDelta);
+        //renderBackground();
+        if(this.client.world!=null)fillGradient(0,0, width, height, new Color(0xB0100E0E, true).hashCode(), new Color(0x46212020, true).hashCode());
         options.forEach(optionWidget -> optionWidget.render(MinecraftClient.getInstance(), mouseX, mouseY));
         if(dialog!=null)dialog.render(MinecraftClient.getInstance(), mouseX, mouseY);
 
@@ -51,7 +56,9 @@ public class ScreenBuilder extends Screen {
     public void init() {
         super.init();
         for(Option option:Axolotlclient.CONFIG.get()){
-            this.options.add(new OptionWidget(option, this.width/2 - (right?200:-50), lines, this.height, widget -> this.dialog=widget.getDialog()));
+            this.dialog=null;
+
+            this.options.add(new OptionWidget(option, this.width/2 - (right?-50:200), lines, this.height, optionWidget -> this.dialog=optionWidget.getDialog()));
             if(right)lines++;
             right=!right;
         }
@@ -70,11 +77,13 @@ public class ScreenBuilder extends Screen {
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int button) {
         super.mouseClicked(mouseX, mouseY, button);
-        this.dialog=null;
-        //System.out.println("Clicked at X:"+mouseX+" Y:"+mouseY);
-        options.forEach(optionWidget -> {
-            if(optionWidget.isHovered(mouseX, mouseY)) OptionWidget.action.onClick(optionWidget);
-        });
+        if(button==0) {
+            this.dialog = null;
+            //System.out.println("Dialog: "+this.dialog);
+            options.forEach(optionWidget -> {
+                if (optionWidget.isHovered(mouseX, mouseY)) CustomWidget.onClick.onClick(optionWidget);
+            });
+        }
     }
 
     @Override
@@ -89,7 +98,6 @@ public class ScreenBuilder extends Screen {
 
     @Override
     public void handleMouse() {
-        //options.forEach(OptionWidget::clicked);
         super.handleMouse();
     }
 
@@ -101,5 +109,15 @@ public class ScreenBuilder extends Screen {
     @Override
     public boolean shouldPauseGame() {
         return false;
+    }
+
+    @Override
+    public void resize(MinecraftClient client, int width, int height) {
+        super.resize(client, width, height);
+        this.options.clear();
+        this.dialog=null;
+        this.width=width;
+        this.height=height;
+        init();
     }
 }

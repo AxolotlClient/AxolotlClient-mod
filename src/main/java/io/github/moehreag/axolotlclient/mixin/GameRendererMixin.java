@@ -2,6 +2,7 @@ package io.github.moehreag.axolotlclient.mixin;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.modules.sky.SkyboxManager;
 import io.github.moehreag.axolotlclient.modules.zoom.Zoom;
 import net.minecraft.block.Block;
 import net.minecraft.block.Material;
@@ -44,7 +45,7 @@ public abstract class GameRendererMixin {
     @Inject(method = "renderFog", at = @At("HEAD"), cancellable = true)
     public void noFog(int i, float tickDelta, CallbackInfo ci){
 
-        if(MinecraftClient.getInstance().world.dimension.canPlayersSleep() && Axolotlclient.CONFIG.customSky.get()) {
+        if(MinecraftClient.getInstance().world.dimension.canPlayersSleep() && Axolotlclient.CONFIG.customSky.get() && SkyboxManager.getInstance().hasSkyBoxes()) {
             this.viewDistance = (float) (this.viewDistance * 2 + MinecraftClient.getInstance().player.getPos().y);
             Entity entity = this.client.getCameraEntity();
             boolean bl = false;
