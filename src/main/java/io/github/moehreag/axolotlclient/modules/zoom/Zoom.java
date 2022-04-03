@@ -12,7 +12,6 @@ public class Zoom extends AbstractModule {
 
     public static boolean zoomed;
     private static float fadeFactor;
-    private static final float step=0.01F*Axolotlclient.CONFIG.zoomDivisor.get();
     private static float originalSensitivity;
     private static KeyBinding keyBinding;
 
@@ -30,7 +29,6 @@ public class Zoom extends AbstractModule {
 
     public static float getFov(float current){
         decreaseFov();
-        System.out.println(fadeFactor);
         return current / fadeFactor;
     }
 
@@ -78,9 +76,9 @@ public class Zoom extends AbstractModule {
 
     public static void decreaseFov(){
         if(isZoomed()){
-            if(fadeFactor <Axolotlclient.CONFIG.zoomDivisor.get()) fadeFactor+=step;//*(Axolotlclient.CONFIG.General.zoomDivisor/2);
+            if(fadeFactor <Axolotlclient.CONFIG.zoomDivisor.get()) fadeFactor+=0.01*(Axolotlclient.CONFIG.zoomDivisor.get()/4);
         } else {
-            if(fadeFactor > 1F) fadeFactor-=step;//*(Axolotlclient.CONFIG.General.zoomDivisor/2);
+            if(fadeFactor > 1F) fadeFactor-=0.01*Axolotlclient.CONFIG.zoomDivisor.get();
             else fadeFactor = 1F;
         }
     }
