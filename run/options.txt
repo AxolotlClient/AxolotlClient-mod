@@ -14,7 +14,7 @@ difficulty:2
 fancyGraphics:true
 ao:2
 renderClouds:false
-resourcePacks:[]
+resourcePacks:["testpack"]
 incompatibleResourcePacks:[]
 lastServer:
 lang:en_US

@@ -60,7 +60,10 @@ public class NetworkHelper {
                 Axolotlclient.LOGGER.info("Sucessfully logged in at Axolotlclient!");
             }
             client.close();
-        } catch (Exception e) {Axolotlclient.LOGGER.error("Error while logging in!");}
+        } catch (Exception e) {
+            //e.printStackTrace();
+            Axolotlclient.LOGGER.error("Error while logging in!");
+        }
     }
 
     public static void setOffline(){

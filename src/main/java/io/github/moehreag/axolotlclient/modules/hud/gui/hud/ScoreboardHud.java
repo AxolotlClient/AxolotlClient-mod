@@ -6,6 +6,12 @@ import net.minecraft.util.Identifier;
 
 import java.util.List;
 
+/**
+ * This implementation of Hud modules is based on KronHUD.
+ * https://github.com/DarkKronicle/KronHUD
+ * Licensed under GPL-3.0
+ */
+
 public class ScoreboardHud extends AbstractHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "scoreboardhud");
     /*public static final ScoreboardObjective placeholder = Util.make(() -> {

@@ -1,12 +1,16 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
-
-
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
+
+/**
+ * This implementation of Hud modules is based on KronHUD.
+ * https://github.com/DarkKronicle/KronHUD
+ * Licensed under GPL-3.0
+ */
 
 public class CrosshairHud extends AbstractHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "crosshairhud");

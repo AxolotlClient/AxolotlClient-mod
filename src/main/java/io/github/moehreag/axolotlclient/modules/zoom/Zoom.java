@@ -12,7 +12,7 @@ public class Zoom extends AbstractModule {
 
     public static boolean zoomed;
     private static float fadeFactor;
-    private static final float step=0.01F*(Axolotlclient.CONFIG.zoomDivisor.get()/4);
+    private static final float step=0.01F*Axolotlclient.CONFIG.zoomDivisor.get();
     private static float originalSensitivity;
     private static KeyBinding keyBinding;
 
@@ -30,6 +30,7 @@ public class Zoom extends AbstractModule {
 
     public static float getFov(float current){
         decreaseFov();
+        System.out.println(fadeFactor);
         return current / fadeFactor;
     }
 

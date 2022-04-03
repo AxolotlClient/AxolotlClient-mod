@@ -3,6 +3,12 @@ package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.util.Identifier;
 
+/**
+ * This implementation of Hud modules is based on KronHUD.
+ * https://github.com/DarkKronicle/KronHUD
+ * Licensed under GPL-3.0
+ */
+
 public class PingHud extends CleanHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "pinghud");
 
@@ -28,10 +34,5 @@ public class PingHud extends CleanHudEntry {
     @Override
     public Identifier getId() {
         return ID;
-    }
-
-    @Override
-    protected double getDefaultX() {
-        return 150;
     }
 }

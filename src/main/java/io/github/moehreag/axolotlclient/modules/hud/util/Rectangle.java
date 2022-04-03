@@ -1,7 +1,15 @@
 package io.github.moehreag.axolotlclient.modules.hud.util;
+
+/**
+ * This implementation of Hud modules is based on KronHUD.
+ * https://github.com/DarkKronicle/KronHUD
+ * Licensed under GPL-3.0
+ */
+
 /*
  * Stores a basic rectangle.
  */
+
 
 public class Rectangle {
 

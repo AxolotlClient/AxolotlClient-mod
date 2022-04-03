@@ -6,7 +6,7 @@ import com.google.gson.JsonPrimitive;
 public class BooleanOption extends OptionBase implements Option{
 
     private boolean option;
-    private boolean Default;
+    private final boolean Default;
 
     public BooleanOption(String name, boolean Default) {
         super(name);

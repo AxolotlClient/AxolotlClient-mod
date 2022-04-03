@@ -45,7 +45,7 @@ public abstract class PlayerListHudMixin {
 
 	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/PlayerListEntry;getGameMode()Lnet/minecraft/world/level/LevelInfo$GameMode;", ordinal = 0))
 	public void renderBadge(int width, Scoreboard scoreboard, ScoreboardObjective playerListScoreboardObjective, CallbackInfo ci){
-		if(Axolotlclient.features && Axolotlclient.CONFIG.showBadges.get() && Axolotlclient.isUsingClient(player.getId())){
+		if(Axolotlclient.CONFIG.showBadges.get() && Axolotlclient.isUsingClient(player.getId())){
 			//boolean bl = this.client.isIntegratedServerRunning() || this.client.getNetworkHandler().getClientConnection().isEncrypted();
 
 			MinecraftClient.getInstance().getTextureManager().bindTexture(Axolotlclient.badgeIcon);
@@ -60,7 +60,7 @@ public abstract class PlayerListHudMixin {
 	}*/
 	@ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Ljava/lang/String;FFI)I"), index = 1)
 	public float moveName(float x){
-		if(Axolotlclient.features && Axolotlclient.CONFIG.showBadges.get() && Axolotlclient.isUsingClient(player.getId())) {
+		if(Axolotlclient.CONFIG.showBadges.get() && Axolotlclient.isUsingClient(player.getId())) {
 			return x + 10;
 		}
 		return x;
@@ -68,7 +68,7 @@ public abstract class PlayerListHudMixin {
 
 	@ModifyArgs(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;renderLatencyIcon(IIILnet/minecraft/client/network/PlayerListEntry;)V"))
 	public void moveLatencyIcon(Args args){
-		if(Axolotlclient.features && Axolotlclient.CONFIG.showBadges.get() && Axolotlclient.isUsingClient(player.getId())) {
+		if(Axolotlclient.CONFIG.showBadges.get() && Axolotlclient.isUsingClient(player.getId())) {
 			args.set(0,(int)args.get(0)+ 10);
 		}
 
@@ -76,7 +76,7 @@ public abstract class PlayerListHudMixin {
 
 	@ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;fill(IIIII)V"), index = 3)
 	public int enlargeBackground(int par1){
-		if(Axolotlclient.features && Axolotlclient.CONFIG.showBadges.get() && Axolotlclient.isUsingClient(player.getId()))
+		if(Axolotlclient.CONFIG.showBadges.get() && Axolotlclient.isUsingClient(player.getId()))
 			return par1+10;
 		return par1;
 	}

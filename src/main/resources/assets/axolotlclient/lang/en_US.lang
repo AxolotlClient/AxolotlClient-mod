@@ -4,39 +4,35 @@ language.code=en_US
 
 config=Axolotlclient Options
 
-general=General...
+general=General
 general.title=General Options
 customSky=Custom Skies
 showSunMoon=Custom Sky Sun & Moon
 zoomDivisor=Zoom Divisor
 decreaseSensitivity=Reduce Sensitivity
-resetConf=Reset Configuration
-resetConfTooltip=This will delete the current Configuration file! Proceed with Caution!
 
-badges=Badge Options...
-badges.title=Badge Options
-customBadgeDesc=Custom Badge Text:
+badgeOptions=Badge Options
+badgeText=Custom Badge Text
 customBadge=Custom Badges
-showBadge=Show Badges
+showBadges=Show Badges
 
-nametagConf=Nametag Options...
-nametagConf.title=Nametag Options
+nametagOptions=Nametag Options
 showOwnNametag=Show Own Nametag
 useShadows=Force Shadows
 
-nickHider=NickHider Options...
+nickHider=NickHider Options
 nickHiderConf.title=NickHider Options
 hideNames=Hide Names
 nameDesc=Name to hide as:
 hideOwnSkin=Hide Own Skin
 hideOtherSkins=Hide Others' Skins
 
-rpcConf=DiscordRPC Options...
+rpcConf=DiscordRPC Options
 rpcConf.title=DiscordRPC Options
 enableRPC=Enable RPC
 showActivity=Show Activity
 
-cursedConf=Cursed Options...
+cursedConf=Cursed Options
 cursedConf.title=Cursed Options
 rotateWorld=Rotate the World
 
@@ -44,8 +40,11 @@ category.axolotlclient=AxolotlClient
 key.zoom=Zoom
 key.openHud=Open Hud Editor
 
+hud=Hud Options
+pinghud=Ping Hud
+cpshud=CPS Hud
+fpshud=FPS Hud
 hud.snapping=Snapping
-hud.configuration=Configuration
 hud.clientOptions=Client Options
 
 back=Back

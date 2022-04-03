@@ -10,12 +10,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * This implementation of Hud modules is based on KronHUD.
+ * https://github.com/DarkKronicle/KronHUD
+ * Licensed under GPL-3.0
+ */
+
 public class SnappingHelper {
     private final int distance = 4;
     private final HashSet<Integer> x = new HashSet<>();
     private final HashSet<Integer> y = new HashSet<>();
     private static final Color LINE_COLOR = Color.SELECTOR_BLUE;
-    private final Rectangle current;
+    private Rectangle current;
     private final MinecraftClient client;
     private final Window window;
 
@@ -58,7 +64,7 @@ public class SnappingHelper {
             DrawUtil.fillRect(new Rectangle(0, cury, (int) window.getScaledWidth(), 1),
                     LINE_COLOR);
         }
-        // renderAll(matrices);
+        //renderAll();
 
     }
 
@@ -138,4 +144,7 @@ public class SnappingHelper {
         return null;
     }
 
+    public void setCurrent(Rectangle current) {
+        this.current=current;
+    }
 }

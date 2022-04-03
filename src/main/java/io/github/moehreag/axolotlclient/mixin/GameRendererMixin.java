@@ -13,7 +13,6 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.player.PlayerEntity;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 import org.spongepowered.asm.mixin.Mixin;
@@ -48,10 +47,6 @@ public abstract class GameRendererMixin {
         if(MinecraftClient.getInstance().world.dimension.canPlayersSleep() && Axolotlclient.CONFIG.customSky.get() && SkyboxManager.getInstance().hasSkyBoxes()) {
             this.viewDistance = (float) (this.viewDistance * 2 + MinecraftClient.getInstance().player.getPos().y);
             Entity entity = this.client.getCameraEntity();
-            boolean bl = false;
-            if (entity instanceof PlayerEntity) {
-                bl = ((PlayerEntity) entity).abilities.creativeMode;
-            }
 
             GL11.glFog(2918, this.updateFogColorBuffer(this.fogRed, this.fogGreen, this.fogBlue, 1.0F));
             GL11.glNormal3f(0.0F, -1.0F, 0.0F);
@@ -92,13 +87,8 @@ public abstract class GameRendererMixin {
             } else {
                 float f = this.viewDistance;
                 GlStateManager.fogMode(9729);
-                if (i == -1) {
-                    GlStateManager.fogStart(f - 0.01F);
-                    GlStateManager.fogEnd(f);
-                } else {
-                    GlStateManager.fogStart(f - 0.01F);
-                    GlStateManager.fogEnd(f);
-                }
+                GlStateManager.fogStart(f - 0.01F);
+                GlStateManager.fogEnd(f);
 
                 if (this.client.world.dimension.isFogThick((int) entity.x, (int) entity.z)) {
                     GlStateManager.fogStart(f * 0.05F);
@@ -113,7 +103,7 @@ public abstract class GameRendererMixin {
         }
     }
 
-    @Inject(method = "tick", at = @At("HEAD"))
+    @Inject(method = "tick", at = @At("TAIL"))
     public void tick(CallbackInfo ci){
         Zoom.decreaseFov();
     }
@@ -123,8 +113,6 @@ public abstract class GameRendererMixin {
         Zoom.manageZoom();
         if(Zoom.isZoomed()||Zoom.isFadingOut()){
             cir.setReturnValue(Zoom.getFov(cir.getReturnValue()));
-            //cir.cancel();
         }
-
     }
 }

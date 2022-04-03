@@ -2,21 +2,32 @@ package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
 import io.github.moehreag.axolotlclient.config.options.BooleanOption;
 import io.github.moehreag.axolotlclient.config.options.Option;
+import io.github.moehreag.axolotlclient.util.Hooks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
+import org.lwjgl.input.Mouse;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This implementation of Hud modules is based on KronHUD.
+ * https://github.com/DarkKronicle/KronHUD
+ * Licensed under GPL-3.0
+ */
+
 public class CPSHud extends CleanHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "cpshud");
 
-    private BooleanOption fromKeybindings = new BooleanOption("cpskeybind", false);
-    private BooleanOption rmb = new BooleanOption("rightcps", false);
+    private final BooleanOption fromKeybindings = new BooleanOption("cpskeybind", false);
+    private final BooleanOption rmb = new BooleanOption("rightcps", false);
+
+    boolean rc;
+    boolean lc;
 
     public CPSHud() {
         super();
-        /*KronHudHooks.MOUSE_INPUT.register((window, button, action, mods) -> {
+        Hooks.MOUSE_INPUT.register((window, button, action, mods) -> {
             if (!fromKeybindings.get()) {
                 if (button == 0) {
                     ClickList.LEFT.click();
@@ -25,7 +36,7 @@ public class CPSHud extends CleanHudEntry {
                 }
             }
         });
-        KronHudHooks.KEYBIND_PRESS.register((key) -> {
+        Hooks.KEYBIND_PRESS.register((key) -> {
             if (fromKeybindings.get()) {
                 if (key.equals(client.options.keyAttack)) {
                     ClickList.LEFT.click();
@@ -33,7 +44,7 @@ public class CPSHud extends CleanHudEntry {
                     ClickList.RIGHT.click();
                 }
             }
-        });*/
+        });
     }
 
     @Override
@@ -43,6 +54,15 @@ public class CPSHud extends CleanHudEntry {
 
     @Override
     public void tick() {
+
+        if(Mouse.isButtonDown(0) && !lc){
+            ClickList.LEFT.click();
+            lc=true;
+        } else if(!Mouse.isButtonDown(0))lc=false;
+        if(Mouse.isButtonDown(1) && !rc){
+            ClickList.RIGHT.click();
+            rc=true;
+        } else if(!Mouse.isButtonDown(1))rc=false;
         ClickList.LEFT.update();
         ClickList.RIGHT.update();
     }
@@ -84,7 +104,7 @@ public class CPSHud extends CleanHudEntry {
         private final List<Long> clicks;
 
         public ClickList() {
-            clicks = new ArrayList<Long>();
+            clicks = new ArrayList<>();
         }
 
         public void update() {

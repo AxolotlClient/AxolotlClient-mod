@@ -38,13 +38,13 @@ public class MinecraftClientMixin {
 
     @Inject(method = "startGame", at = @At("HEAD"))
     public void startup(String worldName, String string, LevelInfo levelInfo, CallbackInfo ci){
-        if(Axolotlclient.features) NetworkHelper.setOnline();
+        NetworkHelper.setOnline();
         DiscordRPC.startup();
     }
 
     @Inject(method = "stop", at = @At("HEAD"))
     public void stop(CallbackInfo ci){
-        if (Axolotlclient.features) NetworkHelper.setOffline();
+        NetworkHelper.setOffline();
         DiscordRPC.shutdown();
     }
 
@@ -56,7 +56,7 @@ public class MinecraftClientMixin {
 
     @Inject(method = "initializeGame", at = @At("TAIL"))
     public void onLaunch(CallbackInfo ci){
-        if(Axolotlclient.features) NetworkHelper.setOnline();
+        NetworkHelper.setOnline();
     }
 
 }

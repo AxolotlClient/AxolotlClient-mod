@@ -3,34 +3,34 @@ package io.github.moehreag.axolotlclient.config.options;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 
-public class DoubleOption extends OptionBase implements Option{
+public class IntegerOption extends OptionBase implements Option{
 
-    private double option;
-    private final double Default;
-    private final double min;
-    private final double max;
+    private int option;
+    private final int Default;
+    private final int min;
+    private final int max;
 
-    public DoubleOption(String name, double Default, double min, double max) {
+    public IntegerOption(String name, int Default, int min, int max) {
         super(name);
         this.Default=Default;
         this.min=min;
         this.max=max;
     }
 
-    public double get(){
+    public int get(){
         return option;
     }
 
-    public void set(double set){
+    public void set(int set){
         option=set;
     }
 
-    public double getMin(){return min;}
-    public double getMax(){return max;}
+    public int getMin(){return min;}
+    public int getMax(){return max;}
 
     @Override
     public OptionType getType() {
-        return OptionType.DOUBLE;
+        return OptionType.INT;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class DoubleOption extends OptionBase implements Option{
 
     @Override
     public void setValueFromJsonElement(JsonElement element) {
-        option = element.getAsDouble();
+        option = element.getAsInt();
     }
 
     @Override

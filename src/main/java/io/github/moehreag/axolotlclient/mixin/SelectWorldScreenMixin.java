@@ -14,10 +14,7 @@ public class SelectWorldScreenMixin {
 
     @Inject(method = "joinWorld", at = @At("HEAD"))
     public void joinWorld(int index, CallbackInfo ci){
-        if(Axolotlclient.features){
-            NetworkHelper.setOnline();
-
-            DiscordRPC.update();
-        }
+        NetworkHelper.setOnline();
+        DiscordRPC.update();
     }
 }

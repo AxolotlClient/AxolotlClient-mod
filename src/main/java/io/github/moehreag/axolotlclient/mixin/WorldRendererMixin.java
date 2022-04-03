@@ -44,7 +44,7 @@ public abstract class WorldRendererMixin {
 
     @Inject(method = "method_9891", at=@At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;disableTexture()V"), cancellable = true)
     public void sky(float f, int ih, CallbackInfo ci){
-        if(Axolotlclient.features && Axolotlclient.CONFIG.customSky.get() && SkyboxManager.getInstance().hasSkyBoxes()){
+        if(Axolotlclient.CONFIG.customSky.get() && SkyboxManager.getInstance().hasSkyBoxes()){
 
             GlStateManager.disableFog();
             GlStateManager.depthMask(false);
@@ -173,7 +173,7 @@ public abstract class WorldRendererMixin {
 
     @Inject(method = "method_9924", at = @At("TAIL"))
     public void decurse(CallbackInfo ci){
-        if(Axolotlclient.features && Axolotlclient.CONFIG.rotateWorld.get())GlStateManager.popMatrix();
+        if(Axolotlclient.CONFIG.rotateWorld.get())GlStateManager.popMatrix();
     }
 
     @Redirect(method = "method_9910", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/dimension/Dimension;getCloudHeight()F"))

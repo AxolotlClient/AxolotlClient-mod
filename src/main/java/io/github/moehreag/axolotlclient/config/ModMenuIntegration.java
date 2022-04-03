@@ -1,5 +1,6 @@
 package io.github.moehreag.axolotlclient.config;
 
+import io.github.moehreag.axolotlclient.modules.hud.HudEditScreen;
 import io.github.prospector.modmenu.api.ModMenuApi;
 import io.github.prospector.modmenu.gui.ModListScreen;
 import net.minecraft.client.MinecraftClient;
@@ -16,9 +17,6 @@ public class ModMenuIntegration implements ModMenuApi {
     }
     @Override
 	public Function<Screen, ? extends Screen> getConfigScreenFactory() {
-
-        return parent -> (Screen) new AxolotlclientConfigScreen();
+        return parent -> (Screen) new HudEditScreen(parent);
 	}
-
-
 }

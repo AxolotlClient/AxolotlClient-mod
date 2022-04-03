@@ -6,8 +6,12 @@ import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.Window;
 import org.lwjgl.opengl.GL11;
 
-// Cannot use @UtilityClass annotation. Class can't be marked as final.
-public class DrawUtil {
+/**
+ * This implementation of Hud modules is based on KronHUD.
+ * https://github.com/DarkKronicle/KronHUD
+ * Licensed under GPL-3.0
+ */
+public class DrawUtil extends DrawableHelper{
 
     public static void fillRect(Rectangle rectangle, Color color) {
         fillRect(rectangle.x, rectangle.y, rectangle.width,
@@ -41,8 +45,8 @@ public class DrawUtil {
     public static void drawCenteredString(TextRenderer renderer,
                                           String text, DrawPosition position,
                                           int color, boolean shadow) {
-        drawString(renderer, text, (int) (position.x - renderer.getStringWidth(text) / 2),
-                (int) position.y,
+        drawString(renderer, text, position.x - renderer.getStringWidth(text) / 2,
+                position.y,
                 color, shadow);
     }
 

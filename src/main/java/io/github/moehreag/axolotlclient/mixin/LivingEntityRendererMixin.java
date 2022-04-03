@@ -15,7 +15,7 @@ public class LivingEntityRendererMixin<T extends LivingEntity> {
 
     @Inject(method = "hasLabel*", at = @At("HEAD"), cancellable = true)
     private void showOwnNametag(T livingEntity, CallbackInfoReturnable<Boolean> cir){
-        if (Axolotlclient.features && Axolotlclient.CONFIG.showOwnNametag.get() && livingEntity == MinecraftClient.getInstance().player) {
+        if (Axolotlclient.CONFIG.showOwnNametag.get() && livingEntity == MinecraftClient.getInstance().player) {
             cir.setReturnValue(true);
         }
     }

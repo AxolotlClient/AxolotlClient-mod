@@ -14,6 +14,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * This implementation of Hud modules is based on KronHUD.
+ * https://github.com/DarkKronicle/KronHUD
+ * Licensed under GPL-3.0
+ */
+
 public class ItemUtil {
 
     public static List<ItemStorage> storageFromItem(List<ItemStack> items) {

@@ -3,6 +3,7 @@ package io.github.moehreag.axolotlclient.modules.hud.gui;
 import io.github.moehreag.axolotlclient.config.options.BooleanOption;
 import io.github.moehreag.axolotlclient.config.options.DoubleOption;
 import io.github.moehreag.axolotlclient.config.options.Option;
+import io.github.moehreag.axolotlclient.config.options.OptionCategory;
 import io.github.moehreag.axolotlclient.modules.hud.util.Color;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawUtil;
@@ -16,6 +17,12 @@ import net.minecraft.util.math.MathHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This implementation of Hud modules is based on KronHUD.
+ * https://github.com/DarkKronicle/KronHUD
+ * Licensed under GPL-3.0
+ */
+
 public abstract class AbstractHudEntry extends DrawUtil {
 
     public int width;
@@ -27,8 +34,8 @@ public abstract class AbstractHudEntry extends DrawUtil {
     protected BooleanOption shadow = new BooleanOption("shadow",  getShadowDefault());
     protected BooleanOption background = new BooleanOption("background",  true);
     //protected KronColor backgroundColor = new KronColor("backgroundcolor", null, "#64000000");
-    private DoubleOption x = new DoubleOption("x", getDefaultX(), 0, 1);
-    private DoubleOption y = new DoubleOption("y", getDefaultY(), 0, 1);
+    private final DoubleOption x = new DoubleOption("x", getDefaultX(), 0, 1);
+    private final DoubleOption y = new DoubleOption("y", getDefaultY(), 0, 1);
 
     private List<Option> options;
 
@@ -63,9 +70,11 @@ public abstract class AbstractHudEntry extends DrawUtil {
         if (hovered) {
             fillRect(getScaledBounds(), Color.SELECTOR_BLUE);
         } else {
-            fillRect(getScaledBounds(), Color.WHITE);
+            fillRect(getScaledBounds(), Color.DARK_GRAY);
         }
         outlineRect( getScaledBounds(), Color.BLACK);
+
+
     }
 
     public abstract Identifier getId();
@@ -115,8 +124,9 @@ public abstract class AbstractHudEntry extends DrawUtil {
     }
 
     public Rectangle getScaledBounds() {
-        return new Rectangle(getX(), getY(), Math.round(width * (float) scale.get()),
-                Math.round(height * (float) scale.get()));
+        return new Rectangle(getX(), getY(), width, height);
+        /*return new Rectangle(getX(), getY(), Math.round(width * (float) scale.get()),
+                Math.round(height * (float) scale.get()));*/
     }
 
     /**
@@ -144,10 +154,8 @@ public abstract class AbstractHudEntry extends DrawUtil {
     }
 
     public DrawPosition getScaledPos(float scale) {
-        int scaledX = floatToInt((float) x.get(), (int) new Window(client).getScaledWidth(),
-                Math.round(width * scale));
-        int scaledY = floatToInt((float) y.get(), (int) new Window(client).getScaledHeight(),
-                Math.round(height * scale));
+        int scaledX = floatToInt((float) x.get(), (int) new Window(client).getScaledWidth(), Math.round(width * scale));
+        int scaledY = floatToInt((float) y.get(), (int) new Window(client).getScaledHeight(), Math.round(height * scale));
         return new DrawPosition(scaledX, scaledY);
     }
 
@@ -163,11 +171,19 @@ public abstract class AbstractHudEntry extends DrawUtil {
         return options;
     }
 
-    public List<Option> getAllOptions() {
+    public OptionCategory getOptionsAsCategory(){
+        OptionCategory cat = new OptionCategory(getId(), getNameKey());
+        cat.add(getOptions());
+        return cat;
+    }
+
+    public OptionCategory getAllOptions() {
         List<Option> options = new ArrayList<>(getOptions());
         options.add(x);
         options.add(y);
-        return options;
+        OptionCategory cat = new OptionCategory(getId(), getNameKey());
+        cat.add(options);
+        return cat;
     }
 
     public void addConfigOptions(List<Option> options) {
@@ -180,7 +196,7 @@ public abstract class AbstractHudEntry extends DrawUtil {
     }
 
     public String getNameKey() {
-        return "hud." + getId().getNamespace() + "." + getId().getPath();
+        return getId().getPath();
     }
 
     public String getName() {
@@ -189,6 +205,10 @@ public abstract class AbstractHudEntry extends DrawUtil {
 
     public void toggle() {
         enabled.toggle();
+    }
+
+    public boolean isHovered(int mouseX, int mouseY){
+        return (mouseX >= getX() && mouseY >= getY() && mouseX < getX() + this.width && mouseY < getY() + this.height) || hovered;
     }
 
     public void setHovered(boolean value) {

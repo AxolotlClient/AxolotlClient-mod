@@ -14,10 +14,7 @@ public class MultiplayerScreenMixin {
 
     @Inject(method = "connect()V", at = @At("HEAD"))
     public void connect(CallbackInfo ci){
-        if(Axolotlclient.features){
-            NetworkHelper.setOnline();
-
-            DiscordRPC.update();
-        }
+        NetworkHelper.setOnline();
+        DiscordRPC.update();
     }
 }

@@ -1,67 +1,114 @@
 package io.github.moehreag.axolotlclient.modules.hud;
 
-import io.github.moehreag.axolotlclient.Axolotlclient;
-import io.github.moehreag.axolotlclient.config.AxolotlclientConfigScreen;
+import io.github.moehreag.axolotlclient.config.ConfigManager;
 import io.github.moehreag.axolotlclient.config.options.BooleanOption;
-import io.github.moehreag.axolotlclient.config.screen.ScreenBuilder;
+import io.github.moehreag.axolotlclient.config.screen.CategoryScreenBuilder;
+import io.github.moehreag.axolotlclient.config.screen.OptionScreenBuilder;
 import io.github.moehreag.axolotlclient.config.widgets.BooleanButtonWidget;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
-import io.github.moehreag.axolotlclient.modules.hud.gui.screen.ConfigScreen;
 import io.github.moehreag.axolotlclient.modules.hud.snapping.SnappingHelper;
+import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.moehreag.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.resource.language.I18n;
 
+import java.awt.*;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * This implementation of Hud modules is based on KronHUD.
+ * https://github.com/DarkKronicle/KronHUD
+ * Licensed under GPL-3.0
+ */
+
 public class HudEditScreen extends Screen {
 
-    private BooleanOption snapping = new BooleanOption("snapping", true);
+    private final BooleanOption snapping = new BooleanOption("snapping", true);
     private AbstractHudEntry current;
+    private DrawPosition offset = null;
     private final HudManager manager;
     private boolean mouseDown;
     private SnappingHelper snap;
+    private final Screen parent;
 
-    public HudEditScreen(){
+    public HudEditScreen(Screen parent){
         snapping.setDefaults();
         updateSnapState();
         manager = HudManager.getINSTANCE();
         mouseDown = false;
+        this.parent=parent;
     }
+
+    public HudEditScreen(){
+        this(null);
+    }
+
 
     @Override
     public void render(int mouseX, int mouseY, float tickDelta) {
-        this.renderBackground();
-        super.render(mouseX, mouseY, tickDelta);
+        if(this.client.world!=null)fillGradient(0,0, width, height, new Color(0xB0100E0E, true).hashCode(), new Color(0x46212020, true).hashCode());
+        else {renderDirtBackground(0);}
+        for(ButtonWidget button:buttons){
+            button.render(client, mouseX, mouseY);
+        }
+        manager.renderPlaceholder();
+        if (mouseDown && snap != null) {
+            snap.renderSnaps();
+        }
+
         Optional<AbstractHudEntry> entry = manager.getEntryXY(mouseX, mouseY);
         entry.ifPresent(abstractHudEntry -> abstractHudEntry.setHovered(true));
-        manager.renderPlaceholder();
-        if (mouseDown && snapping.get()) {
-            if(snap == null)updateSnapState();
-            else snap.renderSnaps();
-        }
+        //if(current != null && current.isHovered(mouseX, mouseY))current.setXY(mouseX-current.width/2, mouseY-current.height/2);
 
     }
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int button) {
         super.mouseClicked(mouseX, mouseY, button);
-        mouseDown = true;
+        Optional<AbstractHudEntry> entry = manager.getEntryXY(Math.round(mouseX), Math.round(mouseY));
+        if (button == 0) {
+            mouseDown = true;
+            if (entry.isPresent()) {
+                current = entry.get();
+                offset = new DrawPosition(Math.round(mouseX - current.getX()), Math.round(mouseY - current.getY()));
+                updateSnapState();
+            } else {
+                current = null;
+            }
+        } else if (button == 1) {
+            entry.ifPresent(abstractHudEntry -> client.openScreen(new OptionScreenBuilder(this, abstractHudEntry.getOptionsAsCategory())));
+        }
     }
 
     @Override
     protected void mouseReleased(int mouseX, int mouseY, int button) {
-        super.mouseReleased(mouseX, mouseY, button);
-        mouseDown=false;
+        current = null;
+        snap = null;
+        mouseDown = false;
+        ConfigManager.save();
     }
 
     @Override
-    protected void mouseDragged(int i, int j, int k, long l) {
-        super.mouseDragged(i, j, k, l);
-
+    protected void mouseDragged(int mouseX, int mouseY, int button, long l) {
+        if (current != null) {
+            current.setXY((int) mouseX - offset.x, (int) mouseY - offset.y);
+            if (snap != null) {
+                Integer snapX, snapY;
+                snap.setCurrent(current.getScaledBounds());
+                if ((snapX = snap.getCurrentXSnap()) != null) {
+                    current.setX(snapX);
+                }
+                if ((snapY = snap.getCurrentYSnap()) != null) {
+                    current.setY(snapY);
+                }
+            }
+            if (current.tickable()) {
+                current.tick();
+            }
+        }
     }
 
     private void updateSnapState() {
@@ -74,18 +121,17 @@ public class HudEditScreen extends Screen {
         }
     }
 
-
-
     @Override
     protected void buttonClicked(ButtonWidget button) {
         super.buttonClicked(button);
         if(button.id==1){
             snapping.toggle();
-            MinecraftClient.getInstance().openScreen(this);
+            client.openScreen(this);
         }
 
-        if(button.id==3)MinecraftClient.getInstance().openScreen(new ScreenBuilder(this));
-        if(button.id==2)MinecraftClient.getInstance().openScreen(new ConfigScreen(this, manager));
+        if(button.id==3)client.openScreen(new CategoryScreenBuilder(this));
+
+        if(button.id==0)client.openScreen(parent);
     }
 
     @Override
@@ -97,23 +143,19 @@ public class HudEditScreen extends Screen {
                 100, 20,
                 I18n.translate("hud.snapping"), snapping
         ));
-        this.buttons.add(new ButtonWidget(2,
-                width / 2 - 50,
-                height - 50 ,
-                100, 20,
-                I18n.translate("hud.configuration")
-        ));
         this.buttons.add(new ButtonWidget(3,
                 width / 2 - 50,
-                height - 50 + 22 ,
+                height - 50,
                 100, 20,
                 I18n.translate("hud.clientOptions")
         ));
+        if(parent!=null)this.buttons.add(new ButtonWidget(0, width/2 -50, height - 50 + 22, 100, 20, I18n.translate("back")));
     }
 
     @Override
     public void tick() {
         super.tick();
+        if(current!=null && current.tickable())current.tick();
     }
 
     @Override

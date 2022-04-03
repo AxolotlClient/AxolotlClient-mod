@@ -1,12 +1,17 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
-
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.moehreag.axolotlclient.modules.hud.util.Color;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
 
 import java.util.List;
+
+/**
+ * This implementation of Hud modules is based on KronHUD.
+ * https://github.com/DarkKronicle/KronHUD
+ * Licensed under GPL-3.0
+ */
 
 public abstract class CleanHudEntry extends AbstractHudEntry {
 
@@ -24,11 +29,11 @@ public abstract class CleanHudEntry extends AbstractHudEntry {
         scale();
         DrawPosition pos = getPos();
         if (background.get()) {
-            //fillRect(getBounds(), backgroundColor.getColor());
-            fillRect(getBounds(), new Color(-1));
+            //fillRect(getBounds(), new Color(255, 255, 255));
+            //fillRect(getBounds(), new Color(-1));
         }
         drawCenteredString(client.textRenderer, getValue(), new DrawPosition(pos.x + (Math.round(width) / 2),
-                pos.y + (Math.round((float) height / 2)) - 4), -1, shadow.get());
+                pos.y + (Math.round((float) height / 2)) - 4), Color.WHITE, shadow.get());
     }
 
     @Override
@@ -37,8 +42,8 @@ public abstract class CleanHudEntry extends AbstractHudEntry {
         scale();
         DrawPosition pos = getPos();
         drawCenteredString(client.textRenderer, getPlaceholder(),
-                new DrawPosition(pos.x + (Math.round(width) / 2),
-                pos.y + (Math.round((float) height / 2)) - 4), -1, shadow.get());
+                new DrawPosition(pos.x + (width / 2),
+                pos.y + (height / 2) - 4), -1, shadow.get());
         hovered = false;
     }
 

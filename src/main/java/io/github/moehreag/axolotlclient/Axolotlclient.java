@@ -8,6 +8,7 @@ import io.github.moehreag.axolotlclient.modules.hud.HudManager;
 import io.github.moehreag.axolotlclient.modules.zoom.Zoom;
 import io.github.moehreag.axolotlclient.util.Util;
 import net.fabricmc.api.ModInitializer;
+import net.legacyfabric.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.entity.Entity;
@@ -17,6 +18,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,7 +34,6 @@ public class Axolotlclient implements ModInitializer {
 	public static final Identifier badgeIcon = new Identifier("axolotlclient", "textures/badge.png");
 
 	private static final List<AbstractModule> modules= new ArrayList<>();
-	public static boolean features = false;
 
 	public static Integer tickTime = 0;
 
@@ -40,22 +41,16 @@ public class Axolotlclient implements ModInitializer {
 	public void onInitialize() {
 
 		CONFIG = new AxolotlclientConfig();
-		CONFIG.init();
+
+
 		getModules();
+		CONFIG.init();
+		modules.forEach(AbstractModule::init);
 		ConfigManager.load();
-
-
-
 
 		if (CONFIG.enableRPC.get()) io.github.moehreag.axolotlclient.util.DiscordRPC.startup();
 
-
-
-		modules.forEach(AbstractModule::init);
 		LOGGER.info("Axolotlclient Initialized");
-
-
-
 	}
 
 	public static void getModules(){

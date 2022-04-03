@@ -3,6 +3,7 @@ package io.github.moehreag.axolotlclient.config;
 import com.google.gson.*;
 import io.github.moehreag.axolotlclient.Axolotlclient;
 import io.github.moehreag.axolotlclient.config.options.Option;
+import io.github.moehreag.axolotlclient.config.options.OptionCategory;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.FileReader;
@@ -13,7 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ConfigManager{
-    private static final List<Option> options = Axolotlclient.CONFIG.get();
+    private static final List<OptionCategory> categories = Axolotlclient.CONFIG.getCategories();
     private static final Path confPath = FabricLoader.getInstance().getConfigDir().resolve("Axolotlclient.json");
 
     public static void save(){
@@ -25,15 +26,30 @@ public class ConfigManager{
     }
 
     private static void saveFile() throws IOException {
-        JsonObject object = new JsonObject();
-        for(Option option:options){
 
-            object.add(option.getName(), option.getJson());
+        JsonObject config = new JsonObject();
+        for(OptionCategory category : categories) {
+            JsonObject object = new JsonObject();
+            for (Option option : category.getOptions()) {
+
+                object.add(option.getName(), option.getJson());
+            }
+
+            if(!category.getSubCategories().isEmpty()){
+                for(OptionCategory sub:category.getSubCategories()){
+                    JsonObject subOption = new JsonObject();
+                    sub.getOptions().forEach(option ->  subOption.add(option.getName(), option.getJson()));
+                    object.add(sub.getName(), subOption);
+                }
+            }
+
+            config.add(category.getName(), object);
+
         }
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-        Files.write(confPath, Collections.singleton(gson.toJson(object)));
+        Files.write(confPath, Collections.singleton(gson.toJson(config)));
     }
 
     public static void load() {
@@ -41,10 +57,23 @@ public class ConfigManager{
         try {
             JsonObject config = new JsonParser().parse(new FileReader(confPath.toString())).getAsJsonObject();
 
-            for (Option option : options) {
-                if (config.has(option.getName())) {
-                    JsonElement part = config.get(option.getName());
-                    option.setValueFromJsonElement(part);
+            for(OptionCategory category:categories) {
+                for (Option option : category.getOptions()) {
+                    JsonObject cat = config.get(category.getName()).getAsJsonObject();
+                    if (cat.has(option.getName())) {
+                        JsonElement part = cat.get(option.getName());
+                        option.setValueFromJsonElement(part);
+                    }
+                }
+                if(!category.getSubCategories().isEmpty()){
+                    for (OptionCategory sub: category.getSubCategories()) {
+                        JsonObject subCat = config.get(category.getName()).getAsJsonObject().get(sub.getName()).getAsJsonObject();
+                        for(Option option: sub.getOptions()){
+                            if(subCat.has(option.getName())){
+                                option.setValueFromJsonElement(subCat.get(option.getName()));
+                            }
+                        }
+                    }
                 }
             }
         } catch (Exception e){Axolotlclient.LOGGER.error("Failed to load config! Using default values...");}
@@ -52,7 +81,14 @@ public class ConfigManager{
     }
 
     private static void loadDefaults(){
-        Axolotlclient.CONFIG.get().forEach(Option::setDefaults);
+        Axolotlclient.CONFIG.getCategories().forEach(OptionCategory -> {
+            OptionCategory.getOptions().forEach(Option::setDefaults);
+            if(!OptionCategory.getSubCategories().isEmpty()){
+                for(OptionCategory category : OptionCategory.getSubCategories()){
+                    category.getOptions().forEach(Option::setDefaults);
+                }
+            }
+        });
     }
 
 

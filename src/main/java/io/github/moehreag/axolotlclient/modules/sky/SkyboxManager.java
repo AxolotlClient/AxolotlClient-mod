@@ -1,7 +1,5 @@
 package io.github.moehreag.axolotlclient.modules.sky;
 
-import org.jetbrains.annotations.ApiStatus;
-
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -39,6 +37,9 @@ public class SkyboxManager {
     }
 
     public boolean hasSkyBoxes(){
+        this.skyboxes.stream().filter(this.renderPredicate).forEach(this.active_skies::add);
+        this.active_skies.forEach(SkyboxInstance::renderSkybox);
+        this.active_skies.removeIf((skybox) -> skybox.getAlpha() <= MINIMUM_ALPHA);
         return !active_skies.isEmpty();
     }
 

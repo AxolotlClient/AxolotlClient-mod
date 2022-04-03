@@ -25,6 +25,9 @@ public class FloatOption extends OptionBase implements Option{
         value=set;
     }
 
+    public float getMin(){return min;}
+    public float getMax(){return max;}
+
     @Override
     public OptionType getType() {
         return OptionType.FLOAT;
