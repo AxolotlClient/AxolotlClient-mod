@@ -8,6 +8,7 @@ import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.GuiLighting;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.item.ItemStack;
@@ -29,23 +30,14 @@ public class ItemUtil {
 
     private static final MinecraftClient client = MinecraftClient.getInstance();
 
-    public static void renderGuiItem(ItemStack itemStack, int x, int y, Color color){
-        //GlStateManager.enableBlend();
+    public static void renderGuiItem(ItemStack itemStack, int x, int y){
+        ItemRenderer renderer = MinecraftClient.getInstance().getItemRenderer();
         GlStateManager.enableLighting();
         GuiLighting.enable();
-        MinecraftClient.getInstance().getItemRenderer().renderInGuiWithOverrides(itemStack, x+2, y);
+        renderer.renderInGuiWithOverrides(itemStack, x+2, y);
+        renderer.renderGuiItemOverlay(client.textRenderer, itemStack, x+2, y, null);
         GuiLighting.disable();
         GlStateManager.disableLighting();
-        GlStateManager.disableDepthTest();
-        GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        if(itemStack.count>1) {
-            client.textRenderer.drawWithShadow(String.valueOf(itemStack.count),
-                    (float) (x + 2 + 19 - 2 - client.textRenderer.getStringWidth(String.valueOf(itemStack.count))),
-                    (float) (y + 6 + 3),
-                    color != null ? color.color : 16777215);
-        }
-        //GlStateManager.disableBlend();
-        GlStateManager.enableDepthTest();
     }
 /*
     public static List<ItemStorage> storageFromItem(List<ItemStack> items) {

@@ -1,6 +1,5 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
-import io.github.moehreag.axolotlclient.Axolotlclient;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
@@ -34,21 +33,13 @@ public class ArmorHud extends AbstractHudEntry {
         }
         int lastY = 2 + (4 * 20);
         if(client.player.inventory.getMainHandStack() !=null)
-            ItemUtil.renderGuiItem(client.player.inventory.getMainHandStack(), pos.x, pos.y + lastY, null);
+            ItemUtil.renderGuiItem(client.player.inventory.getMainHandStack(), pos.x, pos.y + lastY);
         lastY = lastY - 20;
         for (int i = 0; i <= 3; i++) {
             if(client.player.inventory.armor[i] != null)
-                renderItem(client.player.inventory.armor[i], pos.x , lastY + pos.y);
+                ItemUtil.renderGuiItem(client.player.inventory.armor[i], pos.x , lastY + pos.y);
             lastY = lastY - 20;
         }
-    }
-
-    public void renderItem(ItemStack stack, int x, int y) {
-        ItemUtil.renderGuiItem(stack, x, y, textColor.get());
-    }
-
-    public void renderMainItem(ItemStack stack, int x, int y) {
-        ItemUtil.renderGuiItem(stack, x, y, textColor.get());
     }
 
     @Override
@@ -58,7 +49,7 @@ public class ArmorHud extends AbstractHudEntry {
         DrawPosition pos = getPos();
         int lastY = 2 + (4 * 20);
         ItemStack itemStack = new ItemStack(Block.getById(2), 90);
-        ItemUtil.renderGuiItem(itemStack, pos.x, pos.y+lastY, null);
+        ItemUtil.renderGuiItem(itemStack, pos.x, pos.y+lastY);
         hovered = false;
     }
 
@@ -74,8 +65,8 @@ public class ArmorHud extends AbstractHudEntry {
 
     @Override
     public void addConfigOptions(List<Option> options) {
-        super.addConfigOptions(options);
-        options.add(textColor);
+        //super.addConfigOptions(options);
+        options.add(enabled);
         options.add(shadow);
         options.add(background);
         options.add(backgroundColor);
