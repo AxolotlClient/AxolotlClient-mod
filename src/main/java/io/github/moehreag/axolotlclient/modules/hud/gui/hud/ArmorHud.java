@@ -1,5 +1,6 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
@@ -40,6 +41,7 @@ public class ArmorHud extends AbstractHudEntry {
                 ItemUtil.renderGuiItem(client.player.inventory.armor[i], pos.x , lastY + pos.y);
             lastY = lastY - 20;
         }
+        GlStateManager.popMatrix();
     }
 
     @Override
@@ -47,9 +49,9 @@ public class ArmorHud extends AbstractHudEntry {
         renderPlaceholderBackground();
         scale();
         DrawPosition pos = getPos();
-        int lastY = 2 + (4 * 20);
         ItemStack itemStack = new ItemStack(Block.getById(2), 90);
-        ItemUtil.renderGuiItem(itemStack, pos.x, pos.y+lastY);
+        ItemUtil.renderGuiItem(itemStack, pos.x, pos.y+82);
+        GlStateManager.popMatrix();
         hovered = false;
     }
 
@@ -65,8 +67,8 @@ public class ArmorHud extends AbstractHudEntry {
 
     @Override
     public void addConfigOptions(List<Option> options) {
-        //super.addConfigOptions(options);
-        options.add(enabled);
+        super.addConfigOptions(options);
+        //options.add(enabled);
         options.add(shadow);
         options.add(background);
         options.add(backgroundColor);

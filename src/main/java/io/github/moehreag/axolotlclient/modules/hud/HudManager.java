@@ -4,10 +4,7 @@ import io.github.moehreag.axolotlclient.Axolotlclient;
 import io.github.moehreag.axolotlclient.config.options.OptionCategory;
 import io.github.moehreag.axolotlclient.modules.AbstractModule;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
-import io.github.moehreag.axolotlclient.modules.hud.gui.hud.ArmorHud;
-import io.github.moehreag.axolotlclient.modules.hud.gui.hud.CPSHud;
-import io.github.moehreag.axolotlclient.modules.hud.gui.hud.FPSHud;
-import io.github.moehreag.axolotlclient.modules.hud.gui.hud.PingHud;
+import io.github.moehreag.axolotlclient.modules.hud.gui.hud.*;
 import io.github.moehreag.axolotlclient.modules.hud.util.Rectangle;
 import net.legacyfabric.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.legacyfabric.fabric.api.client.rendering.v1.HudRenderCallback;
@@ -56,6 +53,7 @@ public class HudManager extends AbstractModule {
         add(new FPSHud());
         add(new CPSHud());
         add(new ArmorHud());
+        add(new PotionsHud());
     }
 
     public static void tick(){

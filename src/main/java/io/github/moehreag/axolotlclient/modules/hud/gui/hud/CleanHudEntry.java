@@ -1,5 +1,6 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.moehreag.axolotlclient.modules.hud.util.Color;
@@ -33,6 +34,7 @@ public abstract class CleanHudEntry extends AbstractHudEntry {
         }
         drawCenteredString(client.textRenderer, getValue(), new DrawPosition(pos.x + (Math.round(width) / 2),
                 pos.y + (Math.round((float) height / 2)) - 4), Color.WHITE, shadow.get());
+        GlStateManager.popMatrix();
     }
 
     @Override
@@ -43,6 +45,7 @@ public abstract class CleanHudEntry extends AbstractHudEntry {
         drawCenteredString(client.textRenderer, getPlaceholder(),
                 new DrawPosition(pos.x + (width / 2),
                 pos.y + (height / 2) - 4), -1, shadow.get());
+        GlStateManager.popMatrix();
         hovered = false;
     }
 

@@ -1,5 +1,6 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.config.options.*;
 import io.github.moehreag.axolotlclient.modules.hud.util.Color;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
@@ -136,7 +137,8 @@ public abstract class AbstractHudEntry extends DrawUtil {
     }
 
     public void scale() {
-
+        GlStateManager.pushMatrix();
+        GlStateManager.scalef(getScale(), getScale(), 1F);
     }
 
     public DrawPosition getPos() {
