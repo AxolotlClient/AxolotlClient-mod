@@ -33,13 +33,15 @@ public class CustomButtonWidget extends ButtonWidget {
     }
 
     public CustomButtonWidget(int id, int x, int y, int width, int height, String message, Identifier texture, boolean textField, boolean slider, FloatOption option) {
-        super(id, x, y, width, height, message);
+        super(id, x, y, width, height, "");
         this.texture=texture;
         this.text= I18n.translate(message);
         this.textField=textField;
         if(textField){
-            textFieldWidget = new TextFieldWidget(2, MinecraftClient.getInstance().textRenderer, x+12, y+(height-8/2), 50, 18);
+            textFieldWidget = new TextFieldWidget(2, MinecraftClient.getInstance().textRenderer, x+12, y+(height/2)-4, 50, 18);
             textFieldWidget.setHasBorder(false);
+            this.text="";
+            textFieldWidget.write(message);
         }
         if(slider){
             sliderWidget = new CustomSliderWidget(3, x+12, y+1, 50, 18, option.getMin(), option.getMax(), option.get());
@@ -52,7 +54,7 @@ public class CustomButtonWidget extends ButtonWidget {
         this.text= I18n.translate(message);
         this.textField=textField;
         if(textField){
-            textFieldWidget = new TextFieldWidget(2, MinecraftClient.getInstance().textRenderer, x+12, y+(height-8/2), 50, 18);
+            textFieldWidget = new TextFieldWidget(2, MinecraftClient.getInstance().textRenderer, x+12, y+(height/2)-4, 50, 18);
             textFieldWidget.setHasBorder(false);
         }
         if(slider){
@@ -66,12 +68,22 @@ public class CustomButtonWidget extends ButtonWidget {
         this.text= I18n.translate(message);
         this.textField=textField;
         if(textField){
-            textFieldWidget = new TextFieldWidget(2, MinecraftClient.getInstance().textRenderer, x+12, y+(height-8/2), 50, 18);
+            textFieldWidget = new TextFieldWidget(2, MinecraftClient.getInstance().textRenderer, x+12, y+(height/2)-4, 50, 18);
             textFieldWidget.setHasBorder(false);
         }
         if(slider){
             sliderWidget = new CustomSliderWidget(3, x+12, y+1, 50, 18, option.getMin(), option.getMax(), option.get());
         }
+    }
+
+    public CustomButtonWidget(int id, int x, int y, int width, int height, String message, Identifier texture, ColorOption option) {
+        super(id, x, y, width, height, message);
+        this.texture=texture;
+        this.textField=true;
+        textFieldWidget = new TextFieldWidget(2, MinecraftClient.getInstance().textRenderer, x+12, y+(height/2)-4, 60, 18);
+        textFieldWidget.write(option.get().toString());
+        textFieldWidget.setHasBorder(false);
+        textFieldWidget.setMaxLength(9);
     }
 
     public void setText(String text){

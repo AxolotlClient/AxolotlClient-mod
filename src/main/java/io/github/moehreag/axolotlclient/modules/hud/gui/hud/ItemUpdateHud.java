@@ -17,16 +17,16 @@ import java.util.List;
 public class ItemUpdateHud extends AbstractHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "itemupdatehud");
 
-    private List<ItemUtil.ItemStorage> oldItems = new ArrayList<>();
+    /*private List<ItemUtil.ItemStorage> oldItems = new ArrayList<>();
     private ArrayList<ItemUtil.TimedItemStorage> removed;
-    private ArrayList<ItemUtil.TimedItemStorage> added;
+    private ArrayList<ItemUtil.TimedItemStorage> added;*/
 
     //private KronInteger timeout = new KronInteger("timeout", ID.getPath(), 6, 1, 60);
 
     public ItemUpdateHud() {
         super(200, 11 * 6 - 2);
-        removed = new ArrayList<>();
-        added = new ArrayList<>();
+        //removed = new ArrayList<>();
+        //added = new ArrayList<>();
     }
 
     public void update() {

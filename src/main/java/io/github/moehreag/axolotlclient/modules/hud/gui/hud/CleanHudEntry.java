@@ -29,8 +29,7 @@ public abstract class CleanHudEntry extends AbstractHudEntry {
         scale();
         DrawPosition pos = getPos();
         if (background.get()) {
-            //fillRect(getBounds(), new Color(255, 255, 255));
-            //fillRect(getBounds(), new Color(-1));
+            fillRect(getBounds(), backgroundColor.get());
         }
         drawCenteredString(client.textRenderer, getValue(), new DrawPosition(pos.x + (Math.round(width) / 2),
                 pos.y + (Math.round((float) height / 2)) - 4), Color.WHITE, shadow.get());
@@ -50,10 +49,10 @@ public abstract class CleanHudEntry extends AbstractHudEntry {
     @Override
     public void addConfigOptions(List<Option> options) {
         super.addConfigOptions(options);
-        //options.add(textColor);
+        options.add(textColor);
         options.add(shadow);
         options.add(background);
-        //options.add(backgroundColor);
+        options.add(backgroundColor);
     }
 
     @Override

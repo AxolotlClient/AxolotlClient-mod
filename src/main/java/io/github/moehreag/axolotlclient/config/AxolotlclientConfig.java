@@ -33,6 +33,7 @@ public class AxolotlclientConfig {
     public final OptionCategory general = new OptionCategory(new Identifier("axolotlclient", "general"), "general");
     public final OptionCategory nametagOptions = new OptionCategory(new Identifier("axolotlclient", "nametagOptions"), "nametagOptions");
     public final OptionCategory badgeOptions = new OptionCategory(new Identifier("axolotlclient", "badgeOptions"), "badgeOptions");
+    public final OptionCategory rpcOptions = new OptionCategory(new Identifier("axolotlclient", "rpcOptions"), "rpcConf");
 
     private final List<Option> options = new ArrayList<>();
     private final List<OptionCategory> categories = new ArrayList<>();
@@ -62,6 +63,7 @@ public class AxolotlclientConfig {
         categories.add(general);
         categories.add(nametagOptions);
         categories.add(badgeOptions);
+        categories.add(rpcOptions);
 
         categories.forEach(OptionCategory::clearOptions);
 
@@ -80,6 +82,9 @@ public class AxolotlclientConfig {
         add(hideNames);
         add(hideOwnSkin);
         add(hideOtherSkins);*/
+
+        rpcOptions.add(enableRPC);
+        rpcOptions.add(showActivity);
 
         general.add(customSky);
         general.add(showSunMoon);

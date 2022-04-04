@@ -62,7 +62,7 @@ public class OptionWidget extends CustomWidget{
                     y,
                     75,
                     20,
-                    "",
+                    ((StringOption)option).get(),
                     DIALOG_TEXTURE,
                     true);
         } else if (option.getType() == OptionType.FLOAT){
@@ -86,9 +86,16 @@ public class OptionWidget extends CustomWidget{
                     75,
                     20,
                     "", DIALOG_TEXTURE, false, true, (IntegerOption) option);
+        } else if(option.getType() == OptionType.COLOR){
+            return new CustomButtonWidget(5,
+                    x+width+2,
+                    y,
+                    75,
+                    20,
+                    "", DIALOG_TEXTURE, (ColorOption) option);
         }
 
         Axolotlclient.LOGGER.warn("Configuration dialog building had some kind of error... This shouldn't happen!?");
-        return new CustomButtonWidget(3, x+width+2, y+2, 75, 20,"Configure", DIALOG_TEXTURE);
+        return new CustomButtonWidget(3, x+width+2, y+2, 75, 20,"No Configuration", DIALOG_TEXTURE);
     }
 }

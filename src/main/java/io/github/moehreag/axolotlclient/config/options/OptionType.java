@@ -6,6 +6,6 @@ public enum OptionType {
     DOUBLE,
     STRING,
     INT,
-    LONG,
+    COLOR,
     FLOAT
 }

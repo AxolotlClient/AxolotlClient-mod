@@ -1,13 +1,18 @@
 package io.github.moehreag.axolotlclient.modules.hud.util;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.GuiLighting;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.render.model.BakedModel;
+import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Util;
+import net.minecraft.util.math.MathHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,6 +27,27 @@ import java.util.Optional;
 
 public class ItemUtil {
 
+    private static final MinecraftClient client = MinecraftClient.getInstance();
+
+    public static void renderGuiItem(ItemStack itemStack, int x, int y, Color color){
+        //GlStateManager.enableBlend();
+        GlStateManager.enableLighting();
+        GuiLighting.enable();
+        MinecraftClient.getInstance().getItemRenderer().renderInGuiWithOverrides(itemStack, x+2, y);
+        GuiLighting.disable();
+        GlStateManager.disableLighting();
+        GlStateManager.disableDepthTest();
+        GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        if(itemStack.count>1) {
+            client.textRenderer.drawWithShadow(String.valueOf(itemStack.count),
+                    (float) (x + 2 + 19 - 2 - client.textRenderer.getStringWidth(String.valueOf(itemStack.count))),
+                    (float) (y + 6 + 3),
+                    color != null ? color.color : 16777215);
+        }
+        //GlStateManager.disableBlend();
+        GlStateManager.enableDepthTest();
+    }
+/*
     public static List<ItemStorage> storageFromItem(List<ItemStack> items) {
         ArrayList<ItemStorage> storage = new ArrayList<>();
         for (ItemStack item : items) {
@@ -70,24 +96,24 @@ public class ItemUtil {
     }
 
     public static Optional<ItemStorage> getItemFromItem(ItemStack item, List<ItemStorage> list) {
-        /*ItemStack compare = item.copy();
+        ItemStack compare = item.copy();
         compare.count = 1;
         for (ItemStorage storage : list) {
-            if (storage.stack.isItemEqualIgnoreDamage(compare)) {
+            if (ItemStack.equalsIgnoreDamage(storage.stack, compare)) {
                 return Optional.of(storage);
             }
-        }*/
+        }
         return Optional.empty();
     }
 
     public Optional<TimedItemStorage> getTimedItemFromItem(ItemStack item, List<TimedItemStorage> list) {
-        /*ItemStack compare = item.copy();
+        ItemStack compare = item.copy();
         compare.count =1;
         for (TimedItemStorage storage : list) {
-            if (storage.stack.isItemEqualIgnoreDamage(compare)) {
+            if (ItemStack.equalsIgnoreDamage(storage.stack, compare)) {
                 return Optional.of(storage);
             }
-        }*/
+        }
         return Optional.empty();
     }
 
@@ -110,7 +136,7 @@ public class ItemUtil {
      * @param list2 one to compare to
      * @return
      */
-    public List<ItemStorage> compare(List<ItemStorage> list1, List<ItemStorage> list2) {
+    /*public List<ItemStorage> compare(List<ItemStorage> list1, List<ItemStorage> list2) {
         ArrayList<ItemStorage> list = new ArrayList<>();
         for (ItemStorage current : list1) {
             Optional<ItemStorage> optional = getItemFromItem(current.stack, list2);
@@ -127,14 +153,17 @@ public class ItemUtil {
         return list;
     }
 
-    public void renderGuiItemModel(ItemStack stack, float x, float y) {
+    public static void renderGuiItemModel(ItemStack stack, float x, float y) {
         MinecraftClient client = MinecraftClient.getInstance();
-        /*BakedModel model = client.getItemRenderer().getModel(stack, null, client.player, (int) (x * y));
-        client.getTextureManager().getTexture(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE).setFilter(false, false);
-        GlStateManager.setShaderTexture(0, SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE);
+        BakedModel model = client.getItemRenderer().getModels().method_9884(stack);
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder builder = tessellator.getBuffer();
+        builder.begin(7, VertexFormats.POSITION_TEXTURE);
+        GlStateManager.bindTexture(client.getTextureManager().getTexture(SpriteAtlasTexture.BLOCK_ATLAS_TEX).getGlId());//.setFilter(false, false);
+        //GlStateManager.setShaderTexture(0, SpriteAtlasTexture.BLOCK_ATLAS_TEX);
         GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA);
-        GlStateManager.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        //GlStateManager.blendFunc(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA);
+        //GlStateManager.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.pushMatrix();
         GlStateManager.translatef(x, y, (100.0F + client.getItemRenderer().zOffset));
         GlStateManager.translated(8.0D, 8.0D, 0.0D);
@@ -142,25 +171,24 @@ public class ItemUtil {
         GlStateManager.scalef(16.0F, 16.0F, 16.0F);
         //GlStateManager.applyModelViewMatrix();
         //VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
-        boolean bl = !model.isSideLit();
+        /*boolean bl = !model.isSideLit();
         if (bl) {
             DiffuseLighting.disableGuiDepthLighting();
-        }
+        }*/
 
-        client.getItemRenderer().renderItem(stack, 15728880,
-                OverlayTexture.DEFAULT_UV, model);
-        immediate.draw();
+        //client.getItemRenderer().renderItem(stack, 15728880, model);
+     /*   tessellator.draw();
         GlStateManager.enableDepthTest();
-        if (bl) {
+        /*if (bl) {
             DiffuseLighting.enableGuiDepthLighting();
         }
 
         GlStateManager.popMatrix();
-        //GlStateManager.applyModelViewMatrix();*/
+        //GlStateManager.applyModelViewMatrix();
     }
 
-    public void renderGuiItemOverlay(TextRenderer renderer, ItemStack stack, int x, int y,
-                                     String countLabel, int textColor, boolean shadow) {
+    public static void renderGuiItemOverlay(TextRenderer renderer, ItemStack stack, int x, int y,
+                                            String countLabel, int textColor, boolean shadow) {
         MinecraftClient client = MinecraftClient.getInstance();
         if (stack.isEmpty()) {
             return;
@@ -175,8 +203,8 @@ public class ItemUtil {
                     textColor, shadow);
         }
 
-        /*if (stack.isItemBarVisible()) {
-            GlStateManager.disableDepthTest();
+        //if (stack.isItemBarVisible()) {
+            /*GlStateManager.disableDepthTest();
             GlStateManager.disableTexture();
             GlStateManager.disableBlend();
             int i = stack.getItemBarStep();
@@ -188,22 +216,22 @@ public class ItemUtil {
             GlStateManager.enableBlend();
             GlStateManager.enableTexture();
             GlStateManager.enableDepthTest();
-        }*/
+        //}
 
         ClientPlayerEntity clientPlayerEntity = MinecraftClient.getInstance().player;
-        /*float f = clientPlayerEntity == null ? 0.0F : clientPlayerEntity.().getCooldownProgress(stack.getItem(), MinecraftClient.getInstance().getTickDelta());
+        float f = clientPlayerEntity == null ? 0.0F : clientPlayerEntity.getStackInHand().getCooldownProgress(stack.getItem(), MinecraftClient.getInstance().getTickDelta());
         if (f > 0.0F) {
             GlStateManager.disableDepthTest();
             GlStateManager.disableTexture();
             GlStateManager.enableBlend();
             //GlStateManager.blendFunc();
-            DrawUtil.fillRect(matrices, new Rectangle(x, y + MathHelper.floor(16.0F * (1.0F - f)), 16,
+            DrawUtil.fillRect(new Rectangle(x, y + MathHelper.floor(16.0F * (1.0F - f)), 16,
                 MathHelper.ceil(16.0F * f)), Color.WHITE.withAlpha(127));
             GlStateManager.enableTexture();
             GlStateManager.enableDepthTest();
         }*/
 
-    }
+    /*}
 
     // Minecraft has decided to not use matrixstack's in their itemrender class. So this is implementing itemRenderer stuff with matrices.
 
@@ -273,5 +301,5 @@ public class ItemUtil {
         }
 
 
-    }
+    }*/
 }

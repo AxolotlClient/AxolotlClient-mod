@@ -4,6 +4,7 @@ import io.github.moehreag.axolotlclient.Axolotlclient;
 import io.github.moehreag.axolotlclient.config.options.OptionCategory;
 import io.github.moehreag.axolotlclient.modules.AbstractModule;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
+import io.github.moehreag.axolotlclient.modules.hud.gui.hud.ArmorHud;
 import io.github.moehreag.axolotlclient.modules.hud.gui.hud.CPSHud;
 import io.github.moehreag.axolotlclient.modules.hud.gui.hud.FPSHud;
 import io.github.moehreag.axolotlclient.modules.hud.gui.hud.PingHud;
@@ -54,6 +55,7 @@ public class HudManager extends AbstractModule {
         add(new PingHud());
         add(new FPSHud());
         add(new CPSHud());
+        add(new ArmorHud());
     }
 
     public static void tick(){

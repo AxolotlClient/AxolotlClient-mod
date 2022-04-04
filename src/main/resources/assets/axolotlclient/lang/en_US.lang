@@ -43,8 +43,15 @@ key.openHud=Open Hud Editor
 hud=Hud Options
 pinghud=Ping Hud
 cpshud=CPS Hud
+cpskeybind=CPS from Keybinds
+rightcps=Show Rightclick Cps
 fpshud=FPS Hud
 hud.snapping=Snapping
 hud.clientOptions=Client Options
+
+enabled=Enabled
+scale=Scale
+background=Background
+shadow=Shadow
 
 back=Back

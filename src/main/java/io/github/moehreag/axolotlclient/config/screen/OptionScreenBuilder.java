@@ -125,7 +125,7 @@ public class OptionScreenBuilder extends Screen {
                             ((BooleanOption) optionWidget.getOption()).toggle();
                             dialog.setText(I18n.translate("options."+(((BooleanOption) optionWidget.getOption()).get()?"on":"off")));
                             //client.openScreen(new OptionScreenBuilder(parent, cat, dialog));
-                        } else if(optionWidget.getOption() instanceof StringOption){
+                        } else if(optionWidget.getOption() instanceof StringOption || optionWidget.getOption() instanceof ColorOption){
                             dialog.textFieldWidget.mouseClicked(mouseX, mouseY, 0);
                             dialog.textFieldWidget.setFocused(true);
                         } else if(optionWidget.getOption() instanceof FloatOption){
@@ -142,7 +142,7 @@ public class OptionScreenBuilder extends Screen {
                 optionWidgets.forEach(optionWidget -> {
                     if (this.dialog != null) {
                         if (dialog.x - 2 == optionWidget.getX() + optionWidget.getWidth() && dialog.y == optionWidget.getY()) {
-                            if (this.dialog.textFieldWidget != null) {
+                            if (this.dialog.textFieldWidget != null && optionWidget.getOption() instanceof StringOption) {
                                 ((StringOption) optionWidget.getOption()).set(dialog.textFieldWidget.getText());
                             } else if (this.dialog.sliderWidget != null && optionWidget.getOption() instanceof FloatOption) {
                                 ((FloatOption) optionWidget.getOption()).set(dialog.sliderWidget.getSliderValue());
@@ -150,6 +150,8 @@ public class OptionScreenBuilder extends Screen {
                                 ((DoubleOption) optionWidget.getOption()).set(dialog.sliderWidget.getSliderValue());
                             } else if (this.dialog.sliderWidget != null && optionWidget.getOption() instanceof IntegerOption) {
                                 ((IntegerOption) optionWidget.getOption()).set(dialog.sliderWidget.getSliderValueAsInt());
+                            } else if(this.dialog.textFieldWidget !=null && optionWidget.getOption() instanceof ColorOption){
+                                ((ColorOption)optionWidget.getOption()).set(io.github.moehreag.axolotlclient.modules.hud.util.Color.parse(dialog.textFieldWidget.getText()));
                             }
                         }
                     }
@@ -171,10 +173,16 @@ public class OptionScreenBuilder extends Screen {
                 optionWidgets.forEach(optionWidget -> {
                     if (this.dialog != null) {
                         if (dialog.x - 2 == optionWidget.getX() + optionWidget.getWidth() && dialog.y == optionWidget.getY()) {
-                            if (this.dialog.textFieldWidget != null) {
+                            if (this.dialog.textFieldWidget != null && optionWidget.getOption() instanceof StringOption) {
                                 ((StringOption) optionWidget.getOption()).set(dialog.textFieldWidget.getText());
-                            } else if (this.dialog.sliderWidget != null) {
+                            } else if (this.dialog.sliderWidget != null && optionWidget.getOption() instanceof FloatOption) {
                                 ((FloatOption) optionWidget.getOption()).set(dialog.sliderWidget.getSliderValue());
+                            } else if (this.dialog.sliderWidget != null && optionWidget.getOption() instanceof DoubleOption) {
+                                ((DoubleOption) optionWidget.getOption()).set(dialog.sliderWidget.getSliderValue());
+                            } else if (this.dialog.sliderWidget != null && optionWidget.getOption() instanceof IntegerOption) {
+                                ((IntegerOption) optionWidget.getOption()).set(dialog.sliderWidget.getSliderValueAsInt());
+                            } else if(this.dialog.textFieldWidget !=null && optionWidget.getOption() instanceof ColorOption){
+                                ((ColorOption)optionWidget.getOption()).set(io.github.moehreag.axolotlclient.modules.hud.util.Color.parse(dialog.textFieldWidget.getText()));
                             }
                         }
                     }

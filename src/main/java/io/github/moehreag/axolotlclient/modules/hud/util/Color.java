@@ -31,6 +31,9 @@ public class Color {
         color = (color << 8) + b;
         this.color = color;
     }
+    public int getAsInt(){
+        return color;
+    }
 
     protected Color(int r, int g, int b, int a, int color) {
         this(r, g, b, a);

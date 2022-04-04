@@ -1,15 +1,14 @@
 package io.github.moehreag.axolotlclient.modules.hud;
 
+import io.github.moehreag.axolotlclient.Axolotlclient;
 import io.github.moehreag.axolotlclient.config.ConfigManager;
 import io.github.moehreag.axolotlclient.config.options.BooleanOption;
 import io.github.moehreag.axolotlclient.config.screen.CategoryScreenBuilder;
 import io.github.moehreag.axolotlclient.config.screen.OptionScreenBuilder;
-import io.github.moehreag.axolotlclient.config.widgets.BooleanButtonWidget;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.moehreag.axolotlclient.modules.hud.snapping.SnappingHelper;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.moehreag.axolotlclient.modules.hud.util.Rectangle;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.resource.language.I18n;
@@ -61,7 +60,6 @@ public class HudEditScreen extends Screen {
 
         Optional<AbstractHudEntry> entry = manager.getEntryXY(mouseX, mouseY);
         entry.ifPresent(abstractHudEntry -> abstractHudEntry.setHovered(true));
-        //if(current != null && current.isHovered(mouseX, mouseY))current.setXY(mouseX-current.width/2, mouseY-current.height/2);
 
     }
 
@@ -94,7 +92,7 @@ public class HudEditScreen extends Screen {
     @Override
     protected void mouseDragged(int mouseX, int mouseY, int button, long l) {
         if (current != null) {
-            current.setXY((int) mouseX - offset.x, (int) mouseY - offset.y);
+            current.setXY(mouseX - offset.x, mouseY - offset.y);
             if (snap != null) {
                 Integer snapX, snapY;
                 snap.setCurrent(current.getScaledBounds());
@@ -137,11 +135,11 @@ public class HudEditScreen extends Screen {
     @Override
     public void init() {
         super.init();
-        this.buttons.add(new BooleanButtonWidget(1,
+        this.buttons.add(new ButtonWidget(1,
                 width / 2 - 50,
                 height - 50 - 22,
                 100, 20,
-                I18n.translate("hud.snapping"), snapping
+                I18n.translate("hud.snapping") + ": "+I18n.translate(snapping.get()?"options.on":"options.off")
         ));
         this.buttons.add(new ButtonWidget(3,
                 width / 2 - 50,

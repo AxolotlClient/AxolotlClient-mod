@@ -1,7 +1,12 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
+import io.github.moehreag.axolotlclient.Axolotlclient;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
+import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
+import io.github.moehreag.axolotlclient.modules.hud.util.ItemUtil;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
@@ -21,53 +26,40 @@ public class ArmorHud extends AbstractHudEntry {
 
     @Override
     public void render() {
-        /*matrices.push();
-        scale(matrices);
+        scale();
         DrawPosition pos = getPos();
-        if (background.getBooleanValue()) {
-            fillRect(matrices, getBounds(),
-                    backgroundColor.getColor());
+        if (background.get()) {
+            fillRect(getBounds(),
+                    backgroundColor.get());
         }
         int lastY = 2 + (4 * 20);
-        renderMainItem(matrices, client.player.getInventory().getMainHandStack(), pos.x() + 2, pos.y() + lastY);
+        if(client.player.inventory.getMainHandStack() !=null)
+            ItemUtil.renderGuiItem(client.player.inventory.getMainHandStack(), pos.x, pos.y + lastY, null);
         lastY = lastY - 20;
         for (int i = 0; i <= 3; i++) {
-            ItemStack item = client.player.getInventory().armor.get(i);
-            renderItem(matrices, item, pos.x() + 2, lastY + pos.y());
+            if(client.player.inventory.armor[i] != null)
+                renderItem(client.player.inventory.armor[i], pos.x , lastY + pos.y);
             lastY = lastY - 20;
         }
-        matrices.pop();*/
     }
 
-    /*public void renderItem(MatrixStack matrices, ItemStack stack, int x, int y) {
-        ItemUtil.renderGuiItemModel(matrices, stack, x, y);
-        ItemUtil.renderGuiItemOverlay(matrices, client.textRenderer, stack, x, y, null, textColor.getColor().color(),
-                shadow.getBooleanValue());
+    public void renderItem(ItemStack stack, int x, int y) {
+        ItemUtil.renderGuiItem(stack, x, y, textColor.get());
     }
 
-    public void renderMainItem(MatrixStack matrices, ItemStack stack, int x, int y) {
-        ItemUtil.renderGuiItemModel(matrices, stack, x, y);
-        String total = String.valueOf(ItemUtil.getTotal(client, stack));
-        if (total.equals("1")) {
-            total = null;
-        }
-        ItemUtil.renderGuiItemOverlay(matrices, client.textRenderer, stack, x, y,
-                total, textColor.getColor().color(),
-                shadow.getBooleanValue());
-    }*/
+    public void renderMainItem(ItemStack stack, int x, int y) {
+        ItemUtil.renderGuiItem(stack, x, y, textColor.get());
+    }
 
     @Override
     public void renderPlaceholder() {
-        /*matrices.push();
-        renderPlaceholderBackground(matrices);
-        scale(matrices);
+        renderPlaceholderBackground();
+        scale();
         DrawPosition pos = getPos();
         int lastY = 2 + (4 * 20);
-        ItemUtil.renderGuiItemModel(matrices, new ItemStack(Items.GRASS_BLOCK), pos.x() + 2, pos.y() + lastY);
-        ItemUtil.renderGuiItemOverlay(matrices, client.textRenderer, new ItemStack(Items.GRASS_BLOCK), pos.x() + 2,
-                pos.y() + lastY, "90", textColor.getColor().color(), shadow.getBooleanValue());
+        ItemStack itemStack = new ItemStack(Block.getById(2), 90);
+        ItemUtil.renderGuiItem(itemStack, pos.x, pos.y+lastY, null);
         hovered = false;
-        matrices.pop();*/
     }
 
     @Override
@@ -83,10 +75,10 @@ public class ArmorHud extends AbstractHudEntry {
     @Override
     public void addConfigOptions(List<Option> options) {
         super.addConfigOptions(options);
-        //options.add(textColor);
+        options.add(textColor);
         options.add(shadow);
         options.add(background);
-        //options.add(backgroundColor);
+        options.add(backgroundColor);
     }
 
 }

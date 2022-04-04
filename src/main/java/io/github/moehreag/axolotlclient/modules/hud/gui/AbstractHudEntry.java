@@ -1,9 +1,6 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui;
 
-import io.github.moehreag.axolotlclient.config.options.BooleanOption;
-import io.github.moehreag.axolotlclient.config.options.DoubleOption;
-import io.github.moehreag.axolotlclient.config.options.Option;
-import io.github.moehreag.axolotlclient.config.options.OptionCategory;
+import io.github.moehreag.axolotlclient.config.options.*;
 import io.github.moehreag.axolotlclient.modules.hud.util.Color;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawUtil;
@@ -30,10 +27,10 @@ public abstract class AbstractHudEntry extends DrawUtil {
 
     protected BooleanOption enabled = new BooleanOption("enabled",false);
     public DoubleOption scale = new DoubleOption("scale", 1, 0.1F, 2);
-    //protected KronColor textColor = new KronColor("textcolor", null, "#FFFFFFFF");
+    protected final ColorOption textColor = new ColorOption("textColor", Color.WHITE);
     protected BooleanOption shadow = new BooleanOption("shadow",  getShadowDefault());
     protected BooleanOption background = new BooleanOption("background",  true);
-    //protected KronColor backgroundColor = new KronColor("backgroundcolor", null, "#64000000");
+    protected final ColorOption backgroundColor = new ColorOption("bgColor", Color.parse("#64000000"));
     private final DoubleOption x = new DoubleOption("x", getDefaultX(), 0, 1);
     private final DoubleOption y = new DoubleOption("y", getDefaultY(), 0, 1);
 
@@ -41,13 +38,11 @@ public abstract class AbstractHudEntry extends DrawUtil {
 
     protected boolean hovered = false;
     protected MinecraftClient client = MinecraftClient.getInstance();
-    protected Window window;
 
 
     public AbstractHudEntry(int width, int height) {
         this.width = width;
         this.height = height;
-        //window=new Window(client);
     }
 
     public static int floatToInt(float percent, int max, int offset) {
@@ -124,9 +119,8 @@ public abstract class AbstractHudEntry extends DrawUtil {
     }
 
     public Rectangle getScaledBounds() {
-        return new Rectangle(getX(), getY(), width, height);
-        /*return new Rectangle(getX(), getY(), Math.round(width * (float) scale.get()),
-                Math.round(height * (float) scale.get()));*/
+        return new Rectangle(getX(), getY(), Math.round(width * (float) scale.get()),
+                Math.round(height * (float) scale.get()));
     }
 
     /**
@@ -158,10 +152,6 @@ public abstract class AbstractHudEntry extends DrawUtil {
         int scaledY = floatToInt((float) y.get(), (int) new Window(client).getScaledHeight(), Math.round(height * scale));
         return new DrawPosition(scaledX, scaledY);
     }
-
-    /*public List<GuiConfigsBase.ConfigOptionWrapper> getOptionWrappers() {
-        return GuiConfigsBase.ConfigOptionWrapper.createFor(getOptions());
-    }*/
 
     public List<Option> getOptions() {
         if (options == null) {
