@@ -92,6 +92,8 @@ key_key.hotbar.8:9
 key_key.hotbar.9:33
 key_key.zoom:46
 key_key.openHud:54
+key_key.toggleSprint:23
+key_key.toggleSneak:37
 soundCategory_master:0.4668874
 soundCategory_music:0.0
 soundCategory_record:0.45774648

@@ -46,6 +46,8 @@ public abstract class AbstractHudEntry extends DrawUtil {
         this.height = height;
     }
 
+    public void init(){}
+
     public static int floatToInt(float percent, int max, int offset) {
         return MathHelper.clamp(Math.round((max - offset) * percent), 0, max);
     }

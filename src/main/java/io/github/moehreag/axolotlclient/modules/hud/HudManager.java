@@ -54,6 +54,10 @@ public class HudManager extends AbstractModule {
         add(new CPSHud());
         add(new ArmorHud());
         add(new PotionsHud());
+        add(new KeystrokeHud());
+        add(new ToggleSprintHud());
+
+        entries.forEach((identifier, abstractHudEntry) -> abstractHudEntry.init());
     }
 
     public static void tick(){

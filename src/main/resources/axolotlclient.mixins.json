@@ -17,6 +17,9 @@
     "TextureManagerMixin",
     "GameRendererMixin",
     "ReloadableResourceManagerImplMixin",
+    "ControlsOptionsScreenMixin",
+    "ClientPlayerEntityMixin",
+    "KeyboardInputMixin",
     "PlayerRendererMixin"
   ],
   "injectors": {

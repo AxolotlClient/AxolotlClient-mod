@@ -1,5 +1,6 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
+import io.github.moehreag.axolotlclient.util.Util;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.util.Identifier;
 
@@ -19,11 +20,9 @@ public class PingHud extends CleanHudEntry {
 
     @Override
     public String getValue() {
-        PlayerListEntry entry = client.player.networkHandler.getPlayerListEntry(client.player.getUuid());
-        if (entry != null) {
-            return entry.getLatency() + " ms";
-        }
-        return "0 ms";
+
+        return Util.currentServerPing + " ms";
+        //return "0 ms";
     }
 
     @Override

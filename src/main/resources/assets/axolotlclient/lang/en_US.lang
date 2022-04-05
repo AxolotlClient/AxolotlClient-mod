@@ -37,8 +37,11 @@ cursedConf.title=Cursed Options
 rotateWorld=Rotate the World
 
 category.axolotlclient=AxolotlClient
+
 key.zoom=Zoom
 key.openHud=Open Hud Editor
+key.toggleSneak=Toggle Sneaking
+key.toggleSprint=Toggle Sprinting
 
 hud=Hud Options
 pinghud=Ping Hud
@@ -46,11 +49,23 @@ cpshud=CPS Hud
 cpskeybind=CPS from Keybinds
 rightcps=Show Rightclick Cps
 fpshud=FPS Hud
+armorhud=Armor HUD
+potionshud=Potion HUD
+keystrokehud=Keystrokes
+togglesprint=ToggleSprint
+toggleSprint=Allow Sprinting toggle
+toggleSneak=Allow Sneaking toggle
+
 hud.snapping=Snapping
 hud.clientOptions=Client Options
 
 enabled=Enabled
 scale=Scale
+textColor=Text Color
+heldtextcolor=Text Color when held
+bgColor=Background Color
+placeholder=Placeholder
+heldbackgroundcolor=Background Color when held
 background=Background
 shadow=Shadow
 

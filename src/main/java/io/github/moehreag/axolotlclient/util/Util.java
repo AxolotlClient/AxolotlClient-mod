@@ -34,7 +34,7 @@ public class Util {
     private static Map<Identifier, Texture> textures;
 
     private static final ThreadPoolExecutor REALTIME_PINGER = new ScheduledThreadPoolExecutor(3, new ThreadFactoryBuilder().setNameFormat("Real Time Server Pinger #%d").setDaemon(true).build());
-    public static int currentServerPing;
+    public static int currentServerPing = 0;
 
     public static String lastgame;
     public static String game;

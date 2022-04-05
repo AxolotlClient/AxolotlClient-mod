@@ -17,6 +17,8 @@ public class BooleanOption extends OptionBase implements Option{
         return option;
     }
 
+    public void set(boolean set){option = set;}
+
     @Override
     public OptionType getType() {
         return OptionType.BOOLEAN;

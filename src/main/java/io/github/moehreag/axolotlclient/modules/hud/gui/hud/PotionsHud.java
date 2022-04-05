@@ -41,7 +41,7 @@ public class PotionsHud extends AbstractHudEntry {
             if (collection.size() > 5) {
                 l = 132 / (collection.size() - 1);
             }
-            for(StatusEffectInstance statusEffectInstance : this.client.player.method_6120()) {
+            for(StatusEffectInstance statusEffectInstance : collection) {
                 StatusEffect statusEffect = StatusEffect.STATUS_EFFECTS[statusEffectInstance.getEffectId()];
                 GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
                 this.client.getTextureManager().bindTexture(INVENTORY_TEXTURE);
