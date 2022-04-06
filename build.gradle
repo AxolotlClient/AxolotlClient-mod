@@ -17,7 +17,9 @@ repositories {
 	}
 
 	maven { url 'https://jitpack.io' }
-	//maven { url "https://maven.shedaniel.me/" }
+	maven {
+		url 'https://repo.hypixel.net/repository/Hypixel/'
+	}
 }
 
 loom {
@@ -29,16 +31,12 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	// Fabric API provides hooks for events, item registration, and more. As most mods will need this, it's included by default. 
-	// If you know for a fact you don't, it's not required and can be safely removed.
 	modImplementation include ("net.legacyfabric.legacy-fabric-api:legacy-fabric-api:${fabric_version}") {
 		exclude module: "fabric-loader-1.8.9"
 		include "net.legacyfabric.legacy-fabric-api:legacy-fabric-keybinding-api-v1:1.0.0+1e58a10239"
 		include "net.legacyfabric.legacy-fabric-api:legacy-fabric-api-base:1.0.0+a144b87b39"
 		include "net.legacyfabric.legacy-fabric-api:legacy-fabric-rendering-api-v1:1.0.0+ee2bf60e39"
 	}
-
-
 
 	// Hacks that make mac os work
 	if (System.getProperty("os.name").toLowerCase().contains("mac")) {
@@ -49,6 +47,16 @@ dependencies {
 
 	implementation include ('com.github.Vatuu:discord-rpc:1.6.2')
 	implementation include("net.legacyfabric.legacy-fabric-api:legacy-fabric-resource-loader-v1:1.0.0+1e58a10239")
+
+	include(modImplementation("net.hypixel:hypixel-api-core:4.1") {
+		exclude group: "com.google.code.gson", module: "gson"
+		exclude group: "org.apache.httpcomponents", module: "httpclient"
+	})
+	include(modImplementation("net.hypixel:hypixel-api-transport-apache:4.1") {
+		exclude group: "com.google.code.gson", module: "gson"
+		exclude group: "org.apache.httpcomponents", module: "httpclient"
+	})
+
 
 	modImplementation files("libs/legacy-modmenu-1.1.0-dev.jar")
 

@@ -5,10 +5,10 @@ import io.github.moehreag.axolotlclient.config.AxolotlclientConfig;
 import io.github.moehreag.axolotlclient.config.ConfigManager;
 import io.github.moehreag.axolotlclient.modules.AbstractModule;
 import io.github.moehreag.axolotlclient.modules.hud.HudManager;
+import io.github.moehreag.axolotlclient.modules.levelhead.LevelHead;
 import io.github.moehreag.axolotlclient.modules.zoom.Zoom;
 import io.github.moehreag.axolotlclient.util.Util;
 import net.fabricmc.api.ModInitializer;
-import net.legacyfabric.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.entity.Entity;
@@ -18,7 +18,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,7 +32,7 @@ public class Axolotlclient implements ModInitializer {
 
 	public static final Identifier badgeIcon = new Identifier("axolotlclient", "textures/badge.png");
 
-	private static final List<AbstractModule> modules= new ArrayList<>();
+	public static final List<AbstractModule> modules= new ArrayList<>();
 
 	public static Integer tickTime = 0;
 
@@ -56,6 +55,7 @@ public class Axolotlclient implements ModInitializer {
 	public static void getModules(){
 		modules.add(new Zoom());
 		modules.add(HudManager.getINSTANCE());
+		modules.add(LevelHead.getInstance());
 	}
 
 	public static boolean isUsingClient(UUID uuid){

@@ -20,6 +20,7 @@
     "ControlsOptionsScreenMixin",
     "ClientPlayerEntityMixin",
     "KeyboardInputMixin",
+    "ClientWorldMixin",
     "PlayerRendererMixin"
   ],
   "injectors": {

@@ -14,6 +14,7 @@ public class ClientPlayerEntityMixin {
 
     /**
      * @author DragonEggBedrockBreaking
+     * @license MPL-2.0
      * @param sprintKey the sprint key that the user has bound
      * @return whether or not the user should try to sprint
      */
