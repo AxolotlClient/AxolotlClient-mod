@@ -53,8 +53,11 @@ armorhud=Armor HUD
 potionshud=Potion HUD
 keystrokehud=Keystrokes
 togglesprint=ToggleSprint
+levelhead=LevelHead
 toggleSprint=Allow Sprinting toggle
 toggleSneak=Allow Sneaking toggle
+sneakToggled=Sneaking currently toggled
+sprintToggled=Sprinting currently toggled
 
 hud.snapping=Snapping
 hud.clientOptions=Client Options

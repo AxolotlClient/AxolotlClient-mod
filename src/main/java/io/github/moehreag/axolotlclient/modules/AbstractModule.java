@@ -1,6 +1,8 @@
 package io.github.moehreag.axolotlclient.modules;
 
-public class AbstractModule {
+public abstract class AbstractModule {
 
-    public void init(){}
+    public abstract void init();
+
+    public void lateInit(){}
 }

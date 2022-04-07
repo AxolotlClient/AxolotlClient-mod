@@ -11,18 +11,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntityRenderer.class)
-public class LivingEntityRendererMixin<T extends LivingEntity> {
+public abstract class LivingEntityRendererMixin {
 
     @Inject(method = "hasLabel*", at = @At("HEAD"), cancellable = true)
-    private void showOwnNametag(T livingEntity, CallbackInfoReturnable<Boolean> cir){
+    private void showOwnNametag(LivingEntity livingEntity, CallbackInfoReturnable<Boolean> cir){
         if (Axolotlclient.CONFIG.showOwnNametag.get() && livingEntity == MinecraftClient.getInstance().player) {
             cir.setReturnValue(true);
         }
     }
 
-
-    @Inject(method = "method_10208(Lnet/minecraft/entity/LivingEntity;DDD)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Ljava/lang/String;III)I"))
-    public void addBadge(T livingEntity, double d, double e, double f, CallbackInfo ci){
+    @Inject(method = "method_10208(Lnet/minecraft/entity/LivingEntity;DDD)V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Ljava/lang/String;III)I"))
+    public void addBadge(LivingEntity livingEntity, double d, double e, double f, CallbackInfo ci){
         Axolotlclient.addBadge(livingEntity);
     }
 

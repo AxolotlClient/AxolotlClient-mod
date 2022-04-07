@@ -5,9 +5,9 @@ import io.github.moehreag.axolotlclient.util.ThreadExecuter;
 import net.hypixel.api.HypixelAPI;
 import net.hypixel.api.apache.ApacheHttpClient;
 import net.hypixel.api.reply.PlayerReply;
-import net.legacyfabric.fabric.api.event.Event;
 
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -37,7 +37,12 @@ public class HypixelAbstractionLayer {
 
     public static void loadApiKey() {
         API_KEY = LevelHead.getInstance().hypixel_api_key.get();
-        if(!API_KEY.equals("")) {
+        if(API_KEY == null){
+            LevelHead.getInstance().hypixel_api_key.setDefaults();
+            validApiKey=false;
+            return;
+        }
+        if(!Objects.equals(API_KEY, "")) {
             api = new HypixelAPI(new ApacheHttpClient(UUID.fromString(API_KEY)));
             validApiKey = true;
         } else {
@@ -54,7 +59,7 @@ public class HypixelAbstractionLayer {
             try {
                 return (int) cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer().getNetworkLevel();
             } catch (TimeoutException | InterruptedException | ExecutionException e) {
-                return 0;
+                return -1;
             }
         }
         return 0;

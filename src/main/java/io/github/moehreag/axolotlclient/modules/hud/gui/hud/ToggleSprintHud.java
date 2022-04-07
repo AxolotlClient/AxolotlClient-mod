@@ -1,8 +1,11 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.config.ConfigManager;
 import io.github.moehreag.axolotlclient.config.options.BooleanOption;
 import io.github.moehreag.axolotlclient.config.options.Option;
+import io.github.moehreag.axolotlclient.config.options.OptionCategory;
 import io.github.moehreag.axolotlclient.config.options.StringOption;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
@@ -22,9 +25,9 @@ public class ToggleSprintHud extends AbstractHudEntry {
     KeyBinding sprintToggle = new KeyBinding("key.toggleSprint", 23, "category.axolotlclient");
     KeyBinding sneakToggle = new KeyBinding("key.toggleSneak", 37, "category.axolotlclient");
 
-    public boolean sprintToggled = false;
+    public BooleanOption sprintToggled = new BooleanOption("sprintToggled", false);
     private boolean sprintWasPressed = false;
-    public boolean sneakToggled = false;
+    public BooleanOption sneakToggled = new BooleanOption("sneakToggled", false);
     private boolean sneakWasPressed = false;
 
     public ToggleSprintHud(){
@@ -76,10 +79,10 @@ public class ToggleSprintHud extends AbstractHudEntry {
         if(client.options.keySneak.isPressed())return "Sneaking [Key held]";
         if(client.options.keySprint.isPressed())return "Sprinting [Key held]";
 
-        if(toggleSneak.get() && sneakToggled){
+        if(toggleSneak.get() && sneakToggled.get()){
             return "Sneaking [Toggled]";
         }
-        if(toggleSprint.get() && sprintToggled){
+        if(toggleSprint.get() && sprintToggled.get()){
              return "Sprinting [Toggled]";
         }
 
@@ -94,11 +97,13 @@ public class ToggleSprintHud extends AbstractHudEntry {
     @Override
     public void tick() {
         if(sprintToggle.isPressed() != sprintWasPressed && sprintToggle.isPressed()){
-            sprintToggled=!sprintToggled;
+            sprintToggled.toggle();
+            ConfigManager.save();
             sprintWasPressed=sprintToggle.isPressed();
         } else  if(!sprintToggle.isPressed())sprintWasPressed=false;
         if(sneakToggle.isPressed() != sneakWasPressed && sneakToggle.isPressed()){
-            sneakToggled=!sneakToggled;
+            sneakToggled.toggle();
+            ConfigManager.save();
             sneakWasPressed=sneakToggle.isPressed();
         } else if(!sneakToggle.isPressed())sneakWasPressed = false;
     }
@@ -113,5 +118,8 @@ public class ToggleSprintHud extends AbstractHudEntry {
         options.add(toggleSprint);
         options.add(toggleSneak);
         options.add(placeholder);
+
+        Axolotlclient.config.add(sprintToggled);
+        Axolotlclient.config.add(sneakToggled);
     }
 }

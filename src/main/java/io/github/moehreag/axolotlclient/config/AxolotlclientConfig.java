@@ -39,6 +39,8 @@ public class AxolotlclientConfig {
     private final List<OptionCategory> categories = new ArrayList<>();
     private final List<OptionCategory> client = new ArrayList<>();
 
+    public final List<OptionCategory> config = new ArrayList<>();
+
     public void add(Option option){
         options.add(option);
     }

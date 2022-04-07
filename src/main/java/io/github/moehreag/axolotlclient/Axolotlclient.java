@@ -3,6 +3,7 @@ package io.github.moehreag.axolotlclient;
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.config.AxolotlclientConfig;
 import io.github.moehreag.axolotlclient.config.ConfigManager;
+import io.github.moehreag.axolotlclient.config.options.OptionCategory;
 import io.github.moehreag.axolotlclient.modules.AbstractModule;
 import io.github.moehreag.axolotlclient.modules.hud.HudManager;
 import io.github.moehreag.axolotlclient.modules.levelhead.LevelHead;
@@ -32,6 +33,7 @@ public class Axolotlclient implements ModInitializer {
 
 	public static final Identifier badgeIcon = new Identifier("axolotlclient", "textures/badge.png");
 
+	public static final OptionCategory config = new OptionCategory(new Identifier("storedOptions"), "storedOptions");
 	public static final List<AbstractModule> modules= new ArrayList<>();
 
 	public static Integer tickTime = 0;
@@ -45,9 +47,17 @@ public class Axolotlclient implements ModInitializer {
 		getModules();
 		CONFIG.init();
 		modules.forEach(AbstractModule::init);
+
+		CONFIG.config.addAll(CONFIG.getCategories());
+		CONFIG.config.add(config);
+
 		ConfigManager.load();
 
 		if (CONFIG.enableRPC.get()) io.github.moehreag.axolotlclient.util.DiscordRPC.startup();
+
+		modules.forEach(AbstractModule::lateInit);
+
+
 
 		LOGGER.info("Axolotlclient Initialized");
 	}

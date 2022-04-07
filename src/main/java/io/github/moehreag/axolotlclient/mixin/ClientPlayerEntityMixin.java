@@ -27,6 +27,6 @@ public class ClientPlayerEntityMixin {
     )
     private boolean alwaysPressed(KeyBinding sprintKey) {
         ToggleSprintHud hud = (ToggleSprintHud) HudManager.getINSTANCE().get(ToggleSprintHud.ID);
-        return hud.sprintToggled || sprintKey.isPressed();
+        return hud.sprintToggled.get() || sprintKey.isPressed();
     }
 }

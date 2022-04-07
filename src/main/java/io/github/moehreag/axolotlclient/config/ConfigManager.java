@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ConfigManager{
-    private static final List<OptionCategory> categories = Axolotlclient.CONFIG.getCategories();
+    private static final List<OptionCategory> categories = Axolotlclient.CONFIG.config;
     private static final Path confPath = FabricLoader.getInstance().getConfigDir().resolve("Axolotlclient.json");
 
     public static void save(){
@@ -81,7 +81,7 @@ public class ConfigManager{
     }
 
     private static void loadDefaults(){
-        Axolotlclient.CONFIG.getCategories().forEach(OptionCategory -> {
+        Axolotlclient.CONFIG.config.forEach(OptionCategory -> {
             OptionCategory.getOptions().forEach(Option::setDefaults);
             if(!OptionCategory.getSubCategories().isEmpty()){
                 for(OptionCategory category : OptionCategory.getSubCategories()){

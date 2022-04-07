@@ -1,9 +1,11 @@
 package io.github.moehreag.axolotlclient.config.screen.widgets;
 
-import io.github.moehreag.axolotlclient.config.options.*;
+import io.github.moehreag.axolotlclient.config.options.ColorOption;
+import io.github.moehreag.axolotlclient.config.options.DoubleOption;
+import io.github.moehreag.axolotlclient.config.options.FloatOption;
+import io.github.moehreag.axolotlclient.config.options.IntegerOption;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.util.Identifier;
@@ -39,6 +41,7 @@ public class CustomButtonWidget extends ButtonWidget {
         this.textField=textField;
         if(textField){
             textFieldWidget = new TextFieldWidget(2, MinecraftClient.getInstance().textRenderer, x+12, y+(height/2)-4, 50, 18);
+            textFieldWidget.setMaxLength(36);
             textFieldWidget.setHasBorder(false);
             this.text="";
             textFieldWidget.write(message);

@@ -20,6 +20,6 @@ public class KeyboardInputMixin {
     @Redirect(method = "method_1302", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/options/KeyBinding;isPressed()Z", ordinal = 5))
     public boolean toggleSneak(KeyBinding instance){
         ToggleSprintHud hud = (ToggleSprintHud) HudManager.getINSTANCE().get(ToggleSprintHud.ID);
-        return hud.isEnabled() && hud.sneakToggled || instance.isPressed();
+        return hud.isEnabled() && hud.sneakToggled.get() || instance.isPressed();
     }
 }

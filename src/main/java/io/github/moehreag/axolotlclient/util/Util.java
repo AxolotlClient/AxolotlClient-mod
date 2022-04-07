@@ -85,7 +85,16 @@ public class Util {
 
         if (game==null){game="";}
 
-        return game;
+
+
+        return stripFormatting(game);
+    }
+
+    public static String stripFormatting(String string){
+        if(string.startsWith("§")){
+            stripFormatting(string.substring(2));
+        }
+        return string;
     }
 
 
