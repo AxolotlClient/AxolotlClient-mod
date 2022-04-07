@@ -115,8 +115,13 @@ public class KeystrokeHud extends AbstractHudEntry {
     public void renderPlaceholder() {
         scale();
         renderPlaceholderBackground();
+        if (keystrokes == null) {
+            setKeystrokes();
+        }
+        for (Keystroke stroke : keystrokes) {
+            stroke.render();
+        }
         GlStateManager.popMatrix();
-        renderHud();
         hovered = false;
     }
 

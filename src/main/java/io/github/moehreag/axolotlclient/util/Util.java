@@ -21,6 +21,7 @@ import net.minecraft.scoreboard.ScoreboardPlayerScore;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
 import java.net.InetAddress;
@@ -85,16 +86,7 @@ public class Util {
 
         if (game==null){game="";}
 
-
-
-        return stripFormatting(game);
-    }
-
-    public static String stripFormatting(String string){
-        if(string.startsWith("§")){
-            stripFormatting(string.substring(2));
-        }
-        return string;
+        return Formatting.strip( game);
     }
 
 
