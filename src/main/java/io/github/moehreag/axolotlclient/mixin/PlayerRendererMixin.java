@@ -52,7 +52,7 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
             MinecraftClient.getInstance().getCurrentServerEntry().address.contains("hypixel.net")){
             if(HypixelAbstractionLayer.hasValidAPIKey() && LevelHead.getInstance().enabled.get()){
                 GlStateManager.pushMatrix();
-                GlStateManager.translated(0, 0.25, 0);
+                //GlStateManager.translated(0, 0.25, 0);
 
                 renderCustomNametag(abstractClientPlayerEntity, "Level: "+ HypixelAbstractionLayer.getPlayerLevel(String.valueOf(abstractClientPlayerEntity.getUuid())), LevelHead.getInstance().textColor.get().getAsInt());
 
@@ -64,11 +64,11 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
     private void renderCustomNametag(PlayerEntity entity, String string, int color){
         double g = entity.squaredDistanceTo(this.dispatcher.field_11098);
         if (!(g > (double)(64 * 64))) {
-            TextRenderer textRenderer = this.getFontRenderer();
+            TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;//this.getFontRenderer();
             float j = 0.016666668F * 1.6F;
-            GlStateManager.pushMatrix();
-            GlStateManager.translatef(0.0F, entity.height + 0.5F, 0);
-            GL11.glNormal3f(0.0F, 1.0F, 0.0F);
+            //GlStateManager.pushMatrix();
+            GlStateManager.translatef(0.0F, entity.height +0.75F, 0);
+            //GL11.glNormal3f(0.0F, 1.0F, 0.0F);
             GlStateManager.rotatef(-this.dispatcher.field_2102, 0.0F, 1.0F, 0.0F);
             GlStateManager.rotatef(this.dispatcher.field_2103, 1.0F, 0.0F, 0.0F);
             GlStateManager.scalef(-j, -j, j);
@@ -96,15 +96,15 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
                 GlStateManager.enableTexture();
             }
 
-          // textRenderer.draw(string, -textRenderer.getStringWidth(string) / 2, y, 553648127);
+          // textRenderer.draw(string, -textRenderer.getStringWidth(string) / 2, y, 553648127);*/
             GlStateManager.enableDepthTest();
             GlStateManager.depthMask(true);
-            if(entity.isSneaking())textRenderer.draw(string, -textRenderer.getStringWidth(string) / 2, 0, 553648127);
-            else  textRenderer.drawWithShadow(string, -textRenderer.getStringWidth(string) / (float)2, 0, color);
+            if(entity.isSneaking())textRenderer.draw(string, -textRenderer.getStringWidth(string) / 2, y, 553648127);
+            else  textRenderer.drawWithShadow(string, -textRenderer.getStringWidth(string) / (float)2, y, color);
             GlStateManager.enableLighting();
             GlStateManager.disableBlend();
             GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-            GlStateManager.popMatrix();
+            //GlStateManager.popMatrix();
         }
     }
 }
