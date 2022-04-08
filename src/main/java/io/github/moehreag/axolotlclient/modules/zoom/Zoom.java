@@ -28,7 +28,7 @@ public class Zoom extends AbstractModule {
     }
 
     public static float getFov(float current){
-        decreaseFov();
+        decreaseFov(current);
         return current / fadeFactor;
     }
 
@@ -74,11 +74,11 @@ public class Zoom extends AbstractModule {
         return fadeFactor>1F;
     }
 
-    public static void decreaseFov(){
+    public static void decreaseFov(float current){
         if(isZoomed()){
-            if(fadeFactor <Axolotlclient.CONFIG.zoomDivisor.get()) fadeFactor+=0.01*(Axolotlclient.CONFIG.zoomDivisor.get()/4);
+            if(fadeFactor <Axolotlclient.CONFIG.zoomDivisor.get()) fadeFactor+= (fadeFactor/1000F) *(Axolotlclient.CONFIG.zoomDivisor.get()/4);
         } else {
-            if(fadeFactor > 1F) fadeFactor-=0.01*Axolotlclient.CONFIG.zoomDivisor.get();
+            if(fadeFactor > 1F) fadeFactor-=(fadeFactor/1000F) *(Axolotlclient.CONFIG.zoomDivisor.get()/4);
             else fadeFactor = 1F;
         }
     }

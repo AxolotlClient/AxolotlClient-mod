@@ -103,11 +103,6 @@ public abstract class GameRendererMixin {
         }
     }
 
-    @Inject(method = "tick", at = @At("TAIL"))
-    public void tick(CallbackInfo ci){
-        Zoom.decreaseFov();
-    }
-
     @Inject(method = "getFov", at = @At("RETURN"), cancellable = true)
     public void setZoom(float tickDelta, boolean changingFov, CallbackInfoReturnable<Float> cir){
         Zoom.manageZoom();
