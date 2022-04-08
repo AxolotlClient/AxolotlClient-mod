@@ -7,6 +7,7 @@ import io.github.moehreag.axolotlclient.modules.hud.gui.hud.CPSHud;
 import io.github.moehreag.axolotlclient.util.DiscordRPC;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
+import net.minecraft.client.options.GameOptions;
 import net.minecraft.world.level.LevelInfo;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -23,6 +24,8 @@ public class MinecraftClientMixin {
 
 
     @Shadow @Final private String gameVersion;
+
+    @Shadow public GameOptions options;
 
     /**
      * @author meohreag
@@ -53,6 +56,8 @@ public class MinecraftClientMixin {
 
     @Inject(method = "tick", at = @At("HEAD"))
     public void tickClient(CallbackInfo ci){
+        //if(Axolotlclient.CONFIG.fullBright.get())this.options.gamma = 15F;
+
         Axolotlclient.TickClient();
         DiscordRPC.update();
     }

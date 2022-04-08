@@ -4,10 +4,12 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.Axolotlclient;
 import io.github.moehreag.axolotlclient.modules.sky.SkyboxManager;
 import io.github.moehreag.axolotlclient.modules.zoom.Zoom;
+import jdk.internal.org.objectweb.asm.Opcodes;
 import net.minecraft.block.Block;
 import net.minecraft.block.Material;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.class_321;
+import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -19,6 +21,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -109,5 +112,11 @@ public abstract class GameRendererMixin {
         if(Zoom.isZoomed()||Zoom.isFadingOut()){
             cir.setReturnValue(Zoom.getFov(cir.getReturnValue()));
         }
+    }
+
+    @Redirect(method = "updateLightmap", at = @At(value = "FIELD", target = "Lnet/minecraft/client/options/GameOptions;gamma:F", opcode = Opcodes.GETFIELD))
+    public float setGamma(GameOptions instance){
+        if(Axolotlclient.CONFIG.fullBright.get()) return  15F;
+        return instance.gamma;
     }
 }

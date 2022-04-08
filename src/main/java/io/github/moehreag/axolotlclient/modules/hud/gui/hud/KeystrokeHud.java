@@ -113,8 +113,8 @@ public class KeystrokeHud extends AbstractHudEntry {
 
     @Override
     public void renderPlaceholder() {
-        scale();
         renderPlaceholderBackground();
+        scale();
         if (keystrokes == null) {
             setKeystrokes();
         }

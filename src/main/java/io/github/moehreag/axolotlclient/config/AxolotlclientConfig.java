@@ -24,6 +24,7 @@ public class AxolotlclientConfig {
     public final BooleanOption showSunMoon = new BooleanOption("showSunMoon", true);
     public final FloatOption zoomDivisor = new FloatOption("zoomDivisor", 1F, 10F, 4F);
     public final BooleanOption decreaseSensitivity = new BooleanOption("decreaseSensitivity", true);
+    public final BooleanOption fullBright = new BooleanOption("fullBright", false);
 
     public final BooleanOption enableRPC = new BooleanOption("enableRPC", true);
     public final BooleanOption showActivity = new BooleanOption("showActivity", true);
@@ -37,7 +38,6 @@ public class AxolotlclientConfig {
 
     private final List<Option> options = new ArrayList<>();
     private final List<OptionCategory> categories = new ArrayList<>();
-    private final List<OptionCategory> client = new ArrayList<>();
 
     public final List<OptionCategory> config = new ArrayList<>();
 
@@ -53,8 +53,6 @@ public class AxolotlclientConfig {
         return categories;
     }
 
-    public List<OptionCategory> getClientCategories(){return client;}
-
     public List<Option> getOptions(){
         return options;
     }
@@ -68,10 +66,6 @@ public class AxolotlclientConfig {
         categories.add(rpcOptions);
 
         categories.forEach(OptionCategory::clearOptions);
-
-        client.add(general);
-        client.add(nametagOptions);
-        client.add(badgeOptions);
 
         nametagOptions.add(showOwnNametag);
         nametagOptions.add(useShadows);
@@ -92,6 +86,7 @@ public class AxolotlclientConfig {
         general.add(showSunMoon);
         general.add(zoomDivisor);
         general.add(decreaseSensitivity);
+        general.add(fullBright);
     }
 
 }

@@ -70,7 +70,7 @@ public abstract class AbstractHudEntry extends DrawUtil {
         } else {
             fillRect(getScaledBounds(), Color.DARK_GRAY);
         }
-        outlineRect( getScaledBounds(), Color.BLACK);
+        outlineRect(getScaledBounds(), Color.BLACK);
 
 
     }
