@@ -60,16 +60,6 @@ public class iconHud extends AbstractHudEntry {
     }
 
     @Override
-    protected double getDefaultX() {
-        return 0;
-    }
-
-    @Override
-    protected float getDefaultY() {
-        return 0;
-    }
-
-    @Override
     public void addConfigOptions(List<Option> options) {
         super.addConfigOptions(options);
         options.add(color);
