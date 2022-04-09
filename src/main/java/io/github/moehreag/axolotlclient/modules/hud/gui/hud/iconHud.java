@@ -66,7 +66,7 @@ public class iconHud extends AbstractHudEntry {
 
     @Override
     protected float getDefaultY() {
-        return MinecraftClient.getInstance().height-height;
+        return MinecraftClient.getInstance().height/(float)2;
     }
 
     @Override
