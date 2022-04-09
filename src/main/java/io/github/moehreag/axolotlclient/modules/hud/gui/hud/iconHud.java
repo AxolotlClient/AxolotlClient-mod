@@ -37,17 +37,13 @@ public class iconHud extends AbstractHudEntry {
 
     @Override
     public void renderPlaceholder() {
-        //renderPlaceholderBackground();
         scale();
         DrawPosition pos = getPos();
         this.client.getTextureManager().bindTexture(Axolotlclient.badgeIcon);
-        //GlStateManager.enableLighting();
         GlStateManager.disableDepthTest();
         GlStateManager.color4f(1F, 1F, 1F, 1F);
         GuiLighting.disable();
         drawTexture(pos.x, pos.y, 0, 0, width, height, width, height);
-        //GuiLighting.enable();
-        //GlStateManager.disableLighting();
         GlStateManager.enableDepthTest();
         GlStateManager.popMatrix();
         hovered = false;
