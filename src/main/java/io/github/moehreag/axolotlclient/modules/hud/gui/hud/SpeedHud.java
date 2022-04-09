@@ -28,20 +28,20 @@ public class SpeedHud extends CleanHudEntry {
 
     @Override
     public String getValue() {
-        float vec = MinecraftClient.getInstance().player.getSpeed();
-        double speed;
+        float speed = MinecraftClient.getInstance().player.getSpeed();
+        //double speed;
         /*if (horizontal.get()) {
             speed = vec.horizontalLength();
         } else {
             speed = vec.length();
         }*/
-        return FORMATTER.format(vec) + " BPT";
+        return FORMATTER.format(speed) + " BPT";
     }
 
     @Override
     public void addConfigOptions(List<Option> options) {
         super.addConfigOptions(options);
-        options.add(horizontal);
+        //options.add(horizontal);
     }
 
     @Override

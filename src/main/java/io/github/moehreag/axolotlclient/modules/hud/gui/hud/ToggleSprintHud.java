@@ -44,11 +44,12 @@ public class ToggleSprintHud extends AbstractHudEntry {
     public void render() {
         scale();
         DrawPosition pos = getPos();
+        if(chroma.get())GlStateManager.color4f(textColor.getChroma().getRed(), textColor.getChroma().getGreen(), textColor.getChroma().getBlue(), 1F);
         if (background.get()) {
             fillRect(getBounds(), backgroundColor.get());
         }
         drawCenteredString(client.textRenderer, getText(), new DrawPosition(pos.x + (Math.round(width) / 2),
-                pos.y + (Math.round((float) height / 2)) - 4), textColor.get(), shadow.get());
+                pos.y + (Math.round((float) height / 2)) - 4), chroma.get()? textColor.getChroma() : textColor.get(), shadow.get());
         GlStateManager.popMatrix();
     }
 
@@ -112,6 +113,7 @@ public class ToggleSprintHud extends AbstractHudEntry {
     public void addConfigOptions(List<Option> options) {
         super.addConfigOptions(options);
         options.add(textColor);
+        options.add(chroma);
         options.add(shadow);
         options.add(background);
         options.add(backgroundColor);

@@ -32,8 +32,11 @@ public abstract class CleanHudEntry extends AbstractHudEntry {
         if (background.get()) {
             fillRect(getBounds(), backgroundColor.get());
         }
-        drawCenteredString(client.textRenderer, getValue(), new DrawPosition(pos.x + (Math.round(width) / 2),
-                pos.y + (Math.round((float) height / 2)) - 4), Color.WHITE, shadow.get());
+        drawCenteredString(client.textRenderer, getValue(),
+                new DrawPosition(pos.x + (Math.round(width) / 2),
+                pos.y + (Math.round((float) height / 2)) - 4),
+                chroma.get()? textColor.getChroma() : textColor.get(),
+                shadow.get());
         GlStateManager.popMatrix();
     }
 
@@ -53,6 +56,7 @@ public abstract class CleanHudEntry extends AbstractHudEntry {
     public void addConfigOptions(List<Option> options) {
         super.addConfigOptions(options);
         options.add(textColor);
+        options.add(chroma);
         options.add(shadow);
         options.add(background);
         options.add(backgroundColor);

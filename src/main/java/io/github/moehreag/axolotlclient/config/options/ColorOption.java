@@ -10,7 +10,6 @@ public class ColorOption extends OptionBase implements Option {
     private Color value;
 
 
-
     public ColorOption(String name, Color def){
         super(name);
         this.def=def;
@@ -46,7 +45,7 @@ public class ColorOption extends OptionBase implements Option {
         return new JsonPrimitive(String.valueOf(value));
     }
 
-    /*public Color getColor(){
-        return value;
-    }*/
+    public Color getChroma(){
+        return Color.getChroma();
+    }
 }

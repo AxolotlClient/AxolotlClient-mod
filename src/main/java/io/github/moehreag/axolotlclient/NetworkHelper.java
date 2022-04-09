@@ -1,5 +1,6 @@
 package io.github.moehreag.axolotlclient;
 
+import io.github.moehreag.axolotlclient.util.ThreadExecuter;
 import net.minecraft.client.MinecraftClient;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpDelete;
@@ -21,8 +22,9 @@ public class NetworkHelper {
         } else if (Axolotlclient.otherPlayers.contains(uuid.toString())){
             return false;
         }else {
-            final Thread get = new Thread(() -> getUser(uuid));
-            get.start();
+            /*final Thread get = new Thread(() -> getUser(uuid));
+            get.start();*/
+            ThreadExecuter.scheduleTask(new Thread(() -> getUser(uuid)));
             return Axolotlclient.onlinePlayers.contains(uuid.toString());
         }
     }
@@ -51,8 +53,8 @@ public class NetworkHelper {
 
             CloseableHttpClient client = HttpClients.createDefault();
             HttpPost post = new HttpPost("https://moehreag.duckdns.org/axolotlclient-api/");
-            post.setHeader("Accept", "application/json");
-            post.setHeader("Content-type", "application/json");
+            /*post.setHeader("Accept", "application/json");
+            post.setHeader("Content-type", "application/json");*/
             post.setEntity(new StringEntity("{\n\t\"uuid\": \""+uuid.toString()+"\",\n\t\"online\": true\n}"));
             HttpResponse response = client.execute(post);
 

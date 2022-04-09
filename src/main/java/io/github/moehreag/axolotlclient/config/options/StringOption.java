@@ -6,7 +6,7 @@ import com.google.gson.JsonPrimitive;
 public class StringOption extends OptionBase implements Option{
 
     private String value;
-    private String def;
+    private final String def;
 
     public StringOption(String name, String def){
         super(name);

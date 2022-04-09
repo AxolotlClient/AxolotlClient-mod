@@ -4,6 +4,7 @@ import io.github.moehreag.axolotlclient.Axolotlclient;
 import io.github.moehreag.axolotlclient.NetworkHelper;
 import io.github.moehreag.axolotlclient.modules.hud.HudManager;
 import io.github.moehreag.axolotlclient.modules.hud.gui.hud.CPSHud;
+import io.github.moehreag.axolotlclient.modules.hud.util.Color;
 import io.github.moehreag.axolotlclient.util.DiscordRPC;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
@@ -56,7 +57,7 @@ public class MinecraftClientMixin {
 
     @Inject(method = "tick", at = @At("HEAD"))
     public void tickClient(CallbackInfo ci){
-        //if(Axolotlclient.CONFIG.fullBright.get())this.options.gamma = 15F;
+        Color.tickChroma();
 
         Axolotlclient.TickClient();
         DiscordRPC.update();

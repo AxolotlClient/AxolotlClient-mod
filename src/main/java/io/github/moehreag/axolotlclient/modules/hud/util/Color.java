@@ -1,5 +1,10 @@
 package io.github.moehreag.axolotlclient.modules.hud.util;
 
+import io.github.moehreag.axolotlclient.Axolotlclient;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * This implementation of Hud modules is based on KronHUD.
  * https://github.com/DarkKronicle/KronHUD
@@ -7,10 +12,12 @@ package io.github.moehreag.axolotlclient.modules.hud.util;
  */
 
 public class Color {
-
     private final int red, green, blue;
     private final int alpha;
     final int color;
+
+    public static final List<Color> chromaColors = new ArrayList<>();
+    private static int chromaColorIndex;
 
     public Color(int color) {
         this(color >> 16 & 0xFF, color >> 8 & 0xFF, color & 0xFF, color >> 24 & 0xFF);
@@ -31,6 +38,43 @@ public class Color {
         color = (color << 8) + b;
         this.color = color;
     }
+
+    public static void setupChroma(){
+        for (int r=0; r<75; r++) chromaColors.add(new Color(r*255/75,       255,         0));
+        for (int g=75; g>0; g--) chromaColors.add(new Color(      255, g*255/75,         0));
+        for (int b=0; b<75; b++) chromaColors.add(new Color(      255,         0, b*255/75));
+        for (int r=75; r>0; r--) chromaColors.add(new Color(r*255/75,         0,       255));
+        for (int g=0; g<75; g++) chromaColors.add(new Color(        0, g*255/75,       255));
+        for (int b=75; b>0; b--) chromaColors.add(new Color(        0,       255, b*255/75));
+        chromaColors.add(new Color(0,255,0));
+    }
+
+    public static void tickChroma(){
+        chromaColorIndex+= Axolotlclient.CONFIG.chromaSpeed.get();
+        if(chromaColorIndex >= chromaColors.size()-1)chromaColorIndex=0;
+        else if(chromaColorIndex<0){chromaColorIndex=0;}
+    }
+
+    public static Color getChroma(){
+        return chromaColors.get(chromaColorIndex);
+    }
+
+    public int getRed() {
+        return red;
+    }
+
+    public int getBlue(){
+        return blue;
+    }
+
+    public int getGreen(){
+        return green;
+    }
+
+    public int getAlpha(){
+        return alpha;
+    }
+
     public int getAsInt(){
         return color;
     }

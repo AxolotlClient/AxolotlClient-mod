@@ -66,6 +66,7 @@ hud.clientOptions=Client Options
 enabled=Enabled
 scale=Scale
 textColor=Text Color
+textChroma=Text Chroma
 heldtextcolor=Text Color when held
 bgColor=Background Color
 placeholder=Placeholder

@@ -38,10 +38,6 @@ public abstract class WorldRendererMixin {
 
     @Shadow private ClientWorld world;
 
-    @Shadow private int field_1925;
-
-    @Shadow private AdvancedVertexBuffer field_10827;
-
     @Inject(method = "method_9891", at=@At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;disableTexture()V"), cancellable = true)
     public void sky(float f, int ih, CallbackInfo ci){
         if(Axolotlclient.CONFIG.customSky.get() && SkyboxManager.getInstance().hasSkyBoxes()){

@@ -25,6 +25,7 @@ public class AxolotlclientConfig {
     public final FloatOption zoomDivisor = new FloatOption("zoomDivisor", 1F, 10F, 4F);
     public final BooleanOption decreaseSensitivity = new BooleanOption("decreaseSensitivity", true);
     public final BooleanOption fullBright = new BooleanOption("fullBright", false);
+    public final IntegerOption chromaSpeed = new IntegerOption("chromaSpeed", 20, 10, 50);
 
     public final BooleanOption enableRPC = new BooleanOption("enableRPC", true);
     public final BooleanOption showActivity = new BooleanOption("showActivity", true);
@@ -87,6 +88,7 @@ public class AxolotlclientConfig {
         general.add(zoomDivisor);
         general.add(decreaseSensitivity);
         general.add(fullBright);
+        general.add(chromaSpeed);
     }
 
 }

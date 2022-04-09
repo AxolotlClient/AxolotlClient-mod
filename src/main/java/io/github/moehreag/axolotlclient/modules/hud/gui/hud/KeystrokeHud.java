@@ -221,9 +221,9 @@ public class KeystrokeHud extends AbstractHudEntry {
         }
 
         public Color getFGColor() {
-            return key.isPressed() ? Color.blend(textColor.get(), pressedTextColor.get(), getPercentPressed()) :
+            return key.isPressed() ? Color.blend(chroma.get()? textColor.getChroma() : textColor.get(), pressedTextColor.get(), getPercentPressed()) :
                     Color.blend(pressedTextColor.get(),
-                            textColor.get(),
+                            chroma.get()? textColor.getChroma() : textColor.get(),
                             getPercentPressed());
         }
 
