@@ -2,7 +2,7 @@ name: Build mod
 
 on:
   push:
-    branches: [ master ]
+    branches: [master 1.8.9 1.*]
   pull_request:
     branches: [ master ]
 
