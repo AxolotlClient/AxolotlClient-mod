@@ -58,6 +58,10 @@ fpshud=FPS Arayüzü
 armorhud=Zırh Arayüzü
 potionshud=İksir Arayüzü
 keystrokehud=Tuş-Göstergesi
+LMB=SOLFT
+RMB=SAĞFT
+MMB=OFT
+
 togglesprint=OtomatikKoşma
 iphud=İP Arayüzü
 IconHud=Simge Arayüzü
