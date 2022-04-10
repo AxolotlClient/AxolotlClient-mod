@@ -1,0 +1,87 @@
+language.name=Türkçe
+language.region=TR
+language.code=tr_TR
+
+config=Axolotl Client: Ayarlar
+
+general=Genel
+general.title=Genel Ayarlar
+customSky=Özel Gökyüzü
+showSunMoon=Özel Güneş & Ay
+zoomDivisor=Yaklaştırma Bölümü
+zoomSpeed=Yaklaştırma Hızı
+decreaseSensitivity=Duyarlılığı Azalt
+fullBright=TamParlak
+badgeOptions=Rozet Ayarları
+badgeText=Özel Rozet Yazısı
+customBadge=Özel Rozetler
+showBadges=Rozetleri Göster
+
+nametagOptions=Takma Ad Ayarları
+showOwnNametag=Kendi Takma Adı'nı göster
+useShadows=Gölgeleri Zorla
+nametagBackground=Takma Ad Arkaplanı
+
+nickHider=AdSaklayıcı Ayarları
+nickHiderConf.title=AdSaklayıcı Ayarları
+hideNames=Adları Sakla
+nameDesc=Saklanacak Adlar:
+hideOwnSkin=Kendi Ciltini Sakla
+hideOtherSkins=Diğer Kişilerin Ciltlerini Sakla
+
+rpcConf=DiscordRPC Ayarları
+rpcConf.title=DiscordRPC Ayarları
+enableRPC=RPC'yi Etkinleştir
+showActivity=Aktivite'yi Göster
+
+cursedConf=Lanetli Ayarlar
+cursedConf.title=Lanetli Ayarlar
+rotateWorld=Dünya'yı döndür
+
+levelhead=LevelHead
+hypixel_api_key=Hypixel API Anahtarı
+levelHeadMode=LevelHead Modu
+
+category.axolotlclient=AxolotlClient
+
+key.zoom=Yakınlaştırma
+key.openHud=Arayüz Düzenleyicisini aç
+key.toggleSneak=Otomatik Eğilme
+key.toggleSprint=Otomatik Koşma
+
+hud=Arayüz Ayarları
+pinghud=Gecikme Arayüzü
+cpshud=CPS Arayüzü
+cpskeybind=Tuş-Bağından CPS
+rightcps=Sağ Klik CPS'ini göster
+fpshud=FPS Arayüzü
+armorhud=Zırh Arayüzü
+potionshud=İksir Arayüzü
+keystrokehud=Tuş-Göstergesi
+togglesprint=OtomatikKoşma
+iphud=İP Arayüzü
+IconHud=Simge Arayüzü
+
+toggleSprint=Otomatik Koşma'ya izin ver
+toggleSneak=Otomatik Eğilme'ye izin ver
+sneakToggled=Otomatik Eğilme şuan kullanılıyor
+sprintToggled=Otomatik Koşma şuan kullanılıyor
+
+hud.snapping=Yapıştırma
+hud.clientOptions=Client Ayarları
+
+enabled=Etkinleştirilmiş
+scale=Boyut
+textColor=Metin Rengi
+color=Renk
+textChroma=Kromatik Yazı
+chroma=Kromatik
+chromaSpeed=Kromatik Hızı
+heldtextcolor=Tutulunca ki Metin Rengi
+bgColor=Arkaplan Rengi
+placeholder=Yer-tutucu
+heldbackgroundcolor=Tutulunca'ki arkaplan rengi
+background=Arkaplan
+shadow=Gölge
+
+back=Geri

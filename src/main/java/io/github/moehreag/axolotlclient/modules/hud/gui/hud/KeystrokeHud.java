@@ -10,6 +10,7 @@ import io.github.moehreag.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.options.KeyBinding;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
@@ -37,11 +38,11 @@ public class KeystrokeHud extends AbstractHudEntry {
 
     public static Optional<String> getMouseKeyBindName(KeyBinding keyBinding) {
         if (keyBinding.getTranslationKey().equalsIgnoreCase(client.options.keyAttack.getTranslationKey())) {
-            return Optional.of("LMB");
+            return Optional.of(I18n.translate("LMB"));
         } else if (keyBinding.getTranslationKey().equalsIgnoreCase(client.options.keyUse.getTranslationKey())) {
-            return Optional.of("RMB");
+            return Optional.of(I18n.translate("RMB"));
         } else if (keyBinding.getTranslationKey().equalsIgnoreCase(client.options.keyPickItem.getTranslationKey())) {
-            return Optional.of("MMB");
+            return Optional.of(I18n.translate("MMB"));
         }
         return Optional.empty();
     }

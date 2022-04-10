@@ -59,6 +59,10 @@ fpshud=FPS Hud
 armorhud=Armor HUD
 potionshud=Potion HUD
 keystrokehud=Keystrokes
+LMB=LMB
+RMB=RMB
+MMB=MMB
+
 togglesprint=ToggleSprint
 iphud=IPHud
 IconHud=IconHUD

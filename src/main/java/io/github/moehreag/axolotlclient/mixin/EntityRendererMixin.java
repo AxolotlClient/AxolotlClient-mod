@@ -38,7 +38,7 @@ public class EntityRendererMixin<T extends Entity> {
         if(entity instanceof AbstractClientPlayerEntity){
             if(MinecraftClient.getInstance().getCurrentServerEntry() != null &&
                     MinecraftClient.getInstance().getCurrentServerEntry().address.contains("hypixel.net")){
-                if(HypixelAbstractionLayer.hasValidAPIKey() && LevelHead.getInstance().enabled.get()){
+                if(HypixelAbstractionLayer.hasValidAPIKey() && LevelHead.getInstance().enabled.get() && string.contains(entity.getName().getString())){
                     TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
                     String text = "Level: "+ HypixelAbstractionLayer.getPlayerLevel(String.valueOf(entity.getUuid()));
 
