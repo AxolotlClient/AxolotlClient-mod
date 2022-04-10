@@ -12,7 +12,6 @@ zoomDivisor=Zoom Divisor
 zoomSpeed=Zoomgeschwindigkeit
 decreaseSensitivity=Reduziere Sensitivität
 fullBright=FullBright
-
 badgeOptions=Badge Optionen
 badgeText=Eigener Text als Badge
 customBadge=Benutze eigene Badge
@@ -63,7 +62,7 @@ LMB=LMB
 RMB=RMB
 MMB=MMB
 
-togglesprint=ToggleSprint
+togglesprint=ToggleModifiers
 sprinting_toggled=Sprinting [Toggled]
 sneaking_toggled=Sneaking [Toggled]
 sprinting_pressed=Sprinting [Key held]
