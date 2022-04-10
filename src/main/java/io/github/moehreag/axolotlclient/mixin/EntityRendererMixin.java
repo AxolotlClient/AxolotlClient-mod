@@ -33,7 +33,7 @@ public class EntityRendererMixin<T extends Entity> {
         return 0;
     }
 
-    @Inject(method = "method_6917", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Ljava/lang/String;III)I"))
+    @Inject(method = "method_6917", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Ljava/lang/String;III)I", ordinal = 1))
     public void addLevel(T entity, String string, double d, double e, double f, int i, CallbackInfo ci){
         if(entity instanceof AbstractClientPlayerEntity){
             if(MinecraftClient.getInstance().getCurrentServerEntry() != null &&
