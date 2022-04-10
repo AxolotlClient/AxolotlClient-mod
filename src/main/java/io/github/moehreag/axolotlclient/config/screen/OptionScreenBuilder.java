@@ -2,10 +2,7 @@ package io.github.moehreag.axolotlclient.config.screen;
 
 import io.github.moehreag.axolotlclient.config.ConfigManager;
 import io.github.moehreag.axolotlclient.config.options.*;
-import io.github.moehreag.axolotlclient.config.screen.widgets.CategoryWidget;
-import io.github.moehreag.axolotlclient.config.screen.widgets.CustomButtonWidget;
-import io.github.moehreag.axolotlclient.config.screen.widgets.CustomWidget;
-import io.github.moehreag.axolotlclient.config.screen.widgets.OptionWidget;
+import io.github.moehreag.axolotlclient.config.screen.widgets.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -134,6 +131,8 @@ public class OptionScreenBuilder extends Screen {
                             dialog.sliderWidget.setFocused(true);
                         } else if(optionWidget.getOption() instanceof IntegerOption){
                             dialog.sliderWidget.setFocused(true);
+                        } else if(optionWidget.getOption() instanceof EnumOption){
+                            if(optionWidget.getOption() instanceof LevelHeadOption){dialog.setText (((LevelHeadOption) optionWidget.getOption()).next().toString());}
                         }
                     }
                 });

@@ -1,6 +1,6 @@
 package io.github.moehreag.axolotlclient.modules.levelhead;
 
-import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.config.options.LevelHeadOption;
 import io.github.moehreag.axolotlclient.util.ThreadExecuter;
 import net.hypixel.api.HypixelAPI;
 import net.hypixel.api.apache.ApacheHttpClient;
@@ -57,7 +57,15 @@ public class HypixelAbstractionLayer {
     public static int getPlayerLevel(String uuid) {
         if(loadPlayerDataIfAbsent(uuid)) {
             try {
-                return (int) cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer().getNetworkLevel();
+                Enum<?> mode = LevelHead.getInstance().mode.get();
+                if(mode == LevelHeadOption.LevelHeadMode.NETWORK){
+                    return (int) cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer().getNetworkLevel();
+                } else if (mode == LevelHeadOption.LevelHeadMode.BEDWARS){
+                    return cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer().getIntProperty("achievements.bedwars_level", 0);
+                } else if (mode == LevelHeadOption.LevelHeadMode.SKYWARS){
+                    String formattedLevel = cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer().getStringProperty("stats.SkyWars.levelFormatted", "§70⋆");
+                    return Integer.parseInt(formattedLevel.substring(2, formattedLevel.length()-1));
+                }
             } catch (TimeoutException | InterruptedException | ExecutionException e) {
                 return -1;
             }

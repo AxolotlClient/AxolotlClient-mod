@@ -16,7 +16,7 @@ import java.util.Objects;
 public class CustomButtonWidget extends ButtonWidget {
 
     Identifier texture;
-    String text;
+    public String text;
     boolean textField;
     boolean slider;
     public TextFieldWidget textFieldWidget;
@@ -87,6 +87,11 @@ public class CustomButtonWidget extends ButtonWidget {
         textFieldWidget.write(option.get().toString());
         textFieldWidget.setHasBorder(false);
         textFieldWidget.setMaxLength(9);
+    }
+
+    public CustomButtonWidget(int x, int y, int width, int height, String toString) {
+        super(0, x, y, width, height, toString);
+        this.text=toString;
     }
 
     public void setText(String text){

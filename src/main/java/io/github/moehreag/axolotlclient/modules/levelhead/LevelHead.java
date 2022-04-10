@@ -1,10 +1,7 @@
 package io.github.moehreag.axolotlclient.modules.levelhead;
 
 import io.github.moehreag.axolotlclient.Axolotlclient;
-import io.github.moehreag.axolotlclient.config.options.BooleanOption;
-import io.github.moehreag.axolotlclient.config.options.ColorOption;
-import io.github.moehreag.axolotlclient.config.options.OptionCategory;
-import io.github.moehreag.axolotlclient.config.options.StringOption;
+import io.github.moehreag.axolotlclient.config.options.*;
 import io.github.moehreag.axolotlclient.modules.AbstractModule;
 import io.github.moehreag.axolotlclient.modules.hud.util.Color;
 import net.minecraft.util.Identifier;
@@ -18,6 +15,7 @@ public class LevelHead extends AbstractModule {
     public BooleanOption background = new BooleanOption("background", false);
     public ColorOption textColor = new ColorOption("textColor", Color.GOLD);
     public StringOption hypixel_api_key = new StringOption("hypixel_api_key", "");
+    public LevelHeadOption mode = new LevelHeadOption("levelHeadMode");
 
     @Override
     public void init() {
@@ -26,6 +24,7 @@ public class LevelHead extends AbstractModule {
         category.add(textColor);
         category.add(background);
         category.add(hypixel_api_key);
+        category.add(mode);
 
         Axolotlclient.CONFIG.addCategory(category);
     }
