@@ -9,6 +9,7 @@ general.title=General Options
 customSky=Custom Skies
 showSunMoon=Custom Sky Sun & Moon
 zoomDivisor=Zoom Divisor
+zoomSpeed=Zoom Speed
 decreaseSensitivity=Reduce Sensitivity
 fullBright=FullBright
 
@@ -20,6 +21,7 @@ showBadges=Show Badges
 nametagOptions=Nametag Options
 showOwnNametag=Show Own Nametag
 useShadows=Force Shadows
+nametagBackground=Nametag Background
 
 nickHider=NickHider Options
 nickHiderConf.title=NickHider Options
@@ -36,6 +38,9 @@ showActivity=Show Activity
 cursedConf=Cursed Options
 cursedConf.title=Cursed Options
 rotateWorld=Rotate the World
+
+levelhead=LevelHead
+hypixel_api_key=Hypixel API Key
 
 category.axolotlclient=AxolotlClient
 
@@ -56,7 +61,7 @@ keystrokehud=Keystrokes
 togglesprint=ToggleSprint
 iphud=IPHud
 IconHud=IconHUD
-levelhead=LevelHead
+
 toggleSprint=Allow Sprinting toggle
 toggleSneak=Allow Sneaking toggle
 sneakToggled=Sneaking currently toggled

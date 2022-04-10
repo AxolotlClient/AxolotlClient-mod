@@ -7,9 +7,7 @@ import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.moehreag.axolotlclient.modules.hud.util.Color;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.GuiLighting;
-import net.minecraft.client.texture.TextureUtil;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
@@ -17,7 +15,7 @@ import java.util.List;
 public class iconHud extends AbstractHudEntry {
 
     public Identifier ID = new Identifier("axolotlclient", "IconHud");
-    private final ColorOption color = new ColorOption("color", new Color(255, 255, 255, 255));
+    private final ColorOption color = new ColorOption("color", new Color(255, 255, 255, 0));
 
     public iconHud() {
         super(15, 15);
@@ -29,7 +27,7 @@ public class iconHud extends AbstractHudEntry {
         DrawPosition pos = getPos();
         this.client.getTextureManager().bindTexture(Axolotlclient.badgeIcon);
         if(chroma.get())GlStateManager.color4f(textColor.getChroma().getRed(), textColor.getChroma().getGreen(), textColor.getChroma().getBlue(), 1F);
-        else {GlStateManager.color4f(color.get().getRed(), color.get().getGreen(), color.get().getBlue(), color.get().getAlpha());}
+        else {GlStateManager.color4f(color.get().getRed(), color.get().getGreen(), color.get().getBlue(), 1F);}
         drawTexture(pos.x, pos.y, 0, 0, width, height, width, height);
 
         GlStateManager.popMatrix();
