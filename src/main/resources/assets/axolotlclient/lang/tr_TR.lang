@@ -63,6 +63,11 @@ RMB=SAĞFT
 MMB=OFT
 
 togglesprint=OtomatikKoşma
+sprinting_toggled=Sprinting [Toggled]
+sneaking_toggled=Sneaking [Toggled]
+sprinting_pressed=Sprinting [Key held]
+sneaking_pressed=Sneaking [Key held]
+
 iphud=İP Arayüzü
 IconHud=Simge Arayüzü
 

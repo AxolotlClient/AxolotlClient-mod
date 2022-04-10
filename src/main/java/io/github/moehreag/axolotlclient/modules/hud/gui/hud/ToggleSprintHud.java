@@ -5,12 +5,12 @@ import io.github.moehreag.axolotlclient.Axolotlclient;
 import io.github.moehreag.axolotlclient.config.ConfigManager;
 import io.github.moehreag.axolotlclient.config.options.BooleanOption;
 import io.github.moehreag.axolotlclient.config.options.Option;
-import io.github.moehreag.axolotlclient.config.options.OptionCategory;
 import io.github.moehreag.axolotlclient.config.options.StringOption;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
 import net.legacyfabric.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.options.KeyBinding;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
@@ -58,7 +58,7 @@ public class ToggleSprintHud extends AbstractHudEntry {
         renderPlaceholderBackground();
         scale();
         DrawPosition pos = getPos();
-        drawCenteredString(client.textRenderer, "Sprinting [Toggled]",
+        drawCenteredString(client.textRenderer, I18n.translate("sprinting_toggled"),
                 new DrawPosition(pos.x + (width / 2),
                         pos.y + (height / 2) - 4), textColor.get(), shadow.get());
         GlStateManager.popMatrix();
@@ -77,14 +77,14 @@ public class ToggleSprintHud extends AbstractHudEntry {
 
     public String getText(){
 
-        if(client.options.keySneak.isPressed())return "Sneaking [Key held]";
-        if(client.options.keySprint.isPressed())return "Sprinting [Key held]";
+        if(client.options.keySneak.isPressed())return I18n.translate("sneaking_pressed");
+        if(client.options.keySprint.isPressed())return I18n.translate("sprinting_pressed");
 
         if(toggleSneak.get() && sneakToggled.get()){
-            return "Sneaking [Toggled]";
+            return I18n.translate("sneaking_toggled");
         }
         if(toggleSprint.get() && sprintToggled.get()){
-             return "Sprinting [Toggled]";
+             return I18n.translate("sprinting_toggled");
         }
 
         return placeholder.get();
