@@ -21,6 +21,7 @@ public class SkyboxInstance {
 
     // ! These are the options variables.  Do not mess with these.
     protected float maxAlpha = 1f;
+    int distance;
 
     public SkyboxInstance(JsonObject json){
         this.object=json;

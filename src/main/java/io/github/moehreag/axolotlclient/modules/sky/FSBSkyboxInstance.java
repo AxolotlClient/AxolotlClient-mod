@@ -36,6 +36,7 @@ public class FSBSkyboxInstance extends SkyboxInstance{
 
     public void renderSkybox(){
         this.alpha = getAlpha();
+        this.distance=MinecraftClient.getInstance().options.viewDistance;
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
@@ -64,10 +65,10 @@ public class FSBSkyboxInstance extends SkyboxInstance{
                 GlStateManager.rotatef(-90.0F, 0.0F, 0.0F, 1.0F);
             }
             bufferBuilder.begin(7, VertexFormats.POSITION_TEXTURE_COLOR);
-            bufferBuilder.vertex(-100.0, -100.0, -100.0).texture(0.0, 0.0).color(1F, 1F, 1F, alpha).next();
-            bufferBuilder.vertex(-100.0, -100.0, 100.0).texture(0.0, 1.0).color(1F, 1F, 1F, alpha).next();
-            bufferBuilder.vertex(100.0, -100.0, 100.0).texture(1.0, 1.0).color(1F, 1F, 1F, alpha).next();
-            bufferBuilder.vertex(100.0, -100.0, -100.0).texture(1.0, 0.0).color(1F, 1F, 1F, alpha).next();
+            bufferBuilder.vertex(-distance*16, -distance*16, -distance*16).texture(0.0, 0.0).color(1F, 1F, 1F, alpha).next();
+            bufferBuilder.vertex(-distance*16, -distance*16, distance*16).texture(0.0, 1.0).color(1F, 1F, 1F, alpha).next();
+            bufferBuilder.vertex(distance*16, -distance*16, distance*16).texture(1.0, 1.0).color(1F, 1F, 1F, alpha).next();
+            bufferBuilder.vertex(distance*16, -distance*16, -distance*16).texture(1.0, 0.0).color(1F, 1F, 1F, alpha).next();
             tessellator.draw();
             GlStateManager.popMatrix();
         }

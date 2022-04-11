@@ -23,7 +23,7 @@ public class SkyboxManager {
 
     public void renderSkyboxes(){
         this.skyboxes.stream().filter(this.renderPredicate).forEach(this.active_skies::add);
-        this.active_skies.forEach(SkyboxInstance::renderSkybox);
+        this.active_skies.forEach(skyboxInstance -> {if(skyboxInstance!=null)skyboxInstance.renderSkybox();});
         this.active_skies.removeIf((skybox) -> skybox.getAlpha() <= MINIMUM_ALPHA);
     }
 
@@ -32,13 +32,18 @@ public class SkyboxManager {
         active_skies.clear();
     }
 
+    public void removeSkybox(SkyboxInstance skybox){
+        this.skyboxes.remove(skybox);
+        if(this.active_skies.contains(skybox))active_skies.remove(skybox);
+    }
+
     public static SkyboxManager getInstance(){
         return INSTANCE;
     }
 
     public boolean hasSkyBoxes(){
         this.skyboxes.stream().filter(this.renderPredicate).forEach(this.active_skies::add);
-        this.active_skies.forEach(SkyboxInstance::renderSkybox);
+        if(active_skies.isEmpty())return false;
         this.active_skies.removeIf((skybox) -> skybox.getAlpha() <= MINIMUM_ALPHA);
         return !active_skies.isEmpty();
     }

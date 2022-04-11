@@ -61,6 +61,7 @@ public class HudManager extends AbstractModule {
         add(new ToggleSprintHud());
         add(new IPHud());
         add(new iconHud());
+        add(new SpeedHud());
 
         entries.forEach((identifier, abstractHudEntry) -> abstractHudEntry.init());
     }

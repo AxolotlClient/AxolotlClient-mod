@@ -38,7 +38,12 @@ public abstract class WorldRendererMixin {
 
     @Shadow private ClientWorld world;
 
-    @Inject(method = "method_9891", at=@At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;disableTexture()V"), cancellable = true)
+    @Shadow @Final private MinecraftClient client;
+
+    @Inject(method = "method_9891",
+            at=@At(value = "INVOKE",
+                    target = "Lcom/mojang/blaze3d/platform/GlStateManager;disableTexture()V", ordinal = 0),
+            cancellable = true)
     public void sky(float f, int ih, CallbackInfo ci){
         if(Axolotlclient.CONFIG.customSky.get() && SkyboxManager.getInstance().hasSkyBoxes()){
 
@@ -50,8 +55,10 @@ public abstract class WorldRendererMixin {
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder bufferBuilder = tessellator.getBuffer();
 
+            this.client.profiler.push("Custom Skies");
             SkyboxManager.getInstance().renderSkyboxes();
 
+            this.client.profiler.pop();
 
             GlStateManager.pushMatrix();
             float n = 1.0F - this.world.getRainGradient(f);
@@ -176,5 +183,4 @@ public abstract class WorldRendererMixin {
     public float getCloudHeight(Dimension instance){
         return instance.getCloudHeight();
     }
-
 }

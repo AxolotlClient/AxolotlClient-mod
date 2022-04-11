@@ -14,7 +14,6 @@ public class MultiplayerScreenMixin {
 
     @Inject(method = "connect()V", at = @At("HEAD"))
     public void connect(CallbackInfo ci){
-        NetworkHelper.setOnline();
         DiscordRPC.update();
     }
 }

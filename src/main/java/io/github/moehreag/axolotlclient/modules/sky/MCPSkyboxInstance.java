@@ -25,20 +25,21 @@ public class MCPSkyboxInstance extends SkyboxInstance {
         this.fade[1] = json.get("endFadeIn").getAsInt();
         this.fade[2] = json.get("startFadeOut").getAsInt();
         this.fade[3] = json.get("endFadeOut").getAsInt();
+        loadSkybox();
     }
 
     @Override
     public void renderSkybox() {
         this.alpha=getAlpha();
-
-        loadSkybox();
+        this.distance=MinecraftClient.getInstance().options.viewDistance;
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
 
         for (int i = 0; i < 6; ++i) {
 
-            if(texture[i]!=null)GlStateManager.bindTexture(texture[i].getGlId());
+            if(texture[i]!=null)
+                GlStateManager.bindTexture(texture[i].getGlId());
             GlStateManager.pushMatrix();
             if (i == 1) {
                 GlStateManager.rotatef(90.0F, 1.0F, 0.0F, 0.0F);
@@ -62,10 +63,10 @@ public class MCPSkyboxInstance extends SkyboxInstance {
             }
 
             bufferBuilder.begin(7, VertexFormats.POSITION_TEXTURE_COLOR);
-            bufferBuilder.vertex(-100.0, -100.0, -100.0).texture(0.0, 0.0).color(1F, 1F, 1F, alpha).next();
-            bufferBuilder.vertex(-100.0, -100.0, 100.0).texture(0.0, 1.0).color(1F, 1F, 1F, alpha).next();
-            bufferBuilder.vertex(100.0, -100.0, 100.0).texture(1.0, 1.0).color(1F, 1F, 1F, alpha).next();
-            bufferBuilder.vertex(100.0, -100.0, -100.0).texture(1.0, 0.0).color(1F, 1F, 1F, alpha).next();
+            bufferBuilder.vertex(-distance*16, -distance*16, -distance*16).texture(0.0, 0.0).color(1F, 1F, 1F, alpha).next();
+            bufferBuilder.vertex(-distance*16, -distance*16, distance*16).texture(0.0, 1.0).color(1F, 1F, 1F, alpha).next();
+            bufferBuilder.vertex(distance*16, -distance*16, distance*16).texture(1.0, 1.0).color(1F, 1F, 1F, alpha).next();
+            bufferBuilder.vertex(distance*16, -distance*16, -distance*16).texture(1.0, 0.0).color(1F, 1F, 1F, alpha).next();
             tessellator.draw();
             GlStateManager.popMatrix();
         }

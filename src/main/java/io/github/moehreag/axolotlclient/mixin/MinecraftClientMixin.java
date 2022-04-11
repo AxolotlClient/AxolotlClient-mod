@@ -8,9 +8,11 @@ import io.github.moehreag.axolotlclient.modules.hud.util.Color;
 import io.github.moehreag.axolotlclient.util.DiscordRPC;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
+import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.client.options.GameOptions;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.world.level.LevelInfo;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -27,6 +29,10 @@ public class MinecraftClientMixin {
     @Shadow @Final private String gameVersion;
 
     @Shadow public GameOptions options;
+
+    @Shadow public ClientPlayerEntity player;
+
+    @Shadow public ClientPlayerInteractionManager interactionManager;
 
     /**
      * @author meohreag
@@ -45,7 +51,6 @@ public class MinecraftClientMixin {
 
     @Inject(method = "startGame", at = @At("HEAD"))
     public void startup(String worldName, String string, LevelInfo levelInfo, CallbackInfo ci){
-        NetworkHelper.setOnline();
         DiscordRPC.startup();
     }
 
@@ -71,8 +76,8 @@ public class MinecraftClientMixin {
         }
     }
 
-    @Inject(method = "initializeGame", at = @At("TAIL"))
-    public void onLaunch(CallbackInfo ci){
+    @Inject(method = "connect(Lnet/minecraft/client/world/ClientWorld;Ljava/lang/String;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;method_1236(Lnet/minecraft/entity/player/PlayerEntity;)V"))
+    public void login(ClientWorld world, String loadingMessage, CallbackInfo ci){
         NetworkHelper.setOnline();
     }
 

@@ -1,6 +1,5 @@
 package io.github.moehreag.axolotlclient.mixin;
 
-import io.github.moehreag.axolotlclient.Axolotlclient;
 import io.github.moehreag.axolotlclient.util.SkyResourceManager;
 import net.minecraft.resource.ReloadableResourceManagerImpl;
 import net.minecraft.resource.ResourcePack;

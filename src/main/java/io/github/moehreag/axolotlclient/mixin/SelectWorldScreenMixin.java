@@ -14,7 +14,6 @@ public class SelectWorldScreenMixin {
 
     @Inject(method = "joinWorld", at = @At("HEAD"))
     public void joinWorld(int index, CallbackInfo ci){
-        NetworkHelper.setOnline();
         DiscordRPC.update();
     }
 }
