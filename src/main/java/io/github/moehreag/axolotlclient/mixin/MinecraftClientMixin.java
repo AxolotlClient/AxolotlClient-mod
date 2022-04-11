@@ -32,8 +32,6 @@ public class MinecraftClientMixin {
 
     @Shadow public ClientPlayerEntity player;
 
-    @Shadow public ClientPlayerInteractionManager interactionManager;
-
     /**
      * @author meohreag
      * @reason Customize Window title for use in AxolotlClient
