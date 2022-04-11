@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MixinTitleScreen extends Screen{
 
 	protected MixinTitleScreen() {
-		super(null);
+		super(new LiteralText(""));
 	}
 
 	@Inject(method = "init", at = @At("HEAD"))
