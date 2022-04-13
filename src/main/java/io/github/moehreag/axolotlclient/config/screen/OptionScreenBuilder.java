@@ -98,6 +98,7 @@ public class OptionScreenBuilder extends Screen {
     public void tick() {
         super.tick();
         if(dialog!=null && dialog.textFieldWidget!=null)dialog.textFieldWidget.tick();
+        else if(dialog instanceof ColorSelectorWidget)((ColorSelectorWidget) dialog).tick();
     }
 
     @Override
@@ -122,7 +123,7 @@ public class OptionScreenBuilder extends Screen {
                             ((BooleanOption) optionWidget.getOption()).toggle();
                             dialog.setText(I18n.translate("options."+(((BooleanOption) optionWidget.getOption()).get()?"on":"off")));
                             //client.openScreen(new OptionScreenBuilder(parent, cat, dialog));
-                        } else if(optionWidget.getOption() instanceof StringOption || optionWidget.getOption() instanceof ColorOption){
+                        } else if(optionWidget.getOption() instanceof StringOption){
                             dialog.textFieldWidget.mouseClicked(mouseX, mouseY, 0);
                             dialog.textFieldWidget.setFocused(true);
                         } else if(optionWidget.getOption() instanceof FloatOption){
@@ -133,6 +134,8 @@ public class OptionScreenBuilder extends Screen {
                             dialog.sliderWidget.setFocused(true);
                         } else if(optionWidget.getOption() instanceof EnumOption){
                             if(optionWidget.getOption() instanceof LevelHeadOption){dialog.setText (((LevelHeadOption) optionWidget.getOption()).next().toString());}
+                        } else if(optionWidget.getOption() instanceof ColorOption){
+                            ((ColorSelectorWidget)dialog).onClick(mouseX, mouseY);
                         }
                     }
                 });
@@ -212,6 +215,9 @@ public class OptionScreenBuilder extends Screen {
         if(dialog!=null) {
             if (dialog.textFieldWidget != null)
                 dialog.textFieldWidget.keyPressed(character, code);
+            else if(dialog instanceof ColorSelectorWidget){
+                ((ColorSelectorWidget) dialog).keyPressed(character, code);
+            }
         }
     }
 

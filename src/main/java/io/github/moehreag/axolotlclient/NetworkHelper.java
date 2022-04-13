@@ -2,7 +2,6 @@ package io.github.moehreag.axolotlclient;
 
 import io.github.moehreag.axolotlclient.util.ThreadExecuter;
 import net.minecraft.client.MinecraftClient;
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
@@ -34,20 +33,22 @@ public class NetworkHelper {
 
     public static void getUser(UUID uuid){
         try{
-            CloseableHttpClient client = HttpClients.createDefault();
+            CloseableHttpClient client = HttpClients.custom().disableAutomaticRetries().build();
             HttpGet get = new HttpGet("https://moehreag.duckdns.org/axolotlclient-api/?uuid="+uuid.toString());
             HttpResponse response= client.execute(get);
             String body = EntityUtils.toString(response.getEntity());
             client.close();
             if (body.contains("true")){
                 Axolotlclient.onlinePlayers  = Axolotlclient.onlinePlayers + " " + uuid;
+            } else {
+                Axolotlclient.otherPlayers = Axolotlclient.otherPlayers + " " + uuid;
             }
 
-        } catch (Exception ex){
-            ex.printStackTrace();
+        } catch (Exception ignored){
+            Axolotlclient.otherPlayers = Axolotlclient.otherPlayers + " " + uuid;
         }
 
-        Axolotlclient.otherPlayers = Axolotlclient.otherPlayers + " " + uuid.toString();
+
     }
 
     public static void setOnline() {

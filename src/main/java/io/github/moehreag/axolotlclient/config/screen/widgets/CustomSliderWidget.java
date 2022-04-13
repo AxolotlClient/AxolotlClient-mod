@@ -14,6 +14,7 @@ public class CustomSliderWidget extends ButtonWidget {
     private final float max;
     private final DecimalFormat format = new DecimalFormat("##.#");
     private final DecimalFormat intformat = new DecimalFormat("##");
+    private boolean showText = true;
     protected static final Identifier WIDGETS_LOCATION = new Identifier("axolotlclient", "textures/gui/slider.png");
 
     public CustomSliderWidget(int id, int x, int y, int width, int height, float min, float max, float f) {
@@ -64,14 +65,15 @@ public class CustomSliderWidget extends ButtonWidget {
             client.getTextureManager().bindTexture(WIDGETS_LOCATION);
             GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
             //this.drawTexture(this.x + (int)(this.progress * (float)(this.width - 8)), this.y, 0, 66, 4, height);
-            drawTexture(this.x + (int)(this.progress * (float)(this.width - 8)) + 4, this.y, 0, 0, 4, 18, 4, 18);
+            drawTexture(this.x + (int)(this.progress * (float)(this.width - 8)) + 4, this.y, 0, 0, 4, height, 4, height);
         }
     }
 
     @Override
     public void render(MinecraftClient client, int mouseX, int mouseY) {
         this.renderBg(client, mouseX, mouseY);
-        drawCenteredString(client.textRenderer, message, x+width/2, y+(height-8)/2, -1);
+        if(showText)
+            drawCenteredString(client.textRenderer, message, x+width/2, y+(height-8)/2, -1);
     }
 
     public boolean isMouseOver(MinecraftClient client, int mouseX, int mouseY) {
@@ -91,6 +93,10 @@ public class CustomSliderWidget extends ButtonWidget {
         } else {
             return false;
         }
+    }
+
+    public void setShowText(boolean show){
+        this.showText=show;
     }
 
     public void setFocused(boolean focus){

@@ -88,12 +88,13 @@ public class OptionWidget extends CustomWidget{
                     20,
                     "", DIALOG_TEXTURE, false, true, (IntegerOption) option);
         } else if(option.getType() == OptionType.COLOR){
-            return new CustomButtonWidget(5,
+            return new ColorSelectorWidget(x+width+2, y, (ColorOption)option);
+            /*return new CustomButtonWidget(5,
                     x+width+2,
                     y,
                     75,
                     20,
-                    "", DIALOG_TEXTURE, (ColorOption) option);
+                    "", DIALOG_TEXTURE, (ColorOption) option);*/
         } else if(option.getType() == OptionType.ENUM){
             return new EnumWidget(x+width+2, y, 75, 20, ((EnumOption)option).get());
         }
