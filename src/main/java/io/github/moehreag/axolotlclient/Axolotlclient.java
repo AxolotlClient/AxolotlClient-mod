@@ -3,12 +3,11 @@ package io.github.moehreag.axolotlclient;
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.config.AxolotlclientConfig;
 import io.github.moehreag.axolotlclient.config.ConfigManager;
-import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.config.options.OptionCategory;
 import io.github.moehreag.axolotlclient.modules.AbstractModule;
 import io.github.moehreag.axolotlclient.modules.hud.HudManager;
-import io.github.moehreag.axolotlclient.modules.hud.util.Color;
-import io.github.moehreag.axolotlclient.modules.levelhead.LevelHead;
+import io.github.moehreag.axolotlclient.modules.hypixel.HypixelMods;
+import io.github.moehreag.axolotlclient.modules.hypixel.levelhead.LevelHead;
 import io.github.moehreag.axolotlclient.modules.zoom.Zoom;
 import io.github.moehreag.axolotlclient.util.Util;
 import net.fabricmc.api.ModInitializer;
@@ -67,7 +66,7 @@ public class Axolotlclient implements ModInitializer {
 	public static void getModules(){
 		modules.add(new Zoom());
 		modules.add(HudManager.getINSTANCE());
-		modules.add(LevelHead.getInstance());
+		modules.add(HypixelMods.INSTANCE);
 	}
 
 	public static boolean isUsingClient(UUID uuid){
@@ -83,6 +82,7 @@ public class Axolotlclient implements ModInitializer {
 	public static void TickClient(){
 
 		HudManager.tick();
+		HypixelMods.getInstance().tick();
 
 		if(tickTime % 20 == 0){
 			if(MinecraftClient.getInstance().getCurrentServerEntry() != null){

@@ -1,26 +1,15 @@
 package io.github.moehreag.axolotlclient.mixin;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.Axolotlclient;
-import io.github.moehreag.axolotlclient.modules.levelhead.HypixelAbstractionLayer;
-import io.github.moehreag.axolotlclient.modules.levelhead.LevelHead;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.minecraft.client.render.entity.model.EntityModel;
-import net.minecraft.entity.player.PlayerEntity;
-import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Mixin(PlayerEntityRenderer.class)

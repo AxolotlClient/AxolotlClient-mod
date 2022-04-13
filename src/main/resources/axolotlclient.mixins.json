@@ -17,6 +17,8 @@
     "TextureManagerMixin",
     "GameRendererMixin",
     "ReloadableResourceManagerImplMixin",
+    "PlayerListHudMixin",
+    "ChatHudMixin",
     "ControlsOptionsScreenMixin",
     "ClientPlayerEntityMixin",
     "KeyboardInputMixin",

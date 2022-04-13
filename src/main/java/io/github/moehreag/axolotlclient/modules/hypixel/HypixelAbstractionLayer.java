@@ -1,6 +1,7 @@
-package io.github.moehreag.axolotlclient.modules.levelhead;
+package io.github.moehreag.axolotlclient.modules.hypixel;
 
 import io.github.moehreag.axolotlclient.config.options.LevelHeadOption;
+import io.github.moehreag.axolotlclient.modules.hypixel.levelhead.LevelHead;
 import io.github.moehreag.axolotlclient.util.ThreadExecuter;
 import net.hypixel.api.HypixelAPI;
 import net.hypixel.api.apache.ApacheHttpClient;
@@ -36,9 +37,9 @@ public class HypixelAbstractionLayer {
 
 
     public static void loadApiKey() {
-        API_KEY = LevelHead.getInstance().hypixel_api_key.get();
+        API_KEY = HypixelMods.getInstance().hypixel_api_key.get();
         if(API_KEY == null){
-            LevelHead.getInstance().hypixel_api_key.setDefaults();
+            HypixelMods.getInstance().hypixel_api_key.setDefaults();
             validApiKey=false;
             return;
         }

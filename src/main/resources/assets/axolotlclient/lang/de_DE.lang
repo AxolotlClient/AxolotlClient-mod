@@ -38,9 +38,21 @@ cursedConf=Cursed Options
 cursedConf.title=Cursed Options
 rotateWorld=Rotate the World
 
-levelhead=LevelHead
+hypixel-mods=Hypixel Mods
 hypixel_api_key=Hypixel API Schlüssel
+levelhead=LevelHead
 levelHeadMode=LevelHead Modus
+autogg=AutoGG
+printGG=Schreibe GG
+ggString=GG String
+printGF=Schreibe GF
+gfString=GF String
+printGLHF=Schreibe GLHF
+glhfString=GLHF String
+onHypixel=Aktiv auf Hypixel
+onBWP=Aktiv auf BedWarsPractice
+onPVPL=Aktiv auf PVPLand
+autotip=AutoTip
 
 category.axolotlclient=AxolotlClient
 

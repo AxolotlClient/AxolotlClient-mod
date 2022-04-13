@@ -2,8 +2,8 @@ package io.github.moehreag.axolotlclient.mixin;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.Axolotlclient;
-import io.github.moehreag.axolotlclient.modules.levelhead.HypixelAbstractionLayer;
-import io.github.moehreag.axolotlclient.modules.levelhead.LevelHead;
+import io.github.moehreag.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
+import io.github.moehreag.axolotlclient.modules.hypixel.levelhead.LevelHead;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.network.AbstractClientPlayerEntity;

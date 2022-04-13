@@ -2,6 +2,7 @@ package io.github.moehreag.axolotlclient.modules.sky;
 
 import com.google.gson.JsonObject;
 import com.mojang.blaze3d.platform.GlStateManager;
+import io.github.moehreag.axolotlclient.util.ThreadExecuter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
@@ -38,44 +39,44 @@ public class MCPSkyboxInstance extends SkyboxInstance {
 
         for (int i = 0; i < 6; ++i) {
 
-            if(texture[i]!=null)
+            if(texture[i]!=null) {
                 GlStateManager.bindTexture(texture[i].getGlId());
-            GlStateManager.pushMatrix();
-            if (i == 1) {
-                GlStateManager.rotatef(90.0F, 1.0F, 0.0F, 0.0F);
+                GlStateManager.pushMatrix();
+                if (i == 1) {
+                    GlStateManager.rotatef(90.0F, 1.0F, 0.0F, 0.0F);
 
+                }
+
+                if (i == 2) {
+                    GlStateManager.rotatef(-90.0F, 1.0F, 0.0F, 0.0F);
+                }
+
+                if (i == 3) {
+                    GlStateManager.rotatef(180.0F, 1.0F, 0.0F, 0.0F);
+                }
+
+                if (i == 4) {
+                    GlStateManager.rotatef(90.0F, 0.0F, 0.0F, 1.0F);
+                }
+
+                if (i == 5) {
+                    GlStateManager.rotatef(-90.0F, 0.0F, 0.0F, 1.0F);
+                }
+
+                bufferBuilder.begin(7, VertexFormats.POSITION_TEXTURE_COLOR);
+                bufferBuilder.vertex(-distance * 16, -distance * 16, -distance * 16).texture(0.0, 0.0).color(1F, 1F, 1F, alpha).next();
+                bufferBuilder.vertex(-distance * 16, -distance * 16, distance * 16).texture(0.0, 1.0).color(1F, 1F, 1F, alpha).next();
+                bufferBuilder.vertex(distance * 16, -distance * 16, distance * 16).texture(1.0, 1.0).color(1F, 1F, 1F, alpha).next();
+                bufferBuilder.vertex(distance * 16, -distance * 16, -distance * 16).texture(1.0, 0.0).color(1F, 1F, 1F, alpha).next();
+                tessellator.draw();
+                GlStateManager.popMatrix();
             }
-
-            if (i == 2) {
-                GlStateManager.rotatef(-90.0F, 1.0F, 0.0F, 0.0F);
-            }
-
-            if (i == 3) {
-                GlStateManager.rotatef(180.0F, 1.0F, 0.0F, 0.0F);
-            }
-
-            if (i == 4) {
-                GlStateManager.rotatef(90.0F, 0.0F, 0.0F, 1.0F);
-            }
-
-            if (i == 5) {
-                GlStateManager.rotatef(-90.0F, 0.0F, 0.0F, 1.0F);
-            }
-
-            bufferBuilder.begin(7, VertexFormats.POSITION_TEXTURE_COLOR);
-            bufferBuilder.vertex(-distance*16, -distance*16, -distance*16).texture(0.0, 0.0).color(1F, 1F, 1F, alpha).next();
-            bufferBuilder.vertex(-distance*16, -distance*16, distance*16).texture(0.0, 1.0).color(1F, 1F, 1F, alpha).next();
-            bufferBuilder.vertex(distance*16, -distance*16, distance*16).texture(1.0, 1.0).color(1F, 1F, 1F, alpha).next();
-            bufferBuilder.vertex(distance*16, -distance*16, -distance*16).texture(1.0, 0.0).color(1F, 1F, 1F, alpha).next();
-            tessellator.draw();
-            GlStateManager.popMatrix();
         }
     }
 
     public void loadSkybox(){
-
-        for(int i=0; i<6; i++){
-            if(texture[i]==null) {
+        for (int i = 0; i < 6; i++) {
+            if (texture[i] == null) {
                 try {
                     BufferedImage image = TextureUtil.create(MinecraftClient.getInstance().getResourceManager().getResource(textures[0]).getInputStream());
                     int width = image.getWidth();
@@ -86,9 +87,11 @@ public class MCPSkyboxInstance extends SkyboxInstance {
                     else if (i == 3 || i == 1) x = width / 3;
                     else x = (width / 3) * 2;
 
-                    if(i==0||i==3||i==2)y=0;
-                    else y=height/2;
+                    if (i == 0 || i == 3 || i == 2) y = 0;
+                    else y = height / 2;
+
                     texture[i] = new NativeImageBackedTexture(rotateToOrientation(image.getSubimage(x, y, width / 3, height / 2), i));
+
                 } catch (Exception ignored) {
                 }
             }

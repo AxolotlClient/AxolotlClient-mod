@@ -38,9 +38,21 @@ cursedConf=Lanetli Ayarlar
 cursedConf.title=Lanetli Ayarlar
 rotateWorld=Dünya'yı döndür
 
+hypixel-mods=
 levelhead=LevelHead
 hypixel_api_key=Hypixel API Anahtarı
 levelHeadMode=LevelHead Modu
+autogg=
+printGG=
+ggString=
+printGF=
+gfString=
+printGLHF=
+glhfString=
+onHypixel=
+onBWP=
+onPVPL=
+autotip=
 
 category.axolotlclient=AxolotlClient
 

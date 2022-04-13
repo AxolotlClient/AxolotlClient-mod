@@ -1,4 +1,4 @@
-package io.github.moehreag.axolotlclient.util;
+package io.github.moehreag.axolotlclient.modules.sky;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -98,7 +98,7 @@ public class SkyResourceManager{
                         "\"endFadeOut\":"+endFadeOut/2+
                         "}";
                 JsonObject object = gson.fromJson(text, JsonObject.class);
-                if(!source.contains("sunflare"))SkyboxManager.getInstance().addSkybox(new MCPSkyboxInstance(object));
+                if(!source.contains("sunflare")) SkyboxManager.getInstance().addSkybox(new MCPSkyboxInstance(object));
             } catch (IOException e) {
                 break;
             }

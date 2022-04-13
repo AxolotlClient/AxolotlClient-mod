@@ -1,6 +1,6 @@
 package io.github.moehreag.axolotlclient.mixin;
 
-import io.github.moehreag.axolotlclient.modules.levelhead.HypixelAbstractionLayer;
+import io.github.moehreag.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
