@@ -11,7 +11,9 @@ showSunMoon=Custom Sky Sun & Moon
 zoomDivisor=Zoom Divisor
 zoomSpeed=Zoom Speed
 decreaseSensitivity=Reduce Sensitivity
+dynamicFov=Dynamic FOV
 fullBright=FullBright
+
 badgeOptions=Badge Options
 badgeText=Custom Badge Text
 customBadge=Custom Badges

@@ -11,7 +11,9 @@ showSunMoon=Zeige Sonne & Mond auf eigenem Himmel
 zoomDivisor=Zoom Divisor
 zoomSpeed=Zoomgeschwindigkeit
 decreaseSensitivity=Reduziere Sensitivität
+dynamicFov=Dynamisches FOV
 fullBright=FullBright
+
 badgeOptions=Badge Optionen
 badgeText=Eigener Text als Badge
 customBadge=Benutze eigene Badge
