@@ -61,17 +61,33 @@ public class OptionScreenBuilder extends Screen {
         int lines=1;
         boolean right=false;
         this.optionWidgets.clear();
-        for(Option option:cat.getOptions()){
-            if(!Objects.equals(option.getName(), "x") && !Objects.equals(option.getName(), "y")) {
-                this.optionWidgets.add(new OptionWidget(option, this.width / 2 - (right ? -50 : 200), lines, this.height, optionWidget -> this.dialog = optionWidget.getDialog()));
+        if(cat.getOptions().size()+cat.getSubCategories().size()<=8) {
+            for (Option option : cat.getOptions()) {
+                if (!Objects.equals(option.getName(), "x") && !Objects.equals(option.getName(), "y")) {
+                    this.optionWidgets.add(new OptionWidget(option, this.width / 2 - (right ? -50 : 200), lines, this.height, optionWidget -> this.dialog = optionWidget.getDialog()));
+                    if (right) lines++;
+                    right = !right;
+                }
+            }
+            for (OptionCategory category : cat.getSubCategories()) {
+                this.buttons.add(new CategoryWidget(category, this.width / 2 - (right ? -50 : 200), lines, 150, this.height));
                 if (right) lines++;
                 right = !right;
             }
-        }
-        for(OptionCategory category:cat.getSubCategories()){
-            this.buttons.add(new CategoryWidget(category, this.width/2 - (right?-50:200), lines, this.height));
-            if(right)lines++;
-            right=!right;
+        } else {
+            int row=1;
+            for (Option option : cat.getOptions()) {
+                if (!Objects.equals(option.getName(), "x") && !Objects.equals(option.getName(), "y")) {
+                    this.optionWidgets.add(new OptionWidget(option, this.width / 2 - (row==3 ? -100 : (row==2?50:200)), lines, 100, this.height, optionWidget -> this.dialog = optionWidget.getDialog()));
+                    if (row==3) {row=0;lines++;}
+                    row++;
+                }
+            }
+            for (OptionCategory category : cat.getSubCategories()) {
+                this.buttons.add(new CategoryWidget(category, this.width / 2 - (row==3 ? -100 : (row==2?50:200)), lines,100, this.height));
+                if (row==3) {row=0;lines++;}
+                row++;
+            }
         }
 
         back = new ButtonWidget(0, this.width/2-75, (this.height/6) *5, 150, 20, I18n.translate("back")){

@@ -26,6 +26,7 @@ public class AxolotlclientConfig {
     public final FloatOption zoomDivisor = new FloatOption("zoomDivisor", 1F, 10F, 4F);
     public final IntegerOption zoomSpeed = new IntegerOption("zoomSpeed", 5, 1, 10);
     public final BooleanOption decreaseSensitivity = new BooleanOption("decreaseSensitivity", true);
+    public final BooleanOption dynamicFOV = new BooleanOption("dynamicFov", true);
     public final BooleanOption fullBright = new BooleanOption("fullBright", false);
     public final IntegerOption chromaSpeed = new IntegerOption("chromaSpeed", 20, 10, 50);
 
@@ -91,6 +92,7 @@ public class AxolotlclientConfig {
         general.add(zoomDivisor);
         general.add(zoomSpeed);
         general.add(decreaseSensitivity);
+        general.add(dynamicFOV);
         general.add(fullBright);
         general.add(chromaSpeed);
     }

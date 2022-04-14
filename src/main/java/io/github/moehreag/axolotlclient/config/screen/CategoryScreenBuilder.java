@@ -48,7 +48,7 @@ public class CategoryScreenBuilder extends Screen {
         right=false;
         lines=1;
         for(OptionCategory category:categories){
-            this.buttons.add(new CategoryWidget(category, this.width/2 - (right?-50:200), lines, this.height));
+            this.buttons.add(new CategoryWidget(category, this.width/2 - (right?-50:200), lines, 150, this.height));
             if(right)lines++;
             right=!right;
         }

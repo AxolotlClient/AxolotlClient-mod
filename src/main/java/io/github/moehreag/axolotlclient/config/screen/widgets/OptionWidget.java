@@ -17,13 +17,17 @@ public class OptionWidget extends CustomWidget{
         this.option = option;
     }
 
+    public OptionWidget(Option option, int row, int line, int width, int height, CustomWidget.action action){
+        super(row, height/3 + (line*20+line*2), action);
+        this.option = option;
+        this.width=width;
+    }
+
     public void render(MinecraftClient client, int mouseX, int mouseY){
         this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 
         client.getTextureManager().bindTexture(BUTTON_TEXTURE);
-        drawTexture(x, y, 0, 0,width, height, 150, 20);
-        /*client.getTextureManager().bindTexture(CONFIGURE_TEXTURE);
-        drawTexture(x+5, (int) (y+2.5), 0,0, 15, 15, 15, 15);*/
+        drawTexture(x, y, 0, 0,width, height, width, height);
         drawCenteredString(this.client.textRenderer, option.getTranslatedName(), (int) (x+width/(float)2), y+5, -1);
 
     }

@@ -1,8 +1,12 @@
 package io.github.moehreag.axolotlclient.mixin;
 
 import io.github.moehreag.axolotlclient.modules.hud.HudManager;
+import io.github.moehreag.axolotlclient.modules.hud.gui.hud.ActionBarHud;
+import io.github.moehreag.axolotlclient.modules.hud.gui.hud.BossBarHud;
 import io.github.moehreag.axolotlclient.modules.hud.gui.hud.CrosshairHud;
 import io.github.moehreag.axolotlclient.modules.hud.gui.hud.ScoreboardHud;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.Window;
 import net.minecraft.scoreboard.ScoreboardObjective;
@@ -31,5 +35,23 @@ public abstract class InGameHudMixin {
         CrosshairHud hud = (CrosshairHud) HudManager.getINSTANCE().get(CrosshairHud.ID);
         if(hud.isEnabled()) return false;
         return method_9429();
+    }
+
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Ljava/lang/String;III)I", ordinal = 0))
+    public int actionBar(TextRenderer instance, String text, int x, int y, int color){
+        ActionBarHud hud = (ActionBarHud) HudManager.getINSTANCE().get(ActionBarHud.ID);
+        if(hud.isEnabled()){
+            hud.setActionBar(text, color);
+            return 0;
+        }
+        return instance.draw(text, x, y, color);
+    }
+
+    @Inject(method = "renderBossBar", at = @At("HEAD"), cancellable = true)
+    public void CustomBossBar(CallbackInfo ci){
+        BossBarHud hud = (BossBarHud) HudManager.getINSTANCE().get(BossBarHud.ID);
+        if(hud.isEnabled()){
+            ci.cancel();
+        }
     }
 }

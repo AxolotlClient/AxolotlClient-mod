@@ -111,6 +111,8 @@ public abstract class GameRendererMixin {
         Zoom.manageZoom();
         if(Zoom.isZoomed()||Zoom.isFadingOut()){
             cir.setReturnValue(Zoom.getFov(cir.getReturnValue()));
+        } else if(!Axolotlclient.CONFIG.dynamicFOV.get()) {
+            cir.setReturnValue(client.options.fov);
         }
     }
 

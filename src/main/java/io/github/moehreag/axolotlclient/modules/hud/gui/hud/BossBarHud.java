@@ -1,13 +1,18 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.config.options.BooleanOption;
+import io.github.moehreag.axolotlclient.config.options.ColorOption;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
+import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.entity.boss.BossBar;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -18,100 +23,68 @@ import java.util.List;
 public class BossBarHud extends AbstractHudEntry {
 
     public static final Identifier ID = new Identifier("kronhud", "bossbarhud");
-    private static final Identifier BARS_TEXTURE = new Identifier("textures/gui/bars.png");
-    /*private final BossBar placeholder = new CustomBossBar(new LiteralText("Boss bar"), BossBar.Color.WHITE, BossBar.Style.PROGRESS);
-    private final BossBar placeholder2 = Util.make(() -> {
-        BossBar boss = new CustomBossBar(new LiteralText("More boss bars..."), BossBar.Color.PURPLE, BossBar.Style.PROGRESS);
-        boss.setPercent(0.45F);
-        return boss;
-    });
-
-    private Map<UUID, ClientBossBar> bossBars;*/
+    private static final Identifier BARS_TEXTURE = new Identifier("textures/gui/icons.png");
+    
     private final MinecraftClient client;
-    private BooleanOption text = new BooleanOption("text", true);
-    private BooleanOption bar = new BooleanOption("bar", true);
+    private final ColorOption barColor = new ColorOption("barColor", "#FFFFFFFF");
+    private final BooleanOption text = new BooleanOption("text", true);
+    private final BooleanOption bar = new BooleanOption("bar", true);
     // TODO custom colour
 
     public BossBarHud() {
-        super(184, 80);
+        super(186, 20);
         client = MinecraftClient.getInstance();
     }
 
     @Override
     public void render() {
+        scale();
+        DrawPosition pos = getPos();
 
+        if (BossBar.name != null && BossBar.framesToLive > 0) {
+            client.getTextureManager().bindTexture(BARS_TEXTURE);
+            --BossBar.framesToLive;
+            if(bar.get()) {
+                GlStateManager.color4f(barColor.get().getRed(), barColor.get().getGreen(), barColor.get().getBlue(), barColor.get().getAlpha());
+                drawTexture(pos.x + 2, pos.y + 12, 0, 74, 182, 5);
+                drawTexture(pos.x + 2, pos.y + 12, 0, 74, 182, 5);
+                if (BossBar.percent * 183F > 0) {
+                    GlStateManager.color4f(barColor.get().getRed(), barColor.get().getGreen(), barColor.get().getBlue(), barColor.get().getAlpha());
+                    drawTexture(pos.x + 2, pos.y + 12, 0, 79, (int) (BossBar.percent * 183F), 5);
+                }
+            }
+
+            GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+            if(text.get()) {
+                String string = BossBar.name;
+                client.textRenderer.drawWithShadow(string,
+                        (float) ((pos.x + width / 2) - client.textRenderer.getStringWidth(BossBar.name) / 2), (float) (pos.y + 2), textColor.get().getAsInt());
+            }
+
+        }
+        GlStateManager.popMatrix();
     }
 
     @Override
     public void renderPlaceholder() {
-
-    }
-
-    /*public void setBossBars() {
-        bossBars = ((AccessorBossBarHud) client.inGameHud.getBossBarHud()).getBossBars();
-    }
-
-    @Override
-    public void render(MatrixStack matrices) {
-        setBossBars();
-        if (this.bossBars.isEmpty()) {
-            return;
-        }
-        matrices.push();
-        scale(matrices);
-        DrawPosition scaledPos = getPos();
-
-        int by = 12;
-        for (ClientBossBar bossBar : bossBars.values()) {
-            renderBossBar(matrices, scaledPos.x(), by + scaledPos.y(), bossBar);
-            by = by + 19;
-            if (by > height) {
-                break;
-            }
-        }
-        matrices.pop();
-    }
-
-    @Override
-    public void renderPlaceholder(MatrixStack matrices) {
-        matrices.push();
-        renderPlaceholderBackground(matrices);
-        scale(matrices);
+        renderPlaceholderBackground();
+        scale();
         DrawPosition pos = getPos();
-        outlineRect(matrices, getBounds(), Color.BLACK);
-        renderBossBar(matrices, pos.x(), pos.y() + 12, placeholder);
-        renderBossBar(matrices, pos.x(), pos.y() + 31, placeholder2);
+        //outlineRect(getBounds(), Color.BLACK);
+
+        client.getTextureManager().bindTexture(BARS_TEXTURE);
+        GlStateManager.color4f(barColor.get().getRed(), barColor.get().getGreen(), barColor.get().getBlue(), barColor.get().getAlpha());
+        drawTexture(pos.x+2, pos.y+12, 0, 74, 182, 5);
+        drawTexture(pos.x+2, pos.y+12, 0, 79, 183, 5);
+
+        GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        client.textRenderer.drawWithShadow("Boss Name",
+                (float)((pos.x+width/2)- client.textRenderer.getStringWidth("Boss Name") / 2),
+                (float)(pos.y +3), textColor.get().getAsInt());
+        
         hovered = false;
-        matrices.pop();
+        GlStateManager.popMatrix();
     }
-
-    private void renderBossBar(MatrixStack matrices, int x, int y, BossBar bossBar) {
-        RenderSystem.setShaderTexture(0, BARS_TEXTURE);
-        if (bar.getBooleanValue()) {
-            DrawableHelper.drawTexture(matrices, x, y, 0, bossBar.getColor().ordinal() * 5 * 2, 182, 5, 256, 256);
-            if (bossBar.getStyle() != BossBar.Style.PROGRESS) {
-                DrawableHelper.drawTexture(matrices, x, y, 0, 80 + (bossBar.getStyle().ordinal() - 1) * 5 * 2, 182, 5, 256, 256);
-            }
-
-            int i = (int) (bossBar.getPercent() * 183.0F);
-            if (i > 0) {
-                DrawableHelper.drawTexture(matrices, x, y, 0, bossBar.getColor().ordinal() * 5 * 2 + 5, i, 5, 256, 256);
-                if (bossBar.getStyle() != BossBar.Style.PROGRESS) {
-                    DrawableHelper.drawTexture(matrices, x, y, 0, 80 + (bossBar.getStyle().ordinal() - 1) * 5 * 2 + 5, i, 5, 256, 256);
-                }
-            }
-        }
-        if (text.getBooleanValue()) {
-            Text text = bossBar.getName();
-            float textX = x + ((float) width / 2) - ((float) client.textRenderer.getWidth(text) / 2);
-            float textY = y - 9;
-            if (shadow.getBooleanValue()) {
-                client.textRenderer.drawWithShadow(matrices, text, textX, textY, textColor.getColor().color());
-            } else {
-                client.textRenderer.draw(matrices, text, textX, textY, textColor.getColor().color());
-            }
-        }
-    }*/
 
     @Override
     public Identifier getId() {
@@ -127,14 +100,9 @@ public class BossBarHud extends AbstractHudEntry {
     public void addConfigOptions(List<Option> options) {
         super.addConfigOptions(options);
         options.add(text);
-        //options.add(textColor);
+        options.add(textColor);
         options.add(shadow);
         options.add(bar);
+        options.add(barColor);
     }
-
-    /*public static class CustomBossBar extends BossBar {
-        /*public CustomBossBar(Text name, Color color, Style style) {
-            super(MathHelper.randomUuid(), name, color, style);
-        }
-    }*/
 }

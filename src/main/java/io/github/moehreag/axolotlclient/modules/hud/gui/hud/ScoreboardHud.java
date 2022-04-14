@@ -40,7 +40,7 @@ public class ScoreboardHud extends AbstractHudEntry {
     private final MinecraftClient client = MinecraftClient.getInstance();
     
     public ScoreboardHud() {
-        super(75, 146);
+        super(200, 146);
     }
 
     @Override
@@ -106,7 +106,7 @@ public class ScoreboardHud extends AbstractHudEntry {
             formattedText = Team.decorateName(team, scoreboardPlayerScore.getPlayerName());
             scoresWText.add(new Pair<>(scoreboardPlayerScore, formattedText));
         }
-        maxWidth = maxWidth + 2;
+        maxWidth++;
 
         if (maxWidth > width) {
             maxWidth = 200;
