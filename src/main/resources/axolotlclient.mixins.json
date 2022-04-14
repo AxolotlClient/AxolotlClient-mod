@@ -19,6 +19,7 @@
     "ReloadableResourceManagerImplMixin",
     "PlayerListHudMixin",
     "ChatHudMixin",
+    "InGameHudMixin",
     "ControlsOptionsScreenMixin",
     "ClientPlayerEntityMixin",
     "KeyboardInputMixin",

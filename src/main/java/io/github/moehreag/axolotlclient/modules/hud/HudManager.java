@@ -62,6 +62,9 @@ public class HudManager extends AbstractModule {
         add(new IPHud());
         add(new iconHud());
         add(new SpeedHud());
+        add(new ScoreboardHud());
+        add(new CrosshairHud());
+        add(new CoordsHud());
 
         entries.forEach((identifier, abstractHudEntry) -> abstractHudEntry.init());
     }

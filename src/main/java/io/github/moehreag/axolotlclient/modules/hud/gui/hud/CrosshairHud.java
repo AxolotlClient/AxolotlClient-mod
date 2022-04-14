@@ -1,8 +1,22 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
+import com.mojang.blaze3d.platform.GlStateManager;
+import io.github.moehreag.axolotlclient.config.options.BooleanOption;
+import io.github.moehreag.axolotlclient.config.options.ColorOption;
+import io.github.moehreag.axolotlclient.config.options.CrosshairHudOption;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
+import io.github.moehreag.axolotlclient.modules.hud.util.Color;
+import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
+import io.github.moehreag.axolotlclient.modules.hud.util.Rectangle;
+import net.minecraft.block.ChestBlock;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.util.Window;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import java.util.List;
 
@@ -15,157 +29,70 @@ import java.util.List;
 public class CrosshairHud extends AbstractHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "crosshairhud");
 
-    /*private KronOptionList type = new KronOptionList("type", ID.getPath(), Crosshair.CROSS);
-    private KronBoolean showInF5 = new KronBoolean("showInF5", ID.getPath(), false);
-    private KronColor defaultColor = new KronColor("defaultcolor", ID.getPath(), "#FFFFFFFF");
-    private KronColor entityColor = new KronColor("entitycolor", ID.getPath(), Color.SELECTOR_RED.toString());
-    private KronColor containerColor = new KronColor("blockcolor", ID.getPath(), Color.SELECTOR_BLUE.toString());
-    private KronColor attackIndicatorBackgroundColor = new KronColor("attackindicatorbg", ID.getPath(),
-            "#FF141414");
-    private KronColor attackIndicatorForegroundColor = new KronColor("attackindicatorfg", ID.getPath(),
-            "#FFFFFFFF");
-*/
+    private final CrosshairHudOption type = new CrosshairHudOption("type");
+    private final BooleanOption showInF5 = new BooleanOption("showInF5", false);
+    private final ColorOption defaultColor = new ColorOption("defaultcolor",  "#FFFFFFFF");
+    private final ColorOption entityColor = new ColorOption("entitycolor", Color.SELECTOR_RED);
+    private final ColorOption containerColor = new ColorOption("blockcolor", Color.SELECTOR_BLUE);
+
     public CrosshairHud() {
         super(17, 17);
     }
 
     @Override
-    public void render() {
-
-    }
-
-    /*@Override
     protected double getDefaultX() {
         return 0.5;
     }
 
+    //Direction is not available since it's implemented completely different and I couldn't get it to work...
     @Override
     protected float getDefaultY() {
         return 0.5F;
     }
 
     @Override
-    public void render(MatrixStack matrices) {
-        if(!client.options.getPerspective().isFirstPerson() && !showInF5.getBooleanValue())return;
+    public void render() {
+        if (!(client.options.perspective == 0) && !showInF5.get()) return;
 
-        matrices.push();
-        scale(matrices);
+        scale();
         DrawPosition pos = getPos().subtract(0, -1);
         Color color = getColor();
-        if (type.getOptionListValue() == Crosshair.DOT) {
-            fillRect(matrices, new Rectangle(pos.x() + (width / 2) - 2, pos.y() + (height / 2) - 2, 3, 3), color);
-        } else if (type.getOptionListValue() == Crosshair.CROSS) {
-            fillRect(matrices, new Rectangle(pos.x() + (width / 2) - 6, pos.y() + (height / 2) - 1, 6, 1), color);
-            fillRect(matrices, new Rectangle(pos.x() + (width / 2), pos.y() + (height / 2) - 1, 5, 1), color);
-            fillRect(matrices, new Rectangle(pos.x() + (width / 2) - 1, pos.y() + (height / 2) - 6, 1, 6), color);
-            fillRect(matrices, new Rectangle(pos.x() + (width / 2) - 1, pos.y() + (height / 2), 1, 5), color);
-        } else if (type.getOptionListValue() == Crosshair.DIRECTION) {
-            Camera camera = this.client.gameRenderer.getCamera();
-            MatrixStack matrixStack = RenderSystem.getModelViewStack();
-            matrixStack.push();
-            matrixStack.translate(getX() + ((float) width / 2), getY() + ((float) height / 2), 0);
-            matrixStack.multiply(Vec3f.NEGATIVE_X.getDegreesQuaternion(camera.getPitch()));
-            matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(camera.getYaw()));
-            matrixStack.scale(-getScale(), -getScale(), getScale());
-            RenderSystem.applyModelViewMatrix();
-            RenderSystem.renderCrosshair(10);
-            matrixStack.pop();
-            RenderSystem.applyModelViewMatrix();
-        } else if (type.getOptionListValue() == Crosshair.TEXTURE) {
-            RenderUtils.bindTexture(DrawableHelper.GUI_ICONS_TEXTURE);
+        if (type.get() == CrosshairHudOption.CrosshairOption.DOT) {
+            fillRect(new Rectangle(pos.x + (width / 2) - 1, pos.y + (height / 2) - 2, 3, 3), color);
+        } else if (type.get() == CrosshairHudOption.CrosshairOption.CROSS) {
+            fillRect(new Rectangle(pos.x + (width / 2) - 5, pos.y + (height / 2) - 1, 6, 1), color);
+            fillRect(new Rectangle(pos.x + (width / 2) + 1, pos.y + (height / 2) - 1, 5, 1), color);
+            fillRect(new Rectangle(pos.x + (width / 2), pos.y + (height / 2) - 6, 1, 6), color);
+            fillRect(new Rectangle(pos.x + (width / 2), pos.y + (height / 2), 1, 5), color);
+        } else if (type.get() == CrosshairHudOption.CrosshairOption.TEXTURE) {
+            MinecraftClient.getInstance().getTextureManager().bindTexture(DrawableHelper.GUI_ICONS_TEXTURE);
 
             // Draw crosshair
-            RenderUtils.color((float) color.red() / 255, (float) color.green() / 255, (float) color.blue() / 255, (float) color.alpha() / 255);
-            client.inGameHud.drawTexture(matrices, (int) (((client.getWindow().getScaledWidth() / getScale()) - 15) / 2), (int) (((client.getWindow().getScaledHeight() / getScale()) - 15) / 2), 0, 0, 15, 15);
-            RenderUtils.color(1, 1, 1, 1);
+            GlStateManager.color4f((float) color.getRed() / 255, (float) color.getGreen() / 255, (float) color.getBlue() / 255, (float) color.getAlpha() / 255);
+            client.inGameHud.drawTexture((int) (((new Window(client).getScaledWidth() / getScale()) - 14) / 2),
+                    (int) (((new Window(client).getScaledHeight() / getScale()) - 14) / 2), 0, 0, 16, 16);
+            GlStateManager.color4f(1, 1, 1, 1);
 
-            // Draw attack indicator
-            if (this.client.options.attackIndicator == AttackIndicator.CROSSHAIR) {
-                float progress = this.client.player.getAttackCooldownProgress(0.0F);
 
-                // Whether a cross should be displayed under the indicator
-                boolean targetingEntity = false;
-                if (this.client.targetedEntity != null && this.client.targetedEntity instanceof LivingEntity
-                        && progress >= 1.0F) {
-                    targetingEntity = this.client.player.getAttackCooldownProgressPerTick() > 5.0F;
-                    targetingEntity &= this.client.targetedEntity.isAlive();
-                }
-
-                int x = (int) ((client.getWindow().getScaledWidth() / getScale()) / 2 - 8);
-                int y = (int) ((client.getWindow().getScaledHeight() / getScale()) / 2 - 7 + 16);
-
-                if (targetingEntity) {
-                    client.inGameHud.drawTexture(matrices, x, y, 68, 94, 16, 16);
-                } else if (progress < 1.0F) {
-                    int k = (int)(progress * 17.0F);
-                    client.inGameHud.drawTexture(matrices, x, y, 36, 94, 16, 4);
-                    client.inGameHud.drawTexture(matrices, x, y, 52, 94, k, 4);
-                }
-            }
         }
-        if (this.client.options.attackIndicator == AttackIndicator.CROSSHAIR) {
-            float progress = this.client.player.getAttackCooldownProgress(0.0F);
-            if (progress != 1.0F) {
-                fill(matrices.peek().getPositionMatrix(), pos.x() + (width / 2) - 6, pos.y() + (height / 2) + 9, 11, 1,
-                        attackIndicatorBackgroundColor.getColor().color());
-                fill(matrices.peek().getPositionMatrix(), pos.x() + (width / 2) - 6, pos.y() + (height / 2) + 9,
-                        progress * 11, 1, attackIndicatorForegroundColor.getColor().color());
-            }
-        }
-        matrices.pop();
-    }
-
-    private static void fill(Matrix4f matrix, float x, float y, float width, float height, int color) {
-        float x2 = x + width;
-        float y2 = y + height;
-        float swap;
-        if (x < x2) {
-            swap = x;
-            x = x2;
-            x2 = swap;
-        }
-
-        if (y < y2) {
-            swap = y;
-            y = y2;
-            y2 = swap;
-        }
-
-        float alpha = (float) (color >> 24 & 255) / 255.0F;
-        float r = (float) (color >> 16 & 255) / 255.0F;
-        float g = (float) (color >> 8 & 255) / 255.0F;
-        float b = (float) (color & 255) / 255.0F;
-        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
-        RenderSystem.enableBlend();
-        RenderSystem.disableTexture();
-        RenderSystem.defaultBlendFunc();
-        bufferBuilder.begin(DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-        bufferBuilder.vertex(matrix, x, y2, 0.0F).color(r, g, b, alpha).next();
-        bufferBuilder.vertex(matrix, x2, y2, 0.0F).color(r, g, b, alpha).next();
-        bufferBuilder.vertex(matrix, x2, y, 0.0F).color(r, g, b, alpha).next();
-        bufferBuilder.vertex(matrix, x, y, 0.0F).color(r, g, b, alpha).next();
-        bufferBuilder.end();
-        BufferRenderer.draw(bufferBuilder);
-        RenderSystem.enableTexture();
-        RenderSystem.disableBlend();
+        GlStateManager.popMatrix();
     }
 
     public Color getColor() {
-        HitResult hit = client.crosshairTarget;
-        if (hit.getType() == null) {
-            return defaultColor.getColor();
-        } else if (hit.getType() == HitResult.Type.ENTITY) {
-            return entityColor.getColor();
-        } else if (hit.getType() == HitResult.Type.BLOCK) {
-            BlockPos blockPos = ((BlockHitResult) hit).getBlockPos();
+        HitResult hit = client.result;
+        if (hit.type == null) {
+            return defaultColor.get();
+        } else if (hit.type == HitResult.Type.ENTITY) {
+            return entityColor.get();
+        } else if (hit.type == HitResult.Type.BLOCK) {
+            BlockPos blockPos = hit.getBlockPos();
             World world = this.client.world;
-            if (world.getBlockState(blockPos).createScreenHandlerFactory(world, blockPos) != null || world.getBlockState(blockPos).getBlock() instanceof AbstractChestBlock<?>) {
-                return containerColor.getColor();
+            if (world.getBlockState(blockPos).getBlock() != null || world.getBlockState(blockPos).getBlock() instanceof ChestBlock) {
+                return containerColor.get();
             }
         }
-        return defaultColor.getColor();
+        return defaultColor.get();
     }
-*/
     @Override
     public void renderPlaceholder() {
         // Shouldn't need this...
@@ -184,60 +111,11 @@ public class CrosshairHud extends AbstractHudEntry {
     @Override
     public void addConfigOptions(List<Option> options) {
         super.addConfigOptions(options);
-        /*options.add(type);
+        options.add(type);
         options.add(showInF5);
         options.add(defaultColor);
         options.add(entityColor);
         options.add(containerColor);
-        options.add(attackIndicatorBackgroundColor);
-        options.add(attackIndicatorForegroundColor);*/
     }
-
-    /*@AllArgsConstructor
-    public enum Crosshair implements IConfigOptionListEntry {
-        CROSS("cross"),
-        DOT("dot"),
-        DIRECTION("direction"),
-        TEXTURE("texture");
-
-        private String value;
-
-        @Override
-        public String getStringValue() {
-            return value;
-        }
-
-        @Override
-        public String getDisplayName() {
-            return StringUtils.translate("option.kronhud." + ID.getPath() + "." + value);
-        }
-
-        @Override
-        public IConfigOptionListEntry cycle(boolean forwards) {
-            int id = this.ordinal();
-            if (forwards) {
-                id++;
-            } else {
-                id--;
-            }
-            if (id >= values().length) {
-                id = 0;
-            } else if (id < 0) {
-                id = values().length - 1;
-            }
-            return values()[id % values().length];
-        }
-
-        @Override
-        public IConfigOptionListEntry fromString(String str) {
-            for (Crosshair crosshair : values()) {
-                if (crosshair.value.equals(str)) {
-                    return crosshair;
-                }
-            }
-            return CROSS;
-        }
-
-    }*/
 
 }

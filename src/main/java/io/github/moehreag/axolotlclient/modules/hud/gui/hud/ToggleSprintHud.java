@@ -6,7 +6,6 @@ import io.github.moehreag.axolotlclient.config.ConfigManager;
 import io.github.moehreag.axolotlclient.config.options.BooleanOption;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.config.options.StringOption;
-import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
 import net.legacyfabric.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.options.KeyBinding;
@@ -15,7 +14,7 @@ import net.minecraft.util.Identifier;
 
 import java.util.List;
 
-public class ToggleSprintHud extends AbstractHudEntry {
+public class ToggleSprintHud extends CleanHudEntry {
 
     public static final Identifier ID = new Identifier("togglesprint");
     private final BooleanOption toggleSprint = new BooleanOption("toggleSprint", false);
@@ -41,28 +40,8 @@ public class ToggleSprintHud extends AbstractHudEntry {
     }
 
     @Override
-    public void render() {
-        scale();
-        DrawPosition pos = getPos();
-        if(chroma.get())GlStateManager.color4f(textColor.getChroma().getRed(), textColor.getChroma().getGreen(), textColor.getChroma().getBlue(), 1F);
-        if (background.get()) {
-            fillRect(getBounds(), backgroundColor.get());
-        }
-        drawCenteredString(client.textRenderer, getText(), new DrawPosition(pos.x + (Math.round(width) / 2),
-                pos.y + (Math.round((float) height / 2)) - 4), chroma.get()? textColor.getChroma() : textColor.get(), shadow.get());
-        GlStateManager.popMatrix();
-    }
-
-    @Override
-    public void renderPlaceholder() {
-        renderPlaceholderBackground();
-        scale();
-        DrawPosition pos = getPos();
-        drawCenteredString(client.textRenderer, I18n.translate("sprinting_toggled"),
-                new DrawPosition(pos.x + (width / 2),
-                        pos.y + (height / 2) - 4), textColor.get(), shadow.get());
-        GlStateManager.popMatrix();
-        hovered = false;
+    public String getPlaceholder() {
+        return placeholder.get();
     }
 
     @Override
@@ -75,7 +54,8 @@ public class ToggleSprintHud extends AbstractHudEntry {
         return true;
     }
 
-    public String getText(){
+    @Override
+    public String getValue(){
 
         if(client.options.keySneak.isPressed())return I18n.translate("sneaking_pressed");
         if(client.options.keySprint.isPressed())return I18n.translate("sprinting_pressed");
@@ -86,7 +66,6 @@ public class ToggleSprintHud extends AbstractHudEntry {
         if(toggleSprint.get() && sprintToggled.get()){
              return I18n.translate("sprinting_toggled");
         }
-
         return placeholder.get();
     }
 
@@ -112,11 +91,6 @@ public class ToggleSprintHud extends AbstractHudEntry {
     @Override
     public void addConfigOptions(List<Option> options) {
         super.addConfigOptions(options);
-        options.add(textColor);
-        options.add(chroma);
-        options.add(shadow);
-        options.add(background);
-        options.add(backgroundColor);
         options.add(toggleSprint);
         options.add(toggleSneak);
         options.add(placeholder);

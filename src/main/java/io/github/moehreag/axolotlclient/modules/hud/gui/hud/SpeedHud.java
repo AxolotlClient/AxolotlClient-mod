@@ -3,6 +3,7 @@ package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.class_321;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 
@@ -21,6 +22,8 @@ public class SpeedHud extends CleanHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "speedhud");
     private final static NumberFormat FORMATTER = new DecimalFormat("#0.00");
 
+    private Vec3d lastTickPos = new Vec3d(0, 0, 0);
+
     @Override
     public Identifier getId() {
         return ID;
@@ -28,9 +31,25 @@ public class SpeedHud extends CleanHudEntry {
 
     @Override
     public String getValue() {
-        Vec3d vec = class_321.method_9372(MinecraftClient.getInstance().player, 0.2);
-        double speed = vec.length();
-        return FORMATTER.format(speed) + " BPT";
+        PlayerEntity player = MinecraftClient.getInstance().player;
+        double dx = player.getPos().x - lastTickPos.x;
+        double dy = player.getPos().y - lastTickPos.y;
+        double dz = player.getPos().z - lastTickPos.z;
+        double speed = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+        return FORMATTER.format(speed*20) + " m/s";
+    }
+
+    @Override
+    public boolean tickable() {
+        return true;
+    }
+
+    @Override
+    public void tick() {
+        if(MinecraftClient.getInstance().player!=null) {
+            lastTickPos = MinecraftClient.getInstance().player.getPos();
+        }
     }
 
     @Override
@@ -40,6 +59,6 @@ public class SpeedHud extends CleanHudEntry {
 
     @Override
     public String getPlaceholder() {
-        return "0.95 BPT";
+        return "4.67 m/s";
     }
 }
