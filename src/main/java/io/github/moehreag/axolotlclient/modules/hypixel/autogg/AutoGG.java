@@ -36,6 +36,7 @@ public class AutoGG implements AbstractHypixelMod {
     private final BooleanOption onHypixel = new BooleanOption("onHypixel", false);
     private final BooleanOption onBWP = new BooleanOption("onBWP", false);
     private final BooleanOption onPVPL = new BooleanOption("onPVPL", false);
+    private final BooleanOption onMMC = new BooleanOption("onMMC", false);
 
     private final List<String> hypixelGGStrings = new ArrayList<>();
     private final List<String> hypixelGFStrings = new ArrayList<>();
@@ -48,6 +49,10 @@ public class AutoGG implements AbstractHypixelMod {
     private final List<String> pvpLandGGStrings = new ArrayList<>();
     private final List<String> pvpLandGFStrings = new ArrayList<>();
     private final List<String> pvpLandGLHFStrings = new ArrayList<>();
+
+    private final List<String> minemenGGStrings = new ArrayList<>();
+    private final List<String> minemenGFStrings = new ArrayList<>();
+    private final List<String> minemenGLHFStrings = new ArrayList<>();
 
     @Override
     public void init() {
@@ -62,6 +67,10 @@ public class AutoGG implements AbstractHypixelMod {
         populatePvpLandGGStrings();
         populatePvpLandGFStrings();
 
+        populateMinemenGGStrings();
+        populateMinemenGFStrings();
+        populateMinemenGLHFStrings();
+
         category.add(gg);
         category.add(ggString);
         category.add(gf);
@@ -71,6 +80,7 @@ public class AutoGG implements AbstractHypixelMod {
         category.add(onHypixel);
         category.add(onBWP);
         category.add(onPVPL);
+        category.add(onMMC);
 
     }
 
@@ -151,6 +161,20 @@ public class AutoGG implements AbstractHypixelMod {
         pvpLandGFStrings.add("slain by " + client.getSession().getUsername());
     }
 
+
+
+    private void populateMinemenGGStrings() {
+        minemenGGStrings.add("Match Results");
+    }
+
+    private void populateMinemenGFStrings() {
+        minemenGFStrings.add("killed by " + client.getSession().getUsername() + "!");
+    }
+
+    private void populateMinemenGLHFStrings() {
+        minemenGLHFStrings.add("1...");
+    }
+
     public void onMessage(Text message) {
         if (onHypixel.get() && client.getCurrentServerEntry().address.contains("hypixel")) {
             if (gf.get()) {
@@ -182,6 +206,20 @@ public class AutoGG implements AbstractHypixelMod {
             if (glhf.get()) {
                 processChat(message, pvpLandGLHFStrings, glhfString.get());
             }
+        } else if (onMMC.get() && client.getCurrentServerEntry().address.contains("minemen.club")) {
+            if (gf.get()) {
+                if (minemenGFStrings.size() == 0) populateMinemenGFStrings();
+                processChat(message, minemenGFStrings, "gf");
+            }
+            if (gg.get()) {
+                if (minemenGGStrings.size() == 0) populateMinemenGGStrings();
+                processChat(message, minemenGGStrings, "gg");
+            }
+            if (glhf.get()) {
+                if (minemenGLHFStrings.size() == 0) populateMinemenGLHFStrings();
+                processChat(message, minemenGLHFStrings, "glhf");
+            }
+
         }
     }
 }

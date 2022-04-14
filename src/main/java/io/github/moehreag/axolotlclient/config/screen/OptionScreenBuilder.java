@@ -133,7 +133,7 @@ public class OptionScreenBuilder extends Screen {
                         } else if(optionWidget.getOption() instanceof IntegerOption){
                             dialog.sliderWidget.setFocused(true);
                         } else if(optionWidget.getOption() instanceof EnumOption){
-                            if(optionWidget.getOption() instanceof LevelHeadOption){dialog.setText (((LevelHeadOption) optionWidget.getOption()).next().toString());}
+                            dialog.setText(((EnumOption) optionWidget.getOption()).next().toString());
                         } else if(optionWidget.getOption() instanceof ColorOption){
                             ((ColorSelectorWidget)dialog).onClick(mouseX, mouseY);
                         }

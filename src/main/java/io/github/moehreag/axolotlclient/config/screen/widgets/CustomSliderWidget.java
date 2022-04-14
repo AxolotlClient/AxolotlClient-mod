@@ -15,6 +15,7 @@ public class CustomSliderWidget extends ButtonWidget {
     private final DecimalFormat format = new DecimalFormat("##.#");
     private final DecimalFormat intformat = new DecimalFormat("##");
     private boolean showText = true;
+    private boolean integer = false;
     protected static final Identifier WIDGETS_LOCATION = new Identifier("axolotlclient", "textures/gui/slider.png");
 
     public CustomSliderWidget(int id, int x, int y, int width, int height, float min, float max, float f) {
@@ -23,6 +24,7 @@ public class CustomSliderWidget extends ButtonWidget {
         this.max = max;
         this.progress = (f - min) / (max - min);
         this.message = this.getMessage();
+        integer=true;
     }
 
     public CustomSliderWidget(int id, int x, int y, int width, int height, double min, double max, double f) {
@@ -38,11 +40,12 @@ public class CustomSliderWidget extends ButtonWidget {
         return Float.parseFloat(format.format(this.min + (this.max - this.min) * this.progress));
     }
     public int getSliderValueAsInt() {
+        intformat.applyLocalizedPattern("##");
         return Integer.parseInt(intformat.format(this.min + (this.max - this.min) * this.progress));
     }
 
     private String getMessage() {
-        return ""+this.getSliderValue();
+        return ""+ (integer? getSliderValueAsInt(): this.getSliderValue());
     }
 
     protected int getYImage(boolean isHovered) {
@@ -93,10 +96,6 @@ public class CustomSliderWidget extends ButtonWidget {
         } else {
             return false;
         }
-    }
-
-    public void setShowText(boolean show){
-        this.showText=show;
     }
 
     public void setFocused(boolean focus){

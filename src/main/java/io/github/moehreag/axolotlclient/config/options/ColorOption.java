@@ -9,6 +9,9 @@ public class ColorOption extends OptionBase implements Option {
     private final Color def;
     private Color value;
 
+    public ColorOption(String name, String def){
+        this(name, Color.parse(def));
+    }
 
     public ColorOption(String name, Color def){
         super(name);

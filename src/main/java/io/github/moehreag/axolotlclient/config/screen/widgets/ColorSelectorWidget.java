@@ -47,7 +47,9 @@ public class ColorSelectorWidget extends CustomButtonWidget {
             int green= mouseX<=x+46? (mouseX-(x+18))*10:0;
             green=green>0? (mouseY<y+30 && mouseX>x+41?green/4:255-green):0;
 
-            if(red<50 && blue==0 && green<20)green=40;
+            if(mouseX==x+43 && mouseY<y+30){red=255;green=255;}
+            if(mouseX<x+43 && mouseX>x+35 && mouseY<y+30)red+=green/2;
+            if(mouseX>x+43 && mouseX<x+51 && mouseY<y+30)green+=red/2;
 
             if(red<0)red=0;
             if(blue<0)blue=0;
