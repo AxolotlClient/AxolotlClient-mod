@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.config.options.IntegerOption;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
+import io.github.moehreag.axolotlclient.modules.hud.util.Color;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.util.Identifier;
@@ -20,10 +21,9 @@ public class ActionBarHud extends AbstractHudEntry {
 
     public static final Identifier ID = new Identifier("kronhud", "actionbarhud");
 
-    public final IntegerOption timeShown = new IntegerOption("timeshown", 60, 40, 300);
+    //public final IntegerOption timeShown = new IntegerOption("timeshown", 60, 40, 300);
 
     private String actionBar;
-    private int ticksShown;
     private int color;
     MinecraftClient client;
 
@@ -36,7 +36,7 @@ public class ActionBarHud extends AbstractHudEntry {
 
     @Override
     public void render() {
-        if (ticksShown >= timeShown.get()){
+        if (new Color(color).getAlpha()==0){
             this.actionBar = null;
         }
         if(this.actionBar != null) {
@@ -49,9 +49,6 @@ public class ActionBarHud extends AbstractHudEntry {
                 client.textRenderer.draw(actionBar, getPos().x + Math.round(width /2F) - (client.textRenderer.getStringWidth(actionBar) /2), getPos().y + 3, color);
             }
             GlStateManager.popMatrix();
-            ticksShown++;
-        } else {
-            ticksShown = 0;
         }
     }
 
@@ -81,6 +78,5 @@ public class ActionBarHud extends AbstractHudEntry {
     public void addConfigOptions(List<Option> options){
         super.addConfigOptions(options);
         options.add(shadow);
-        options.add(timeShown);
     }
 }

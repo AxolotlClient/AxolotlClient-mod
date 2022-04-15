@@ -2,22 +2,14 @@ package io.github.moehreag.axolotlclient.modules.hud.util;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.GuiLighting;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.render.item.ItemRenderer;
-import net.minecraft.client.render.model.BakedModel;
-import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.MathHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -38,22 +30,20 @@ public class ItemUtil {
         GuiLighting.disable();
         GlStateManager.disableLighting();
     }
-/*
-    public static List<ItemStorage> storageFromItem(List<ItemStack> items) {
-        ArrayList<ItemStorage> storage = new ArrayList<>();
-        for (ItemStack item : items) {
-            if (item.isEmpty()) {
-                continue;
-            }
-            Optional<ItemStorage> s = getItemFromItem(item, storage);
-            if (s.isPresent()) {
-                ItemStorage store = s.get();
-                store.incrementTimes(item.count);
-            } else {
-                storage.add(new ItemStorage(item, item.count));
-            }
+
+    public static int getTotal(MinecraftClient client, ItemStack stack) {
+        List<ItemStack> item = ItemUtil.getItems(client);
+        if (item == null || item.isEmpty()) {
+            return 0;
         }
-        return storage;
+        AtomicInteger count= new AtomicInteger();
+        item.forEach(itemStack -> {
+            if (itemStack !=null && !itemStack.isEmpty() && itemStack.getItem() == stack.getItem()){
+                count.addAndGet(itemStack.count);
+            }
+        });
+
+        return count.get();
     }
 
     public static List<ItemStack> getItems(MinecraftClient client) {
@@ -62,63 +52,12 @@ public class ItemUtil {
             return null;
         }
         items.addAll(Arrays.asList(client.player.inventory.armor));
-        //items.addAll(client.player.inventory.offHand);
+        //items.addAll(client.player.inventory.)
         items.addAll(Arrays.asList(client.player.inventory.main));
         return items;
     }
 
-
-    public ArrayList<TimedItemStorage> removeOld(List<TimedItemStorage> list, int time) {
-        ArrayList<TimedItemStorage> stored = new ArrayList<>();
-        for (TimedItemStorage storage : list) {
-            if (storage.getPassedTime() <= time) {
-                stored.add(storage);
-            }
-        }
-        return stored;
-    }
-
-    public static List<TimedItemStorage> untimedToTimed(List<ItemStorage> list) {
-        ArrayList<TimedItemStorage> timed = new ArrayList<>();
-        for (ItemStorage stack : list) {
-            timed.add(stack.timed());
-        }
-        return timed;
-    }
-
-    public static Optional<ItemStorage> getItemFromItem(ItemStack item, List<ItemStorage> list) {
-        ItemStack compare = item.copy();
-        compare.count = 1;
-        for (ItemStorage storage : list) {
-            if (ItemStack.equalsIgnoreDamage(storage.stack, compare)) {
-                return Optional.of(storage);
-            }
-        }
-        return Optional.empty();
-    }
-
-    public Optional<TimedItemStorage> getTimedItemFromItem(ItemStack item, List<TimedItemStorage> list) {
-        ItemStack compare = item.copy();
-        compare.count =1;
-        for (TimedItemStorage storage : list) {
-            if (ItemStack.equalsIgnoreDamage(storage.stack, compare)) {
-                return Optional.of(storage);
-            }
-        }
-        return Optional.empty();
-    }
-
-    public int getTotal(MinecraftClient client, ItemStack stack) {
-        List<ItemStack> item = ItemUtil.getItems(client);
-        if (item == null || item.isEmpty()) {
-            return 0;
-        }
-        List<ItemStorage> items = ItemUtil.storageFromItem(item);
-        Optional<ItemStorage> stor = ItemUtil.getItemFromItem(stack, items);
-        return stor.map(itemStorage -> itemStorage.times).orElse(0);
-    }
-
-    /**
+    /*/**
      * Compares two ItemStorage Lists.
      * If list1.get(1) is 10, and list2 is 5, it will return 5.
      * Will return nothing if negative...
@@ -233,9 +172,9 @@ public class ItemUtil {
         buffer.vertex(x + width, y + height, 0.0D).color(red, green, blue, alpha).next();
         buffer.vertex(x + width, y, 0.0D).color(red, green, blue, alpha).next();
         Tessellator.getInstance().draw();
-    }
+    }*/
 
-    public static class ItemStorage {
+    /*public static class ItemStorage {
         public final ItemStack stack;
         public int times;
 
