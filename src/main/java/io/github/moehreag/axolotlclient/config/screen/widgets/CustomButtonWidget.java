@@ -47,7 +47,7 @@ public class CustomButtonWidget extends ButtonWidget {
             textFieldWidget.write(message);
         }
         if(slider){
-            sliderWidget = new CustomSliderWidget(3, x+12, y+1, 50, 18, option.getMin(), option.getMax(), option.get());
+            sliderWidget = new CustomSliderWidget(3, x+12, y+1, 50, 18, option.getMin(), option.getMax(), option.get(), option);
         }
     }
 
@@ -61,7 +61,7 @@ public class CustomButtonWidget extends ButtonWidget {
             textFieldWidget.setHasBorder(false);
         }
         if(slider){
-            sliderWidget = new CustomSliderWidget(3, x+12, y+1, 50, 18, option.getMin(), option.getMax(), option.get());
+            sliderWidget = new CustomSliderWidget(3, x+12, y+1, 50, 18, option.getMin(), option.getMax(), option.get(), option);
         }
     }
 
@@ -75,7 +75,7 @@ public class CustomButtonWidget extends ButtonWidget {
             textFieldWidget.setHasBorder(false);
         }
         if(slider){
-            sliderWidget = new CustomSliderWidget(3, x+12, y+1, 50, 18, option.getMin(), option.getMax(), option.get());
+            sliderWidget = new CustomSliderWidget(3, x+12, y+1, 50, 18, option.getMin(), option.getMax(), option.get(), option);
         }
     }
 

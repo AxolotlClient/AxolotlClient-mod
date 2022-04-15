@@ -5,6 +5,7 @@ import io.github.moehreag.axolotlclient.config.options.IntegerOption;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
@@ -24,7 +25,6 @@ public class ActionBarHud extends AbstractHudEntry {
     private String actionBar;
     private int ticksShown;
     private int color;
-    private final String placeholder = "Action Bar";
     MinecraftClient client;
 
     public ActionBarHud() {
@@ -59,7 +59,10 @@ public class ActionBarHud extends AbstractHudEntry {
     public void renderPlaceholder() {
         renderPlaceholderBackground();
         scale();
-        client.textRenderer.draw(placeholder,  getPos().x + Math.round(width /2F) - client.textRenderer.getStringWidth(placeholder) /2, getPos().y + 3, textColor.get().getAsInt());
+        client.textRenderer.draw(I18n.translate("actionBarPlaceholder"),
+                getPos().x + Math.round(width /2F) - client.textRenderer.getStringWidth(I18n.translate("actionBarPlaceholder")) /2,
+                getPos().y + 3,
+                -1);
         GlStateManager.popMatrix();
         hovered = false;
     }

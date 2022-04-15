@@ -133,6 +133,7 @@ public class OptionScreenBuilder extends Screen {
             if(dialog!=null && dialog.isMouseOver(client, mouseX, mouseY)) {
                 dialog.playDownSound(MinecraftClient.getInstance().getSoundManager());
                 optionWidgets.forEach(optionWidget -> {
+                    optionWidget.playDownSound();
                     if(dialog.x-2 == optionWidget.getX() + optionWidget.getWidth() && dialog.y == optionWidget.getY()){
 
                         if(optionWidget.getOption() instanceof BooleanOption){
@@ -244,6 +245,8 @@ public class OptionScreenBuilder extends Screen {
             if(optionWidget.getOption() instanceof FloatOption || optionWidget.getOption() instanceof IntegerOption || optionWidget.getOption() instanceof DoubleOption){
                 if(dialog!=null && dialog.sliderWidget != null)
                 dialog.sliderWidget.mouseReleased(mouseX, mouseY);
+            } else if(optionWidget.getOption() instanceof ColorOption && dialog instanceof ColorSelectorWidget){
+                dialog.mouseReleased(mouseX, mouseY);
             }
         });
     }

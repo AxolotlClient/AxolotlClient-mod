@@ -116,11 +116,11 @@ public class Color {
     public static Color WHITE = new Color(255, 255, 255);
     public static Color BLACK = new Color(0, 0, 0);
     public static Color GRAY = new Color(128, 128, 128);
-    public static Color DARK_GRAY = new Color(49, 51, 53);
+    public static Color DARK_GRAY = new Color(49, 51, 53, 50);
     public static Color SELECTOR_RED = new Color(191, 34, 34);
     public static Color GOLD = Color.parse("#b8860b");
     public static Color SELECTOR_GREEN = new Color(53, 219, 103);
-    public static Color SELECTOR_BLUE = new Color(51, 153, 255);
+    public static Color SELECTOR_BLUE = new Color(51, 153, 255, 100);
     public static Color ERROR = new Color(255, 0, 255);
 
     /**
