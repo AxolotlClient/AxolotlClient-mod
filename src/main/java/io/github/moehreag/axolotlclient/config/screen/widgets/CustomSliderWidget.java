@@ -52,7 +52,7 @@ public class CustomSliderWidget extends ButtonWidget {
     }
 
     public float getSliderValue() {
-        format.applyLocalizedPattern("##.#");
+        format.applyLocalizedPattern("###.#");
         return Float.parseFloat(format.format(this.min + (this.max - this.min) * this.progress));
     }
     public int getSliderValueAsInt() {
