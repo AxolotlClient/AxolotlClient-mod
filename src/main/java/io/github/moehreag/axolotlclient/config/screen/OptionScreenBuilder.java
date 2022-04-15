@@ -61,7 +61,7 @@ public class OptionScreenBuilder extends Screen {
         int lines=1;
         boolean right=false;
         this.optionWidgets.clear();
-        if(cat.getOptions().size()+cat.getSubCategories().size()<=8) {
+        if(cat.getOptions().size()+cat.getSubCategories().size()<=12) {
             for (Option option : cat.getOptions()) {
                 if (!Objects.equals(option.getName(), "x") && !Objects.equals(option.getName(), "y")) {
                     this.optionWidgets.add(new OptionWidget(option, this.width / 2 - (right ? -50 : 200), lines, this.height, optionWidget -> this.dialog = optionWidget.getDialog()));

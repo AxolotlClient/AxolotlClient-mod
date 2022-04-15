@@ -10,6 +10,8 @@ import io.github.moehreag.axolotlclient.modules.hud.util.Color;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.moehreag.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.block.ChestBlock;
+import net.minecraft.block.EnderChestBlock;
+import net.minecraft.block.HopperBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.Window;
@@ -54,28 +56,34 @@ public class CrosshairHud extends AbstractHudEntry {
     public void render() {
         if (!(client.options.perspective == 0) && !showInF5.get()) return;
 
+        GlStateManager.blendFuncSeparate(775, 769, 1, 0);
+        GlStateManager.enableAlphaTest();
         scale();
         DrawPosition pos = getPos().subtract(0, -1);
         Color color = getColor();
         if (type.get() == CrosshairHudOption.CrosshairOption.DOT) {
+            //GlStateManager.color4f(1, 1, 1, 1);
             fillRect(new Rectangle(pos.x + (width / 2) - 1, pos.y + (height / 2) - 2, 3, 3), color);
         } else if (type.get() == CrosshairHudOption.CrosshairOption.CROSS) {
+            //GlStateManager.color4f(1, 1, 1, 1);
             fillRect(new Rectangle(pos.x + (width / 2) - 5, pos.y + (height / 2) - 1, 6, 1), color);
             fillRect(new Rectangle(pos.x + (width / 2) + 1, pos.y + (height / 2) - 1, 5, 1), color);
             fillRect(new Rectangle(pos.x + (width / 2), pos.y + (height / 2) - 6, 1, 6), color);
             fillRect(new Rectangle(pos.x + (width / 2), pos.y + (height / 2), 1, 5), color);
         } else if (type.get() == CrosshairHudOption.CrosshairOption.TEXTURE) {
+            //GlStateManager.color4f(1, 1, 1, 1);
             MinecraftClient.getInstance().getTextureManager().bindTexture(DrawableHelper.GUI_ICONS_TEXTURE);
 
             // Draw crosshair
-            GlStateManager.color4f((float) color.getRed() / 255, (float) color.getGreen() / 255, (float) color.getBlue() / 255, (float) color.getAlpha() / 255);
+            GlStateManager.color4f((float) color.getRed() / 255, (float) color.getGreen() / 255, (float) color.getBlue() / 255, 1F);
             client.inGameHud.drawTexture((int) (((new Window(client).getScaledWidth() / getScale()) - 14) / 2),
                     (int) (((new Window(client).getScaledHeight() / getScale()) - 14) / 2), 0, 0, 16, 16);
-            GlStateManager.color4f(1, 1, 1, 1);
+            GlStateManager.color4f(1F, 1F, 1F, 1F);
 
 
         }
         GlStateManager.popMatrix();
+        GlStateManager.blendFuncSeparate(770, 771, 1, 0);
     }
 
     public Color getColor() {
@@ -87,7 +95,10 @@ public class CrosshairHud extends AbstractHudEntry {
         } else if (hit.type == HitResult.Type.BLOCK) {
             BlockPos blockPos = hit.getBlockPos();
             World world = this.client.world;
-            if (world.getBlockState(blockPos).getBlock() != null || world.getBlockState(blockPos).getBlock() instanceof ChestBlock) {
+            if (world.getBlockState(blockPos).getBlock() != null &&
+                    (world.getBlockState(blockPos).getBlock() instanceof ChestBlock ||
+                            world.getBlockState(blockPos).getBlock() instanceof EnderChestBlock ||
+                            world.getBlockState(blockPos).getBlock() instanceof HopperBlock)) {
                 return containerColor.get();
             }
         }
