@@ -56,6 +56,7 @@ public class CrosshairHud extends AbstractHudEntry {
     public void render() {
         if (!(client.options.perspective == 0) && !showInF5.get()) return;
 
+        GlStateManager.enableBlend();
         GlStateManager.blendFuncSeparate(775, 769, 1, 0);
         GlStateManager.enableAlphaTest();
         scale();
@@ -84,11 +85,13 @@ public class CrosshairHud extends AbstractHudEntry {
         }
         GlStateManager.popMatrix();
         GlStateManager.blendFuncSeparate(770, 771, 1, 0);
+        GlStateManager.disableBlend();
+
     }
 
     public Color getColor() {
         HitResult hit = client.result;
-        if (hit.type == null) {
+        if (hit == null || hit.type == null) {
             return defaultColor.get();
         } else if (hit.type == HitResult.Type.ENTITY) {
             return entityColor.get();

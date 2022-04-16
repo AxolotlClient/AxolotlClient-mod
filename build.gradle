@@ -33,10 +33,10 @@ dependencies {
 
 	modImplementation include ("net.legacyfabric.legacy-fabric-api:legacy-fabric-api:${fabric_version}") {
 		exclude module: "fabric-loader-1.8.9"
-		include "net.legacyfabric.legacy-fabric-api:legacy-fabric-keybinding-api-v1:1.0.0+ee2bf60e39"
-		include ("net.legacyfabric.legacy-fabric-api:legacy-fabric-api-base:1.0.0+a144b87b39")
-		include "net.legacyfabric.legacy-fabric-api:legacy-fabric-rendering-api-v1:1.0.0+ee2bf60e39"
-		include("net.legacyfabric.legacy-fabric-api:legacy-fabric-resource-loader-v1:1.0.0+1e58a10239")
+	modImplementation ( include ("net.legacyfabric.legacy-fabric-api:legacy-fabric-keybinding-api-v1:1.0.0+63bb8ea352"))
+	modImplementation ( include ("net.legacyfabric.legacy-fabric-api:legacy-fabric-api-base:1.0.0+a144b87b39"))
+	modImplementation ( include ("net.legacyfabric.legacy-fabric-api:legacy-fabric-rendering-api-v1:1.0.0+ee2bf60e39"))
+	modImplementation ( include("net.legacyfabric.legacy-fabric-api:legacy-fabric-resource-loader-v1:1.0.0+63bb8ea352"))
 	}
 
 	// Hacks that make mac os work
