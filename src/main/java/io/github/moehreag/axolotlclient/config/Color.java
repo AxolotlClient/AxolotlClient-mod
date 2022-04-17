@@ -1,4 +1,4 @@
-package io.github.moehreag.axolotlclient.modules.hud.util;
+package io.github.moehreag.axolotlclient.config;
 
 import io.github.moehreag.axolotlclient.Axolotlclient;
 
@@ -14,7 +14,7 @@ import java.util.List;
 public class Color {
     private final int red, green, blue;
     private final int alpha;
-    final int color;
+    private final int color;
 
     public static final List<Color> chromaColors = new ArrayList<>();
     private static int chromaColorIndex;
@@ -79,9 +79,9 @@ public class Color {
         return color;
     }
 
-    protected Color(int r, int g, int b, int a, int color) {
+    /*protected Color(int r, int g, int b, int a, int color) {
         this(r, g, b, a);
-    }
+    }*/
 
     public static Color parse(String color) {
         try {

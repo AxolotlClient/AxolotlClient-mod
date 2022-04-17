@@ -2,7 +2,7 @@ package io.github.moehreag.axolotlclient.config.options;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
-import io.github.moehreag.axolotlclient.modules.hud.util.Color;
+import io.github.moehreag.axolotlclient.config.Color;
 
 public class ColorOption extends OptionBase implements Option {
 

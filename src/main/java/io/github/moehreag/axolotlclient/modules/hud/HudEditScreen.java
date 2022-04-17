@@ -124,6 +124,7 @@ public class HudEditScreen extends Screen {
         super.buttonClicked(button);
         if(button.id==1){
             snapping.toggle();
+            ConfigManager.save();
             client.openScreen(this);
         }
 

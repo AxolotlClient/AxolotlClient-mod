@@ -5,7 +5,7 @@ import io.github.moehreag.axolotlclient.config.options.ColorOption;
 import io.github.moehreag.axolotlclient.config.options.IntegerOption;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
-import io.github.moehreag.axolotlclient.modules.hud.util.Color;
+import io.github.moehreag.axolotlclient.config.Color;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.util.Identifier;

@@ -1,10 +1,9 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.moehreag.axolotlclient.config.options.IntegerOption;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
-import io.github.moehreag.axolotlclient.modules.hud.util.Color;
+import io.github.moehreag.axolotlclient.config.Color;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.util.Identifier;

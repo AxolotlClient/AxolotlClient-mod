@@ -3,7 +3,7 @@ package io.github.moehreag.axolotlclient.config.screen.widgets;
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.config.options.ColorOption;
 import io.github.moehreag.axolotlclient.config.options.FloatOption;
-import io.github.moehreag.axolotlclient.modules.hud.util.Color;
+import io.github.moehreag.axolotlclient.config.Color;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawUtil;
 import io.github.moehreag.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;

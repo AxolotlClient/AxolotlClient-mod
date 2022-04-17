@@ -7,7 +7,6 @@ import io.github.moehreag.axolotlclient.config.options.OptionCategory;
 import io.github.moehreag.axolotlclient.modules.AbstractModule;
 import io.github.moehreag.axolotlclient.modules.hud.HudManager;
 import io.github.moehreag.axolotlclient.modules.hypixel.HypixelMods;
-import io.github.moehreag.axolotlclient.modules.hypixel.levelhead.LevelHead;
 import io.github.moehreag.axolotlclient.modules.zoom.Zoom;
 import io.github.moehreag.axolotlclient.util.Util;
 import net.fabricmc.api.ModInitializer;

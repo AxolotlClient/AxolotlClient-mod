@@ -3,7 +3,6 @@ package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
-import io.github.moehreag.axolotlclient.modules.hud.util.Color;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
 
 import java.util.List;

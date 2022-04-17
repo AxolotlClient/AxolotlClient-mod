@@ -1,6 +1,9 @@
 package io.github.moehreag.axolotlclient.mixin;
 
+import io.github.moehreag.axolotlclient.config.Color;
 import io.github.moehreag.axolotlclient.modules.hud.HudManager;
+import io.github.moehreag.axolotlclient.modules.hud.util.DrawUtil;
+import io.github.moehreag.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.util.Window;
@@ -16,18 +19,19 @@ public abstract class ChatScreenMixin {
     public void redirectMousePos(Args args){
         io.github.moehreag.axolotlclient.modules.hud.gui.hud.ChatHud hud = (io.github.moehreag.axolotlclient.modules.hud.gui.hud.ChatHud) HudManager.getINSTANCE().get(io.github.moehreag.axolotlclient.modules.hud.gui.hud.ChatHud.ID);
         if(hud.isEnabled()){
+            Window window = new Window(MinecraftClient.getInstance());
             int x=args.get(0);
             int y = args.get(1);
-            Window window = new Window(MinecraftClient.getInstance());
+
             /*Rectangle rectX = new Rectangle(0,
-                    ((window.getHeight() -(y/2)-1) + (window.getHeight() - hud.getPos().y))-58*2,
+                    ((window.getHeight() -(y/window.getScaleFactor())-1) + (window.getHeight() - hud.getPos().y))-58*2,
                     window.getWidth(), 1);
-            Rectangle rectY = new Rectangle((x/ window.getScaleFactor()) - hud.getX(), 0, 1, window.getHeight());
+            Rectangle rectY = new Rectangle((x/ window.getScaleFactor()) - hud.getPos().x, 0, 1, window.getHeight());
             DrawUtil.fillRect(rectX, Color.ERROR);
             DrawUtil.fillRect(rectY, Color.ERROR);*/
 
-            args.set(1, ((MinecraftClient.getInstance().height -(((window.getHeight() -(y/2)-1) + (window.getHeight() - hud.getPos().y))-58*2)) - window.getHeight())*2);
-            args.set(0, (x/2) - hud.getX());
+            args.set(0, ((x/window.getScaleFactor() ) - (hud.getPos().x))+ 8*window.getScaleFactor());
+            args.set(1, (MinecraftClient.getInstance().height- (((window.getHeight() -(y/window.getScaleFactor())-1) + (window.getHeight() - hud.getPos().y))-58*2)*window.getScaleFactor()));
         }
     }
 
@@ -37,10 +41,10 @@ public abstract class ChatScreenMixin {
         if(hud.isEnabled()){
             int x=args.get(0);
             int y = args.get(1);
-
             Window window = new Window(MinecraftClient.getInstance());
-            args.set(0, (x/window.getScaleFactor() ) - hud.getX());
-            args.set(1, ((MinecraftClient.getInstance().height -(((window.getHeight() -(y/2)-1) + (window.getHeight() - hud.getPos().y))-58*2)) - window.getHeight())*2);
+            
+            args.set(0, ((x/window.getScaleFactor() ) - (hud.getPos().x))+ 8*window.getScaleFactor());//-2*window.getScaleFactor()
+            args.set(1, (MinecraftClient.getInstance().height- (((window.getHeight() -(y/window.getScaleFactor())-1) + (window.getHeight() - hud.getPos().y))-58*2)*window.getScaleFactor()));
 
         }
 

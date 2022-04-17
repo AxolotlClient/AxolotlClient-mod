@@ -1,5 +1,6 @@
 package io.github.moehreag.axolotlclient.modules.hud.util;
 
+import io.github.moehreag.axolotlclient.config.Color;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
@@ -16,7 +17,7 @@ public class DrawUtil extends DrawableHelper{
     public static void fillRect(Rectangle rectangle, Color color) {
         fillRect(rectangle.x, rectangle.y, rectangle.width,
                 rectangle.height,
-                color.color);
+                color.getAsInt());
     }
 
     private static void fillRect(int x, int y, int width, int height, int color) {
@@ -24,7 +25,7 @@ public class DrawUtil extends DrawableHelper{
     }
 
     public static void outlineRect(Rectangle rectangle, Color color) {
-        outlineRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height, color.color);
+        outlineRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height, color.getAsInt());
     }
 
     private static void outlineRect(int x, int y, int width, int height, int color) {
@@ -38,7 +39,7 @@ public class DrawUtil extends DrawableHelper{
     public static void drawCenteredString(TextRenderer renderer,
                                           String text, DrawPosition position,
                                           Color color, boolean shadow) {
-        drawCenteredString(renderer, text, position, color.color, shadow);
+        drawCenteredString(renderer, text, position, color.getAsInt(), shadow);
     }
 
 

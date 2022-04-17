@@ -170,7 +170,7 @@ public class OptionScreenBuilder extends Screen {
                             } else if (this.dialog.sliderWidget != null && optionWidget.getOption() instanceof IntegerOption) {
                                 ((IntegerOption) optionWidget.getOption()).set(dialog.sliderWidget.getSliderValueAsInt());
                             } else if(this.dialog.textFieldWidget !=null && optionWidget.getOption() instanceof ColorOption){
-                                ((ColorOption)optionWidget.getOption()).set(io.github.moehreag.axolotlclient.modules.hud.util.Color.parse(dialog.textFieldWidget.getText()));
+                                ((ColorOption)optionWidget.getOption()).set(io.github.moehreag.axolotlclient.config.Color.parse(dialog.textFieldWidget.getText()));
                             }
                         }
                     }
@@ -201,7 +201,7 @@ public class OptionScreenBuilder extends Screen {
                             } else if (this.dialog.sliderWidget != null && optionWidget.getOption() instanceof IntegerOption) {
                                 ((IntegerOption) optionWidget.getOption()).set(dialog.sliderWidget.getSliderValueAsInt());
                             } else if(this.dialog.textFieldWidget !=null && optionWidget.getOption() instanceof ColorOption){
-                                ((ColorOption)optionWidget.getOption()).set(io.github.moehreag.axolotlclient.modules.hud.util.Color.parse(dialog.textFieldWidget.getText()));
+                                ((ColorOption)optionWidget.getOption()).set(io.github.moehreag.axolotlclient.config.Color.parse(dialog.textFieldWidget.getText()));
                             }
                         }
                     }

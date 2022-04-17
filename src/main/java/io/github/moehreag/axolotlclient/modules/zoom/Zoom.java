@@ -28,7 +28,7 @@ public class Zoom extends AbstractModule {
     }
 
     public static float getFov(float current){
-        decreaseFov(current);
+        decreaseFov();
         return current / fadeFactor;
     }
 
@@ -74,7 +74,7 @@ public class Zoom extends AbstractModule {
         return fadeFactor>1F;
     }
 
-    public static void decreaseFov(float current){
+    public static void decreaseFov(){
         if(isZoomed()){
             if(fadeFactor <Axolotlclient.CONFIG.zoomDivisor.get())
                 fadeFactor+= (fadeFactor*Axolotlclient.CONFIG.zoomSpeed.get())/50 * (Axolotlclient.CONFIG.zoomDivisor.get()/4);

@@ -6,7 +6,7 @@ import io.github.moehreag.axolotlclient.config.options.ColorOption;
 import io.github.moehreag.axolotlclient.config.options.CrosshairHudOption;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
-import io.github.moehreag.axolotlclient.modules.hud.util.Color;
+import io.github.moehreag.axolotlclient.config.Color;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.moehreag.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.block.ChestBlock;
@@ -63,28 +63,29 @@ public class CrosshairHud extends AbstractHudEntry {
         DrawPosition pos = getPos().subtract(0, -1);
         Color color = getColor();
         if (type.get() == CrosshairHudOption.CrosshairOption.DOT) {
-            //GlStateManager.color4f(1, 1, 1, 1);
+
             fillRect(new Rectangle(pos.x + (width / 2) - 1, pos.y + (height / 2) - 2, 3, 3), color);
         } else if (type.get() == CrosshairHudOption.CrosshairOption.CROSS) {
-            //GlStateManager.color4f(1, 1, 1, 1);
+
             fillRect(new Rectangle(pos.x + (width / 2) - 5, pos.y + (height / 2) - 1, 6, 1), color);
             fillRect(new Rectangle(pos.x + (width / 2) + 1, pos.y + (height / 2) - 1, 5, 1), color);
             fillRect(new Rectangle(pos.x + (width / 2), pos.y + (height / 2) - 6, 1, 6), color);
             fillRect(new Rectangle(pos.x + (width / 2), pos.y + (height / 2), 1, 5), color);
         } else if (type.get() == CrosshairHudOption.CrosshairOption.TEXTURE) {
-            //GlStateManager.color4f(1, 1, 1, 1);
+
             MinecraftClient.getInstance().getTextureManager().bindTexture(DrawableHelper.GUI_ICONS_TEXTURE);
 
             // Draw crosshair
             GlStateManager.color4f((float) color.getRed() / 255, (float) color.getGreen() / 255, (float) color.getBlue() / 255, 1F);
             client.inGameHud.drawTexture((int) (((new Window(client).getScaledWidth() / getScale()) - 14) / 2),
                     (int) (((new Window(client).getScaledHeight() / getScale()) - 14) / 2), 0, 0, 16, 16);
-            GlStateManager.color4f(1F, 1F, 1F, 1F);
 
 
         }
         GlStateManager.popMatrix();
         GlStateManager.blendFuncSeparate(770, 771, 1, 0);
+        GlStateManager.color4f(1F, 1F, 1F, 1F);
+        GlStateManager.disableAlphaTest();
         GlStateManager.disableBlend();
 
     }

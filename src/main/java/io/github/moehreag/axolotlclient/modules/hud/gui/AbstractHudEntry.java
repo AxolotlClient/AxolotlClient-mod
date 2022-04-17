@@ -2,7 +2,7 @@ package io.github.moehreag.axolotlclient.modules.hud.gui;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.config.options.*;
-import io.github.moehreag.axolotlclient.modules.hud.util.Color;
+import io.github.moehreag.axolotlclient.config.Color;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawUtil;
 import io.github.moehreag.axolotlclient.modules.hud.util.Rectangle;
