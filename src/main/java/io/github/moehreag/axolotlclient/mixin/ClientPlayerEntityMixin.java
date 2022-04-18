@@ -2,9 +2,8 @@ package io.github.moehreag.axolotlclient.mixin;
 
 import io.github.moehreag.axolotlclient.modules.hud.HudManager;
 import io.github.moehreag.axolotlclient.modules.hud.gui.hud.ToggleSprintHud;
-import net.minecraft.client.network.ClientPlayerEntity;
-//import net.minecraft.entity.player.ClientPlayerEntity;
 import net.minecraft.client.options.KeyBinding;
+import net.minecraft.entity.player.ClientPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;

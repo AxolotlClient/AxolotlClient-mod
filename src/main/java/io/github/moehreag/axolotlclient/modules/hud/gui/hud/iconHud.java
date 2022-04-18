@@ -2,12 +2,12 @@ package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.config.Color;
 import io.github.moehreag.axolotlclient.config.options.ColorOption;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
-import io.github.moehreag.axolotlclient.config.Color;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
-import net.minecraft.client.render.GuiLighting;
+import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
@@ -40,7 +40,7 @@ public class iconHud extends AbstractHudEntry {
         this.client.getTextureManager().bindTexture(Axolotlclient.badgeIcon);
         GlStateManager.disableDepthTest();
         GlStateManager.color4f(1F, 1F, 1F, 1F);
-        GuiLighting.disable();
+        DiffuseLighting.disable();
         drawTexture(pos.x, pos.y, 0, 0, width, height, width, height);
         GlStateManager.enableDepthTest();
         GlStateManager.popMatrix();

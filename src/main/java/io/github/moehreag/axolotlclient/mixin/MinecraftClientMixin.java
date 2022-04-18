@@ -9,10 +9,10 @@ import io.github.moehreag.axolotlclient.modules.sky.SkyResourceManager;
 import io.github.moehreag.axolotlclient.util.DiscordRPC;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.texture.TextureManager;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.player.ClientPlayerEntity;
 import net.minecraft.world.level.LevelInfo;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
@@ -50,7 +50,7 @@ public abstract class MinecraftClientMixin {
     @Redirect(method = "initializeGame", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;loadLogo(Lnet/minecraft/client/texture/TextureManager;)V"))
     public void noLogo(MinecraftClient instance, TextureManager textureManager){}
 
-    @Inject(method = "initializeGame", at = @At(value = "INVOKE", target = "Lnet/minecraft/achievement/Achievement;setStatFormatter(Lnet/minecraft/stat/StatFormatter;)Lnet/minecraft/achievement/Achievement;"))
+    @Inject(method = "initializeGame", at = @At(value = "INVOKE", target = "Lnet/minecraft/advancement/Achievement;setStatFormatter(Lnet/minecraft/stat/StatFormatter;)Lnet/minecraft/advancement/Achievement;"))
     public void loadSkiesOnStartup(CallbackInfo ci){
         SkyResourceManager.onStartup();
         try {

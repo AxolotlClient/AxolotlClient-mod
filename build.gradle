@@ -32,7 +32,7 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	modImplementation include ("net.legacyfabric.legacy-fabric-api:legacy-fabric-api:${fabric_version}") {
-		exclude module: "fabric-loader-1.8.9"
+		exclude module: "legacy-fabric-entity-events-v1"
 	}
 
 	// Hacks that make mac os work

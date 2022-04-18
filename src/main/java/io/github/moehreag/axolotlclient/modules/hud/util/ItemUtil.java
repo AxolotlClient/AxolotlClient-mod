@@ -2,7 +2,7 @@ package io.github.moehreag.axolotlclient.modules.hud.util;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.GuiLighting;
+import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.item.ItemStack;
 
@@ -24,10 +24,10 @@ public class ItemUtil {
     public static void renderGuiItem(ItemStack itemStack, int x, int y){
         ItemRenderer renderer = MinecraftClient.getInstance().getItemRenderer();
         GlStateManager.enableLighting();
-        GuiLighting.enable();
+        DiffuseLighting.enable();
         renderer.renderInGuiWithOverrides(itemStack, x+2, y);
         renderer.renderGuiItemOverlay(client.textRenderer, itemStack, x+2, y, null);
-        GuiLighting.disable();
+        DiffuseLighting.disable();
         GlStateManager.disableLighting();
     }
 

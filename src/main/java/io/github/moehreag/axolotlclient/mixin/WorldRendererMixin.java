@@ -14,9 +14,11 @@ import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 /**
  * This implementation of custom skies is based on the FabricSkyBoxes mod by AMereBagatelle
@@ -31,7 +33,7 @@ public abstract class WorldRendererMixin {
 
     @Shadow private boolean field_10817;
 
-    @Shadow private AdvancedVertexBuffer starsBuffer;
+    @Shadow private VertexBuffer starsBuffer;
 
     @Shadow private int field_1923;
 
@@ -83,7 +85,7 @@ public abstract class WorldRendererMixin {
             GlStateManager.disableAlphaTest();
             GlStateManager.enableBlend();
             GlStateManager.blendFuncSeparate(770, 771, 1, 0);
-            GuiLighting.disable();
+            DiffuseLighting.disable();
             float[] fs = this.world.dimension.getBackgroundColor(this.world.getSkyAngle(f), f);
             if (fs != null) {
                 GlStateManager.disableTexture();
@@ -147,11 +149,11 @@ public abstract class WorldRendererMixin {
             if (z > 0.0F) {
                 GlStateManager.color4f(z, z, z, z);
                 if (this.field_10817) {
-                    this.starsBuffer.method_10327();
+                    this.starsBuffer.bind();
                     GL11.glEnableClientState(32884);
                     GL11.glVertexPointer(3, 5126, 12, 0L);
-                    this.starsBuffer.method_10328(7);
-                    this.starsBuffer.method_10330();
+                    this.starsBuffer.draw(7);
+                    this.starsBuffer.unbind();
                     GL11.glDisableClientState(32884);
                 } else {
                     GlStateManager.callList(this.field_1923);

@@ -33,7 +33,7 @@ public class PotionsHud extends AbstractHudEntry {
         DrawPosition pos = getPos();
         int i = pos.x-2;
         int y = pos.y;
-        Collection<StatusEffectInstance> collection = this.client.player.method_6120();
+        Collection<StatusEffectInstance> collection = this.client.player.getStatusEffectInstances();
         if (!collection.isEmpty()) {
             GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
             GlStateManager.disableLighting();

@@ -21,19 +21,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(EntityRenderer.class)
 public class EntityRendererMixin<T extends Entity> {
 
-    @Inject(method = "method_6917", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Ljava/lang/String;III)I"))
+    @Inject(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Ljava/lang/String;III)I"))
     public void addBadges(T entity, String string, double d, double e, double f, int i, CallbackInfo ci){
         if(string.contains(entity.getName().asFormattedString()))
         Axolotlclient.addBadge(entity);
     }
 
-    @Redirect(method = "method_6917", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Ljava/lang/String;III)I"))
+    @Redirect(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Ljava/lang/String;III)I"))
     public int forceShadows(TextRenderer instance, String text, int x, int y, int color){
         instance.draw(text, x, y, color, Axolotlclient.CONFIG.useShadows.get());
         return 0;
     }
 
-    @Inject(method = "method_6917", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Ljava/lang/String;III)I", ordinal = 1))
+    @Inject(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Ljava/lang/String;III)I", ordinal = 1))
     public void addLevel(T entity, String string, double d, double e, double f, int i, CallbackInfo ci){
         if(entity instanceof AbstractClientPlayerEntity){
             if(MinecraftClient.getInstance().getCurrentServerEntry() != null &&
@@ -64,7 +64,7 @@ public class EntityRendererMixin<T extends Entity> {
         }
     }
 
-    @Redirect(method = "method_6917", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/BufferBuilder;vertex(DDD)Lnet/minecraft/client/render/BufferBuilder;"))
+    @Redirect(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/BufferBuilder;vertex(DDD)Lnet/minecraft/client/render/BufferBuilder;"))
     public BufferBuilder noBg(BufferBuilder instance, double d, double e, double f){
         if(Axolotlclient.CONFIG.nametagBackground.get()){
             instance.vertex(d, e, f);
