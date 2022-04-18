@@ -35,10 +35,16 @@ public class AxolotlclientConfig {
 
     public final BooleanOption rotateWorld = new BooleanOption("rotateWorld", false);
 
+    public final BooleanOption enableCustomOutlines = new BooleanOption("enabled", false);
+    public final ColorOption outlineColor = new ColorOption("color", Color.parse("#04000000"));
+    public final BooleanOption outlineChroma = new BooleanOption("chroma", false);
+    public final IntegerOption outlineWidth = new IntegerOption("outlineWidth", 1, 1, 10);
+
     public final OptionCategory general = new OptionCategory(new Identifier("axolotlclient", "general"), "general");
     public final OptionCategory nametagOptions = new OptionCategory(new Identifier("axolotlclient", "nametagOptions"), "nametagOptions");
-    public final OptionCategory badgeOptions = new OptionCategory(new Identifier("axolotlclient", "badgeOptions"), "badgeOptions");
-    public final OptionCategory rpcOptions = new OptionCategory(new Identifier("axolotlclient", "rpcOptions"), "rpcConf");
+    public final OptionCategory rendering = new OptionCategory(new Identifier("axolotlclient", "rendering"), "rendering");
+    public final OptionCategory zoom = new OptionCategory("zoom");
+    public final OptionCategory outlines= new OptionCategory("blockOutlines");
 
     private final List<Option> options = new ArrayList<>();
     private final List<OptionCategory> categories = new ArrayList<>();
@@ -66,8 +72,10 @@ public class AxolotlclientConfig {
 
         categories.add(general);
         categories.add(nametagOptions);
-        categories.add(badgeOptions);
-        categories.add(rpcOptions);
+        categories.add(rendering);
+
+        rendering.addSubCategory(zoom);
+        rendering.addSubCategory(outlines);
 
         categories.forEach(OptionCategory::clearOptions);
 
@@ -75,26 +83,33 @@ public class AxolotlclientConfig {
         nametagOptions.add(useShadows);
         nametagOptions.add(nametagBackground);
 
-        badgeOptions.add(showBadges);
-        badgeOptions.add(customBadge);
-        badgeOptions.add(badgeText);
+        nametagOptions.add(showBadges);
+        nametagOptions.add(customBadge);
+        nametagOptions.add(badgeText);
 
         /*add(name);
         add(hideNames);
         add(hideOwnSkin);
         add(hideOtherSkins);*/
 
-        rpcOptions.add(enableRPC);
-        rpcOptions.add(showActivity);
+        general.add(enableRPC);
+        general.add(showActivity);
 
-        general.add(customSky);
-        general.add(showSunMoon);
-        general.add(zoomDivisor);
-        general.add(zoomSpeed);
-        general.add(decreaseSensitivity);
-        general.add(dynamicFOV);
-        general.add(fullBright);
-        general.add(chromaSpeed);
+        rendering.add(customSky);
+        rendering.add(showSunMoon);
+        rendering.add(chromaSpeed);
+        rendering.add(dynamicFOV);
+        rendering.add(fullBright);
+
+        zoom.add(zoomDivisor);
+        zoom.add(zoomSpeed);
+        zoom.add(decreaseSensitivity);
+
+        outlines.add(enableCustomOutlines);
+        outlines.add(outlineColor);
+        outlines.add(outlineChroma);
+        outlines.add(outlineWidth);
+
     }
 
 }

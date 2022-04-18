@@ -8,6 +8,8 @@ import net.minecraft.util.Identifier;
 
 public class AutoTip implements AbstractHypixelMod {
 
+    public static AutoTip INSTANCE = new AutoTip();
+
     private final OptionCategory category = new OptionCategory(new Identifier("autotip"), "autotip");
 
     private final BooleanOption enabled = new BooleanOption("enabled", false);

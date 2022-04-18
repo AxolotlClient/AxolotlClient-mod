@@ -1,10 +1,6 @@
 package io.github.moehreag.axolotlclient.config.options;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonPrimitive;
-import com.sun.jna.Function;
-
-public abstract interface EnumOption extends Option {
+public interface EnumOption extends Option {
 
     @Override
     default OptionType getType() {
@@ -12,7 +8,7 @@ public abstract interface EnumOption extends Option {
     }
 
     @Override
-    public String getName();
+    String getName();
 
     Enum<?> get();
 

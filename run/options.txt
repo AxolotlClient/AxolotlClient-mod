@@ -14,8 +14,8 @@ difficulty:2
 fancyGraphics:true
 ao:2
 renderClouds:false
-resourcePacks:["testpack"]
-incompatibleResourcePacks:[]
+resourcePacks:["sky_1.16","4cubo-s-sky-overlay-v1","astralex-sky-overlay-for-1-8.zip","OF-Testpack"]
+incompatibleResourcePacks:["sky_1.16","OF-Testpack"]
 lastServer:
 lang:en_US
 chatVisibility:0

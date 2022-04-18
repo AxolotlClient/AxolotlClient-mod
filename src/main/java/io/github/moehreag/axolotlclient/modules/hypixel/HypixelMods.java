@@ -26,13 +26,9 @@ public class HypixelMods extends AbstractModule {
 
         category.add(hypixel_api_key);
 
-        category.addSubCategory(LevelHead.getInstance().getCategory());
-        category.addSubCategory(AutoGG.Instance.getCategory());
-        category.addSubCategory(new AutoTip().getCategory());
-
-        subModules.add(LevelHead.getInstance());
-        subModules.add(AutoGG.Instance);
-        subModules.add(new AutoTip());
+        addSubModule(LevelHead.getInstance());
+        addSubModule(AutoGG.Instance);
+        addSubModule(AutoTip.INSTANCE);
 
         subModules.forEach(AbstractHypixelMod::init);
         //subModules.forEach(hypixelMods -> addSubModule(hypixelMods.getCategory()));
@@ -56,8 +52,9 @@ public class HypixelMods extends AbstractModule {
         return INSTANCE;
     }
 
-    private void addSubModule(OptionCategory category){
-        this.category.addSubCategory(category);
+    private void addSubModule(AbstractHypixelMod mod){
+        this.subModules.add(mod);
+        this.category.addSubCategory(mod.getCategory());
     }
 
     public OptionCategory getCategory() {

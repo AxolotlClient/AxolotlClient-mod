@@ -14,10 +14,9 @@ import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 /**
  * This implementation of custom skies is based on the FabricSkyBoxes mod by AMereBagatelle
@@ -182,5 +181,32 @@ public abstract class WorldRendererMixin {
     @Redirect(method = "method_9910", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/dimension/Dimension;getCloudHeight()F"))
     public float getCloudHeight(Dimension instance){
         return instance.getCloudHeight();
+    }
+
+    @ModifyArg(method = "method_1380", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/GL11;glLineWidth(F)V"))
+    public float OutlineWidth(float width){
+        if(Axolotlclient.CONFIG.enableCustomOutlines.get()){
+            return 1.0F+Axolotlclient.CONFIG.outlineWidth.get();
+        }
+        return width;
+    }
+
+    @Redirect(method = "method_1380", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;color4f(FFFF)V"))
+    public void customOutlineColor(float red, float green, float blue, float alpha){
+        if(Axolotlclient.CONFIG.enableCustomOutlines.get()){
+            if(Axolotlclient.CONFIG.outlineChroma.get()){
+                GlStateManager.color4f(Axolotlclient.CONFIG.outlineColor.getChroma().getRed(),
+                        Axolotlclient.CONFIG.outlineColor.getChroma().getGreen(),
+                        Axolotlclient.CONFIG.outlineColor.getChroma().getBlue(),
+                        Axolotlclient.CONFIG.outlineColor.getChroma().getAlpha());
+            } else {
+                GlStateManager.color4f(Axolotlclient.CONFIG.outlineColor.get().getRed(),
+                        Axolotlclient.CONFIG.outlineColor.get().getGreen(),
+                        Axolotlclient.CONFIG.outlineColor.get().getBlue(),
+                        Axolotlclient.CONFIG.outlineColor.get().getAlpha());
+            }
+        } else {
+            GlStateManager.color4f(0F, 0F, 0F, 0.4F);
+        }
     }
 }

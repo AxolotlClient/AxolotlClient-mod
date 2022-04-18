@@ -42,7 +42,7 @@ public abstract class ChatScreenMixin {
             int x=args.get(0);
             int y = args.get(1);
             Window window = new Window(MinecraftClient.getInstance());
-            
+
             args.set(0, ((x/window.getScaleFactor() ) - (hud.getPos().x))+ 8*window.getScaleFactor());//-2*window.getScaleFactor()
             args.set(1, (MinecraftClient.getInstance().height- (((window.getHeight() -(y/window.getScaleFactor())-1) + (window.getHeight() - hud.getPos().y))-58*2)*window.getScaleFactor()));
 

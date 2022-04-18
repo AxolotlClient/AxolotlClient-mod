@@ -5,13 +5,16 @@ import io.github.moehreag.axolotlclient.NetworkHelper;
 import io.github.moehreag.axolotlclient.modules.hud.HudManager;
 import io.github.moehreag.axolotlclient.modules.hud.gui.hud.CPSHud;
 import io.github.moehreag.axolotlclient.config.Color;
+import io.github.moehreag.axolotlclient.modules.sky.SkyResourceManager;
 import io.github.moehreag.axolotlclient.util.DiscordRPC;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.options.GameOptions;
+import net.minecraft.client.texture.TextureManager;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.world.level.LevelInfo;
+import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(MinecraftClient.class)
-public class MinecraftClientMixin {
+public abstract class MinecraftClientMixin {
 
 
     @Shadow @Final private String gameVersion;
@@ -31,6 +34,10 @@ public class MinecraftClientMixin {
 
     @Shadow public ClientPlayerEntity player;
 
+    @Shadow protected abstract void loadLogo(TextureManager textureManager) throws LWJGLException;
+
+    @Shadow private TextureManager textureManager;
+
     /**
      * @author meohreag
      * @reason Customize Window title for use in AxolotlClient
@@ -38,6 +45,17 @@ public class MinecraftClientMixin {
     @Inject(method = "setPixelFormat", at = @At("TAIL"))
     public void setWindowTitle(CallbackInfo ci){
         Display.setTitle("Axolotlclient "+ this.gameVersion);
+    }
+
+    @Redirect(method = "initializeGame", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;loadLogo(Lnet/minecraft/client/texture/TextureManager;)V"))
+    public void noLogo(MinecraftClient instance, TextureManager textureManager){}
+
+    @Inject(method = "initializeGame", at = @At(value = "INVOKE", target = "Lnet/minecraft/achievement/Achievement;setStatFormatter(Lnet/minecraft/stat/StatFormatter;)Lnet/minecraft/achievement/Achievement;"))
+    public void loadSkiesOnStartup(CallbackInfo ci){
+        SkyResourceManager.onStartup();
+        try {
+            this.loadLogo(this.textureManager);
+        } catch (Exception ignored){}
     }
 
     @Redirect(

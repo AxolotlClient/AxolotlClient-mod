@@ -2,11 +2,7 @@ package io.github.moehreag.axolotlclient.config;
 
 import io.github.moehreag.axolotlclient.modules.hud.HudEditScreen;
 import io.github.prospector.modmenu.api.ModMenuApi;
-import io.github.prospector.modmenu.gui.ModListScreen;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.TitleScreen;
 
 import java.util.function.Function;
 

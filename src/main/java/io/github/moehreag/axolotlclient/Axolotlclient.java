@@ -31,6 +31,8 @@ public class Axolotlclient implements ModInitializer {
 	public static String onlinePlayers = "";
 	public static String otherPlayers = "";
 
+	public static boolean initalized = false;
+
 	public static final Identifier badgeIcon = new Identifier("axolotlclient", "textures/badge.png");
 
 	public static final OptionCategory config = new OptionCategory(new Identifier("storedOptions"), "storedOptions");
@@ -56,8 +58,6 @@ public class Axolotlclient implements ModInitializer {
 		if (CONFIG.enableRPC.get()) io.github.moehreag.axolotlclient.util.DiscordRPC.startup();
 
 		modules.forEach(AbstractModule::lateInit);
-
-
 
 		LOGGER.info("Axolotlclient Initialized");
 	}

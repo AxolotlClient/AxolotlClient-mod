@@ -13,6 +13,9 @@ public class OptionCategory {
     private final List<Option> options = new ArrayList<>();
     private final List<OptionCategory> subCategories = new ArrayList<>();
 
+    public OptionCategory(String key){
+        this.name=key;
+    }
 
     public OptionCategory(Identifier Id, String key){
         this.Id=Id;

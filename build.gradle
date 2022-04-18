@@ -53,7 +53,7 @@ dependencies {
 		exclude group: "org.apache.httpcomponents", module: "httpclient"
 	})
 
-	modImplementation files("libs/legacy-modmenu-1.1.0-dev.jar")
+	modImplementation files("libs/legacy-modmenu-1.1.1-dev.jar")
 
 }
 

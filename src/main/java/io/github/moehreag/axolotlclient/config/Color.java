@@ -16,7 +16,7 @@ public class Color {
     private final int alpha;
     private final int color;
 
-    public static final List<Color> chromaColors = new ArrayList<>();
+    private static final List<Color> chromaColors = new ArrayList<>();
     private static int chromaColorIndex;
 
     public Color(int color) {
@@ -78,10 +78,6 @@ public class Color {
     public int getAsInt(){
         return color;
     }
-
-    /*protected Color(int r, int g, int b, int a, int color) {
-        this(r, g, b, a);
-    }*/
 
     public static Color parse(String color) {
         try {

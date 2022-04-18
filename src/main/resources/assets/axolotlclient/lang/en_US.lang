@@ -4,8 +4,15 @@ language.code=en_US
 
 config=Axolotlclient Options
 
+sky_loading_text=Loading Skies out of
+resource_loading_finished=Loading finished! Starting Minecraft...
+
 general=General
 general.title=General Options
+enableRPC=Enable RPC
+showActivity=Show Activity
+
+rendering=Rendering Options
 customSky=Custom Skies
 showSunMoon=Custom Sky Sun & Moon
 zoomDivisor=Zoom Divisor
@@ -13,6 +20,10 @@ zoomSpeed=Zoom Speed
 decreaseSensitivity=Reduce Sensitivity
 dynamicFov=Dynamic FOV
 fullBright=FullBright
+
+zoom=Zoom
+blockOutlines=Block Outlines
+outlineWidth=Outline Width
 
 badgeOptions=Badge Options
 badgeText=Custom Badge Text
@@ -30,11 +41,6 @@ hideNames=Hide Names
 nameDesc=Name to hide as:
 hideOwnSkin=Hide Own Skin
 hideOtherSkins=Hide Others' Skins
-
-rpcConf=DiscordRPC Options
-rpcConf.title=DiscordRPC Options
-enableRPC=Enable RPC
-showActivity=Show Activity
 
 cursedConf=Cursed Options
 cursedConf.title=Cursed Options
