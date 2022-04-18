@@ -206,7 +206,7 @@ public abstract class WorldRendererMixin {
                         Axolotlclient.CONFIG.outlineColor.get().getAlpha());
             }
         } else {
-            GlStateManager.color4f(0F, 0F, 0F, 0.4F);
+            GlStateManager.color4f(red, green, blue, alpha);
         }
     }
 }
