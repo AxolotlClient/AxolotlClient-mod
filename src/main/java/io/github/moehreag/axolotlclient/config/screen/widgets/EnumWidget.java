@@ -2,12 +2,13 @@ package io.github.moehreag.axolotlclient.config.screen.widgets;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 public class EnumWidget extends CustomButtonWidget {
 
     private final Identifier DIALOG_TEXTURE= new Identifier("axolotlclient", "textures/gui/dialog.png");
 
-    public EnumWidget(int x, int y, int width, int height, Enum<?> message) {
+    public EnumWidget(int x, int y, int width, int height, @NotNull Enum<?> message) {
         super(x, y, width, height, message.toString());
     }
 

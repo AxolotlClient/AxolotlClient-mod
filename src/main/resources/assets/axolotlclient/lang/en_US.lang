@@ -101,6 +101,8 @@ bossbarhud=BossBar HUD
 chathud=Chat HUD
 arrowhud=Arrow HUD
 dynamic=Dynamic
+itemupdatehud=ItemUpdate HUD
+timeout=Timeout
 text=Text
 bar=Bar
 barColor=Bar Color
@@ -140,3 +142,4 @@ background=Background
 shadow=Shadow
 
 back=Back
+close=Close

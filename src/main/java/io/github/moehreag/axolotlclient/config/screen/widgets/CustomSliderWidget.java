@@ -8,6 +8,7 @@ import io.github.moehreag.axolotlclient.config.options.Option;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
 
@@ -60,7 +61,7 @@ public class CustomSliderWidget extends ButtonWidget {
         return Integer.parseInt(intformat.format(this.min + (this.max - this.min) * this.progress));
     }
 
-    private String getMessage() {
+    private @NotNull String getMessage() {
         return ""+ (integer? getSliderValueAsInt(): this.getSliderValue());
     }
 

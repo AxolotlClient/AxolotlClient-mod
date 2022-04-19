@@ -2,6 +2,7 @@ package io.github.moehreag.axolotlclient.config.options;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
+import org.jetbrains.annotations.NotNull;
 
 public class FloatOption extends OptionBase implements Option{
 
@@ -39,7 +40,7 @@ public class FloatOption extends OptionBase implements Option{
     }
 
     @Override
-    public void setValueFromJsonElement(JsonElement element) {
+    public void setValueFromJsonElement(@NotNull JsonElement element) {
         value = element.getAsFloat();
     }
 

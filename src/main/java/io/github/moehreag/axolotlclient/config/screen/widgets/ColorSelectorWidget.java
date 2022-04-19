@@ -9,6 +9,7 @@ import io.github.moehreag.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 public class ColorSelectorWidget extends CustomButtonWidget {
 
@@ -19,7 +20,7 @@ public class ColorSelectorWidget extends CustomButtonWidget {
     private final TextFieldWidget textInput;
     private final CustomSliderWidget alphaSlider;
 
-    public ColorSelectorWidget(int x, int y, ColorOption option) {
+    public ColorSelectorWidget(int x, int y, @NotNull ColorOption option) {
         super(0, x, y, 75, 100, "", new Identifier("axolotlclient", "textures/gui/dialog2.png"));
         this.option=option;
         current=new Rectangle(x+18, y+70, 50, 15);

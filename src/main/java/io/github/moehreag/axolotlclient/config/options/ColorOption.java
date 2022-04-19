@@ -3,6 +3,7 @@ package io.github.moehreag.axolotlclient.config.options;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import io.github.moehreag.axolotlclient.config.Color;
+import org.jetbrains.annotations.NotNull;
 
 public class ColorOption extends OptionBase implements Option {
 
@@ -34,7 +35,7 @@ public class ColorOption extends OptionBase implements Option {
     }
 
     @Override
-    public void setValueFromJsonElement(JsonElement element) {
+    public void setValueFromJsonElement(@NotNull JsonElement element) {
         value=Color.parse(element.getAsString());
     }
 

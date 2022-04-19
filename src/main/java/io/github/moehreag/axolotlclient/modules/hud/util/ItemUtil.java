@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -57,7 +58,7 @@ public class ItemUtil {
         return items;
     }
 
-    /*/**
+    /**
      * Compares two ItemStorage Lists.
      * If list1.get(1) is 10, and list2 is 5, it will return 5.
      * Will return nothing if negative...
@@ -66,7 +67,7 @@ public class ItemUtil {
      * @param list2 one to compare to
      * @return
      */
-    /*public List<ItemStorage> compare(List<ItemStorage> list1, List<ItemStorage> list2) {
+    public static List<ItemStorage> compare(List<ItemStorage> list1, List<ItemStorage> list2) {
         ArrayList<ItemStorage> list = new ArrayList<>();
         for (ItemStorage current : list1) {
             Optional<ItemStorage> optional = getItemFromItem(current.stack, list2);
@@ -83,7 +84,68 @@ public class ItemUtil {
         return list;
     }
 
-    public static void renderGuiItemModel(ItemStack stack, float x, float y) {
+    public static ArrayList<ItemUtil.TimedItemStorage> removeOld(List<ItemUtil.TimedItemStorage> list, int time) {
+        ArrayList<ItemUtil.TimedItemStorage> stored = new ArrayList<>();
+        for (ItemUtil.TimedItemStorage storage : list) {
+            if (storage.getPassedTime() <= time) {
+                stored.add(storage);
+            }
+        }
+        return stored;
+    }
+
+    public static Optional<ItemUtil.TimedItemStorage> getTimedItemFromItem(ItemStack item, List<ItemUtil.TimedItemStorage> list) {
+        ItemStack compare = item.copy();
+        compare.count=1;
+        for (ItemUtil.TimedItemStorage storage : list) {
+            if (isEqual (storage.stack, compare)) {
+                return Optional.of(storage);
+            }
+        }
+        return Optional.empty();
+    }
+
+    public static Optional<ItemUtil.ItemStorage> getItemFromItem(ItemStack item, List<ItemUtil.ItemStorage> list) {
+        ItemStack compare = item.copy();
+        compare.count=1;
+        for (ItemUtil.ItemStorage storage : list) {
+            if (isEqual(storage.stack, compare)) {
+                return Optional.of(storage);
+            }
+        }
+        return Optional.empty();
+    }
+
+    private static boolean isEqual(ItemStack stack, ItemStack compare){
+        return !stack.isEmpty() && !compare.isEmpty() && stack.getItem() == compare.getItem();
+    }
+
+    public static List<ItemStorage> storageFromItem(List<ItemStack> items) {
+        ArrayList<ItemStorage> storage = new ArrayList<>();
+        for (ItemStack item : items) {
+            if (item ==null || item.isEmpty()) {
+                continue;
+            }
+            Optional<ItemStorage> s = getItemFromItem(item, storage);
+            if (s.isPresent()) {
+                ItemUtil.ItemStorage store = s.get();
+                store.incrementTimes(item.count);
+            } else {
+                storage.add(new ItemUtil.ItemStorage(item, item.count));
+            }
+        }
+        return storage;
+    }
+
+    public static List<ItemUtil.TimedItemStorage> untimedToTimed(List<ItemStorage> list) {
+        ArrayList<TimedItemStorage> timed = new ArrayList<>();
+        for (ItemStorage stack : list) {
+            timed.add(stack.timed());
+        }
+        return timed;
+    }
+
+    /*public static void renderGuiItemModel(ItemStack stack, float x, float y) {
         MinecraftClient client = MinecraftClient.getInstance();
         BakedModel model = client.getItemRenderer().getModels().method_9884(stack);
         Tessellator tessellator = Tessellator.getInstance();
@@ -174,7 +236,7 @@ public class ItemUtil {
         Tessellator.getInstance().draw();
     }*/
 
-    /*public static class ItemStorage {
+    public static class ItemStorage {
         public final ItemStack stack;
         public int times;
 
@@ -231,5 +293,5 @@ public class ItemUtil {
         }
 
 
-    }*/
+    }
 }

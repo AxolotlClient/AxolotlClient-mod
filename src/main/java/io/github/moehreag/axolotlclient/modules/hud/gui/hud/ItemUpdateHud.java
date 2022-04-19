@@ -1,12 +1,22 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
+import com.mojang.blaze3d.platform.GlStateManager;
+import io.github.moehreag.axolotlclient.config.Color;
+import io.github.moehreag.axolotlclient.config.options.IntegerOption;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
+import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.moehreag.axolotlclient.modules.hud.util.ItemUtil;
+import net.minecraft.block.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Language;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -17,24 +27,24 @@ import java.util.List;
 public class ItemUpdateHud extends AbstractHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "itemupdatehud");
 
-    /*private List<ItemUtil.ItemStorage> oldItems = new ArrayList<>();
+    private List<ItemUtil.ItemStorage> oldItems = new ArrayList<>();
     private ArrayList<ItemUtil.TimedItemStorage> removed;
-    private ArrayList<ItemUtil.TimedItemStorage> added;*/
+    private ArrayList<ItemUtil.TimedItemStorage> added;
 
-    //private KronInteger timeout = new KronInteger("timeout", ID.getPath(), 6, 1, 60);
+    private IntegerOption timeout = new IntegerOption("timeout", 6, 1, 60);
 
     public ItemUpdateHud() {
         super(200, 11 * 6 - 2);
-        //removed = new ArrayList<>();
-        //added = new ArrayList<>();
+        removed = new ArrayList<>();
+        added = new ArrayList<>();
     }
 
     public void update() {
-        /*this.removed = ItemUtil.removeOld(removed, timeout.getIntegerValue() * 1000);
-        this.added = ItemUtil.removeOld(added, timeout.getIntegerValue() * 1000);
+        this.removed = ItemUtil.removeOld(removed, timeout.get() * 1000);
+        this.added = ItemUtil.removeOld(added, timeout.get() * 1000);
         updateAdded();
         updateRemoved();
-        oldItems = ItemUtil.storageFromItem(ItemUtil.getItems(client));*/
+        oldItems = ItemUtil.storageFromItem(ItemUtil.getItems(client));
     }
 
     @Override
@@ -49,7 +59,7 @@ public class ItemUpdateHud extends AbstractHudEntry {
         }
     }
 
-    /*private void updateAdded() {
+    private void updateAdded() {
         List<ItemUtil.ItemStorage> added = ItemUtil.compare(ItemUtil.storageFromItem(ItemUtil.getItems(client)), oldItems);
         ArrayList<ItemUtil.TimedItemStorage> timedAdded = new ArrayList<>();
         for (ItemUtil.ItemStorage stack : added) {
@@ -67,9 +77,9 @@ public class ItemUpdateHud extends AbstractHudEntry {
             }
         }
         this.added.sort((o1, o2) -> Float.compare(o1.getPassedTime(), o2.getPassedTime()));
-    }*/
+    }
 
-    /*private void updateRemoved() {
+    private void updateRemoved() {
         List<ItemUtil.ItemStorage> removed = ItemUtil.compare(oldItems, ItemUtil.storageFromItem(ItemUtil.getItems(client)));
         List<ItemUtil.TimedItemStorage> timed = ItemUtil.untimedToTimed(removed);
         for (ItemUtil.TimedItemStorage stack : timed) {
@@ -84,105 +94,99 @@ public class ItemUpdateHud extends AbstractHudEntry {
             }
         }
         this.removed.sort((o1, o2) -> Float.compare(o1.getPassedTime(), o2.getPassedTime()));
-    }*/
+    }
 
     @Override
     public void render() {
-        /*matrices.push();
-        scale(matrices);
+        scale();
         DrawPosition pos = getPos();
         int lastY = 1;
         int i = 0;
         for (ItemUtil.ItemStorage item : this.added) {
             if (i > 5) {
-                matrices.pop();
+                GlStateManager.popMatrix();
                 return;
             }
-            TextCollector message = new TextCollector();
-            message.add(new LiteralText("+ "));
-            message.add(new LiteralText("[").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(Color.DARK_GRAY.color()))));
-            message.add(new LiteralText(item.times + "").setStyle(Style.EMPTY.withColor(Formatting.WHITE)));
-            message.add(new LiteralText("] ").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(Color.DARK_GRAY.color()))));
-            message.add(item.stack.getName());
-            OrderedText text = Language.getInstance().reorder(message.getCombined());
-            if (shadow.getBooleanValue()) {
-                client.textRenderer.drawWithShadow(matrices, text, pos.x(), pos.y() + lastY,
-                        Color.SELECTOR_GREEN.color());
+            String message = "+ " +
+                    Formatting.DARK_GRAY + "[" +
+                    Formatting.WHITE + item.times +
+                    Formatting.DARK_GRAY + "] " +
+                    Formatting.RESET+
+                    item.stack.getName();
+            if (shadow.get()) {
+                client.textRenderer.drawWithShadow(message, pos.x, pos.y + lastY,
+                        Color.SELECTOR_GREEN.getAsInt());
             } else {
-                client.textRenderer.draw(matrices, text, pos.x(), pos.y() + lastY,
-                        Color.SELECTOR_GREEN.color());
+                client.textRenderer.draw(message, pos.x, pos.y + lastY,
+                        Color.SELECTOR_GREEN.getAsInt());
             }
             lastY = lastY + client.textRenderer.fontHeight + 2;
             i++;
         }
         for (ItemUtil.ItemStorage item : this.removed) {
             if (i > 5) {
-                matrices.pop();
+                GlStateManager.popMatrix();
                 return;
             }
-            TextCollector message = new TextCollector();
-            message.add(new LiteralText("- "));
-            message.add(new LiteralText("[").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(Color.DARK_GRAY.color()))));
-            message.add(new LiteralText(item.times + "").setStyle(Style.EMPTY.withColor(Formatting.WHITE)));
-            message.add(new LiteralText("] ").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(Color.DARK_GRAY.color()))));
-            message.add(item.stack.getName());
-            OrderedText text = Language.getInstance().reorder(message.getCombined());
-            if (shadow.getBooleanValue()) {
-                client.textRenderer.drawWithShadow(matrices, text, pos.x(), pos.y() + lastY,
-                        Formatting.RED.getColorValue());
+            String message = "- " +
+                    Formatting.DARK_GRAY + "[" +
+                    Formatting.WHITE + item.times +
+                    Formatting.DARK_GRAY + "] " +
+                    Formatting.RESET+
+                    item.stack.getName();
+            if (shadow.get()) {
+                client.textRenderer.drawWithShadow(message, pos.x, pos.y + lastY,
+                        Color.SELECTOR_RED.getAsInt());
             } else {
-                client.textRenderer.draw(matrices, text, pos.x(), pos.y() + lastY,
-                        Formatting.RED.getColorValue());
+                client.textRenderer.draw(message, pos.x, pos.y + lastY,
+                        Color.SELECTOR_RED.getAsInt());
             }
             lastY = lastY + client.textRenderer.fontHeight + 2;
             i++;
         }
-        matrices.pop();*/
+        GlStateManager.popMatrix();
     }
 
     @Override
     public void renderPlaceholder() {
-        /*matrices.push();
-        renderPlaceholderBackground(matrices);
-        scale(matrices);
+        renderPlaceholderBackground();
+        scale();
         DrawPosition pos = getPos();
-        TextCollector addM = new TextCollector();
-        addM.add(new LiteralText("+ "));
-        addM.add(new LiteralText("[").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(Color.DARK_GRAY.color()))));
-        addM.add(new LiteralText("2").setStyle(Style.EMPTY.withColor(Formatting.WHITE)));
-        addM.add(new LiteralText("] ").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(Color.DARK_GRAY.color()))));
-        addM.add(new ItemStack(Items.DIRT).getName());
-        OrderedText addText = Language.getInstance().reorder(addM.getCombined());
-        if (shadow.getBooleanValue()) {
-            client.textRenderer.drawWithShadow(matrices, addText, pos.x(), pos.y(),
-                    Formatting.RED.getColorValue());
+        String addM = "+ " +
+                Formatting.DARK_GRAY + "[" +
+                Formatting.WHITE + 2 +
+                Formatting.DARK_GRAY + "] " +
+                Formatting.RESET+
+                new ItemStack(Blocks.DIRT).getName();
+        if (shadow.get()) {
+            client.textRenderer.drawWithShadow(addM, pos.x+1, pos.y+1,
+                    Color.SELECTOR_GREEN.getAsInt());
         } else {
-            client.textRenderer.draw(matrices, addText, pos.x(), pos.y() + client.textRenderer.fontHeight + 2,
-                    Formatting.RED.getColorValue());
+            client.textRenderer.draw(addM, pos.x+1, pos.y+1 + client.textRenderer.fontHeight + 2,
+                    Color.SELECTOR_GREEN.getAsInt());
         }
-        TextCollector removeM = new TextCollector();
-        removeM.add(new LiteralText("- "));
-        removeM.add(new LiteralText("[").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(Color.DARK_GRAY.color()))));
-        removeM.add(new LiteralText("4").setStyle(Style.EMPTY.withColor(Formatting.WHITE)));
-        removeM.add(new LiteralText("] ").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(Color.DARK_GRAY.color()))));
-        removeM.add(new ItemStack(Items.GRASS).getName());
-        OrderedText removeText = Language.getInstance().reorder(removeM.getCombined());
-        if (shadow.getBooleanValue()) {
-            client.textRenderer.drawWithShadow(matrices, removeText, pos.x(), pos.y() + client.textRenderer.fontHeight + 2,
-                    Formatting.RED.getColorValue());
+        String removeM = "- " +
+                Formatting.DARK_GRAY + "[" +
+                Formatting.WHITE + 4 +
+                Formatting.DARK_GRAY + "] " +
+                Formatting.RESET+
+                new ItemStack(Blocks.GRASS).getName();
+        if (shadow.get()) {
+            client.textRenderer.drawWithShadow(removeM, pos.x+1, pos.y+1 + client.textRenderer.fontHeight + 2,
+                    Color.SELECTOR_RED.getAsInt());
         } else {
-            client.textRenderer.draw(matrices, removeText, pos.x(), pos.y() + client.textRenderer.fontHeight + 3,
-                    Formatting.RED.getColorValue());
+            client.textRenderer.draw(removeM, pos.x+1, pos.y+1 + client.textRenderer.fontHeight + 3,
+                    Color.SELECTOR_RED.getAsInt());
         }
         hovered = false;
-        matrices.pop();*/
+        GlStateManager.popMatrix();
     }
 
     @Override
     public void addConfigOptions(List<Option> options) {
         super.addConfigOptions(options);
         options.add(shadow);
-        //options.add(timeout);
+        options.add(timeout);
     }
 
     @Override

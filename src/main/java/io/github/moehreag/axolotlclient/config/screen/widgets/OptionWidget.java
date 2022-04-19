@@ -5,6 +5,7 @@ import io.github.moehreag.axolotlclient.config.options.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 public class OptionWidget extends CustomWidget{
 
@@ -24,7 +25,7 @@ public class OptionWidget extends CustomWidget{
         this.width=width;
     }
 
-    public void render(MinecraftClient client, int mouseX, int mouseY){
+    public void render(@NotNull MinecraftClient client, int mouseX, int mouseY){
         this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 
         client.getTextureManager().bindTexture(BUTTON_TEXTURE);

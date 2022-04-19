@@ -1,6 +1,5 @@
 package io.github.moehreag.axolotlclient.config.screen.widgets;
 
-import io.github.moehreag.axolotlclient.config.options.ColorOption;
 import io.github.moehreag.axolotlclient.config.options.DoubleOption;
 import io.github.moehreag.axolotlclient.config.options.FloatOption;
 import io.github.moehreag.axolotlclient.config.options.IntegerOption;
@@ -79,7 +78,7 @@ public class CustomButtonWidget extends ButtonWidget {
         }
     }
 
-    public CustomButtonWidget(int id, int x, int y, int width, int height, String message, Identifier texture, ColorOption option) {
+    /*public CustomButtonWidget(int id, int x, int y, int width, int height, String message, Identifier texture, ColorOption option) {
         super(id, x, y, width, height, message);
         this.texture=texture;
         this.textField=true;
@@ -87,7 +86,7 @@ public class CustomButtonWidget extends ButtonWidget {
         textFieldWidget.write(option.get().toString());
         textFieldWidget.setHasBorder(false);
         textFieldWidget.setMaxLength(9);
-    }
+    }*/
 
     public CustomButtonWidget(int x, int y, int width, int height, String toString) {
         super(0, x, y, width, height, toString);

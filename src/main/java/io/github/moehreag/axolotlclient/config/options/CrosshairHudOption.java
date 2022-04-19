@@ -2,6 +2,7 @@ package io.github.moehreag.axolotlclient.config.options;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
+import org.jetbrains.annotations.NotNull;
 
 public class CrosshairHudOption extends OptionBase implements EnumOption{
 
@@ -18,7 +19,7 @@ public class CrosshairHudOption extends OptionBase implements EnumOption{
     }
 
     @Override
-    public void setValueFromJsonElement(JsonElement element) {
+    public void setValueFromJsonElement(@NotNull JsonElement element) {
         switch (element.getAsString()){
             case ("CROSS")      :this.value=CrosshairOption.CROSS;break;
             case ("DOT")        :this.value=CrosshairOption.DOT;break;

@@ -9,22 +9,17 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.util.Identifier;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.List;
 
 public class CategoryScreenBuilder extends Screen {
 
     private final Screen parent;
     private CustomWidget back;
-    private List<OptionCategory> categories = Axolotlclient.CONFIG.getCategories();
+    private final List<OptionCategory> categories = Axolotlclient.CONFIG.getCategories();
 
     public CategoryScreenBuilder(Screen parent){
         this.parent=parent;
-    }
-
-    public CategoryScreenBuilder(Screen parent, List<OptionCategory> categories){
-        this.parent=parent;
-        this.categories = categories;
     }
 
     int lines = 1;
@@ -36,7 +31,6 @@ public class CategoryScreenBuilder extends Screen {
         else renderDirtBackground(0);
 
         drawCenteredString(this.textRenderer, I18n.translate("config"), width/2, height/4, -1);
-
         buttons.forEach(buttonWidget -> buttonWidget.render(MinecraftClient.getInstance(), mouseX, mouseY));
         back.render(mouseX, mouseY);
 

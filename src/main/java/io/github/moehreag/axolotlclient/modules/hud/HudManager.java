@@ -69,6 +69,7 @@ public class HudManager extends AbstractModule {
         add(new BossBarHud());
         add(new ChatHud());
         add(new ArrowHud());
+        add(new ItemUpdateHud());
 
         entries.forEach((identifier, abstractHudEntry) -> abstractHudEntry.init());
     }

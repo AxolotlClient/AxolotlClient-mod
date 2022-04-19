@@ -4,6 +4,7 @@ import io.github.moehreag.axolotlclient.config.options.OptionCategory;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 public class CategoryWidget extends ButtonWidget {
 
@@ -18,7 +19,7 @@ public class CategoryWidget extends ButtonWidget {
     }
 
     @Override
-    public void render(MinecraftClient client, int mouseX, int mouseY) {
+    public void render(@NotNull MinecraftClient client, int mouseX, int mouseY) {
         client.getTextureManager().bindTexture(BUTTON_TEXTURE);
         if(width==100)client.getTextureManager().bindTexture(BUTTON2_TEXTURE);
         drawTexture(x, y, 0, 0,width, height, width, height);

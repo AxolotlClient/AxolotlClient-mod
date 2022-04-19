@@ -2,6 +2,7 @@ package io.github.moehreag.axolotlclient.config.options;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
+import org.jetbrains.annotations.NotNull;
 
 public class LevelHeadOption extends OptionBase implements EnumOption{
 
@@ -28,7 +29,7 @@ public class LevelHeadOption extends OptionBase implements EnumOption{
     }
 
     @Override
-    public void setValueFromJsonElement(JsonElement element) {
+    public void setValueFromJsonElement(@NotNull JsonElement element) {
         switch(element.getAsString()){
             case "NETWORK": value=LevelHeadMode.NETWORK; break;
             case "BEDWARS": value=LevelHeadMode.BEDWARS; break;

@@ -7,6 +7,7 @@ import net.minecraft.client.texture.TextureUtil;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -31,7 +32,7 @@ public class SkyboxTexture extends ResourceTexture {
         }
     }
 
-    public BufferedImage rotateToOrientation(BufferedImage image){
+    public BufferedImage rotateToOrientation(@NotNull BufferedImage image){
 
         int widthOfImage = image.getWidth();
         int heightOfImage = image.getHeight();
@@ -62,7 +63,7 @@ public class SkyboxTexture extends ResourceTexture {
     }
 
     @Override
-    public void load(ResourceManager manager) throws IOException {
+    public void load(@NotNull ResourceManager manager) throws IOException {
         this.clearGlId();
         InputStream inputStream = null;
 
