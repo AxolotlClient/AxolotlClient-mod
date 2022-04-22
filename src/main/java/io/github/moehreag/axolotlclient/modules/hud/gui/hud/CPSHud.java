@@ -23,8 +23,6 @@ public class CPSHud extends CleanHudEntry {
     private final BooleanOption rmb = new BooleanOption("rightcps", false);
 
     boolean rc;
-    private long lastClicked;
-    private int pressedMouseButton;
     boolean lc;
 
     public CPSHud() {
@@ -63,17 +61,11 @@ public class CPSHud extends CleanHudEntry {
     public void click(){
         int button = Mouse.getEventButton();
         if (Mouse.getEventButtonState()) {
-
-            this.pressedMouseButton = button;
-            this.lastClicked = MinecraftClient.getTime();
             if(button==0){
                 ClickList.LEFT.click();
             }
             if(button==1)ClickList.RIGHT.click();
-        } else if (button != -1) {
-            this.pressedMouseButton = -1;
         }
-
     }
 
     @Override
