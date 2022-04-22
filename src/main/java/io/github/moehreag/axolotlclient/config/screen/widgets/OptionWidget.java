@@ -3,7 +3,6 @@ package io.github.moehreag.axolotlclient.config.screen.widgets;
 import io.github.moehreag.axolotlclient.Axolotlclient;
 import io.github.moehreag.axolotlclient.config.options.*;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 

@@ -2,7 +2,6 @@ package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
 import io.github.moehreag.axolotlclient.config.options.Option;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.class_321;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;

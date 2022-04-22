@@ -2,7 +2,6 @@ package io.github.moehreag.axolotlclient.config.screen.widgets;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.util.Identifier;
@@ -10,9 +9,6 @@ import net.minecraft.util.Identifier;
 import java.util.Objects;
 
 public class CustomWidget extends DrawableHelper {
-
-    private final Identifier BUTTON_TEXTURE = new Identifier("axolotlclient", "textures/gui/button1.png");
-
     int x;
     int y;
     int width;

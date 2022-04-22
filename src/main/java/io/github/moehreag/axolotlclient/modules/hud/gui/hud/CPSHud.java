@@ -1,6 +1,5 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
-import io.github.moehreag.axolotlclient.Axolotlclient;
 import io.github.moehreag.axolotlclient.config.options.BooleanOption;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.util.Hooks;
@@ -73,8 +72,6 @@ public class CPSHud extends CleanHudEntry {
             if(button==1)ClickList.RIGHT.click();
         } else if (button != -1) {
             this.pressedMouseButton = -1;
-        } else if (this.pressedMouseButton != -1 && this.lastClicked > 0L) {
-            long l = MinecraftClient.getTime() - this.lastClicked;
         }
 
     }
