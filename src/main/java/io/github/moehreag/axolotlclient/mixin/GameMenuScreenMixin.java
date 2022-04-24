@@ -26,6 +26,12 @@ public abstract class GameMenuScreenMixin extends Screen {
                 }
                 button.y -= 12;
             }
+        } else {
+            for (ButtonWidget button:buttons){
+                if(!button.active && button.id==20){
+                    button.active=true;
+                }
+            }
         }
     }
 
@@ -33,7 +39,6 @@ public abstract class GameMenuScreenMixin extends Screen {
     public void addOptionsButton(Args args){
         if(!MinecraftClient.getInstance().isInSingleplayer() || MinecraftClient.getInstance().getServer().isPublished()){
             args.set(0, 20);
-            args.set(2, ((int)args.get(2))+24);
             args.set(5, I18n.translate("config"));
         }
     }
