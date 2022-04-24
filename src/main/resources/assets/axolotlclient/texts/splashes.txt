@@ -4,10 +4,12 @@ github.com/AxolotlClient!
 Coming Soon!
 The axolotls are not what they seem!
 9Q3brQVQZN!
-See  you ingame!
+See you ingame!
 private final SoundInstance bgm = PositionedSoundInstance.method_7051(new Identifier("minecraft", "records.chirp"));!
 Legacy Fabric Edition!
 Not on minecraft.net!
 AxolotlClient-branding/tree/1.8.9!
 Türkçe'de kullanılabilir!
 ඞ!
+Also...!
+The Module Update!
