@@ -12,7 +12,7 @@ general.title=Genel Ayarlar
 enableRPC=RPC'yi Etkinleştir
 showActivity=Aktivite'yi Göster
 
-general.title=Genel Ayarlar
+rendering=İşleme Ayarları
 customSky=Özel Gökyüzü
 showSunMoon=Özel Güneş & Ay
 zoomDivisor=Yakınlaştırma Bölümü
