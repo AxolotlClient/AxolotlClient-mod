@@ -9,6 +9,7 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.sound.SoundInstance;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.lwjgl.input.Keyboard;
 
@@ -92,10 +93,11 @@ public class CreditsScreen extends Screen {
     private void initCredits(){
         credits.put("moehreag", new String[]{"Author, Programming", "https://github.com/moehreag"});
         credits.put("YakisikliBaran", new String[]{"Turkish Translation"});
+        credits.put("DragonEggBedrockBreaking", new String[]{"Bugfixing, inspiration of new Features"});
         credits.put("kuchenag", new String[]{"Art"});
 
         other.put("DarkKronicle", new String[]{"Author of KronHUD, the best HUD mod!"});
         other.put("AMereBagatelle", new String[]{"Author of the excellent FabricSkyBoxes Mod"});
-        other.put("DragonEggBedrockBreaking", new String[]{"Author of various small 1.8.9 utility mods"});
+
     }
 }
