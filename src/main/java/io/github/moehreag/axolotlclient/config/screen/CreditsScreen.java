@@ -2,6 +2,7 @@ package io.github.moehreag.axolotlclient.config.screen;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.config.ConfigManager;
 import io.github.moehreag.axolotlclient.config.screen.widgets.CustomButtonWidget;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -73,7 +74,12 @@ public class CreditsScreen extends Screen {
     @Override
     protected void buttonClicked(ButtonWidget button) {
         if(button.id==0){client.openScreen(parent);client.getSoundManager().stop(bgm);}
-        if(button.id==1){Axolotlclient.CONFIG.creditsBGM.toggle();client.getSoundManager().stop(bgm);client.openScreen(new CreditsScreen(parent));}
+        if(button.id==1){
+            Axolotlclient.CONFIG.creditsBGM.toggle();
+            ConfigManager.save();
+            client.getSoundManager().stop(bgm);
+            client.openScreen(new CreditsScreen(parent));
+        }
     }
 
     @Override
