@@ -18,12 +18,14 @@ public abstract class GameMenuScreenMixin extends Screen {
 
     @Inject(method = "init", at = @At("RETURN"))
     public void addConfigButton(CallbackInfo ci){
-        buttons.add(new ButtonWidget(20, width/2-100, height/4+80, I18n.translate("config")));
-        for (ButtonWidget button : buttons) {
-            if (button.y >= this.height / 4 - 16 + 24 * 4 - 1 && !(button.id==20)) {
-                button.y += 24;
+        if(MinecraftClient.getInstance().isInSingleplayer() && !MinecraftClient.getInstance().getServer().isPublished()) {
+            buttons.add(new ButtonWidget(20, width / 2 - 100, height / 4 + 80, I18n.translate("config")));
+            for (ButtonWidget button : buttons) {
+                if (button.y >= this.height / 4 - 16 + 24 * 4 - 1 && !(button.id == 20)) {
+                    button.y += 24;
+                }
+                button.y -= 12;
             }
-            button.y -= 12;
         }
     }
 
@@ -31,6 +33,7 @@ public abstract class GameMenuScreenMixin extends Screen {
     public void addOptionsButton(Args args){
         if(!MinecraftClient.getInstance().isInSingleplayer() || MinecraftClient.getInstance().getServer().isPublished()){
             args.set(0, 20);
+            args.set(2, ((int)args.get(2))+24);
             args.set(5, I18n.translate("config"));
         }
     }

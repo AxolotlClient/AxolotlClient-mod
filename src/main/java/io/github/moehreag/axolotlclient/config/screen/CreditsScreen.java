@@ -10,9 +10,7 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.sound.SoundInstance;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
-import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -22,7 +20,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class CreditsScreen extends Screen {
 
     private final Screen parent;
-    private boolean playing = false;
 
     private final Map<String, String[]> credits = new HashMap<>();
     private final Map<String, String[]> other = new HashMap<>();
@@ -36,9 +33,8 @@ public class CreditsScreen extends Screen {
     @Override
     public void render(int mouseX, int mouseY, float tickDelta) {
 
-        if(Axolotlclient.CONFIG.creditsBGM.get() && !client.getSoundManager().isPlaying(bgm) && !playing){
+        if(Axolotlclient.CONFIG.creditsBGM.get() && !client.getSoundManager().isPlaying(bgm)){
             MinecraftClient.getInstance().getSoundManager().play(bgm);
-            this.playing=true;
         }
 
         if(this.client.world!=null)fillGradient(0,0, width, height, new Color(0xB0100E0E, true).hashCode(), new Color(0x46212020, true).hashCode());
