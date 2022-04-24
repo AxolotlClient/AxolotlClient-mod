@@ -1,7 +1,6 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
 import io.github.moehreag.axolotlclient.util.Util;
-import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.util.Identifier;
 
 /**

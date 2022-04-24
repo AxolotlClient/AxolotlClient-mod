@@ -5,7 +5,6 @@ import io.github.moehreag.axolotlclient.modules.hud.gui.hud.ActionBarHud;
 import io.github.moehreag.axolotlclient.modules.hud.gui.hud.BossBarHud;
 import io.github.moehreag.axolotlclient.modules.hud.gui.hud.CrosshairHud;
 import io.github.moehreag.axolotlclient.modules.hud.gui.hud.ScoreboardHud;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.Window;

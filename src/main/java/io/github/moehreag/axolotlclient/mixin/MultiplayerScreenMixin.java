@@ -1,7 +1,5 @@
 package io.github.moehreag.axolotlclient.mixin;
 
-import io.github.moehreag.axolotlclient.Axolotlclient;
-import io.github.moehreag.axolotlclient.NetworkHelper;
 import io.github.moehreag.axolotlclient.util.DiscordRPC;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import org.spongepowered.asm.mixin.Mixin;

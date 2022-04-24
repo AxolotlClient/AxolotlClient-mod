@@ -10,13 +10,10 @@ import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.Window;
 import net.minecraft.resource.ResourcePack;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
 
 import java.util.Objects;
 
 public class SkyLoadingScreen {
-
-    private final Identifier bgTexture = new Identifier("axolotlclient", "textures/gui/loadingbg.png");
     private String currentPack = "";
     public static boolean currentlyShown = false;
     private String description="";

@@ -12,7 +12,6 @@ import net.minecraft.entity.boss.BossBar;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
