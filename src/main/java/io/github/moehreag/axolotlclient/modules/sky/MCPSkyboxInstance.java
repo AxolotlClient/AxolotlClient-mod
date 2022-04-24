@@ -43,24 +43,24 @@ public class MCPSkyboxInstance extends SkyboxInstance {
 
                 } else if (i == 1) {
                     GlStateManager.rotatef(90.0F, 1.0F, 0.0F, 0.0F);
-                    u=0.333333333F;
+                    u=1/3F;
                     v=0.5F;
 
                 } else if (i == 2) {
                     GlStateManager.rotatef(-90.0F, 1.0F, 0.0F, 0.0F);
                     GlStateManager.rotatef(180, 0, 1, 0);
-                    u=0.66666666F;
+                    u=2/3F;
                     v=0F;
 
                 } else if (i == 3) {
                     GlStateManager.rotatef(180.0F, 1.0F, 0.0F, 0.0F);
-                    u=0.333333333F;
+                    u=1/3F;
                     v=0F;
 
                 } else if (i == 4) {
                     GlStateManager.rotatef(90.0F, 0.0F, 0.0F, 1.0F);
                     GlStateManager.rotatef(-90, 0, 1, 0);
-                    u=0.6666666666F;
+                    u=2/3F;
                     v=0.5F;
 
                 } else {
@@ -74,8 +74,8 @@ public class MCPSkyboxInstance extends SkyboxInstance {
                 bufferBuilder.begin(7, VertexFormats.POSITION_TEXTURE_COLOR);
                 bufferBuilder.vertex(-distance * 16, -distance * 16, -distance * 16).texture(u, v).color(1F, 1F, 1F, alpha).next();
                 bufferBuilder.vertex(-distance * 16, -distance * 16, distance * 16).texture(u, v+0.5).color(1F, 1F, 1F, alpha).next();
-                bufferBuilder.vertex(distance * 16, -distance * 16, distance * 16).texture(u+0.33333, v+0.5).color(1F, 1F, 1F, alpha).next();
-                bufferBuilder.vertex(distance * 16, -distance * 16, -distance * 16).texture(u+0.3333333, v).color(1F, 1F, 1F, alpha).next();
+                bufferBuilder.vertex(distance * 16, -distance * 16, distance * 16).texture(u+1/3F, v+0.5).color(1F, 1F, 1F, alpha).next();
+                bufferBuilder.vertex(distance * 16, -distance * 16, -distance * 16).texture(u+1/3F, v).color(1F, 1F, 1F, alpha).next();
 
                 tessellator.draw();
                 GlStateManager.popMatrix();
