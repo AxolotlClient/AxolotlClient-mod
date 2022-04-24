@@ -2,7 +2,7 @@ package io.github.moehreag.axolotlclient.modules.hypixel.levelhead;
 
 import io.github.moehreag.axolotlclient.config.options.BooleanOption;
 import io.github.moehreag.axolotlclient.config.options.ColorOption;
-import io.github.moehreag.axolotlclient.config.options.LevelHeadOption;
+import io.github.moehreag.axolotlclient.config.options.enumOptions.LevelHeadOption;
 import io.github.moehreag.axolotlclient.config.options.OptionCategory;
 import io.github.moehreag.axolotlclient.config.Color;
 import io.github.moehreag.axolotlclient.modules.hypixel.AbstractHypixelMod;

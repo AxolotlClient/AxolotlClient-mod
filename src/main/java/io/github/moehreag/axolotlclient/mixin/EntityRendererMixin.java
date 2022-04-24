@@ -59,6 +59,8 @@ public class EntityRendererMixin<T extends Entity> {
                     }
 
                     textRenderer.draw(text, -x, y,  LevelHead.getInstance().textColor.get().getAsInt(), Axolotlclient.CONFIG.useShadows.get());
+                } else if(!HypixelAbstractionLayer.hasValidAPIKey()){
+                    HypixelAbstractionLayer.loadApiKey();
                 }
             }
         }

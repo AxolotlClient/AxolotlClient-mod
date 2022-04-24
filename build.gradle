@@ -53,8 +53,6 @@ dependencies {
 		exclude group: "org.apache.httpcomponents", module: "httpclient"
 	})
 
-	modImplementation files("libs/legacy-modmenu-1.1.1-dev.jar")
-
 }
 
 // More hacks that make mac os work

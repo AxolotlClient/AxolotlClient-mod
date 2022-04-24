@@ -135,7 +135,6 @@ public class Util {
         {
             try
             {
-
                     ServerAddress address = ServerAddress.parse(server.address);
                     final ClientConnection manager = ClientConnection.connect(InetAddress.getByName(address.getAddress()), address.getPort(), false);
 

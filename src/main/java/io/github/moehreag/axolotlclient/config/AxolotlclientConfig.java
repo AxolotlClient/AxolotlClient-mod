@@ -1,5 +1,6 @@
 package io.github.moehreag.axolotlclient.config;
 
+import io.github.moehreag.axolotlclient.Axolotlclient;
 import io.github.moehreag.axolotlclient.config.options.*;
 import net.minecraft.util.Identifier;
 
@@ -39,6 +40,8 @@ public class AxolotlclientConfig {
     public final ColorOption outlineColor = new ColorOption("color", Color.parse("#04000000"));
     public final BooleanOption outlineChroma = new BooleanOption("chroma", false);
     public final IntegerOption outlineWidth = new IntegerOption("outlineWidth", 1, 1, 10);
+
+    public final BooleanOption creditsBGM = new BooleanOption("creditsBGM", true);
 
     public final OptionCategory general = new OptionCategory(new Identifier("axolotlclient", "general"), "general");
     public final OptionCategory nametagOptions = new OptionCategory(new Identifier("axolotlclient", "nametagOptions"), "nametagOptions");
@@ -109,6 +112,8 @@ public class AxolotlclientConfig {
         outlines.add(outlineColor);
         outlines.add(outlineChroma);
         outlines.add(outlineWidth);
+
+        Axolotlclient.config.add(creditsBGM);
 
     }
 

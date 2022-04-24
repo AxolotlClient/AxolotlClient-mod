@@ -3,6 +3,7 @@ package io.github.moehreag.axolotlclient.config.screen;
 import io.github.moehreag.axolotlclient.Axolotlclient;
 import io.github.moehreag.axolotlclient.config.options.OptionCategory;
 import io.github.moehreag.axolotlclient.config.screen.widgets.CategoryWidget;
+import io.github.moehreag.axolotlclient.config.screen.widgets.CustomButtonWidget;
 import io.github.moehreag.axolotlclient.config.screen.widgets.CustomWidget;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -46,6 +47,8 @@ public class CategoryScreenBuilder extends Screen {
             if(right)lines++;
             right=!right;
         }
+
+        this.buttons.add(new CustomButtonWidget(99,this.width-106, this.height-26, 100, 20, "credits", new Identifier("axolotlclient", "textures/gui/button2.png")));
         back = new CustomWidget(this.width/2-75, (this.height/6) *5, 150, 20,"back" , widget -> client.openScreen(parent), new Identifier("axolotlclient", "textures/gui/button1.png"));
     }
 
@@ -53,9 +56,13 @@ public class CategoryScreenBuilder extends Screen {
     protected void mouseClicked(int mouseX, int mouseY, int button) {
         if(button==0) {
             this.buttons.forEach(buttonWidget -> {
+
                 if(buttonWidget.isMouseOver(client, mouseX, mouseY) && buttonWidget instanceof CategoryWidget){
                     buttonWidget.playDownSound(client.getSoundManager());
                     this.client.openScreen(new OptionScreenBuilder(this, ((CategoryWidget) buttonWidget).category));
+                } else if(buttonWidget.isMouseOver(client, mouseX, mouseY) && buttonWidget instanceof CustomButtonWidget){
+                    buttonWidget.playDownSound(client.getSoundManager());
+                    if(buttonWidget.id==99)client.openScreen(new CreditsScreen(new CategoryScreenBuilder(parent)));
                 }
             });
             if(back.isHovered(mouseX, mouseY)){CustomWidget.onClick.onClick(back);back.playDownSound();}

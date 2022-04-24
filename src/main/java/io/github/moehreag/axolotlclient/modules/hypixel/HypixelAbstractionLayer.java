@@ -1,6 +1,6 @@
 package io.github.moehreag.axolotlclient.modules.hypixel;
 
-import io.github.moehreag.axolotlclient.config.options.LevelHeadOption;
+import io.github.moehreag.axolotlclient.config.options.enumOptions.LevelHeadOption;
 import io.github.moehreag.axolotlclient.modules.hypixel.levelhead.LevelHead;
 import io.github.moehreag.axolotlclient.util.ThreadExecuter;
 import net.hypixel.api.HypixelAPI;
@@ -39,13 +39,15 @@ public class HypixelAbstractionLayer {
     public static void loadApiKey() {
         API_KEY = HypixelMods.getInstance().hypixel_api_key.get();
         if(API_KEY == null){
-            HypixelMods.getInstance().hypixel_api_key.setDefaults();
-            validApiKey=false;
             return;
         }
         if(!Objects.equals(API_KEY, "")) {
-            api = new HypixelAPI(new ApacheHttpClient(UUID.fromString(API_KEY)));
-            validApiKey = true;
+            try {
+                api = new HypixelAPI(new ApacheHttpClient(UUID.fromString(API_KEY)));
+                validApiKey = true;
+            } catch (Exception ignored){
+                validApiKey = false;
+            }
         } else {
             validApiKey = false;
         }
@@ -56,6 +58,9 @@ public class HypixelAbstractionLayer {
     }
 
     public static int getPlayerLevel(String uuid) {
+        if(api == null){
+            loadApiKey();
+        }
         if(loadPlayerDataIfAbsent(uuid)) {
             try {
                 Enum<?> mode = LevelHead.getInstance().mode.get();
@@ -73,6 +78,8 @@ public class HypixelAbstractionLayer {
         }
         return 0;
     }
+
+
 
     private static boolean loadPlayerDataIfAbsent(String uuid) {
         if(cachedPlayerData.get(uuid) == null) {

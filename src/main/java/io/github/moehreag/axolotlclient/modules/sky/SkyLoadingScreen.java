@@ -55,7 +55,7 @@ public class SkyLoadingScreen {
         if(!loadingFinished) {
             this.client.textRenderer.draw(I18n.translate("sky_loading_text") +
                             " "+Formatting.ITALIC +
-                            currentPack+
+                            currentPack+Formatting.RESET+Formatting.ITALIC +
                             (!Objects.equals(description, "")? " "+description:"") + Formatting.RESET+"...",
                     20, window.getHeight() - 20,
                     Color.getChroma().getAsInt());
@@ -82,6 +82,7 @@ public class SkyLoadingScreen {
 
     public void setDesc(String desc){
         this.description="("+desc+")";
+        //Color.tickChroma();
         render();
     }
 

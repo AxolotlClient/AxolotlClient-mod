@@ -1,10 +1,12 @@
-package io.github.moehreag.axolotlclient.config.options;
+package io.github.moehreag.axolotlclient.config.options.enumOptions;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
+import io.github.moehreag.axolotlclient.config.options.EnumOption;
+import io.github.moehreag.axolotlclient.config.options.OptionBase;
 import org.jetbrains.annotations.NotNull;
 
-public class CrosshairHudOption extends OptionBase implements EnumOption{
+public class CrosshairHudOption extends OptionBase implements EnumOption {
 
     private CrosshairOption value;
 
@@ -15,7 +17,7 @@ public class CrosshairHudOption extends OptionBase implements EnumOption{
 
     @Override
     public String getName() {
-        return name;
+        return this.name;
     }
 
     @Override

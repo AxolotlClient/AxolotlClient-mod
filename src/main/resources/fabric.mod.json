@@ -18,8 +18,7 @@
   "icon": "assets/axolotlclient/icon.png",
   "environment": "*",
   "entrypoints": {
-    "main": ["io.github.moehreag.axolotlclient.Axolotlclient"],
-    "modmenu": ["io.github.moehreag.axolotlclient.config.ModMenuIntegration"]
+    "main": ["io.github.moehreag.axolotlclient.Axolotlclient"]
   },
   "mixins": [
     "axolotlclient.mixins.json"

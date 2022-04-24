@@ -185,6 +185,7 @@ public abstract class WorldRendererMixin {
         return instance.getCloudHeight();
     }
 
+
     @ModifyArg(method = "method_1380", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/GL11;glLineWidth(F)V"))
     public float OutlineWidth(float width){
         if(Axolotlclient.CONFIG.enableCustomOutlines.get() && Axolotlclient.CONFIG.outlineWidth.get()>1){

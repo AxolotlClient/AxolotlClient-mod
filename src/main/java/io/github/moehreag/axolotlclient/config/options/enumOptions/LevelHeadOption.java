@@ -1,10 +1,13 @@
-package io.github.moehreag.axolotlclient.config.options;
+package io.github.moehreag.axolotlclient.config.options.enumOptions;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
+import io.github.moehreag.axolotlclient.config.options.EnumOption;
+import io.github.moehreag.axolotlclient.config.options.OptionBase;
+import io.github.moehreag.axolotlclient.config.options.OptionType;
 import org.jetbrains.annotations.NotNull;
 
-public class LevelHeadOption extends OptionBase implements EnumOption{
+public class LevelHeadOption extends OptionBase implements EnumOption {
 
     LevelHeadMode value;
 
@@ -59,6 +62,6 @@ public class LevelHeadOption extends OptionBase implements EnumOption{
     public enum LevelHeadMode{
         NETWORK,
         BEDWARS,
-        SKYWARS;
+        SKYWARS
     }
 }

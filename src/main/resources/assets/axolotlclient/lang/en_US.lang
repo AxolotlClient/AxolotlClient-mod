@@ -141,5 +141,10 @@ heldbackgroundcolor=Background Color when held
 background=Background
 shadow=Shadow
 
+credits=Credits
+creditsBGM=BGM
+contributors=Contributors:
+other_people=Other People:
+
 back=Back
 close=Close

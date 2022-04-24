@@ -62,7 +62,7 @@ public class SkyResourceManager{
         }
         loadingScreen.finish();
         try {
-            TimeUnit.SECONDS.sleep(1);
+            TimeUnit.MILLISECONDS.sleep(500);
         } catch (Exception ignored){}
     }
 
@@ -78,7 +78,7 @@ public class SkyResourceManager{
 
     public static void loadMCPSky(ResourcePack pack, String loader, SkyLoadingScreen loadingScreen){
         int i = 1;
-        Axolotlclient.LOGGER.info("Loading MCP/OF sky!");
+        Axolotlclient.LOGGER.info("Loading MCP/OF skies in pack "+pack.getName()+" !");
         while (true) {
             try {
                 String source = "";

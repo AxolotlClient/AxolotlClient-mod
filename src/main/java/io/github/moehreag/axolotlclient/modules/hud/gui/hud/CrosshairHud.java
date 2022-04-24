@@ -3,7 +3,7 @@ package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.config.options.BooleanOption;
 import io.github.moehreag.axolotlclient.config.options.ColorOption;
-import io.github.moehreag.axolotlclient.config.options.CrosshairHudOption;
+import io.github.moehreag.axolotlclient.config.options.enumOptions.CrosshairHudOption;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.moehreag.axolotlclient.config.Color;
