@@ -4,15 +4,26 @@ language.code=tr_TR
 
 config=Axolotl Client: Ayarlar
 
+sky_loading_text=Gökyüzü bundan yükleniliyor:
+resource_loading_finished=Yüklenme Bitti! Minecraft Başlatılıyor...
+
 general=Genel
+general.title=Genel Ayarlar
+enableRPC=RPC'yi Etkinleştir
+showActivity=Aktivite'yi Göster
+
 general.title=Genel Ayarlar
 customSky=Özel Gökyüzü
 showSunMoon=Özel Güneş & Ay
-zoomDivisor=Yaklaştırma Bölümü
-zoomSpeed=Yaklaştırma Hızı
+zoomDivisor=Yakınlaştırma Bölümü
+zoomSpeed=Yakınlaştırma Hızı
 decreaseSensitivity=Duyarlılığı Azalt
 dynamicFov=Dinamik Görüş Alanı
 fullBright=TamParlak
+
+zoom=Yakınlaştırma
+blockOutlines=Blok Anahatları
+outlineWidth=Anahat Genişliği
 
 badgeOptions=Rozet Ayarları
 badgeText=Özel Rozet Yazısı
@@ -30,11 +41,6 @@ hideNames=Adları Sakla
 nameDesc=Saklanacak Adlar:
 hideOwnSkin=Kendi Ciltini Sakla
 hideOtherSkins=Diğer Kişilerin Ciltlerini Sakla
-
-rpcConf=DiscordRPC Ayarları
-rpcConf.title=DiscordRPC Ayarları
-enableRPC=RPC'yi Etkinleştir
-showActivity=Aktivite'yi Göster
 
 cursedConf=Lanetli Ayarlar
 cursedConf.title=Lanetli Ayarlar
@@ -95,6 +101,8 @@ bossbarhud=Can Barı Arayüzü
 chathud=Sohbet HUD
 arrowhud=Ok Arayüzü
 dynamic=Dinamik
+itemupdatehud=EşyaDurumu Arayüzü
+timeout=Zaman Aşımı
 text=Yazı
 bar=Can Barı
 barColor=Can Barı Rengi
@@ -133,4 +141,10 @@ heldbackgroundcolor=Tutulunca'ki arkaplan rengi
 background=Arkaplan
 shadow=Gölge
 
+credits=Katkıda Bulunanlar
+creditsBGM=Müzik
+contributors=Katılımcılar:
+other_people=Diğer Kişiler:
+
 back=Geri
+close=Kapat
