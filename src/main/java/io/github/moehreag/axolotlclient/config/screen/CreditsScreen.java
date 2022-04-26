@@ -4,6 +4,8 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.Axolotlclient;
 import io.github.moehreag.axolotlclient.config.ConfigManager;
 import io.github.moehreag.axolotlclient.config.screen.widgets.CustomButtonWidget;
+import io.github.moehreag.axolotlclient.mixin.AccessorSoundManager;
+import io.github.moehreag.axolotlclient.mixin.AccessorSoundSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -11,6 +13,7 @@ import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.util.Identifier;
+import paulscode.sound.SoundSystem;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -34,7 +37,9 @@ public class CreditsScreen extends Screen {
     public void render(int mouseX, int mouseY, float tickDelta) {
 
         if(Axolotlclient.CONFIG.creditsBGM.get() && !client.getSoundManager().isPlaying(bgm)){
-            MinecraftClient.getInstance().getSoundManager().play(bgm);
+            if(((AccessorSoundSystem) ((AccessorSoundManager) MinecraftClient.getInstance().getSoundManager()).getSoundSystem()).getField_8196().get(bgm) == null) {
+                MinecraftClient.getInstance().getSoundManager().play(bgm);
+            }
         }
 
         if(this.client.world!=null)fillGradient(0,0, width, height, new Color(0xB0100E0E, true).hashCode(), new Color(0x46212020, true).hashCode());
@@ -69,11 +74,11 @@ public class CreditsScreen extends Screen {
 
     @Override
     protected void buttonClicked(ButtonWidget button) {
-        if(button.id==0){client.openScreen(parent);client.getSoundManager().stop(bgm);}
+        if(button.id==0){client.openScreen(parent);stopBGM();}
         if(button.id==1){
             Axolotlclient.CONFIG.creditsBGM.toggle();
             ConfigManager.save();
-            client.getSoundManager().stop(bgm);
+            stopBGM();
             client.openScreen(new CreditsScreen(parent));
         }
     }
@@ -101,5 +106,42 @@ public class CreditsScreen extends Screen {
         other.put("DarkKronicle", new String[]{"Author of KronHUD, the best HUD mod!"});
         other.put("AMereBagatelle", new String[]{"Author of the excellent FabricSkyBoxes Mod"});
 
+    }
+
+    private void stopBGM(){
+        String source = ((AccessorSoundSystem) ((AccessorSoundManager) MinecraftClient.getInstance().getSoundManager()).getSoundSystem()).getField_8196().get(bgm);
+        if(source!=null) {
+            ((SoundSystem) ((AccessorSoundManager) MinecraftClient.getInstance()
+                    .getSoundManager())
+                    .getSoundSystem()
+                    .field_8193)
+                    .stop(
+                            ((AccessorSoundSystem) ((AccessorSoundManager) MinecraftClient.getInstance()
+                            .getSoundManager())
+                            .getSoundSystem())
+                            .getField_8196()
+                            .get(bgm));
+            ((SoundSystem) ((AccessorSoundManager) MinecraftClient.getInstance()
+                    .getSoundManager())
+                    .getSoundSystem()
+                    .field_8193)
+                    .removeSource(
+                            ((AccessorSoundSystem) ((AccessorSoundManager) MinecraftClient.getInstance()
+                            .getSoundManager())
+                                    .getSoundSystem())
+                                    .getField_8196()
+                                    .get(bgm));
+        }
+    }
+
+    @Override
+    protected void keyPressed(char character, int code) {
+        if(code==1){
+            stopBGM();
+            this.client.openScreen(null);
+            if (this.client.currentScreen == null) {
+                this.client.closeScreen();
+            }
+        }
     }
 }

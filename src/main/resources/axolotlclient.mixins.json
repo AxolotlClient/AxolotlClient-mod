@@ -5,6 +5,8 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [],
   "client": [
+    "AccessorSoundManager",
+    "AccessorSoundSystem",
     "ChatHudMixin",
     "ChatScreenMixin",
     "ClientBrandRetrieverMixin",

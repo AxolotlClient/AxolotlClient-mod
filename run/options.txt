@@ -95,9 +95,9 @@ key_key.openHud:54
 key_key.toggleSprint:23
 key_key.toggleSneak:37
 soundCategory_master:0.4668874
-soundCategory_music:0.0
+soundCategory_music:0.471831
 soundCategory_record:0.45774648
-soundCategory_weather:0.471831
+soundCategory_weather:0.5070422
 soundCategory_block:0.45070422
 soundCategory_hostile:0.47887325
 soundCategory_neutral:0.49295774
