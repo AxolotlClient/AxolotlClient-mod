@@ -109,8 +109,9 @@ public class CreditsScreen extends Screen {
     }
 
     private void stopBGM(){
-        String source = ((AccessorSoundSystem) ((AccessorSoundManager) MinecraftClient.getInstance().getSoundManager()).getSoundSystem()).getField_8196().get(bgm);
-        if(source!=null) {
+        if(((AccessorSoundSystem) ((AccessorSoundManager) MinecraftClient.getInstance().
+                getSoundManager()).getSoundSystem()).
+                getField_8196().get(bgm)!=null) {
             ((SoundSystem) ((AccessorSoundManager) MinecraftClient.getInstance()
                     .getSoundManager())
                     .getSoundSystem()

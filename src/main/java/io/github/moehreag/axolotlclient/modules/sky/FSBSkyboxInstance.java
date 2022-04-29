@@ -2,13 +2,10 @@ package io.github.moehreag.axolotlclient.modules.sky;
 
 import com.google.gson.JsonObject;
 import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.moehreag.axolotlclient.modules.sky.texture.SkyboxTexture;
-import io.github.moehreag.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
-import net.minecraft.client.texture.Texture;
 import net.minecraft.util.Identifier;
 
 /**
@@ -42,27 +39,25 @@ public class FSBSkyboxInstance extends SkyboxInstance{
         BufferBuilder bufferBuilder = tessellator.getBuffer();
 
         for (int i = 0; i < 6; ++i) {
-            Texture texture = Util.getTextures().get(textures[i]);
-            if (texture == null) {
-                texture = new SkyboxTexture(textures[i], i);
-                MinecraftClient.getInstance().getTextureManager().loadTexture(textures[i], texture);
-            }
-            GlStateManager.bindTexture(texture.getGlId());
+            MinecraftClient.getInstance().getTextureManager().bindTexture(textures[i]);
             GlStateManager.pushMatrix();
             if (i == 1) {
                 GlStateManager.rotatef(90.0F, 1.0F, 0.0F, 0.0F);
             }
             if (i == 2) {
                 GlStateManager.rotatef(-90.0F, 1.0F, 0.0F, 0.0F);
+                GlStateManager.rotatef(180, 0, 1, 0);
             }
             if (i == 3) {
                 GlStateManager.rotatef(180.0F, 1.0F, 0.0F, 0.0F);
             }
             if (i == 4) {
                 GlStateManager.rotatef(90.0F, 0.0F, 0.0F, 1.0F);
+                GlStateManager.rotatef(-90, 0, 1, 0);
             }
             if (i == 5) {
                 GlStateManager.rotatef(-90.0F, 0.0F, 0.0F, 1.0F);
+                GlStateManager.rotatef(90, 0, 1, 0);
             }
             bufferBuilder.begin(7, VertexFormats.POSITION_TEXTURE_COLOR);
             bufferBuilder.vertex(-distance*16, -distance*16, -distance*16).texture(0.0, 0.0).color(1F, 1F, 1F, alpha).next();

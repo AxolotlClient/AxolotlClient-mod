@@ -244,7 +244,7 @@ public class OptionScreenBuilder extends Screen {
         optionWidgets.forEach(optionWidget -> {
             if(optionWidget.getOption() instanceof FloatOption || optionWidget.getOption() instanceof IntegerOption || optionWidget.getOption() instanceof DoubleOption){
                 if(dialog!=null && dialog.sliderWidget != null)
-                dialog.sliderWidget.mouseReleased(mouseX, mouseY);
+                    dialog.sliderWidget.mouseReleased(mouseX, mouseY);
             } else if(optionWidget.getOption() instanceof ColorOption && dialog instanceof ColorSelectorWidget){
                 dialog.mouseReleased(mouseX, mouseY);
             }

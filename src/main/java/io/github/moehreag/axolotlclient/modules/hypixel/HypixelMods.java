@@ -31,8 +31,6 @@ public class HypixelMods extends AbstractModule {
         addSubModule(AutoTip.INSTANCE);
 
         subModules.forEach(AbstractHypixelMod::init);
-        //subModules.forEach(hypixelMods -> addSubModule(hypixelMods.getCategory()));
-
 
         Axolotlclient.CONFIG.addCategory(category);
     }

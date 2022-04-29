@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Based on https://github.com/DragonEggBedrockBreaking/AutoGG/blob/trunk/src/main/java/uk/debb/autogg/mixin/MixinChatHud.java
+ * Based on <a href="https://github.com/DragonEggBedrockBreaking/AutoGG/blob/trunk/src/main/java/uk/debb/autogg/mixin/MixinChatHud.java">https://github.com/DragonEggBedrockBreaking/AutoGG/blob/trunk/src/main/java/uk/debb/autogg/mixin/MixinChatHud.java</a>
  * License: MPL-2.0
  */
 
@@ -176,50 +176,52 @@ public class AutoGG implements AbstractHypixelMod {
     }
 
     public void onMessage(Text message) {
-        if (onHypixel.get() && client.getCurrentServerEntry().address.contains("hypixel")) {
-            if (gf.get()) {
-                processChat(message, hypixelGFStrings, gfString.get());
-            }
-            if (gg.get()) {
-                processChat(message, hypixelGGStrings, ggString.get());
-            }
-            if (glhf.get()) {
-                processChat(message, hypixelGLHFStrings, glhfString.get());
-            }
-        } else if (onBWP.get() && client.getCurrentServerEntry().address.contains("bedwarspractice.club")) {
-            if (gf.get()) {
-                processChat(message, bedwarsPracticeGFStrings, gfString.get());
-            }
-            if (gg.get()) {
-                processChat(message, bedwarsPracticeGGStrings, ggString.get());
-            }
-            if (glhf.get()) {
-                processChat(message, bedwarsPracticeGLHFStrings, glhfString.get());
-            }
-        } else if (onPVPL.get() && client.getCurrentServerEntry().address.contains("pvp.land")) {
-            if (gf.get()) {
-                processChat(message, pvpLandGFStrings, gfString.get());
-            }
-            if (gg.get()) {
-                processChat(message, pvpLandGGStrings, ggString.get());
-            }
-            if (glhf.get()) {
-                processChat(message, pvpLandGLHFStrings, glhfString.get());
-            }
-        } else if (onMMC.get() && client.getCurrentServerEntry().address.contains("minemen.club")) {
-            if (gf.get()) {
-                if (minemenGFStrings.size() == 0) populateMinemenGFStrings();
-                processChat(message, minemenGFStrings, "gf");
-            }
-            if (gg.get()) {
-                if (minemenGGStrings.size() == 0) populateMinemenGGStrings();
-                processChat(message, minemenGGStrings, "gg");
-            }
-            if (glhf.get()) {
-                if (minemenGLHFStrings.size() == 0) populateMinemenGLHFStrings();
-                processChat(message, minemenGLHFStrings, "glhf");
-            }
+        if(client.getCurrentServerEntry() != null) {
+            if (onHypixel.get() && client.getCurrentServerEntry().address.contains("hypixel")) {
+                if (gf.get()) {
+                    processChat(message, hypixelGFStrings, gfString.get());
+                }
+                if (gg.get()) {
+                    processChat(message, hypixelGGStrings, ggString.get());
+                }
+                if (glhf.get()) {
+                    processChat(message, hypixelGLHFStrings, glhfString.get());
+                }
+            } else if (onBWP.get() && client.getCurrentServerEntry().address.contains("bedwarspractice.club")) {
+                if (gf.get()) {
+                    processChat(message, bedwarsPracticeGFStrings, gfString.get());
+                }
+                if (gg.get()) {
+                    processChat(message, bedwarsPracticeGGStrings, ggString.get());
+                }
+                if (glhf.get()) {
+                    processChat(message, bedwarsPracticeGLHFStrings, glhfString.get());
+                }
+            } else if (onPVPL.get() && client.getCurrentServerEntry().address.contains("pvp.land")) {
+                if (gf.get()) {
+                    processChat(message, pvpLandGFStrings, gfString.get());
+                }
+                if (gg.get()) {
+                    processChat(message, pvpLandGGStrings, ggString.get());
+                }
+                if (glhf.get()) {
+                    processChat(message, pvpLandGLHFStrings, glhfString.get());
+                }
+            } else if (onMMC.get() && client.getCurrentServerEntry().address.contains("minemen.club")) {
+                if (gf.get()) {
+                    if (minemenGFStrings.size() == 0) populateMinemenGFStrings();
+                    processChat(message, minemenGFStrings, "gf");
+                }
+                if (gg.get()) {
+                    if (minemenGGStrings.size() == 0) populateMinemenGGStrings();
+                    processChat(message, minemenGGStrings, "gg");
+                }
+                if (glhf.get()) {
+                    if (minemenGLHFStrings.size() == 0) populateMinemenGLHFStrings();
+                    processChat(message, minemenGLHFStrings, "glhf");
+                }
 
+            }
         }
     }
 }
