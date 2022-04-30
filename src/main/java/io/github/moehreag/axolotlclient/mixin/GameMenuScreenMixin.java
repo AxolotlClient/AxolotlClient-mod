@@ -37,7 +37,8 @@ public abstract class GameMenuScreenMixin extends Screen {
 
     @ModifyArgs(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget;<init>(IIIIILjava/lang/String;)V", ordinal = 1))
     public void addOptionsButton(Args args){
-        if(MinecraftClient.getInstance().getServer().isPublished()){
+        if((MinecraftClient.getInstance().getServer()!=null && MinecraftClient.getInstance().getServer().isPublished())
+                || MinecraftClient.getInstance().getCurrentServerEntry() != null){
             args.set(0, 20);
             args.set(5, I18n.translate("config"));
         }
