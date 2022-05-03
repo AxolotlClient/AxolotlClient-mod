@@ -2,14 +2,15 @@ package io.github.moehreag.axolotlclient.mixin;
 
 import io.github.moehreag.axolotlclient.Axolotlclient;
 import io.github.moehreag.axolotlclient.NetworkHelper;
+import io.github.moehreag.axolotlclient.config.Color;
 import io.github.moehreag.axolotlclient.modules.hud.HudManager;
 import io.github.moehreag.axolotlclient.modules.hud.gui.hud.CPSHud;
-import io.github.moehreag.axolotlclient.config.Color;
 import io.github.moehreag.axolotlclient.modules.sky.SkyResourceManager;
 import io.github.moehreag.axolotlclient.util.DiscordRPC;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
 import net.minecraft.client.options.GameOptions;
+import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.texture.TextureManager;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.player.ClientPlayerEntity;
@@ -56,6 +57,23 @@ public abstract class MinecraftClientMixin {
         try {
             this.loadLogo(this.textureManager);
         } catch (Exception ignored){}
+    }
+
+    //Don't ask me why we need both here, but otherwise it looks ugly
+    @Redirect(method = "loadLogo", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/BufferBuilder;color(IIII)Lnet/minecraft/client/render/BufferBuilder;"))
+    public BufferBuilder loadingScreenColor(BufferBuilder instance, int red, int green, int blue, int alpha){
+
+        return instance.color(Axolotlclient.CONFIG.loadingScreenColor.get().getRed(),
+                Axolotlclient.CONFIG.loadingScreenColor.get().getGreen(),
+                Axolotlclient.CONFIG.loadingScreenColor.get().getBlue(), Axolotlclient.CONFIG.loadingScreenColor.get().getAlpha());
+    }
+
+    @Redirect(method = "method_9382", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/BufferBuilder;color(IIII)Lnet/minecraft/client/render/BufferBuilder;"))
+    public BufferBuilder loadingScreenBg(BufferBuilder instance, int red, int green, int blue, int alpha){
+
+        return instance.color(Axolotlclient.CONFIG.loadingScreenColor.get().getRed(),
+                Axolotlclient.CONFIG.loadingScreenColor.get().getGreen(),
+                Axolotlclient.CONFIG.loadingScreenColor.get().getBlue(), Axolotlclient.CONFIG.loadingScreenColor.get().getAlpha());
     }
 
     @Redirect(

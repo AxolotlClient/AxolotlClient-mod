@@ -11,6 +11,7 @@ general=General
 general.title=General Options
 enableRPC=Enable RPC
 showActivity=Show Activity
+loadingBgColor=Loading Screen Color
 
 rendering=Rendering Options
 customSky=Custom Skies

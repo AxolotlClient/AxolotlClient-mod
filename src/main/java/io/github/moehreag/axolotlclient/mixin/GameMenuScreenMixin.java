@@ -1,6 +1,7 @@
 package io.github.moehreag.axolotlclient.mixin;
 
 import io.github.moehreag.axolotlclient.modules.hud.HudEditScreen;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.Screen;
@@ -19,7 +20,9 @@ public abstract class GameMenuScreenMixin extends Screen {
     @Inject(method = "init", at = @At("RETURN"))
     public void addConfigButton(CallbackInfo ci){
         if(MinecraftClient.getInstance().isInSingleplayer() && !this.client.getServer().isPublished()) {
-            buttons.add(new ButtonWidget(20, width / 2 - 100, height / 4 + 80, I18n.translate("config")));
+            buttons.add(new ButtonWidget(20, width / 2 - 100, height / 4 +
+                    (FabricLoader.getInstance().isModLoaded("modmenu")? 67 :80),
+                    I18n.translate("config")));
             for (ButtonWidget button : buttons) {
                 if (button.y >= this.height / 4 - 16 + 24 * 4 - 1 && !(button.id == 20)) {
                     button.y += 24;

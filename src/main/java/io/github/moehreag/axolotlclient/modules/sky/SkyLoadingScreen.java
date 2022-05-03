@@ -6,6 +6,9 @@ import io.github.moehreag.axolotlclient.config.Color;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.Window;
 import net.minecraft.resource.ResourcePack;
@@ -38,6 +41,9 @@ public class SkyLoadingScreen {
         GlStateManager.disableLighting();
         GlStateManager.disableFog();
         GlStateManager.disableDepthTest();
+
+        DrawableHelper.fill(0, 0, MinecraftClient.getInstance().width, MinecraftClient.getInstance().height, Axolotlclient.CONFIG.loadingScreenColor.get().getAsInt());
+
         GlStateManager.enableTexture();
 
         MinecraftClient.getInstance().getTextureManager().bindTexture(Axolotlclient.badgeIcon);
@@ -69,7 +75,6 @@ public class SkyLoadingScreen {
         MinecraftClient.getInstance().updateDisplay();
 
     }
-
 
     public void update(ResourcePack pack){
         currentPack = pack.getName();

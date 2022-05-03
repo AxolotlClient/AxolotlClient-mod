@@ -43,6 +43,8 @@ public class AxolotlclientConfig {
 
     public final BooleanOption creditsBGM = new BooleanOption("creditsBGM", true);
 
+    public final ColorOption loadingScreenColor = new ColorOption("loadingBgColor", new Color(-1));
+
     public final OptionCategory general = new OptionCategory(new Identifier("axolotlclient", "general"), "general");
     public final OptionCategory nametagOptions = new OptionCategory(new Identifier("axolotlclient", "nametagOptions"), "nametagOptions");
     public final OptionCategory rendering = new OptionCategory(new Identifier("axolotlclient", "rendering"), "rendering");
@@ -97,6 +99,7 @@ public class AxolotlclientConfig {
 
         general.add(enableRPC);
         general.add(showActivity);
+        general.add(loadingScreenColor);
 
         rendering.add(customSky);
         rendering.add(showSunMoon);
