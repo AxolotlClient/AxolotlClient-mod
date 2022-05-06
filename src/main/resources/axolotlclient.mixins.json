@@ -10,6 +10,7 @@
     "ChatHudMixin",
     "ChatScreenMixin",
     "ClientBrandRetrieverMixin",
+    "AddServerScreenMixin",
     "ClientPlayerEntityMixin",
     "ClientWorldMixin",
     "ControlsOptionsScreenMixin",
