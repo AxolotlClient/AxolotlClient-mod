@@ -32,6 +32,8 @@ import java.util.stream.Collectors;
 
 public class Util {
 
+    public static Color GlColor = new Color();
+
     private static Map<Identifier, Texture> textures;
 
     private static final ThreadPoolExecutor REALTIME_PINGER = new ScheduledThreadPoolExecutor(3, new ThreadFactoryBuilder().setNameFormat("Real Time Server Pinger #%d").setDaemon(true).build());
@@ -129,17 +131,13 @@ public class Util {
 
     //Indicatia removed this feature...
     //We still need it :(
-    public static void getRealTimeServerPing(ServerInfo server)
-    {
-        REALTIME_PINGER.submit(() ->
-        {
-            try
-            {
+    public static void getRealTimeServerPing(ServerInfo server) {
+        REALTIME_PINGER.submit(() -> {
+            try {
                     ServerAddress address = ServerAddress.parse(server.address);
                     final ClientConnection manager = ClientConnection.connect(InetAddress.getByName(address.getAddress()), address.getPort(), false);
 
-                    manager.setPacketListener(new ClientQueryPacketListener()
-                    {
+                    manager.setPacketListener(new ClientQueryPacketListener() {
                         @Override
                         public void onResponse(QueryResponseS2CPacket packet) {
                             this.currentSystemTime = MinecraftClient.getTime();
@@ -166,6 +164,23 @@ public class Util {
             }
             catch (Exception ignored){}
         });
+    }
+
+    public static class Color {
+        public float red = 1.0F;
+        public float green = 1.0F;
+        public float blue = 1.0F;
+        public float alpha = 1.0F;
+
+        public Color() {
+        }
+
+        public Color(float red, float green, float blue, float alpha) {
+            this.red = red;
+            this.green = green;
+            this.blue = blue;
+            this.alpha = alpha;
+        }
     }
 
 }

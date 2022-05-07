@@ -1,6 +1,8 @@
 package io.github.moehreag.axolotlclient.mixin;
 
 import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
+import io.github.moehreag.axolotlclient.modules.hypixel.HypixelMods;
 import io.github.moehreag.axolotlclient.modules.sky.SkyResourceManager;
 import net.minecraft.resource.ReloadableResourceManagerImpl;
 import net.minecraft.resource.ResourcePack;
@@ -16,6 +18,7 @@ public class ReloadableResourceManagerImplMixin {
 
     @Inject(method = "reload", at=@At("TAIL"))
     public void loadSkies(List<ResourcePack> resourcePacks, CallbackInfo ci){
+        HypixelAbstractionLayer.clearPlayerData();
         if(Axolotlclient.initalized)SkyResourceManager.reload(resourcePacks);
         else{SkyResourceManager.packs=resourcePacks;}
 

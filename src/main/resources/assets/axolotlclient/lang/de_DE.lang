@@ -4,8 +4,17 @@ language.code=de_DE
 
 config=Axolotlclient Optionen
 
+sky_loading_text=Lade Himmelstexturen aus Pack
+resource_loading_finished=Laden beendet! Starte Minecraft...
+
 general=Allgemein
 general.title=Allgemeine Optionen
+enableRPC=Aktiviere RPC
+showActivity=Zeige Aktivität
+loadingBgColor=Ladebildschirmfarbe
+nightMode=Blaufilter
+
+rendering=Renderoptionen
 customSky=Benutzerdefinierte Himmel
 showSunMoon=Zeige Sonne & Mond auf eigenem Himmel
 zoomDivisor=Zoom Divisor
@@ -14,31 +23,13 @@ decreaseSensitivity=Reduziere Sensitivität
 dynamicFov=Dynamisches FOV
 fullBright=FullBright
 
-badgeOptions=Badge Optionen
-badgeText=Eigener Text als Badge
-customBadge=Benutze eigene Badge
-showBadges=Zeige Badges
-
 nametagOptions=Nametag Optionen
 showOwnNametag=Zeige eigenes Nametag
 useShadows=Erzwinge Schatten
 nametagBackground=Zeige Nametaghintergrund
-
-nickHider=NickHider Options
-nickHiderConf.title=NickHider Options
-hideNames=Hide Names
-nameDesc=Name to hide as:
-hideOwnSkin=Hide Own Skin
-hideOtherSkins=Hide Others' Skins
-
-rpcConf=DiscordRPC Optionen
-rpcConf.title=DiscordRPC Optionen
-enableRPC=Aktiviere RPC
-showActivity=Zeige Aktivität
-
-cursedConf=Cursed Options
-cursedConf.title=Cursed Options
-rotateWorld=Rotate the World
+badgeText=Eigener Text als Badge
+customBadge=Benutze eigene Badge
+showBadges=Zeige Badges
 
 hypixel-mods=Hypixel Mods
 hypixel_api_key=Hypixel API Schlüssel

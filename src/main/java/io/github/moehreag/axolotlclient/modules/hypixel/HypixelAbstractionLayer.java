@@ -79,7 +79,9 @@ public class HypixelAbstractionLayer {
         return 0;
     }
 
-
+    public static void clearPlayerData(){
+        cachedPlayerData.clear();
+    }
 
     private static boolean loadPlayerDataIfAbsent(String uuid) {
         if(cachedPlayerData.get(uuid) == null) {

@@ -21,13 +21,13 @@ public abstract class GameMenuScreenMixin extends Screen {
     public void addConfigButton(CallbackInfo ci){
         if(MinecraftClient.getInstance().isInSingleplayer() && !this.client.getServer().isPublished()) {
             buttons.add(new ButtonWidget(20, width / 2 - 100, height / 4 +
-                    (FabricLoader.getInstance().isModLoaded("modmenu")? 67 :80),
+                    (FabricLoader.getInstance().isModLoaded("modmenu")? 82 :80),
                     I18n.translate("config")));
             for (ButtonWidget button : buttons) {
                 if (button.y >= this.height / 4 - 16 + 24 * 4 - 1 && !(button.id == 20)) {
                     button.y += 24;
                 }
-                button.y -= 12;
+                //button.y -= 12;
             }
         } else {
             for (ButtonWidget button:buttons){

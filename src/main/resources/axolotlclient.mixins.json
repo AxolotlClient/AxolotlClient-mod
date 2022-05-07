@@ -8,6 +8,8 @@
     "AccessorSoundManager",
     "AccessorSoundSystem",
     "ChatHudMixin",
+    "TextRendererMixin",
+    "GlStateManagerMixin",
     "ChatScreenMixin",
     "ClientBrandRetrieverMixin",
     "AddServerScreenMixin",

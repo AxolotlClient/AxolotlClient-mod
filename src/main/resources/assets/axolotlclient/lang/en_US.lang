@@ -12,6 +12,7 @@ general.title=General Options
 enableRPC=Enable RPC
 showActivity=Show Activity
 loadingBgColor=Loading Screen Color
+nightMode=Night Mode
 
 rendering=Rendering Options
 customSky=Custom Skies
@@ -26,26 +27,13 @@ zoom=Zoom
 blockOutlines=Block Outlines
 outlineWidth=Outline Width
 
-badgeOptions=Badge Options
-badgeText=Custom Badge Text
-customBadge=Custom Badges
-showBadges=Show Badges
-
 nametagOptions=Nametag Options
 showOwnNametag=Show Own Nametag
 useShadows=Force Shadows
 nametagBackground=Nametag Background
-
-nickHider=NickHider Options
-nickHiderConf.title=NickHider Options
-hideNames=Hide Names
-nameDesc=Name to hide as:
-hideOwnSkin=Hide Own Skin
-hideOtherSkins=Hide Others' Skins
-
-cursedConf=Cursed Options
-cursedConf.title=Cursed Options
-rotateWorld=Rotate the World
+badgeText=Custom Badge Text
+customBadge=Custom Badges
+showBadges=Show Badges
 
 hypixel-mods=Hypixel Mods
 hypixel_api_key=Hypixel API Key
