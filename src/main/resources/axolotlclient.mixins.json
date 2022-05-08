@@ -9,6 +9,7 @@
     "AccessorSoundSystem",
     "ChatHudMixin",
     "TextRendererMixin",
+    "KeyBindingMixin",
     "GlStateManagerMixin",
     "ChatScreenMixin",
     "ClientBrandRetrieverMixin",
