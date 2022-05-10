@@ -10,6 +10,7 @@
     "ChatHudMixin",
     "TextRendererMixin",
     "KeyBindingMixin",
+    "ModelPartMixin",
     "GlStateManagerMixin",
     "ChatScreenMixin",
     "ClientBrandRetrieverMixin",

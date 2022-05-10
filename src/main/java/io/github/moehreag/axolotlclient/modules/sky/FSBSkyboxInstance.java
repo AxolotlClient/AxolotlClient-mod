@@ -2,11 +2,13 @@ package io.github.moehreag.axolotlclient.modules.sky;
 
 import com.google.gson.JsonObject;
 import com.mojang.blaze3d.platform.GlStateManager;
+import io.github.moehreag.axolotlclient.mixin.GlStateManagerMixin;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.util.Identifier;
+import org.lwjgl.opengl.GL11;
 
 /**
  * This implementation of custom skies is based on the FabricSkyBoxes mod by AMereBagatelle
@@ -35,12 +37,16 @@ public class FSBSkyboxInstance extends SkyboxInstance{
         this.alpha = getAlpha();
         this.distance=MinecraftClient.getInstance().options.viewDistance;
 
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
 
         for (int i = 0; i < 6; ++i) {
             MinecraftClient.getInstance().getTextureManager().bindTexture(textures[i]);
             GlStateManager.pushMatrix();
+
             if (i == 1) {
                 GlStateManager.rotatef(90.0F, 1.0F, 0.0F, 0.0F);
             }
@@ -50,6 +56,7 @@ public class FSBSkyboxInstance extends SkyboxInstance{
             }
             if (i == 3) {
                 GlStateManager.rotatef(180.0F, 1.0F, 0.0F, 0.0F);
+                GlStateManager.rotatef(90F, 0, 1, 0);
             }
             if (i == 4) {
                 GlStateManager.rotatef(90.0F, 0.0F, 0.0F, 1.0F);
@@ -67,5 +74,6 @@ public class FSBSkyboxInstance extends SkyboxInstance{
             tessellator.draw();
             GlStateManager.popMatrix();
         }
+        GlStateManager.disableBlend();
     }
 }

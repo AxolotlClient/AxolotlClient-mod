@@ -7,6 +7,7 @@ import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.util.Identifier;
+import org.lwjgl.opengl.GL11;
 
 public class MCPSkyboxInstance extends SkyboxInstance {
 
@@ -23,6 +24,9 @@ public class MCPSkyboxInstance extends SkyboxInstance {
     public void renderSkybox() {
         this.alpha=getAlpha();
         this.distance=MinecraftClient.getInstance().options.viewDistance;
+
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
@@ -81,5 +85,6 @@ public class MCPSkyboxInstance extends SkyboxInstance {
                 GlStateManager.popMatrix();
             }
         }
+        GlStateManager.disableBlend();
     }
 }

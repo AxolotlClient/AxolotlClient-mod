@@ -14,6 +14,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.resource.ResourcePack;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,6 +31,8 @@ public class Axolotlclient implements ModInitializer {
 	public static AxolotlclientConfig CONFIG;
 	public static String onlinePlayers = "";
 	public static String otherPlayers = "";
+
+	public static List<ResourcePack> packs = new ArrayList<>();
 
 	public static boolean initalized = false;
 
