@@ -14,8 +14,8 @@ difficulty:2
 fancyGraphics:true
 ao:2
 renderClouds:false
-resourcePacks:["astralex-sky-overlay-for-1-8.zip"]
-incompatibleResourcePacks:[]
+resourcePacks:["! §bNebula - [sky only]","astralex-sky-overlay-for-1-8.zip"]
+incompatibleResourcePacks:["! §bNebula - [sky only]"]
 lastServer:
 lang:en_US
 chatVisibility:0

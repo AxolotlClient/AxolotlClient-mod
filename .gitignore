@@ -25,3 +25,5 @@ run/
 
 # macos
 *.DS_Store
+src/main/resources/assets/minecraft/textures/entity/alex.png
+src/main/resources/assets/minecraft/textures/entity/steve.png
