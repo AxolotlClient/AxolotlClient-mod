@@ -85,6 +85,8 @@ actionBarPlaceholder=Aktionsleiste
 bossbarhud=BossBar HUD
 chathud=Chat HUD
 arrowhud=Arrow HUD
+itemupdatehud=ItemUpdate HUD
+packdisplayhud=Pack Display HUD
 dynamic=Dynamisch
 text=Text
 bar=Leiste
@@ -122,6 +124,8 @@ bgColor=Hintergrundfarbe
 placeholder=Platzhalter
 heldbackgroundcolor=Hintergrundfarbe (wenn gedrückt)
 background=Hintergrund
+outline=Umrandung
+outlineColor=Umrandungsfarbe
 shadow=Schatten
 
 back=Zurück

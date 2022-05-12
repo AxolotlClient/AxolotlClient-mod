@@ -32,6 +32,7 @@ public class ArmorHud extends AbstractHudEntry {
             fillRect(getBounds(),
                     backgroundColor.get());
         }
+        if(outline.get()) outlineRect(getBounds(), outlineColor.get());
         int lastY = 2 + (4 * 20);
         if(client.player.inventory.getMainHandStack() !=null)
             ItemUtil.renderGuiItem(client.player.inventory.getMainHandStack(), pos.x, pos.y + lastY);
@@ -72,6 +73,8 @@ public class ArmorHud extends AbstractHudEntry {
         options.add(shadow);
         options.add(background);
         options.add(backgroundColor);
+        options.add(outline);
+        options.add(outlineColor);
     }
 
 }

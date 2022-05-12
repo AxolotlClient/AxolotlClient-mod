@@ -46,6 +46,8 @@ public class PackDisplayHud extends AbstractHudEntry {
             fillRect(new Rectangle(pos.x, pos.y, width, widgets.size()*18), backgroundColor.get());
         }
 
+        if(outline.get()) outlineRect(getBounds(), outlineColor.get());
+
         int y= pos.y+1;
         for(PackDisplayHud.packWidget widget:widgets){
             widget.render(pos.x+1, y);
@@ -98,6 +100,8 @@ public class PackDisplayHud extends AbstractHudEntry {
 
         options.add(background);
         options.add(backgroundColor);
+        options.add(outline);
+        options.add(outlineColor);
         options.add(shadow);
         options.add(textColor);
     }

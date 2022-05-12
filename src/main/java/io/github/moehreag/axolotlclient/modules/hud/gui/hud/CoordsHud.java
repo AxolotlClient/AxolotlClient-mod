@@ -106,6 +106,7 @@ public class CoordsHud extends AbstractHudEntry {
         if (background.get()) {
             fillRect(getBounds(), backgroundColor.get());
         }
+        if(outline.get()) outlineRect(getBounds(), outlineColor.get());
         StringBuilder format = new StringBuilder("#");
         if (decimalPlaces.get() > 0) {
             format.append(".");
@@ -229,6 +230,8 @@ public class CoordsHud extends AbstractHudEntry {
         super.addConfigOptions(options);
         options.add(background);
         options.add(backgroundColor);
+        options.add(outline);
+        options.add(outlineColor);
         options.add(firstColor);
         options.add(secondColor);
         options.add(decimalPlaces);

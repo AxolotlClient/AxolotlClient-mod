@@ -17,7 +17,7 @@ import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
- * https://github.com/DarkKronicle/KronHUD
+ * <a href="https://github.com/DarkKronicle/KronHUD">https://github.com/DarkKronicle/KronHUD</a>
  * Licensed under GPL-3.0
  */
 
@@ -33,6 +33,8 @@ public abstract class AbstractHudEntry extends DrawUtil {
     protected BooleanOption shadow = new BooleanOption("shadow",  getShadowDefault());
     protected BooleanOption background = new BooleanOption("background",  true);
     protected final ColorOption backgroundColor = new ColorOption("bgColor", Color.parse("#64000000"));
+    protected final BooleanOption outline = new BooleanOption("outline", false);
+    protected final ColorOption outlineColor = new ColorOption("outlineColor", "#75000000");
     private final DoubleOption x = new DoubleOption("x", getDefaultX(), 0, 1);
     private final DoubleOption y = new DoubleOption("y", getDefaultY(), 0, 1);
 

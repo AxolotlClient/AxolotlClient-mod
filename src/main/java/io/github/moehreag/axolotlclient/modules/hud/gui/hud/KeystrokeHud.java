@@ -165,6 +165,8 @@ public class KeystrokeHud extends AbstractHudEntry {
         options.add(background);
         options.add(backgroundColor);
         options.add(pressedBackgroundColor);
+        options.add(outline);
+        options.add(outlineColor);
     }
 
     public class Keystroke {
@@ -204,6 +206,7 @@ public class KeystrokeHud extends AbstractHudEntry {
                 fillRect(bounds.offset(offset),
                         getColor());
             }
+            if(outline.get()) outlineRect(bounds.offset(offset), outlineColor.get());
             if ((System.nanoTime() / 1000000F - start) / animTime >= 1) {
                 start = -1;
             }

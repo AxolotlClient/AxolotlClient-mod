@@ -160,50 +160,7 @@ public class ScoreboardHud extends AbstractHudEntry {
                 }
             }
         }
-
-        /*DrawPosition pos = getPos();
-
-        Scoreboard scoreboard = objective.getScoreboard();
-
-        Collection<ScoreboardPlayerScore> collection = scoreboard.getAllPlayerScores(objective);
-        ArrayList<ScoreboardPlayerScore> list = collection.stream().filter(scoreboardPlayerScore -> scoreboardPlayerScore.getPlayerName() != null && !scoreboardPlayerScore.getPlayerName().startsWith("#")).collect(Collectors.toCollection(Lists::newArrayList));
-        if (list.size() > 15) {
-            collection = Lists.newArrayList(Iterables.skip(list, collection.size() - 15));
-        }
-
-        int i = MinecraftClient.getInstance().textRenderer.getStringWidth(objective.getDisplayName());
-
-        String Object;
-        for (Iterator<ScoreboardPlayerScore> iterator = collection.iterator(); iterator.hasNext(); i = Math.max(i, MinecraftClient.getInstance().textRenderer.getStringWidth(Object))) {
-            ScoreboardPlayerScore scoreboardPlayerScore = iterator.next();
-            Team team = scoreboard.getPlayerTeam(scoreboardPlayerScore.getPlayerName());
-            Object = Team.decorateName(team, scoreboardPlayerScore.getPlayerName()) + ": " + Formatting.RED + scoreboardPlayerScore.getScore();
-        }
-
-        int j = collection.size() * client.textRenderer.fontHeight;
-        int k = pos.y;
-        int l = 3;
-        int m = pos.x;
-        int n = 0;
-
-        for (ScoreboardPlayerScore scoreboardPlayerScore2 : collection) {
-            ++n;
-            Team team2 = scoreboard.getPlayerTeam(scoreboardPlayerScore2.getPlayerName());
-            String name = Team.decorateName(team2, scoreboardPlayerScore2.getPlayerName());
-            String score = Formatting.RED + "" + scoreboardPlayerScore2.getScore();
-            int p = k - n * client.textRenderer.fontHeight;
-            int q = pos.x+i+5;//window.getWidth() - l + 2;
-            fill(m - 2, p, q, p + client.textRenderer.fontHeight, 1342177280);
-            client.textRenderer.draw(name, m, p, 553648127);
-            client.textRenderer.draw(score, q - client.textRenderer.getStringWidth(score), p, 553648127);
-            if (n == collection.size()) {
-                String objectiveTitle = objective.getDisplayName();
-                fill(m - 2, p - client.textRenderer.fontHeight - 1, q, p - 1, 1610612736);
-                fill(m - 2, p - 1, q, p, 1342177280);
-                client.textRenderer.draw(objectiveTitle, m + i / 2 - client.textRenderer.getStringWidth(objectiveTitle) / 2, p - client.textRenderer.fontHeight, 553648127);
-            }
-
-        }*/
+        if(outline.get()) outlineRect(new Rectangle(textOffset, calculated.y-1, maxWidth, calculated.height+1), outlineColor.get());
 
     }
 
@@ -213,6 +170,8 @@ public class ScoreboardHud extends AbstractHudEntry {
         options.add(background);
         options.add(topColor);
         options.add(backgroundColor);
+        options.add(outline);
+        options.add(outlineColor);
         options.add(shadow);
         options.add(scores);
         options.add(scoreColor);

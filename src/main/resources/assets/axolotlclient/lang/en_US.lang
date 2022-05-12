@@ -91,6 +91,7 @@ chathud=Chat HUD
 arrowhud=Arrow HUD
 dynamic=Dynamic
 itemupdatehud=ItemUpdate HUD
+packdisplayhud=Pack Display HUD
 timeout=Timeout
 text=Text
 bar=Bar
@@ -128,6 +129,8 @@ bgColor=Background Color
 placeholder=Placeholder
 heldbackgroundcolor=Background Color when held
 background=Background
+outline=Outline
+outlineColor=Outline Color
 shadow=Shadow
 
 credits=Credits
