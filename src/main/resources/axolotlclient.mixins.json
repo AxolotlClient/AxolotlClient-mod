@@ -10,6 +10,7 @@
     "ChatHudMixin",
     "TextRendererMixin",
     "KeyBindingMixin",
+    "DownloadingTerrainScreenMixin",
     "PlayerEntityModelMixin",
     "BiPedModelMixin",
     "GlStateManagerMixin",
