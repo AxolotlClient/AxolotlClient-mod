@@ -17,6 +17,7 @@ nightMode=Gece Modu
 rendering=İşleme Ayarları
 customSky=Özel Gökyüzü
 showSunMoon=Özel Güneş & Ay
+cloudHeight=Bulut Yüksekliği
 zoomDivisor=Yakınlaştırma Bölümü
 zoomSpeed=Yakınlaştırma Hızı
 decreaseSensitivity=Duyarlılığı Azalt
