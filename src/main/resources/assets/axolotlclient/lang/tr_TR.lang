@@ -108,6 +108,13 @@ barColor=Can Barı Rengi
 LMB=SOL
 RMB=SAĞ
 MMB=ORTA
+showLMB=SOL'u Göster
+showRMB=Sağ'ı Göster
+showW=W'u Göster
+showA=A'yı Göster
+showS=S'yi Göster
+showD=D'yi Göster
+showSpace=Boşluk'u Göster
 
 togglesprint=Otomatik Niteleme
 sprinting_toggled=Koşma [Etkin]
