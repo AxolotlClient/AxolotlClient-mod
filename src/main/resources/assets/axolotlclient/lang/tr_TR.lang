@@ -11,6 +11,8 @@ general=Genel
 general.title=Genel Ayarlar
 enableRPC=RPC'yi Etkinleştir
 showActivity=Aktivite'yi Göster
+loadingBgColor=Yüklenme Ekranı Rengi
+nightMode=Gece Modu
 
 rendering=İşleme Ayarları
 customSky=Özel Gökyüzü
@@ -25,26 +27,13 @@ zoom=Yakınlaştırma
 blockOutlines=Blok Anahatları
 outlineWidth=Anahat Genişliği
 
-badgeOptions=Rozet Ayarları
-badgeText=Özel Rozet Yazısı
-customBadge=Özel Rozetler
-showBadges=Rozetleri Göster
-
 nametagOptions=Takma Ad Ayarları
 showOwnNametag=Kendi Takma Adı'nı göster
 useShadows=Gölgeleri Zorla
 nametagBackground=Takma Ad Arkaplanı
-
-nickHider=AdSaklayıcı Ayarları
-nickHiderConf.title=AdSaklayıcı Ayarları
-hideNames=Adları Sakla
-nameDesc=Saklanacak Adlar:
-hideOwnSkin=Kendi Ciltini Sakla
-hideOtherSkins=Diğer Kişilerin Ciltlerini Sakla
-
-cursedConf=Lanetli Ayarlar
-cursedConf.title=Lanetli Ayarlar
-rotateWorld=Dünya'yı döndür
+badgeText=Özel Rozet Yazısı
+customBadge=Özel Rozetler
+showBadges=Rozetleri Göster
 
 hypixel-mods=Hypixel Eklentileri
 levelhead=SeviyeEtiketi
@@ -102,6 +91,7 @@ chathud=Sohbet HUD
 arrowhud=Ok Arayüzü
 dynamic=Dinamik
 itemupdatehud=EşyaDurumu Arayüzü
+packdisplayhud=Paket Bilgisi Arayüzü
 timeout=Zaman Aşımı
 text=Yazı
 bar=Can Barı
@@ -139,6 +129,8 @@ bgColor=Arkaplan Rengi
 placeholder=Yer-tutucu
 heldbackgroundcolor=Tutulunca'ki arkaplan rengi
 background=Arkaplan
+outline=Anahat
+outlineColor=Anahat Rengi
 shadow=Gölge
 
 credits=Katkıda Bulunanlar
