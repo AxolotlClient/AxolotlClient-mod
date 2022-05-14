@@ -23,7 +23,7 @@ public class EntityRendererMixin<T extends Entity> {
 
     @Inject(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Ljava/lang/String;III)I"))
     public void addBadges(T entity, String string, double d, double e, double f, int i, CallbackInfo ci){
-        if(entity instanceof AbstractClientPlayerEntity)
+        if(entity instanceof AbstractClientPlayerEntity && string.contains(entity.getName().getString()))
             Axolotlclient.addBadge(entity);
     }
 
