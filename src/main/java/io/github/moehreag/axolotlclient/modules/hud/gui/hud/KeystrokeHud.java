@@ -1,6 +1,7 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import io.github.moehreag.axolotlclient.config.options.BooleanOption;
 import io.github.moehreag.axolotlclient.config.options.ColorOption;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
@@ -29,6 +30,22 @@ public class KeystrokeHud extends AbstractHudEntry {
 
     private final ColorOption pressedTextColor = new ColorOption("heldtextcolor", Color.parse("#FF000000"));
     private final ColorOption pressedBackgroundColor = new ColorOption( "heldbackgroundcolor", Color.parse("#64FFFFFF"));
+    private final BooleanOption showW = new BooleanOption("showW", true);
+    private final BooleanOption showA = new BooleanOption("showA", true);
+    private final BooleanOption showS = new BooleanOption("showS", true);
+    private final BooleanOption showD = new BooleanOption("showD", true);
+    private final BooleanOption showSpace = new BooleanOption("showSpace", true);
+    private final BooleanOption showLMB = new BooleanOption("showLMB", true);
+    private final BooleanOption showRMB = new BooleanOption("showRMB", true);
+
+    private Keystroke w;
+    private Keystroke a;
+    private Keystroke s;
+    private Keystroke d;
+    private Keystroke lmb;
+    private Keystroke rmb;
+    private Keystroke space;
+
     private ArrayList<Keystroke> keystrokes;
     private static final MinecraftClient client = MinecraftClient.getInstance();
 
@@ -51,30 +68,51 @@ public class KeystrokeHud extends AbstractHudEntry {
         keystrokes = new ArrayList<>();
         DrawPosition pos = getPos();
         // LMB
-        keystrokes.add(createFromKey(new Rectangle(0, 36, 26, 17), pos, client.options.keyAttack));
+        if(showLMB.get()) {
+            lmb = createFromKey(new Rectangle(0, 36, 26, 17), pos, client.options.keyAttack);
+            keystrokes.add(lmb);
+        }
         // RMB
-        keystrokes.add(createFromKey(new Rectangle(27, 36, 26, 17), pos, client.options.keyUse));
+        if(showRMB.get()) {
+            rmb = createFromKey(new Rectangle(27, 36, 26, 17), pos, client.options.keyUse);
+            keystrokes.add(rmb);
+        }
         // W
-        keystrokes.add(createFromKey(new Rectangle(18, 0, 17, 17), pos, client.options.keyForward));
+        if(showW.get()) {
+            w = createFromKey(new Rectangle(18, 0, 17, 17), pos, client.options.keyForward);
+            keystrokes.add(w);
+        }
         // A
-        keystrokes.add(createFromKey(new Rectangle(0, 18, 17, 17), pos, client.options.keyLeft));
+        if(showA.get()) {
+            a = createFromKey(new Rectangle(0, 18, 17, 17), pos, client.options.keyLeft);
+            keystrokes.add(a);
+        }
         // S
-        keystrokes.add(createFromKey(new Rectangle(18, 18, 17, 17), pos, client.options.keyBack));
+        if(showS.get()) {
+            s = createFromKey(new Rectangle(18, 18, 17, 17), pos, client.options.keyBack);
+            keystrokes.add(s);
+        }
         // D
-        keystrokes.add(createFromKey(new Rectangle(36, 18, 17, 17), pos, client.options.keyRight));
+        if(showD.get()) {
+            d = createFromKey(new Rectangle(36, 18, 17, 17), pos, client.options.keyRight);
+            keystrokes.add(d);
+        }
 
         // Space
-        keystrokes.add(new Keystroke(new Rectangle(0, 54, 53, 7), pos, client.options.keyJump, (stroke) -> {
-            Rectangle bounds = stroke.bounds;
-            Rectangle spaceBounds = new Rectangle(bounds.x + stroke.offset.x + 4,
-                    bounds.y + stroke.offset.y + 2,
-                    bounds.width - 8, 1);
-            fillRect(spaceBounds, stroke.getFGColor());
-            if (shadow.get()) {
-                fillRect(spaceBounds.offset(1, 1),
-                        new Color((stroke.getFGColor().getAsInt() & 16579836) >> 2 | stroke.getFGColor().getAsInt() & -16777216));
-            }
-        }));
+        if(showSpace.get()) {
+            space = new Keystroke(new Rectangle(0, 54, 53, 7), pos, client.options.keyJump, (stroke) -> {
+                Rectangle bounds = stroke.bounds;
+                Rectangle spaceBounds = new Rectangle(bounds.x + stroke.offset.x + 4,
+                        bounds.y + stroke.offset.y + 2,
+                        bounds.width - 8, 1);
+                fillRect(spaceBounds, stroke.getFGColor());
+                if (shadow.get()) {
+                    fillRect(spaceBounds.offset(1, 1),
+                            new Color((stroke.getFGColor().getAsInt() & 16579836) >> 2 | stroke.getFGColor().getAsInt() & -16777216));
+                }
+            });
+            keystrokes.add(space);
+        }
         KeyBinding.unpressAll();
         KeyBinding.updateKeysByCode();
     }
@@ -105,6 +143,39 @@ public class KeystrokeHud extends AbstractHudEntry {
         for (Keystroke stroke : keystrokes) {
             stroke.offset = pos;
         }
+
+        if(keystrokes.contains(lmb) && !showLMB.get()){
+            keystrokes.remove(lmb);
+        }
+        if(keystrokes.contains(rmb) && !showRMB.get()){
+            keystrokes.remove(rmb);
+        }
+        if(keystrokes.contains(w) && !showW.get()){
+            keystrokes.remove(w);
+        }
+        if(keystrokes.contains(a) && !showA.get()){
+            keystrokes.remove(a);
+        }
+        if(keystrokes.contains(s) && !showS.get()){
+            keystrokes.remove(s);
+        }
+        if(keystrokes.contains(d) && !showD.get()){
+            keystrokes.remove(d);
+        }
+        if(keystrokes.contains(space) && !showSpace.get()){
+            keystrokes.remove(space);
+        }
+
+        if(!keystrokes.contains(lmb) && showLMB.get() ||
+                !keystrokes.contains(rmb) && showRMB.get() ||
+                !keystrokes.contains(w) && showW.get() ||
+                !keystrokes.contains(a) && showA.get() ||
+                !keystrokes.contains(s) && showS.get() ||
+                !keystrokes.contains(d) && showD.get() ||
+                !keystrokes.contains(space) && showSpace.get()){
+            setKeystrokes();
+        }
+
     }
 
     @Override
@@ -167,6 +238,13 @@ public class KeystrokeHud extends AbstractHudEntry {
         options.add(pressedBackgroundColor);
         options.add(outline);
         options.add(outlineColor);
+        options.add(showLMB);
+        options.add(showRMB);
+        options.add(showSpace);
+        options.add(showW);
+        options.add(showA);
+        options.add(showS);
+        options.add(showD);
     }
 
     public class Keystroke {

@@ -108,6 +108,13 @@ barColor=Bar Color
 LMB=LMB
 RMB=RMB
 MMB=MMB
+showLMB=Show LMB
+showRMB=Show RMB
+showW=Show W
+showA=Show A
+showS=Show S
+showD=Show D
+showSpace=Show Spacebar
 
 togglesprint=ToggleModifiers
 sprinting_toggled=Sprinting [Toggled]

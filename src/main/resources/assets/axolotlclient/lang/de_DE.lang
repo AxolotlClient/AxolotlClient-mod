@@ -103,6 +103,13 @@ barColor=Leistenfarbe
 LMB=LMB
 RMB=RMB
 MMB=MMB
+showLMB=Zeige LMB
+showRMB=Zeige RMB
+showW=Zeige W
+showA=Zeige A
+showS=Zeige S
+showD=Zeige D
+showSpace=Zeige Leertaste
 
 togglesprint=ToggleModifiers
 sprinting_toggled=Sprinting [Toggled]
