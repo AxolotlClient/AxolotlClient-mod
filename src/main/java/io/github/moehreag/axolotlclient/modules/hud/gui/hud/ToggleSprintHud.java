@@ -103,7 +103,7 @@ public class ToggleSprintHud extends CleanHudEntry {
         if(toggleSprint.get() && sprintToggled.get()){
              return I18n.translate("sprinting_toggled");
         }
-        return placeholder.get();
+        return getPlaceholder();
     }
 
     @Override
