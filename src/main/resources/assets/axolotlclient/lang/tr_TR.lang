@@ -51,6 +51,13 @@ onBWP=Bedwars Practice'de Etkin
 onPVPL=PVP Land'de Etkin
 onMMC=MineMen.club'ta Etkin
 autotip=Otomatik-Bağış
+nickhider=Takma Ad Saklayıcı
+hiddenNameSelf=Kendini bu adla sakla:
+hiddenNameOthers=Diğerleri bu adla sakla:
+hideOwnName=Kendi Adını Sakla
+hideOtherNames=Diğerlerinin adını bu adla sakla:
+hideOwnSkin=Kendi Ciltini Sakla
+hideOtherSkins=Diğerlerinin Ciltlerini Sakla
 
 category.axolotlclient=AxolotlClient
 
@@ -77,6 +84,7 @@ scorecolor=Skor rengi
 crosshairhud=Artı-Gösterge Arayüzü
 type=Tür
 showInF5=3. Perspektif'de Göster
+showInF3=Hata Ayıklama Arayüzü'de Göster
 defaultcolor=Renk (Varsayılan)
 entitycolor=Renk (Varlıklar)
 blockcolor=Renk (İçeren)
