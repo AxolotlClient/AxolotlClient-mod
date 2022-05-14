@@ -45,11 +45,12 @@ public abstract class TextRendererMixin {
             MinecraftClient.getInstance().getTextureManager().bindTexture(new Identifier("axolotlclient",
                     "textures/font/g_breve_capital.png"));
 
+            float alpha = (float)(color >> 16 & 0xFF) / 255.0F;
+            float red = (float)(color >> 8 & 0xFF) / 255.0F;
+            float green = (float)(color & 0xFF) / 255.0F;
+            float blue = (float)(color >> 24 & 0xFF) / 255.0F;
             if(bl) {
-                float alpha = (float)(color >> 16 & 0xFF) / 255.0F;
-                float red = (float)(color >> 8 & 0xFF) / 255.0F;
-                float green = (float)(color & 0xFF) / 255.0F;
-                float blue = (float)(color >> 24 & 0xFF) / 255.0F;
+
 
                 GlStateManager.color4f(alpha, red, green, blue);
                 //GlStateManager.color4f(this.field_1153, this.field_1154, this.field_1155, this.field_1156);
@@ -59,7 +60,7 @@ public abstract class TextRendererMixin {
                 GlStateManager.color4f(this.field_1153, this.field_1154, this.field_1155, this.field_1156);
             }
 
-            GlStateManager.color4f(this.field_1153, this.field_1154, this.field_1155, this.field_1156);
+            GlStateManager.color4f(alpha, red, green, blue);
             drawTexture(this.field_1149,
                     this.field_1150 - this.fontHeight + 6
             );

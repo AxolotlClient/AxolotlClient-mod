@@ -68,6 +68,9 @@ public class CreditsScreen extends Screen {
         other.forEach((person, text)->{
             textRenderer.draw(person, authorX, y.get(), -1);
             textRenderer.draw(text[0], textX, y.get(), -1);
+            for(int i=1;i<text.length;i++){
+                textRenderer.draw(text[i], textX+30, y.addAndGet(12), -1);
+            }
             y.addAndGet(12);
         });
     }

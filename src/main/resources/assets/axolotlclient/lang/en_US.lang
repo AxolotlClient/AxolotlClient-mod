@@ -117,6 +117,7 @@ showD=Show D
 showSpace=Show Spacebar
 
 togglesprint=ToggleModifiers
+randomPlaceholder=Random Placeholder
 sprinting_toggled=Sprinting [Toggled]
 sneaking_toggled=Sneaking [Toggled]
 sprinting_pressed=Sprinting [Key held]

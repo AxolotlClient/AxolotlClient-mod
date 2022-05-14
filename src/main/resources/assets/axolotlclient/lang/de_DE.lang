@@ -112,6 +112,7 @@ showD=Zeige D
 showSpace=Zeige Leertaste
 
 togglesprint=ToggleModifiers
+randomPlaceholder=Zufälliger Platzhalter
 sprinting_toggled=Sprinting [Toggled]
 sneaking_toggled=Sneaking [Toggled]
 sprinting_pressed=Sprinting [Key held]

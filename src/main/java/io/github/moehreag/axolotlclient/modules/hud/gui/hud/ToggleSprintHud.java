@@ -6,17 +6,27 @@ import io.github.moehreag.axolotlclient.config.options.BooleanOption;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.config.options.StringOption;
 import net.legacyfabric.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.util.Identifier;
+import org.apache.commons.io.Charsets;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Random;
 
 public class ToggleSprintHud extends CleanHudEntry {
 
     public static final Identifier ID = new Identifier("togglesprint");
     private final BooleanOption toggleSprint = new BooleanOption("toggleSprint", false);
     private final BooleanOption toggleSneak = new BooleanOption("toggleSneak", false);
+    private final BooleanOption randomPlaceholder = new BooleanOption("randomPlaceholder", false);
     private final StringOption placeholder = new StringOption("placeholder", "");
 
     KeyBinding sprintToggle = new KeyBinding("key.toggleSprint", 23, "category.axolotlclient");
@@ -26,6 +36,9 @@ public class ToggleSprintHud extends CleanHudEntry {
     private boolean sprintWasPressed = false;
     public BooleanOption sneakToggled = new BooleanOption("sneakToggled", false);
     private boolean sneakWasPressed = false;
+
+    private final List<String> texts = new ArrayList<>();
+    private String text = "";
 
     public ToggleSprintHud(){
         super(100, 20);
@@ -37,9 +50,35 @@ public class ToggleSprintHud extends CleanHudEntry {
         KeyBindingHelper.registerKeyBinding(sneakToggle);
     }
 
+    private void loadRandomPlaceholder(){
+        try {
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(MinecraftClient.getInstance().getResourceManager().getResource(new Identifier("axolotlclient", "texts/splashes.txt")).getInputStream(), Charsets.UTF_8)
+            );
+            String string;
+            while((string = bufferedReader.readLine()) != null) {
+                string = string.trim();
+                if (!string.isEmpty()) {
+                    texts.add(string);
+                }
+            }
+
+            text = texts.get(new Random().nextInt(texts.size()));
+        } catch (Exception e){
+            text = "";
+        }
+    }
+
+    private String getRandomPlaceholder(){
+        if(Objects.equals(text, "")){
+            loadRandomPlaceholder();
+        }
+        return text;
+    }
+
     @Override
     public String getPlaceholder() {
-        return placeholder.get();
+        return randomPlaceholder.get() ? getRandomPlaceholder() : placeholder.get();
     }
 
     @Override
@@ -91,9 +130,12 @@ public class ToggleSprintHud extends CleanHudEntry {
         super.addConfigOptions(options);
         options.add(toggleSprint);
         options.add(toggleSneak);
+        options.add(randomPlaceholder);
         options.add(placeholder);
 
         Axolotlclient.config.add(sprintToggled);
         Axolotlclient.config.add(sneakToggled);
     }
+
+
 }
