@@ -51,6 +51,13 @@ onBWP=Active on BedWarsPractice
 onPVPL=Active on PVPLand
 onMMC=Active on MineMen.club
 autotip=AutoTip
+nickhider=NickHider
+hiddenNameSelf=Hide yourself as:
+hiddenNameOthers=Hide others as:
+hideOwnName=Hide your own name
+hideOtherNames=Hide others' names
+hideOwnSkin=Hide your own skin
+hideOtherSkins=Hide others' skins
 
 category.axolotlclient=AxolotlClient
 

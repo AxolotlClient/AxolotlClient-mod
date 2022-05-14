@@ -1,6 +1,7 @@
 package io.github.moehreag.axolotlclient.mixin;
 
 import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.modules.hypixel.nickhider.NickHider;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
@@ -24,11 +25,12 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
     public void modifiyName(Args args){
         if(Axolotlclient.CONFIG != null) {
             AbstractClientPlayerEntity player = args.get(0);
-            if (Axolotlclient.CONFIG.hideNames.get()) {
-                assert MinecraftClient.getInstance().player != null;
-                if (player.getName() != MinecraftClient.getInstance().player.getName()) {
-                    args.set(4, Axolotlclient.CONFIG.name);
-                }
+            if(player.getUuid()==MinecraftClient.getInstance().player.getUuid() &&
+                    NickHider.Instance.hideOwnName.get()){
+                args.set(4, NickHider.Instance.hiddenNameSelf.get());
+            } else if(player.getUuid()!=MinecraftClient.getInstance().player.getUuid() &&
+                    NickHider.Instance.hideOtherNames.get()){
+                args.set(4, NickHider.Instance.hiddenNameOthers.get());
             }
         }
     }

@@ -7,6 +7,7 @@ import io.github.moehreag.axolotlclient.config.options.OptionCategory;
 import io.github.moehreag.axolotlclient.modules.AbstractModule;
 import io.github.moehreag.axolotlclient.modules.hud.HudManager;
 import io.github.moehreag.axolotlclient.modules.hypixel.HypixelMods;
+import io.github.moehreag.axolotlclient.modules.hypixel.nickhider.NickHider;
 import io.github.moehreag.axolotlclient.modules.zoom.Zoom;
 import io.github.moehreag.axolotlclient.util.Util;
 import net.fabricmc.api.ModInitializer;
@@ -109,7 +110,9 @@ public class Axolotlclient implements ModInitializer {
 				MinecraftClient.getInstance().getTextureManager().bindTexture(Axolotlclient.badgeIcon);
 
 				int x = -(MinecraftClient.getInstance().textRenderer.getStringWidth(
-						Axolotlclient.CONFIG.hideNames.get() ? Axolotlclient.CONFIG.name.get(): entity.getName().asFormattedString()
+						entity.getUuid() == MinecraftClient.getInstance().player.getUuid()?
+						(NickHider.Instance.hideOwnName.get() ? NickHider.Instance.hiddenNameSelf.get(): entity.getName().asFormattedString()):
+						(NickHider.Instance.hideOtherNames.get() ? NickHider.Instance.hiddenNameOthers.get(): entity.getName().asFormattedString())
 				)/2 + (Axolotlclient.CONFIG.customBadge.get() ? MinecraftClient.getInstance().textRenderer.getStringWidth(Axolotlclient.CONFIG.badgeText.get()): 10));
 
 				GlStateManager.color4f(1, 1, 1, 1);

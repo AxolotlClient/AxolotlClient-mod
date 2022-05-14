@@ -1,16 +1,15 @@
 package io.github.moehreag.axolotlclient.mixin;
 
 import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.modules.hypixel.nickhider.NickHider;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.PlayerListHud;
 import net.minecraft.client.network.PlayerListEntry;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.ModifyArgs;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Mixin(PlayerListHud.class)
@@ -18,6 +17,17 @@ public abstract class PlayerListHudMixin extends DrawableHelper {
 
 	MinecraftClient client = MinecraftClient.getInstance();
 	private PlayerListEntry playerListEntry;
+
+	@Inject(method = "getPlayerName", at = @At("HEAD"), cancellable = true)
+	public void nickHider(PlayerListEntry playerEntry, CallbackInfoReturnable<String> cir){
+		if(playerEntry.getProfile().getId()==MinecraftClient.getInstance().player.getUuid() &&
+				NickHider.Instance.hideOwnName.get()){
+			cir.setReturnValue(NickHider.Instance.hiddenNameSelf.get());
+		} else if(playerEntry.getProfile().getId()!=MinecraftClient.getInstance().player.getUuid() &&
+			NickHider.Instance.hideOtherNames.get()){
+			cir.setReturnValue(NickHider.Instance.hiddenNameOthers.get());
+		}
+	}
 
 	@ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;getPlayerName(Lnet/minecraft/client/network/PlayerListEntry;)Ljava/lang/String;"))
 	public PlayerListEntry getPlayer(PlayerListEntry playerEntry){

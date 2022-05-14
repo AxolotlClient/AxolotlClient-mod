@@ -25,6 +25,7 @@
     "GameMenuScreenMixin",
     "GameRendererMixin",
     "InGameHudMixin",
+    "PlayerListEntryMixin",
     "KeyboardInputMixin",
     "LivingEntityRendererMixin",
     "MinecraftClientMixin",

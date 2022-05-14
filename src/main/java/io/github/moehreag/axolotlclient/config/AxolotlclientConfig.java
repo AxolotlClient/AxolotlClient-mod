@@ -17,11 +17,6 @@ public class AxolotlclientConfig {
     public final BooleanOption customBadge = new BooleanOption("customBadge", false);
     public final StringOption badgeText = new StringOption("badgeText", "");
 
-    public final StringOption name = new StringOption("name", "Player");
-    public final BooleanOption hideNames = new BooleanOption("hideNames", false);
-    public final BooleanOption hideOwnSkin = new BooleanOption("hideOwnSkin", false);
-    public final BooleanOption hideOtherSkins = new BooleanOption("hideOtherSkins", false);
-
     public final BooleanOption customSky = new BooleanOption("customSky", true);
     public final BooleanOption showSunMoon = new BooleanOption("showSunMoon", true);
     public final FloatOption zoomDivisor = new FloatOption("zoomDivisor", 1F, 10F, 4F);
@@ -91,11 +86,6 @@ public class AxolotlclientConfig {
         nametagOptions.add(showBadges);
         nametagOptions.add(customBadge);
         nametagOptions.add(badgeText);
-
-        /*add(name);
-        add(hideNames);
-        add(hideOwnSkin);
-        add(hideOtherSkins);*/
 
         general.add(enableRPC);
         general.add(showActivity);

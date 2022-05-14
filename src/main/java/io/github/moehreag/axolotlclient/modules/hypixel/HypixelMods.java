@@ -7,6 +7,7 @@ import io.github.moehreag.axolotlclient.modules.AbstractModule;
 import io.github.moehreag.axolotlclient.modules.hypixel.autogg.AutoGG;
 import io.github.moehreag.axolotlclient.modules.hypixel.autotip.AutoTip;
 import io.github.moehreag.axolotlclient.modules.hypixel.levelhead.LevelHead;
+import io.github.moehreag.axolotlclient.modules.hypixel.nickhider.NickHider;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public class HypixelMods extends AbstractModule {
         addSubModule(LevelHead.getInstance());
         addSubModule(AutoGG.Instance);
         addSubModule(AutoTip.INSTANCE);
+        addSubModule(NickHider.Instance);
 
         subModules.forEach(AbstractHypixelMod::init);
 
