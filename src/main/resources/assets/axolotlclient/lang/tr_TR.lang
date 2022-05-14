@@ -117,6 +117,7 @@ showD=D'yi Göster
 showSpace=Boşluk'u Göster
 
 togglesprint=Otomatik Niteleme
+randomPlaceholder=Rastgele Yer-tutucu
 sprinting_toggled=Koşma [Etkin]
 sneaking_toggled=Eğilme [Etkin]
 sprinting_pressed=Koşuluyor [Tuş Basılı]
