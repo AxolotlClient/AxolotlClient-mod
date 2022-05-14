@@ -33,6 +33,7 @@ public class CrosshairHud extends AbstractHudEntry {
 
     private final CrosshairHudOption type = new CrosshairHudOption("type");
     private final BooleanOption showInF5 = new BooleanOption("showInF5", false);
+    public final BooleanOption showInF3 = new BooleanOption("showInF3", false);
     private final ColorOption defaultColor = new ColorOption("defaultcolor",  "#FFFFFFFF");
     private final ColorOption entityColor = new ColorOption("entitycolor", Color.SELECTOR_RED);
     private final ColorOption containerColor = new ColorOption("blockcolor", Color.SELECTOR_BLUE);
@@ -56,8 +57,6 @@ public class CrosshairHud extends AbstractHudEntry {
     public void render() {
         if (!(client.options.perspective == 0) && !showInF5.get()) return;
 
-        GlStateManager.enableBlend();
-        GlStateManager.blendFuncSeparate(775, 769, 1, 0);
         GlStateManager.enableAlphaTest();
         scale();
         DrawPosition pos = getPos().subtract(0, -1);
@@ -83,10 +82,7 @@ public class CrosshairHud extends AbstractHudEntry {
 
         }
         GlStateManager.popMatrix();
-        GlStateManager.blendFuncSeparate(770, 771, 1, 0);
-        GlStateManager.color4f(1F, 1F, 1F, 1F);
         GlStateManager.disableAlphaTest();
-        GlStateManager.disableBlend();
 
     }
 
@@ -128,6 +124,7 @@ public class CrosshairHud extends AbstractHudEntry {
         super.addConfigOptions(options);
         options.add(type);
         options.add(showInF5);
+        options.add(showInF3);
         options.add(defaultColor);
         options.add(entityColor);
         options.add(containerColor);

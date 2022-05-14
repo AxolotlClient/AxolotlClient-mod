@@ -73,6 +73,7 @@ scorecolor=Wertfarbe
 crosshairhud=Crosshair HUD
 type=Typ
 showInF5=In Er-Perspektive zeigen
+showInF3=In Debug-HUD Anzeige erzwingen
 defaultcolor=Farbe (default)
 entitycolor=Farbe (Entities)
 blockcolor=Farbe (Container)

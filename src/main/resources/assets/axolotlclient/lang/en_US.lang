@@ -77,6 +77,7 @@ scorecolor=Score color
 crosshairhud=Crosshair HUD
 type=Type
 showInF5=Show in 3rd Perspective
+showInF3=Force on Debug HUD
 defaultcolor=Color (default)
 entitycolor=Color (Entities)
 blockcolor=Color (Container)

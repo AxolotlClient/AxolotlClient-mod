@@ -2,6 +2,7 @@ package io.github.moehreag.axolotlclient.mixin;
 
 import io.github.moehreag.axolotlclient.modules.hud.HudManager;
 import io.github.moehreag.axolotlclient.modules.hud.gui.hud.ToggleSprintHud;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.input.KeyboardInput;
 import net.minecraft.client.options.KeyBinding;
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,6 +21,7 @@ public class KeyboardInputMixin {
     @Redirect(method = "method_1302", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/options/KeyBinding;isPressed()Z", ordinal = 5))
     public boolean toggleSneak(KeyBinding instance){
         ToggleSprintHud hud = (ToggleSprintHud) HudManager.getINSTANCE().get(ToggleSprintHud.ID);
-        return hud.isEnabled() && hud.sneakToggled.get() || instance.isPressed();
+        return hud.isEnabled() && hud.sneakToggled.get() && MinecraftClient.getInstance().currentScreen==null ||
+                instance.isPressed();
     }
 }

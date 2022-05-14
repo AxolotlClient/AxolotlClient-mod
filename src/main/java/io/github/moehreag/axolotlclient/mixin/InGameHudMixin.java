@@ -1,5 +1,6 @@
 package io.github.moehreag.axolotlclient.mixin;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.modules.hud.HudManager;
 import io.github.moehreag.axolotlclient.modules.hud.gui.hud.ActionBarHud;
 import io.github.moehreag.axolotlclient.modules.hud.gui.hud.BossBarHud;
@@ -32,7 +33,11 @@ public abstract class InGameHudMixin {
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;method_9429()Z"))
     public boolean noCrosshair(InGameHud instance){
         CrosshairHud hud = (CrosshairHud) HudManager.getINSTANCE().get(CrosshairHud.ID);
-        if(hud.isEnabled()) return false;
+        if(hud.isEnabled()) {
+            GlStateManager.blendFuncSeparate(775, 769, 1, 0);
+            GlStateManager.enableAlphaTest();
+            return false;
+        }
         return method_9429();
     }
 

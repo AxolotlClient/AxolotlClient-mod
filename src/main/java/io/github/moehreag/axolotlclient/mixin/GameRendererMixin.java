@@ -2,6 +2,8 @@ package io.github.moehreag.axolotlclient.mixin;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.modules.hud.HudManager;
+import io.github.moehreag.axolotlclient.modules.hud.gui.hud.CrosshairHud;
 import io.github.moehreag.axolotlclient.modules.sky.SkyboxManager;
 import io.github.moehreag.axolotlclient.modules.zoom.Zoom;
 import net.minecraft.block.Block;
@@ -120,5 +122,16 @@ public abstract class GameRendererMixin {
     public float setGamma(GameOptions instance){
         if(Axolotlclient.CONFIG.fullBright.get()) return  15F;
         return instance.gamma;
+    }
+
+    @Inject(method = "renderDebugCrosshair", at = @At("HEAD"), cancellable = true)
+    public void customCrosshairF3(float tickDelta, CallbackInfo ci){
+        CrosshairHud hud = (CrosshairHud) HudManager.getINSTANCE().get(CrosshairHud.ID);
+        if(hud.isEnabled() && this.client.options.debugEnabled
+                && !this.client.options.hudHidden
+                && hud.showInF3.get()) {
+            ci.cancel();
+        }
+
     }
 }
