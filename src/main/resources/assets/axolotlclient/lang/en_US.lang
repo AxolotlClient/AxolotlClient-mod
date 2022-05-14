@@ -17,6 +17,7 @@ nightMode=Night Mode
 rendering=Rendering Options
 customSky=Custom Skies
 showSunMoon=Custom Sky Sun & Moon
+cloudHeight=Cloud Height
 zoomDivisor=Zoom Divisor
 zoomSpeed=Zoom Speed
 decreaseSensitivity=Reduce Sensitivity

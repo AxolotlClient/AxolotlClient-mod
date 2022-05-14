@@ -182,7 +182,7 @@ public abstract class WorldRendererMixin {
 
     @Redirect(method = "method_9910", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/dimension/Dimension;getCloudHeight()F"))
     public float getCloudHeight(Dimension instance){
-        return instance.getCloudHeight();
+        return Axolotlclient.CONFIG.cloudHeight.get();
     }
 
 

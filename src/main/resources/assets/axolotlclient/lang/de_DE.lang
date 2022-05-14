@@ -17,6 +17,7 @@ nightMode=Blaufilter
 rendering=Renderoptionen
 customSky=Benutzerdefinierte Himmel
 showSunMoon=Zeige Sonne & Mond auf eigenem Himmel
+cloudHeight=Wolkenhöhe
 zoomDivisor=Zoom Divisor
 zoomSpeed=Zoomgeschwindigkeit
 decreaseSensitivity=Reduziere Sensitivität
