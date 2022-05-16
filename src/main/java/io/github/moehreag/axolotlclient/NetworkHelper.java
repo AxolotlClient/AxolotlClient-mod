@@ -21,13 +21,13 @@ public class NetworkHelper {
 
     public static boolean getOnline(UUID uuid){
 
-        if (Axolotlclient.onlinePlayers.contains(uuid.toString())){
+        if (AxolotlClient.onlinePlayers.contains(uuid.toString())){
             return true;
-        } else if (Axolotlclient.otherPlayers.contains(uuid.toString())){
+        } else if (AxolotlClient.otherPlayers.contains(uuid.toString())){
             return false;
         }else {
             ThreadExecuter.scheduleTask(() -> getUser(uuid));
-            return Axolotlclient.onlinePlayers.contains(uuid.toString());
+            return AxolotlClient.onlinePlayers.contains(uuid.toString());
         }
     }
 
@@ -39,13 +39,13 @@ public class NetworkHelper {
             String body = EntityUtils.toString(response.getEntity());
             client.close();
             if (body.contains("true")){
-                Axolotlclient.onlinePlayers  = Axolotlclient.onlinePlayers + " " + uuid;
+                AxolotlClient.onlinePlayers  = AxolotlClient.onlinePlayers + " " + uuid;
             } else {
-                Axolotlclient.otherPlayers = Axolotlclient.otherPlayers + " " + uuid;
+                AxolotlClient.otherPlayers = AxolotlClient.otherPlayers + " " + uuid;
             }
 
         } catch (Exception ignored){
-            Axolotlclient.otherPlayers = Axolotlclient.otherPlayers + " " + uuid;
+            AxolotlClient.otherPlayers = AxolotlClient.otherPlayers + " " + uuid;
         }
 
 
@@ -64,13 +64,13 @@ public class NetworkHelper {
             HttpResponse response = client.execute(post);
             String body = EntityUtils.toString(response.getEntity());
             if(body.contains("Success!")){
-                Axolotlclient.LOGGER.info("Sucessfully logged in at Axolotlclient!");
+                AxolotlClient.LOGGER.info("Sucessfully logged in at AxolotlClient!");
                 loggedIn=true;
             }
             client.close();
         } catch (Exception e) {
             e.printStackTrace();
-            Axolotlclient.LOGGER.error("Error while logging in!");
+            AxolotlClient.LOGGER.error("Error while logging in!");
         }
     }
 
@@ -78,7 +78,7 @@ public class NetworkHelper {
 
         if(loggedIn) {
             try {
-                Axolotlclient.LOGGER.info("Logging off..");
+                AxolotlClient.LOGGER.info("Logging off..");
                 CloseableHttpClient client = HttpClients.createDefault();
                 HttpDelete delete = new HttpDelete("https://moehreag.duckdns.org/axolotlclient-api/?uuid=" + uuid.toString());
                 delete.setHeader("Accept", "application/json");
@@ -86,7 +86,7 @@ public class NetworkHelper {
                 HttpResponse response = client.execute(delete);
                 String body = EntityUtils.toString(response.getEntity());
                 if (body.contains("Success!")) {
-                    Axolotlclient.LOGGER.info("Successfully logged off!");
+                    AxolotlClient.LOGGER.info("Successfully logged off!");
                 } else {
                     throw new Exception("Error while logging off: " + body);
                 }
@@ -94,7 +94,7 @@ public class NetworkHelper {
 
             } catch (Exception ex) {
                 ex.printStackTrace();
-                Axolotlclient.LOGGER.error("Error while logging off!");
+                AxolotlClient.LOGGER.error("Error while logging off!");
             }
         }
 

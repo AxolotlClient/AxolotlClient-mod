@@ -1,7 +1,7 @@
 package io.github.moehreag.axolotlclient;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.moehreag.axolotlclient.config.AxolotlclientConfig;
+import io.github.moehreag.axolotlclient.config.AxolotlClientConfig;
 import io.github.moehreag.axolotlclient.config.ConfigManager;
 import io.github.moehreag.axolotlclient.config.options.OptionCategory;
 import io.github.moehreag.axolotlclient.modules.AbstractModule;
@@ -25,11 +25,11 @@ import java.util.List;
 import java.util.UUID;
 
 
-public class Axolotlclient implements ModInitializer {
+public class AxolotlClient implements ModInitializer {
 
-	public static Logger LOGGER = LogManager.getLogger("Axolotlclient");
+	public static Logger LOGGER = LogManager.getLogger("AxolotlClient");
 
-	public static AxolotlclientConfig CONFIG;
+	public static AxolotlClientConfig CONFIG;
 	public static String onlinePlayers = "";
 	public static String otherPlayers = "";
 
@@ -47,7 +47,7 @@ public class Axolotlclient implements ModInitializer {
 	@Override
 	public void onInitialize() {
 
-		CONFIG = new AxolotlclientConfig();
+		CONFIG = new AxolotlClientConfig();
 
 
 		getModules();
@@ -63,7 +63,7 @@ public class Axolotlclient implements ModInitializer {
 
 		modules.forEach(AbstractModule::lateInit);
 
-		LOGGER.info("Axolotlclient Initialized");
+		LOGGER.info("AxolotlClient Initialized");
 	}
 
 	public static void getModules(){
@@ -106,18 +106,18 @@ public class Axolotlclient implements ModInitializer {
 	public static void addBadge(Entity entity){
 		if(entity instanceof PlayerEntity){
 
-			if(Axolotlclient.CONFIG.showBadges.get() && Axolotlclient.isUsingClient(entity.getUuid())) {
-				MinecraftClient.getInstance().getTextureManager().bindTexture(Axolotlclient.badgeIcon);
+			if(AxolotlClient.CONFIG.showBadges.get() && AxolotlClient.isUsingClient(entity.getUuid())) {
+				MinecraftClient.getInstance().getTextureManager().bindTexture(AxolotlClient.badgeIcon);
 
 				int x = -(MinecraftClient.getInstance().textRenderer.getStringWidth(
 						entity.getUuid() == MinecraftClient.getInstance().player.getUuid()?
 						(NickHider.Instance.hideOwnName.get() ? NickHider.Instance.hiddenNameSelf.get(): entity.getName().asFormattedString()):
 						(NickHider.Instance.hideOtherNames.get() ? NickHider.Instance.hiddenNameOthers.get(): entity.getName().asFormattedString())
-				)/2 + (Axolotlclient.CONFIG.customBadge.get() ? MinecraftClient.getInstance().textRenderer.getStringWidth(Axolotlclient.CONFIG.badgeText.get()): 10));
+				)/2 + (AxolotlClient.CONFIG.customBadge.get() ? MinecraftClient.getInstance().textRenderer.getStringWidth(AxolotlClient.CONFIG.badgeText.get()): 10));
 
 				GlStateManager.color4f(1, 1, 1, 1);
 
-				if(Axolotlclient.CONFIG.customBadge.get()) MinecraftClient.getInstance().textRenderer.draw(Axolotlclient.CONFIG.badgeText.get(), x, 0 ,-1, Axolotlclient.CONFIG.useShadows.get());
+				if(AxolotlClient.CONFIG.customBadge.get()) MinecraftClient.getInstance().textRenderer.draw(AxolotlClient.CONFIG.badgeText.get(), x, 0 ,-1, AxolotlClient.CONFIG.useShadows.get());
 				else DrawableHelper.drawTexture(x, 0, 0, 0, 8, 8, 8, 8);
 
 

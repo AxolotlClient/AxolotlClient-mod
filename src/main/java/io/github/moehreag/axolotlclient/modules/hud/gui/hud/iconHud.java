@@ -1,7 +1,7 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.config.Color;
 import io.github.moehreag.axolotlclient.config.options.ColorOption;
 import io.github.moehreag.axolotlclient.config.options.Option;
@@ -25,7 +25,7 @@ public class iconHud extends AbstractHudEntry {
     public void render() {
         scale();
         DrawPosition pos = getPos();
-        this.client.getTextureManager().bindTexture(Axolotlclient.badgeIcon);
+        this.client.getTextureManager().bindTexture(AxolotlClient.badgeIcon);
         if(chroma.get())GlStateManager.color4f(textColor.getChroma().getRed(), textColor.getChroma().getGreen(), textColor.getChroma().getBlue(), 1F);
         else {GlStateManager.color4f(color.get().getRed(), color.get().getGreen(), color.get().getBlue(), 1F);}
         drawTexture(pos.x, pos.y, 0, 0, width, height, width, height);
@@ -37,7 +37,7 @@ public class iconHud extends AbstractHudEntry {
     public void renderPlaceholder() {
         scale();
         DrawPosition pos = getPos();
-        this.client.getTextureManager().bindTexture(Axolotlclient.badgeIcon);
+        this.client.getTextureManager().bindTexture(AxolotlClient.badgeIcon);
         GlStateManager.disableDepthTest();
         GlStateManager.color4f(1F, 1F, 1F, 1F);
         DiffuseLighting.disable();

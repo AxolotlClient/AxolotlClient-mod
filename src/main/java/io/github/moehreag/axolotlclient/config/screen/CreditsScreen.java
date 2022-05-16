@@ -1,7 +1,7 @@
 package io.github.moehreag.axolotlclient.config.screen;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.config.ConfigManager;
 import io.github.moehreag.axolotlclient.config.screen.widgets.CustomButtonWidget;
 import io.github.moehreag.axolotlclient.mixin.AccessorSoundManager;
@@ -36,7 +36,7 @@ public class CreditsScreen extends Screen {
     @Override
     public void render(int mouseX, int mouseY, float tickDelta) {
 
-        if(Axolotlclient.CONFIG.creditsBGM.get() && !client.getSoundManager().isPlaying(bgm)){
+        if(AxolotlClient.CONFIG.creditsBGM.get() && !client.getSoundManager().isPlaying(bgm)){
             if(((AccessorSoundSystem) ((AccessorSoundManager) MinecraftClient.getInstance().getSoundManager()).getSoundSystem()).getField_8196().get(bgm) == null) {
                 MinecraftClient.getInstance().getSoundManager().play(bgm);
             }
@@ -79,7 +79,7 @@ public class CreditsScreen extends Screen {
     protected void buttonClicked(ButtonWidget button) {
         if(button.id==0){client.openScreen(parent);stopBGM();}
         if(button.id==1){
-            Axolotlclient.CONFIG.creditsBGM.toggle();
+            AxolotlClient.CONFIG.creditsBGM.toggle();
             ConfigManager.save();
             stopBGM();
             client.openScreen(new CreditsScreen(parent));
@@ -95,7 +95,7 @@ public class CreditsScreen extends Screen {
         initCredits();
 
         this.buttons.add(new CustomButtonWidget(1, 6, this.height-26, 100, 20,
-                I18n.translate("creditsBGM")+ ": "+I18n.translate(Axolotlclient.CONFIG.creditsBGM.get()?"options.on":"options.off"),
+                I18n.translate("creditsBGM")+ ": "+I18n.translate(AxolotlClient.CONFIG.creditsBGM.get()?"options.on":"options.off"),
                 new Identifier("axolotlclient", "textures/gui/button2.png")
         ));
     }

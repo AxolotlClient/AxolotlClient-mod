@@ -1,6 +1,6 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
-import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.config.ConfigManager;
 import io.github.moehreag.axolotlclient.config.options.BooleanOption;
 import io.github.moehreag.axolotlclient.config.options.Option;
@@ -13,8 +13,6 @@ import net.minecraft.util.Identifier;
 import org.apache.commons.io.Charsets;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -133,8 +131,8 @@ public class ToggleSprintHud extends CleanHudEntry {
         options.add(randomPlaceholder);
         options.add(placeholder);
 
-        Axolotlclient.config.add(sprintToggled);
-        Axolotlclient.config.add(sneakToggled);
+        AxolotlClient.config.add(sprintToggled);
+        AxolotlClient.config.add(sneakToggled);
     }
 
 

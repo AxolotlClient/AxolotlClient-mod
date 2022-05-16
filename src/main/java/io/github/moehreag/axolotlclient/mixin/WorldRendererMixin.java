@@ -1,7 +1,7 @@
 package io.github.moehreag.axolotlclient.mixin;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.modules.sky.SkyboxManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.*;
@@ -46,7 +46,7 @@ public abstract class WorldRendererMixin {
                     target = "Lcom/mojang/blaze3d/platform/GlStateManager;disableTexture()V", ordinal = 0),
             cancellable = true)
     public void sky(float f, int ih, CallbackInfo ci){
-        if(Axolotlclient.CONFIG.customSky.get() && SkyboxManager.getInstance().hasSkyBoxes()){
+        if(AxolotlClient.CONFIG.customSky.get() && SkyboxManager.getInstance().hasSkyBoxes()){
 
             GlStateManager.disableFog();
             GlStateManager.depthMask(false);
@@ -68,7 +68,7 @@ public abstract class WorldRendererMixin {
             GlStateManager.rotatef(this.world.getSkyAngle(f) * 360.0F, 1.0F, 0.0F, 0.0F);
 
 
-            if(!Axolotlclient.CONFIG.rotateWorld.get())GlStateManager.popMatrix();
+            if(!AxolotlClient.CONFIG.rotateWorld.get())GlStateManager.popMatrix();
             GlStateManager.disableTexture();
             Vec3d vec3d = this.world.method_3631(MinecraftClient.getInstance().getCameraEntity(), f);
             float g = (float)vec3d.x;
@@ -119,7 +119,7 @@ public abstract class WorldRendererMixin {
             GlStateManager.color4f(1.0F, 1.0F, 1.0F, n);
             GlStateManager.rotatef(-90.0F, 0.0F, 1.0F, 0.0F);
             GlStateManager.rotatef(this.world.getSkyAngle(f) * 360.0F, 1.0F, 0.0F, 0.0F);
-            if(Axolotlclient.CONFIG.showSunMoon.get()) {
+            if(AxolotlClient.CONFIG.showSunMoon.get()) {
                 float o = 30.0F;
                 MinecraftClient.getInstance().getTextureManager().bindTexture(SUN);
                 bufferBuilder.begin(7, VertexFormats.POSITION_TEXTURE);
@@ -177,36 +177,36 @@ public abstract class WorldRendererMixin {
 
     @Inject(method = "method_9924", at = @At("TAIL"))
     public void decurse(CallbackInfo ci){
-        if(Axolotlclient.CONFIG.rotateWorld.get())GlStateManager.popMatrix();
+        if(AxolotlClient.CONFIG.rotateWorld.get())GlStateManager.popMatrix();
     }
 
     @Redirect(method = "method_9910", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/dimension/Dimension;getCloudHeight()F"))
     public float getCloudHeight(Dimension instance){
-        return Axolotlclient.CONFIG.cloudHeight.get();
+        return AxolotlClient.CONFIG.cloudHeight.get();
     }
 
 
     @ModifyArg(method = "method_1380", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/GL11;glLineWidth(F)V"))
     public float OutlineWidth(float width){
-        if(Axolotlclient.CONFIG.enableCustomOutlines.get() && Axolotlclient.CONFIG.outlineWidth.get()>1){
-            return 1.0F+Axolotlclient.CONFIG.outlineWidth.get();
+        if(AxolotlClient.CONFIG.enableCustomOutlines.get() && AxolotlClient.CONFIG.outlineWidth.get()>1){
+            return 1.0F+ AxolotlClient.CONFIG.outlineWidth.get();
         }
         return width;
     }
 
     @Redirect(method = "method_1380", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;color4f(FFFF)V"))
     public void customOutlineColor(float red, float green, float blue, float alpha){
-        if(Axolotlclient.CONFIG.enableCustomOutlines.get()){
-            if(Axolotlclient.CONFIG.outlineChroma.get()){
-                GlStateManager.color4f(Axolotlclient.CONFIG.outlineColor.getChroma().getRed(),
-                        Axolotlclient.CONFIG.outlineColor.getChroma().getGreen(),
-                        Axolotlclient.CONFIG.outlineColor.getChroma().getBlue(),
-                        Axolotlclient.CONFIG.outlineColor.getChroma().getAlpha());
+        if(AxolotlClient.CONFIG.enableCustomOutlines.get()){
+            if(AxolotlClient.CONFIG.outlineChroma.get()){
+                GlStateManager.color4f(AxolotlClient.CONFIG.outlineColor.getChroma().getRed(),
+                        AxolotlClient.CONFIG.outlineColor.getChroma().getGreen(),
+                        AxolotlClient.CONFIG.outlineColor.getChroma().getBlue(),
+                        AxolotlClient.CONFIG.outlineColor.getChroma().getAlpha());
             } else {
-                GlStateManager.color4f(Axolotlclient.CONFIG.outlineColor.get().getRed(),
-                        Axolotlclient.CONFIG.outlineColor.get().getGreen(),
-                        Axolotlclient.CONFIG.outlineColor.get().getBlue(),
-                        Axolotlclient.CONFIG.outlineColor.get().getAlpha());
+                GlStateManager.color4f(AxolotlClient.CONFIG.outlineColor.get().getRed(),
+                        AxolotlClient.CONFIG.outlineColor.get().getGreen(),
+                        AxolotlClient.CONFIG.outlineColor.get().getBlue(),
+                        AxolotlClient.CONFIG.outlineColor.get().getAlpha());
             }
         } else {
             GlStateManager.color4f(red, green, blue, alpha);

@@ -1,6 +1,6 @@
 package io.github.moehreag.axolotlclient.config;
 
-import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.AxolotlClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +50,7 @@ public class Color {
     }
 
     public static void tickChroma(){
-        chromaColorIndex+= Axolotlclient.CONFIG.chromaSpeed.get();
+        chromaColorIndex+= AxolotlClient.CONFIG.chromaSpeed.get();
         if(chromaColorIndex >= chromaColors.size()-1)chromaColorIndex=0;
         else if(chromaColorIndex<0){chromaColorIndex=0;}
     }

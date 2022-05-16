@@ -1,6 +1,6 @@
 package io.github.moehreag.axolotlclient.modules.hypixel;
 
-import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.config.options.OptionCategory;
 import io.github.moehreag.axolotlclient.config.options.StringOption;
 import io.github.moehreag.axolotlclient.modules.AbstractModule;
@@ -34,7 +34,7 @@ public class HypixelMods extends AbstractModule {
 
         subModules.forEach(AbstractHypixelMod::init);
 
-        Axolotlclient.CONFIG.addCategory(category);
+        AxolotlClient.CONFIG.addCategory(category);
     }
 
     public void tick(){

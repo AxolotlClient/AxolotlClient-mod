@@ -1,6 +1,6 @@
 package io.github.moehreag.axolotlclient.modules.zoom;
 
-import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.modules.AbstractModule;
 import net.legacyfabric.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
@@ -34,7 +34,7 @@ public class Zoom extends AbstractModule {
 
     public static void decreaseSensitivity(){
         originalSensitivity=MinecraftClient.getInstance().options.sensitivity;
-        MinecraftClient.getInstance().options.sensitivity /= Axolotlclient.CONFIG.zoomDivisor.get();
+        MinecraftClient.getInstance().options.sensitivity /= AxolotlClient.CONFIG.zoomDivisor.get();
     }
 
     public static void restoreSensitivity(){
@@ -62,12 +62,12 @@ public class Zoom extends AbstractModule {
 
     private static void zoomStarted() {
         zoomed = true;
-        if(Axolotlclient.CONFIG.decreaseSensitivity.get())decreaseSensitivity();
+        if(AxolotlClient.CONFIG.decreaseSensitivity.get())decreaseSensitivity();
     }
 
     private static void zoomStopped() {
         zoomed = false;
-        if(Axolotlclient.CONFIG.decreaseSensitivity.get())restoreSensitivity();
+        if(AxolotlClient.CONFIG.decreaseSensitivity.get())restoreSensitivity();
     }
 
     public static boolean isFadingOut(){
@@ -76,11 +76,11 @@ public class Zoom extends AbstractModule {
 
     public static void decreaseFov(){
         if(isZoomed()){
-            if(fadeFactor <Axolotlclient.CONFIG.zoomDivisor.get())
-                fadeFactor+= (fadeFactor*Axolotlclient.CONFIG.zoomSpeed.get())/50 * (Axolotlclient.CONFIG.zoomDivisor.get()/4);
+            if(fadeFactor < AxolotlClient.CONFIG.zoomDivisor.get())
+                fadeFactor+= (fadeFactor* AxolotlClient.CONFIG.zoomSpeed.get())/50 * (AxolotlClient.CONFIG.zoomDivisor.get()/4);
         } else {
             if(fadeFactor > 1F)
-                fadeFactor-= (fadeFactor*Axolotlclient.CONFIG.zoomSpeed.get())/50 *(Axolotlclient.CONFIG.zoomDivisor.get()/4);
+                fadeFactor-= (fadeFactor* AxolotlClient.CONFIG.zoomSpeed.get())/50 *(AxolotlClient.CONFIG.zoomDivisor.get()/4);
             else fadeFactor = 1F;
         }
     }

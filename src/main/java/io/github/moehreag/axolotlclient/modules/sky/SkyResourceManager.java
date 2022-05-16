@@ -3,7 +3,7 @@ package io.github.moehreag.axolotlclient.modules.sky;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.AxolotlClient;
 import net.minecraft.resource.ResourcePack;
 import net.minecraft.util.Identifier;
 
@@ -27,7 +27,7 @@ public class SkyResourceManager{
     public static List<ResourcePack> packs;
 
     public static void reload(List<ResourcePack> resourcePacks) {
-        if(!Axolotlclient.CONFIG.customSky.get())return;
+        if(!AxolotlClient.CONFIG.customSky.get())return;
         SkyLoadingScreen loadingScreen = new SkyLoadingScreen();
         loadingScreen.render();
         SkyboxManager.getInstance().clearSkyboxes();
@@ -68,7 +68,7 @@ public class SkyResourceManager{
 
     public static void onStartup(){
         if(!packs.isEmpty())reload(packs);
-        Axolotlclient.initalized=true;
+        AxolotlClient.initalized=true;
     }
 
     public static void loadSky(String json){
@@ -78,7 +78,7 @@ public class SkyResourceManager{
 
     public static void loadMCPSky(ResourcePack pack, String loader, SkyLoadingScreen loadingScreen){
         int i = 1;
-        Axolotlclient.LOGGER.info("Loading MCP/OF skies in pack "+pack.getName()+" !");
+        AxolotlClient.LOGGER.info("Loading MCP/OF skies in pack "+pack.getName()+" !");
         while (true) {
             try {
                 String source = "";

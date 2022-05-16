@@ -1,7 +1,7 @@
 package io.github.moehreag.axolotlclient.config;
 
 import com.google.gson.*;
-import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.config.options.OptionCategory;
 import net.fabricmc.loader.api.FabricLoader;
@@ -14,14 +14,14 @@ import java.util.Collections;
 import java.util.List;
 
 public class ConfigManager{
-    private static final List<OptionCategory> categories = Axolotlclient.CONFIG.config;
-    private static final Path confPath = FabricLoader.getInstance().getConfigDir().resolve("Axolotlclient.json");
+    private static final List<OptionCategory> categories = AxolotlClient.CONFIG.config;
+    private static final Path confPath = FabricLoader.getInstance().getConfigDir().resolve("AxolotlClient.json");
 
     public static void save(){
         try{
             saveFile();
         } catch (IOException e) {
-            Axolotlclient.LOGGER.error("Failed to save config!");
+            AxolotlClient.LOGGER.error("Failed to save config!");
         }
     }
 
@@ -76,12 +76,13 @@ public class ConfigManager{
                     }
                 }
             }
-        } catch (Exception e){Axolotlclient.LOGGER.error("Failed to load config! Using default values...");}
+        } catch (Exception e){
+            AxolotlClient.LOGGER.error("Failed to load config! Using default values...");}
         save();
     }
 
     private static void loadDefaults(){
-        Axolotlclient.CONFIG.config.forEach(OptionCategory -> {
+        AxolotlClient.CONFIG.config.forEach(OptionCategory -> {
             OptionCategory.getOptions().forEach(Option::setDefaults);
             if(!OptionCategory.getSubCategories().isEmpty()){
                 for(OptionCategory category : OptionCategory.getSubCategories()){

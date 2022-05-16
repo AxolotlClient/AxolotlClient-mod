@@ -1,13 +1,13 @@
 package io.github.moehreag.axolotlclient.config;
 
-import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.config.options.*;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AxolotlclientConfig {
+public class AxolotlClientConfig {
 
     public final BooleanOption showOwnNametag = new BooleanOption("showOwnNametag", false);
     public final BooleanOption useShadows = new BooleanOption("useShadows", false);
@@ -116,7 +116,7 @@ public class AxolotlclientConfig {
         outlines.add(outlineChroma);
         outlines.add(outlineWidth);
 
-        Axolotlclient.config.add(creditsBGM);
+        AxolotlClient.config.add(creditsBGM);
 
     }
 

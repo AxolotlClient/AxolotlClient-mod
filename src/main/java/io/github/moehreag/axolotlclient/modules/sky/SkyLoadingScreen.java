@@ -1,14 +1,11 @@
 package io.github.moehreag.axolotlclient.modules.sky;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.config.Color;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.Window;
 import net.minecraft.resource.ResourcePack;
@@ -42,11 +39,11 @@ public class SkyLoadingScreen {
         GlStateManager.disableFog();
         GlStateManager.disableDepthTest();
 
-        DrawableHelper.fill(0, 0, MinecraftClient.getInstance().width, MinecraftClient.getInstance().height, Axolotlclient.CONFIG.loadingScreenColor.get().getAsInt());
+        DrawableHelper.fill(0, 0, MinecraftClient.getInstance().width, MinecraftClient.getInstance().height, AxolotlClient.CONFIG.loadingScreenColor.get().getAsInt());
 
         GlStateManager.enableTexture();
 
-        MinecraftClient.getInstance().getTextureManager().bindTexture(Axolotlclient.badgeIcon);
+        MinecraftClient.getInstance().getTextureManager().bindTexture(AxolotlClient.badgeIcon);
 
         GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1F);
         DrawableHelper.drawTexture((window.getWidth()/2)-50,
@@ -62,7 +59,7 @@ public class SkyLoadingScreen {
                             (!Objects.equals(description, "")? " "+description:"") + Formatting.RESET+"...",
                     20, window.getHeight() - 20,
                     Color.getChroma().getAsInt());
-        } else if(!Axolotlclient.initalized) {
+        } else if(!AxolotlClient.initalized) {
             this.client.textRenderer.draw(Formatting.BOLD+ I18n.translate("resource_loading_finished"),
                     20, window.getHeight()-20, Color.getChroma().getAsInt());
         }
@@ -92,7 +89,7 @@ public class SkyLoadingScreen {
         loadingFinished=true;
         Color.tickChroma();
         render();
-        Axolotlclient.initalized=true;
+        AxolotlClient.initalized=true;
     }
 
 }

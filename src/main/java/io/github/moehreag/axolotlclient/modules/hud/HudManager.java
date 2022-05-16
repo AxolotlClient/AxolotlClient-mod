@@ -1,6 +1,6 @@
 package io.github.moehreag.axolotlclient.modules.hud;
 
-import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.config.options.OptionCategory;
 import io.github.moehreag.axolotlclient.modules.AbstractModule;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
@@ -48,7 +48,7 @@ public class HudManager extends AbstractModule {
 
         KeyBindingHelper.registerKeyBinding(key);
 
-        Axolotlclient.CONFIG.addCategory(hudCategory);
+        AxolotlClient.CONFIG.addCategory(hudCategory);
 
         HudRenderCallback.EVENT.register((tickDelta, v)->render());
 

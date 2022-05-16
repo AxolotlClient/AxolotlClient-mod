@@ -1,6 +1,6 @@
 package io.github.moehreag.axolotlclient.config.screen.widgets;
 
-import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.config.options.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
@@ -99,7 +99,7 @@ public class OptionWidget extends CustomWidget{
             return new EnumWidget(x+width+2, y, 75, 20, ((EnumOption)option).get());
         }
 
-        Axolotlclient.LOGGER.warn("Configuration dialog building had some kind of error... This shouldn't happen!?");
+        AxolotlClient.LOGGER.warn("Configuration dialog building had some kind of error... This shouldn't happen!?");
         return new CustomButtonWidget(3, x+width+2, y+2, 75, 20,"No Configuration", DIALOG_TEXTURE);
     }
 }

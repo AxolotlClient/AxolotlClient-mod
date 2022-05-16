@@ -1,6 +1,6 @@
 package io.github.moehreag.axolotlclient.config.screen;
 
-import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.config.options.OptionCategory;
 import io.github.moehreag.axolotlclient.config.screen.widgets.CategoryWidget;
 import io.github.moehreag.axolotlclient.config.screen.widgets.CustomButtonWidget;
@@ -17,7 +17,7 @@ public class CategoryScreenBuilder extends Screen {
 
     private final Screen parent;
     private CustomWidget back;
-    private final List<OptionCategory> categories = Axolotlclient.CONFIG.getCategories();
+    private final List<OptionCategory> categories = AxolotlClient.CONFIG.getCategories();
 
     public CategoryScreenBuilder(Screen parent){
         this.parent=parent;

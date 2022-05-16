@@ -19,7 +19,9 @@
   "accessWidener" : "axolotlclient.accesswidener",
   "environment": "*",
   "entrypoints": {
-    "main": ["io.github.moehreag.axolotlclient.Axolotlclient"]
+    "main": [
+      "io.github.moehreag.axolotlclient.AxolotlClient"
+    ]
   },
   "mixins": [
     "axolotlclient.mixins.json"

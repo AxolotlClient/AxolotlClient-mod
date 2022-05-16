@@ -1,6 +1,6 @@
 package io.github.moehreag.axolotlclient.mixin;
 
-import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.NetworkHelper;
 import io.github.moehreag.axolotlclient.config.Color;
 import io.github.moehreag.axolotlclient.modules.hud.HudManager;
@@ -45,7 +45,7 @@ public abstract class MinecraftClientMixin {
      */
     @Inject(method = "setPixelFormat", at = @At("TAIL"))
     public void setWindowTitle(CallbackInfo ci){
-        Display.setTitle("Axolotlclient "+ this.gameVersion);
+        Display.setTitle("AxolotlClient "+ this.gameVersion);
     }
 
     @Redirect(method = "initializeGame", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;loadLogo(Lnet/minecraft/client/texture/TextureManager;)V"))
@@ -63,17 +63,17 @@ public abstract class MinecraftClientMixin {
     @Redirect(method = "loadLogo", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/BufferBuilder;color(IIII)Lnet/minecraft/client/render/BufferBuilder;"))
     public BufferBuilder loadingScreenColor(BufferBuilder instance, int red, int green, int blue, int alpha){
 
-        return instance.color(Axolotlclient.CONFIG.loadingScreenColor.get().getRed(),
-                Axolotlclient.CONFIG.loadingScreenColor.get().getGreen(),
-                Axolotlclient.CONFIG.loadingScreenColor.get().getBlue(), Axolotlclient.CONFIG.loadingScreenColor.get().getAlpha());
+        return instance.color(AxolotlClient.CONFIG.loadingScreenColor.get().getRed(),
+                AxolotlClient.CONFIG.loadingScreenColor.get().getGreen(),
+                AxolotlClient.CONFIG.loadingScreenColor.get().getBlue(), AxolotlClient.CONFIG.loadingScreenColor.get().getAlpha());
     }
 
     @Redirect(method = "method_9382", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/BufferBuilder;color(IIII)Lnet/minecraft/client/render/BufferBuilder;"))
     public BufferBuilder loadingScreenBg(BufferBuilder instance, int red, int green, int blue, int alpha){
 
-        return instance.color(Axolotlclient.CONFIG.loadingScreenColor.get().getRed(),
-                Axolotlclient.CONFIG.loadingScreenColor.get().getGreen(),
-                Axolotlclient.CONFIG.loadingScreenColor.get().getBlue(), Axolotlclient.CONFIG.loadingScreenColor.get().getAlpha());
+        return instance.color(AxolotlClient.CONFIG.loadingScreenColor.get().getRed(),
+                AxolotlClient.CONFIG.loadingScreenColor.get().getGreen(),
+                AxolotlClient.CONFIG.loadingScreenColor.get().getBlue(), AxolotlClient.CONFIG.loadingScreenColor.get().getAlpha());
     }
 
     @Redirect(
@@ -97,7 +97,7 @@ public abstract class MinecraftClientMixin {
     public void tickClient(CallbackInfo ci){
         Color.tickChroma();
 
-        Axolotlclient.TickClient();
+        AxolotlClient.TickClient();
         DiscordRPC.update();
     }
 

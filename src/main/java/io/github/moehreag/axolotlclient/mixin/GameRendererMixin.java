@@ -1,7 +1,7 @@
 package io.github.moehreag.axolotlclient.mixin;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.modules.hud.HudManager;
 import io.github.moehreag.axolotlclient.modules.hud.gui.hud.CrosshairHud;
 import io.github.moehreag.axolotlclient.modules.sky.SkyboxManager;
@@ -10,7 +10,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Material;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.class_321;
-import net.minecraft.client.gl.PostProcessShader;
+import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -50,12 +50,13 @@ public abstract class GameRendererMixin {
 
     @Shadow protected abstract void loadShader(Identifier id);
 
+    @Shadow private ShaderEffect shader;
     private boolean blurLoaded=false;
 
     @Inject(method = "renderFog", at = @At("HEAD"), cancellable = true)
     public void noFog(int i, float tickDelta, CallbackInfo ci){
 
-        if(MinecraftClient.getInstance().world.dimension.canPlayersSleep() && Axolotlclient.CONFIG.customSky.get() && SkyboxManager.getInstance().hasSkyBoxes()) {
+        if(MinecraftClient.getInstance().world.dimension.canPlayersSleep() && AxolotlClient.CONFIG.customSky.get() && SkyboxManager.getInstance().hasSkyBoxes()) {
             this.viewDistance = (float) (this.viewDistance * 2 + MinecraftClient.getInstance().player.getPos().y);
             Entity entity = this.client.getCameraEntity();
 
@@ -119,14 +120,14 @@ public abstract class GameRendererMixin {
         Zoom.manageZoom();
         if(Zoom.isZoomed()||Zoom.isFadingOut()){
             cir.setReturnValue(Zoom.getFov(cir.getReturnValue()));
-        } else if(!Axolotlclient.CONFIG.dynamicFOV.get()) {
+        } else if(!AxolotlClient.CONFIG.dynamicFOV.get()) {
             cir.setReturnValue(client.options.fov);
         }
     }
 
     @Redirect(method = "updateLightmap", at = @At(value = "FIELD", target = "Lnet/minecraft/client/options/GameOptions;gamma:F", opcode = Opcodes.GETFIELD))
     public float setGamma(GameOptions instance){
-        if(Axolotlclient.CONFIG.fullBright.get()) return  15F;
+        if(AxolotlClient.CONFIG.fullBright.get()) return  15F;
         return instance.gamma;
     }
 
@@ -144,13 +145,18 @@ public abstract class GameRendererMixin {
     @Inject(method = "render", at = @At("HEAD"))
     public void motionBlur(float tickDelta, long nanoTime, CallbackInfo ci){
 
-        if(Axolotlclient.CONFIG.motionBlurEnabled.get()) {
+        this.client.profiler.push("Motion Blur");
+        if(AxolotlClient.CONFIG.motionBlurEnabled.get()) {
 
-            this.client.profiler.push("Motion Blur");
-            /*if(!Loaded){
+            if(!blurLoaded){
                 loadShader(new Identifier("axolotlclient", "shaders/program/motion_blur.json"));
-            }*/
-            this.client.profiler.pop();
+                blurLoaded=true;
+            }
+
+        } else if(!AxolotlClient.CONFIG.motionBlurEnabled.get() &&
+                blurLoaded && this.shader.getName().contains("motion_blur")){
+            this.shader.disable();
         }
+        this.client.profiler.pop();
     }
 }

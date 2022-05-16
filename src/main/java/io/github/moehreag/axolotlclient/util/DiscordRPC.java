@@ -1,6 +1,6 @@
 package io.github.moehreag.axolotlclient.util;
 
-import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.AxolotlClient;
 import net.arikia.dev.drpc.DiscordEventHandlers;
 import net.arikia.dev.drpc.DiscordRichPresence;
 import net.minecraft.client.MinecraftClient;
@@ -12,7 +12,7 @@ public class DiscordRPC {
     private static long time;
 
     private static final DiscordEventHandlers handlers = new DiscordEventHandlers.Builder()
-            .setReadyEventHandler((user) -> Axolotlclient.LOGGER.info("Discord RPC Connected to user "+ user.username + "#" + user.discriminator))
+            .setReadyEventHandler((user) -> AxolotlClient.LOGGER.info("Discord RPC Connected to user "+ user.username + "#" + user.discriminator))
             .build();
 
     public static void startup() {
@@ -24,7 +24,7 @@ public class DiscordRPC {
 
     public static void update(){
 
-        if(Axolotlclient.CONFIG!=null && !Axolotlclient.CONFIG.enableRPC.get()){shutdown();}
+        if(AxolotlClient.CONFIG!=null && !AxolotlClient.CONFIG.enableRPC.get()){shutdown();}
 
         if (MinecraftClient.getInstance().world == null){
 
@@ -32,19 +32,19 @@ public class DiscordRPC {
             menu();
         } else {
 
-            assert Axolotlclient.CONFIG != null;
-            if (Axolotlclient.CONFIG.enableRPC.get()) inGame();
+            assert AxolotlClient.CONFIG != null;
+            if (AxolotlClient.CONFIG.enableRPC.get()) inGame();
         }
     }
 
     public static void menu(){
 
-        if (Axolotlclient.CONFIG!=null &&  Axolotlclient.CONFIG.enableRPC.get()) {
+        if (AxolotlClient.CONFIG!=null &&  AxolotlClient.CONFIG.enableRPC.get()) {
             if (!Objects.equals(rpcstate, "menu"))
                 time = System.currentTimeMillis() / 1000L;
 
             DiscordRichPresence rpc = new DiscordRichPresence.Builder("In the Menu")
-                    .setBigImage("icon", "Axolotlclient " + MinecraftClient.getInstance().getGameVersion())
+                    .setBigImage("icon", "AxolotlClient " + MinecraftClient.getInstance().getGameVersion())
                     .setStartTimestamps(time)
                     .build();
             net.arikia.dev.drpc.DiscordRPC.discordUpdatePresence(rpc);
@@ -63,8 +63,8 @@ public class DiscordRPC {
             rpcstate = game;
 
             DiscordRichPresence rpc = new DiscordRichPresence.Builder(MinecraftClient.getInstance().getCurrentServerEntry().address)
-                    .setBigImage("icon", "Axolotlclient " + MinecraftClient.getInstance().getGameVersion())
-                    .setDetails(Axolotlclient.CONFIG.showActivity.get() ? game: "")
+                    .setBigImage("icon", "AxolotlClient " + MinecraftClient.getInstance().getGameVersion())
+                    .setDetails(AxolotlClient.CONFIG.showActivity.get() ? game: "")
                     .setStartTimestamps(time)
                     .build();
             net.arikia.dev.drpc.DiscordRPC.discordUpdatePresence(rpc);
@@ -75,8 +75,8 @@ public class DiscordRPC {
             rpcstate = "sp";
 
             DiscordRichPresence rpc = new DiscordRichPresence.Builder("Having fun!")
-                    .setBigImage("icon", "Axolotlclient " + MinecraftClient.getInstance().getGameVersion())
-                    .setDetails(Axolotlclient.CONFIG.showActivity.get() ? "Singleplayer": "")
+                    .setBigImage("icon", "AxolotlClient " + MinecraftClient.getInstance().getGameVersion())
+                    .setDetails(AxolotlClient.CONFIG.showActivity.get() ? "Singleplayer": "")
                     .setStartTimestamps(time)
                     .build();
             net.arikia.dev.drpc.DiscordRPC.discordUpdatePresence(rpc);

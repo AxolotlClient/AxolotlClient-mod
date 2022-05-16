@@ -1,7 +1,7 @@
 package io.github.moehreag.axolotlclient.mixin;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.util.Util;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,7 +14,7 @@ public abstract class GlStateManagerMixin {
 
     @Inject(method = "color4f", at = @At("HEAD"), cancellable = true)
     private static void nightMode(float red, float green, float blue, float alpha, CallbackInfo ci){
-        if(Axolotlclient.CONFIG.nightMode.get()){
+        if(AxolotlClient.CONFIG.nightMode.get()){
 
             if (red != Util.GlColor.red || green != Util.GlColor.green || blue != Util.GlColor.blue || alpha != Util.GlColor.alpha) {
                 Util.GlColor.red = red;

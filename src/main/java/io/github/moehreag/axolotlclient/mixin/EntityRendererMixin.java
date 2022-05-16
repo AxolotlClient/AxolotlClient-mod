@@ -1,7 +1,7 @@
 package io.github.moehreag.axolotlclient.mixin;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
 import io.github.moehreag.axolotlclient.modules.hypixel.levelhead.LevelHead;
 import net.minecraft.client.MinecraftClient;
@@ -24,12 +24,12 @@ public class EntityRendererMixin<T extends Entity> {
     @Inject(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Ljava/lang/String;III)I"))
     public void addBadges(T entity, String string, double d, double e, double f, int i, CallbackInfo ci){
         if(entity instanceof AbstractClientPlayerEntity && string.contains(entity.getName().getString()))
-            Axolotlclient.addBadge(entity);
+            AxolotlClient.addBadge(entity);
     }
 
     @Redirect(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Ljava/lang/String;III)I"))
     public int forceShadows(TextRenderer instance, String text, int x, int y, int color){
-        instance.draw(text, x, y, color, Axolotlclient.CONFIG.useShadows.get());
+        instance.draw(text, x, y, color, AxolotlClient.CONFIG.useShadows.get());
         return 0;
     }
 
@@ -58,7 +58,7 @@ public class EntityRendererMixin<T extends Entity> {
                         GlStateManager.enableTexture();
                     }
 
-                    textRenderer.draw(text, -x, y,  LevelHead.getInstance().textColor.get().getAsInt(), Axolotlclient.CONFIG.useShadows.get());
+                    textRenderer.draw(text, -x, y,  LevelHead.getInstance().textColor.get().getAsInt(), AxolotlClient.CONFIG.useShadows.get());
                 } else if(!HypixelAbstractionLayer.hasValidAPIKey()){
                     HypixelAbstractionLayer.loadApiKey();
                 }
@@ -68,7 +68,7 @@ public class EntityRendererMixin<T extends Entity> {
 
     @Redirect(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/BufferBuilder;vertex(DDD)Lnet/minecraft/client/render/BufferBuilder;"))
     public BufferBuilder noBg(BufferBuilder instance, double d, double e, double f){
-        if(Axolotlclient.CONFIG.nametagBackground.get()){
+        if(AxolotlClient.CONFIG.nametagBackground.get()){
             instance.vertex(d, e, f);
         }
         return instance;

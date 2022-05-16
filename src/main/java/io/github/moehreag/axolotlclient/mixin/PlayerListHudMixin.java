@@ -1,6 +1,6 @@
 package io.github.moehreag.axolotlclient.mixin;
 
-import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.modules.hypixel.nickhider.NickHider;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -37,7 +37,7 @@ public abstract class PlayerListHudMixin extends DrawableHelper {
 
 	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;getStringWidth(Ljava/lang/String;)I", ordinal = 0))
 	public int moveName(TextRenderer instance, String text){
-		if(Axolotlclient.isUsingClient(playerListEntry.getProfile().getId())) return instance.getStringWidth(text)+10;
+		if(AxolotlClient.isUsingClient(playerListEntry.getProfile().getId())) return instance.getStringWidth(text)+10;
 		return instance.getStringWidth(text);
 	}
 
@@ -45,8 +45,8 @@ public abstract class PlayerListHudMixin extends DrawableHelper {
 	public void getCoords(Args args){
 		float x = args.get(1);
 		float y = args.get(2);
-		if(Axolotlclient.isUsingClient(playerListEntry.getProfile().getId())) {
-			client.getTextureManager().bindTexture(Axolotlclient.badgeIcon);
+		if(AxolotlClient.isUsingClient(playerListEntry.getProfile().getId())) {
+			client.getTextureManager().bindTexture(AxolotlClient.badgeIcon);
 			DrawableHelper.drawTexture((int) x, (int) y, 0, 0,  8, 8, 8, 8);
 			args.set(1, x+10);
 		}
@@ -57,8 +57,8 @@ public abstract class PlayerListHudMixin extends DrawableHelper {
 	public void getCoords2(Args args){
 		float x=args.get(1);
 		float y=args.get(2);
-		if(Axolotlclient.isUsingClient(playerListEntry.getProfile().getId())) {
-			client.getTextureManager().bindTexture(Axolotlclient.badgeIcon);
+		if(AxolotlClient.isUsingClient(playerListEntry.getProfile().getId())) {
+			client.getTextureManager().bindTexture(AxolotlClient.badgeIcon);
 			DrawableHelper.drawTexture((int) x, (int) y, 0, 0,  8, 8, 8, 8);
 			args.set(1, x+10);
 		}

@@ -1,7 +1,7 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
@@ -26,7 +26,7 @@ public class PackDisplayHud extends AbstractHudEntry {
 
     @Override
     public void init() {
-        Axolotlclient.packs.forEach(pack -> {
+        AxolotlClient.packs.forEach(pack -> {
             try {
                 if(!pack.getName().equalsIgnoreCase("Default") && pack.getIcon()!=null)
                     widgets.add(new packWidget(pack));
@@ -81,7 +81,7 @@ public class PackDisplayHud extends AbstractHudEntry {
             try {
                 this.texture = new NativeImageBackedTexture(pack.getIcon()).getGlId();
             } catch (Exception e){
-                Axolotlclient.LOGGER.warn("Pack "+pack.getName()+" somehow threw an error! Please investigate...");
+                AxolotlClient.LOGGER.warn("Pack "+pack.getName()+" somehow threw an error! Please investigate...");
             }
         }
 

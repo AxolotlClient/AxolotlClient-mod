@@ -1,6 +1,6 @@
 package io.github.moehreag.axolotlclient.mixin;
 
-import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.modules.hud.HudManager;
 import io.github.moehreag.axolotlclient.modules.hud.gui.hud.PackDisplayHud;
 import io.github.moehreag.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
@@ -20,7 +20,7 @@ public class ReloadableResourceManagerImplMixin {
     @Inject(method = "reload", at=@At("TAIL"))
     public void loadSkies(List<ResourcePack> resourcePacks, CallbackInfo ci){
         HypixelAbstractionLayer.clearPlayerData();
-        if(Axolotlclient.initalized)SkyResourceManager.reload(resourcePacks);
+        if(AxolotlClient.initalized)SkyResourceManager.reload(resourcePacks);
         else{SkyResourceManager.packs=resourcePacks;}
 
         PackDisplayHud hud = (PackDisplayHud) HudManager.getINSTANCE().get(PackDisplayHud.ID);
@@ -28,6 +28,6 @@ public class ReloadableResourceManagerImplMixin {
             hud.widgets.clear();
         }
 
-        Axolotlclient.packs=resourcePacks;
+        AxolotlClient.packs=resourcePacks;
     }
 }
