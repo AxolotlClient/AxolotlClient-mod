@@ -27,6 +27,9 @@ public class AxolotlclientConfig {
     public final BooleanOption fullBright = new BooleanOption("fullBright", false);
     public final IntegerOption chromaSpeed = new IntegerOption("chromaSpeed", 20, 10, 50);
 
+    public final BooleanOption motionBlurEnabled = new BooleanOption("enabled", false);
+    public final FloatOption motionBlurStrength = new FloatOption("strength", 0.1F, 0.9F, 0.5F);
+
     public final BooleanOption enableRPC = new BooleanOption("enableRPC", true);
     public final BooleanOption showActivity = new BooleanOption("showActivity", true);
     public final ColorOption loadingScreenColor = new ColorOption("loadingBgColor", new Color(-1));
@@ -46,6 +49,7 @@ public class AxolotlclientConfig {
     public final OptionCategory rendering = new OptionCategory(new Identifier("axolotlclient", "rendering"), "rendering");
     public final OptionCategory zoom = new OptionCategory("zoom");
     public final OptionCategory outlines= new OptionCategory("blockOutlines");
+    public final OptionCategory motionBlur = new OptionCategory("motionBlur");
 
     private final List<Option> options = new ArrayList<>();
     private final List<OptionCategory> categories = new ArrayList<>();
@@ -99,6 +103,9 @@ public class AxolotlclientConfig {
         rendering.add(chromaSpeed);
         rendering.add(dynamicFOV);
         rendering.add(fullBright);
+
+        motionBlur.add(motionBlurEnabled);
+        rendering.addSubCategory(motionBlur);
 
         zoom.add(zoomDivisor);
         zoom.add(zoomSpeed);

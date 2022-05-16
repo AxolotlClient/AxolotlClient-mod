@@ -10,12 +10,14 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Material;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.class_321;
+import net.minecraft.client.gl.PostProcessShader;
 import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.util.Identifier;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 import org.objectweb.asm.Opcodes;
@@ -45,6 +47,10 @@ public abstract class GameRendererMixin {
     @Shadow private float fogBlue;
 
     @Shadow private boolean thickFog;
+
+    @Shadow protected abstract void loadShader(Identifier id);
+
+    private boolean blurLoaded=false;
 
     @Inject(method = "renderFog", at = @At("HEAD"), cancellable = true)
     public void noFog(int i, float tickDelta, CallbackInfo ci){
@@ -133,5 +139,18 @@ public abstract class GameRendererMixin {
             ci.cancel();
         }
 
+    }
+
+    @Inject(method = "render", at = @At("HEAD"))
+    public void motionBlur(float tickDelta, long nanoTime, CallbackInfo ci){
+
+        if(Axolotlclient.CONFIG.motionBlurEnabled.get()) {
+
+            this.client.profiler.push("Motion Blur");
+            /*if(!Loaded){
+                loadShader(new Identifier("axolotlclient", "shaders/program/motion_blur.json"));
+            }*/
+            this.client.profiler.pop();
+        }
     }
 }

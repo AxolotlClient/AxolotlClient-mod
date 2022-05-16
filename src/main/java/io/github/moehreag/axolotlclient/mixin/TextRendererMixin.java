@@ -22,8 +22,6 @@ public abstract class TextRendererMixin {
 
     @Shadow public int fontHeight;
 
-    @Shadow private boolean field_1161;
-
     @Shadow private float field_1156;
 
     @Shadow private float field_1155;

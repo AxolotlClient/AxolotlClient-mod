@@ -3,9 +3,11 @@ package io.github.moehreag.axolotlclient.modules.hypixel;
 import io.github.moehreag.axolotlclient.config.options.enumOptions.LevelHeadOption;
 import io.github.moehreag.axolotlclient.modules.hypixel.levelhead.LevelHead;
 import io.github.moehreag.axolotlclient.util.ThreadExecuter;
+import io.github.moehreag.axolotlclient.util.Util;
 import net.hypixel.api.HypixelAPI;
 import net.hypixel.api.apache.ApacheHttpClient;
 import net.hypixel.api.reply.PlayerReply;
+import net.minecraft.util.Formatting;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -69,8 +71,8 @@ public class HypixelAbstractionLayer {
                 } else if (mode == LevelHeadOption.LevelHeadMode.BEDWARS){
                     return cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer().getIntProperty("achievements.bedwars_level", 0);
                 } else if (mode == LevelHeadOption.LevelHeadMode.SKYWARS){
-                    String formattedLevel = cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer().getStringProperty("stats.SkyWars.levelFormatted", "§70⋆");
-                    return Integer.parseInt(formattedLevel.substring(2, formattedLevel.length()-1));
+                    int exp = cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer().getIntProperty("stats.SkyWars.skywars_experience", 0);
+                    return Math.round(ExpCalculator.getLevelForExp(exp));
                 }
             } catch (TimeoutException | InterruptedException | ExecutionException e) {
                 return -1;
