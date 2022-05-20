@@ -51,7 +51,7 @@ public abstract class GameRendererMixin {
     @Shadow protected abstract void loadShader(Identifier id);
 
     @Shadow private ShaderEffect shader;
-    private boolean blurLoaded=false;
+    private boolean blurActive=false;
 
     @Inject(method = "renderFog", at = @At("HEAD"), cancellable = true)
     public void noFog(int i, float tickDelta, CallbackInfo ci){
@@ -161,14 +161,21 @@ public abstract class GameRendererMixin {
         this.client.profiler.push("Motion Blur");
         if(AxolotlClient.CONFIG.motionBlurEnabled.get()) {
 
-            if(!blurLoaded){
-                loadShader(new Identifier("axolotlclient", "shaders/program/motion_blur.json"));
-                blurLoaded=true;
+            if(!blurActive || shader==null){
+                loadShader(new Identifier("minecraft", "shaders/post/motion_blur.json"));
+                blurActive=true;
             }
 
         } else if(!AxolotlClient.CONFIG.motionBlurEnabled.get() &&
-                blurLoaded && this.shader.getName().contains("motion_blur")){
-            this.shader.disable();
+                blurActive){
+            try {
+                if(this.shader.getName().contains("motion_blur")) {
+                    this.shader.disable();
+                    this.shader = null;
+                    blurActive = false;
+                }
+            } catch (Exception ignored){}
+
         }
         this.client.profiler.pop();
     }

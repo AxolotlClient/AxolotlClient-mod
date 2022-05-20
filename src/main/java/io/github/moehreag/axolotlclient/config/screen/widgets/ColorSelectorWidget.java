@@ -17,7 +17,7 @@ public class ColorSelectorWidget extends CustomButtonWidget {
     private final Identifier alphabg = new Identifier("axolotlclient", "textures/gui/alphabg.png");
     private final ColorOption option;
     private final Rectangle current;
-    private final TextFieldWidget textInput;
+    public final TextFieldWidget textInput;
     private final CustomSliderWidget alphaSlider;
 
     public ColorSelectorWidget(int x, int y, @NotNull ColorOption option) {
@@ -59,6 +59,9 @@ public class ColorSelectorWidget extends CustomButtonWidget {
     }
 
     public void onClick(int mouseX, int mouseY){
+        if(textInput.isFocused()){
+            this.option.set(Color.parse(textInput.getText()));
+        }
         if(mouseX>=x+18 && mouseX<=x+65 && mouseY>=y+5 && mouseY <=y+55){
             int red = (mouseX-(x+41))*10;
             int blue = (mouseY-(y+30))*10;

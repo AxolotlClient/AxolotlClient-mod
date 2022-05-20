@@ -169,8 +169,8 @@ public class OptionScreenBuilder extends Screen {
                                 ((DoubleOption) optionWidget.getOption()).set(dialog.sliderWidget.getSliderValue());
                             } else if (this.dialog.sliderWidget != null && optionWidget.getOption() instanceof IntegerOption) {
                                 ((IntegerOption) optionWidget.getOption()).set(dialog.sliderWidget.getSliderValueAsInt());
-                            } else if(this.dialog.textFieldWidget !=null && optionWidget.getOption() instanceof ColorOption){
-                                ((ColorOption)optionWidget.getOption()).set(io.github.moehreag.axolotlclient.config.Color.parse(dialog.textFieldWidget.getText()));
+                            } else if(optionWidget.getOption() instanceof ColorOption){
+                                ((ColorOption)optionWidget.getOption()).set(io.github.moehreag.axolotlclient.config.Color.parse(((ColorSelectorWidget) dialog).textInput.getText()));
                             }
                         }
                     }
