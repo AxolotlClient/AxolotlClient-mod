@@ -2,7 +2,7 @@ language.name=English
 language.region=US
 language.code=en_US
 
-config=Axolotlclient Options
+config=AxolotlClient Options
 
 sky_loading_text=Loading Skies out of
 resource_loading_finished=Loading finished! Starting Minecraft...
@@ -68,11 +68,11 @@ key.toggleSneak=Toggle Sneaking
 key.toggleSprint=Toggle Sprinting
 
 hud=Hud Options
-pinghud=Ping Hud
-cpshud=CPS Hud
+pinghud=Ping HUD
+cpshud=CPS HUD
 cpskeybind=CPS from Keybinds
 rightcps=Show Rightclick Cps
-fpshud=FPS Hud
+fpshud=FPS HUD
 armorhud=Armor HUD
 potionshud=Potion HUD
 keystrokehud=Keystrokes
@@ -81,7 +81,7 @@ scoreboardhud=Scoreboard HUD
 topbackgroundcolor=Backgroundcolor (top)
 backgroundcolor=Backgroundcolor (Main part)
 scores=Show Scores
-scorecolor=Score color
+scorecolor=Score colorit
 crosshairhud=Crosshair HUD
 type=Type
 showInF5=Show in 3rd Perspective
@@ -123,7 +123,7 @@ sneaking_toggled=Sneaking [Toggled]
 sprinting_pressed=Sprinting [Key held]
 sneaking_pressed=Sneaking [Key held]
 
-iphud=IPHud
+iphud=IPHUD
 IconHud=IconHUD
 
 toggleSprint=Allow Sprinting toggle
