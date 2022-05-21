@@ -123,8 +123,8 @@ sneaking_toggled=Sneaking [Toggled]
 sprinting_pressed=Sprinting [Key held]
 sneaking_pressed=Sneaking [Key held]
 
-iphud=IPHUD
-IconHud=IconHUD
+iphud=IP HUD
+IconHud=Icon HUD
 
 toggleSprint=Allow Sprinting toggle
 toggleSneak=Allow Sneaking toggle
