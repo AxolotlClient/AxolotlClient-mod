@@ -2,13 +2,15 @@
   "schemaVersion": 1,
   "id": "axolotlclient",
   "version": "${version}",
-  "name": "Axolotlclient",
-  "description": "Mod for Axolotlclient",
+  "name": "AxolotlClient",
+  "description": "Mod for AxolotlClient",
   "authors": [
     "moehreag"
   ],
   "contributors":[
-    "YakisikliBaran"
+    "YakisikliBaran",
+    "DragonEggBedrockBreaking",
+    "kuchenag"
   ],
   "contact": {
     "homepage": "https://moehreag.duckdns.org/",
