@@ -28,7 +28,7 @@ public class AxolotlClientConfig {
     public final IntegerOption chromaSpeed = new IntegerOption("chromaSpeed", 20, 10, 50);
 
     public final BooleanOption motionBlurEnabled = new BooleanOption("enabled", false);
-    public final FloatOption motionBlurStrength = new FloatOption("strength", 0.1F, 0.9F, 0.5F);
+    public final FloatOption motionBlurStrength = new FloatOption("strength", 1F, 99F, 50F);
     public final BooleanOption motionBlurInGuis = new BooleanOption("inGuis", false);
 
     public final BooleanOption enableRPC = new BooleanOption("enableRPC", true);

@@ -23,6 +23,8 @@ zoomSpeed=Zoomgeschwindigkeit
 decreaseSensitivity=Reduziere Sensitivität
 dynamicFov=Dynamisches FOV
 fullBright=FullBright
+strength=Stärke
+inGuis=in GUIs anwenden
 
 nametagOptions=Nametag Optionen
 showOwnNametag=Zeige eigenes Nametag

@@ -2,8 +2,6 @@ package io.github.moehreag.axolotlclient.modules.motionblur;
 
 import com.google.gson.JsonSyntaxException;
 import io.github.moehreag.axolotlclient.AxolotlClient;
-import io.github.moehreag.axolotlclient.config.AxolotlClientConfig;
-import io.github.moehreag.axolotlclient.config.options.FloatOption;
 import io.github.moehreag.axolotlclient.mixin.AccessorShaderEffect;
 import io.github.moehreag.axolotlclient.modules.AbstractModule;
 import net.minecraft.client.MinecraftClient;
@@ -63,7 +61,7 @@ public class MotionBlur extends AbstractModule {
     }
 
     private static float getBlur() {
-        return AxolotlClient.CONFIG.motionBlurStrength.get();
+        return AxolotlClient.CONFIG.motionBlurStrength.get()/100F;
     }
 
     public class MotionBlurShader implements Resource {
