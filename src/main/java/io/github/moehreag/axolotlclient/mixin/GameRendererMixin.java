@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.modules.hud.HudManager;
 import io.github.moehreag.axolotlclient.modules.hud.gui.hud.CrosshairHud;
+import io.github.moehreag.axolotlclient.modules.motionblur.MotionBlur;
 import io.github.moehreag.axolotlclient.modules.sky.SkyboxManager;
 import io.github.moehreag.axolotlclient.modules.zoom.Zoom;
 import net.minecraft.block.Block;
@@ -48,10 +49,9 @@ public abstract class GameRendererMixin {
 
     @Shadow private boolean thickFog;
 
-    @Shadow protected abstract void loadShader(Identifier id);
-
     @Shadow private ShaderEffect shader;
-    private boolean blurActive=false;
+
+    @Shadow protected abstract void loadShader(Identifier id);
 
     @Inject(method = "renderFog", at = @At("HEAD"), cancellable = true)
     public void noFog(int i, float tickDelta, CallbackInfo ci){
@@ -155,18 +155,18 @@ public abstract class GameRendererMixin {
 
     }
 
-    @Inject(method = "render", at = @At("HEAD"))
+    @Inject(method = "render", at = @At("TAIL"))
     public void motionBlur(float tickDelta, long nanoTime, CallbackInfo ci){
 
         this.client.profiler.push("Motion Blur");
         if(AxolotlClient.CONFIG.motionBlurEnabled.get()) {
 
-            if(!blurActive || shader==null){
-                loadShader(new Identifier("minecraft", "shaders/post/motion_blur.json"));
-                blurActive=true;
-            }
 
-        } else if(!AxolotlClient.CONFIG.motionBlurEnabled.get() &&
+                MotionBlur blur = (MotionBlur) AxolotlClient.modules.get(MotionBlur.ID);
+                blur.onUpdate();
+                //this.shader=blur.shader;
+
+        } /*else if(!AxolotlClient.CONFIG.motionBlurEnabled.get() &&
                 blurActive){
             try {
                 if(this.shader.getName().contains("motion_blur")) {
@@ -176,7 +176,7 @@ public abstract class GameRendererMixin {
                 }
             } catch (Exception ignored){}
 
-        }
+        }*/
         this.client.profiler.pop();
     }
 }

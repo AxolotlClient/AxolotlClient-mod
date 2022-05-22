@@ -32,7 +32,7 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	modImplementation include ("net.legacyfabric.legacy-fabric-api:legacy-fabric-api:${fabric_version}") {
+	modImplementation ("net.legacyfabric.legacy-fabric-api:legacy-fabric-api:${fabric_version}") {
 		exclude module: "legacy-fabric-entity-events-v1"
 	}
 

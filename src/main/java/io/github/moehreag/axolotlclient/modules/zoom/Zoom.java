@@ -5,6 +5,7 @@ import io.github.moehreag.axolotlclient.modules.AbstractModule;
 import net.legacyfabric.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.options.KeyBinding;
+import net.minecraft.util.Identifier;
 
 
 //Based on https://github.com/LogicalGeekBoy/logical_zoom/blob/master/src/main/java/com/logicalgeekboy/logical_zoom/LogicalZoom.java
@@ -14,6 +15,8 @@ public class Zoom extends AbstractModule {
     private static float fadeFactor;
     private static float originalSensitivity;
     private static KeyBinding keyBinding;
+
+    public static Identifier ID = new Identifier("zoom");
 
     public void init(){
         keyBinding = new KeyBinding("key.zoom", 46, "category.axolotlclient");

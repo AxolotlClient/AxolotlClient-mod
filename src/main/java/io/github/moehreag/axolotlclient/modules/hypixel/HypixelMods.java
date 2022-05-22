@@ -15,6 +15,8 @@ import java.util.List;
 
 public class HypixelMods extends AbstractModule {
 
+    public static Identifier ID = new Identifier("hypixel");
+
     public static HypixelMods INSTANCE = new HypixelMods();
 
     public StringOption hypixel_api_key = new StringOption("hypixel_api_key", "");

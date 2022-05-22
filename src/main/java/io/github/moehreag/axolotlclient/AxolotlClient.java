@@ -8,6 +8,7 @@ import io.github.moehreag.axolotlclient.modules.AbstractModule;
 import io.github.moehreag.axolotlclient.modules.hud.HudManager;
 import io.github.moehreag.axolotlclient.modules.hypixel.HypixelMods;
 import io.github.moehreag.axolotlclient.modules.hypixel.nickhider.NickHider;
+import io.github.moehreag.axolotlclient.modules.motionblur.MotionBlur;
 import io.github.moehreag.axolotlclient.modules.zoom.Zoom;
 import io.github.moehreag.axolotlclient.util.Util;
 import net.fabricmc.api.ModInitializer;
@@ -15,12 +16,14 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourcePack;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,13 +37,14 @@ public class AxolotlClient implements ModInitializer {
 	public static String otherPlayers = "";
 
 	public static List<ResourcePack> packs = new ArrayList<>();
+	public static HashMap<Identifier, Resource> runtimeResources = new HashMap<>();
 
 	public static boolean initalized = false;
 
 	public static final Identifier badgeIcon = new Identifier("axolotlclient", "textures/badge.png");
 
 	public static final OptionCategory config = new OptionCategory(new Identifier("storedOptions"), "storedOptions");
-	public static final List<AbstractModule> modules= new ArrayList<>();
+	public static final HashMap<Identifier, AbstractModule> modules= new HashMap<>();
 
 	public static Integer tickTime = 0;
 
@@ -52,7 +56,7 @@ public class AxolotlClient implements ModInitializer {
 
 		getModules();
 		CONFIG.init();
-		modules.forEach(AbstractModule::init);
+		modules.forEach((identifier, abstractModule) -> abstractModule.init());
 
 		CONFIG.config.addAll(CONFIG.getCategories());
 		CONFIG.config.add(config);
@@ -61,15 +65,16 @@ public class AxolotlClient implements ModInitializer {
 
 		if (CONFIG.enableRPC.get()) io.github.moehreag.axolotlclient.util.DiscordRPC.startup();
 
-		modules.forEach(AbstractModule::lateInit);
+		modules.forEach((identifier, abstractModule) -> abstractModule.lateInit());
 
 		LOGGER.info("AxolotlClient Initialized");
 	}
 
 	public static void getModules(){
-		modules.add(new Zoom());
-		modules.add(HudManager.getINSTANCE());
-		modules.add(HypixelMods.INSTANCE);
+		modules.put(Zoom.ID, new Zoom());
+		modules.put(HudManager.ID, HudManager.getINSTANCE());
+		modules.put(HypixelMods.ID, HypixelMods.INSTANCE);
+		modules.put(MotionBlur.ID, new MotionBlur());
 	}
 
 	public static boolean isUsingClient(UUID uuid){
