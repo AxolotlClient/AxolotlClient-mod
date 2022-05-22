@@ -1,5 +1,6 @@
 package io.github.moehreag.axolotlclient.mixin;
 
+import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.modules.hud.HudManager;
@@ -25,6 +26,7 @@ import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.At.Shift;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -136,8 +138,6 @@ public abstract class GameRendererMixin {
         }
     }
 
-
-
     @Redirect(method = "updateLightmap", at = @At(value = "FIELD", target = "Lnet/minecraft/client/options/GameOptions;gamma:F", opcode = Opcodes.GETFIELD))
     public float setGamma(GameOptions instance){
         if(AxolotlClient.CONFIG.fullBright.get()) return  15F;
@@ -155,28 +155,26 @@ public abstract class GameRendererMixin {
 
     }
 
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/Framebuffer;bind(Z)V",
+            shift = Shift.BEFORE))
+    public void worldMotionBlur(float tickDelta, long nanoTime, CallbackInfo ci) {
+        motionBlur(tickDelta, nanoTime, null);
+    }
+
     @Inject(method = "render", at = @At("TAIL"))
     public void motionBlur(float tickDelta, long nanoTime, CallbackInfo ci){
+        if((ci == null) == AxolotlClient.CONFIG.motionBlurInGuis.get()) {
+            return;
+        }
 
         this.client.profiler.push("Motion Blur");
-        if(AxolotlClient.CONFIG.motionBlurEnabled.get()) {
 
+        if(AxolotlClient.CONFIG.motionBlurEnabled.get() && GLX.shadersSupported) {
+            MotionBlur blur = (MotionBlur) AxolotlClient.modules.get(MotionBlur.ID);
+            blur.onUpdate();
+            blur.shader.render(tickDelta);
+        }
 
-                MotionBlur blur = (MotionBlur) AxolotlClient.modules.get(MotionBlur.ID);
-                blur.onUpdate();
-                //this.shader=blur.shader;
-
-        } /*else if(!AxolotlClient.CONFIG.motionBlurEnabled.get() &&
-                blurActive){
-            try {
-                if(this.shader.getName().contains("motion_blur")) {
-                    this.shader.disable();
-                    this.shader = null;
-                    blurActive = false;
-                }
-            } catch (Exception ignored){}
-
-        }*/
         this.client.profiler.pop();
     }
 }

@@ -2,6 +2,7 @@ package io.github.moehreag.axolotlclient.modules.motionblur;
 
 import com.google.gson.JsonSyntaxException;
 import io.github.moehreag.axolotlclient.AxolotlClient;
+import io.github.moehreag.axolotlclient.config.AxolotlClientConfig;
 import io.github.moehreag.axolotlclient.config.options.FloatOption;
 import io.github.moehreag.axolotlclient.mixin.AccessorShaderEffect;
 import io.github.moehreag.axolotlclient.modules.AbstractModule;
@@ -20,45 +21,49 @@ public class MotionBlur extends AbstractModule {
 
     public static Identifier ID = new Identifier("motion_blur");
 
-    public Identifier shader_location = new Identifier("minecraft:shaders/post/motion_blur.json");
+    private Identifier shaderLocation = new Identifier("minecraft:shaders/post/motion_blur.json");
 
     public ShaderEffect shader;
-    //private final FloatOption blurStrength = new FloatOption("blurStrength", 0F, 1F, 0.5F);
-    private float blur=0.5F;
     private final MinecraftClient client = MinecraftClient.getInstance();
     private float currentBlur;
 
-    @Override
-    public void init() {
-        AxolotlClient.runtimeResources.put(shader_location, new MotionBlurShader());
-    }
+    private int lastWidth;
+
+    private int lastHeight;
 
     @Override
-    public void lateInit() {
-        //AxolotlClient.CONFIG.motionBlur.add(blur);
+    public void init() {
+        AxolotlClient.runtimeResources.put(shaderLocation, new MotionBlurShader());
     }
 
     public void onUpdate() {
-        if (shader == null) {
-            currentBlur=blur;
+        if(shader == null || client.width!=lastWidth || client.height!=lastHeight) {
+            currentBlur=getBlur();
             try {
                 shader = new ShaderEffect(client.getTextureManager(),
                         client.getResourceManager(), client.getFramebuffer(),
-                        shader_location);
+                        shaderLocation);
                 shader.setupDimensions(client.width, client.height);
             } catch (JsonSyntaxException | IOException e) {
                 AxolotlClient.LOGGER.error("Could not load motion blur", e);
             }
         }
-        if(currentBlur!=blur){
+        if(currentBlur!=getBlur()){
             ((AccessorShaderEffect)shader).getPasses().forEach(shader -> {
                 GlUniform blendFactor = shader.getProgram().getUniformByName("BlendFactor");
                 if(blendFactor!=null){
-                    blendFactor.method_6976(blur);
+                    blendFactor.method_6976(getBlur());
                 }
             });
-            currentBlur=blur;
+            currentBlur=getBlur();
         }
+
+        lastWidth = client.width;
+        lastHeight = client.height;
+    }
+
+    private static float getBlur() {
+        return AxolotlClient.CONFIG.motionBlurStrength.get();
     }
 
     public class MotionBlurShader implements Resource {
@@ -104,7 +109,7 @@ public class MotionBlur extends AbstractModule {
                     "            \"outtarget\": \"minecraft:main\"" +
                     "        }" +
                     "    ]" +
-                    "}", blur));
+                    "}", getBlur()));
         }
 
         @Override

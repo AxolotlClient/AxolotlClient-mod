@@ -29,6 +29,7 @@ public class AxolotlClientConfig {
 
     public final BooleanOption motionBlurEnabled = new BooleanOption("enabled", false);
     public final FloatOption motionBlurStrength = new FloatOption("strength", 0.1F, 0.9F, 0.5F);
+    public final BooleanOption motionBlurInGuis = new BooleanOption("inGuis", false);
 
     public final BooleanOption enableRPC = new BooleanOption("enableRPC", true);
     public final BooleanOption showActivity = new BooleanOption("showActivity", true);
@@ -105,6 +106,8 @@ public class AxolotlClientConfig {
         rendering.add(fullBright);
 
         motionBlur.add(motionBlurEnabled);
+        motionBlur.add(motionBlurStrength);
+        motionBlur.add(motionBlurInGuis);
         rendering.addSubCategory(motionBlur);
 
         zoom.add(zoomDivisor);
