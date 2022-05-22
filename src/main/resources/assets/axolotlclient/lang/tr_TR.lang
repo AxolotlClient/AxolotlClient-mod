@@ -23,7 +23,10 @@ zoomSpeed=Yakınlaştırma Hızı
 decreaseSensitivity=Duyarlılığı Azalt
 dynamicFov=Dinamik Görüş Alanı
 fullBright=TamParlak
+strength=Sertlik
+inGuis=Tüm Arayüzlere Uygula
 
+motionBlur = Hareket Bulanıklığı
 zoom=Yakınlaştırma
 blockOutlines=Blok Anahatları
 outlineWidth=Anahat Genişliği
