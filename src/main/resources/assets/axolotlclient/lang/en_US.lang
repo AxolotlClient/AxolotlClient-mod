@@ -23,7 +23,10 @@ zoomSpeed=Zoom Speed
 decreaseSensitivity=Reduce Sensitivity
 dynamicFov=Dynamic FOV
 fullBright=FullBright
+strength=Strength
+inGuis=Apply to GUIs
 
+motionBlur=Motion Blur
 zoom=Zoom
 blockOutlines=Block Outlines
 outlineWidth=Outline Width
