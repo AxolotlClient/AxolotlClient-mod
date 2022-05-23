@@ -28,18 +28,21 @@ public class CategoryScreenBuilder extends Screen {
 
     @Override
     public void render(int mouseX, int mouseY, float tickDelta) {
-        if(this.client.world!=null)fillGradient(0,0, width, height, new Color(0xB0100E0E, true).hashCode(), new Color(0x46212020, true).hashCode());
+        /*if(this.client.world!=null)fillGradient(0,0, width, height, new Color(0xB0100E0E, true).hashCode(), new Color(0x46212020, true).hashCode());
         else renderDirtBackground(0);
 
         drawCenteredString(this.textRenderer, I18n.translate("config"), width/2, height/4, -1);
         buttons.forEach(buttonWidget -> buttonWidget.render(MinecraftClient.getInstance(), mouseX, mouseY));
-        back.render(mouseX, mouseY);
+        back.render(mouseX, mouseY);*/
 
     }
 
     @Override
     public void init() {
-        super.init();
+
+        client.openScreen(new OptionsScreenBuilder(parent, new OptionCategory("config").addSubCategories(AxolotlClient.CONFIG.getCategories())));
+
+        /*super.init();
         right=false;
         lines=1;
         for(OptionCategory category:categories){
@@ -59,7 +62,7 @@ public class CategoryScreenBuilder extends Screen {
 
                 if(buttonWidget.isMouseOver(client, mouseX, mouseY) && buttonWidget instanceof CategoryWidget){
                     buttonWidget.playDownSound(client.getSoundManager());
-                    this.client.openScreen(new OptionScreenBuilder(this, ((CategoryWidget) buttonWidget).category));
+                    this.client.openScreen(new OptionsScreenBuilder(this, ((CategoryWidget) buttonWidget).category));
                 } else if(buttonWidget.isMouseOver(client, mouseX, mouseY) && buttonWidget instanceof CustomButtonWidget){
                     buttonWidget.playDownSound(client.getSoundManager());
                     if(buttonWidget.id==99)client.openScreen(new CreditsScreen(new CategoryScreenBuilder(parent)));
@@ -72,5 +75,7 @@ public class CategoryScreenBuilder extends Screen {
     @Override
     public boolean shouldPauseGame() {
         return false;
+    }
+         */
     }
 }

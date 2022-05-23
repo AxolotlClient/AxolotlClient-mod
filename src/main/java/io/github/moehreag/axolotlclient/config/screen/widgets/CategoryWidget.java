@@ -13,18 +13,18 @@ public class CategoryWidget extends ButtonWidget {
 
     public OptionCategory category;
 
-    public CategoryWidget(OptionCategory category, int row, int line, int width, int height) {
-        super(0, row, height/3 + (line*20+line*2), width, 20, "");
+    public CategoryWidget(OptionCategory category, int x, int y, int width, int height) {
+        super(0, x, y, width, 20, category.getTranslatedName() +"...");
         this.category=category;
     }
 
-    @Override
+    /*@Override
     public void render(@NotNull MinecraftClient client, int mouseX, int mouseY) {
         client.getTextureManager().bindTexture(BUTTON_TEXTURE);
         if(width==100)client.getTextureManager().bindTexture(BUTTON2_TEXTURE);
         drawTexture(x, y, 0, 0,width, height, width, height);
         drawCenteredString(client.textRenderer, category.getTranslatedName() +"...", x+(width/2), y+(height-8)/2, -1);
-    }
+    }*/
 
 
 }

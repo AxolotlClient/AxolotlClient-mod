@@ -2,7 +2,7 @@ language.name=English
 language.region=US
 language.code=en_US
 
-config=AxolotlClient Options
+config=Client Options
 
 sky_loading_text=Loading Skies out of
 resource_loading_finished=Loading finished! Starting Minecraft...

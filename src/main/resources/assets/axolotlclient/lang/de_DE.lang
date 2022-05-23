@@ -2,7 +2,7 @@ language.name=Deutsch
 language.region=DE
 language.code=de_DE
 
-config=Axolotlclient Optionen
+config=Client Optionen
 
 sky_loading_text=Lade Himmelstexturen aus Pack
 resource_loading_finished=Laden beendet! Starte Minecraft...

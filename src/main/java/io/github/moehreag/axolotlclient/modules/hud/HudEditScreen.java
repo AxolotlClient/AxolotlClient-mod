@@ -4,7 +4,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.config.ConfigManager;
 import io.github.moehreag.axolotlclient.config.options.BooleanOption;
 import io.github.moehreag.axolotlclient.config.screen.CategoryScreenBuilder;
-import io.github.moehreag.axolotlclient.config.screen.OptionScreenBuilder;
+import io.github.moehreag.axolotlclient.config.screen.OptionsScreenBuilder;
 import io.github.moehreag.axolotlclient.config.screen.widgets.CustomButtonWidget;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.moehreag.axolotlclient.modules.hud.snapping.SnappingHelper;
@@ -83,7 +83,7 @@ public class HudEditScreen extends Screen {
                 super.mouseClicked(mouseX, mouseY, button);
             }
         } else if (button == 1) {
-            entry.ifPresent(abstractHudEntry -> client.openScreen(new OptionScreenBuilder(this, abstractHudEntry.getOptionsAsCategory())));
+            entry.ifPresent(abstractHudEntry -> client.openScreen(new OptionsScreenBuilder(this, abstractHudEntry.getOptionsAsCategory())));
         }
     }
 

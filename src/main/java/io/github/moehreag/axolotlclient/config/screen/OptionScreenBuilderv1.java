@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class OptionScreenBuilder extends Screen {
+public class OptionScreenBuilderv1 extends Screen {
 
     private final List<OptionWidget> optionWidgets = new ArrayList<>();
     private ButtonWidget back;
@@ -24,11 +24,11 @@ public class OptionScreenBuilder extends Screen {
 
     private final Screen parent;
 
-    public OptionScreenBuilder(Screen parent, OptionCategory category){
+    public OptionScreenBuilderv1(Screen parent, OptionCategory category){
         this(parent, category, null);
     }
 
-    public OptionScreenBuilder(Screen parent, OptionCategory category, CustomButtonWidget dialog){
+    public OptionScreenBuilderv1(Screen parent, OptionCategory category, CustomButtonWidget dialog){
         this.parent=parent;
         this.cat = category;
         this.dialog=dialog;
@@ -182,7 +182,7 @@ public class OptionScreenBuilder extends Screen {
             this.buttons.forEach(buttonWidget -> {
                 if(buttonWidget.isMouseOver(client, mouseX, mouseY) && buttonWidget instanceof CategoryWidget){
                     buttonWidget.playDownSound(client.getSoundManager());
-                    this.client.openScreen(new OptionScreenBuilder(this, ((CategoryWidget) buttonWidget).category));
+                    this.client.openScreen(new OptionScreenBuilderv1(this, ((CategoryWidget) buttonWidget).category));
                 }
             });
 

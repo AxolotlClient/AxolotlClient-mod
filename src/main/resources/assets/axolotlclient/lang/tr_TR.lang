@@ -2,7 +2,7 @@ language.name=Türkçe
 language.region=TR
 language.code=tr_TR
 
-config=AxolotlClient Ayarları
+config=Client Ayarları
 
 sky_loading_text=Gökyüzü bundan yükleniliyor:
 resource_loading_finished=Yüklenme Bitti! Minecraft Başlatılıyor...

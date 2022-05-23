@@ -30,6 +30,8 @@ public class OptionCategory {
 
     public void addSubCategory(OptionCategory category){subCategories.add(category);}
 
+    public OptionCategory addSubCategories(List<OptionCategory> categories){subCategories.addAll(categories); return this;}
+
     public List<OptionCategory> getSubCategories(){return subCategories;}
 
     public void clearOptions(){options.clear();}
