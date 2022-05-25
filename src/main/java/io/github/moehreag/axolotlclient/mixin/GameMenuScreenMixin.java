@@ -43,7 +43,7 @@ public abstract class GameMenuScreenMixin extends Screen {
         if((MinecraftClient.getInstance().getServer()!=null && MinecraftClient.getInstance().getServer().isPublished())
                 || MinecraftClient.getInstance().getCurrentServerEntry() != null){
             args.set(0, 20);
-            args.set(5, I18n.translate("config"));
+            args.set(5, I18n.translate("title_short"));
         }
     }
 

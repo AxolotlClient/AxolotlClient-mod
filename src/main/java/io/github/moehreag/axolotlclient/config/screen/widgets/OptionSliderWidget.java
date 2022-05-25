@@ -82,11 +82,6 @@ public class OptionSliderWidget extends ButtonWidget {
         if (this.visible) {
             if (this.dragging) {
                 this.value = (float)(mouseX - (this.x + 4)) / (float)(this.width - 8);
-                if(option!=null) {
-                    if (option instanceof FloatOption) ((FloatOption) option).set(getSliderValue());
-                    else if (option instanceof DoubleOption) ((DoubleOption) option).set(getSliderValue());
-                    else if (option instanceof IntegerOption) ((IntegerOption) option).set(getSliderValueAsInt());
-                }
 
                 if (this.value < 0.0F) {
                     this.value = 0.0F;
@@ -94,6 +89,13 @@ public class OptionSliderWidget extends ButtonWidget {
                 if (this.value > 1.0F) {
                     this.value = 1.0F;
                 }
+
+                if(option!=null) {
+                    if (option instanceof FloatOption) ((FloatOption) option).set(getSliderValue());
+                    else if (option instanceof DoubleOption) ((DoubleOption) option).set(getSliderValue());
+                    else if (option instanceof IntegerOption) ((IntegerOption) option).set(getSliderValueAsInt());
+                }
+
                 this.message = this.getMessage();
             }
 

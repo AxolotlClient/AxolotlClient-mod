@@ -5,6 +5,7 @@ import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.config.ConfigManager;
 import io.github.moehreag.axolotlclient.mixin.AccessorSoundManager;
 import io.github.moehreag.axolotlclient.mixin.AccessorSoundSystem;
+import io.github.moehreag.axolotlclient.modules.hud.util.DrawUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -43,6 +44,14 @@ public class CreditsScreen extends Screen {
 
         if(this.client.world!=null)fillGradient(0,0, width, height, new Color(0xB0100E0E, true).hashCode(), new Color(0x46212020, true).hashCode());
         else renderDirtBackground(0);
+        if(AxolotlClient.someNiceBackground.get()) { // Credit to pridelib for the colors
+            DrawUtil.fill(0, 0, width, height/6, 0xFFff0018);
+            DrawUtil.fill(0, height/6, width, height*2/6, 0xFFffa52c);
+            DrawUtil.fill(0, height*2/6, width, height/2, 0xFFffff41);
+            DrawUtil.fill(0, height*2/3, width, height*5/6, 0xFF0000f9);
+            DrawUtil.fill(0, height/2, width, height*2/3, 0xFF008018);
+            DrawUtil.fill(0, height*5/6, width, height, 0xFF86007d);
+        }
         GlStateManager.enableAlphaTest();
         super.render(mouseX, mouseY, tickDelta);
         GlStateManager.disableAlphaTest();
@@ -81,21 +90,20 @@ public class CreditsScreen extends Screen {
             AxolotlClient.CONFIG.creditsBGM.toggle();
             ConfigManager.save();
             stopBGM();
-            client.openScreen(new CreditsScreen(parent));
+            button.message = I18n.translate("creditsBGM")+ ": "+I18n.translate(AxolotlClient.CONFIG.creditsBGM.get()?"options.on":"options.off");
         }
     }
 
     @Override
     public void init() {
-        this.buttons.add(new CustomButtonWidget(
+        this.buttons.add(new ButtonWidget(
                 0, width/2 -75, height - 50 + 22, 150, 20,
-                I18n.translate("back"),new Identifier("axolotlclient", "textures/gui/button1.png")));
+                I18n.translate("back")));
 
         initCredits();
 
-        this.buttons.add(new CustomButtonWidget(1, 6, this.height-26, 100, 20,
-                I18n.translate("creditsBGM")+ ": "+I18n.translate(AxolotlClient.CONFIG.creditsBGM.get()?"options.on":"options.off"),
-                new Identifier("axolotlclient", "textures/gui/button2.png")
+        this.buttons.add(new ButtonWidget(1, 6, this.height-26, 100, 20,
+                I18n.translate("creditsBGM")+ ": "+I18n.translate(AxolotlClient.CONFIG.creditsBGM.get()?"options.on":"options.off")
         ));
     }
 

@@ -2,7 +2,8 @@ language.name=English
 language.region=US
 language.code=en_US
 
-config=Client Options
+config=AxolotlClient Options
+title_short=Client Options
 
 sky_loading_text=Loading Skies out of
 resource_loading_finished=Loading finished! Starting Minecraft...
@@ -13,6 +14,7 @@ enableRPC=Enable RPC
 showActivity=Show Activity
 loadingBgColor=Loading Screen Color
 nightMode=Night Mode
+quickToggles=Quick Toggles
 
 rendering=Rendering Options
 customSky=Custom Skies
@@ -102,8 +104,10 @@ bossbarhud=BossBar HUD
 chathud=Chat HUD
 arrowhud=Arrow HUD
 dynamic=Dynamic
-itemupdatehud=ItemUpdate HUD
+itemupdatehud=Item Update HUD
 packdisplayhud=Pack Display HUD
+realtimehud=Real Time HUD
+showSeconds=Show Seconds
 timeout=Timeout
 text=Text
 bar=Bar

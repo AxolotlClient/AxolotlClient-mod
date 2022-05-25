@@ -2,7 +2,8 @@ language.name=Türkçe
 language.region=TR
 language.code=tr_TR
 
-config=Client Ayarları
+config=AxolotlClient Ayarları
+title_short=Client Ayarları
 
 sky_loading_text=Gökyüzü bundan yükleniliyor:
 resource_loading_finished=Yüklenme Bitti! Minecraft Başlatılıyor...
@@ -26,7 +27,7 @@ fullBright=TamParlak
 strength=Sertlik
 inGuis=Tüm Arayüzlere Uygula
 
-motionBlur = Hareket Bulanıklığı
+motionBlur=Hareket Bulanıklığı
 zoom=Yakınlaştırma
 blockOutlines=Blok Anahatları
 outlineWidth=Anahat Genişliği

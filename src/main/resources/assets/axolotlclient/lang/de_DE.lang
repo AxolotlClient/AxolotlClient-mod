@@ -2,7 +2,8 @@ language.name=Deutsch
 language.region=DE
 language.code=de_DE
 
-config=Client Optionen
+config=AxolotlClient Optionen
+title_short=Client Optionen
 
 sky_loading_text=Lade Himmelstexturen aus Pack
 resource_loading_finished=Laden beendet! Starte Minecraft...
@@ -13,6 +14,7 @@ enableRPC=Aktiviere RPC
 showActivity=Zeige Aktivität
 loadingBgColor=Ladebildschirmfarbe
 nightMode=Blaufilter
+quickToggles=Quick Toggles
 
 rendering=Renderoptionen
 customSky=Benutzerdefinierte Himmel
@@ -96,8 +98,10 @@ actionBarPlaceholder=Aktionsleiste
 bossbarhud=BossBar HUD
 chathud=Chat HUD
 arrowhud=Arrow HUD
-itemupdatehud=ItemUpdate HUD
+itemupdatehud=Item Update HUD
 packdisplayhud=Pack Display HUD
+realtimehud=Echtzeit HUD
+showSeconds=Zeige Sekunden
 dynamic=Dynamisch
 text=Text
 bar=Leiste

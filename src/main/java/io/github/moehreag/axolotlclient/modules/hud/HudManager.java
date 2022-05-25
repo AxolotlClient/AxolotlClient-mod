@@ -73,6 +73,7 @@ public class HudManager extends AbstractModule {
         add(new ArrowHud());
         add(new ItemUpdateHud());
         add(new PackDisplayHud());
+        add(new RealTimeHud());
 
         entries.forEach((identifier, abstractHudEntry) -> abstractHudEntry.init());
     }

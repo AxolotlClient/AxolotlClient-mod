@@ -56,6 +56,8 @@ public class OptionsScreenBuilder extends Screen {
     protected void buttonClicked(ButtonWidget button) {
         if(button.id==0){
             MinecraftClient.getInstance().openScreen(parent);
+        } else if(button.id==99){
+            MinecraftClient.getInstance().openScreen(new CreditsScreen(this));
         }
     }
 
@@ -69,6 +71,7 @@ public class OptionsScreenBuilder extends Screen {
         this.list = new ButtonWidgetList(this.client, this.width, this.height, 50, this.height - 50, 25, cat);
 
         this.buttons.add(new ButtonWidget(0, this.width/2-100, this.height-40, 200, 20, I18n.translate("back")));
+        if(cat.getOptions().isEmpty()) this.buttons.add(new ButtonWidget(99, this.width-106, this.height-26, 100, 20, I18n.translate("credits")));
     }
 
     @Override
