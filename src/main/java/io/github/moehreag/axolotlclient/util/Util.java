@@ -3,9 +3,11 @@ package io.github.moehreag.axolotlclient.util;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import io.github.moehreag.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.texture.Texture;
+import net.minecraft.client.util.Window;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.NetworkState;
 import net.minecraft.network.ServerAddress;
@@ -23,9 +25,12 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
 import java.net.InetAddress;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.stream.Collectors;
@@ -181,6 +186,13 @@ public class Util {
             this.blue = blue;
             this.alpha = alpha;
         }
+    }
+
+    public static void applyScissor(Rectangle scissor){
+        GL11.glEnable(GL11.GL_SCISSOR_TEST);
+        Window window = new Window(MinecraftClient.getInstance());
+        int scale = window.getScaleFactor();
+        GL11.glScissor(scissor.x * scale, (int) ((window.getScaledHeight() - scissor.height - scissor.y) * scale), scissor.width * scale, scissor.height * scale);
     }
 
 }

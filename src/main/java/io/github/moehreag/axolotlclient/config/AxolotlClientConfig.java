@@ -31,6 +31,7 @@ public class AxolotlClientConfig {
     public final FloatOption motionBlurStrength = new FloatOption("strength", 1F, 99F, 50F);
     public final BooleanOption motionBlurInGuis = new BooleanOption("inGuis", false);
 
+    public final BooleanOption quickToggles = new BooleanOption("quickToggles", false);
     public final BooleanOption enableRPC = new BooleanOption("enableRPC", true);
     public final BooleanOption showActivity = new BooleanOption("showActivity", true);
     public final ColorOption loadingScreenColor = new ColorOption("loadingBgColor", new Color(-1));
@@ -97,6 +98,7 @@ public class AxolotlClientConfig {
         general.add(showActivity);
         general.add(loadingScreenColor);
         general.add(nightMode);
+        general.add(quickToggles);
 
         rendering.add(customSky);
         rendering.add(showSunMoon);

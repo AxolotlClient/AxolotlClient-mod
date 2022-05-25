@@ -3,6 +3,7 @@ package io.github.moehreag.axolotlclient;
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.config.AxolotlClientConfig;
 import io.github.moehreag.axolotlclient.config.ConfigManager;
+import io.github.moehreag.axolotlclient.config.options.BooleanOption;
 import io.github.moehreag.axolotlclient.config.options.OptionCategory;
 import io.github.moehreag.axolotlclient.modules.AbstractModule;
 import io.github.moehreag.axolotlclient.modules.hud.HudManager;
@@ -12,6 +13,7 @@ import io.github.moehreag.axolotlclient.modules.motionblur.MotionBlur;
 import io.github.moehreag.axolotlclient.modules.zoom.Zoom;
 import io.github.moehreag.axolotlclient.util.Util;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.entity.Entity;
@@ -22,10 +24,8 @@ import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.nio.file.Path;
+import java.util.*;
 
 
 public class AxolotlClient implements ModInitializer {
@@ -44,6 +44,7 @@ public class AxolotlClient implements ModInitializer {
 	public static final Identifier badgeIcon = new Identifier("axolotlclient", "textures/badge.png");
 
 	public static final OptionCategory config = new OptionCategory(new Identifier("storedOptions"), "storedOptions");
+	public static final BooleanOption someNiceBackground = new BooleanOption("defNoSecret", false);
 	public static final HashMap<Identifier, AbstractModule> modules= new HashMap<>();
 
 	public static Integer tickTime = 0;
@@ -52,7 +53,7 @@ public class AxolotlClient implements ModInitializer {
 	public void onInitialize() {
 
 		CONFIG = new AxolotlClientConfig();
-
+		config.add(someNiceBackground);
 
 		getModules();
 		CONFIG.init();
@@ -66,6 +67,12 @@ public class AxolotlClient implements ModInitializer {
 		if (CONFIG.enableRPC.get()) io.github.moehreag.axolotlclient.util.DiscordRPC.startup();
 
 		modules.forEach((identifier, abstractModule) -> abstractModule.lateInit());
+
+		FabricLoader.getInstance().getModContainer("axolotlclient").ifPresent(modContainer -> {
+			Optional<Path> optional = modContainer.findPath("resourcepacks/AxolotlClientUI.zip");
+			optional.ifPresent(path -> MinecraftClient.getInstance().getResourcePackLoader().method_10366(path.toFile()));
+
+		});
 
 		LOGGER.info("AxolotlClient Initialized");
 	}

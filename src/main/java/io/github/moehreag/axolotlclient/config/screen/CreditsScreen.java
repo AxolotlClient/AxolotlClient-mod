@@ -3,7 +3,6 @@ package io.github.moehreag.axolotlclient.config.screen;
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.config.ConfigManager;
-import io.github.moehreag.axolotlclient.config.screen.widgets.CustomButtonWidget;
 import io.github.moehreag.axolotlclient.mixin.AccessorSoundManager;
 import io.github.moehreag.axolotlclient.mixin.AccessorSoundSystem;
 import net.minecraft.client.MinecraftClient;

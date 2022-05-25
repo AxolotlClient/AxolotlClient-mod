@@ -7,7 +7,6 @@ import io.github.moehreag.axolotlclient.config.options.IntegerOption;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,22 +16,7 @@ public class OptionSliderWidget extends ButtonWidget {
     private final DecimalFormat format = new DecimalFormat("##.#");
     private final DecimalFormat intformat = new DecimalFormat("##");
 
-
-    /*public OptionSliderWidget(PagedEntryListWidget.Listener listener, int id, int x, int y, Option option) {
-        super(listener, id, x, y, option.getName(),
-                option.getType() == OptionType.INT?((IntegerOption)option).getMin():
-                        (float) (option.getType() == OptionType.DOUBLE ? ((DoubleOption) option).getMin() :
-                                option.getType() == OptionType.FLOAT ? ((FloatOption) option).getMin() : 0),
-                option.getType() == OptionType.INT?((IntegerOption)option).getMax():
-                        (float) (option.getType() == OptionType.DOUBLE ? ((DoubleOption) option).getMax() :
-                                option.getType() == OptionType.FLOAT ? ((FloatOption) option).getMax() : 0),
-                option.getType() == OptionType.INT?((IntegerOption)option).get():
-                        (float) (option.getType() == OptionType.DOUBLE ? ((DoubleOption) option).get() :
-                                option.getType() == OptionType.FLOAT ? ((FloatOption) option).get() : 0),
-                null);
-    }*/
-
-    private double value = 1.0F;
+    private double value;
     public boolean dragging;
     private final Option option;
     private final double min;
@@ -87,7 +71,7 @@ public class OptionSliderWidget extends ButtonWidget {
     }
 
     private @NotNull String getMessage() {
-        return I18n.translate(option.getName()) + ": " + (option instanceof IntegerOption? getSliderValueAsInt(): this.getSliderValue());
+        return ""+ (option instanceof IntegerOption? getSliderValueAsInt(): this.getSliderValue());
     }
 
     protected int getYImage(boolean isHovered) {

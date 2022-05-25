@@ -61,15 +61,4 @@ public class DrawUtil extends DrawableHelper{
         }
     }
 
-    public static void applyScissor(Rectangle scissor) {
-        Window window = new Window(MinecraftClient.getInstance());
-        double scale = window.getScaleFactor();
-        GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        GL11.glScissor((int) (scissor.x * scale), (int) ((window.getScaledHeight() - scissor.height - scissor.y) * scale), (int) (scissor.width * scale), (int) (scissor.height * scale));
-    }
-
-    public static void removeScissors() {
-        GL11.glDisable(GL11.GL_SCISSOR_TEST);
-    }
-
 }

@@ -1,11 +1,11 @@
 package io.github.moehreag.axolotlclient.modules.hud;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.config.ConfigManager;
 import io.github.moehreag.axolotlclient.config.options.BooleanOption;
-import io.github.moehreag.axolotlclient.config.screen.CategoryScreenBuilder;
+import io.github.moehreag.axolotlclient.config.options.OptionCategory;
 import io.github.moehreag.axolotlclient.config.screen.OptionsScreenBuilder;
-import io.github.moehreag.axolotlclient.config.screen.widgets.CustomButtonWidget;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.moehreag.axolotlclient.modules.hud.snapping.SnappingHelper;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
@@ -13,7 +13,6 @@ import io.github.moehreag.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.resource.language.I18n;
-import net.minecraft.util.Identifier;
 
 import java.awt.*;
 import java.util.List;
@@ -127,50 +126,50 @@ public class HudEditScreen extends Screen {
 
     @Override
     protected void buttonClicked(ButtonWidget button) {
-        super.buttonClicked(button);
         if(button.id==1){
             snapping.toggle();
             ConfigManager.save();
-            client.openScreen(this);
+
+            button.message = I18n.translate("hud.snapping") + ": "+I18n.translate(snapping.get()?"options.on":"options.off");
+        } else if(button.id==3) {
+            client.openScreen(new OptionsScreenBuilder(this, new OptionCategory("config").addSubCategories(AxolotlClient.CONFIG.getCategories())));
+        } else if(button.id==0) {
+            client.openScreen(parent);
+        } else if(button.id==2) {
+            client.closeScreen();
         }
-
-        if(button.id==3)client.openScreen(new CategoryScreenBuilder(this));
-
-        if(button.id==0)client.openScreen(parent);
-        else if(button.id==2)client.closeScreen();
     }
 
     @Override
     public void init() {
-        super.init();
-        this.buttons.add(new CustomButtonWidget(1,
+        // Actually using vanilla widgets here. Who would have thought that?
+        this.buttons.add(new ButtonWidget(1,
                 width / 2 - 50,
                 height/2+ 12,
                 100, 20,
-                I18n.translate("hud.snapping") + ": "+I18n.translate(snapping.get()?"options.on":"options.off"),
-                new Identifier("axolotlclient", "textures/gui/button2.png")
+                I18n.translate("hud.snapping") + ": "+I18n.translate(snapping.get()?"options.on":"options.off")
         ));
 
-        this.buttons.add(new CustomButtonWidget(3,
+        this.buttons.add(new ButtonWidget(3,
                 width / 2 - 75,
                 height/2-10,
                 150, 20,
-                I18n.translate("hud.clientOptions"),
-                new Identifier("axolotlclient", "textures/gui/button1.png")
+                I18n.translate("hud.clientOptions")
         ));
-        if(parent!=null)this.buttons.add(new CustomButtonWidget(
+        if(parent!=null)this.buttons.add(new ButtonWidget(
                 0, width/2 -75, height - 50 + 22, 150, 20,
-                I18n.translate("back"),new Identifier("axolotlclient", "textures/gui/button1.png")));
-        else this.buttons.add(new CustomButtonWidget(
+                I18n.translate("back")));
+        else this.buttons.add(new ButtonWidget(
                 2, width/2 -75, height - 50 + 22, 150, 20,
-                I18n.translate("close"),new Identifier("axolotlclient", "textures/gui/button1.png")));
+                I18n.translate("close")));
 
     }
 
     @Override
     public void tick() {
-        super.tick();
-        if(current!=null && current.tickable())current.tick();
+        if(current!=null && current.tickable()) {
+            current.tick();
+        }
     }
 
     @Override
