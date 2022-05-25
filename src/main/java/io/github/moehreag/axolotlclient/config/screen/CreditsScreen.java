@@ -87,15 +87,14 @@ public class CreditsScreen extends Screen {
 
     @Override
     public void init() {
-        this.buttons.add(new CustomButtonWidget(
+        this.buttons.add(new ButtonWidget(
                 0, width/2 -75, height - 50 + 22, 150, 20,
-                I18n.translate("back"),new Identifier("axolotlclient", "textures/gui/button1.png")));
+                I18n.translate("back")));
 
         initCredits();
 
-        this.buttons.add(new CustomButtonWidget(1, 6, this.height-26, 100, 20,
-                I18n.translate("creditsBGM")+ ": "+I18n.translate(AxolotlClient.CONFIG.creditsBGM.get()?"options.on":"options.off"),
-                new Identifier("axolotlclient", "textures/gui/button2.png")
+        this.buttons.add(new ButtonWidget(1, 6, this.height-26, 100, 20,
+                I18n.translate("creditsBGM")+ ": "+I18n.translate(AxolotlClient.CONFIG.creditsBGM.get()?"options.on":"options.off")
         ));
     }
 
