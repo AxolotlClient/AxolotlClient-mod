@@ -215,12 +215,10 @@ public class ButtonWidgetList extends EntryListWidget {
             if (this.left.isMouseOver(this.client, mouseX, mouseY)) {
                 onClick(this.left, mouseX, mouseY);
 
-                ConfigManager.save();
                 return true;
             } else if (this.right != null && this.right.isMouseOver(this.client, mouseX, mouseY)) {
                 onClick(this.right, mouseX, mouseY);
-
-                ConfigManager.save();
+                
                 return true;
             }
             return false;
@@ -229,24 +227,28 @@ public class ButtonWidgetList extends EntryListWidget {
         protected void onClick(ButtonWidget button, int mouseX, int mouseY){
             if (button instanceof OptionSliderWidget){
                 button.isMouseOver(client, mouseX, mouseY);
-
+                ConfigManager.save();
             } else if (button instanceof CategoryWidget) {
                 ((CategoryWidget) button).mouseClicked(mouseX, mouseY);
 
             } else if (button instanceof EnumOptionWidget) {
                 button.playDownSound(client.getSoundManager());
                 ((EnumOptionWidget) button).mouseClicked();
+                ConfigManager.save();
 
             } else if (button instanceof StringOptionWidget) {
                 ((StringOptionWidget) button).textField.mouseClicked(mouseX, mouseY, 0);
+                ConfigManager.save();
 
             } else if (button instanceof BooleanWidget) {
                 button.playDownSound(client.getSoundManager());
                 ((BooleanWidget) button).option.toggle();
                 ((BooleanWidget) button).updateMessage();
+                ConfigManager.save();
 
             } else if (button instanceof ColorOptionWidget) {
                 ((ColorOptionWidget) button).mouseClicked(mouseX, mouseY);
+                ConfigManager.save();
 
             }
         }
