@@ -2,6 +2,7 @@ package io.github.moehreag.axolotlclient.config.screen;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.GlStateManager;
+import io.github.moehreag.axolotlclient.config.ConfigManager;
 import io.github.moehreag.axolotlclient.config.options.*;
 import io.github.moehreag.axolotlclient.config.screen.widgets.*;
 import io.github.moehreag.axolotlclient.modules.hud.util.Rectangle;
@@ -214,13 +215,12 @@ public class ButtonWidgetList extends EntryListWidget {
             if (this.left.isMouseOver(this.client, mouseX, mouseY)) {
                 onClick(this.left, mouseX, mouseY);
 
+                ConfigManager.save();
                 return true;
             } else if (this.right != null && this.right.isMouseOver(this.client, mouseX, mouseY)) {
                 onClick(this.right, mouseX, mouseY);
 
-                return true;
-            } else if (this.left instanceof StringOptionWidget && ((StringOptionWidget) this.left).textField.isFocused()) {
-                ((StringOptionWidget) this.left).textField.setFocused(false);
+                ConfigManager.save();
                 return true;
             }
             return false;
