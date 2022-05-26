@@ -54,6 +54,7 @@ public class AxolotlClient implements ModInitializer {
 
 		CONFIG = new AxolotlClientConfig();
 		config.add(someNiceBackground);
+		config.add(CONFIG.rotateWorld);
 
 		getModules();
 		CONFIG.init();

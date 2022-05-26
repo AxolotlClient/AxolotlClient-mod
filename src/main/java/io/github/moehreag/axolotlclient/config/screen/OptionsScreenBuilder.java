@@ -1,12 +1,17 @@
 package io.github.moehreag.axolotlclient.config.screen;
 
 import io.github.moehreag.axolotlclient.AxolotlClient;
+import io.github.moehreag.axolotlclient.config.ConfigManager;
 import io.github.moehreag.axolotlclient.config.options.OptionCategory;
+import io.github.moehreag.axolotlclient.config.screen.widgets.ColorOptionWidget;
+import io.github.moehreag.axolotlclient.config.screen.widgets.StringOptionWidget;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.resource.language.I18n;
+
+import java.util.Objects;
 
 public class OptionsScreenBuilder extends Screen {
 
@@ -43,6 +48,16 @@ public class OptionsScreenBuilder extends Screen {
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int button) {
         super.mouseClicked(mouseX, mouseY, button);
+
+        this.list.entries.forEach(pair -> {
+            if(pair.left instanceof StringOptionWidget && ((StringOptionWidget) pair.left).textField.isFocused()){
+                ((StringOptionWidget) pair.left).textField.mouseClicked(mouseX, mouseY, button);
+            }
+            if(pair.left instanceof ColorOptionWidget && ((ColorOptionWidget) pair.left).textField.isFocused()){
+                ((ColorOptionWidget) pair.left).textField.mouseClicked(mouseX, mouseY, button);
+            }
+        });
+
         this.list.mouseClicked(mouseX, mouseY, button);
     }
 
@@ -55,6 +70,7 @@ public class OptionsScreenBuilder extends Screen {
     @Override
     protected void buttonClicked(ButtonWidget button) {
         if(button.id==0){
+            ConfigManager.save();
             MinecraftClient.getInstance().openScreen(parent);
         } else if(button.id==99){
             MinecraftClient.getInstance().openScreen(new CreditsScreen(this));
@@ -71,7 +87,7 @@ public class OptionsScreenBuilder extends Screen {
         this.list = new ButtonWidgetList(this.client, this.width, this.height, 50, this.height - 50, 25, cat);
 
         this.buttons.add(new ButtonWidget(0, this.width/2-100, this.height-40, 200, 20, I18n.translate("back")));
-        if(cat.getOptions().isEmpty()) this.buttons.add(new ButtonWidget(99, this.width-106, this.height-26, 100, 20, I18n.translate("credits")));
+        if(Objects.equals(cat.getName(), "config")) this.buttons.add(new ButtonWidget(99, this.width-106, this.height-26, 100, 20, I18n.translate("credits")));
     }
 
     @Override

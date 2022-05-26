@@ -10,7 +10,7 @@ public class StringOptionWidget extends ButtonWidget {
 
     public TextFieldWidget textField;
 
-    private final StringOption option;
+    public final StringOption option;
 
     public StringOptionWidget(int id, int x, int y, StringOption option){
         super(id, x, y, 150, 40, option.get());
@@ -42,6 +42,10 @@ public class StringOptionWidget extends ButtonWidget {
     }
 
 
+    public void keyPressed(char c, int code){
+        this.textField.keyPressed(c, code);
+        this.option.set(textField.getText());
+    }
 
 
 

@@ -12,14 +12,12 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Material;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.class_321;
-import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.util.Identifier;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 import org.objectweb.asm.Opcodes;
@@ -50,10 +48,6 @@ public abstract class GameRendererMixin {
     @Shadow private float fogBlue;
 
     @Shadow private boolean thickFog;
-
-    @Shadow private ShaderEffect shader;
-
-    @Shadow protected abstract void loadShader(Identifier id);
 
     @Inject(method = "renderFog", at = @At("HEAD"), cancellable = true)
     public void noFog(int i, float tickDelta, CallbackInfo ci){

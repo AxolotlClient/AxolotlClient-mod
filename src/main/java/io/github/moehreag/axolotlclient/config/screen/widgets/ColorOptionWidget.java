@@ -12,7 +12,7 @@ public class ColorOptionWidget extends ButtonWidget {
 
     private final ColorOption option;
 
-    private final TextFieldWidget textField;
+    public final TextFieldWidget textField;
     private final ButtonWidget openPicker;
 
     public ColorOptionWidget(int id, int x, int y, ColorOption option) {

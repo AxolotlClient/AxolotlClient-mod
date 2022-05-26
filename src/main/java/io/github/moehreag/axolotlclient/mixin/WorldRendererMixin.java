@@ -68,7 +68,7 @@ public abstract class WorldRendererMixin {
             GlStateManager.rotatef(this.world.getSkyAngle(f) * 360.0F, 1.0F, 0.0F, 0.0F);
 
 
-            if(!AxolotlClient.CONFIG.rotateWorld.get())GlStateManager.popMatrix();
+            if(!AxolotlClient.CONFIG.rotateWorld.get()) GlStateManager.popMatrix();
             GlStateManager.disableTexture();
             Vec3d vec3d = this.world.method_3631(MinecraftClient.getInstance().getCameraEntity(), f);
             float g = (float)vec3d.x;

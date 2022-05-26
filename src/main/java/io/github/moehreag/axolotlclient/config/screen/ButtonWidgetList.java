@@ -23,7 +23,7 @@ import java.util.List;
 
 public class ButtonWidgetList extends EntryListWidget {
 
-    private final List<Pair> entries = Lists.newArrayList();
+    public final List<Pair> entries = Lists.newArrayList();
 
     //private final OptionCategory category; // Uncomment if needed one day
 
@@ -176,9 +176,9 @@ public class ButtonWidgetList extends EntryListWidget {
     public void keyPressed(char c, int code){
         entries.forEach(pair -> {
             if(pair.left instanceof StringOptionWidget && ((StringOptionWidget) pair.left).textField.isFocused()){
-                ((StringOptionWidget) pair.left).textField.keyPressed(c, code);
+                ((StringOptionWidget) pair.left).keyPressed(c, code);
             } else if(pair.right instanceof StringOptionWidget && ((StringOptionWidget) pair.right).textField.isFocused()){
-                ((StringOptionWidget) pair.right).textField.keyPressed(c, code);
+                ((StringOptionWidget) pair.right).keyPressed(c, code);
             }
 
             if(pair.left instanceof ColorOptionWidget) {
@@ -218,7 +218,7 @@ public class ButtonWidgetList extends EntryListWidget {
                 return true;
             } else if (this.right != null && this.right.isMouseOver(this.client, mouseX, mouseY)) {
                 onClick(this.right, mouseX, mouseY);
-                
+
                 return true;
             }
             return false;
