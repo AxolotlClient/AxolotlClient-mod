@@ -20,7 +20,6 @@ import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.ScoreboardPlayerScore;
 import net.minecraft.scoreboard.Team;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 
 import java.util.ArrayList;
@@ -134,7 +133,7 @@ public class Util {
 							var time = this.currentSystemTime;
 							var latency = net.minecraft.util.Util.getMeasuringTimeMs();
 							Util.currentServerPing = (int) (latency - time);
-							manager.disconnect(new LiteralText(""));
+							manager.disconnect(Text.of(""));
 						}
 
 						private long currentSystemTime = 0L;

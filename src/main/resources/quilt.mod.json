@@ -1,0 +1,43 @@
+{
+	"schema_version": 1,
+	"quilt_loader": {
+		"group": "io.github.moehreag.axolotlclient",
+		"id": "axolotlclient",
+		"version": "${version}",
+		"metadata": {
+			"name": "AxolotlClient",
+			"description": "Special features of AxolotlClient",
+			"contributors": {
+				"moehreag": "Owner",
+				"YaklisikiBaran": "Contributor",
+				"DragonEggBedrockBreaking": "Contributor",
+				"TheKodeToad": "Contributor"
+			},
+			"contact": {
+				"homepage": "https://axolotlclient.github.io/",
+				"issues": "https://github.com/AxolotlClient/Axolotlclient-mod/issues",
+				"sources": "https://github.com/Axolotlclient?tab=repositories"
+			},
+			"icon": "assets/axolotlclient/icon.png"
+		},
+		"intermediate_mappings": "net.fabricmc:intermediary",
+		"entrypoints": {
+			"init": "io.github.moehreag.axolotlclient.AxolotlClient"
+		},
+		"depends": [
+			{
+				"id": "quilt_loader",
+				"versions": ">=0.16.0-"
+			},
+			{
+				"id": "quilted_fabric_api",
+				"versions": ">=1.0.0-"
+			},
+			{
+				"id": "minecraft",
+				"versions": ">=1.19"
+			}
+		]
+	},
+	"mixin": "axolotlclient.mixins.json"
+}

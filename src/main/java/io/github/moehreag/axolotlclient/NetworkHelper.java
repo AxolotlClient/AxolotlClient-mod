@@ -1,85 +1,103 @@
 package io.github.moehreag.axolotlclient;
 
+import io.github.moehreag.axolotlclient.util.ThreadExecuter;
 import net.minecraft.client.MinecraftClient;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.Objects;
 import java.util.UUID;
 
 
 public class NetworkHelper {
 
-	public static boolean getOnline(UUID uuid){
+    private static boolean loggedIn;
+    private static UUID uuid;
 
-		if (Axolotlclient.onlinePlayers.contains(uuid.toString())){
-			return true;
-		} else if (Axolotlclient.otherPlayers.contains(uuid.toString())){
-			return false;
-		}else {
-			final Thread get = new Thread(() -> getUser(uuid));
-			get.start();
-			return Axolotlclient.onlinePlayers.contains(uuid.toString());
-		}
-	}
+    public static boolean getOnline(UUID uuid){
 
-	public static void getUser(UUID uuid){
-			try{
-				final HttpClient client = HttpClient.newBuilder().build();
-				HttpRequest request = HttpRequest.newBuilder()
-					.GET()
-					.uri(URI.create("https://moehreag.duckdns.org/axolotlclient-api/?uuid="+uuid))
-					.build();
+        if (AxolotlClient.onlinePlayers.contains(uuid.toString())){
+            return true;
+        } else if (AxolotlClient.otherPlayers.contains(uuid.toString())){
+            return false;
+        }else {
+            ThreadExecuter.scheduleTask(() -> getUser(uuid));
+            return AxolotlClient.onlinePlayers.contains(uuid.toString());
+        }
+    }
 
-				HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+    public static void getUser(UUID uuid){
+        try{
+            CloseableHttpClient client = HttpClients.custom().disableAutomaticRetries().build();
+            HttpGet get = new HttpGet("https://moehreag.duckdns.org/axolotlclient-api/?uuid="+uuid.toString());
+            HttpResponse response= client.execute(get);
+            String body = EntityUtils.toString(response.getEntity());
+            client.close();
+            if (body.contains("true")){
+                AxolotlClient.onlinePlayers  = AxolotlClient.onlinePlayers + " " + uuid;
+            } else {
+                AxolotlClient.otherPlayers = AxolotlClient.otherPlayers + " " + uuid;
+            }
 
-				if (response.body().contains("true")){
-					Axolotlclient.onlinePlayers  = Axolotlclient.onlinePlayers + " " + uuid;
-				}
+        } catch (Exception ignored){
+            AxolotlClient.otherPlayers = AxolotlClient.otherPlayers + " " + uuid;
+        }
 
-			} catch (Exception ex){
-				ex.printStackTrace();
-			}
 
-		Axolotlclient.otherPlayers = Axolotlclient.otherPlayers + " " + uuid.toString();
-	}
+    }
 
-	public static void setOnline() {
+    public static void setOnline() {
 
-		UUID uuid = Objects.requireNonNull(MinecraftClient.getInstance().player).getUuid();
+        try {
+            uuid = MinecraftClient.getInstance().player.getUuid();
 
-		try {
-			HttpRequest request = HttpRequest.newBuilder()
-				.uri(URI.create("https://moehreag.duckdns.org/axolotlclient-api/"))
-				.header("Content-Type", "application/json")
-				.method("POST", HttpRequest.BodyPublishers.ofString("{\n\t\"uuid\": \""+uuid.toString()+"\",\n\t\"online\": true\n}"))
-				.build();
-			HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-			//System.out.println(response.body());
-			if(!response.body().contains("Success!")){
-				System.out.println("Sucessfully logged in at Axolotlclient!");
-			}
-		} catch (Exception e) {System.out.println("Exception");}
-	}
+            CloseableHttpClient client = HttpClients.createDefault();
+            HttpPost post = new HttpPost("https://moehreag.duckdns.org/axolotlclient-api/");
+            post.setHeader("Accept", "application/json");
+            post.setHeader("Content-type", "application/json");
+            post.setEntity(new StringEntity("{\n\t\"uuid\": \""+uuid.toString()+"\",\n\t\"online\": true\n}"));
+            HttpResponse response = client.execute(post);
+            String body = EntityUtils.toString(response.getEntity());
+            if(body.contains("Success!")){
+                AxolotlClient.LOGGER.info("Sucessfully logged in at AxolotlClient!");
+                loggedIn=true;
+            }
+            client.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            AxolotlClient.LOGGER.error("Error while logging in!");
+        }
+    }
 
-	public static void setOffline(){
+    public static void setOffline(){
 
-		UUID uuid = Objects.requireNonNull(MinecraftClient.getInstance().player).getUuid();
+        if(loggedIn) {
+            try {
+                AxolotlClient.LOGGER.info("Logging off..");
+                CloseableHttpClient client = HttpClients.createDefault();
+                HttpDelete delete = new HttpDelete("https://moehreag.duckdns.org/axolotlclient-api/?uuid=" + uuid.toString());
+                delete.setHeader("Accept", "application/json");
+                delete.setHeader("Content-type", "application/json");
+                HttpResponse response = client.execute(delete);
+                String body = EntityUtils.toString(response.getEntity());
+                if (body.contains("Success!")) {
+                    AxolotlClient.LOGGER.info("Successfully logged off!");
+                } else {
+                    throw new Exception("Error while logging off: " + body);
+                }
+                client.close();
 
-		try{
-			HttpRequest request = HttpRequest.newBuilder()
-				.uri(URI.create("https://moehreag.duckdns.org/axolotlclient-api/?uuid="+uuid))
-				.method("DELETE", HttpRequest.BodyPublishers.noBody())
-				.build();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                AxolotlClient.LOGGER.error("Error while logging off!");
+            }
+        }
 
-			HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-
-		} catch (Exception ex){
-			ex.printStackTrace();
-		}
-
-	}
+    }
 
 }

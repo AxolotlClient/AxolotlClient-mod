@@ -1,18 +1,27 @@
-# gradle
-
+# Gradle
 .gradle/
 build/
 out/
+classes/
 
-#idea
+# Quilt Loom
+run/
 
+# Eclipse
+*.launch
+
+# IntelliJ Idea
 .idea/
+*.iml
+*.ipr
+*.iws
 
-# fabric
+# Visual Studio Code
+.settings/
+.vscode/
+bin/
+.classpath
+.project
 
-/run/*
-/run_server/*
-/minecraft/
-run/options.txt
-run/options.txt
-.idea/runConfigurations/Minecraft_Server.xml
+# macOS
+*.DS_Store

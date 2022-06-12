@@ -1,9 +1,7 @@
 package io.github.moehreag.axolotlclient;
 
-import io.github.moehreag.axolotlclient.config.AxolotlclientConfig;
+import io.github.moehreag.axolotlclient.config.AxolotlClientConfig;
 import io.github.moehreag.axolotlclient.util.Util;
-import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
@@ -19,7 +17,7 @@ public class Axolotlclient implements ClientModInitializer {
 
 	public static final Logger LOGGER = LoggerFactory.getLogger("Axolotlclient");
 
-	public static AxolotlclientConfig CONFIG;
+	public static AxolotlClientConfig CONFIG;
 	public static String onlinePlayers = "";
 	public static String otherPlayers = "";
 

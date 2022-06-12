@@ -1,0 +1,123 @@
+package io.github.moehreag.axolotlclient.config.screen;
+
+import io.github.moehreag.axolotlclient.AxolotlClient;
+import io.github.moehreag.axolotlclient.config.ConfigManager;
+import io.github.moehreag.axolotlclient.config.options.ColorOption;
+import io.github.moehreag.axolotlclient.config.options.OptionCategory;
+import io.github.moehreag.axolotlclient.config.screen.widgets.ColorOptionWidget;
+import io.github.moehreag.axolotlclient.config.screen.widgets.ColorSelectionWidget;
+import io.github.moehreag.axolotlclient.config.screen.widgets.StringOptionWidget;
+import io.github.moehreag.axolotlclient.modules.hud.util.DrawUtil;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.resource.language.I18n;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
+
+import java.util.Objects;
+
+public class OptionsScreenBuilder extends Screen {
+
+    private final Screen parent;
+    protected OptionCategory cat;
+
+    protected ColorSelectionWidget picker;
+
+    private ButtonWidgetList list;
+
+    public OptionsScreenBuilder(Screen parent, OptionCategory category){
+	    super(Text.of(""));
+	    this.parent=parent;
+        this.cat=category;
+    }
+
+	@Override
+	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        if(MinecraftClient.getInstance().world!=null)DrawUtil.fill(matrices, 0,0, width, height, 0xB0100E0E);
+        else renderBackgroundTexture(0);
+
+        if(AxolotlClient.someNiceBackground.get()) { // Credit to pridelib for the colors
+            DrawUtil.fill(matrices, 0, 0, width, height/6, 0xFFff0018);
+            DrawUtil.fill(matrices, 0, height/6, width, height*2/6, 0xFFffa52c);
+            DrawUtil.fill(matrices, 0, height*2/6, width, height/2, 0xFFffff41);
+            DrawUtil.fill(matrices, 0, height*2/3, width, height*5/6, 0xFF0000f9);
+            DrawUtil.fill(matrices, 0, height/2, width, height*2/3, 0xFF008018);
+            DrawUtil.fill(matrices, 0, height*5/6, width, height, 0xFF86007d);
+        }
+
+        this.list.render(matrices, mouseX, mouseY, delta);
+        drawCenteredText(matrices, textRenderer, cat.getTranslatedName(), width/2, 25, -1);
+
+        if(picker!=null){
+            picker.render(MinecraftClient.getInstance(), mouseX, mouseY);
+        }
+
+        super.render(matrices, mouseX, mouseY, delta);
+    }
+
+    public void openColorPicker(ColorOption option){
+        picker = new ColorSelectionWidget(option);
+    }
+
+    public void closeColorPicker(){
+        picker=null;
+    }
+
+    public boolean isPickerOpen(){
+        return picker!=null;
+    }
+
+	@Override
+	public boolean mouseClicked(double mouseX, double mouseY, int button) {
+		return super.mouseClicked(mouseX, mouseY, button);
+	}
+
+	/*@Override
+    protected void mouseClicked(int mouseX, int mouseY, int button) {
+        super.mouseClicked(mouseX, mouseY, button);
+
+        this.list.entries.forEach(pair -> {
+            if(pair.left instanceof StringOptionWidget && ((StringOptionWidget) pair.left).textField.isFocused()){
+                ((StringOptionWidget) pair.left).textField.mouseClicked(mouseX, mouseY, button);
+            }
+            if(pair.left instanceof ColorOptionWidget){
+                if(((ColorOptionWidget) pair.left).textField.isFocused()) {
+                    ((ColorOptionWidget) pair.left).textField.mouseClicked(mouseX, mouseY, button);
+                }
+            }
+        });
+
+        if(picker!=null){
+            if(!picker.isMouseOver(MinecraftClient.getInstance(), mouseX, mouseY)) {
+                closeColorPicker();
+            } else {
+                picker.onClick(mouseX, mouseY);
+            }
+        }
+
+        this.list.mouseClicked(mouseX, mouseY, button);
+    }*/
+
+    /*@Override
+    protected void mouseReleased(int mouseX, int mouseY, int button) {
+        super.mouseReleased(mouseX, mouseY, button);
+        this.list.mouseReleased(mouseX, mouseY, button);
+    }*/
+
+    /*@Override
+    public void tick() {
+        this.list.tick();
+    }*/
+
+    @Override
+    public void init() {
+        this.list = new ButtonWidgetList(this.client, this.width, this.height, 50, this.height - 50, 25, cat);
+
+		this.addSelectableChild(list);
+
+        this.addDrawableChild(new ButtonWidget(this.width/2-100, this.height-40, 200, 20, new TranslatableText("back"), buttonWidget -> MinecraftClient.getInstance().setScreen(parent)));
+        if(Objects.equals(cat.getName(), "config")) this.addDrawableChild(new ButtonWidget(this.width-106, this.height-26, 100, 20, new TranslatableText("credits"), buttonWidget -> MinecraftClient.getInstance().setScreen(new CreditsScreen(this))));
+    }
+}

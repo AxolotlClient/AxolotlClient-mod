@@ -23,8 +23,7 @@
 
 	"environment": "client",
 	"entrypoints": {
-		"client": ["io.github.moehreag.axolotlclient.Axolotlclient"],
-		"modmenu": ["io.github.moehreag.axolotlclient.config.ModMenuIntegration"]
+		"client": ["io.github.moehreag.axolotlclient.AxolotlClient"]
 	},
 
 	"mixins": ["axolotlclient.mixins.json"],
