@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 @Mixin(PlayerListHud.class)
 public abstract class PlayerListHudMixin extends DrawableHelper {
 
-	MinecraftClient client = MinecraftClient.getInstance();
+	/*MinecraftClient client = MinecraftClient.getInstance();
 	private PlayerListEntry playerListEntry;
 
 	@Inject(method = "getPlayerName", at = @At("HEAD"), cancellable = true)
@@ -63,5 +63,5 @@ public abstract class PlayerListHudMixin extends DrawableHelper {
 			args.set(1, x+10);
 		}
 
-	}
+	}*/
 }

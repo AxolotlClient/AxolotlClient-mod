@@ -14,13 +14,10 @@ import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Mixin(PlayerEntityRenderer.class)
-public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractClientPlayerEntity> {
-    public PlayerRendererMixin(EntityRenderDispatcher dispatcher, EntityModel model, float shadowSize) {
-        super(dispatcher, model, shadowSize);
-    }
+public abstract class PlayerRendererMixin {
 
 
-    @ModifyArgs(method = "method_10209(Lnet/minecraft/client/network/AbstractClientPlayerEntity;DDDLjava/lang/String;FD)V",
+    /*@ModifyArgs(method = "method_10209(Lnet/minecraft/client/network/AbstractClientPlayerEntity;DDDLjava/lang/String;FD)V",
     at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/LivingEntityRenderer;method_10209(Lnet/minecraft/entity/Entity;DDDLjava/lang/String;FD)V"))
     public void modifiyName(Args args){
         if(AxolotlClient.CONFIG != null) {
@@ -33,5 +30,5 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
                 args.set(4, NickHider.Instance.hiddenNameOthers.get());
             }
         }
-    }
+    }*/
 }

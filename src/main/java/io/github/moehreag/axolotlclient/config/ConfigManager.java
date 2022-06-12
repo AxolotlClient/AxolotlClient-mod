@@ -1,10 +1,14 @@
 package io.github.moehreag.axolotlclient.config;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.config.options.OptionCategory;
-import net.fabricmc.loader.api.FabricLoader;
+import org.quiltmc.loader.api.QuiltLoader;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -15,7 +19,7 @@ import java.util.List;
 
 public class ConfigManager{
     private static final List<OptionCategory> categories = AxolotlClient.CONFIG.config;
-    private static final Path confPath = FabricLoader.getInstance().getConfigDir().resolve("AxolotlClient.json");
+    private static final Path confPath = QuiltLoader.getConfigDir().resolve("AxolotlClient.json");
 
     public static void save(){
         try{
@@ -55,7 +59,7 @@ public class ConfigManager{
     public static void load() {
         loadDefaults();
         try {
-            JsonObject config = new JsonParser().parse(new FileReader(confPath.toString())).getAsJsonObject();
+            JsonObject config = JsonParser.parseReader(new FileReader(confPath.toString())).getAsJsonObject();
 
             for(OptionCategory category:categories) {
                 for (Option option : category.getOptions()) {

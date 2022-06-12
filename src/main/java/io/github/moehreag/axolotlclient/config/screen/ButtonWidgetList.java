@@ -5,6 +5,7 @@ import io.github.moehreag.axolotlclient.config.screen.widgets.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.ButtonListWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.ClickableWidget;
 
 public class ButtonWidgetList extends ButtonListWidget {
 
@@ -47,16 +48,16 @@ public class ButtonWidgetList extends ButtonListWidget {
         }
     }
 
-    private ButtonWidget createWidget(int x, Option option) {
+    private ClickableWidget createWidget(int x, Option option) {
         if (option != null) {
             int i = 0;
-            if (option instanceof FloatOption) return new OptionSliderWidget(i, x, 0, (FloatOption) option);
-            else if (option instanceof IntegerOption) return new OptionSliderWidget(i, x, 0, (IntegerOption) option);
-            else if (option instanceof DoubleOption) return new OptionSliderWidget(i, x, 0, (DoubleOption) option);
-            else if (option instanceof BooleanOption) return new BooleanWidget(i, x, 0, 35, 20, (BooleanOption) option);
-            else if (option instanceof StringOption) return new StringOptionWidget(i, x, 0, (StringOption) option);
-            else if (option instanceof ColorOption) return new ColorOptionWidget(i, x, 0, (ColorOption) option);
-            else if (option instanceof EnumOption) return new EnumOptionWidget(i, x, 0, (EnumOption) option);
+            /*if (option instanceof FloatOption) return new OptionSliderWidget(x, 0, (FloatOption) option);
+            else if (option instanceof IntegerOption) return new OptionSliderWidget(x, 0, (IntegerOption) option);
+            else if (option instanceof DoubleOption) return new OptionSliderWidget(x, 0, (DoubleOption) option);
+            else*/ if (option instanceof BooleanOption) return new BooleanWidget(x, 0, 35, 20, (BooleanOption) option);
+            else if (option instanceof StringOption) return new StringOptionWidget(x, 0, 200, (StringOption) option);
+            else if (option instanceof ColorOption) return new ColorOptionWidget(x, 0, (ColorOption) option);
+            else if (option instanceof EnumOption) return new EnumOptionWidget(x, 0, (EnumOption) option);
         }
         return null;
     }

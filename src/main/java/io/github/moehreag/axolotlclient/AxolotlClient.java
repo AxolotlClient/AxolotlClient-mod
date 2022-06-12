@@ -51,7 +51,7 @@ public class AxolotlClient implements ClientModInitializer {
 
 	public static final Identifier badgeIcon = new Identifier("axolotlclient", "textures/badge.png");
 
-	public static final OptionCategory config = new OptionCategory(new Identifier("storedOptions"), "storedOptions");
+	public static final OptionCategory config = new OptionCategory("stored_options");
 	public static final BooleanOption someNiceBackground = new BooleanOption("defNoSecret", false);
 	public static final HashMap<Identifier, AbstractModule> modules= new HashMap<>();
 
@@ -62,7 +62,6 @@ public class AxolotlClient implements ClientModInitializer {
 
 		CONFIG = new AxolotlClientConfig();
 		config.add(someNiceBackground);
-		config.add(CONFIG.rotateWorld);
 
 		getModules();
 		CONFIG.init();

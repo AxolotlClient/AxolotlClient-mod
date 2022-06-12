@@ -1,19 +1,43 @@
 package io.github.moehreag.axolotlclient.modules.hud;
 
 import io.github.moehreag.axolotlclient.AxolotlClient;
+import io.github.moehreag.axolotlclient.config.Color;
 import io.github.moehreag.axolotlclient.config.options.OptionCategory;
 import io.github.moehreag.axolotlclient.modules.AbstractModule;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
-import io.github.moehreag.axolotlclient.modules.hud.gui.hud.*;
-import io.github.moehreag.axolotlclient.config.Color;
+import io.github.moehreag.axolotlclient.modules.hud.gui.hud.ActionBarHud;
+import io.github.moehreag.axolotlclient.modules.hud.gui.hud.ArmorHud;
+import io.github.moehreag.axolotlclient.modules.hud.gui.hud.ArrowHud;
+import io.github.moehreag.axolotlclient.modules.hud.gui.hud.BossBarHud;
+import io.github.moehreag.axolotlclient.modules.hud.gui.hud.CPSHud;
+import io.github.moehreag.axolotlclient.modules.hud.gui.hud.CoordsHud;
+import io.github.moehreag.axolotlclient.modules.hud.gui.hud.CrosshairHud;
+import io.github.moehreag.axolotlclient.modules.hud.gui.hud.FPSHud;
+import io.github.moehreag.axolotlclient.modules.hud.gui.hud.IPHud;
+import io.github.moehreag.axolotlclient.modules.hud.gui.hud.ItemUpdateHud;
+import io.github.moehreag.axolotlclient.modules.hud.gui.hud.KeystrokeHud;
+import io.github.moehreag.axolotlclient.modules.hud.gui.hud.PackDisplayHud;
+import io.github.moehreag.axolotlclient.modules.hud.gui.hud.PingHud;
+import io.github.moehreag.axolotlclient.modules.hud.gui.hud.PotionsHud;
+import io.github.moehreag.axolotlclient.modules.hud.gui.hud.RealTimeHud;
+import io.github.moehreag.axolotlclient.modules.hud.gui.hud.ScoreboardHud;
+import io.github.moehreag.axolotlclient.modules.hud.gui.hud.SpeedHud;
+import io.github.moehreag.axolotlclient.modules.hud.gui.hud.ToggleSprintHud;
+import io.github.moehreag.axolotlclient.modules.hud.gui.hud.iconHud;
 import io.github.moehreag.axolotlclient.modules.hud.util.Rectangle;
-import net.legacyfabric.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.legacyfabric.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.options.KeyBinding;
+import net.minecraft.client.option.KeyBind;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
+import org.lwjgl.glfw.GLFW;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -34,7 +58,7 @@ public class HudManager extends AbstractModule {
     private final MinecraftClient client = MinecraftClient.getInstance();
     private static final HudManager INSTANCE = new HudManager();
 
-    static KeyBinding key = new KeyBinding("key.openHud", 54, "category.axolotlclient");
+    static KeyBind key = new KeyBind("key.openHud", GLFW.GLFW_KEY_RIGHT_SHIFT, "category.axolotlclient");
 
     public void save(){
 
@@ -52,7 +76,7 @@ public class HudManager extends AbstractModule {
 
         AxolotlClient.CONFIG.addCategory(hudCategory);
 
-        HudRenderCallback.EVENT.register((tickDelta, v)->render());
+        HudRenderCallback.EVENT.register((matrices, v)->render(matrices));
 
         add(new PingHud());
         add(new FPSHud());
@@ -69,7 +93,7 @@ public class HudManager extends AbstractModule {
         add(new CoordsHud());
         add(new ActionBarHud());
         add(new BossBarHud());
-        add(new ChatHud());
+        //add(new ChatHud()); // really just use AdvancedChat
         add(new ArrowHud());
         add(new ItemUpdateHud());
         add(new PackDisplayHud());
@@ -79,7 +103,7 @@ public class HudManager extends AbstractModule {
     }
 
     public static void tick(){
-        if(key.isPressed()) MinecraftClient.getInstance().openScreen(new HudEditScreen());
+        if(key.isPressed()) MinecraftClient.getInstance().setScreen(new HudEditScreen());
         INSTANCE.entries.forEach((identifier, abstractHudEntry) -> {
             if(abstractHudEntry.tickable())abstractHudEntry.tick();
         });
@@ -109,11 +133,11 @@ public class HudManager extends AbstractModule {
         return entries.get(identifier);
     }
 
-    public void render() {
+    public void render(MatrixStack matrices) {
         if (!(client.currentScreen instanceof HudEditScreen) && !client.options.debugEnabled) {
             for (AbstractHudEntry hud : getEntries()) {
                 if (hud.isEnabled()) {
-                    hud.renderHud();
+                    hud.renderHud(matrices);
                 }
             }
         }
@@ -129,10 +153,10 @@ public class HudManager extends AbstractModule {
         return Optional.empty();
     }
 
-    public void renderPlaceholder() {
+    public void renderPlaceholder(MatrixStack matrices) {
         for (AbstractHudEntry hud : getEntries()) {
             if (hud.isEnabled()) {
-                hud.renderPlaceholder();
+                hud.renderPlaceholder(matrices);
             }
         }
     }

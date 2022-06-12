@@ -1,5 +1,6 @@
 package io.github.moehreag.axolotlclient.config.screen.widgets;
 
+import com.mojang.blaze3d.glfw.Window;
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.config.Color;
 import io.github.moehreag.axolotlclient.config.options.ColorOption;
@@ -8,7 +9,7 @@ import io.github.moehreag.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.util.Window;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.lwjgl.opengl.GL11;
 
@@ -22,9 +23,9 @@ public class ColorSelectionWidget extends ButtonWidget {
     //private final Rectangle rect;
 
     public ColorSelectionWidget(ColorOption option) {
-        super(0, 100, 50, "");
+        super(0, 0, 100, 50, Text.empty(), buttonWidget -> {});
         this.option=option;
-        Window window= new Window(MinecraftClient.getInstance());
+        Window window= MinecraftClient.getInstance().getWindow();
         width=window.getWidth()-200;
         height=window.getHeight()-100;
 
@@ -33,7 +34,7 @@ public class ColorSelectionWidget extends ButtonWidget {
         //rect = new Rectangle(100, 50, width-200, height-100);
     }
 
-    @Override
+    /*@Override
     public void render(MinecraftClient client, int mouseX, int mouseY) {
 
         DrawUtil.fillRect(new Rectangle(100, 50, width, height), Color.DARK_GRAY.withAlpha(127));
@@ -60,7 +61,7 @@ public class ColorSelectionWidget extends ButtonWidget {
 
             option.set(new Color(buf.get(0) & 0xFF, buf.get(1) & 0xFF, buf.get(2) & 0xFF, buf.get(3) & 0xFF));
         }
-    }
+    }*/
 
 
 }

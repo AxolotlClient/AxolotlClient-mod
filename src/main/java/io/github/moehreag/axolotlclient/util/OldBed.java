@@ -1,6 +1,5 @@
 package io.github.moehreag.axolotlclient.util;
 
-import io.github.moehreag.axolotlclient.Axolotlclient;
 import net.minecraft.block.Block;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
@@ -19,16 +18,16 @@ public class OldBed {
 	protected static final VoxelShape WEST_SHAPE;
 
 	public static VoxelShape getShape(Direction direction) {
-		if (!Axolotlclient.features || !Axolotlclient.CONFIG.General.fullBed)
+		//if (!Axolotlclient.features || !Axolotlclient.CONFIG.General.fullBed)
 			return null;
 
-		return switch (direction) {
+		/*return switch (direction) {
 			case EAST -> EAST_SHAPE;
 			case WEST -> WEST_SHAPE;
 			case SOUTH -> SOUTH_SHAPE;
 			case NORTH -> NORTH_SHAPE;
 			default -> null;
-		};
+		};*/
 	}
 
 

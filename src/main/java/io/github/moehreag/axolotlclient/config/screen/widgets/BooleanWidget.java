@@ -7,7 +7,6 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 
 public class BooleanWidget extends ButtonWidget {
 
@@ -21,7 +20,7 @@ public class BooleanWidget extends ButtonWidget {
     }
 
     public Text getMessage(){
-        return option.get()? new TranslatableText("options."+"on"): new TranslatableText ("options."+"off");
+        return option.get()? Text.translatable("options."+"on"): Text.translatable ("options."+"off");
     }
 
     /*@Override

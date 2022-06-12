@@ -1,16 +1,6 @@
 package io.github.moehreag.axolotlclient.modules.hud.util;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.DiffuseLighting;
-import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.item.ItemStack;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -20,7 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class ItemUtil {
 
-    private static final MinecraftClient client = MinecraftClient.getInstance();
+    /*private static final MinecraftClient client = MinecraftClient.getInstance();
 
     public static void renderGuiItem(ItemStack itemStack, int x, int y){
         ItemRenderer renderer = MinecraftClient.getInstance().getItemRenderer();
@@ -67,6 +57,7 @@ public class ItemUtil {
      * @param list2 one to compare to
      * @return
      */
+	/*
     public static List<ItemStorage> compare(List<ItemStorage> list1, List<ItemStorage> list2) {
         ArrayList<ItemStorage> list = new ArrayList<>();
         for (ItemStorage current : list1) {
@@ -246,7 +237,7 @@ public class ItemUtil {
 
         public ItemStorage(ItemStack stack, int times) {
             ItemStack copy = stack.copy();
-            copy.count =1;
+            copy.setCount(1);
             this.stack = copy;
             this.times = times;
         }
@@ -275,11 +266,11 @@ public class ItemUtil {
 
         public TimedItemStorage(ItemStack stack, int times) {
             super(stack, times);
-            this.start = MinecraftClient.getTime();
+            this.start = System.currentTimeMillis();
         }
 
         public float getPassedTime() {
-            return MinecraftClient.getTime() - start;
+            return System.currentTimeMillis() - start;
         }
 
         @Override
@@ -289,7 +280,7 @@ public class ItemUtil {
         }
 
         public void refresh() {
-            start = MinecraftClient.getTime();
+            start = System.currentTimeMillis();
         }
 
 

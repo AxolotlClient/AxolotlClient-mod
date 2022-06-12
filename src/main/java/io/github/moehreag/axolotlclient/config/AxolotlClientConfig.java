@@ -46,12 +46,12 @@ public class AxolotlClientConfig {
 
     public final BooleanOption creditsBGM = new BooleanOption("creditsBGM", true);
 
-    public final OptionCategory general = new OptionCategory(new Identifier("axolotlclient", "general"), "general");
-    public final OptionCategory nametagOptions = new OptionCategory(new Identifier("axolotlclient", "nametagOptions"), "nametagOptions");
-    public final OptionCategory rendering = new OptionCategory(new Identifier("axolotlclient", "rendering"), "rendering");
+    public final OptionCategory general = new OptionCategory("general");
+    public final OptionCategory nametagOptions = new OptionCategory( "nametag_options");
+    public final OptionCategory rendering = new OptionCategory("rendering");
     public final OptionCategory zoom = new OptionCategory("zoom");
-    public final OptionCategory outlines= new OptionCategory("blockOutlines");
-    public final OptionCategory motionBlur = new OptionCategory("motionBlur");
+    public final OptionCategory outlines= new OptionCategory("block_outlines");
+    public final OptionCategory motionBlur = new OptionCategory("motion_blur");
 
     private final List<Option> options = new ArrayList<>();
     private final List<OptionCategory> categories = new ArrayList<>();

@@ -1,9 +1,8 @@
 package io.github.moehreag.axolotlclient.mixin;
 
-import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.AxolotlClient;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.ChatHud;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,10 +13,10 @@ import java.util.Objects;
 @Mixin(ChatHud.class)
 public class MixinChatHud {
 
-	@ModifyArg(method = "addMessage(Lnet/minecraft/text/Text;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;addMessage(Lnet/minecraft/text/Text;IIZ)V"))
+	/*@ModifyArg(method = "addMessage(Lnet/minecraft/text/Text;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;addMessage(Lnet/minecraft/text/Text;IIZ)V"))
 	public Text editChat(Text message) {
 
-		if (Axolotlclient.CONFIG.NickHider.hideOwnName || Axolotlclient.CONFIG.NickHider.hideOtherNames) {
+		if (AxolotlClient.CONFIG.NickHider.hideOwnName || Axolotlclient.CONFIG.NickHider.hideOtherNames) {
 			assert MinecraftClient.getInstance().player != null;
 
 			LiteralText name = new LiteralText("");
@@ -59,6 +58,6 @@ public class MixinChatHud {
 			return editedMessage.setStyle(message.getStyle().withFont(Axolotlclient.FONT));
 		}
 		return message;
-	}
+	}*/
 
 }

@@ -1,14 +1,7 @@
 package io.github.moehreag.axolotlclient.modules.sky;
 
 import com.google.gson.JsonObject;
-import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.moehreag.axolotlclient.mixin.GlStateManagerMixin;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexFormats;
 import net.minecraft.util.Identifier;
-import org.lwjgl.opengl.GL11;
 
 /**
  * This implementation of custom skies is based on the FabricSkyBoxes mod by AMereBagatelle
@@ -33,9 +26,9 @@ public class FSBSkyboxInstance extends SkyboxInstance{
             this.fade[3] = props.get("fade").getAsJsonObject().get("endFadeOut").getAsInt();
     }
 
-    public void renderSkybox(){
+    /*public void renderSkybox(){
         this.alpha = getAlpha();
-        this.distance=MinecraftClient.getInstance().options.viewDistance;
+        this.distance= MinecraftClient.getInstance().options.getViewDistance().get();
 
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -75,5 +68,5 @@ public class FSBSkyboxInstance extends SkyboxInstance{
             GlStateManager.popMatrix();
         }
         GlStateManager.disableBlend();
-    }
+    }*/
 }

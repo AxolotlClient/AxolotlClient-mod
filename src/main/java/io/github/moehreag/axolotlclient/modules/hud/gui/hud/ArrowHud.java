@@ -1,19 +1,9 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.config.options.BooleanOption;
-import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
-import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
-import io.github.moehreag.axolotlclient.modules.hud.util.ItemUtil;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.player.ClientPlayerEntity;
-import net.minecraft.item.BowItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
-
-import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -30,7 +20,7 @@ public class ArrowHud extends AbstractHudEntry {
         super(20, 30);
     }
 
-    @Override
+    /*@Override
     public void render() {
         if (dynamic.get()) {
             ClientPlayerEntity player = MinecraftClient.getInstance().player;
@@ -86,14 +76,24 @@ public class ArrowHud extends AbstractHudEntry {
         options.add(outline);
         options.add(outlineColor);
         options.add(dynamic);
-    }
+    }*/
 
     @Override
     public boolean movable() {
         return true;
     }
 
-    @Override
+	@Override
+	public void render(MatrixStack matrices) {
+
+	}
+
+	@Override
+	public void renderPlaceholder(MatrixStack matrices) {
+
+	}
+
+	@Override
     public Identifier getId() {
         return ID;
     }

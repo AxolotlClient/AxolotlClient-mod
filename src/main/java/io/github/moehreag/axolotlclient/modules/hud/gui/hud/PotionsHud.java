@@ -5,6 +5,7 @@ import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
 import net.minecraft.client.resource.language.I18n;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.util.Identifier;
@@ -27,7 +28,7 @@ public class PotionsHud extends AbstractHudEntry {
         super(60, 200);
     }
 
-    @Override
+    /*@Override
     public void render() {
         scale();
         DrawPosition pos = getPos();
@@ -94,14 +95,24 @@ public class PotionsHud extends AbstractHudEntry {
         super.addConfigOptions(options);
         options.add(textColor);
         options.add(shadow);
-    }
+    }*/
 
     @Override
     public boolean movable() {
         return true;
     }
 
-    @Override
+	@Override
+	public void render(MatrixStack matrices) {
+
+	}
+
+	@Override
+	public void renderPlaceholder(MatrixStack matrices) {
+
+	}
+
+	@Override
     public Identifier getId() {
         return ID;
     }

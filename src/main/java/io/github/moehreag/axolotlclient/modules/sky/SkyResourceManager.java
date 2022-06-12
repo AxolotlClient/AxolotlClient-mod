@@ -1,21 +1,5 @@
 package io.github.moehreag.axolotlclient.modules.sky;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import io.github.moehreag.axolotlclient.AxolotlClient;
-import net.minecraft.resource.ResourcePack;
-import net.minecraft.util.Identifier;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-
 /**
  * This implementation of custom skies is based on the FabricSkyBoxes mod by AMereBagatelle
  * https://github.com/AMereBagatelle/FabricSkyBoxes
@@ -23,7 +7,7 @@ import java.util.stream.Collectors;
 
 public class SkyResourceManager{
 
-    static Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    /*static Gson gson = new GsonBuilder().setPrettyPrinting().create();
     public static List<ResourcePack> packs;
 
     public static void reload(List<ResourcePack> resourcePacks) {
@@ -118,5 +102,5 @@ public class SkyResourceManager{
             }
             i++;
         }
-    }
+    }*/
 }

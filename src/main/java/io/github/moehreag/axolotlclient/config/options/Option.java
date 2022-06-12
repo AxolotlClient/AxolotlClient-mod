@@ -1,9 +1,7 @@
 package io.github.moehreag.axolotlclient.config.options;
 
 import com.google.gson.JsonElement;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 
 public interface Option {
 
@@ -12,7 +10,7 @@ public interface Option {
     String getName();
 
     default Text getTranslatedName(){
-        return new TranslatableText(this.getName());
+        return Text.translatable(this.getName());
     }
 
     void setValueFromJsonElement(JsonElement element);

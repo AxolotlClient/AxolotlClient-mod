@@ -6,6 +6,7 @@ import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.moehreag.axolotlclient.config.Color;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.resource.language.I18n;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
@@ -33,7 +34,27 @@ public class ActionBarHud extends AbstractHudEntry {
 
     public void setActionBar(String bar, int color){this.actionBar = bar; this.color = color;}
 
-    @Override
+	@Override
+	public void render(MatrixStack matrices) {
+
+	}
+
+	@Override
+	public void renderPlaceholder(MatrixStack matrices) {
+
+	}
+
+	@Override
+	public Identifier getId() {
+		return ID;
+	}
+
+	@Override
+	public boolean movable() {
+		return true;
+	}
+
+    /*@Override
     public void render() {
         if (new Color(color).getAlpha()==0){
             this.actionBar = null;
@@ -77,5 +98,5 @@ public class ActionBarHud extends AbstractHudEntry {
     public void addConfigOptions(List<Option> options){
         super.addConfigOptions(options);
         options.add(shadow);
-    }
+    }*/
 }

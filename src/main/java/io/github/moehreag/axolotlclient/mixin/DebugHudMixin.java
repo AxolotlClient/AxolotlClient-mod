@@ -17,7 +17,7 @@ public class DebugHudMixin {
 
         CrosshairHud hud = (CrosshairHud) HudManager.getINSTANCE().get(CrosshairHud.ID);
         if(hud.isEnabled() && hud.showInF3.get()){
-            hud.render();
+            hud.render(matrices);
         }
 
     }

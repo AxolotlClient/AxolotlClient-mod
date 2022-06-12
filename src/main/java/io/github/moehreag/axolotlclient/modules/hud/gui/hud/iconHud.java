@@ -1,20 +1,20 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.config.Color;
 import io.github.moehreag.axolotlclient.config.options.ColorOption;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
-import net.minecraft.client.render.DiffuseLighting;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
 
 public class iconHud extends AbstractHudEntry {
 
-    public Identifier ID = new Identifier("axolotlclient", "IconHud");
+    public Identifier ID = new Identifier("axolotlclient", "iconhud");
     private final ColorOption color = new ColorOption("color", new Color(255, 255, 255, 0));
 
     public iconHud() {
@@ -22,28 +22,25 @@ public class iconHud extends AbstractHudEntry {
     }
 
     @Override
-    public void render() {
-        scale();
+    public void render(MatrixStack matrices) {
+        scale(matrices);
         DrawPosition pos = getPos();
-        this.client.getTextureManager().bindTexture(AxolotlClient.badgeIcon);
-        if(chroma.get())GlStateManager.color4f(textColor.getChroma().getRed(), textColor.getChroma().getGreen(), textColor.getChroma().getBlue(), 1F);
-        else {GlStateManager.color4f(color.get().getRed(), color.get().getGreen(), color.get().getBlue(), 1F);}
-        drawTexture(pos.x, pos.y, 0, 0, width, height, width, height);
+        RenderSystem.setShaderTexture(0, AxolotlClient.badgeIcon);
+        if(chroma.get())RenderSystem.setShaderColor(textColor.getChroma().getRed(), textColor.getChroma().getGreen(), textColor.getChroma().getBlue(), 1F);
+        else {RenderSystem.setShaderColor(color.get().getRed(), color.get().getGreen(), color.get().getBlue(), 1F);}
+        drawTexture(matrices, pos.x, pos.y, 0, 0, width, height, width, height);
 
-        GlStateManager.popMatrix();
+        matrices.pop();
     }
 
     @Override
-    public void renderPlaceholder() {
-        scale();
+    public void renderPlaceholder(MatrixStack matrices) {
+        scale(matrices);
         DrawPosition pos = getPos();
-        this.client.getTextureManager().bindTexture(AxolotlClient.badgeIcon);
-        GlStateManager.disableDepthTest();
-        GlStateManager.color4f(1F, 1F, 1F, 1F);
-        DiffuseLighting.disable();
-        drawTexture(pos.x, pos.y, 0, 0, width, height, width, height);
-        GlStateManager.enableDepthTest();
-        GlStateManager.popMatrix();
+        RenderSystem.setShaderTexture(0, AxolotlClient.badgeIcon);
+        RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
+        drawTexture(matrices, pos.x, pos.y, 0, 0, width, height, width, height);
+        matrices.pop();
         hovered = false;
     }
 

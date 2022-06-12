@@ -10,9 +10,11 @@ import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.moehreag.axolotlclient.modules.hud.snapping.SnappingHelper;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.moehreag.axolotlclient.modules.hud.util.Rectangle;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.resource.language.I18n;
+import net.minecraft.text.Text;
 
 import java.awt.*;
 import java.util.List;
@@ -35,7 +37,8 @@ public class HudEditScreen extends Screen {
     private final Screen parent;
 
     public HudEditScreen(Screen parent){
-        snapping.setDefaults();
+	    super(Text.empty());
+	    snapping.setDefaults();
         updateSnapState();
         manager = HudManager.getINSTANCE();
         mouseDown = false;
@@ -47,7 +50,7 @@ public class HudEditScreen extends Screen {
     }
 
 
-    @Override
+    /*@Override
     public void render(int mouseX, int mouseY, float tickDelta) {
         if(this.client.world!=null)fillGradient(0,0, width, height, new Color(0xB0100E0E, true).hashCode(), new Color(0x46212020, true).hashCode());
         else {renderDirtBackground(0);}
@@ -112,7 +115,7 @@ public class HudEditScreen extends Screen {
                 current.tick();
             }
         }
-    }
+    }*/
 
     private void updateSnapState() {
         if (snapping.get() && current != null) {
@@ -124,7 +127,7 @@ public class HudEditScreen extends Screen {
         }
     }
 
-    @Override
+    /*@Override
     protected void buttonClicked(ButtonWidget button) {
         if(button.id==1){
             snapping.toggle();
@@ -138,30 +141,32 @@ public class HudEditScreen extends Screen {
         } else if(button.id==2) {
             client.closeScreen();
         }
-    }
+    }*/
 
     @Override
     public void init() {
         // Actually using vanilla widgets here. Who would have thought that?
-        this.buttons.add(new ButtonWidget(1,
-                width / 2 - 50,
-                height/2+ 12,
-                100, 20,
-                I18n.translate("hud.snapping") + ": "+I18n.translate(snapping.get()?"options.on":"options.off")
-        ));
 
-        this.buttons.add(new ButtonWidget(3,
-                width / 2 - 75,
-                height/2-10,
-                150, 20,
-                I18n.translate("hud.clientOptions")
-        ));
-        if(parent!=null)this.buttons.add(new ButtonWidget(
-                0, width/2 -75, height - 50 + 22, 150, 20,
-                I18n.translate("back")));
-        else this.buttons.add(new ButtonWidget(
-                2, width/2 -75, height - 50 + 22, 150, 20,
-                I18n.translate("close")));
+	    this.addDrawableChild(new ButtonWidget(width / 2 - 50,
+		    height/2+ 12,
+		    100, 20,
+		    Text.translatable("hud.snapping").append(": ").append(Text.translatable(snapping.get()?"options.on":"options.off")),
+		    buttonWidget -> {snapping.toggle(); ConfigManager.save();}));
+
+		this.addDrawableChild(new ButtonWidget(width / 2 - 75,
+			height/2-10,
+			150, 20,
+			Text.translatable("hud.clientOptions"),
+			buttonWidget -> MinecraftClient.getInstance().setScreen(
+				new OptionsScreenBuilder(this, new OptionCategory("config")
+					.addSubCategories(AxolotlClient.CONFIG.getCategories())))));
+
+        if(parent!=null)addDrawableChild(new ButtonWidget(
+                width/2 -75, height - 50 + 22, 150, 20,
+                Text.translatable("back"), buttonWidget -> MinecraftClient.getInstance().setScreen(parent)));
+        else addDrawableChild(new ButtonWidget(
+                width/2 -75, height - 50 + 22, 150, 20,
+                Text.translatable("close"), buttonWidget -> MinecraftClient.getInstance().setScreen(null)));
 
     }
 
@@ -175,11 +180,6 @@ public class HudEditScreen extends Screen {
     @Override
     public void removed() {
         manager.save();
-    }
-
-    @Override
-    public boolean shouldPauseGame() {
-        return false;
     }
 
 

@@ -1,13 +1,7 @@
 package io.github.moehreag.axolotlclient.modules.sky;
 
 import com.google.gson.JsonObject;
-import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexFormats;
 import net.minecraft.util.Identifier;
-import org.lwjgl.opengl.GL11;
 
 public class MCPSkyboxInstance extends SkyboxInstance {
 
@@ -20,7 +14,7 @@ public class MCPSkyboxInstance extends SkyboxInstance {
         this.fade[3] = json.get("endFadeOut").getAsInt();
     }
 
-    @Override
+    /*@Override
     public void renderSkybox() {
         this.alpha=getAlpha();
         this.distance=MinecraftClient.getInstance().options.viewDistance;
@@ -86,5 +80,5 @@ public class MCPSkyboxInstance extends SkyboxInstance {
             }
         }
         GlStateManager.disableBlend();
-    }
+    }*/
 }

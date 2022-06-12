@@ -8,6 +8,7 @@ import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.boss.BossBar;
 import net.minecraft.util.Identifier;
 
@@ -35,7 +36,7 @@ public class BossBarHud extends AbstractHudEntry {
         client = MinecraftClient.getInstance();
     }
 
-    @Override
+    /*@Override
     public void render() {
         scale();
         DrawPosition pos = getPos();
@@ -83,9 +84,19 @@ public class BossBarHud extends AbstractHudEntry {
         
         hovered = false;
         GlStateManager.popMatrix();
-    }
+    }*/
 
-    @Override
+	@Override
+	public void render(MatrixStack matrices) {
+
+	}
+
+	@Override
+	public void renderPlaceholder(MatrixStack matrices) {
+
+	}
+
+	@Override
     public Identifier getId() {
         return ID;
     }

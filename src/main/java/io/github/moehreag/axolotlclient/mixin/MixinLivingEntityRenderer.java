@@ -1,6 +1,6 @@
 package io.github.moehreag.axolotlclient.mixin;
 
-import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.AxolotlClient;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
@@ -23,7 +23,7 @@ public abstract class MixinLivingEntityRenderer<T extends LivingEntity, M extend
 
 	@Inject(method = "hasLabel*", at = @At("HEAD"), cancellable = true)
 	private void showOwnNametag(T livingEntity, CallbackInfoReturnable<Boolean> cir){
-		if ( Axolotlclient.showOwnNametag() && livingEntity == MinecraftClient.getInstance().player) {
+		if (AxolotlClient.CONFIG.showOwnNametag.get() && livingEntity == MinecraftClient.getInstance().player) {
 			cir.setReturnValue(true);
 		}
 	}

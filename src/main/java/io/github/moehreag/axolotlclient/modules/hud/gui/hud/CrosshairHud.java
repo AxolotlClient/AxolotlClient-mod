@@ -14,7 +14,7 @@ import net.minecraft.block.EnderChestBlock;
 import net.minecraft.block.HopperBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.util.Window;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -47,6 +47,7 @@ public class CrosshairHud extends AbstractHudEntry {
         return 0.5;
     }
 
+	/*
     //Direction is not available since it's implemented completely different and I couldn't get it to work...
     @Override
     protected float getDefaultY() {
@@ -55,7 +56,7 @@ public class CrosshairHud extends AbstractHudEntry {
 
     @Override
     public void render() {
-        if (!(client.options.perspective == 0) && !showInF5.get()) return;
+        if (!(client.options.getPerspective().isFirstPerson()) && !showInF5.get()) return;
 
         GlStateManager.enableAlphaTest();
         scale();
@@ -107,14 +108,24 @@ public class CrosshairHud extends AbstractHudEntry {
     @Override
     public void renderPlaceholder() {
         // Shouldn't need this...
-    }
+    }*/
 
     @Override
     public boolean movable() {
         return false;
     }
 
-    @Override
+	@Override
+	public void render(MatrixStack matrices) {
+
+	}
+
+	@Override
+	public void renderPlaceholder(MatrixStack matrices) {
+
+	}
+
+	@Override
     public Identifier getId() {
         return ID;
     }

@@ -1,10 +1,11 @@
 package io.github.moehreag.axolotlclient.modules.hud.snapping;
 
+import com.mojang.blaze3d.glfw.Window;
 import io.github.moehreag.axolotlclient.config.Color;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawUtil;
 import io.github.moehreag.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.util.Window;
+import net.minecraft.client.util.math.MatrixStack;
 
 import java.util.HashSet;
 import java.util.List;
@@ -29,7 +30,7 @@ public class SnappingHelper {
         addAllRects(rects);
         this.current = current;
         this.client = MinecraftClient.getInstance();
-        this.window = new Window(client);
+        this.window = MinecraftClient.getInstance().getWindow();
     }
 
     public static Optional<Integer> getNearby(int pos, HashSet<Integer> set, int distance) {
@@ -54,27 +55,27 @@ public class SnappingHelper {
         y.add(rect.y + rect.height);
     }
 
-    public void renderSnaps() {
+    public void renderSnaps(MatrixStack matrices) {
         Integer curx, cury;
         if ((curx = getRawXSnap()) != null) {
-            DrawUtil.fillRect(new Rectangle(curx, 0, 1, (int) window.getScaledHeight()),
+            DrawUtil.fillRect(matrices, new Rectangle(curx, 0, 1, (int) window.getScaledHeight()),
                     LINE_COLOR);
         }
         if ((cury = getRawYSnap()) != null) {
-            DrawUtil.fillRect(new Rectangle(0, cury, (int) window.getScaledWidth(), 1),
+            DrawUtil.fillRect(matrices, new Rectangle(0, cury, (int) window.getScaledWidth(), 1),
                     LINE_COLOR);
         }
         //renderAll();
 
     }
 
-    public void renderAll() {
+    public void renderAll(MatrixStack matrices) {
         for (Integer xval : x) {
-            DrawUtil.fillRect(new Rectangle(xval, 0, 1, (int) window.getScaledHeight()),
+            DrawUtil.fillRect(matrices, new Rectangle(xval, 0, 1, (int) window.getScaledHeight()),
                     Color.WHITE);
         }
         for (Integer yval : y) {
-            DrawUtil.fillRect(new Rectangle(0, yval, (int) window.getScaledWidth(), 1), Color.WHITE);
+            DrawUtil.fillRect(matrices, new Rectangle(0, yval, (int) window.getScaledWidth(), 1), Color.WHITE);
         }
     }
 

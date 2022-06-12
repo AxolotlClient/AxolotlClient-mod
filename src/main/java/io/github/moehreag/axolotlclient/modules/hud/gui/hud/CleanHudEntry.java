@@ -1,9 +1,9 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
+import net.minecraft.client.util.math.MatrixStack;
 
 import java.util.List;
 
@@ -24,31 +24,31 @@ public abstract class CleanHudEntry extends AbstractHudEntry {
     }
 
     @Override
-    public void render() {
+    public void render(MatrixStack matrices) {
 
-        scale();
+        scale(matrices);
         DrawPosition pos = getPos();
         if (background.get()) {
-            fillRect(getBounds(), backgroundColor.get());
+            fillRect(matrices, getBounds(), backgroundColor.get());
         }
-        if(outline.get()) outlineRect(getBounds(), outlineColor.get());
-        drawCenteredString(client.textRenderer, getValue(),
+        if(outline.get()) outlineRect(matrices, getBounds(), outlineColor.get());
+        drawCenteredString(matrices, client.textRenderer, getValue(),
                 new DrawPosition(pos.x + (Math.round(width) / 2),
                 pos.y + (Math.round((float) height / 2)) - 4),
                 chroma.get()? textColor.getChroma() : textColor.get(),
                 shadow.get());
-        GlStateManager.popMatrix();
+        matrices.pop();
     }
 
     @Override
-    public void renderPlaceholder() {
-        renderPlaceholderBackground();
-        scale();
+    public void renderPlaceholder(MatrixStack matrices) {
+        renderPlaceholderBackground(matrices);
+        scale(matrices);
         DrawPosition pos = getPos();
-        drawCenteredString(client.textRenderer, getPlaceholder(),
+        drawCenteredString(matrices, client.textRenderer, getPlaceholder(),
                 new DrawPosition(pos.x + (width / 2),
                 pos.y + (height / 2) - 4), -1, shadow.get());
-        GlStateManager.popMatrix();
+        matrices.pop();
         hovered = false;
     }
 

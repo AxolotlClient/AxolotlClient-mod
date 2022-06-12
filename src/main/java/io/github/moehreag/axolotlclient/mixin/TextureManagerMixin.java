@@ -1,8 +1,8 @@
 package io.github.moehreag.axolotlclient.mixin;
 
 import io.github.moehreag.axolotlclient.util.Util;
-import net.minecraft.client.texture.Texture;
 import net.minecraft.client.texture.TextureManager;
+import net.minecraft.data.client.model.Texture;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,8 +18,8 @@ public class TextureManagerMixin {
 
     @Shadow @Final private Map<Identifier, Texture> textures;
 
-    @Inject(method = "tick", at = @At("TAIL"))
+    /*@Inject(method = "tick", at = @At("TAIL"))
     public void getTextures(CallbackInfo ci){
         Util.setTextures(textures);
-    }
+    }*/
 }

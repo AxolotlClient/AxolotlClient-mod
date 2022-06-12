@@ -31,7 +31,7 @@ public class ColorOptionWidget extends ButtonWidget {
 	        @Override
 	        public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
                 DrawUtil.fill(matrices, x, y, x+width, y+height, option.get().getAsInt());
-                DrawUtil.outlineRect(new Rectangle(x, y, width, height), new Color(-6250336));
+                DrawUtil.outlineRect(matrices, new Rectangle(x, y, width, height), new Color(-6250336));
 
                 // Color picker icon, indicating there will be a better, bigger color selection dialog
                 // for everyone uncomfortable with hexcodes (to be made first)

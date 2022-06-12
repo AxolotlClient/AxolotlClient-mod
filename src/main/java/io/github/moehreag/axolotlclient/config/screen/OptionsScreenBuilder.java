@@ -1,20 +1,15 @@
 package io.github.moehreag.axolotlclient.config.screen;
 
 import io.github.moehreag.axolotlclient.AxolotlClient;
-import io.github.moehreag.axolotlclient.config.ConfigManager;
 import io.github.moehreag.axolotlclient.config.options.ColorOption;
 import io.github.moehreag.axolotlclient.config.options.OptionCategory;
-import io.github.moehreag.axolotlclient.config.screen.widgets.ColorOptionWidget;
 import io.github.moehreag.axolotlclient.config.screen.widgets.ColorSelectionWidget;
-import io.github.moehreag.axolotlclient.config.screen.widgets.StringOptionWidget;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 
 import java.util.Objects;
 
@@ -51,7 +46,7 @@ public class OptionsScreenBuilder extends Screen {
         drawCenteredText(matrices, textRenderer, cat.getTranslatedName(), width/2, 25, -1);
 
         if(picker!=null){
-            picker.render(MinecraftClient.getInstance(), mouseX, mouseY);
+            picker.render(matrices, mouseX, mouseY, delta);
         }
 
         super.render(matrices, mouseX, mouseY, delta);
@@ -117,7 +112,7 @@ public class OptionsScreenBuilder extends Screen {
 
 		this.addSelectableChild(list);
 
-        this.addDrawableChild(new ButtonWidget(this.width/2-100, this.height-40, 200, 20, new TranslatableText("back"), buttonWidget -> MinecraftClient.getInstance().setScreen(parent)));
-        if(Objects.equals(cat.getName(), "config")) this.addDrawableChild(new ButtonWidget(this.width-106, this.height-26, 100, 20, new TranslatableText("credits"), buttonWidget -> MinecraftClient.getInstance().setScreen(new CreditsScreen(this))));
+        this.addDrawableChild(new ButtonWidget(this.width/2-100, this.height-40, 200, 20, Text.translatable("back"), buttonWidget -> MinecraftClient.getInstance().setScreen(parent)));
+        if(Objects.equals(cat.getName(), "config")) this.addDrawableChild(new ButtonWidget(this.width-106, this.height-26, 100, 20, Text.translatable("credits"), buttonWidget -> MinecraftClient.getInstance().setScreen(new CreditsScreen(this))));
     }
 }

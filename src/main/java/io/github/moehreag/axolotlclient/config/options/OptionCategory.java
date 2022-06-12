@@ -1,8 +1,6 @@
 package io.github.moehreag.axolotlclient.config.options;
 
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
@@ -46,6 +44,6 @@ public class OptionCategory {
         return name;
     }
 
-    public Text getTranslatedName(){return new TranslatableText(name);}
+    public Text getTranslatedName(){return Text.translatable(name);}
 
 }

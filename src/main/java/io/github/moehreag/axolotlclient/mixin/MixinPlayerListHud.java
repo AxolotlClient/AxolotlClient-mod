@@ -1,22 +1,15 @@
 package io.github.moehreag.axolotlclient.mixin;
 
-import io.github.moehreag.axolotlclient.Axolotlclient;
 import io.github.moehreag.axolotlclient.util.Util;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.PlayerListHud;
 import net.minecraft.client.network.PlayerListEntry;
-import net.minecraft.scoreboard.Team;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.Objects;
 
 @Mixin(PlayerListHud.class)
 public abstract class MixinPlayerListHud {
@@ -29,7 +22,7 @@ public abstract class MixinPlayerListHud {
 
 		if (!Util.getGame().toLowerCase().contains("skyblock")) {
 
-			if (Axolotlclient.features && Axolotlclient.CONFIG.badgeOptions.showBadge && Axolotlclient.isUsingClient(entry.getProfile().getId())) {
+			/*if (Axolotlclient.features && Axolotlclient.CONFIG.badgeOptions.showBadge && Axolotlclient.isUsingClient(entry.getProfile().getId())) {
 
 				assert MinecraftClient.getInstance().player != null;
 
@@ -62,7 +55,7 @@ public abstract class MixinPlayerListHud {
 				cir.cancel();
 			} else if(Axolotlclient.CONFIG.NickHider.hideOtherNames){
 				cir.setReturnValue(new LiteralText(Axolotlclient.CONFIG.NickHider.otherName));
-			}
+			}*/
 		}
 	}
 }

@@ -9,13 +9,14 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.text.Text;
 
 public class StringOptionWidget extends TextFieldWidget {
-	public StringOptionWidget(TextRenderer textRenderer, int i, int j, int k, int l, Text text) {
-		super(textRenderer, i, j, k, l, text);
+
+	public final StringOption option;
+	public StringOptionWidget(int x, int y, int width, StringOption option) {
+		super(MinecraftClient.getInstance().textRenderer, x, y, width, 20, Text.of(option.get()));
+		this.option=option;
 	}
 
     /*public TextFieldWidget textField;
-
-    public final StringOption option;
 
     public StringOptionWidget(int x, int y, StringOption option){
         super(MinecraftClient.getInstance().textRenderer, x, y, 150, 40, option.get());

@@ -1,14 +1,18 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.moehreag.axolotlclient.config.options.*;
 import io.github.moehreag.axolotlclient.config.Color;
+import io.github.moehreag.axolotlclient.config.options.BooleanOption;
+import io.github.moehreag.axolotlclient.config.options.ColorOption;
+import io.github.moehreag.axolotlclient.config.options.DoubleOption;
+import io.github.moehreag.axolotlclient.config.options.Option;
+import io.github.moehreag.axolotlclient.config.options.OptionCategory;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawUtil;
 import io.github.moehreag.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.resource.language.I18n;
-import net.minecraft.client.util.Window;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
@@ -59,21 +63,21 @@ public abstract class AbstractHudEntry extends DrawUtil {
         return MathHelper.clamp((float) (current) / (max - offset), 0, 1);
     }
 
-    public void renderHud() {
-        render();
+    public void renderHud(MatrixStack matrices) {
+        render(matrices);
     }
 
-    public abstract void render();
+    public abstract void render(MatrixStack matrices);
 
-    public abstract void renderPlaceholder();
+    public abstract void renderPlaceholder(MatrixStack matrices);
 
-    public void renderPlaceholderBackground() {
+    public void renderPlaceholderBackground(MatrixStack matrices) {
         if (hovered) {
-            fillRect(getScaledBounds(), Color.SELECTOR_BLUE);
+            fillRect(matrices, getScaledBounds(), Color.SELECTOR_BLUE);
         } else {
-            fillRect(getScaledBounds(), Color.DARK_GRAY);
+            fillRect(matrices, getScaledBounds(), Color.DARK_GRAY);
         }
-        outlineRect(getScaledBounds(), Color.BLACK);
+        outlineRect(matrices, getScaledBounds(), Color.BLACK);
 
 
     }
@@ -99,7 +103,7 @@ public abstract class AbstractHudEntry extends DrawUtil {
     }
 
     public void setX(int x) {
-        this.x.set(intToFloat(x, (int)new Window(client).getScaledWidth(),
+        this.x.set(intToFloat(x, MinecraftClient.getInstance().getWindow().getScaledWidth(),
                 Math.round(width * getScale())));
     }
 
@@ -108,7 +112,7 @@ public abstract class AbstractHudEntry extends DrawUtil {
     }
 
     public void setY(int y) {
-        this.y.set(intToFloat(y, (int) new Window(client).getScaledHeight(),
+        this.y.set(intToFloat(y, MinecraftClient.getInstance().getWindow().getScaledHeight(),
                 Math.round(height * getScale())));
     }
 
@@ -141,9 +145,9 @@ public abstract class AbstractHudEntry extends DrawUtil {
         return (float) scale.get();
     }
 
-    public void scale() {
-        GlStateManager.pushMatrix();
-        GlStateManager.scalef(getScale(), getScale(), 1F);
+    public void scale(MatrixStack matrices) {
+        matrices.push();
+        matrices.scale(getScale(), getScale(), 1F);
     }
 
     public DrawPosition getPos() {
@@ -155,8 +159,8 @@ public abstract class AbstractHudEntry extends DrawUtil {
     }
 
     public DrawPosition getScaledPos(float scale) {
-        int scaledX = floatToInt((float) x.get(), (int) new Window(client).getScaledWidth(), Math.round(width * scale));
-        int scaledY = floatToInt((float) y.get(), (int) new Window(client).getScaledHeight(), Math.round(height * scale));
+        int scaledX = floatToInt((float) x.get(), MinecraftClient.getInstance().getWindow().getScaledWidth(), Math.round(width * scale));
+        int scaledY = floatToInt((float) y.get(), MinecraftClient.getInstance().getWindow().getScaledHeight(), Math.round(height * scale));
         return new DrawPosition(scaledX, scaledY);
     }
 

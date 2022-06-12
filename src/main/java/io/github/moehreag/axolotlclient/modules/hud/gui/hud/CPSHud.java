@@ -3,9 +3,7 @@ package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 import io.github.moehreag.axolotlclient.config.options.BooleanOption;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.util.Hooks;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
-import org.lwjgl.input.Mouse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,9 +36,9 @@ public class CPSHud extends CleanHudEntry {
         });
         Hooks.KEYBIND_PRESS.register((key) -> {
             if (fromKeybindings.get()) {
-                if (key.equals(client.options.keyAttack)) {
+                if (key.equals(client.options.attackKey)) {
                     ClickList.LEFT.click();
-                } else if (key.equals(client.options.keyUse)) {
+                } else if (key.equals(client.options.useKey)) {
                     ClickList.RIGHT.click();
                 }
             }
@@ -58,7 +56,7 @@ public class CPSHud extends CleanHudEntry {
         ClickList.RIGHT.update();
     }
 
-    public void click(){
+    /*public void click(){
         int button = Mouse.getEventButton();
         if (Mouse.getEventButtonState()) {
             if(button==0){
@@ -66,7 +64,7 @@ public class CPSHud extends CleanHudEntry {
             }
             if(button==1)ClickList.RIGHT.click();
         }
-    }
+    }*/
 
     @Override
     public String getValue() {
@@ -109,11 +107,11 @@ public class CPSHud extends CleanHudEntry {
         }
 
         public void update() {
-            clicks.removeIf((click) -> MinecraftClient.getTime() - click > 1000);
+            //clicks.removeIf((click) -> MinecraftClient.getTime() - click > 1000);
         }
 
         public void click() {
-            clicks.add(MinecraftClient.getTime());
+            //clicks.add(MinecraftClient.getTime());
         }
 
         public int clicks() {

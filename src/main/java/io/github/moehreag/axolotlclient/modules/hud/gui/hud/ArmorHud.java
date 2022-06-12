@@ -6,6 +6,7 @@ import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.moehreag.axolotlclient.modules.hud.util.ItemUtil;
 import net.minecraft.block.Block;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
@@ -24,7 +25,7 @@ public class ArmorHud extends AbstractHudEntry {
         super(20, 100);
     }
 
-    @Override
+    /*@Override
     public void render() {
         scale();
         DrawPosition pos = getPos();
@@ -54,14 +55,24 @@ public class ArmorHud extends AbstractHudEntry {
         ItemUtil.renderGuiItem(itemStack, pos.x, pos.y+82);
         GlStateManager.popMatrix();
         hovered = false;
-    }
+    }*/
 
     @Override
     public boolean movable() {
         return true;
     }
 
-    @Override
+	@Override
+	public void render(MatrixStack matrices) {
+
+	}
+
+	@Override
+	public void renderPlaceholder(MatrixStack matrices) {
+
+	}
+
+	@Override
     public Identifier getId() {
         return ID;
     }

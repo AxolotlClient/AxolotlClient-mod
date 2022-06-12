@@ -1,23 +1,15 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.moehreag.axolotlclient.config.options.BooleanOption;
-import io.github.moehreag.axolotlclient.config.options.ColorOption;
+import io.github.moehreag.axolotlclient.config.Color;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
-import io.github.moehreag.axolotlclient.config.Color;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.moehreag.axolotlclient.modules.hud.util.Rectangle;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.options.GameOptions;
-import net.minecraft.client.options.KeyBinding;
-import net.minecraft.client.resource.language.I18n;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -28,7 +20,11 @@ import java.util.Optional;
 public class KeystrokeHud extends AbstractHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "keystrokehud");
 
-    private final ColorOption pressedTextColor = new ColorOption("heldtextcolor", Color.parse("#FF000000"));
+	public KeystrokeHud() {
+		super(150, 30);
+	}
+
+    /*private final ColorOption pressedTextColor = new ColorOption("heldtextcolor", Color.parse("#FF000000"));
     private final ColorOption pressedBackgroundColor = new ColorOption( "heldbackgroundcolor", Color.parse("#64FFFFFF"));
     private final BooleanOption showW = new BooleanOption("showW", true);
     private final BooleanOption showA = new BooleanOption("showA", true);
@@ -214,9 +210,19 @@ public class KeystrokeHud extends AbstractHudEntry {
 
             drawString(client.textRenderer, word, (int) x, (int) y, stroke.getFGColor().getAsInt(), shadow.get());
         });
-    }
+    }*/
 
-    @Override
+	@Override
+	public void render(MatrixStack matrices) {
+
+	}
+
+	@Override
+	public void renderPlaceholder(MatrixStack matrices) {
+
+	}
+
+	@Override
     public Identifier getId() {
         return ID;
     }
@@ -226,7 +232,7 @@ public class KeystrokeHud extends AbstractHudEntry {
         return true;
     }
 
-    @Override
+    /*@Override
     public void addConfigOptions(List<Option> options) {
         super.addConfigOptions(options);
         options.add(textColor);
@@ -319,6 +325,6 @@ public class KeystrokeHud extends AbstractHudEntry {
 
     public interface KeystrokeRenderer {
         void render(Keystroke stroke);
-    }
+    }*/
 
 }

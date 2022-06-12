@@ -22,7 +22,7 @@
 		},
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"entrypoints": {
-			"init": "io.github.moehreag.axolotlclient.AxolotlClient"
+			"client_init": "io.github.moehreag.axolotlclient.AxolotlClient"
 		},
 		"depends": [
 			{

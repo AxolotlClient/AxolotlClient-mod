@@ -1,6 +1,6 @@
 package io.github.moehreag.axolotlclient.mixin;
 
-import io.github.moehreag.axolotlclient.Axolotlclient;
+import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.util.DiscordRPC;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
@@ -62,6 +62,6 @@ public class MixinMinecraftClient {
 	@Inject(method = "tick", at = @At("HEAD"))
 	public void TickClient(CallbackInfo ci){
 		DiscordRPC.update();
-		Axolotlclient.TickClient();
+		AxolotlClient.TickClient();
 	}
 }

@@ -1,6 +1,6 @@
 package io.github.moehreag.axolotlclient.util;
 
-import net.minecraft.client.options.KeyBinding;
+import net.minecraft.client.option.KeyBind;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -10,6 +10,6 @@ import net.minecraft.client.options.KeyBinding;
 
 public final class KeyBindingCallback {
     public interface OnPress {
-        void onPress(KeyBinding binding);
+        void onPress(KeyBind binding);
     }
 }

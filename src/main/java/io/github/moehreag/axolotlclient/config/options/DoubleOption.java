@@ -62,7 +62,7 @@ public class DoubleOption extends OptionBase implements Option {
 		return new SliderWidget(x, y, width, 20, getTranslatedName(), option) {
 			@Override
 			protected void updateMessage() {
-				setMessage(getTranslatedName().shallowCopy().append(Text.of(": "+ option)));
+				setMessage(getTranslatedName().copy().append(Text.of(": "+ option)));
 			}
 
 			@Override

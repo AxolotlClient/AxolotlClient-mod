@@ -7,7 +7,7 @@ import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.option.GameOptions;
 import org.jetbrains.annotations.NotNull;
 
-public class BooleanOption extends OptionBase implements Option{
+public class BooleanOption extends OptionBase implements Option {
 
     private boolean option;
     private final boolean Default;

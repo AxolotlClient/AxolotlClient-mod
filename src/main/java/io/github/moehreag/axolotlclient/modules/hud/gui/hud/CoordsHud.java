@@ -8,6 +8,7 @@ import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.moehreag.axolotlclient.config.Color;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
 import java.math.RoundingMode;
@@ -99,7 +100,7 @@ public class CoordsHud extends AbstractHudEntry {
         return 0;
     }
 
-    @Override
+    /*@Override
     public void render() {
         scale();
         DrawPosition pos = getPos();
@@ -189,7 +190,7 @@ public class CoordsHud extends AbstractHudEntry {
 
         GlStateManager.popMatrix();
         hovered = false;
-    }
+    }*/
 
     public String getWordedDirection(int dir) {
         String direction = "";
@@ -242,7 +243,17 @@ public class CoordsHud extends AbstractHudEntry {
         return true;
     }
 
-    @Override
+	@Override
+	public void render(MatrixStack matrices) {
+
+	}
+
+	@Override
+	public void renderPlaceholder(MatrixStack matrices) {
+
+	}
+
+	@Override
     public Identifier getId() {
         return ID;
     }

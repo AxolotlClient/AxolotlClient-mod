@@ -2,10 +2,11 @@ package io.github.moehreag.axolotlclient.modules.zoom;
 
 import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.modules.AbstractModule;
-import net.legacyfabric.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.options.KeyBinding;
+import net.minecraft.client.option.KeyBind;
 import net.minecraft.util.Identifier;
+import org.lwjgl.glfw.GLFW;
 
 
 //Based on https://github.com/LogicalGeekBoy/logical_zoom/blob/master/src/main/java/com/logicalgeekboy/logical_zoom/LogicalZoom.java
@@ -13,13 +14,13 @@ public class Zoom extends AbstractModule {
 
     public static boolean zoomed;
     private static float fadeFactor;
-    private static float originalSensitivity;
-    private static KeyBinding keyBinding;
+    private static Double originalSensitivity;
+    private static KeyBind keyBinding;
 
     public static Identifier ID = new Identifier("zoom");
 
     public void init(){
-        keyBinding = new KeyBinding("key.zoom", 46, "category.axolotlclient");
+        keyBinding = new KeyBind("key.zoom", GLFW.GLFW_KEY_C, "category.axolotlclient");
 
         KeyBindingHelper.registerKeyBinding(keyBinding);
         zoomed = false;
@@ -30,18 +31,18 @@ public class Zoom extends AbstractModule {
         return keyBinding.isPressed();
     }
 
-    public static float getFov(float current){
+    public static double getFov(Double current){
         decreaseFov();
         return current / fadeFactor;
     }
 
     public static void decreaseSensitivity(){
-        originalSensitivity=MinecraftClient.getInstance().options.sensitivity;
-        MinecraftClient.getInstance().options.sensitivity /= AxolotlClient.CONFIG.zoomDivisor.get();
+        originalSensitivity=MinecraftClient.getInstance().options.getMouseSensitivity().get();
+        MinecraftClient.getInstance().options.getMouseSensitivity().set(MinecraftClient.getInstance().options.getMouseSensitivity().get() / AxolotlClient.CONFIG.zoomDivisor.get());
     }
 
     public static void restoreSensitivity(){
-        MinecraftClient.getInstance().options.sensitivity=originalSensitivity;
+        MinecraftClient.getInstance().options.getMouseSensitivity().set(originalSensitivity);
     }
 
     public static void manageZoom() {

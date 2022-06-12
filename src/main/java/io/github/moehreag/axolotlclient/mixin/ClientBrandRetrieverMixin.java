@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ClientBrandRetriever.class)
 public class ClientBrandRetrieverMixin {
 
-    @Inject(method = "getClientModName", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getClientModName", at = @At("HEAD"), cancellable = true, remap = false)
     private static void returnClientBrand(CallbackInfoReturnable<String> cir){
 
         cir.setReturnValue("AxolotlClient");

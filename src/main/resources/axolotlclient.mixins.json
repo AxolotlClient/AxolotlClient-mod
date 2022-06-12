@@ -8,7 +8,6 @@
 		"MixinWindow"
 	],
 	"client": [
-		"MixinPingKronHUD",
 		"MixinClientBrandRetriever",
 		"MixinCrashReport",
 		"MixinChatHud",

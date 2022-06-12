@@ -1,20 +1,7 @@
 package io.github.moehreag.axolotlclient.modules.sky;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.moehreag.axolotlclient.AxolotlClient;
-import io.github.moehreag.axolotlclient.config.Color;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.Framebuffer;
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.resource.language.I18n;
-import net.minecraft.client.util.Window;
-import net.minecraft.resource.ResourcePack;
-import net.minecraft.util.Formatting;
-
-import java.util.Objects;
-
 public class SkyLoadingScreen {
-    private String currentPack = "";
+    /*private String currentPack = "";
     public static boolean currentlyShown = false;
     private String description="";
     private boolean loadingFinished = false;
@@ -90,6 +77,6 @@ public class SkyLoadingScreen {
         Color.tickChroma();
         render();
         AxolotlClient.initalized=true;
-    }
+    }*/
 
 }

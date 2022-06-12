@@ -8,6 +8,7 @@ import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.moehreag.axolotlclient.modules.hud.util.ItemUtil;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
@@ -37,7 +38,7 @@ public class ItemUpdateHud extends AbstractHudEntry {
         added = new ArrayList<>();
     }
 
-    public void update() {
+    /*public void update() {
         this.removed = ItemUtil.removeOld(removed, timeout.get() * 1000);
         this.added = ItemUtil.removeOld(added, timeout.get() * 1000);
         updateAdded();
@@ -185,9 +186,19 @@ public class ItemUpdateHud extends AbstractHudEntry {
         super.addConfigOptions(options);
         options.add(shadow);
         options.add(timeout);
-    }
+    }*/
 
-    @Override
+	@Override
+	public void render(MatrixStack matrices) {
+
+	}
+
+	@Override
+	public void renderPlaceholder(MatrixStack matrices) {
+
+	}
+
+	@Override
     public Identifier getId() {
         return ID;
     }

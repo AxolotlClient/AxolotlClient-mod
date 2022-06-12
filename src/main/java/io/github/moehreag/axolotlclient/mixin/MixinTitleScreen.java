@@ -1,16 +1,10 @@
 package io.github.moehreag.axolotlclient.mixin;
 
 
-import io.github.moehreag.axolotlclient.Axolotlclient;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
-
-import net.minecraft.text.TranslatableText;
-import net.minecraft.util.Formatting;
+import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -20,13 +14,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MixinTitleScreen extends Screen{
 
 	protected MixinTitleScreen() {
-		super(new LiteralText(""));
+		super(Text.of(""));
 	}
 
 	@Inject(method = "init", at = @At("HEAD"))
 	public void showBadModsScreen(CallbackInfo ci){
 
-		if (Axolotlclient.showWarning) {
+		/*if (Axolotlclient.showWarning) {
 			MinecraftClient.getInstance().setScreen(new ConfirmScreen(
 				(boolean confirmed) -> {
 					if (confirmed) {
@@ -43,15 +37,15 @@ public abstract class MixinTitleScreen extends Screen{
 					new LiteralText(Axolotlclient.badmod).formatted(Formatting.BOLD, Formatting.DARK_RED)).append(" is most likely prohibited to be used on many Servers!\n" +
 					"I will not be responsible for any punishment you will get for using it. Proceed with Caution!"),
 				new LiteralText("Proceed"), new TranslatableText("menu.quit")));
-		}
+		}*/
 	}
 
 	@Inject(method = "render", at = @At("TAIL"))
 	public void addDisclaimer(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci){
-		if(Axolotlclient.TitleDisclaimer){
+		/*if(Axolotlclient.TitleDisclaimer){
 			TitleScreen.drawCenteredText(matrices, this.textRenderer, "You are playing at your own risk with unsupported Mods",
 				this.width/2, 5, 0xFFCC8888);
 			TitleScreen.drawCenteredText(matrices, this.textRenderer, "Things could break!", this.width/2, 15, 0xFFCC8888);
-		}
+		}*/
 	}
 }

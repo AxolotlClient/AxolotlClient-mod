@@ -11,6 +11,7 @@ import io.github.moehreag.axolotlclient.config.Color;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.moehreag.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.ScoreboardPlayerScore;
@@ -43,7 +44,7 @@ public class ScoreboardHud extends AbstractHudEntry {
         super(200, 146);
     }
 
-    @Override
+    /*@Override
     public void render() {
         scale();
 
@@ -175,9 +176,19 @@ public class ScoreboardHud extends AbstractHudEntry {
         options.add(shadow);
         options.add(scores);
         options.add(scoreColor);
-    }
+    }*/
 
-    @Override
+	@Override
+	public void render(MatrixStack matrices) {
+
+	}
+
+	@Override
+	public void renderPlaceholder(MatrixStack matrices) {
+
+	}
+
+	@Override
     public Identifier getId() {
         return ID;
     }
