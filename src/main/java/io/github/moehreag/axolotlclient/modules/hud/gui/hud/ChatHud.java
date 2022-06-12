@@ -57,7 +57,7 @@ public class ChatHud extends AbstractHudEntry {
         DrawPosition pos = getPos();
         if(MinecraftClient.getInstance().player!=null) {
             client.textRenderer.drawWithShadow(
-                    "<" + MinecraftClient.getInstance().player.getName().asFormattedString() + "> OOh! There's my Chat now!",
+                    "<" + MinecraftClient.getInstance().player.method_6344().asFormattedString() + "> OOh! There's my Chat now!",
                     pos.x + 1, pos.y + height - 9, -1
             );
         } else {

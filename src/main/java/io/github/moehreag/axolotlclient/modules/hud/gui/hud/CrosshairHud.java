@@ -16,7 +16,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.Window;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -87,12 +87,12 @@ public class CrosshairHud extends AbstractHudEntry {
     }
 
     public Color getColor() {
-        HitResult hit = client.result;
+        BlockHitResult hit = client.result;
         if (hit == null || hit.type == null) {
             return defaultColor.get();
-        } else if (hit.type == HitResult.Type.ENTITY) {
+        } else if (hit.type == BlockHitResult.Type.ENTITY) {
             return entityColor.get();
-        } else if (hit.type == HitResult.Type.BLOCK) {
+        } else if (hit.type == BlockHitResult.Type.BLOCK) {
             BlockPos blockPos = hit.getBlockPos();
             World world = this.client.world;
             if (world.getBlockState(blockPos).getBlock() != null &&

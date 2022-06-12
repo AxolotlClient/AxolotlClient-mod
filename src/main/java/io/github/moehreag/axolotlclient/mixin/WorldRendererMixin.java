@@ -6,7 +6,9 @@ import io.github.moehreag.axolotlclient.modules.sky.SkyboxManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.*;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.dimension.Dimension;
@@ -194,8 +196,8 @@ public abstract class WorldRendererMixin {
         return width;
     }
 
-    @Redirect(method = "method_1380", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;color4f(FFFF)V"))
-    public void customOutlineColor(float red, float green, float blue, float alpha){
+    @Inject(method = "method_1380", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;color4f(FFFF)V", shift = At.Shift.AFTER))
+    public void customOutlineColor(PlayerEntity playerEntity, BlockHitResult blockHitResult, int i, float f, CallbackInfo ci){
         if(AxolotlClient.CONFIG.enableCustomOutlines.get()){
             if(AxolotlClient.CONFIG.outlineChroma.get()){
                 GlStateManager.color4f(AxolotlClient.CONFIG.outlineColor.getChroma().getRed(),
@@ -203,13 +205,15 @@ public abstract class WorldRendererMixin {
                         AxolotlClient.CONFIG.outlineColor.getChroma().getBlue(),
                         AxolotlClient.CONFIG.outlineColor.getChroma().getAlpha());
             } else {
-                GlStateManager.color4f(AxolotlClient.CONFIG.outlineColor.get().getRed(),
-                        AxolotlClient.CONFIG.outlineColor.get().getGreen(),
-                        AxolotlClient.CONFIG.outlineColor.get().getBlue(),
-                        AxolotlClient.CONFIG.outlineColor.get().getAlpha());
+                GlStateManager.clearColor();
+
+                int color = AxolotlClient.CONFIG.outlineColor.get().getAsInt();
+                float a = (float)(color >> 24 & 0xFF) / 255.0F;
+                float r = (float)(color >> 16 & 0xFF) / 255.0F;
+                float g = (float)(color >> 8 & 0xFF) / 255.0F;
+                float b = (float)(color & 0xFF) / 255.0F;
+                GlStateManager.color4f(r,g,b,a);
             }
-        } else {
-            GlStateManager.color4f(red, green, blue, alpha);
         }
     }
 }

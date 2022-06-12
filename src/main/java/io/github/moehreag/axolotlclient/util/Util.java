@@ -27,13 +27,12 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
 import java.net.InetAddress;
 import java.util.*;
-import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.stream.Collectors;
+
 
 public class Util {
 

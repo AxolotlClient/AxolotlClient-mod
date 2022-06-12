@@ -2,8 +2,10 @@ package io.github.moehreag.axolotlclient.config.screen;
 
 import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.config.ConfigManager;
+import io.github.moehreag.axolotlclient.config.options.ColorOption;
 import io.github.moehreag.axolotlclient.config.options.OptionCategory;
 import io.github.moehreag.axolotlclient.config.screen.widgets.ColorOptionWidget;
+import io.github.moehreag.axolotlclient.config.screen.widgets.ColorSelectionWidget;
 import io.github.moehreag.axolotlclient.config.screen.widgets.StringOptionWidget;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawUtil;
 import net.minecraft.client.MinecraftClient;
@@ -17,6 +19,8 @@ public class OptionsScreenBuilder extends Screen {
 
     private final Screen parent;
     protected OptionCategory cat;
+
+    protected ColorSelectionWidget picker;
 
     private ButtonWidgetList list;
 
@@ -42,7 +46,23 @@ public class OptionsScreenBuilder extends Screen {
         this.list.render(mouseX, mouseY, tickDelta);
         drawCenteredString(textRenderer, cat.getTranslatedName(), width/2, 25, -1);
 
+        if(picker!=null){
+            picker.render(MinecraftClient.getInstance(), mouseX, mouseY);
+        }
+
         super.render(mouseX, mouseY, tickDelta);
+    }
+
+    public void openColorPicker(ColorOption option){
+        picker = new ColorSelectionWidget(option);
+    }
+
+    public void closeColorPicker(){
+        picker=null;
+    }
+
+    public boolean isPickerOpen(){
+        return picker!=null;
     }
 
     @Override
@@ -53,10 +73,20 @@ public class OptionsScreenBuilder extends Screen {
             if(pair.left instanceof StringOptionWidget && ((StringOptionWidget) pair.left).textField.isFocused()){
                 ((StringOptionWidget) pair.left).textField.mouseClicked(mouseX, mouseY, button);
             }
-            if(pair.left instanceof ColorOptionWidget && ((ColorOptionWidget) pair.left).textField.isFocused()){
-                ((ColorOptionWidget) pair.left).textField.mouseClicked(mouseX, mouseY, button);
+            if(pair.left instanceof ColorOptionWidget){
+                if(((ColorOptionWidget) pair.left).textField.isFocused()) {
+                    ((ColorOptionWidget) pair.left).textField.mouseClicked(mouseX, mouseY, button);
+                }
             }
         });
+
+        if(picker!=null){
+            if(!picker.isMouseOver(MinecraftClient.getInstance(), mouseX, mouseY)) {
+                closeColorPicker();
+            } else {
+                picker.onClick(mouseX, mouseY);
+            }
+        }
 
         this.list.mouseClicked(mouseX, mouseY, button);
     }

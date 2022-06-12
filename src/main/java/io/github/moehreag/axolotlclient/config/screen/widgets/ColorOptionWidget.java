@@ -2,11 +2,14 @@ package io.github.moehreag.axolotlclient.config.screen.widgets;
 
 import io.github.moehreag.axolotlclient.config.Color;
 import io.github.moehreag.axolotlclient.config.options.ColorOption;
+import io.github.moehreag.axolotlclient.config.screen.OptionsScreenBuilder;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawUtil;
 import io.github.moehreag.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+
+import java.util.Objects;
 
 public class ColorOptionWidget extends ButtonWidget {
 
@@ -14,6 +17,7 @@ public class ColorOptionWidget extends ButtonWidget {
 
     public final TextFieldWidget textField;
     private final ButtonWidget openPicker;
+
 
     public ColorOptionWidget(int id, int x, int y, ColorOption option) {
         super(id, x, y, 150, 20, "");
@@ -60,14 +64,26 @@ public class ColorOptionWidget extends ButtonWidget {
     public void mouseClicked(int mouseX, int mouseY){
         if(openPicker.isMouseOver(MinecraftClient.getInstance(), mouseX, mouseY)){
             // WIP -> open Color picking dialog
+            if(MinecraftClient.getInstance().currentScreen instanceof OptionsScreenBuilder){
+                ((OptionsScreenBuilder) MinecraftClient.getInstance().currentScreen).openColorPicker(option);
+            }
         } else {
             textField.mouseClicked(mouseX, mouseY, 0);
+            if(MinecraftClient.getInstance().currentScreen instanceof OptionsScreenBuilder){
+                ((OptionsScreenBuilder) MinecraftClient.getInstance().currentScreen).closeColorPicker();
+            }
         }
     }
 
     public void tick(){
         if(textField.isFocused()) {
             textField.tick();
+        } else {
+            if(MinecraftClient.getInstance().currentScreen instanceof OptionsScreenBuilder &&
+                    ((OptionsScreenBuilder) MinecraftClient.getInstance().currentScreen).isPickerOpen() &&
+                    !Objects.equals(textField.getText(), option.get().toString())){
+                textField.setText(option.get().toString());
+            }
         }
     }
 

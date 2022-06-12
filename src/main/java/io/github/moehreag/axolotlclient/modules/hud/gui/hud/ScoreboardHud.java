@@ -160,7 +160,7 @@ public class ScoreboardHud extends AbstractHudEntry {
                 }
             }
         }
-        if(outline.get()) outlineRect(new Rectangle(textOffset, calculated.y-1, maxWidth, calculated.height+1), outlineColor.get());
+        if(outline.get()) outlineRect(new Rectangle(textOffset, calculated.y-2, maxWidth, calculated.height+2), outlineColor.get());
 
     }
 

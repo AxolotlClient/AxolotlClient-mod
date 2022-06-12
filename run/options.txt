@@ -8,7 +8,7 @@ guiScale:2
 particles:0
 bobView:true
 anaglyph3d:false
-maxFps:260
+maxFps:120
 fboEnable:true
 difficulty:2
 fancyGraphics:true
@@ -90,10 +90,10 @@ key_key.hotbar.6:7
 key_key.hotbar.7:8
 key_key.hotbar.8:9
 key_key.hotbar.9:33
-key_key.zoom:46
 key_key.openHud:54
 key_key.toggleSprint:23
 key_key.toggleSneak:37
+key_key.zoom:46
 soundCategory_master:0.4668874
 soundCategory_music:0.471831
 soundCategory_record:0.45774648

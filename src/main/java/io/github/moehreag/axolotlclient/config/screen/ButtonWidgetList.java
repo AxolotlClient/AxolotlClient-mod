@@ -84,6 +84,9 @@ public class ButtonWidgetList extends EntryListWidget {
     @Override
     public void render(int mouseX, int mouseY, float delta){
         if (this.visible) {
+            GlStateManager.enableDepthTest();
+            GlStateManager.pushMatrix();
+            GlStateManager.translatef(0, 0, 1F);
             this.lastMouseX = mouseX;
             this.lastMouseY = mouseY;
             int i = this.getScrollbarPosition();
@@ -133,6 +136,8 @@ public class ButtonWidgetList extends EntryListWidget {
             GlStateManager.enableTexture();
             GlStateManager.shadeModel(7424);
             GlStateManager.enableAlphaTest();
+            GlStateManager.disableDepthTest();
+            GlStateManager.popMatrix();
             GlStateManager.disableBlend();
         }
     }

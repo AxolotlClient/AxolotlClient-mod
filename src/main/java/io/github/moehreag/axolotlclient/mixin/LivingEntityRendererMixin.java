@@ -25,7 +25,7 @@ public abstract class LivingEntityRendererMixin {
         }
     }
 
-    @Redirect(method = "method_10208(Lnet/minecraft/entity/LivingEntity;DDD)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getName()Lnet/minecraft/text/Text;"))
+    @Redirect(method = "method_10208(Lnet/minecraft/entity/LivingEntity;DDD)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;method_6344()Lnet/minecraft/text/Text;"))
     public Text hideNameWhenSneaking(LivingEntity instance){
         if(instance instanceof AbstractClientPlayerEntity) {
 
@@ -35,7 +35,7 @@ public abstract class LivingEntityRendererMixin {
                 return new LiteralText(NickHider.Instance.hiddenNameOthers.get());
             }
         }
-        return instance.getName();
+        return instance.method_6344();
     }
 
     @Inject(method = "method_10208(Lnet/minecraft/entity/LivingEntity;DDD)V",

@@ -32,4 +32,8 @@ public class Rectangle {
         return new Rectangle(this.x + x, this.y + y, width, height);
     }
 
+    public boolean isMouseOver(int mouseX, int mouseY){
+        return mouseX>=x && mouseX<=x+width && mouseY >=y && mouseY <= y+height;
+    }
+
 }

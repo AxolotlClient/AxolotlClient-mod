@@ -101,8 +101,8 @@ public class OptionSliderWidget extends ButtonWidget {
 
             client.getTextureManager().bindTexture(WIDGETS_LOCATION);
             GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-            this.drawTexture(this.x + (int)(this.value * (float)(this.width - 8)), this.y, 0, 66, 4, 20);
-            this.drawTexture(this.x + (int)(this.value * (float)(this.width - 8)) + 4, this.y, 196, 66, 4, 20);
+            this.drawTexture(this.x + (int)(this.value * (float)(this.width - 8)), this.y, 0, 66 + (hovered ? 20:0), 4, 20);
+            this.drawTexture(this.x + (int)(this.value * (float)(this.width - 8)) + 4, this.y, 196, 66 + (hovered ? 20:0), 4, 20);
         }
     }
 

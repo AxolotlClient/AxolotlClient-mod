@@ -13,8 +13,8 @@ import java.util.List;
 
 public class Color {
     private final int red, green, blue;
-    private final int alpha;
-    private final int color;
+    private int alpha;
+    private int color;
 
     private static final List<Color> chromaColors = new ArrayList<>();
     private static int chromaColorIndex;
@@ -55,6 +55,14 @@ public class Color {
         else if(chromaColorIndex<0){chromaColorIndex=0;}
     }
 
+    private void updateColor(){
+        int color = alpha;
+        color = (color << 8) + red;
+        color = (color << 8) + green;
+        color = (color << 8) + blue;
+        this.color = color;
+    }
+
     public static Color getChroma(){
         return chromaColors.get(chromaColorIndex);
     }
@@ -73,6 +81,12 @@ public class Color {
 
     public int getAlpha(){
         return alpha;
+    }
+
+    public Color withAlpha(int alpha){
+        this.alpha=alpha;
+        updateColor();
+        return this;
     }
 
     public int getAsInt(){
