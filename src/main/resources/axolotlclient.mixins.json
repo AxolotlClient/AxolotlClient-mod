@@ -3,22 +3,26 @@
 	"package": "io.github.moehreag.axolotlclient.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
-		"MixinMinecraftServer",
-		"MixinModStatus",
-		"MixinWindow"
+
 	],
 	"client": [
+		"MixinBedBlock",
+		"MixinChatHud",
 		"MixinClientBrandRetriever",
 		"MixinCrashReport",
-		"MixinChatHud",
+		"MixinEntityRenderer",
 		"MixinLivingEntityRenderer",
 		"MixinMinecraftClient",
 		"MixinMinecraftClientGame",
 		"MixinPlayerEntityRenderer",
 		"MixinPlayerListHud",
-		"MixinEntityRenderer",
 		"MixinTitleScreen",
-		"MixinBedBlock"
+		"TitleScreenMixin",
+		"ButtonListWidgetAccessor",
+		"ButtonEntryAccessor",
+		"MixinMinecraftServer",
+		"MixinModStatus",
+		"MixinWindow"
 	],
 	"server": [],
 	"injectors": {

@@ -1,0 +1,163 @@
+language.name=Türkçe
+language.region=TR
+language.code=tr_TR
+
+config=AxolotlClient Ayarları
+title_short=Client Ayarları
+
+sky_loading_text=Gökyüzü bundan yükleniliyor:
+resource_loading_finished=Yüklenme Bitti! Minecraft Başlatılıyor...
+
+general=Genel
+general.title=Genel Ayarlar
+enableRPC=RPC'yi Etkinleştir
+showActivity=Aktivite'yi Göster
+loadingBgColor=Yüklenme Ekranı Rengi
+nightMode=Gece Modu
+
+rendering=İşleme Ayarları
+customSky=Özel Gökyüzü
+showSunMoon=Özel Güneş & Ay
+cloudHeight=Bulut Yüksekliği
+zoomDivisor=Yakınlaştırma Bölümü
+zoomSpeed=Yakınlaştırma Hızı
+decreaseSensitivity=Duyarlılığı Azalt
+dynamicFov=Dinamik Görüş Alanı
+fullBright=TamParlak
+strength=Sertlik
+inGuis=Tüm Arayüzlere Uygula
+
+motionBlur=Hareket Bulanıklığı
+zoom=Yakınlaştırma
+blockOutlines=Blok Anahatları
+outlineWidth=Anahat Genişliği
+
+nametagOptions=Takma Ad Ayarları
+showOwnNametag=Kendi Takma Adı'nı göster
+useShadows=Gölgeleri Zorla
+nametagBackground=Takma Ad Arkaplanı
+badgeText=Özel Rozet Yazısı
+customBadge=Özel Rozetler
+showBadges=Rozetleri Göster
+
+hypixel-mods=Hypixel Eklentileri
+levelhead=SeviyeEtiketi
+hypixel_api_key=Hypixel API Anahtarı
+levelHeadMode=SeviyeEtiketi Modu
+autogg=OtomatikGG
+printGG=GG Yazdır
+ggString=GG Yazısı
+printGF=GF Yazdır
+gfString=GF Yazısı
+printGLHF=GLHF Yazdır
+glhfString=GLHF Yazısı
+onHypixel=Hypixel'de Etkin
+onBWP=Bedwars Practice'de Etkin
+onPVPL=PVP Land'de Etkin
+onMMC=MineMen.club'ta Etkin
+autotip=Otomatik-Bağış
+nickhider=Takma Ad Saklayıcı
+hiddenNameSelf=Kendini bu adla sakla:
+hiddenNameOthers=Diğerleri bu adla sakla:
+hideOwnName=Kendi Adını Sakla
+hideOtherNames=Diğerlerinin adını bu adla sakla:
+hideOwnSkin=Kendi Ciltini Sakla
+hideOtherSkins=Diğerlerinin Ciltlerini Sakla
+
+category.axolotlclient=AxolotlClient
+
+key.zoom=Yakınlaştırma
+key.openHud=Arayüz Düzenleyicisini aç
+key.toggleSneak=Otomatik Eğilme
+key.toggleSprint=Otomatik Koşma
+
+hud=Arayüz Ayarları
+pinghud=Gecikme Arayüzü
+cpshud=CPS Arayüzü
+cpskeybind=Tuş-Bağından CPS
+rightcps=Sağ Klik CPS'ini göster
+fpshud=FPS Arayüzü
+armorhud=Zırh Arayüzü
+potionshud=İksir Arayüzü
+keystrokehud=Tuş-Göstergesi
+speedhud=Hız Arayüzü
+scoreboardhud=Liderlik Tablosu Arayüzü
+topbackgroundcolor=Arkaplan Rengi (Üst)
+backgroundcolor=Arkaplan Rengi (Ana Kısım)
+scores=Skorları Göster
+scorecolor=Skor rengi
+crosshairhud=Artı-Gösterge Arayüzü
+type=Tür
+showInF5=3. Perspektif'de Göster
+showInF3=Hata Ayıklama Arayüzü'de Göster
+defaultcolor=Renk (Varsayılan)
+entitycolor=Renk (Varlıklar)
+blockcolor=Renk (İçeren)
+firsttextcolor=Birinci Renk
+secondtextcolor=İkinci Renk
+decimalplaces=Ondalık Yerler
+coordshud=Koordinatlar Arayüzü
+actionbarhud=Eylem Barı Arayüzü
+actionBarPlaceholder=Eylem Barı
+bossbarhud=Can Barı Arayüzü
+chathud=Sohbet HUD
+arrowhud=Ok Arayüzü
+dynamic=Dinamik
+itemupdatehud=EşyaDurumu Arayüzü
+packdisplayhud=Paket Bilgisi Arayüzü
+timeout=Zaman Aşımı
+text=Yazı
+bar=Can Barı
+barColor=Can Barı Rengi
+LMB=SOL
+RMB=SAĞ
+MMB=ORTA
+showLMB=SOL'u Göster
+showRMB=Sağ'ı Göster
+showW=W'u Göster
+showA=A'yı Göster
+showS=S'yi Göster
+showD=D'yi Göster
+showSpace=Boşluk'u Göster
+
+togglesprint=Otomatik Niteleme
+randomPlaceholder=Rastgele Yer-tutucu
+sprinting_toggled=Koşma [Etkin]
+sneaking_toggled=Eğilme [Etkin]
+sprinting_pressed=Koşuluyor [Tuş Basılı]
+sneaking_pressed=Eğilmiş [Tuş Basılı]
+
+iphud=İP Arayüzü
+IconHud=Simge Arayüzü
+
+toggleSprint=Otomatik Koşma'ya izin ver
+toggleSneak=Otomatik Eğilme'ye izin ver
+sneakToggled=Otomatik Eğilme şuan kullanılıyor
+sprintToggled=Otomatik Koşma şuan kullanılıyor
+
+hud.snapping=Yapıştırma
+hud.clientOptions=Client Ayarları
+
+enabled=Etkinleştirilmiş
+scale=Boyut
+textColor=Metin Rengi
+color=Renk
+textChroma=Kromatik Metin
+chroma=Kromatik
+chromaSpeed=Kromatik Hızı
+heldtextcolor=Tutulunca ki Metin Rengi
+bgColor=Arkaplan Rengi
+placeholder=Yer-tutucu
+heldbackgroundcolor=Tutulunca'ki arkaplan rengi
+background=Arkaplan
+outline=Anahat
+outlineColor=Anahat Rengi
+shadow=Gölge
+
+credits=Katkıda Bulunanlar
+creditsBGM=Müzik
+contributors=Katılımcılar:
+other_people=Diğer Kişiler:
+
+back=Geri
+close=Kapat

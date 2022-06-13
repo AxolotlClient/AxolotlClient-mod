@@ -1,18 +1,14 @@
 package io.github.moehreag.axolotlclient.config.screen.widgets;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.config.options.BooleanOption;
 import io.github.moehreag.axolotlclient.config.options.OptionCategory;
 import io.github.moehreag.axolotlclient.config.screen.OptionsScreenBuilder;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.util.math.MatrixStack;
-import org.jetbrains.annotations.NotNull;
 
 public class CategoryWidget extends ButtonWidget {
 
@@ -72,10 +68,11 @@ public class CategoryWidget extends ButtonWidget {
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
 
-        playDownSound(MinecraftClient.getInstance().getSoundManager());
+        //playDownSound(MinecraftClient.getInstance().getSoundManager());
         if(enabledButton!=null &&
                 enabledButton.isHoveredOrFocused()) {
             enabledButton.option.toggle();
+			return false;
             //enabledButton.updateMessage();
         } else {
             MinecraftClient.getInstance().setScreen(new OptionsScreenBuilder(MinecraftClient.getInstance().currentScreen, category));

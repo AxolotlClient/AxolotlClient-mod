@@ -1,25 +1,32 @@
 package io.github.moehreag.axolotlclient.config.options;
 
+import io.github.moehreag.axolotlclient.config.screen.widgets.CategoryWidget;
+import net.minecraft.client.gui.widget.ClickableWidget;
+import net.minecraft.client.option.GameOptions;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class OptionCategory {
+public class OptionCategory extends OptionBase {
 
     Identifier Id;
-    String name;
     private final List<Option> options = new ArrayList<>();
     private final List<OptionCategory> subCategories = new ArrayList<>();
 
     public OptionCategory(String key){
-        this.name=key;
+	    super(key);
     }
 
-    public OptionCategory(Identifier Id, String key){
-        this.Id=Id;
-        this.name=key;
+	@Override
+	public ClickableWidget createButton(GameOptions options, int x, int y, int width) {
+		return new CategoryWidget(this, x, y, width, 20);
+	}
+
+	public OptionCategory(Identifier Id, String key){
+		super(key);
+		this.Id=Id;
     }
 
     public List<Option> getOptions(){return options;}

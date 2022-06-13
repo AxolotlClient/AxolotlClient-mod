@@ -66,6 +66,13 @@ public class OptionsScreenBuilder extends Screen {
 
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
+		if(picker!=null){
+			if(!picker.isMouseOver(mouseX, mouseY)) {
+				closeColorPicker();
+			} else {
+				picker.onClick(mouseX, mouseY);
+			}
+		}
 		return super.mouseClicked(mouseX, mouseY, button);
 	}
 
@@ -84,13 +91,7 @@ public class OptionsScreenBuilder extends Screen {
             }
         });
 
-        if(picker!=null){
-            if(!picker.isMouseOver(MinecraftClient.getInstance(), mouseX, mouseY)) {
-                closeColorPicker();
-            } else {
-                picker.onClick(mouseX, mouseY);
-            }
-        }
+
 
         this.list.mouseClicked(mouseX, mouseY, button);
     }*/
@@ -101,10 +102,10 @@ public class OptionsScreenBuilder extends Screen {
         this.list.mouseReleased(mouseX, mouseY, button);
     }*/
 
-    /*@Override
+    @Override
     public void tick() {
         this.list.tick();
-    }*/
+    }
 
     @Override
     public void init() {

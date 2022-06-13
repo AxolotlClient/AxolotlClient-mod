@@ -1,0 +1,154 @@
+language.name=Deutsch
+language.region=DE
+language.code=de_DE
+
+config=AxolotlClient Optionen
+title_short=Client Optionen
+
+sky_loading_text=Lade Himmelstexturen aus Pack
+resource_loading_finished=Laden beendet! Starte Minecraft...
+
+general=Allgemein
+general.title=Allgemeine Optionen
+enableRPC=Aktiviere RPC
+showActivity=Zeige Aktivität
+loadingBgColor=Ladebildschirmfarbe
+nightMode=Blaufilter
+quickToggles=Quick Toggles
+
+rendering=Renderoptionen
+customSky=Benutzerdefinierte Himmel
+showSunMoon=Zeige Sonne & Mond auf eigenem Himmel
+cloudHeight=Wolkenhöhe
+zoomDivisor=Zoom Divisor
+zoomSpeed=Zoomgeschwindigkeit
+decreaseSensitivity=Reduziere Sensitivität
+dynamicFov=Dynamisches FOV
+fullBright=FullBright
+strength=Stärke
+inGuis=in GUIs anwenden
+
+nametagOptions=Nametag Optionen
+showOwnNametag=Zeige eigenes Nametag
+useShadows=Erzwinge Schatten
+nametagBackground=Zeige Nametaghintergrund
+badgeText=Eigener Text als Badge
+customBadge=Benutze eigene Badge
+showBadges=Zeige Badges
+
+hypixel-mods=Hypixel Mods
+hypixel_api_key=Hypixel API Schlüssel
+levelhead=LevelHead
+levelHeadMode=LevelHead Modus
+autogg=AutoGG
+printGG=Schreibe GG
+ggString=GG String
+printGF=Schreibe GF
+gfString=GF String
+printGLHF=Schreibe GLHF
+glhfString=GLHF String
+onHypixel=Aktiv auf Hypixel
+onBWP=Aktiv auf BedWarsPractice
+onPVPL=Aktiv auf PVPLand
+onMMC=Aktiv auf MineMen.club
+autotip=AutoTip
+nickhider=NickHider
+hiddenNameSelf=Verstecke dich selbst als:
+hiddenNameOthers=Verstecke andere als:
+hideOwnName=Verstecke deinen Namen
+hideOtherNames=Verstecke Namen anderer
+hideOwnSkin=Verstecke deinen Skin
+hideOtherSkins=Verstecke andere Skins
+
+category.axolotlclient=AxolotlClient
+
+key.zoom=Zoom
+key.openHud=Öffne Hud Editor
+key.toggleSneak=Toggle Sneaking
+key.toggleSprint=Toggle Sprinting
+
+hud=Hud Optionen
+pinghud=Ping Hud
+cpshud=CPS Hud
+cpskeybind=CPS aus Keybinds
+rightcps=Zeige Rightclick Cps
+fpshud=FPS Hud
+armorhud=Armor HUD
+potionshud=Potion HUD
+keystrokehud=Keystrokes
+speedhud=Speed HUD
+scoreboardhud=Scoreboard HUD
+topbackgroundcolor=Hintergrundfarbe (Titel)
+backgroundcolor=Hintergrundfarbe (Hauptteil)
+scores=Zeige Werte
+scorecolor=Wertfarbe
+crosshairhud=Crosshair HUD
+type=Typ
+showInF5=In Er-Perspektive zeigen
+showInF3=In Debug-HUD Anzeige erzwingen
+defaultcolor=Farbe (default)
+entitycolor=Farbe (Entities)
+blockcolor=Farbe (Container)
+firsttextcolor=Erste Farbe
+secondtextcolor=Zweite Farbe
+decimalplaces=Dezimalstellen
+coordshud=Coordinates HUD
+actionbarhud=ActionBar HUD
+actionBarPlaceholder=Aktionsleiste
+bossbarhud=BossBar HUD
+chathud=Chat HUD
+arrowhud=Arrow HUD
+itemupdatehud=Item Update HUD
+packdisplayhud=Pack Display HUD
+realtimehud=Echtzeit HUD
+showSeconds=Zeige Sekunden
+dynamic=Dynamisch
+text=Text
+bar=Leiste
+barColor=Leistenfarbe
+LMB=LMB
+RMB=RMB
+MMB=MMB
+showLMB=Zeige LMB
+showRMB=Zeige RMB
+showW=Zeige W
+showA=Zeige A
+showS=Zeige S
+showD=Zeige D
+showSpace=Zeige Leertaste
+
+togglesprint=ToggleModifiers
+randomPlaceholder=Zufälliger Platzhalter
+sprinting_toggled=Sprinting [Toggled]
+sneaking_toggled=Sneaking [Toggled]
+sprinting_pressed=Sprinting [Key held]
+sneaking_pressed=Sneaking [Key held]
+
+iphud=IPHud
+IconHud=IconHUD
+
+toggleSprint=Erlaube Sprint toggle
+toggleSneak=Erlaube Sneak toggle
+sneakToggled=Sneaking currently toggled
+sprintToggled=Sprinting currently toggled
+
+hud.snapping=Snapping
+hud.clientOptions=Client Optionen
+
+enabled=Aktiviert
+scale=Größe
+textColor=Textfarbe
+color=Farbe
+textChroma=Textchroma
+chroma=Chroma
+chromaSpeed=Chromageschwindigkeit
+heldtextcolor=Textfarbe (wenn gedrückt)
+bgColor=Hintergrundfarbe
+placeholder=Platzhalter
+heldbackgroundcolor=Hintergrundfarbe (wenn gedrückt)
+background=Hintergrund
+outline=Umrandung
+outlineColor=Umrandungsfarbe
+shadow=Schatten
+
+back=Zurück

@@ -3,6 +3,8 @@ package io.github.moehreag.axolotlclient.util;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import com.mojang.blaze3d.glfw.Window;
+import io.github.moehreag.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.Address;
 import net.minecraft.client.network.AllowedAddressResolver;
@@ -21,6 +23,7 @@ import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.ScoreboardPlayerScore;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.text.Text;
+import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -168,6 +171,13 @@ public class Util {
 			}
 			catch (Exception ignored){}
 		});
+	}
+
+	public static void applyScissor(Rectangle scissor){
+		GL11.glEnable(GL11.GL_SCISSOR_TEST);
+		Window window = MinecraftClient.getInstance().getWindow();
+		double scale = window.getScaleFactor();
+		GL11.glScissor((int) (scissor.x * scale), (int) ((window.getScaledHeight() - scissor.height - scissor.y) * scale), (int) (scissor.width * scale), (int) (scissor.height * scale));
 	}
 
 }

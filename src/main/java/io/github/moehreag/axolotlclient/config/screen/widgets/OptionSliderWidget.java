@@ -1,13 +1,24 @@
 package io.github.moehreag.axolotlclient.config.screen.widgets;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import io.github.moehreag.axolotlclient.config.options.DoubleOption;
+import io.github.moehreag.axolotlclient.config.options.FloatOption;
+import io.github.moehreag.axolotlclient.config.options.IntegerOption;
+import io.github.moehreag.axolotlclient.config.options.Option;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.ClickableWidget;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.MathHelper;
+
+import java.text.DecimalFormat;
 
 public class OptionSliderWidget extends ButtonWidget {
-	public OptionSliderWidget(int x, int y, int width, Text text, PressAction pressAction) {
+	/*public OptionSliderWidget(int x, int y, int width, Text text, PressAction pressAction) {
 		super(x, y, width, 20, text, pressAction);
-	}
-    /*private final DecimalFormat format = new DecimalFormat("##.#");
+	}*/
+    private final DecimalFormat format = new DecimalFormat("##.#");
     private final DecimalFormat intformat = new DecimalFormat("##");
 
     private double value;
@@ -23,7 +34,7 @@ public class OptionSliderWidget extends ButtonWidget {
     }
 
     public OptionSliderWidget(int x, int y, FloatOption option, float min, float max) {
-        super(x, y, 150, 20, "");
+        super(x, y, 150, 20, Text.empty(), buttonWidget -> {});
         this.option = option;
         this.min = min;
         this.max = max;
@@ -36,7 +47,7 @@ public class OptionSliderWidget extends ButtonWidget {
     }
 
     public OptionSliderWidget(int x, int y, IntegerOption option, float min, float max) {
-        super(x, y, 150, 20, "");
+        super(x, y, 150, 20, Text.empty(), buttonWidget -> {});
         this.option = option;
         this.min = min;
         this.max = max;
@@ -44,12 +55,12 @@ public class OptionSliderWidget extends ButtonWidget {
         this.message = this.getMessage();
     }
 
-    public OptionSliderWidget(int id, int x, int y, DoubleOption option) {
-        this(id, x, y, option, option.getMin(), option.getMax());
+    public OptionSliderWidget(int x, int y, DoubleOption option) {
+        this(x, y, option, option.getMin(), option.getMax());
     }
 
-    public OptionSliderWidget(int id, int x, int y, DoubleOption option, double min, double max) {
-        super(id, x, y, 150, 20, "");
+    public OptionSliderWidget(int x, int y, DoubleOption option, double min, double max) {
+        super(x, y, 150, 20, Text.empty(), buttonWidget -> {});
         this.option = option;
         this.min = min;
         this.max = max;
@@ -74,8 +85,10 @@ public class OptionSliderWidget extends ButtonWidget {
         return 0;
     }
 
-    protected void renderBg(MinecraftClient client, int mouseX, int mouseY) {
+	@Override
+	public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         if (this.visible) {
+	        this.renderBackground(matrices, MinecraftClient.getInstance(), mouseX, mouseY);
             if (this.dragging) {
                 this.value = (float)(mouseX - (this.x + 4)) / (float)(this.width - 8);
 
@@ -95,15 +108,15 @@ public class OptionSliderWidget extends ButtonWidget {
                 this.message = this.getMessage();
             }
 
-            client.getTextureManager().bindTexture(WIDGETS_LOCATION);
-            GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-            this.drawTexture(this.x + (int)(this.value * (float)(this.width - 8)), this.y, 0, 66 + (hovered ? 20:0), 4, 20);
-            this.drawTexture(this.x + (int)(this.value * (float)(this.width - 8)) + 4, this.y, 196, 66 + (hovered ? 20:0), 4, 20);
+            RenderSystem.setShaderTexture(0, ClickableWidget.WIDGETS_TEXTURE);
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            this.drawTexture(matrices, this.x + (int)(this.value * (float)(this.width - 8)), this.y, 0, 66 + (hovered ? 20:0), 4, 20);
+            this.drawTexture(matrices, this.x + (int)(this.value * (float)(this.width - 8)) + 4, this.y, 196, 66 + (hovered ? 20:0), 4, 20);
         }
     }
 
-    public boolean isMouseOver(MinecraftClient client, int mouseX, int mouseY) {
-        if (super.isMouseOver(client, mouseX, mouseY)) {
+    public boolean isMouseOver(double mouseX, double mouseY) {
+        if (super.isMouseOver(mouseX, mouseY)) {
             this.value = (float)(mouseX - (this.x + 4)) / (float)(this.width - 8);
             this.value = MathHelper.clamp(this.value, 0.0F, 1.0F);
             if (option instanceof FloatOption) ((FloatOption) option).set(getSliderValue());
@@ -119,6 +132,6 @@ public class OptionSliderWidget extends ButtonWidget {
 
     public void mouseReleased(int mouseX, int mouseY) {
         this.dragging = false;
-    }*/
+    }
 
 }

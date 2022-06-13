@@ -39,5 +39,6 @@
 			}
 		]
 	},
-	"mixin": "axolotlclient.mixins.json"
+	"mixin": "axolotlclient.mixins.json",
+	"accessWidener": "axolotlclient.accesswidener"
 }
