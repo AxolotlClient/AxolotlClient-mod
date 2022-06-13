@@ -113,29 +113,6 @@ public class ButtonWidgetList extends ButtonListWidget {
 		BufferBuilder bufferBuilder = tessellator.getBufferBuilder();
 		RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
 		((AccessorButtonListWidget)this).setHoveredEntry(this.isMouseOver(mouseX, mouseY) ? this.getEntryAtPosition(mouseX, mouseY) : null);
-		/*if (this.renderBackground) {
-			RenderSystem.setShaderTexture(0, DrawableHelper.OPTIONS_BACKGROUND_TEXTURE);
-			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-			float f = 32.0F;
-			bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
-			bufferBuilder.vertex(this.left, this.bottom, 0.0)
-				.uv((float)this.left / 32.0F, (float)(this.bottom + (int)this.getScrollAmount()) / 32.0F)
-				.color(32, 32, 32, 255)
-				.next();
-			bufferBuilder.vertex(this.right, this.bottom, 0.0)
-				.uv((float)this.right / 32.0F, (float)(this.bottom + (int)this.getScrollAmount()) / 32.0F)
-				.color(32, 32, 32, 255)
-				.next();
-			bufferBuilder.vertex(this.right, this.top, 0.0)
-				.uv((float)this.right / 32.0F, (float)(this.top + (int)this.getScrollAmount()) / 32.0F)
-				.color(32, 32, 32, 255)
-				.next();
-			bufferBuilder.vertex(this.left, this.top, 0.0)
-				.uv((float)this.left / 32.0F, (float)(this.top + (int)this.getScrollAmount()) / 32.0F)
-				.color(32, 32, 32, 255)
-				.next();
-			tessellator.draw();
-		}*/
 
 		int k = this.getRowLeft();
 		int l = this.top + 4 - (int)this.getScrollAmount();
@@ -246,9 +223,10 @@ public class ButtonWidgetList extends ButtonListWidget {
 
             if(pair.left instanceof ColorOptionWidget) {
                 pair.left.keyPressed(keyCode, scanCode, modifiers);
+
             }
         });
-	    return false;
+	    return true;
     }
 
 	@Override

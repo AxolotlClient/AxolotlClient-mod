@@ -129,13 +129,15 @@ public class HudEditScreen extends Screen {
 
     @Override
     public void init() {
-        // Actually using vanilla widgets here. Who would have thought that?
-
 	    this.addDrawableChild(new ButtonWidget(width / 2 - 50,
 		    height/2+ 12,
 		    100, 20,
 		    Text.translatable("hud.snapping").append(": ").append(Text.translatable(snapping.get()?"options.on":"options.off")),
-		    buttonWidget -> {snapping.toggle(); ConfigManager.save();}));
+		    buttonWidget -> {
+			snapping.toggle();
+			buttonWidget.setMessage(Text.translatable("hud.snapping").append(": ").append(Text.translatable(snapping.get()?"options.on":"options.off")));
+			ConfigManager.save();
+		}));
 
 		this.addDrawableChild(new ButtonWidget(width / 2 - 75,
 			height/2-10,

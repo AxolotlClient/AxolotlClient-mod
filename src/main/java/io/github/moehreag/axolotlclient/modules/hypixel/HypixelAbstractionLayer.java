@@ -3,11 +3,9 @@ package io.github.moehreag.axolotlclient.modules.hypixel;
 import io.github.moehreag.axolotlclient.config.options.enumOptions.LevelHeadOption;
 import io.github.moehreag.axolotlclient.modules.hypixel.levelhead.LevelHead;
 import io.github.moehreag.axolotlclient.util.ThreadExecuter;
-import io.github.moehreag.axolotlclient.util.Util;
 import net.hypixel.api.HypixelAPI;
 import net.hypixel.api.apache.ApacheHttpClient;
 import net.hypixel.api.reply.PlayerReply;
-import net.minecraft.util.Formatting;
 
 import java.util.HashMap;
 import java.util.Objects;

@@ -139,8 +139,10 @@ public class OptionSliderWidget extends ButtonWidget {
         }
     }
 
-    public void mouseReleased(int mouseX, int mouseY) {
-        this.dragging = false;
-    }
+	@Override
+	public boolean mouseReleased(double mouseX, double mouseY, int button) {
+		this.dragging = false;
+		return super.mouseReleased(mouseX, mouseY, button);
+	}
 
 }

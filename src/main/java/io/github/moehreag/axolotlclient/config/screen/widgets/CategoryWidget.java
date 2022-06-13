@@ -68,9 +68,9 @@ public class CategoryWidget extends ButtonWidget {
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
 
-        //playDownSound(MinecraftClient.getInstance().getSoundManager());
         if(enabledButton!=null &&
                 enabledButton.isHoveredOrFocused()) {
+	        playDownSound(MinecraftClient.getInstance().getSoundManager());
             enabledButton.option.toggle();
 			return false;
             //enabledButton.updateMessage();

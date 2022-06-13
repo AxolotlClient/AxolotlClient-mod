@@ -16,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
@@ -37,9 +38,9 @@ public class MixinReloadableResourceManager {
     }
 
     @Inject(method = "method_14486", at = @At("HEAD"), cancellable = true)
-    public void getResource(Identifier id, CallbackInfoReturnable<Resource> cir){
+    public void getResource(Identifier id, CallbackInfoReturnable<Optional<Resource>> cir){
         if(AxolotlClient.runtimeResources.get(id) != null){
-            cir.setReturnValue(AxolotlClient.runtimeResources.get(id));
+            cir.setReturnValue(Optional.of(AxolotlClient.runtimeResources.get(id)));
         }
     }
 

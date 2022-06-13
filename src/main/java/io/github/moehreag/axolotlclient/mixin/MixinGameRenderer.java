@@ -120,7 +120,7 @@ public abstract class MixinGameRenderer {
 
     @Inject(method = "render", at = @At("TAIL"))
     public void motionBlur(float tickDelta, long startTime, boolean tick, CallbackInfo ci){
-        if((ci == null) == AxolotlClient.CONFIG.motionBlurInGuis.get()) {
+        if(ci !=null && !AxolotlClient.CONFIG.motionBlurInGuis.get()) {
             return;
         }
 
