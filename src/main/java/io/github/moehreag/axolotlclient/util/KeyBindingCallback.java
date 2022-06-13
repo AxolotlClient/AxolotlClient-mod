@@ -1,5 +1,6 @@
 package io.github.moehreag.axolotlclient.util;
 
+import com.mojang.blaze3d.platform.InputUtil;
 import net.minecraft.client.option.KeyBind;
 
 /**
@@ -9,6 +10,11 @@ import net.minecraft.client.option.KeyBind;
  */
 
 public final class KeyBindingCallback {
+
+	public interface ChangeBind {
+		void setBoundKey(InputUtil.Key boundKey);
+	}
+
     public interface OnPress {
         void onPress(KeyBind binding);
     }

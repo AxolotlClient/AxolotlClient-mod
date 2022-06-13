@@ -68,8 +68,8 @@ public abstract class MinecraftClientMixin {
         return "1.8.9";
     }*/
 
-    @Inject(method = "<init>", at = @At("HEAD"))
-    private static void startup(RunArgs runArgs, CallbackInfo ci){
+    @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;checkIs64Bit()Z"))
+    public void startup(RunArgs runArgs, CallbackInfo ci){
         DiscordRPC.startup();
     }
 

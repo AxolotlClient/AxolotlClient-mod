@@ -16,6 +16,12 @@ public class Hooks {
         }
     }));
 
+	public static final Event<KeyBindingCallback.ChangeBind> KEYBIND_CHANGE = Event.create(KeyBindingCallback.ChangeBind.class, listeners -> ((key) -> {
+		for (KeyBindingCallback.ChangeBind listener : listeners) {
+			listener.setBoundKey(key);
+		}
+	}));
+
     public static final Event<KeyBindingCallback.OnPress> KEYBIND_PRESS = Event.create(KeyBindingCallback.OnPress.class, listeners -> ((key) -> {
         for (KeyBindingCallback.OnPress listener : listeners) {
             listener.onPress(key);

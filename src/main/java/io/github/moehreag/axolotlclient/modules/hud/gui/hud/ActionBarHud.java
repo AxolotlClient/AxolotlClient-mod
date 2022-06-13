@@ -1,15 +1,11 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.moehreag.axolotlclient.config.options.Option;
+import io.github.moehreag.axolotlclient.config.options.IntegerOption;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
-import io.github.moehreag.axolotlclient.config.Color;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-
-import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -21,9 +17,9 @@ public class ActionBarHud extends AbstractHudEntry {
 
     public static final Identifier ID = new Identifier("kronhud", "actionbarhud");
 
-    //public final IntegerOption timeShown = new IntegerOption("timeshown", 60, 40, 300);
+    public final IntegerOption timeShown = new IntegerOption("timeshown", 60, 40, 300);
 
-    private String actionBar;
+    private Text actionBar;
     private int color;
     MinecraftClient client;
 
@@ -32,7 +28,7 @@ public class ActionBarHud extends AbstractHudEntry {
         client = MinecraftClient.getInstance();
     }
 
-    public void setActionBar(String bar, int color){this.actionBar = bar; this.color = color;}
+    public void setActionBar(Text bar, int color){this.actionBar = bar; this.color = color;}
 
 	@Override
 	public void render(MatrixStack matrices) {

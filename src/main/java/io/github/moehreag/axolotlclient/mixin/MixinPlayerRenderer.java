@@ -1,20 +1,10 @@
 package io.github.moehreag.axolotlclient.mixin;
 
-import io.github.moehreag.axolotlclient.AxolotlClient;
-import io.github.moehreag.axolotlclient.modules.hypixel.nickhider.NickHider;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
-import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
-import net.minecraft.client.render.entity.model.EntityModel;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyArgs;
-import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Mixin(PlayerEntityRenderer.class)
-public abstract class PlayerRendererMixin {
+public abstract class MixinPlayerRenderer {
 
 
     /*@ModifyArgs(method = "method_10209(Lnet/minecraft/client/network/AbstractClientPlayerEntity;DDDLjava/lang/String;FD)V",

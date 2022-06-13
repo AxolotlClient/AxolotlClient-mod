@@ -76,7 +76,12 @@ public class OptionsScreenBuilder extends Screen {
 		return super.mouseClicked(mouseX, mouseY, button);
 	}
 
-    @Override
+	@Override
+	public boolean mouseReleased(double mouseX, double mouseY, int button) {
+		return this.list.mouseReleased(mouseX, mouseY, button) || super.mouseReleased(mouseX, mouseY, button);
+	}
+
+	@Override
     public void tick() {
         this.list.tick();
     }

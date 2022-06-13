@@ -22,7 +22,7 @@ import io.github.moehreag.axolotlclient.config.screen.widgets.ColorOptionWidget;
 import io.github.moehreag.axolotlclient.config.screen.widgets.EnumOptionWidget;
 import io.github.moehreag.axolotlclient.config.screen.widgets.OptionSliderWidget;
 import io.github.moehreag.axolotlclient.config.screen.widgets.StringOptionWidget;
-import io.github.moehreag.axolotlclient.mixin.ButtonListWidgetAccessor;
+import io.github.moehreag.axolotlclient.mixin.AccessorButtonListWidget;
 import io.github.moehreag.axolotlclient.modules.hud.util.Rectangle;
 import io.github.moehreag.axolotlclient.util.Util;
 import net.fabricmc.api.EnvType;
@@ -112,7 +112,7 @@ public class ButtonWidgetList extends ButtonListWidget {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferBuilder = tessellator.getBufferBuilder();
 		RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
-		((ButtonListWidgetAccessor)this).setHoveredEntry(this.isMouseOver(mouseX, mouseY) ? this.getEntryAtPosition(mouseX, mouseY) : null);
+		((AccessorButtonListWidget)this).setHoveredEntry(this.isMouseOver(mouseX, mouseY) ? this.getEntryAtPosition(mouseX, mouseY) : null);
 		/*if (this.renderBackground) {
 			RenderSystem.setShaderTexture(0, DrawableHelper.OPTIONS_BACKGROUND_TEXTURE);
 			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
@@ -251,7 +251,12 @@ public class ButtonWidgetList extends ButtonListWidget {
 	    return false;
     }
 
-    @Environment(EnvType.CLIENT)
+	@Override
+	public boolean mouseReleased(double mouseX, double mouseY, int button) {
+		return super.mouseReleased(mouseX, mouseY, button);
+	}
+
+	@Environment(EnvType.CLIENT)
     public static class Pair extends ButtonListWidget.ButtonEntry {
         protected final MinecraftClient client = MinecraftClient.getInstance();
         protected final ClickableWidget left;

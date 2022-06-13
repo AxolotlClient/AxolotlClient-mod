@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(LightmapTextureManager.class)
-public abstract class LightmapManagerMixin {
+public abstract class MixinLightmapManager {
 
 	@Redirect(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/GameOptions;getGamma()Lnet/minecraft/client/option/Option;"))
 	public Option<Double> fullBright(GameOptions instance){

@@ -1,37 +1,26 @@
 package io.github.moehreag.axolotlclient.mixin;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.AxolotlClient;
-import io.github.moehreag.axolotlclient.modules.hud.HudManager;
-import io.github.moehreag.axolotlclient.modules.hud.gui.hud.CrosshairHud;
 import io.github.moehreag.axolotlclient.modules.motionblur.MotionBlur;
-import io.github.moehreag.axolotlclient.modules.sky.SkyboxManager;
 import io.github.moehreag.axolotlclient.modules.zoom.Zoom;
-import net.minecraft.block.Block;
-import net.minecraft.block.Material;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.CameraSubmersionType;
 import net.minecraft.client.render.GameRenderer;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.util.math.MathHelper;
-import org.lwjgl.opengl.GL11;
-import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.At.Shift;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(GameRenderer.class)
-public abstract class GameRendererMixin {
+public abstract class MixinGameRenderer {
 
     @Final
     @Shadow private MinecraftClient client;
