@@ -1,11 +1,10 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import io.github.moehreag.axolotlclient.config.Color;
 import io.github.moehreag.axolotlclient.config.options.ColorOption;
 import io.github.moehreag.axolotlclient.config.options.IntegerOption;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
-import io.github.moehreag.axolotlclient.config.Color;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.util.math.MatrixStack;
@@ -100,97 +99,94 @@ public class CoordsHud extends AbstractHudEntry {
         return 0;
     }
 
-    /*@Override
-    public void render() {
-        scale();
-        DrawPosition pos = getPos();
-        if (background.get()) {
-            fillRect(getBounds(), backgroundColor.get());
-        }
-        if(outline.get()) outlineRect(getBounds(), outlineColor.get());
-        StringBuilder format = new StringBuilder("#");
-        if (decimalPlaces.get() > 0) {
-            format.append(".");
-            for (int i = 0; i < decimalPlaces.get(); i++) {
-                format.append("0");
-            }
-        }
-        DecimalFormat df = new DecimalFormat(format.toString());
-        df.setRoundingMode(RoundingMode.CEILING);
-        double x = client.player.getPos().x;
-        double y = client.player.getPos().y;
-        double z = client.player.getPos().z;
-        double yaw = client.player.getHeadRotation() + 180;
-        int dir = getDirection(yaw);
-        String direction = getWordedDirection(dir);
-        TextRenderer textRenderer = client.textRenderer;
-        drawString(textRenderer, "X", pos.x + 1, pos.y + 2, firstColor.get().getAsInt(),
-                shadow.get());
-        drawString(textRenderer, String.valueOf(df.format(x)), pos.x + 11, pos.y + 2,
-                secondColor.get().getAsInt(), shadow.get());
+	@Override
+	public void render(MatrixStack matrices) {
+		matrices.push();
+		scale(matrices);
+		DrawPosition pos = getPos();
+		if (background.get()) {
+			fillRect(matrices, getBounds(), backgroundColor.get());
+		}
+		StringBuilder format = new StringBuilder("#");
+		if (decimalPlaces.get() > 0) {
+			format.append(".");
+			format.append("0".repeat(Math.max(0, decimalPlaces.get())));
+		}
+		DecimalFormat df = new DecimalFormat(format.toString());
+		df.setRoundingMode(RoundingMode.CEILING);
+		double x = client.player.getX();
+		double y = client.player.getY();
+		double z = client.player.getZ();
+		double yaw = client.player.getYaw(0) + 180;
+		int dir = getDirection(yaw);
+		String direction = getWordedDirection(dir);
+		TextRenderer textRenderer = client.textRenderer;
+		drawString(matrices, textRenderer, "X", pos.x + 1, pos.y + 2, firstColor.get().getAsInt(),
+			shadow.get());
+		drawString(matrices, textRenderer, String.valueOf(df.format(x)), pos.x + 11, pos.y + 2,
+			secondColor.get().getAsInt(), shadow.get());
 
-        drawString(textRenderer, "Y", pos.x + 1, pos.y + 12, firstColor.get().getAsInt(),
-                shadow.get());
-        drawString(textRenderer, String.valueOf(df.format(y)), pos.x + 11, pos.y + 12,
-                secondColor.get().getAsInt(), shadow.get());
+		drawString(matrices, textRenderer, "Y", pos.x + 1, pos.y + 12, firstColor.get().getAsInt(),
+			shadow.get());
+		drawString(matrices, textRenderer, String.valueOf(df.format(y)), pos.x + 11, pos.y + 12,
+			secondColor.get().getAsInt(), shadow.get());
 
-        drawString(textRenderer, "Z", pos.x + 1, pos.y + 22, firstColor.get().getAsInt(),
-                shadow.get());
-        drawString(textRenderer, String.valueOf(df.format(z)), pos.x + 11, pos.y + 22,
-                secondColor.get().getAsInt(), shadow.get());
+		drawString(matrices, textRenderer, "Z", pos.x + 1, pos.y + 22, firstColor.get().getAsInt(),
+			shadow.get());
+		drawString(matrices, textRenderer, String.valueOf(df.format(z)), pos.x + 11, pos.y + 22,
+			secondColor.get().getAsInt(), shadow.get());
 
-        drawString(textRenderer, direction, pos.x + 60, pos.y + 12,
-                firstColor.get().getAsInt(), shadow.get());
+		drawString(matrices, textRenderer, direction, pos.x + 60, pos.y + 12,
+			firstColor.get().getAsInt(), shadow.get());
 
-        drawString(textRenderer, getXDir(dir), pos.x + 60, pos.y + 2,
-                secondColor.get().getAsInt(), shadow.get());
-        drawString(textRenderer, getZDir(dir), pos.x + 60, pos.y + 22,
-                secondColor.get().getAsInt(), shadow.get());
+		drawString(matrices, textRenderer, getXDir(dir), pos.x + 60, pos.y + 2,
+			secondColor.get().getAsInt(), shadow.get());
+		textRenderer.drawWithShadow(matrices, getZDir(dir), pos.x + 60, pos.y + 22,
+			secondColor.get().getAsInt(), shadow.get());
 
-        GlStateManager.popMatrix();
-    }
+		matrices.pop();
+	}
 
-    @Override
-    public void renderPlaceholder() {
-        renderPlaceholderBackground();
-        scale();
-        DrawPosition pos = getPos();
-        StringBuilder format = new StringBuilder("#");
-        if (decimalPlaces.get() > 0) {
-            format.append(".");
-            for (int i = 0; i < decimalPlaces.get(); i++) {
-                format.append("#");
-            }
-        }
+	@Override
+	public void renderPlaceholder(MatrixStack matrices) {
+		matrices.push();
+		renderPlaceholderBackground(matrices);
+		scale(matrices);
+		DrawPosition pos = getPos();
+		StringBuilder format = new StringBuilder("#");
+		if (decimalPlaces.get() > 0) {
+			format.append(".");
+			format.append("#".repeat(Math.max(0, decimalPlaces.get())));
+		}
 
-        DecimalFormat df = new DecimalFormat(format.toString());
-        df.setRoundingMode(RoundingMode.FLOOR);
-        double x = 109.2325;
-        double y = 180.8981;
-        double z = -5098.32698;
-        double yaw = 180;
-        int dir = getDirection(yaw);
-        String direction = getWordedDirection(dir);
-        TextRenderer textRenderer = client.textRenderer;
-        textRenderer.drawWithShadow("X", pos.x + 1, pos.y + 2, firstColor.get().getAsInt());
-        textRenderer.drawWithShadow(String.valueOf(df.format(x)), pos.x + 11, pos.y + 2,
-                secondColor.get().getAsInt());
-        textRenderer.drawWithShadow("Y", pos.x + 1, pos.y + 12, firstColor.get().getAsInt());
-        textRenderer.drawWithShadow(String.valueOf(df.format(y)), pos.x + 11, pos.y + 12,
-                secondColor.get().getAsInt());
-        textRenderer.drawWithShadow("Z", pos.x + 1, pos.y + 22, firstColor.get().getAsInt());
-        textRenderer.drawWithShadow(String.valueOf(df.format(z)), pos.x + 11, pos.y + 22,
-                secondColor.get().getAsInt());
-        textRenderer.drawWithShadow(direction, pos.x + 60, pos.y + 12,
-                firstColor.get().getAsInt());
-        textRenderer.drawWithShadow(getXDir(dir), pos.x + 60, pos.y + 2,
-                secondColor.get().getAsInt());
-        textRenderer.drawWithShadow(getZDir(dir), pos.x + 60, pos.y + 22,
-                secondColor.get().getAsInt());
+		DecimalFormat df = new DecimalFormat(format.toString());
+		df.setRoundingMode(RoundingMode.FLOOR);
+		double x = 109.2325;
+		double y = 180.8981;
+		double z = -5098.32698;
+		double yaw = 180;
+		int dir = getDirection(yaw);
+		String direction = getWordedDirection(dir);
+		TextRenderer textRenderer = client.textRenderer;
+		textRenderer.drawWithShadow(matrices, "X", pos.x + 1, pos.y + 2, firstColor.get().getAsInt());
+		textRenderer.drawWithShadow(matrices, String.valueOf(df.format(x)), pos.x + 11, pos.y + 2,
+			secondColor.get().getAsInt());
+		textRenderer.drawWithShadow(matrices, "Y", pos.x + 1, pos.y + 12, firstColor.get().getAsInt());
+		textRenderer.drawWithShadow(matrices, String.valueOf(df.format(y)), pos.x + 11, pos.y + 12,
+			secondColor.get().getAsInt());
+		textRenderer.drawWithShadow(matrices, "Z", pos.x + 1, pos.y + 22, firstColor.get().getAsInt());
+		textRenderer.drawWithShadow(matrices, String.valueOf(df.format(z)), pos.x + 11, pos.y + 22,
+			secondColor.get().getAsInt());
+		textRenderer.drawWithShadow(matrices, direction, pos.x + 60, pos.y + 12,
+			firstColor.get().getAsInt());
+		textRenderer.drawWithShadow(matrices, getXDir(dir), pos.x + 60, pos.y + 2,
+			secondColor.get().getAsInt());
+		textRenderer.drawWithShadow(matrices, getZDir(dir), pos.x + 60, pos.y + 22,
+			secondColor.get().getAsInt());
 
-        GlStateManager.popMatrix();
-        hovered = false;
-    }*/
+		matrices.pop();
+		hovered = false;
+	}
 
     public String getWordedDirection(int dir) {
         String direction = "";
@@ -242,16 +238,6 @@ public class CoordsHud extends AbstractHudEntry {
     public boolean movable() {
         return true;
     }
-
-	@Override
-	public void render(MatrixStack matrices) {
-
-	}
-
-	@Override
-	public void renderPlaceholder(MatrixStack matrices) {
-
-	}
 
 	@Override
     public Identifier getId() {

@@ -129,7 +129,7 @@
 	"sneaking_pressed": "Sneaking [Key held]",
 
 	"iphud": "IP HUD",
-	"IconHud": "Icon HUD",
+	"iconhud": "Icon HUD",
 
 	"toggleSprint": "Allow Sprinting toggle",
 	"toggleSneak": "Allow Sneaking toggle",

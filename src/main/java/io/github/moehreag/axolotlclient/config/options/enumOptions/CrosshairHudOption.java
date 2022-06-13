@@ -34,6 +34,7 @@ public class CrosshairHudOption extends OptionBase implements EnumOption {
 		    case ("CROSS") -> this.value = CrosshairOption.CROSS;
 		    case ("DOT") -> this.value = CrosshairOption.DOT;
 		    case ("TEXTURE") -> this.value = CrosshairOption.TEXTURE;
+			case ("DIRECTION") -> this.value = CrosshairOption.DIRECTION;
 	    }
     }
 
@@ -57,7 +58,8 @@ public class CrosshairHudOption extends OptionBase implements EnumOption {
 	    switch (value) {
 		    case CROSS -> value = CrosshairOption.DOT;
 		    case DOT -> value = CrosshairOption.TEXTURE;
-		    case TEXTURE -> value = CrosshairOption.CROSS;
+		    case TEXTURE -> value = CrosshairOption.DIRECTION;
+		    case DIRECTION -> value = CrosshairOption.CROSS;
 	    }
 
         return value;
@@ -66,6 +68,7 @@ public class CrosshairHudOption extends OptionBase implements EnumOption {
     public enum CrosshairOption{
         CROSS,
         DOT,
-        TEXTURE
+        TEXTURE,
+	    DIRECTION
     }
 }

@@ -76,32 +76,6 @@ public class OptionsScreenBuilder extends Screen {
 		return super.mouseClicked(mouseX, mouseY, button);
 	}
 
-	/*@Override
-    protected void mouseClicked(int mouseX, int mouseY, int button) {
-        super.mouseClicked(mouseX, mouseY, button);
-
-        this.list.entries.forEach(pair -> {
-            if(pair.left instanceof StringOptionWidget && ((StringOptionWidget) pair.left).textField.isFocused()){
-                ((StringOptionWidget) pair.left).textField.mouseClicked(mouseX, mouseY, button);
-            }
-            if(pair.left instanceof ColorOptionWidget){
-                if(((ColorOptionWidget) pair.left).textField.isFocused()) {
-                    ((ColorOptionWidget) pair.left).textField.mouseClicked(mouseX, mouseY, button);
-                }
-            }
-        });
-
-
-
-        this.list.mouseClicked(mouseX, mouseY, button);
-    }*/
-
-    /*@Override
-    protected void mouseReleased(int mouseX, int mouseY, int button) {
-        super.mouseReleased(mouseX, mouseY, button);
-        this.list.mouseReleased(mouseX, mouseY, button);
-    }*/
-
     @Override
     public void tick() {
         this.list.tick();
@@ -116,4 +90,9 @@ public class OptionsScreenBuilder extends Screen {
         this.addDrawableChild(new ButtonWidget(this.width/2-100, this.height-40, 200, 20, Text.translatable("back"), buttonWidget -> MinecraftClient.getInstance().setScreen(parent)));
         if(Objects.equals(cat.getName(), "config")) this.addDrawableChild(new ButtonWidget(this.width-106, this.height-26, 100, 20, Text.translatable("credits"), buttonWidget -> MinecraftClient.getInstance().setScreen(new CreditsScreen(this))));
     }
+
+	@Override
+	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+		return this.list.keyPressed(keyCode, scanCode, modifiers);
+	}
 }

@@ -1,16 +1,21 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import io.github.moehreag.axolotlclient.config.Color;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
-import net.minecraft.client.resource.language.I18n;
+import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.texture.Sprite;
+import net.minecraft.client.texture.StatusEffectSpriteManager;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffectUtil;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.Identifier;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,95 +27,75 @@ import java.util.List;
 public class PotionsHud extends AbstractHudEntry {
 
     public static final Identifier ID = new Identifier("kronhud", "potionshud");
-    protected static final Identifier INVENTORY_TEXTURE = new Identifier("textures/gui/container/inventory.png");
 
-    public PotionsHud() {
+	public PotionsHud() {
         super(60, 200);
     }
 
-    /*@Override
-    public void render() {
-        scale();
-        DrawPosition pos = getPos();
-        int i = pos.x-2;
-        int y = pos.y;
-        Collection<StatusEffectInstance> collection = this.client.player.getStatusEffectInstances();
-        if (!collection.isEmpty()) {
-            GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-            GlStateManager.disableLighting();
-            int l = 33;
-            if (collection.size() > 5) {
-                l = 132 / (collection.size() - 1);
-            }
-            for(StatusEffectInstance statusEffectInstance : collection) {
-                StatusEffect statusEffect = StatusEffect.STATUS_EFFECTS[statusEffectInstance.getEffectId()];
-                GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-                this.client.getTextureManager().bindTexture(INVENTORY_TEXTURE);
-                if (statusEffect.method_2443()) {
-                    int m = statusEffect.method_2444();
-                    this.drawTexture(i + 6, y + 7, m % 8 * 18, 198 + m / 8 * 18, 18, 18);
-                }
+	@Override
+	public void render(MatrixStack matrices) {
+		matrices.push();
+		scale(matrices);
+		ArrayList<StatusEffectInstance> effects = new ArrayList<>(client.player.getStatusEffects());
+		if (!effects.isEmpty()) {
+			StatusEffectSpriteManager statusEffectSpriteManager = this.client.getStatusEffectSpriteManager();
+			int lastY = 1;
+			DrawPosition pos = getPos();
+			for (int i = 0; i < effects.size(); i++) {
+				StatusEffectInstance effect = effects.get(i);
+				StatusEffect type = effect.getEffectType();
+//                Removed - night vision appears in vanilla, just not with hideParticles flag.
+//                if (type == StatusEffects.NIGHT_VISION) {
+//                    continue;
+//                }
+				if (i > 8) {
+					break;
+				}
 
-                String string = I18n.translate(statusEffect.getTranslationKey());
-                if (statusEffectInstance.getAmplifier() == 1) {
-                    string = string + " " + I18n.translate("enchantment.level.2");
-                } else if (statusEffectInstance.getAmplifier() == 2) {
-                    string = string + " " + I18n.translate("enchantment.level.3");
-                } else if (statusEffectInstance.getAmplifier() == 3) {
-                    string = string + " " + I18n.translate("enchantment.level.4");
-                }
+				Sprite sprite = statusEffectSpriteManager.getSprite(type);
+				RenderSystem.setShaderTexture(0, sprite.getAtlas().getId());
+				RenderSystem.setShaderColor(1, 1, 1, 1);
+				DrawableHelper.drawSprite(matrices, pos.x, pos.y + 1 + lastY, 0, 18, 18, sprite);
+				drawString(matrices, client.textRenderer, StatusEffectUtil.durationToString(effect, 1),
+					pos.x + 20, pos.y + 6 + lastY, textColor.get().getAsInt(), shadow.get());
 
-                client.textRenderer.drawWithShadow(string, (float)(i + 10 + 18), (float)(y + 6), 16777215);
-                String string2 = StatusEffect.method_2436(statusEffectInstance);
-                client.textRenderer.drawWithShadow(string2, (float)(i + 10 + 18), (float)(y + 6 + 10), 8355711);
-                y += l;
-            }
+				lastY += 20;
+			}
+		}
+		matrices.pop();
 
-        }
-        GlStateManager.popMatrix();
+	}
 
-    }
-
-    @Override
-    public void renderPlaceholder() {
-
-        renderPlaceholderBackground();
-        scale();
-        DrawPosition pos = getPos();
-        int i = pos.x-2;
-        StatusEffect statusEffect = StatusEffect.STATUS_EFFECTS[1];
-        GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.client.getTextureManager().bindTexture(INVENTORY_TEXTURE);
-        int m = statusEffect.method_2444();
-        this.drawTexture(i + 6, pos.y + 7, m % 8 * 18, 198 + m / 8 * 18, 18, 18);
-        client.textRenderer.drawWithShadow(I18n.translate(statusEffect.getTranslationKey()), (float)(i + 10 + 18), (float)(pos.y + 6), 16777215);
-        client.textRenderer.drawWithShadow("**:**", (float)(i + 10 + 18), (float)(pos.y + 6 + 10), textColor.get().getAsInt());
-        GlStateManager.popMatrix();
-        hovered = false;
-
-    }
+	@Override
+	public void renderPlaceholder(MatrixStack matrices) {
+		matrices.push();
+		renderPlaceholderBackground(matrices);
+		scale(matrices);
+		DrawPosition pos = getPos();
+		StatusEffectSpriteManager statusEffectSpriteManager = this.client.getStatusEffectSpriteManager();
+		StatusEffectInstance effect = new StatusEffectInstance(StatusEffects.SPEED);
+		StatusEffect type = effect.getEffectType();
+		Sprite sprite = statusEffectSpriteManager.getSprite(type);
+		RenderSystem.setShaderTexture(0, sprite.getAtlas().getId());
+		RenderSystem.setShaderColor(1, 1, 1, 1);
+		DrawableHelper.drawSprite(matrices, pos.x + 1, pos.y + 1, 0, 18, 18, sprite);
+		drawString(matrices, client.textRenderer, StatusEffectUtil.durationToString(effect, 1), pos.x + 20,
+			pos.y + 7, Color.WHITE.getAsInt(), shadow.get());
+		hovered = false;
+		matrices.pop();
+	}
 
     @Override
     public void addConfigOptions(List<Option> options) {
         super.addConfigOptions(options);
         options.add(textColor);
         options.add(shadow);
-    }*/
+    }
 
     @Override
     public boolean movable() {
         return true;
     }
-
-	@Override
-	public void render(MatrixStack matrices) {
-
-	}
-
-	@Override
-	public void renderPlaceholder(MatrixStack matrices) {
-
-	}
 
 	@Override
     public Identifier getId() {

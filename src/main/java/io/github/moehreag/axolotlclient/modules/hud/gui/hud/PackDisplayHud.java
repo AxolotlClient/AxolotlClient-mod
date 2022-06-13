@@ -1,12 +1,17 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.texture.NativeImage;
 import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.moehreag.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.resource.ResourceType;
 import net.minecraft.resource.pack.ResourcePack;
 import net.minecraft.util.Identifier;
 
@@ -71,23 +76,25 @@ public class PackDisplayHud extends AbstractHudEntry {
         return true;
     }
 
-    private class packWidget{
+    private class packWidget {
         private int texture;
         private final String name;
 
         public packWidget(ResourcePack pack){
             this.name=pack.getName();
             try {
-                //this.texture = new NativeImageBackedTexture(pack.).getGlId();
+                this.texture = new NativeImageBackedTexture(
+					NativeImage.read(
+						pack.open(ResourceType.CLIENT_RESOURCES, new Identifier("pack.png")))).getGlId();
             } catch (Exception e){
                 AxolotlClient.LOGGER.warn("Pack "+pack.getName()+" somehow threw an error! Please investigate...");
             }
         }
 
         public void render(MatrixStack matrices, int x, int y) {
-            /*GlStateManager.color3f(textColor.get().getRed(), textColor.get().getGreen(), textColor.get().getBlue());
-            GlStateManager.bindTexture(texture);
-            drawTexture(x, y, 0, 0, 16, 16, 16, 16);*/
+            RenderSystem.setShaderColor(textColor.get().getRed(), textColor.get().getGreen(), textColor.get().getBlue(), 1F);
+            RenderSystem.setShaderTexture(0, texture);
+            DrawableHelper.drawTexture(matrices, x, y, 0, 0, 16, 16, 16, 16);
             drawString(matrices, MinecraftClient.getInstance().textRenderer, name, x + 18, y + 6, textColor.get().getAsInt(), shadow.get());
         }
 

@@ -1,13 +1,12 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.moehreag.axolotlclient.modules.hud.util.ItemUtil;
-import net.minecraft.block.Block;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
@@ -25,52 +24,64 @@ public class ArmorHud extends AbstractHudEntry {
         super(20, 100);
     }
 
-    /*@Override
-    public void render() {
-        scale();
-        DrawPosition pos = getPos();
-        if (background.get()) {
-            fillRect(getBounds(),
-                    backgroundColor.get());
-        }
-        if(outline.get()) outlineRect(getBounds(), outlineColor.get());
-        int lastY = 2 + (4 * 20);
-        if(client.player.inventory.getMainHandStack() !=null)
-            ItemUtil.renderGuiItem(client.player.inventory.getMainHandStack(), pos.x, pos.y + lastY);
-        lastY = lastY - 20;
-        for (int i = 0; i <= 3; i++) {
-            if(client.player.inventory.armor[i] != null)
-                ItemUtil.renderGuiItem(client.player.inventory.armor[i], pos.x , lastY + pos.y);
-            lastY = lastY - 20;
-        }
-        GlStateManager.popMatrix();
-    }
+	@Override
+	public void render(MatrixStack matrices) {
+		matrices.push();
+		scale(matrices);
+		DrawPosition pos = getPos();
+		if (background.get()) {
+			fillRect(matrices, getBounds(),
+				backgroundColor.get());
+		}
+		int lastY = 2 + (4 * 20);
+		assert client.player != null;
+		renderMainItem(matrices, client.player.getInventory().getMainHandStack(), pos.x + 2, pos.y + lastY);
+		lastY = lastY - 20;
+		for (int i = 0; i <= 3; i++) {
+			ItemStack item = client.player.getInventory().armor.get(i);
+			renderItem(matrices, item, pos.x + 2, lastY + pos.y);
+			lastY = lastY - 20;
+		}
+		matrices.pop();
+	}
 
-    @Override
-    public void renderPlaceholder() {
-        renderPlaceholderBackground();
-        scale();
-        DrawPosition pos = getPos();
-        ItemStack itemStack = new ItemStack(Block.getById(2), 90);
-        ItemUtil.renderGuiItem(itemStack, pos.x, pos.y+82);
-        GlStateManager.popMatrix();
-        hovered = false;
-    }*/
+	public void renderItem(MatrixStack matrices, ItemStack stack, int x, int y) {
+		//MinecraftClient.getInstance().getItemRenderer().renderGuiItemIcon(stack, x, y);
+		ItemUtil.renderGuiItemModel(matrices, stack, x, y);
+		//client.getItemRenderer().
+		ItemUtil.renderGuiItemOverlay(matrices, client.textRenderer, stack, x, y, null, textColor.get().getAsInt(),
+			shadow.get());
+	}
+
+	public void renderMainItem(MatrixStack matrices, ItemStack stack, int x, int y) {
+		ItemUtil.renderGuiItemModel(matrices, stack, x, y);
+		String total = String.valueOf(ItemUtil.getTotal(client, stack));
+		if (total.equals("1")) {
+			total = null;
+		}
+		ItemUtil.renderGuiItemOverlay(matrices, client.textRenderer, stack, x, y,
+			total, textColor.get().getAsInt(),
+			shadow.get());
+	}
+
+	@Override
+	public void renderPlaceholder(MatrixStack matrices) {
+		matrices.push();
+		renderPlaceholderBackground(matrices);
+		scale(matrices);
+		DrawPosition pos = getPos();
+		int lastY = 2 + (4 * 20);
+		ItemUtil.renderGuiItemModel(matrices, new ItemStack(Items.GRASS_BLOCK), pos.x + 2, pos.y + lastY);
+		ItemUtil.renderGuiItemOverlay(matrices, client.textRenderer, new ItemStack(Items.GRASS_BLOCK), pos.x + 2,
+			pos.y + lastY, "90", textColor.get().getAsInt(), shadow.get());
+		hovered = false;
+		matrices.pop();
+	}
 
     @Override
     public boolean movable() {
         return true;
     }
-
-	@Override
-	public void render(MatrixStack matrices) {
-
-	}
-
-	@Override
-	public void renderPlaceholder(MatrixStack matrices) {
-
-	}
 
 	@Override
     public Identifier getId() {
