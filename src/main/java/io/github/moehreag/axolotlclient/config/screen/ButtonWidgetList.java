@@ -70,7 +70,7 @@ public class ButtonWidgetList extends ButtonListWidget {
 
             Option option = category.getOptions().get(i);
             if(option.getName().equals("x")||option.getName().equals("y")) continue;
-            ClickableWidget buttonWidget = this.createWidget(width / 2 - 155, option);
+            ClickableWidget buttonWidget = this.createWidget(width / 2 - 155+160, option);
 
             addEntry(new OptionEntry(buttonWidget, option, width));
 			this.entries.add(new OptionEntry(buttonWidget, option, width));
@@ -193,57 +193,56 @@ public class ButtonWidgetList extends ButtonListWidget {
     }
 
 	@Override
+	public boolean mouseClicked(double mouseX, double mouseY, int button) {
+		setFocused(null);
+		return super.mouseClicked(mouseX, mouseY, button);
+	}
+
+	@Override
 	protected void renderList(MatrixStack matrices, int x, int y, int mouseX, int mouseY, float delta) {
 		Util.applyScissor(new Rectangle(0, top, this.width, bottom-top));
 		super.renderList(matrices, x, y, mouseX, mouseY, delta);
 		GL11.glDisable(GL11.GL_SCISSOR_TEST);
 	}
 
+	private boolean halftick = true;
     public void tick(){
-        entries.forEach(pair -> {
-            if(pair.left instanceof StringOptionWidget && ((StringOptionWidget) pair.left).textField.isFocused()){
-                ((StringOptionWidget) pair.left).textField.tick();
-            } else if(pair.right instanceof StringOptionWidget && ((StringOptionWidget) pair.right).textField.isFocused()){
-                ((StringOptionWidget) pair.right).textField.tick();
-            }
-
-            if(pair.left instanceof ColorOptionWidget) {
-                ((ColorOptionWidget) pair.left).tick();
-            }
-        });
+		if(halftick) {
+			for (Pair pair : entries) {
+				if (pair.tickable) pair.tick();
+			}
+		}
+	    halftick=!halftick;
     }
 
     public boolean keyPressed(int keyCode, int scanCode, int modifiers){
-        entries.forEach(pair -> {
-            if(pair.left instanceof StringOptionWidget && ((StringOptionWidget) pair.left).textField.isFocused()){
-                pair.left.keyPressed(keyCode, scanCode, modifiers);
-            } else if(pair.right instanceof StringOptionWidget && ((StringOptionWidget) pair.right).textField.isFocused()){
-                pair.right.keyPressed(keyCode, scanCode, modifiers);
-            }
-
-            if(pair.left instanceof ColorOptionWidget) {
-                pair.left.keyPressed(keyCode, scanCode, modifiers);
-
-            }
-        });
-	    return true;
+        for (Pair pair:entries) if(pair.keyPressed(keyCode, scanCode, modifiers)){
+			return true;
+        }
+	    return false;
     }
 
-	@Override
-	public boolean mouseReleased(double mouseX, double mouseY, int button) {
-		return super.mouseReleased(mouseX, mouseY, button);
+	public boolean charTyped(char c, int modifiers){
+		for(Pair pair:entries){
+			if(pair.charTyped(c, modifiers)) return true;
+		}
+		return false;
 	}
 
 	@Environment(EnvType.CLIENT)
     public static class Pair extends ButtonListWidget.ButtonEntry {
         protected final MinecraftClient client = MinecraftClient.getInstance();
         protected final ClickableWidget left;
-        private final ClickableWidget right;
+        protected final ClickableWidget right;
+
+		protected final boolean tickable;
 
         public Pair(ClickableWidget left, ClickableWidget right) {
 			super(new HashMap<>());
 	        this.left = left;
             this.right = right;
+
+			tickable = left instanceof StringOptionWidget || left instanceof ColorOptionWidget;
         }
 
 	    @Override
@@ -294,7 +293,6 @@ public class ButtonWidgetList extends ButtonListWidget {
             } else if (button instanceof BooleanWidget) {
                 button.playDownSound(client.getSoundManager());
                 ((BooleanWidget) button).option.toggle();
-                //((BooleanWidget) button).updateMessage();
                 ConfigManager.save();
 
             } else if (button instanceof ColorOptionWidget) {
@@ -302,9 +300,21 @@ public class ButtonWidgetList extends ButtonListWidget {
                 ConfigManager.save();
 
             }
+
         }
 
-	    @Override
+		@Override
+		public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+			if(left!=null && left.keyPressed(keyCode, scanCode, modifiers)) return true;
+			return super.keyPressed(keyCode, scanCode, modifiers);
+		}
+
+		@Override
+		public boolean charTyped(char c, int modifiers) {
+			return this.left != null && left.charTyped(c, modifiers);
+		}
+
+		@Override
 	    public boolean mouseReleased(double mouseX, double mouseY, int button) {
             if (this.left != null) {
                 return this.left.mouseReleased(mouseX, mouseY, button);
@@ -317,23 +327,31 @@ public class ButtonWidgetList extends ButtonListWidget {
 		    return super.mouseReleased(mouseX, mouseY, button);
 
         }
+
+		public void tick(){
+			if(left instanceof StringOptionWidget) ((StringOptionWidget) left).tick();
+			else if (left instanceof ColorOptionWidget) ((ColorOptionWidget) left).tick();
+
+		}
     }
 
     public static class OptionEntry extends Pair {
 
         private final Option option;
+		protected int width;
 
         public OptionEntry(ClickableWidget left, Option option, int width) {
             super(left, null);
             this.option = option;
             if(left instanceof BooleanWidget) left.x = width / 2 - 155 + 160 + 57;
             else left.x = width / 2 - 155 + 160;
+			this.width=width;
         }
 
 	    @Override
 	    public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
 
-            drawCenteredText(matrices, client.textRenderer, option.getTranslatedName(), x, y, -1);
+            DrawableHelper.drawTextWithShadow(matrices, client.textRenderer, option.getTranslatedName(), width/2-155, y + 5, -1);
             left.y = y;
             left.render(matrices, mouseX, mouseY, tickDelta);
 

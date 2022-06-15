@@ -1,5 +1,6 @@
 package io.github.moehreag.axolotlclient.config.screen.widgets;
 
+import com.mojang.blaze3d.platform.InputUtil;
 import io.github.moehreag.axolotlclient.config.Color;
 import io.github.moehreag.axolotlclient.config.options.ColorOption;
 import io.github.moehreag.axolotlclient.config.screen.OptionsScreenBuilder;
@@ -61,11 +62,14 @@ public class ColorOptionWidget extends ButtonWidget {
             if(MinecraftClient.getInstance().currentScreen instanceof OptionsScreenBuilder){
                 ((OptionsScreenBuilder) MinecraftClient.getInstance().currentScreen).openColorPicker(option);
             }
-        } else {
+        } else if(textField.isMouseOver(mouseX, mouseY)) {
             textField.mouseClicked(mouseX, mouseY, 0);
-            if(MinecraftClient.getInstance().currentScreen instanceof OptionsScreenBuilder){
-                ((OptionsScreenBuilder) MinecraftClient.getInstance().currentScreen).closeColorPicker();
-            }
+
+        } else {
+			textField.setTextFieldFocused(false);
+	        if(MinecraftClient.getInstance().currentScreen instanceof OptionsScreenBuilder){
+		        ((OptionsScreenBuilder) MinecraftClient.getInstance().currentScreen).closeColorPicker();
+	        }
         }
 		return super.mouseClicked(mouseX, mouseY, button);
     }
@@ -90,4 +94,14 @@ public class ColorOptionWidget extends ButtonWidget {
         }
 	    return false;
     }
+
+	@Override
+	public boolean charTyped(char c, int modifiers) {
+		if(textField.isFocused()) {
+			textField.charTyped(c, modifiers);
+			option.set(Color.parse(textField.getText()));
+			return true;
+		}
+		return false;
+	}
 }

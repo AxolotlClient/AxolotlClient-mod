@@ -56,8 +56,4 @@ public class ColorOption extends OptionBase implements Option {
         return Color.getChroma();
     }
 
-	@Override
-	public ClickableWidget createButton(GameOptions options, int x, int y, int width) {
-		return new ColorOptionWidget(x, y, this);
-	}
 }

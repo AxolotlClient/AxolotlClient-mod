@@ -2,6 +2,7 @@ package io.github.moehreag.axolotlclient.config.screen.widgets;
 
 import com.mojang.blaze3d.glfw.Window;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.moehreag.axolotlclient.config.Color;
 import io.github.moehreag.axolotlclient.config.options.ColorOption;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawUtil;
@@ -9,6 +10,7 @@ import io.github.moehreag.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.lwjgl.opengl.GL11;
@@ -34,17 +36,17 @@ public class ColorSelectionWidget extends ButtonWidget {
         //rect = new Rectangle(100, 50, width-200, height-100);
     }
 
-    /*@Override
-    public void render(MinecraftClient client, int mouseX, int mouseY) {
+	@Override
+	public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 
-        DrawUtil.fillRect(new Rectangle(100, 50, width, height), Color.DARK_GRAY.withAlpha(127));
-        DrawUtil.outlineRect(new Rectangle(100, 50, width, height), Color.BLACK);
+        DrawUtil.fillRect(matrices, new Rectangle(100, 50, width, height), Color.DARK_GRAY.withAlpha(127));
+        DrawUtil.outlineRect(matrices, new Rectangle(100, 50, width, height), Color.BLACK);
 
-        DrawUtil.outlineRect(pickerImage, Color.DARK_GRAY.withAlpha(127));
+        DrawUtil.outlineRect(matrices, pickerImage, Color.DARK_GRAY.withAlpha(127));
 
-        GlStateManager.color3f(1, 1, 1);
-        MinecraftClient.getInstance().getTextureManager().bindTexture(new Identifier("axolotlclient", "textures/gui/colorwheel.png"));
-        DrawableHelper.drawTexture(pickerImage.x, pickerImage.y, 0, 0, pickerImage.width, pickerImage.height, pickerImage.width, pickerImage.height);
+		RenderSystem.setShaderColor(1, 1, 1, 1);
+        RenderSystem.setShaderTexture(0, new Identifier("axolotlclient", "textures/gui/colorwheel.png"));
+        DrawableHelper.drawTexture(matrices, pickerImage.x, pickerImage.y, 0, 0, pickerImage.width, pickerImage.height, pickerImage.width, pickerImage.height);
 
         //super.render(client, mouseX, mouseY);
     }
@@ -54,14 +56,14 @@ public class ColorSelectionWidget extends ButtonWidget {
             ByteBuffer buf = ByteBuffer.allocateDirect(4);
             IntBuffer color = buf.asIntBuffer();
 
-            MinecraftClient.getInstance().getFramebuffer().bind(true);
+            //MinecraftClient.getInstance().getFramebuffer().bind(true);
             GL11.glReadPixels(mouseX, mouseY, 1, 1, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buf);
 
             System.out.println(buf.get());
 
             option.set(new Color(buf.get(0) & 0xFF, buf.get(1) & 0xFF, buf.get(2) & 0xFF, buf.get(3) & 0xFF));
         }
-    }*/
+    }
 
 
 }

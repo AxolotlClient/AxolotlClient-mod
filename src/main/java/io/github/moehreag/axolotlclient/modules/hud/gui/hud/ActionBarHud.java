@@ -1,11 +1,16 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
+import io.github.moehreag.axolotlclient.config.Color;
+import io.github.moehreag.axolotlclient.config.options.BooleanOption;
 import io.github.moehreag.axolotlclient.config.options.IntegerOption;
+import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+
+import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -18,10 +23,13 @@ public class ActionBarHud extends AbstractHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "actionbarhud");
 
     public final IntegerOption timeShown = new IntegerOption("timeshown", 60, 40, 300);
+	public final BooleanOption customTextColor = new BooleanOption("customtextcolor", false);
 
     private Text actionBar;
+	private int ticksShown;
     private int color;
     MinecraftClient client;
+	private final String placeholder = "Action Bar";
 
     public ActionBarHud() {
         super(115, 13);
@@ -32,53 +40,57 @@ public class ActionBarHud extends AbstractHudEntry {
 
 	@Override
 	public void render(MatrixStack matrices) {
+		if (ticksShown >= timeShown.get()){
+			this.actionBar = null;
+		}
+		Color vanillaColor = new Color(color);
+		if(this.actionBar != null) {
 
+			matrices.push();
+			scale(matrices);
+			if (shadow.get()){
+				client.textRenderer.drawWithShadow(matrices, actionBar,
+					(float)getPos().x + Math.round((float) width /2) -  (float) client.textRenderer.getWidth(actionBar) /2,
+					(float)getPos().y + 3,
+					customTextColor.get() ? (textColor.get().getAlpha()==255 ?
+						new Color(
+							textColor.get().getRed(),
+							textColor.get().getGreen(),
+							textColor.get().getBlue(),
+							vanillaColor.getAlpha()).getAsInt():
+						textColor.get().getAsInt()) :
+						color
+				);
+			} else {
+
+				client.textRenderer.draw(matrices, actionBar,
+					(float)getPos().x + Math.round((float) width /2) - ((float) client.textRenderer.getWidth(actionBar) /2),
+					(float)getPos().y + 3,
+					customTextColor.get() ? (textColor.get().getAlpha()==255 ?
+						new Color(textColor.get().getRed(),
+							textColor.get().getGreen(),
+							textColor.get().getBlue(),
+							vanillaColor.getAlpha()).getAsInt():
+						textColor.get().getAsInt()) :
+						color
+				);
+			}
+			matrices.pop();
+			ticksShown++;
+		} else {
+			ticksShown = 0;
+		}
 	}
 
 	@Override
 	public void renderPlaceholder(MatrixStack matrices) {
-
+		matrices.push();
+		renderPlaceholderBackground(matrices);
+		scale(matrices);
+		client.textRenderer.draw(matrices, placeholder,  (float)getPos().x + Math.round((float) width /2) - (float) client.textRenderer.getWidth(placeholder) /2, (float)getPos().y + 3, -1);
+		matrices.pop();
+		hovered = false;
 	}
-
-	@Override
-	public Identifier getId() {
-		return ID;
-	}
-
-	@Override
-	public boolean movable() {
-		return true;
-	}
-
-    /*@Override
-    public void render() {
-        if (new Color(color).getAlpha()==0){
-            this.actionBar = null;
-        }
-        if(this.actionBar != null) {
-
-            scale();
-            if (shadow.get()){
-                client.textRenderer.drawWithShadow(actionBar, (float)getPos().x + Math.round((float) width /2) -  (float) client.textRenderer.getStringWidth(actionBar) /2, (float)getPos().y + 3, color);
-            } else {
-
-                client.textRenderer.draw(actionBar, getPos().x + Math.round(width /2F) - (client.textRenderer.getStringWidth(actionBar) /2), getPos().y + 3, color);
-            }
-            GlStateManager.popMatrix();
-        }
-    }
-
-    @Override
-    public void renderPlaceholder() {
-        renderPlaceholderBackground();
-        scale();
-        client.textRenderer.draw(I18n.translate("actionBarPlaceholder"),
-                getPos().x + Math.round(width /2F) - client.textRenderer.getStringWidth(I18n.translate("actionBarPlaceholder")) /2,
-                getPos().y + 3,
-                -1);
-        GlStateManager.popMatrix();
-        hovered = false;
-    }
 
     @Override
     public Identifier getId() {
@@ -94,5 +106,5 @@ public class ActionBarHud extends AbstractHudEntry {
     public void addConfigOptions(List<Option> options){
         super.addConfigOptions(options);
         options.add(shadow);
-    }*/
+    }
 }

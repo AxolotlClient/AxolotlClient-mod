@@ -57,18 +57,4 @@ public class DoubleOption extends OptionBase implements Option {
         return new JsonPrimitive(option);
     }
 
-	@Override
-	public ClickableWidget createButton(GameOptions options, int x, int y, int width) {
-		return new SliderWidget(x, y, width, 20, getTranslatedName(), option) {
-			@Override
-			protected void updateMessage() {
-				setMessage(getTranslatedName().copy().append(Text.of(": "+ option)));
-			}
-
-			@Override
-			protected void applyValue() {
-				option = value;
-			}
-		};
-	}
 }

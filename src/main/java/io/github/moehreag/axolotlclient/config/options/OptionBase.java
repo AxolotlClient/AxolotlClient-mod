@@ -8,6 +8,4 @@ public abstract class OptionBase {
     public OptionBase(String name){
 	    this.name=name;
     }
-
-	public abstract ClickableWidget createButton(GameOptions options, int x, int y, int width);
 }

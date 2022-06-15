@@ -28,6 +28,13 @@ public class StringOptionWidget extends TextFieldWidget {
 					return false;
                 }
             }
+
+	        @Override
+	        public boolean charTyped(char chr, int modifiers) {
+		        boolean bool = super.charTyped(chr, modifiers);
+		        option.set(textField.getText());
+				return bool;
+	        }
         };
         this.option=option;
         textField.setText(option.get());
@@ -44,6 +51,11 @@ public class StringOptionWidget extends TextFieldWidget {
 	}
 
 	@Override
+	public boolean charTyped(char chr, int modifiers) {
+		return textField.charTyped(chr, modifiers) || super.charTyped(chr, modifiers);
+	}
+
+	@Override
 	public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 
         //GlStateManager.disableDepthTest();
@@ -54,4 +66,16 @@ public class StringOptionWidget extends TextFieldWidget {
         //GlStateManager.enableDepthTest();
     }
 
+	@Override
+	public void tick() {
+		if(textField.isFocused()) {
+			textField.tick();
+		}
+	}
+
+	@Override
+	public void setTextFieldFocused(boolean focused) {
+		textField.setTextFieldFocused(focused);
+		super.setTextFieldFocused(focused);
+	}
 }

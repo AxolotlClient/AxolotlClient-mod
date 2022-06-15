@@ -1,17 +1,22 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.config.Color;
 import io.github.moehreag.axolotlclient.config.options.IntegerOption;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.moehreag.axolotlclient.modules.hud.util.ItemUtil;
-import net.minecraft.block.Blocks;
+import net.minecraft.client.util.TextCollector;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.text.OrderedText;
+import net.minecraft.text.Style;
+import net.minecraft.text.Text;
+import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Language;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +35,7 @@ public class ItemUpdateHud extends AbstractHudEntry {
     private ArrayList<ItemUtil.TimedItemStorage> removed;
     private ArrayList<ItemUtil.TimedItemStorage> added;
 
-    private IntegerOption timeout = new IntegerOption("timeout", 6, 1, 60);
+    private final IntegerOption timeout = new IntegerOption("timeout", 6, 1, 60);
 
     public ItemUpdateHud() {
         super(200, 11 * 6 - 2);
@@ -38,7 +43,7 @@ public class ItemUpdateHud extends AbstractHudEntry {
         added = new ArrayList<>();
     }
 
-    /*public void update() {
+    public void update() {
         this.removed = ItemUtil.removeOld(removed, timeout.get() * 1000);
         this.added = ItemUtil.removeOld(added, timeout.get() * 1000);
         updateAdded();
@@ -95,108 +100,104 @@ public class ItemUpdateHud extends AbstractHudEntry {
         this.removed.sort((o1, o2) -> Float.compare(o1.getPassedTime(), o2.getPassedTime()));
     }
 
-    @Override
-    public void render() {
-        scale();
-        DrawPosition pos = getPos();
-        int lastY = 1;
-        int i = 0;
-        for (ItemUtil.ItemStorage item : this.added) {
-            if (i > 5) {
-                GlStateManager.popMatrix();
-                return;
-            }
-            String message = "+ " +
-                    Formatting.DARK_GRAY + "[" +
-                    Formatting.WHITE + item.times +
-                    Formatting.DARK_GRAY + "] " +
-                    Formatting.RESET+
-                    item.stack.getName();
-            if (shadow.get()) {
-                client.textRenderer.drawWithShadow(message, pos.x, pos.y + lastY,
-                        Color.SELECTOR_GREEN.getAsInt());
-            } else {
-                client.textRenderer.draw(message, pos.x, pos.y + lastY,
-                        Color.SELECTOR_GREEN.getAsInt());
-            }
-            lastY = lastY + client.textRenderer.fontHeight + 2;
-            i++;
-        }
-        for (ItemUtil.ItemStorage item : this.removed) {
-            if (i > 5) {
-                GlStateManager.popMatrix();
-                return;
-            }
-            String message = "- " +
-                    Formatting.DARK_GRAY + "[" +
-                    Formatting.WHITE + item.times +
-                    Formatting.DARK_GRAY + "] " +
-                    Formatting.RESET+
-                    item.stack.getName();
-            if (shadow.get()) {
-                client.textRenderer.drawWithShadow(message, pos.x, pos.y + lastY,
-                        Color.SELECTOR_RED.getAsInt());
-            } else {
-                client.textRenderer.draw(message, pos.x, pos.y + lastY,
-                        Color.SELECTOR_RED.getAsInt());
-            }
-            lastY = lastY + client.textRenderer.fontHeight + 2;
-            i++;
-        }
-        GlStateManager.popMatrix();
-    }
+	@Override
+	public void render(MatrixStack matrices) {
+		matrices.push();
+		scale(matrices);
+		DrawPosition pos = getPos();
+		int lastY = 1;
+		int i = 0;
+		for (ItemUtil.ItemStorage item : this.added) {
+			if (i > 5) {
+				matrices.pop();
+				return;
+			}
+			TextCollector message = new TextCollector();
+			message.add(Text.literal("+ "));
+			message.add(Text.literal("[").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(Color.DARK_GRAY.getAsInt()))));
+			message.add(Text.literal(item.times + "").setStyle(Style.EMPTY.withColor(Formatting.WHITE)));
+			message.add(Text.literal("] ").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(Color.DARK_GRAY.getAsInt()))));
+			message.add(item.stack.getName());
+			OrderedText text = Language.getInstance().reorder(message.getCombined());
+			if (shadow.get()) {
+				client.textRenderer.drawWithShadow(matrices, text, pos.x, pos.y + lastY,
+					Color.SELECTOR_GREEN.getAsInt());
+			} else {
+				client.textRenderer.draw(matrices, text, pos.x, pos.y + lastY,
+					Color.SELECTOR_GREEN.getAsInt());
+			}
+			lastY = lastY + client.textRenderer.fontHeight + 2;
+			i++;
+		}
+		for (ItemUtil.ItemStorage item : this.removed) {
+			if (i > 5) {
+				matrices.pop();
+				return;
+			}
+			TextCollector message = new TextCollector();
+			message.add(Text.literal("- "));
+			message.add(Text.literal("[").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(Color.DARK_GRAY.getAsInt()))));
+			message.add(Text.literal(item.times + "").setStyle(Style.EMPTY.withColor(Formatting.WHITE)));
+			message.add(Text.literal("] ").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(Color.DARK_GRAY.getAsInt()))));
+			message.add(item.stack.getName());
+			OrderedText text = Language.getInstance().reorder(message.getCombined());
+			if (shadow.get()) {
+				client.textRenderer.drawWithShadow(matrices, text, pos.x, pos.y + lastY,
+					16733525);
+			} else {
+				client.textRenderer.draw(matrices, text, pos.x, pos.y + lastY,
+					16733525);
+			}
+			lastY = lastY + client.textRenderer.fontHeight + 2;
+			i++;
+		}
+		matrices.pop();
+	}
 
-    @Override
-    public void renderPlaceholder() {
-        renderPlaceholderBackground();
-        scale();
-        DrawPosition pos = getPos();
-        String addM = "+ " +
-                Formatting.DARK_GRAY + "[" +
-                Formatting.WHITE + 2 +
-                Formatting.DARK_GRAY + "] " +
-                Formatting.RESET+
-                new ItemStack(Blocks.DIRT).getName();
-        if (shadow.get()) {
-            client.textRenderer.drawWithShadow(addM, pos.x+1, pos.y+1,
-                    Color.SELECTOR_GREEN.getAsInt());
-        } else {
-            client.textRenderer.draw(addM, pos.x+1, pos.y+1 + client.textRenderer.fontHeight + 2,
-                    Color.SELECTOR_GREEN.getAsInt());
-        }
-        String removeM = "- " +
-                Formatting.DARK_GRAY + "[" +
-                Formatting.WHITE + 4 +
-                Formatting.DARK_GRAY + "] " +
-                Formatting.RESET+
-                new ItemStack(Blocks.GRASS).getName();
-        if (shadow.get()) {
-            client.textRenderer.drawWithShadow(removeM, pos.x+1, pos.y+1 + client.textRenderer.fontHeight + 2,
-                    Color.SELECTOR_RED.getAsInt());
-        } else {
-            client.textRenderer.draw(removeM, pos.x+1, pos.y+1 + client.textRenderer.fontHeight + 3,
-                    Color.SELECTOR_RED.getAsInt());
-        }
-        hovered = false;
-        GlStateManager.popMatrix();
-    }
+	@Override
+	public void renderPlaceholder(MatrixStack matrices) {
+		matrices.push();
+		renderPlaceholderBackground(matrices);
+		scale(matrices);
+		DrawPosition pos = getPos();
+		TextCollector addM = new TextCollector();
+		addM.add(Text.literal("+ "));
+		addM.add(Text.literal("[").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(Color.DARK_GRAY.getAsInt()))));
+		addM.add(Text.literal("2").setStyle(Style.EMPTY.withColor(Formatting.WHITE)));
+		addM.add(Text.literal("] ").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(Color.DARK_GRAY.getAsInt()))));
+		addM.add(new ItemStack(Items.DIRT).getName());
+		OrderedText addText = Language.getInstance().reorder(addM.getCombined());
+		if (shadow.get()) {
+			client.textRenderer.drawWithShadow(matrices, addText, pos.x, pos.y,
+				16733525);
+		} else {
+			client.textRenderer.draw(matrices, addText, pos.x, pos.y + client.textRenderer.fontHeight + 2,
+				16733525);
+		}
+		TextCollector removeM = new TextCollector();
+		removeM.add(Text.literal("- "));
+		removeM.add(Text.literal("[").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(Color.DARK_GRAY.getAsInt()))));
+		removeM.add(Text.literal("4").setStyle(Style.EMPTY.withColor(Formatting.WHITE)));
+		removeM.add(Text.literal("] ").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(Color.DARK_GRAY.getAsInt()))));
+		removeM.add(new ItemStack(Items.GRASS).getName());
+		OrderedText removeText = Language.getInstance().reorder(removeM.getCombined());
+		if (shadow.get()) {
+			client.textRenderer.drawWithShadow(matrices, removeText, pos.x, pos.y + client.textRenderer.fontHeight + 2,
+				16733525);
+		} else {
+			client.textRenderer.draw(matrices, removeText, pos.x, pos.y + client.textRenderer.fontHeight + 3,
+				16733525);
+		}
+		hovered = false;
+		matrices.pop();
+	}
 
     @Override
     public void addConfigOptions(List<Option> options) {
         super.addConfigOptions(options);
         options.add(shadow);
         options.add(timeout);
-    }*/
-
-	@Override
-	public void render(MatrixStack matrices) {
-
-	}
-
-	@Override
-	public void renderPlaceholder(MatrixStack matrices) {
-
-	}
+    }
 
 	@Override
     public Identifier getId() {

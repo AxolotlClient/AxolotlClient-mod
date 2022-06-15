@@ -7,7 +7,10 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.resource.language.I18n;
+import net.minecraft.client.sound.PositionedSoundInstance;
+import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 
 import java.awt.*;
@@ -22,7 +25,7 @@ public class CreditsScreen extends Screen {
     private final Map<String, String[]> credits = new HashMap<>();
     private final Map<String, String[]> other = new HashMap<>();
 
-    //private final SoundInstance bgm = PositionedSoundInstance.method_7051(new Identifier("minecraft", "records.chirp"));
+    private final SoundInstance bgm = PositionedSoundInstance.master(SoundEvents.MUSIC_DISC_CHIRP, 1, 1);
 
     public CreditsScreen(Screen parent){
 	    super(Text.of(""));
@@ -33,11 +36,12 @@ public class CreditsScreen extends Screen {
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 
-        /*if(AxolotlClient.CONFIG.creditsBGM.get() && !client.getSoundManager().isPlaying(bgm)){
-            if(((AccessorSoundSystem) ((AccessorSoundManager) MinecraftClient.getInstance().getSoundManager()).getSoundSystem()).getField_8196().get(bgm) == null) {
+        if(AxolotlClient.CONFIG.creditsBGM.get() && !MinecraftClient.getInstance().getSoundManager().isPlaying(bgm)){
+
+            //if(((AccessorSoundSystem) ((AccessorSoundManager) MinecraftClient.getInstance().getSoundManager()).getSoundSystem()).getField_8196().get(bgm) == null) {
                 MinecraftClient.getInstance().getSoundManager().play(bgm);
-            }
-        }*/
+            //}
+        }
 
         if(MinecraftClient.getInstance().world!=null)fillGradient(matrices, 0,0, width, height, new Color(0xB0100E0E, true).hashCode(), new Color(0x46212020, true).hashCode());
         else renderBackgroundTexture(0);
@@ -112,6 +116,8 @@ public class CreditsScreen extends Screen {
     }
 
     private void stopBGM(){
+		MinecraftClient.getInstance().getSoundManager().stop(bgm);
+		//MinecraftClient.getInstance().getSoundManager().
         /*if(((AccessorSoundSystem) ((AccessorSoundManager) MinecraftClient.getInstance().
                 getSoundManager()).getSoundSystem()).
                 getField_8196().get(bgm)!=null) {
@@ -139,13 +145,8 @@ public class CreditsScreen extends Screen {
     }
 
 	@Override
-	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-		if(keyCode==1){
-			stopBGM();
-			MinecraftClient.getInstance().setScreen(null);
-		}
-		return super.keyPressed(keyCode, scanCode, modifiers);
-
-
-    }
+	public void closeScreen() {
+		stopBGM();
+		super.closeScreen();
+	}
 }

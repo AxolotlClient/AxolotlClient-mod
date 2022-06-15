@@ -4,6 +4,7 @@ import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.config.options.OptionCategory;
 import io.github.moehreag.axolotlclient.config.options.StringOption;
 import io.github.moehreag.axolotlclient.modules.AbstractModule;
+import io.github.moehreag.axolotlclient.modules.hypixel.autoboop.AutoBoop;
 import io.github.moehreag.axolotlclient.modules.hypixel.autogg.AutoGG;
 import io.github.moehreag.axolotlclient.modules.hypixel.autotip.AutoTip;
 import io.github.moehreag.axolotlclient.modules.hypixel.levelhead.LevelHead;
@@ -33,6 +34,7 @@ public class HypixelMods extends AbstractModule {
         addSubModule(AutoGG.Instance);
         addSubModule(AutoTip.INSTANCE);
         addSubModule(NickHider.Instance);
+		addSubModule(AutoBoop.Instance);
 
         subModules.forEach(AbstractHypixelMod::init);
 

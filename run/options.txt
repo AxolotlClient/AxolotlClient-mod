@@ -100,7 +100,7 @@ key_key.smoothCamera:key.keyboard.f8
 key_key.fullscreen:key.keyboard.f11
 key_key.spectatorOutlines:key.keyboard.unknown
 key_key.swapOffhand:key.keyboard.f
-key_key.saveToolbarActivator:key.keyboard.c
+key_key.saveToolbarActivator:key.keyboard.unknown
 key_key.loadToolbarActivator:key.keyboard.x
 key_key.advancements:key.keyboard.l
 key_key.hotbar.1:key.keyboard.1
@@ -115,7 +115,7 @@ key_key.hotbar.9:key.keyboard.9
 key_key.openHud:key.keyboard.right.shift
 key_key.toggleSprint:key.keyboard.k
 key_key.toggleSneak:key.keyboard.i
-key_key.zoom:key.keyboard.period
+key_key.zoom:key.keyboard.c
 soundCategory_master:1.0
 soundCategory_music:0.0
 soundCategory_record:1.0

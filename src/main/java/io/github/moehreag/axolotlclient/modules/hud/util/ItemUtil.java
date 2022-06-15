@@ -62,7 +62,7 @@ public class ItemUtil {
 	}
 
 
-	public ArrayList<ItemUtil.TimedItemStorage> removeOld(List<ItemUtil.TimedItemStorage> list, int time) {
+	public static ArrayList<ItemUtil.TimedItemStorage> removeOld(List<ItemUtil.TimedItemStorage> list, int time) {
 		ArrayList<ItemUtil.TimedItemStorage> stored = new ArrayList<>();
 		for (ItemUtil.TimedItemStorage storage : list) {
 			if (storage.getPassedTime() <= time) {
@@ -91,7 +91,7 @@ public class ItemUtil {
 		return Optional.empty();
 	}
 
-	public Optional<ItemUtil.TimedItemStorage> getTimedItemFromItem(ItemStack item, List<ItemUtil.TimedItemStorage> list) {
+	public static Optional<ItemUtil.TimedItemStorage> getTimedItemFromItem(ItemStack item, List<ItemUtil.TimedItemStorage> list) {
 		ItemStack compare = item.copy();
 		compare.setCount(1);
 		for (ItemUtil.TimedItemStorage storage : list) {
@@ -121,7 +121,7 @@ public class ItemUtil {
 	 * @param list2 one to compare to
 	 * @return
 	 */
-	public List<ItemStorage> compare(List<ItemStorage> list1, List<ItemStorage> list2) {
+	public static List<ItemStorage> compare(List<ItemStorage> list1, List<ItemStorage> list2) {
 		ArrayList<ItemStorage> list = new ArrayList<>();
 		for (ItemStorage current : list1) {
 			Optional<ItemStorage> optional = getItemFromItem(current.stack, list2);

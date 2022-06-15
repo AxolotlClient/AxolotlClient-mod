@@ -163,20 +163,20 @@ public abstract class MixinWorldRenderer {
     public void customOutlineColor(Args args){
         if(AxolotlClient.CONFIG.enableCustomOutlines.get()){
             if(AxolotlClient.CONFIG.outlineChroma.get()){
-                args.set(0, AxolotlClient.CONFIG.outlineColor.getChroma().getRed());
-				args.set(1, AxolotlClient.CONFIG.outlineColor.getChroma().getGreen());
-				args.set(2, AxolotlClient.CONFIG.outlineColor.getChroma().getBlue());
-				args.set(3, AxolotlClient.CONFIG.outlineColor.getChroma().getAlpha());
+                args.set(6, AxolotlClient.CONFIG.outlineColor.getChroma().getRed());
+				args.set(7, AxolotlClient.CONFIG.outlineColor.getChroma().getGreen());
+				args.set(8, AxolotlClient.CONFIG.outlineColor.getChroma().getBlue());
+				args.set(9, AxolotlClient.CONFIG.outlineColor.getChroma().getAlpha());
             } else {
                 int color = AxolotlClient.CONFIG.outlineColor.get().getAsInt();
                 float a = (float)(color >> 24 & 0xFF) / 255.0F;
                 float r = (float)(color >> 16 & 0xFF) / 255.0F;
                 float g = (float)(color >> 8 & 0xFF) / 255.0F;
                 float b = (float)(color & 0xFF) / 255.0F;
-	            args.set(0, r);
-	            args.set(1, g);
-	            args.set(2, b);
-	            args.set(3, a);
+	            args.set(6, r);
+	            args.set(7, g);
+	            args.set(8, b);
+	            args.set(9, a);
             }
         }
     }

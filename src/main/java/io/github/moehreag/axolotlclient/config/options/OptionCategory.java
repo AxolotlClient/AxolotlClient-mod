@@ -19,11 +19,6 @@ public class OptionCategory extends OptionBase {
 	    super(key);
     }
 
-	@Override
-	public ClickableWidget createButton(GameOptions options, int x, int y, int width) {
-		return new CategoryWidget(this, x, y, width, 20);
-	}
-
 	public OptionCategory(Identifier Id, String key){
 		super(key);
 		this.Id=Id;

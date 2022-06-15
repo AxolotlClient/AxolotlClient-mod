@@ -19,11 +19,6 @@ public class CrosshairHudOption extends OptionBase implements EnumOption {
     }
 
 	@Override
-	public ClickableWidget createButton(GameOptions options, int x, int y, int width) {
-		return new EnumOptionWidget(x, y, this);
-	}
-
-	@Override
     public String getName() {
         return this.name;
     }

@@ -51,7 +51,7 @@ public class AxolotlClient implements ClientModInitializer {
 
 	public static final Identifier badgeIcon = new Identifier("axolotlclient", "textures/badge.png");
 
-	public static final OptionCategory config = new OptionCategory("stored_options");
+	public static final OptionCategory config = new OptionCategory("storedOptions");
 	public static final BooleanOption someNiceBackground = new BooleanOption("defNoSecret", false);
 	public static final HashMap<Identifier, AbstractModule> modules= new HashMap<>();
 
@@ -123,7 +123,7 @@ public class AxolotlClient implements ClientModInitializer {
 		if(entity instanceof PlayerEntity){
 
 			if(AxolotlClient.CONFIG.showBadges.get() && AxolotlClient.isUsingClient(entity.getUuid())) {
-				MinecraftClient.getInstance().getTextureManager().bindTexture(AxolotlClient.badgeIcon);
+				RenderSystem.setShaderTexture(0, AxolotlClient.badgeIcon);
 
 				int x = -(MinecraftClient.getInstance().textRenderer.getWidth(
 						entity.getUuid() == MinecraftClient.getInstance().player.getUuid()?

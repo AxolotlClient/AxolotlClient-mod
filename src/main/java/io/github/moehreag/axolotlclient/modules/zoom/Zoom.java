@@ -1,12 +1,12 @@
 package io.github.moehreag.axolotlclient.modules.zoom;
 
+import com.mojang.blaze3d.platform.InputUtil;
 import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.modules.AbstractModule;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBind;
 import net.minecraft.util.Identifier;
-import org.lwjgl.glfw.GLFW;
 
 
 //Based on https://github.com/LogicalGeekBoy/logical_zoom/blob/master/src/main/java/com/logicalgeekboy/logical_zoom/LogicalZoom.java
@@ -20,7 +20,7 @@ public class Zoom extends AbstractModule {
     public static Identifier ID = new Identifier("zoom");
 
     public void init(){
-        keyBinding = new KeyBind("key.zoom", GLFW.GLFW_KEY_C, "category.axolotlclient");
+        keyBinding = new KeyBind("key.zoom", InputUtil.KEY_C_CODE, "category.axolotlclient");
 
         KeyBindingHelper.registerKeyBinding(keyBinding);
         zoomed = false;

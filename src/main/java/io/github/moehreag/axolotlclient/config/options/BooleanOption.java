@@ -51,8 +51,4 @@ public class BooleanOption extends OptionBase implements Option {
         this.option=!option;
     }
 
-	@Override
-	public ClickableWidget createButton(GameOptions options, int x, int y, int width) {
-		return new BooleanWidget(x, y, width, 20, this);
-	}
 }

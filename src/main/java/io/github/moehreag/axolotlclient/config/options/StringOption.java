@@ -52,8 +52,4 @@ public class StringOption extends OptionBase implements Option{
         return new JsonPrimitive(value);
     }
 
-	@Override
-	public ClickableWidget createButton(GameOptions options, int x, int y, int width) {
-		return new TextFieldWidget(MinecraftClient.getInstance().textRenderer, x, y, width, 20, Text.of(value));
-	}
 }

@@ -20,11 +20,6 @@ public class LevelHeadOption extends OptionBase implements EnumOption {
     }
 
 	@Override
-	public ClickableWidget createButton(GameOptions options, int x, int y, int width) {
-		return new EnumOptionWidget(x, y, this);
-	}
-
-	@Override
     public OptionType getType() {
         return OptionType.ENUM;
     }
@@ -41,19 +36,19 @@ public class LevelHeadOption extends OptionBase implements EnumOption {
 
     @Override
     public void setValueFromJsonElement(@NotNull JsonElement element) {
-        switch(element.getAsString()){
-            case "NETWORK": value=LevelHeadMode.NETWORK; break;
-            case "BEDWARS": value=LevelHeadMode.BEDWARS; break;
-            case "SKYWARS": value=LevelHeadMode.SKYWARS; break;
-        }
+	    switch (element.getAsString()) {
+		    case "NETWORK" -> value = LevelHeadMode.NETWORK;
+		    case "BEDWARS" -> value = LevelHeadMode.BEDWARS;
+		    case "SKYWARS" -> value = LevelHeadMode.SKYWARS;
+	    }
     }
 
     public LevelHeadMode next(){
-        switch (value){
-            case BEDWARS:value=LevelHeadMode.SKYWARS; break;
-            case SKYWARS:value=LevelHeadMode.NETWORK; break;
-            case NETWORK:value=LevelHeadMode.BEDWARS; break;
-        }
+	    switch (value) {
+		    case BEDWARS -> value = LevelHeadMode.SKYWARS;
+		    case SKYWARS -> value = LevelHeadMode.NETWORK;
+		    case NETWORK -> value = LevelHeadMode.BEDWARS;
+	    }
         return value;
     }
 

@@ -56,16 +56,6 @@ public class CPSHud extends CleanHudEntry {
         ClickList.RIGHT.update();
     }
 
-    /*public void click(){
-        int button = Mouse.getEventButton();
-        if (Mouse.getEventButtonState()) {
-            if(button==0){
-                ClickList.LEFT.click();
-            }
-            if(button==1)ClickList.RIGHT.click();
-        }
-    }*/
-
     @Override
     public String getValue() {
         if (rmb.get()) {

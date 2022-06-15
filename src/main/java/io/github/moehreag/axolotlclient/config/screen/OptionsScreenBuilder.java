@@ -98,6 +98,11 @@ public class OptionsScreenBuilder extends Screen {
 
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-		return this.list.keyPressed(keyCode, scanCode, modifiers);
+		return this.list.keyPressed(keyCode, scanCode, modifiers) || super.keyPressed(keyCode, scanCode, modifiers);
+	}
+
+	@Override
+	public boolean charTyped(char chr, int modifiers) {
+		return list.charTyped(chr, modifiers);
 	}
 }
