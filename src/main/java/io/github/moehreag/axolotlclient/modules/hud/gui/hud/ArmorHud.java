@@ -43,24 +43,24 @@ public class ArmorHud extends AbstractHudEntry {
             ItemUtil.renderGuiItem(client.player.inventory.getMainHandStack(), pos.x, pos.y + lastY);
         lastY = lastY - 20;
         for (int i = 0; i <= 3; i++) {
-            ItemStack stack = client.player.inventory.armor[i];
-            if(stack != null) {
-                ItemUtil.renderGuiItem(stack, pos.x, lastY + pos.y);
-                if(showProtLvl.get() && stack.hasEnchantments()){
+            if(client.player.inventory.armor[i]!=null) {
+                ItemStack stack = client.player.inventory.armor[i].copy();
+                if (showProtLvl.get() && stack.hasEnchantments()) {
                     NbtList nbtList = stack.getEnchantments();
                     if (nbtList != null) {
-                        for(int k = 0; k < nbtList.size(); ++k) {
+                        for (int k = 0; k < nbtList.size(); ++k) {
                             int enchantId = nbtList.getCompound(k).getShort("id");
                             int level = nbtList.getCompound(k).getShort("lvl");
-                            if (enchantId==0 && Enchantment.byRawId(enchantId) != null) {
-                                GlStateManager.disableDepthTest();
-                                drawCenteredString(client.textRenderer, String.valueOf(level), new DrawPosition(pos.x+width/2, lastY+pos.y + 4), textColor.get(), shadow.get());
-                                GlStateManager.enableDepthTest();
+                            if (enchantId == 0 && Enchantment.byRawId(enchantId) != null) {
+                                stack.count = level;
                             }
                         }
                     }
                 }
+
+                ItemUtil.renderGuiItem(stack, pos.x, lastY + pos.y);
             }
+
             lastY = lastY - 20;
         }
         GlStateManager.popMatrix();
