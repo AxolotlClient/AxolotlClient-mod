@@ -215,20 +215,11 @@ public class ButtonWidgetList extends EntryListWidget {
 
         }
 
-        protected void renderTooltip(Option option, int x, int y){
+        protected void renderTooltip(Tooltippable option, int x, int y){
             if(isMouseInList(y) && MinecraftClient.getInstance().currentScreen instanceof OptionsScreenBuilder &&
                     AxolotlClient.CONFIG.showOptionTooltips.get() && option.getTooltip()!=null){
                 GL11.glDisable(GL11.GL_SCISSOR_TEST);
                 ((OptionsScreenBuilder) MinecraftClient.getInstance().currentScreen).renderTooltip(option, x, y);
-                Util.applyScissor(new Rectangle(0, yStart, width, yEnd-yStart));
-            }
-        }
-
-        protected void renderTooltip(OptionCategory category, int x, int y){
-            if(isMouseInList(y) && MinecraftClient.getInstance().currentScreen instanceof OptionsScreenBuilder &&
-                    AxolotlClient.CONFIG.showCategoryTooltips.get() && category.getTooltip()!=null){
-                GL11.glDisable(GL11.GL_SCISSOR_TEST);
-                ((OptionsScreenBuilder) MinecraftClient.getInstance().currentScreen).renderTooltip(category, x, y);
                 Util.applyScissor(new Rectangle(0, yStart, width, yEnd-yStart));
             }
         }
