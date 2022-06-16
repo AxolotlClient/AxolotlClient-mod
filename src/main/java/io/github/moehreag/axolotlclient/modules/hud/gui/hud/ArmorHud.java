@@ -50,7 +50,7 @@ public class ArmorHud extends AbstractHudEntry {
 		lastY = lastY - 20;
 		for (int i = 0; i <= 3; i++) {
 			ItemStack item = client.player.getInventory().armor.get(i);
-			renderItem(matrices, item, pos.x + 2, lastY + pos.y);
+			renderItem(matrices, item.copy(), pos.x + 2, lastY + pos.y);
 			lastY = lastY - 20;
 		}
 		matrices.pop();

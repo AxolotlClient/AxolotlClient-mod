@@ -1,15 +1,18 @@
 package io.github.moehreag.axolotlclient.mixin;
 
 
+import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.modules.hud.HudEditScreen;
 import io.github.moehreag.axolotlclient.util.DiscordRPC;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.quiltmc.loader.api.QuiltLoader;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,6 +21,8 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
+
+import java.util.Objects;
 
 @Mixin(TitleScreen.class)
 public abstract class MixinTitleScreen extends Screen{
@@ -49,32 +54,32 @@ public abstract class MixinTitleScreen extends Screen{
 	@Inject(method = "init", at = @At("HEAD"))
 	public void showBadModsScreen(CallbackInfo ci){
 
-		/*if (Axolotlclient.showWarning) {
+		if (AxolotlClient.showWarning) {
 			MinecraftClient.getInstance().setScreen(new ConfirmScreen(
 				(boolean confirmed) -> {
 					if (confirmed) {
-						Axolotlclient.showWarning = false;
-						Axolotlclient.TitleDisclaimer = true;
+						AxolotlClient.showWarning = false;
+						AxolotlClient.titleDisclaimer = true;
 						System.out.println("Proceed with Caution!");
 						MinecraftClient.getInstance().setScreen(new TitleScreen());
 					} else {
 						MinecraftClient.getInstance().stop();
 					}
 				},
-				new LiteralText("Axolotlclient warning").formatted(Formatting.RED),
-				new LiteralText("The mod ").append(
-					new LiteralText(Axolotlclient.badmod).formatted(Formatting.BOLD, Formatting.DARK_RED)).append(" is most likely prohibited to be used on many Servers!\n" +
-					"I will not be responsible for any punishment you will get for using it. Proceed with Caution!"),
-				new LiteralText("Proceed"), new TranslatableText("menu.quit")));
-		}*/
+				Text.literal("Axolotlclient warning").formatted(Formatting.RED),
+				Text.literal("The mod ").append(
+					Text.literal(AxolotlClient.badmod).formatted(Formatting.BOLD, Formatting.DARK_RED)).append(" is most likely prohibited to be used on many Servers!\n" +
+					"AxolotlClient will not be responsible for any punishment you will get for using it. Proceed with Caution!"),
+				Text.literal("Proceed"), Text.translatable("menu.quit")));
+		}
 	}
 
 	@Inject(method = "render", at = @At("TAIL"))
 	public void addDisclaimer(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci){
-		/*if(Axolotlclient.TitleDisclaimer){
+		if(AxolotlClient.titleDisclaimer){
 			TitleScreen.drawCenteredText(matrices, this.textRenderer, "You are playing at your own risk with unsupported Mods",
 				this.width/2, 5, 0xFFCC8888);
 			TitleScreen.drawCenteredText(matrices, this.textRenderer, "Things could break!", this.width/2, 15, 0xFFCC8888);
-		}*/
+		}
 	}
 }

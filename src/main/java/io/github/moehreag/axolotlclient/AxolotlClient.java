@@ -23,6 +23,7 @@ import net.minecraft.resource.Resource;
 import net.minecraft.resource.pack.ResourcePack;
 import net.minecraft.util.Identifier;
 import org.quiltmc.loader.api.ModContainer;
+import org.quiltmc.loader.api.QuiltLoader;
 import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
 import org.quiltmc.qsl.lifecycle.api.client.event.ClientTickEvents;
 import org.quiltmc.qsl.resource.loader.api.ResourceLoader;
@@ -57,8 +58,28 @@ public class AxolotlClient implements ClientModInitializer {
 
 	public static Integer tickTime = 0;
 
+	public static String badmod="";
+	public static boolean titleDisclaimer = false;
+	public static boolean showWarning = true;
+
 	@Override
 	public void onInitializeClient(ModContainer container) {
+
+		if (QuiltLoader.isModLoaded("ares")){
+			badmod = "Ares Client";
+		} else if (QuiltLoader.isModLoaded("inertia")) {
+			badmod = "Inertia Client";
+		} else if (QuiltLoader.isModLoaded("meteor-client")) {
+			badmod = "Meteor Client";
+		} else if (QuiltLoader.isModLoaded("wurst")) {
+			badmod = "Wurst Client";
+		} else if (QuiltLoader.isModLoaded("baritone")) {
+			badmod = "Baritone";
+		} else if (QuiltLoader.isModLoaded("xaerominimap")) {
+			badmod = "Xaero's Minimap";
+		} else {
+			showWarning = false;
+		}
 
 		CONFIG = new AxolotlClientConfig();
 		config.add(someNiceBackground);
