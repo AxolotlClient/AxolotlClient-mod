@@ -9,12 +9,21 @@ sky_loading_text=Loading Skies out of
 resource_loading_finished=Loading finished! Starting Minecraft...
 
 general=General
-general.title=General Options
+general.tooltip=General Options
 enableRPC=Enable RPC
+enableRPC.tooltip=Whether to enable Discord RPC.
 showActivity=Show Activity
+showActivity.tooltip=Whether to show your current In-Game Activity.
 loadingBgColor=Loading Screen Color
+loadingBgColor.tooltip=The Background Color of the loading Screen.
 nightMode=Night Mode
+nightMode.tooltip=Reduces blue colors.
 quickToggles=Quick Toggles
+quickToggles.tooltip=Whether to show small switches on categories \ncontaining an 'enabled' option.
+showOptionTooltips=Show Option Tooltips
+showOptionTooltips.tooltip=Whether to show Tooltips on Options in the menu.
+showCategoryTooltips=Show Category Tooltips
+showCategoryTooltips.tooltip=Whether to show Tooltips on Categories in the menu.
 
 rendering=Rendering Options
 customSky=Custom Skies

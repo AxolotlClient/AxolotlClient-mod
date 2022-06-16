@@ -34,10 +34,6 @@ public class DoubleOption extends OptionBase implements Option{
         return OptionType.DOUBLE;
     }
 
-    @Override
-    public String getName() {
-        return this.name;
-    }
 
     public void setDefaults(){
         option = Default;

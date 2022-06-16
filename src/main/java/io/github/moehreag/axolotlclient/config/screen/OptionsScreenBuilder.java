@@ -1,8 +1,10 @@
 package io.github.moehreag.axolotlclient.config.screen;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.config.ConfigManager;
 import io.github.moehreag.axolotlclient.config.options.ColorOption;
+import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.config.options.OptionCategory;
 import io.github.moehreag.axolotlclient.config.screen.widgets.ColorOptionWidget;
 import io.github.moehreag.axolotlclient.config.screen.widgets.ColorSelectionWidget;
@@ -11,9 +13,12 @@ import io.github.moehreag.axolotlclient.modules.hud.util.DrawUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.resource.language.I18n;
+import net.minecraft.text.Text;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
+import java.util.*;
 
 public class OptionsScreenBuilder extends Screen {
 
@@ -135,5 +140,19 @@ public class OptionsScreenBuilder extends Screen {
     @Override
     public boolean shouldPauseGame() {
         return false;
+    }
+
+    public void renderTooltip(Option option, int x, int y){
+        String[] tooltip = Objects.requireNonNull(option.getTooltip()).split("\n");
+        List<String> text = new ArrayList<>(Arrays.asList(tooltip));
+        this.renderTooltip(text, x, y);
+        GlStateManager.disableLighting();
+    }
+
+    public void renderTooltip(OptionCategory category, int x, int y){
+        String[] tooltip = Objects.requireNonNull(category.getTooltip()).split("\n");
+        List<String> text = new ArrayList<>(Arrays.asList(tooltip));
+        this.renderTooltip(text, x, y);
+        GlStateManager.disableLighting();
     }
 }

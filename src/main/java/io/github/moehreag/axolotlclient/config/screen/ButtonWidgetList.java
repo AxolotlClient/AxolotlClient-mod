@@ -2,15 +2,16 @@ package io.github.moehreag.axolotlclient.config.screen;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.GlStateManager;
+import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.config.ConfigManager;
 import io.github.moehreag.axolotlclient.config.options.*;
 import io.github.moehreag.axolotlclient.config.screen.widgets.*;
+import io.github.moehreag.axolotlclient.modules.hud.util.DrawUtil;
 import io.github.moehreag.axolotlclient.modules.hud.util.Rectangle;
 import io.github.moehreag.axolotlclient.util.Util;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.EntryListWidget;
 import net.minecraft.client.render.BufferBuilder;
@@ -29,18 +30,17 @@ public class ButtonWidgetList extends EntryListWidget {
 
     public ButtonWidgetList(MinecraftClient minecraftClient, int width, int height, int top, int bottom, int entryHeight, OptionCategory category) {
         super(minecraftClient, width, height, top, bottom, entryHeight);
-        this.field_7735 = false;
         //this.category=category; // same as above
 
         if(!category.getSubCategories().isEmpty()) {
             for (int i = 0; i < category.getSubCategories().size(); i += 2) {
                 OptionCategory subCat = category.getSubCategories().get(i);
-                ButtonWidget buttonWidget = this.createCategoryWidget(width / 2 - 155, subCat);
+                CategoryWidget buttonWidget = this.createCategoryWidget(width / 2 - 155, subCat);
 
                 OptionCategory subCat2 = i < category.getSubCategories().size() - 1 ? category.getSubCategories().get(i + 1) : null;
-                ButtonWidget buttonWidget2 = this.createCategoryWidget(width / 2 - 155 + 160, subCat2);
+                CategoryWidget buttonWidget2 = this.createCategoryWidget(width / 2 - 155 + 160, subCat2);
 
-                this.entries.add(new Pair(buttonWidget, buttonWidget2));
+                this.entries.add(new CategoryPair(subCat, buttonWidget, subCat2, buttonWidget2));
             }
             this.entries.add(new Spacer());
         }
@@ -55,7 +55,7 @@ public class ButtonWidgetList extends EntryListWidget {
         }
     }
 
-    private ButtonWidget createCategoryWidget(int x, OptionCategory cat){
+    private CategoryWidget createCategoryWidget(int x, OptionCategory cat){
         if(cat==null) {
             return null;
         } else {
@@ -94,11 +94,9 @@ public class ButtonWidgetList extends EntryListWidget {
             this.capYPosition();
             GlStateManager.disableLighting();
             GlStateManager.disableFog();
-            int k = this.xStart + this.width / 2 - 220 / 2 + 2;
+            int k = this.xStart + this.width / 2 - 125;
             int l = this.yStart + 4 - (int)this.scrollAmount;
 
-            this.renderList(k, l, mouseX, mouseY);
-            GlStateManager.disableDepthTest();
 
             int n = this.getMaxScroll();
             if (n > 0) {
@@ -131,12 +129,13 @@ public class ButtonWidgetList extends EntryListWidget {
                 bufferBuilder.vertex(i, p, 0.0).texture(0.0, 0.0).color(192, 192, 192, 255).next();
                 tessellator.draw();
             }
-            
-            this.renderDecorations(mouseX, mouseY);
             GlStateManager.enableTexture();
+
+            this.renderList(k, l, mouseX, mouseY);
+
             GlStateManager.shadeModel(7424);
             GlStateManager.enableAlphaTest();
-            GlStateManager.disableDepthTest();
+            //GlStateManager.disableDepthTest();
             GlStateManager.popMatrix();
             GlStateManager.disableBlend();
         }
@@ -193,7 +192,7 @@ public class ButtonWidgetList extends EntryListWidget {
     }
 
     @Environment(EnvType.CLIENT)
-    public static class Pair extends DrawableHelper implements Entry {
+    public class Pair extends DrawUtil implements Entry {
         protected final MinecraftClient client = MinecraftClient.getInstance();
         protected final ButtonWidget left;
         private final ButtonWidget right;
@@ -214,6 +213,24 @@ public class ButtonWidgetList extends EntryListWidget {
                 this.right.render(this.client, mouseX, mouseY);
             }
 
+        }
+
+        protected void renderTooltip(Option option, int x, int y){
+            if(isMouseInList(y) && MinecraftClient.getInstance().currentScreen instanceof OptionsScreenBuilder &&
+                    AxolotlClient.CONFIG.showOptionTooltips.get() && option.getTooltip()!=null){
+                GL11.glDisable(GL11.GL_SCISSOR_TEST);
+                ((OptionsScreenBuilder) MinecraftClient.getInstance().currentScreen).renderTooltip(option, x, y);
+                Util.applyScissor(new Rectangle(0, yStart, width, yEnd-yStart));
+            }
+        }
+
+        protected void renderTooltip(OptionCategory category, int x, int y){
+            if(isMouseInList(y) && MinecraftClient.getInstance().currentScreen instanceof OptionsScreenBuilder &&
+                    AxolotlClient.CONFIG.showCategoryTooltips.get() && category.getTooltip()!=null){
+                GL11.glDisable(GL11.GL_SCISSOR_TEST);
+                ((OptionsScreenBuilder) MinecraftClient.getInstance().currentScreen).renderTooltip(category, x, y);
+                Util.applyScissor(new Rectangle(0, yStart, width, yEnd-yStart));
+            }
         }
 
         public boolean mouseClicked(int index, int mouseX, int mouseY, int button, int x, int y) {
@@ -273,28 +290,55 @@ public class ButtonWidgetList extends EntryListWidget {
         }
     }
 
-    public static class OptionEntry extends Pair {
+    public class CategoryPair extends Pair {
+
+        protected OptionCategory left;
+        protected OptionCategory right;
+
+        public CategoryPair(OptionCategory catLeft, CategoryWidget btnLeft, OptionCategory catRight, CategoryWidget btnRight) {
+            super(btnLeft, btnRight);
+            left = catLeft;
+            right = catRight;
+        }
+
+        @Override
+        public void render(int index, int x, int y, int rowWidth, int rowHeight, int mouseX, int mouseY, boolean hovered) {
+            super.render(index, x, y, rowWidth, rowHeight, mouseX, mouseY, hovered);
+            if(super.left!=null && super.left.isMouseOver(client, mouseX, mouseY)){
+                renderTooltip(left, mouseX, mouseY);
+            }
+            if(super.right !=null && super.right.isMouseOver(client, mouseX, mouseY)){
+                renderTooltip(right, mouseX, mouseY);
+            }
+        }
+    }
+
+    public class OptionEntry extends Pair {
 
         private final Option option;
 
         public OptionEntry(ButtonWidget left, Option option, int width) {
             super(left, null);
             this.option = option;
-            if(left instanceof BooleanWidget) left.x = width / 2 - 155 + 160 + 57;
-            else left.x = width / 2 - 155 + 160;
+            if(left instanceof BooleanWidget) left.x = width / 2 + 5 + 57;
+            else left.x = width / 2 + 5;
         }
 
         @Override
         public void render(int index, int x, int y, int rowWidth, int rowHeight, int mouseX, int mouseY, boolean hovered) {
 
-            drawCenteredString(client.textRenderer, option.getTranslatedName(), x, y, -1);
+            drawString(client.textRenderer, option.getTranslatedName(), x, y+5, -1, true);
             left.y = y;
             left.render(client, mouseX, mouseY);
+
+            if(mouseX>=x && mouseX<=left.x + left.getWidth() && mouseY>= y && mouseY<= y + 20){
+                renderTooltip(option, mouseX, mouseY);
+            }
 
         }
     }
 
-    public static class Spacer extends Pair {
+    public class Spacer extends Pair {
 
         public Spacer() {
             super(null, null);

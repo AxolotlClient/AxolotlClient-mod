@@ -34,11 +34,6 @@ public class IntegerOption extends OptionBase implements Option{
         return OptionType.INT;
     }
 
-    @Override
-    public String getName() {
-        return this.name;
-    }
-
     public void setDefaults(){
         option = Default;
     }

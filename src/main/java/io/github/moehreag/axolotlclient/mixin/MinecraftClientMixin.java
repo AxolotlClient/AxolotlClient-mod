@@ -59,7 +59,7 @@ public abstract class MinecraftClientMixin {
         } catch (Exception ignored){}
     }
 
-    //Don't ask me why we need both here, but otherwise it looks ugly
+    // Don't ask me why we need both here, but otherwise it looks ugly
     @Redirect(method = "loadLogo", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/BufferBuilder;color(IIII)Lnet/minecraft/client/render/BufferBuilder;"))
     public BufferBuilder loadingScreenColor(BufferBuilder instance, int red, int green, int blue, int alpha){
 

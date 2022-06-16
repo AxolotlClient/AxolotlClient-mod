@@ -1,6 +1,7 @@
 package io.github.moehreag.axolotlclient.config.options;
 
 public enum OptionType {
+    CATEGORY,
     BOOLEAN,
     ENUM,
     DOUBLE,

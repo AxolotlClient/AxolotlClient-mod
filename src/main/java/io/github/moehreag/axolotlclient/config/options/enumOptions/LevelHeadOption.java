@@ -22,11 +22,6 @@ public class LevelHeadOption extends OptionBase implements EnumOption {
     }
 
     @Override
-    public String getName() {
-        return this.name;
-    }
-
-    @Override
     public Enum<?> get() {
         return value;
     }

@@ -67,6 +67,9 @@ public class Util {
         return end - start;
     }
 
+    public static void sendChatMessage(String msg){
+        MinecraftClient.getInstance().player.sendChatMessage(msg);
+    }
 
     public static String getGame(){
 

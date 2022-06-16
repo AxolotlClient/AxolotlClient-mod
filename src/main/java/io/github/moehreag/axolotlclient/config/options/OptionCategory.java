@@ -1,10 +1,13 @@
 package io.github.moehreag.axolotlclient.config.options;
 
+import io.github.moehreag.axolotlclient.config.screen.widgets.CategoryWidget;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class OptionCategory {
 
@@ -40,10 +43,17 @@ public class OptionCategory {
         return Id;
     }
 
+
     public String getName() {
         return name;
     }
 
     public String getTranslatedName(){return I18n.translate(name);}
 
+    public @Nullable String getTooltip(){
+        if(!Objects.equals(I18n.translate(getName() + ".tooltip"), getName() + ".tooltip")) {
+            return I18n.translate(getName() + ".tooltip");
+        }
+        return null;
+    }
 }

@@ -35,11 +35,6 @@ public class FloatOption extends OptionBase implements Option{
     }
 
     @Override
-    public String getName() {
-        return this.name;
-    }
-
-    @Override
     public void setValueFromJsonElement(@NotNull JsonElement element) {
         value = element.getAsFloat();
     }

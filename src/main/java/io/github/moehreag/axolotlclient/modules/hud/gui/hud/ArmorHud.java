@@ -1,12 +1,15 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import io.github.moehreag.axolotlclient.config.options.BooleanOption;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.moehreag.axolotlclient.modules.hud.util.ItemUtil;
 import net.minecraft.block.Block;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
@@ -19,6 +22,8 @@ import java.util.List;
 
 public class ArmorHud extends AbstractHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "armorhud");
+
+    protected BooleanOption showProtLvl = new BooleanOption("showProtectionLevel", false);
 
     public ArmorHud() {
         super(20, 100);
@@ -38,8 +43,24 @@ public class ArmorHud extends AbstractHudEntry {
             ItemUtil.renderGuiItem(client.player.inventory.getMainHandStack(), pos.x, pos.y + lastY);
         lastY = lastY - 20;
         for (int i = 0; i <= 3; i++) {
-            if(client.player.inventory.armor[i] != null)
-                ItemUtil.renderGuiItem(client.player.inventory.armor[i], pos.x , lastY + pos.y);
+            ItemStack stack = client.player.inventory.armor[i];
+            if(stack != null) {
+                ItemUtil.renderGuiItem(stack, pos.x, lastY + pos.y);
+                if(showProtLvl.get() && stack.hasEnchantments()){
+                    NbtList nbtList = stack.getEnchantments();
+                    if (nbtList != null) {
+                        for(int k = 0; k < nbtList.size(); ++k) {
+                            int enchantId = nbtList.getCompound(k).getShort("id");
+                            int level = nbtList.getCompound(k).getShort("lvl");
+                            if (enchantId==0 && Enchantment.byRawId(enchantId) != null) {
+                                GlStateManager.disableDepthTest();
+                                drawCenteredString(client.textRenderer, String.valueOf(level), new DrawPosition(pos.x+width/2, lastY+pos.y + 4), textColor.get(), shadow.get());
+                                GlStateManager.enableDepthTest();
+                            }
+                        }
+                    }
+                }
+            }
             lastY = lastY - 20;
         }
         GlStateManager.popMatrix();
@@ -69,12 +90,13 @@ public class ArmorHud extends AbstractHudEntry {
     @Override
     public void addConfigOptions(List<Option> options) {
         super.addConfigOptions(options);
-        //options.add(enabled);
+        options.add(textColor);
         options.add(shadow);
         options.add(background);
         options.add(backgroundColor);
         options.add(outline);
         options.add(outlineColor);
+        options.add(showProtLvl);
     }
 
 }

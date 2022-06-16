@@ -3,6 +3,7 @@ package io.github.moehreag.axolotlclient.mixin;
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.modules.hud.HudManager;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
+import io.github.moehreag.axolotlclient.modules.hypixel.autoboop.AutoBoop;
 import io.github.moehreag.axolotlclient.modules.hypixel.autogg.AutoGG;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -28,6 +29,7 @@ public abstract class ChatHudMixin {
     @Inject(method = "addMessage(Lnet/minecraft/text/Text;IIZ)V", at = @At("HEAD"))
     public void autoGG(Text message, int messageId, int timestamp, boolean bl, CallbackInfo ci){
         AutoGG.Instance.onMessage(message);
+        AutoBoop.Instance.onMessage(message);
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;fill(IIIII)V"))

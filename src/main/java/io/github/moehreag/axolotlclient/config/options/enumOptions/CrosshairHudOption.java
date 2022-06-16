@@ -16,11 +16,6 @@ public class CrosshairHudOption extends OptionBase implements EnumOption {
     }
 
     @Override
-    public String getName() {
-        return this.name;
-    }
-
-    @Override
     public void setValueFromJsonElement(@NotNull JsonElement element) {
         switch (element.getAsString()){
             case ("CROSS")      :this.value=CrosshairOption.CROSS;break;

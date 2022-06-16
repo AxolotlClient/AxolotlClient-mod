@@ -4,6 +4,7 @@ import io.github.moehreag.axolotlclient.config.options.BooleanOption;
 import io.github.moehreag.axolotlclient.config.options.OptionCategory;
 import io.github.moehreag.axolotlclient.config.options.StringOption;
 import io.github.moehreag.axolotlclient.modules.hypixel.AbstractHypixelMod;
+import io.github.moehreag.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -93,7 +94,7 @@ public class AutoGG implements AbstractHypixelMod {
         if (System.currentTimeMillis() - this.lastTime > 3000) {
             for (String s : options) {
                 if (messageReceived.getString().contains(s)) {
-                    client.player.sendChatMessage(messageToSend);
+                    Util.sendChatMessage(messageToSend);
                     this.lastTime = System.currentTimeMillis();
                     return;
                 }

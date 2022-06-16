@@ -30,11 +30,6 @@ public class ColorOption extends OptionBase implements Option {
     }
 
     @Override
-    public String getName() {
-        return this.name;
-    }
-
-    @Override
     public void setValueFromJsonElement(@NotNull JsonElement element) {
         value=Color.parse(element.getAsString());
     }
