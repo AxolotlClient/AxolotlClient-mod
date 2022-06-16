@@ -5,6 +5,7 @@ import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.config.options.ColorOption;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.config.options.OptionCategory;
+import io.github.moehreag.axolotlclient.config.options.Tooltippable;
 import io.github.moehreag.axolotlclient.config.screen.widgets.ColorSelectionWidget;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawUtil;
 import net.minecraft.client.MinecraftClient;
@@ -111,16 +112,9 @@ public class OptionsScreenBuilder extends Screen {
 		return list.charTyped(chr, modifiers);
 	}
 
-	public void renderTooltip(MatrixStack matrices, Option option, int x, int y){
+	public void renderTooltip(MatrixStack matrices, Tooltippable option, int x, int y){
 		List<Text> text = new ArrayList<>();
-		String[] tooltip = Objects.requireNonNull(option.getTooltip()).getString().split("\n");
-		for(String s:tooltip) text.add(Text.literal(s));
-		this.renderTooltip(matrices, text, x, y);
-	}
-
-	public void renderTooltip(MatrixStack matrices, OptionCategory category, int x, int y){
-		List<Text> text = new ArrayList<>();
-		String[] tooltip = Objects.requireNonNull(category.getTooltip()).getString().split("\n");
+		String[] tooltip = Objects.requireNonNull(option.getTooltip()).getString().split("<br>");
 		for(String s:tooltip) text.add(Text.literal(s));
 		this.renderTooltip(matrices, text, x, y);
 	}

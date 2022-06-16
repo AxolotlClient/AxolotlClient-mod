@@ -146,28 +146,27 @@ public class ItemUtil {
 		RenderSystem.enableBlend();
 		RenderSystem.blendFunc(GlStateManager.class_4535.SRC_ALPHA, GlStateManager.class_4534.ONE_MINUS_SRC_ALPHA);
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-		MatrixStack matrixStack = RenderSystem.getModelViewStack();
-		matrixStack.push();
-		matrixStack.translate(x, y, 100.0F + MinecraftClient.getInstance().getItemRenderer().zOffset);
-		matrixStack.translate(8.0, 8.0, 0.0);
-		matrixStack.scale(1.0F, -1.0F, 1.0F);
-		matrixStack.scale(16.0F, 16.0F, 16.0F);
+		matrices.push();
+		matrices.translate(x, y, (100.0F + client.getItemRenderer().zOffset));
+		matrices.translate(8.0D, 8.0D, 0.0D);
+		matrices.scale(1.0F, -1.0F, 1.0F);
+		matrices.scale(16.0F, 16.0F, 16.0F);
 		RenderSystem.applyModelViewMatrix();
-		MatrixStack matrixStack2 = new MatrixStack();
 		VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
 		boolean bl = !model.isSideLit();
 		if (bl) {
 			DiffuseLighting.setupFlatGuiLighting();
 		}
 
-		MinecraftClient.getInstance().getItemRenderer().renderItem(stack, ModelTransformation.Mode.GUI, false, matrixStack2, immediate, 15728880, OverlayTexture.DEFAULT_UV, model);
+		client.getItemRenderer().renderItem(stack, ModelTransformation.Mode.GUI, false, matrices, immediate, 15728880,
+			OverlayTexture.DEFAULT_UV, model);
 		immediate.draw();
 		RenderSystem.enableDepthTest();
 		if (bl) {
 			DiffuseLighting.setup3DGuiLighting();
 		}
 
-		matrixStack.pop();
+		matrices.pop();
 		RenderSystem.applyModelViewMatrix();
 	}
 

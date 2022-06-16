@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-public interface Option {
+public interface Option extends Tooltippable {
 
     OptionType getType();
 
@@ -22,10 +22,4 @@ public interface Option {
 
     JsonElement getJson();
 
-	default @Nullable Text getTooltip(){
-		if(!Objects.equals(Text.translatable(getName() + ".tooltip").getString(), getName() + ".tooltip")) {
-			return Text.translatable(getName() + ".tooltip");
-		}
-		return null;
-	}
 }

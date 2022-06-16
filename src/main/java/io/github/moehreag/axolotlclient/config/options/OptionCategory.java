@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class OptionCategory {
+public class OptionCategory implements Tooltippable {
 
     Identifier Id;
 	String name;
@@ -47,11 +47,4 @@ public class OptionCategory {
     }
 
     public Text getTranslatedName(){return Text.translatable(name);}
-
-	public @Nullable Text getTooltip(){
-		if(!Objects.equals(Text.translatable(getName() + ".tooltip").getString(), getName() + ".tooltip")) {
-			return Text.translatable(getName() + ".tooltip");
-		}
-		return null;
-	}
 }

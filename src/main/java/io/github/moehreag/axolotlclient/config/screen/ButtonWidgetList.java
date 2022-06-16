@@ -16,6 +16,7 @@ import io.github.moehreag.axolotlclient.config.options.IntegerOption;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.config.options.OptionCategory;
 import io.github.moehreag.axolotlclient.config.options.StringOption;
+import io.github.moehreag.axolotlclient.config.options.Tooltippable;
 import io.github.moehreag.axolotlclient.config.screen.widgets.BooleanWidget;
 import io.github.moehreag.axolotlclient.config.screen.widgets.CategoryWidget;
 import io.github.moehreag.axolotlclient.config.screen.widgets.ColorOptionWidget;
@@ -222,20 +223,11 @@ public class ButtonWidgetList extends ButtonListWidget {
 
         }
 
-		protected void renderTooltip(MatrixStack matrices, Option option, int x, int y){
+		protected void renderTooltip(MatrixStack matrices, Tooltippable option, int x, int y){
 			if(MinecraftClient.getInstance().currentScreen instanceof OptionsScreenBuilder &&
 				AxolotlClient.CONFIG.showOptionTooltips.get() && option.getTooltip()!=null){
 				GL11.glDisable(GL11.GL_SCISSOR_TEST);
 				((OptionsScreenBuilder) MinecraftClient.getInstance().currentScreen).renderTooltip(matrices, option, x, y);
-				Util.applyScissor(new Rectangle(0, top, width, bottom-top));
-			}
-		}
-
-		protected void renderTooltip(MatrixStack matrices, OptionCategory category, int x, int y){
-			if(MinecraftClient.getInstance().currentScreen instanceof OptionsScreenBuilder &&
-				AxolotlClient.CONFIG.showCategoryTooltips.get() && category.getTooltip()!=null){
-				GL11.glDisable(GL11.GL_SCISSOR_TEST);
-				((OptionsScreenBuilder) MinecraftClient.getInstance().currentScreen).renderTooltip(matrices, category, x, y);
 				Util.applyScissor(new Rectangle(0, top, width, bottom-top));
 			}
 		}
