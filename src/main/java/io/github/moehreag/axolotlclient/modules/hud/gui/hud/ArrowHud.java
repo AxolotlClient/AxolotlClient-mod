@@ -49,6 +49,7 @@ public class ArrowHud extends AbstractHudEntry {
 		if (background.get()) {
 			fillRect(matrices, getBounds(), backgroundColor.get());
 		}
+		if(outline.get()) outlineRect(matrices, getBounds(), outlineColor.get());
 		drawCenteredString(matrices, client.textRenderer, String.valueOf(arrows), new DrawPosition(pos.x + width / 2,
 			pos.y + height - 10), textColor.get(), shadow.get());
 		ItemUtil.renderGuiItemModel(matrices, currentArrow, pos.x + 2, pos.y + 2);

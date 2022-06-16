@@ -1,5 +1,6 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
+import io.github.moehreag.axolotlclient.mixin.AccessorMinecraftClient;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
 
@@ -24,7 +25,7 @@ public class FPSHud extends CleanHudEntry {
 
     @Override
     public String getValue() {
-        return "095";//MinecraftClient.getCurrentFps() + " FPS";
+        return ((AccessorMinecraftClient)MinecraftClient.getInstance()).getCurrentFps() + " FPS";
     }
 
     @Override

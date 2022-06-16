@@ -1,26 +1,22 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
-import io.github.moehreag.axolotlclient.config.Color;
 import io.github.moehreag.axolotlclient.config.options.BooleanOption;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.moehreag.axolotlclient.modules.hud.util.ItemUtil;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtList;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -42,10 +38,12 @@ public class ArmorHud extends AbstractHudEntry {
 		matrices.push();
 		scale(matrices);
 		DrawPosition pos = getPos();
+
 		if (background.get()) {
 			fillRect(matrices, getBounds(),
 				backgroundColor.get());
 		}
+		if(outline.get()) outlineRect(matrices, getBounds(), outlineColor.get());
 		int lastY = 2 + (4 * 20);
 		assert client.player != null;
 		renderMainItem(matrices, client.player.getInventory().getMainHandStack(), pos.x + 2, pos.y + lastY);
@@ -59,34 +57,22 @@ public class ArmorHud extends AbstractHudEntry {
 	}
 
 	public void renderItem(MatrixStack matrices, ItemStack stack, int x, int y) {
-		//MinecraftClient.getInstance().getItemRenderer().renderGuiItemIcon(stack, x, y);e
 
-		ItemUtil.renderGuiItemModel(matrices, stack, x, y);
-		//client.getItemRenderer().
-		ItemUtil.renderGuiItemOverlay(matrices, client.textRenderer, stack, x, y, null, textColor.get().getAsInt(),
-			shadow.get());
-
-		matrices.push();
-		matrices.translate(0, 0, client.getItemRenderer().zOffset + 200F);
-		RenderSystem.disableDepthTest();
-		if(showProtLvl.get() && stack.hasEnchantments()){
-			NbtList nbtList = stack.getEnchantments();
-			for(int i = 0; i < stack.getEnchantments().size(); ++i) {
+		if(showProtLvl.get() && stack.hasEnchantments()) {
+			for (int i = 0; i < stack.getEnchantments().size(); ++i) {
 				NbtCompound nbtCompound = stack.getEnchantments().getCompound(i);
 				Registry.ENCHANTMENT
 					.getOrEmpty(EnchantmentHelper.getIdFromNbt(nbtCompound))
 					.ifPresent(e -> {
-						if(Objects.equals(e.getTranslationKey(), Enchantments.PROTECTION.getTranslationKey())) {
-							drawCenteredString(matrices,
-								client.textRenderer,
-								String.valueOf(EnchantmentHelper.getLevelFromNbt(nbtCompound)),
-								new DrawPosition(x + width / 2, y + 4), textColor.get(), shadow.get());
+						if (Objects.equals(e.getTranslationKey(), Enchantments.PROTECTION.getTranslationKey())) {
+							stack.setCount(EnchantmentHelper.getLevelFromNbt(nbtCompound));
 						}
 					});
 			}
 		}
-		RenderSystem.enableDepthTest();
-		matrices.pop();
+		ItemUtil.renderGuiItemModel(matrices, stack, x, y);
+		ItemUtil.renderGuiItemOverlay(matrices, client.textRenderer, stack, x, y, null, textColor.get().getAsInt(),
+			shadow.get());
 	}
 
 	public void renderMainItem(MatrixStack matrices, ItemStack stack, int x, int y) {

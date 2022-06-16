@@ -169,6 +169,7 @@ public class ScoreboardHud extends AbstractHudEntry {
 					fillRect(matrices, new Rectangle(scoreX - 2, relativeY - 1, maxWidth, 1),
 						backgroundColor.get());
 				}
+
 				float title = (float) (scoreX + maxWidth / 2 - displayNameWidth / 2 - 1);
 				if (shadow.get()) {
 					client.textRenderer.drawWithShadow(matrices, text, title, (float) (relativeY - 9), -1);
@@ -178,6 +179,7 @@ public class ScoreboardHud extends AbstractHudEntry {
 				}
 			}
 		}
+		if(outline.get()) outlineRect(matrices, new Rectangle(textOffset, calculated.y-2, maxWidth, calculated.height+2), outlineColor.get());
 	}
 
     @Override

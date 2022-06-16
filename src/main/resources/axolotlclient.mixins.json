@@ -8,6 +8,7 @@
 	"client": [
 		"AccessorBossBarHud",
 		"AccessorButtonListWidget",
+		"AccessorMinecraftClient",
 		"AccessorShaderEffect",
 		"MixinAddServerScreen",
 		"MixinBossBarHud",

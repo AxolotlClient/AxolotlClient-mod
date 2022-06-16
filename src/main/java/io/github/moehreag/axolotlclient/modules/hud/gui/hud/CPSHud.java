@@ -4,9 +4,7 @@ import io.github.moehreag.axolotlclient.config.options.BooleanOption;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.util.Hooks;
 import net.minecraft.util.Identifier;
-import org.lwjgl.glfw.GLFWMouseButtonCallback;
-import org.quiltmc.qsl.lifecycle.api.client.event.ClientTickEvents;
-import org.quiltmc.qsl.screen.api.client.ScreenMouseEvents;
+import net.minecraft.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +20,6 @@ public class CPSHud extends CleanHudEntry {
 
     private final BooleanOption fromKeybindings = new BooleanOption("cpskeybind", false);
     private final BooleanOption rmb = new BooleanOption("rightcps", false);
-
-    boolean rc;
-    boolean lc;
 
     public CPSHud() {
         super();
@@ -100,11 +95,11 @@ public class CPSHud extends CleanHudEntry {
         }
 
         public void update() {
-            //clicks.removeIf((click) -> MinecraftClient.getTime() - click > 1000);
+            clicks.removeIf((click) -> Util.getMeasuringTimeMs() - click > 1000);
         }
 
         public void click() {
-            //clicks.add(MinecraftClient.getTime());
+            clicks.add(Util.getMeasuringTimeMs());
         }
 
         public int clicks() {

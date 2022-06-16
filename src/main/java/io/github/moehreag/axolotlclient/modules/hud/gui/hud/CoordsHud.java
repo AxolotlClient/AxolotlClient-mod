@@ -33,35 +33,23 @@ public class CoordsHud extends AbstractHudEntry {
     }
 
     public static String getZDir(int dir) {
-        switch (dir) {
-            case 5:
-                return "++";
-            case 4:
-            case 6:
-                return "+";
-            case 8:
-            case 2:
-                return "-";
-            case 1:
-                return "--";
-        }
-        return "";
+	    return switch (dir) {
+		    case 5 -> "++";
+		    case 4, 6 -> "+";
+		    case 8, 2 -> "-";
+		    case 1 -> "--";
+		    default -> "";
+	    };
     }
 
     public static String getXDir(int dir) {
-        switch (dir) {
-            case 3:
-                return "++";
-            case 2:
-            case 4:
-                return "+";
-            case 6:
-            case 8:
-                return "-";
-            case 7:
-                return "--";
-        }
-        return "";
+	    return switch (dir) {
+		    case 3 -> "++";
+		    case 2, 4 -> "+";
+		    case 6, 8 -> "-";
+		    case 7 -> "--";
+		    default -> "";
+	    };
     }
 
     /**
@@ -106,6 +94,9 @@ public class CoordsHud extends AbstractHudEntry {
 		DrawPosition pos = getPos();
 		if (background.get()) {
 			fillRect(matrices, getBounds(), backgroundColor.get());
+		}
+		if(outline.get()) {
+			outlineRect(matrices, getBounds(), outlineColor.get());
 		}
 		StringBuilder format = new StringBuilder("#");
 		if (decimalPlaces.get() > 0) {
@@ -189,37 +180,18 @@ public class CoordsHud extends AbstractHudEntry {
 	}
 
     public String getWordedDirection(int dir) {
-        String direction = "";
-        switch (dir) {
-            case 1:
-                direction = "N";
-                break;
-            case 2:
-                direction = "NE";
-                break;
-            case 3:
-                direction = "E";
-                break;
-            case 4:
-                direction = "SE";
-                break;
-            case 5:
-                direction = "S";
-                break;
-            case 6:
-                direction = "SW";
-                break;
-            case 7:
-                direction = "W";
-                break;
-            case 8:
-                direction = "NW";
-                break;
-            case 0:
-                direction = "?";
-                break;
-        }
-        return direction;
+	    return switch (dir) {
+		    case 1 -> "N";
+		    case 2 -> "NE";
+		    case 3 -> "E";
+		    case 4 -> "SE";
+		    case 5 -> "S";
+		    case 6 -> "SW";
+		    case 7 -> "W";
+		    case 8 -> "NW";
+		    case 0 -> "?";
+		    default -> "";
+	    };
     }
 
     @Override
