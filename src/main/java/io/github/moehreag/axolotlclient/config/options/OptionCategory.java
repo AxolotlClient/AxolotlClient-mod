@@ -1,26 +1,26 @@
 package io.github.moehreag.axolotlclient.config.options;
 
-import io.github.moehreag.axolotlclient.config.screen.widgets.CategoryWidget;
-import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.option.GameOptions;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public class OptionCategory extends OptionBase {
+public class OptionCategory {
 
     Identifier Id;
+	String name;
     private final List<Option> options = new ArrayList<>();
     private final List<OptionCategory> subCategories = new ArrayList<>();
 
     public OptionCategory(String key){
-	    super(key);
+	    this.name =key;
     }
 
 	public OptionCategory(Identifier Id, String key){
-		super(key);
+		this.name = key;
 		this.Id=Id;
     }
 
@@ -48,4 +48,10 @@ public class OptionCategory extends OptionBase {
 
     public Text getTranslatedName(){return Text.translatable(name);}
 
+	public @Nullable Text getTooltip(){
+		if(!Objects.equals(Text.translatable(getName() + ".tooltip").getString(), getName() + ".tooltip")) {
+			return Text.translatable(getName() + ".tooltip");
+		}
+		return null;
+	}
 }

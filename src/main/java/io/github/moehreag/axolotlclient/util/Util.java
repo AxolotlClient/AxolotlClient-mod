@@ -23,6 +23,7 @@ import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.ScoreboardPlayerScore;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.text.Text;
+import net.minecraft.unmapped.C_fijiyucq;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -82,6 +83,12 @@ public class Util {
 		return game;
 	}
 
+	// I suppose this is something introduced with the chat cryptography features in 1.19
+	private static final C_fijiyucq whateverThisIs = new C_fijiyucq(MinecraftClient.getInstance());
+	public static void sendChatMessage(String msg) {
+		Text text = whateverThisIs.method_44037(msg);
+		MinecraftClient.getInstance().player.method_44096(msg, text);
+	}
 
 	public static List<String> getSidebar() {
 		List<String> lines = new ArrayList<>();

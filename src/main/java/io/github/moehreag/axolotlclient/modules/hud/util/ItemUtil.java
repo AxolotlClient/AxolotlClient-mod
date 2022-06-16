@@ -119,7 +119,6 @@ public class ItemUtil {
 	 *
 	 * @param list1 one to be based off of
 	 * @param list2 one to compare to
-	 * @return
 	 */
 	public static List<ItemStorage> compare(List<ItemStorage> list1, List<ItemStorage> list2) {
 		ArrayList<ItemStorage> list = new ArrayList<>();
@@ -138,6 +137,7 @@ public class ItemUtil {
 		return list;
 	}
 
+	@SuppressWarnings("deprecated")
 	public static void renderGuiItemModel(MatrixStack matrices, ItemStack stack, float x, float y) {
 		MinecraftClient client = MinecraftClient.getInstance();
 		BakedModel model = client.getItemRenderer().getHeldItemModel(stack, null, client.player, (int) (x * y));
@@ -148,7 +148,7 @@ public class ItemUtil {
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		MatrixStack matrixStack = RenderSystem.getModelViewStack();
 		matrixStack.push();
-		matrixStack.translate((double)x, (double)y, (double)(100.0F + MinecraftClient.getInstance().getItemRenderer().zOffset));
+		matrixStack.translate(x, y, 100.0F + MinecraftClient.getInstance().getItemRenderer().zOffset);
 		matrixStack.translate(8.0, 8.0, 0.0);
 		matrixStack.scale(1.0F, -1.0F, 1.0F);
 		matrixStack.scale(16.0F, 16.0F, 16.0F);

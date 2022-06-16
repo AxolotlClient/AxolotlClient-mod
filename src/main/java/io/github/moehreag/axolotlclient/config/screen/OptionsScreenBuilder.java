@@ -1,7 +1,9 @@
 package io.github.moehreag.axolotlclient.config.screen;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.config.options.ColorOption;
+import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.config.options.OptionCategory;
 import io.github.moehreag.axolotlclient.config.screen.widgets.ColorSelectionWidget;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawUtil;
@@ -11,6 +13,9 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class OptionsScreenBuilder extends Screen {
@@ -104,5 +109,19 @@ public class OptionsScreenBuilder extends Screen {
 	@Override
 	public boolean charTyped(char chr, int modifiers) {
 		return list.charTyped(chr, modifiers);
+	}
+
+	public void renderTooltip(MatrixStack matrices, Option option, int x, int y){
+		List<Text> text = new ArrayList<>();
+		String[] tooltip = Objects.requireNonNull(option.getTooltip()).getString().split("\n");
+		for(String s:tooltip) text.add(Text.literal(s));
+		this.renderTooltip(matrices, text, x, y);
+	}
+
+	public void renderTooltip(MatrixStack matrices, OptionCategory category, int x, int y){
+		List<Text> text = new ArrayList<>();
+		String[] tooltip = Objects.requireNonNull(category.getTooltip()).getString().split("\n");
+		for(String s:tooltip) text.add(Text.literal(s));
+		this.renderTooltip(matrices, text, x, y);
 	}
 }

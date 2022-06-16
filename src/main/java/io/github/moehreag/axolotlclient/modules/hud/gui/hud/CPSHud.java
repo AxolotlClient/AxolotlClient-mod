@@ -4,6 +4,9 @@ import io.github.moehreag.axolotlclient.config.options.BooleanOption;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.util.Hooks;
 import net.minecraft.util.Identifier;
+import org.lwjgl.glfw.GLFWMouseButtonCallback;
+import org.quiltmc.qsl.lifecycle.api.client.event.ClientTickEvents;
+import org.quiltmc.qsl.screen.api.client.ScreenMouseEvents;
 
 import java.util.ArrayList;
 import java.util.List;

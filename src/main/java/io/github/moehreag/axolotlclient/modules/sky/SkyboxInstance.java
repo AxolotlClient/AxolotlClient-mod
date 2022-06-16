@@ -3,6 +3,7 @@ package io.github.moehreag.axolotlclient.modules.sky;
 import com.google.gson.JsonObject;
 import io.github.moehreag.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
 import java.util.Objects;
@@ -91,6 +92,6 @@ public class SkyboxInstance {
         return  maxPossibleAlpha;
     }
 
-    public void renderSkybox(){
+    public void renderSkybox(MatrixStack matrices){
     }
 }

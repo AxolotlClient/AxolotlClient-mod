@@ -1,11 +1,12 @@
 package io.github.moehreag.axolotlclient.config.options;
 
-import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.option.GameOptions;
-
-public abstract class OptionBase {
+public abstract class OptionBase implements Option {
     public String name;
     public OptionBase(String name){
 	    this.name=name;
     }
+
+	public String getName(){
+		return name;
+	}
 }

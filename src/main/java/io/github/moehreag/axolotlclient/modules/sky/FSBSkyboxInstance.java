@@ -1,7 +1,16 @@
 package io.github.moehreag.axolotlclient.modules.sky;
 
 import com.google.gson.JsonObject;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.Tessellator;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormats;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Vec3f;
 
 /**
  * This implementation of custom skies is based on the FabricSkyBoxes mod by AMereBagatelle
@@ -26,47 +35,50 @@ public class FSBSkyboxInstance extends SkyboxInstance{
             this.fade[3] = props.get("fade").getAsJsonObject().get("endFadeOut").getAsInt();
     }
 
-    /*public void renderSkybox(){
-        this.alpha = getAlpha();
-        this.distance= MinecraftClient.getInstance().options.getViewDistance().get();
+	@Override
+	public void renderSkybox(MatrixStack matrices) {
+		this.alpha=getAlpha();
+		this.distance= MinecraftClient.getInstance().options.getViewDistance().get();
 
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		RenderSystem.enableBlend();
+		RenderSystem.blendFunc(GlStateManager.class_4535.SRC_ALPHA, GlStateManager.class_4534.ONE_MINUS_SRC_ALPHA);
 
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferBuilder = tessellator.getBuffer();
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder bufferBuilder = tessellator.getBufferBuilder();
 
-        for (int i = 0; i < 6; ++i) {
-            MinecraftClient.getInstance().getTextureManager().bindTexture(textures[i]);
-            GlStateManager.pushMatrix();
+		for (int i = 0; i < 6; ++i) {
 
-            if (i == 1) {
-                GlStateManager.rotatef(90.0F, 1.0F, 0.0F, 0.0F);
-            }
-            if (i == 2) {
-                GlStateManager.rotatef(-90.0F, 1.0F, 0.0F, 0.0F);
-                GlStateManager.rotatef(180, 0, 1, 0);
-            }
-            if (i == 3) {
-                GlStateManager.rotatef(180.0F, 1.0F, 0.0F, 0.0F);
-                GlStateManager.rotatef(90F, 0, 1, 0);
-            }
-            if (i == 4) {
-                GlStateManager.rotatef(90.0F, 0.0F, 0.0F, 1.0F);
-                GlStateManager.rotatef(-90, 0, 1, 0);
-            }
-            if (i == 5) {
-                GlStateManager.rotatef(-90.0F, 0.0F, 0.0F, 1.0F);
-                GlStateManager.rotatef(90, 0, 1, 0);
-            }
-            bufferBuilder.begin(7, VertexFormats.POSITION_TEXTURE_COLOR);
-            bufferBuilder.vertex(-distance*16, -distance*16, -distance*16).texture(0.0, 0.0).color(1F, 1F, 1F, alpha).next();
-            bufferBuilder.vertex(-distance*16, -distance*16, distance*16).texture(0.0, 1.0).color(1F, 1F, 1F, alpha).next();
-            bufferBuilder.vertex(distance*16, -distance*16, distance*16).texture(1.0, 1.0).color(1F, 1F, 1F, alpha).next();
-            bufferBuilder.vertex(distance*16, -distance*16, -distance*16).texture(1.0, 0.0).color(1F, 1F, 1F, alpha).next();
-            tessellator.draw();
-            GlStateManager.popMatrix();
-        }
-        GlStateManager.disableBlend();
-    }*/
+			if (textures[0] != null) {
+				MinecraftClient.getInstance().getTextureManager().bindTexture(textures[0]);
+				matrices.push();
+
+				if (i == 1) {
+					matrices.multiply(Vec3f.POSITIVE_X.getRadialQuaternion(90));
+
+				} else if (i == 2) {
+					matrices.multiply(Vec3f.NEGATIVE_X.getRadialQuaternion(90));
+					matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion(180));
+
+				} else if (i == 3) {
+					matrices.multiply(Vec3f.POSITIVE_X.getRadialQuaternion(180));
+
+				} else if (i == 4) {
+					matrices.multiply(Vec3f.POSITIVE_Z.getRadialQuaternion(90));
+					matrices.multiply(Vec3f.NEGATIVE_Y.getRadialQuaternion(90));
+
+				} else {
+					matrices.multiply(Vec3f.NEGATIVE_Z.getRadialQuaternion(90));
+					matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion(90));
+				}
+				bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
+				bufferBuilder.vertex(-distance * 16, -distance * 16, -distance * 16).uv(0F, 0F).color(1F, 1F, 1F, alpha).next();
+				bufferBuilder.vertex(-distance * 16, -distance * 16, distance * 16).uv(0F, 1F).color(1F, 1F, 1F, alpha).next();
+				bufferBuilder.vertex(distance * 16, -distance * 16, distance * 16).uv(1F, 1F).color(1F, 1F, 1F, alpha).next();
+				bufferBuilder.vertex(distance * 16, -distance * 16, -distance * 16).uv(1F, 0F).color(1F, 1F, 1F, alpha).next();
+				tessellator.draw();
+				matrices.pop();
+			}
+			RenderSystem.disableBlend();
+		}
+    }
 }

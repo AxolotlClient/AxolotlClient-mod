@@ -38,9 +38,7 @@ public class CreditsScreen extends Screen {
 
         if(AxolotlClient.CONFIG.creditsBGM.get() && !MinecraftClient.getInstance().getSoundManager().isPlaying(bgm)){
 
-            //if(((AccessorSoundSystem) ((AccessorSoundManager) MinecraftClient.getInstance().getSoundManager()).getSoundSystem()).getField_8196().get(bgm) == null) {
-                MinecraftClient.getInstance().getSoundManager().play(bgm);
-            //}
+	        MinecraftClient.getInstance().getSoundManager().play(bgm);
         }
 
         if(MinecraftClient.getInstance().world!=null)fillGradient(matrices, 0,0, width, height, new Color(0xB0100E0E, true).hashCode(), new Color(0x46212020, true).hashCode());
@@ -117,31 +115,6 @@ public class CreditsScreen extends Screen {
 
     private void stopBGM(){
 		MinecraftClient.getInstance().getSoundManager().stop(bgm);
-		//MinecraftClient.getInstance().getSoundManager().
-        /*if(((AccessorSoundSystem) ((AccessorSoundManager) MinecraftClient.getInstance().
-                getSoundManager()).getSoundSystem()).
-                getField_8196().get(bgm)!=null) {
-            ((SoundSystem) ((AccessorSoundManager) MinecraftClient.getInstance()
-                    .getSoundManager())
-                    .getSoundSystem()
-                    .field_8193)
-                    .stop(
-                            ((AccessorSoundSystem) ((AccessorSoundManager) MinecraftClient.getInstance()
-                            .getSoundManager())
-                            .getSoundSystem())
-                            .getField_8196()
-                            .get(bgm));
-            ((SoundSystem) ((AccessorSoundManager) MinecraftClient.getInstance()
-                    .getSoundManager())
-                    .getSoundSystem()
-                    .field_8193)
-                    .removeSource(
-                            ((AccessorSoundSystem) ((AccessorSoundManager) MinecraftClient.getInstance()
-                            .getSoundManager())
-                                    .getSoundSystem())
-                                    .getField_8196()
-                                    .get(bgm));
-        }*/
     }
 
 	@Override

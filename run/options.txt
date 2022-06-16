@@ -1,5 +1,5 @@
 version:3105
-quilt_available_resource_packs:["programer_art","vanilla"]
+quilt_available_resource_packs:["programer_art","vanilla","file/astralex-sky-overlay-for-1-8.zip","file/testpack"]
 autoJump:false
 autoSuggestions:true
 chatColors:true
@@ -38,8 +38,8 @@ ao:2
 prioritizeChunkUpdates:0
 biomeBlendRadius:2
 renderClouds:"false"
-resourcePacks:["vanilla"]
-incompatibleResourcePacks:[]
+resourcePacks:["vanilla","programer_art","file/astralex-sky-overlay-for-1-8.zip","file/testpack"]
+incompatibleResourcePacks:["file/astralex-sky-overlay-for-1-8.zip","file/testpack"]
 lastServer:
 lang:en_us
 soundDevice:""

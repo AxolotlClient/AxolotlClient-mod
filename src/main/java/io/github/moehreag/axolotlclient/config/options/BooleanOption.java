@@ -2,9 +2,6 @@ package io.github.moehreag.axolotlclient.config.options;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
-import io.github.moehreag.axolotlclient.config.screen.widgets.BooleanWidget;
-import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.option.GameOptions;
 import org.jetbrains.annotations.NotNull;
 
 public class BooleanOption extends OptionBase implements Option {
@@ -27,12 +24,6 @@ public class BooleanOption extends OptionBase implements Option {
     public OptionType getType() {
         return OptionType.BOOLEAN;
     }
-
-    @Override
-    public String getName() {
-        return this.name;
-    }
-
     @Override
     public void setValueFromJsonElement(@NotNull JsonElement element) {
         option = element.getAsBoolean();

@@ -1,5 +1,24 @@
 package io.github.moehreag.axolotlclient.modules.sky;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.mojang.blaze3d.systems.RenderSystem;
+import io.github.moehreag.axolotlclient.AxolotlClient;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.resource.ResourceType;
+import net.minecraft.resource.pack.ResourcePack;
+import net.minecraft.util.Identifier;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * This implementation of custom skies is based on the FabricSkyBoxes mod by AMereBagatelle
  * https://github.com/AMereBagatelle/FabricSkyBoxes
@@ -7,21 +26,17 @@ package io.github.moehreag.axolotlclient.modules.sky;
 
 public class SkyResourceManager{
 
-    /*static Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    public static List<ResourcePack> packs;
+    static Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     public static void reload(List<ResourcePack> resourcePacks) {
         if(!AxolotlClient.CONFIG.customSky.get())return;
-        SkyLoadingScreen loadingScreen = new SkyLoadingScreen();
-        loadingScreen.render();
         SkyboxManager.getInstance().clearSkyboxes();
         for (ResourcePack pack : resourcePacks) {
-            if(SkyLoadingScreen.currentlyShown)loadingScreen.update(pack);
-            if (pack.getNamespaces().contains("fabricskyboxes")) {
+            if (pack.getNamespaces(ResourceType.CLIENT_RESOURCES).contains("fabricskyboxes")) {
                 int i = 1;
                 while (true) {
                     try {
-                        InputStream stream = pack.open(new Identifier("fabricskyboxes", "sky/sky" + i + ".json"));
+                        InputStream stream = pack.open(ResourceType.CLIENT_RESOURCES, new Identifier("fabricskyboxes", "sky/sky" + i + ".json"));
                         String text = new BufferedReader(
                                 new InputStreamReader(stream, StandardCharsets.UTF_8))
                                 .lines()
@@ -34,25 +49,16 @@ public class SkyResourceManager{
                 }
             }
             try{
-                pack.open(new Identifier("minecraft", "mcpatcher/sky/world0/sky1.properties"));
-                loadMCPSky(pack, "mcpatcher", loadingScreen);
+                pack.open(ResourceType.CLIENT_RESOURCES, new Identifier("minecraft", "mcpatcher/sky/world0/sky1.properties"));
+                loadMCPSky(pack, "mcpatcher");
             } catch (IOException ignored) {
             }
             try{
-                pack.open(new Identifier("minecraft", "optifine/sky/world0/sky1.properties"));
-                loadMCPSky(pack, "optifine", loadingScreen);
+                pack.open(ResourceType.CLIENT_RESOURCES, new Identifier("minecraft", "optifine/sky/world0/sky1.properties"));
+                loadMCPSky(pack, "optifine");
             } catch (IOException ignored) {
             }
         }
-        loadingScreen.finish();
-        try {
-            TimeUnit.MILLISECONDS.sleep(500);
-        } catch (Exception ignored){}
-    }
-
-    public static void onStartup(){
-        if(!packs.isEmpty())reload(packs);
-        AxolotlClient.initalized=true;
     }
 
     public static void loadSky(String json){
@@ -60,7 +66,7 @@ public class SkyResourceManager{
         SkyboxManager.getInstance().addSkybox(new FSBSkyboxInstance(object));
     }
 
-    public static void loadMCPSky(ResourcePack pack, String loader, SkyLoadingScreen loadingScreen){
+    public static void loadMCPSky(ResourcePack pack, String loader){
         int i = 1;
         AxolotlClient.LOGGER.info("Loading MCP/OF skies in pack "+pack.getName()+" !");
         while (true) {
@@ -70,9 +76,7 @@ public class SkyResourceManager{
                 int endFadeIn = 0;
                 int startFadeOut= 0;
                 int endFadeOut = 0;
-                InputStream stream = pack.open(new Identifier("minecraft", loader + "/sky/world0/sky" + i + ".properties"));
-
-                loadingScreen.setDesc("sky"+i+".properties");
+                InputStream stream = pack.open(ResourceType.CLIENT_RESOURCES, new Identifier("minecraft", loader + "/sky/world0/sky" + i + ".properties"));
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8));
                 String string;
@@ -102,5 +106,5 @@ public class SkyResourceManager{
             }
             i++;
         }
-    }*/
+    }
 }

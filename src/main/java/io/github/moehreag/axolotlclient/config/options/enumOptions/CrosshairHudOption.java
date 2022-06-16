@@ -4,9 +4,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import io.github.moehreag.axolotlclient.config.options.EnumOption;
 import io.github.moehreag.axolotlclient.config.options.OptionBase;
-import io.github.moehreag.axolotlclient.config.screen.widgets.EnumOptionWidget;
-import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.option.GameOptions;
 import org.jetbrains.annotations.NotNull;
 
 public class CrosshairHudOption extends OptionBase implements EnumOption {
@@ -16,11 +13,6 @@ public class CrosshairHudOption extends OptionBase implements EnumOption {
     public CrosshairHudOption(String name) {
         super(name);
         value=CrosshairOption.CROSS;
-    }
-
-	@Override
-    public String getName() {
-        return this.name;
     }
 
     @Override

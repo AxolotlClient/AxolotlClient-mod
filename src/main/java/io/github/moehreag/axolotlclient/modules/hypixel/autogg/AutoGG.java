@@ -4,6 +4,7 @@ import io.github.moehreag.axolotlclient.config.options.BooleanOption;
 import io.github.moehreag.axolotlclient.config.options.OptionCategory;
 import io.github.moehreag.axolotlclient.config.options.StringOption;
 import io.github.moehreag.axolotlclient.modules.hypixel.AbstractHypixelMod;
+import io.github.moehreag.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.minecraft.unmapped.C_fijiyucq;
@@ -21,9 +22,6 @@ import java.util.List;
 public class AutoGG implements AbstractHypixelMod {
 
     public static AutoGG Instance = new AutoGG();
-
-	// I suppose this is something introduced with the chat cryptography features in 1.19
-	private final C_fijiyucq whateverThisIs = new C_fijiyucq(MinecraftClient.getInstance());
 
     private final OptionCategory category = new OptionCategory(new Identifier("autogg"), "autogg");
     private final MinecraftClient client = MinecraftClient.getInstance();
@@ -97,8 +95,7 @@ public class AutoGG implements AbstractHypixelMod {
         if (System.currentTimeMillis() - this.lastTime > 3000) {
             for (String s : options) {
                 if (messageReceived.getString().contains(s)) {
-	                Text text = this.whateverThisIs.method_44037(messageToSend);
-	                this.client.player.method_44096(messageToSend, text);
+	                Util.sendChatMessage(messageToSend);
                     this.lastTime = System.currentTimeMillis();
                     return;
                 }

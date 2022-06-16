@@ -1,5 +1,6 @@
 package io.github.moehreag.axolotlclient.modules.hud;
 
+import com.mojang.blaze3d.platform.InputUtil;
 import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.config.Color;
 import io.github.moehreag.axolotlclient.config.options.OptionCategory;
@@ -58,7 +59,7 @@ public class HudManager extends AbstractModule {
     private final MinecraftClient client = MinecraftClient.getInstance();
     private static final HudManager INSTANCE = new HudManager();
 
-    static KeyBind key = new KeyBind("key.openHud", GLFW.GLFW_KEY_RIGHT_SHIFT, "category.axolotlclient");
+    static KeyBind key = new KeyBind("key.openHud", InputUtil.KEY_RIGHT_SHIFT_CODE, "category.axolotlclient");
 
     public void save(){
 

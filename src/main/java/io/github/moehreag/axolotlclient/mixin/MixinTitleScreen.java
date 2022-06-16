@@ -3,15 +3,18 @@ package io.github.moehreag.axolotlclient.mixin;
 
 import io.github.moehreag.axolotlclient.modules.hud.HudEditScreen;
 import io.github.moehreag.axolotlclient.util.DiscordRPC;
+import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
+import org.quiltmc.loader.api.QuiltLoader;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
@@ -33,6 +36,14 @@ public abstract class MixinTitleScreen extends Screen{
 		args.set(4, Text.translatable("config"));
 		args.set(5, (ButtonWidget.PressAction) buttonWidget ->
 			MinecraftClient.getInstance().setScreen(new HudEditScreen(this)));
+	}
+
+	@ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;drawStringWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V"), index = 2)
+	public String setVersionText(String s){
+		return "Minecraft "+ SharedConstants.getGameVersion().getName() +
+			"/AxolotlClient "+
+			(QuiltLoader.getModContainer("axolotlclient").isPresent() ?
+				QuiltLoader.getModContainer("axolotlclient").get().metadata().version().raw():"");
 	}
 
 	@Inject(method = "init", at = @At("HEAD"))

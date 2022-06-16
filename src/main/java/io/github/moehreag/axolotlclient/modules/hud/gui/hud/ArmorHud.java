@@ -1,15 +1,26 @@
 package io.github.moehreag.axolotlclient.modules.hud.gui.hud;
 
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import io.github.moehreag.axolotlclient.config.Color;
+import io.github.moehreag.axolotlclient.config.options.BooleanOption;
 import io.github.moehreag.axolotlclient.config.options.Option;
 import io.github.moehreag.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.moehreag.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.moehreag.axolotlclient.modules.hud.util.ItemUtil;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -19,6 +30,8 @@ import java.util.List;
 
 public class ArmorHud extends AbstractHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "armorhud");
+
+	protected BooleanOption showProtLvl = new BooleanOption("showProtectionLevel", false);
 
     public ArmorHud() {
         super(20, 100);
@@ -46,11 +59,34 @@ public class ArmorHud extends AbstractHudEntry {
 	}
 
 	public void renderItem(MatrixStack matrices, ItemStack stack, int x, int y) {
-		//MinecraftClient.getInstance().getItemRenderer().renderGuiItemIcon(stack, x, y);
+		//MinecraftClient.getInstance().getItemRenderer().renderGuiItemIcon(stack, x, y);e
+
 		ItemUtil.renderGuiItemModel(matrices, stack, x, y);
 		//client.getItemRenderer().
 		ItemUtil.renderGuiItemOverlay(matrices, client.textRenderer, stack, x, y, null, textColor.get().getAsInt(),
 			shadow.get());
+
+		matrices.push();
+		matrices.translate(0, 0, client.getItemRenderer().zOffset + 200F);
+		RenderSystem.disableDepthTest();
+		if(showProtLvl.get() && stack.hasEnchantments()){
+			NbtList nbtList = stack.getEnchantments();
+			for(int i = 0; i < stack.getEnchantments().size(); ++i) {
+				NbtCompound nbtCompound = stack.getEnchantments().getCompound(i);
+				Registry.ENCHANTMENT
+					.getOrEmpty(EnchantmentHelper.getIdFromNbt(nbtCompound))
+					.ifPresent(e -> {
+						if(Objects.equals(e.getTranslationKey(), Enchantments.PROTECTION.getTranslationKey())) {
+							drawCenteredString(matrices,
+								client.textRenderer,
+								String.valueOf(EnchantmentHelper.getLevelFromNbt(nbtCompound)),
+								new DrawPosition(x + width / 2, y + 4), textColor.get(), shadow.get());
+						}
+					});
+			}
+		}
+		RenderSystem.enableDepthTest();
+		matrices.pop();
 	}
 
 	public void renderMainItem(MatrixStack matrices, ItemStack stack, int x, int y) {
@@ -91,12 +127,13 @@ public class ArmorHud extends AbstractHudEntry {
     @Override
     public void addConfigOptions(List<Option> options) {
         super.addConfigOptions(options);
-        //options.add(enabled);
+        options.add(textColor);
         options.add(shadow);
         options.add(background);
         options.add(backgroundColor);
         options.add(outline);
         options.add(outlineColor);
+		options.add(showProtLvl);
     }
 
 }

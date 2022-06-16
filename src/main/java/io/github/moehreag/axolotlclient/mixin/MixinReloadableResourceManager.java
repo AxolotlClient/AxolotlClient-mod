@@ -4,6 +4,7 @@ import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.modules.hud.HudManager;
 import io.github.moehreag.axolotlclient.modules.hud.gui.hud.PackDisplayHud;
 import io.github.moehreag.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
+import io.github.moehreag.axolotlclient.modules.sky.SkyResourceManager;
 import net.minecraft.resource.ReloadableResourceManager;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceReload;
@@ -23,11 +24,10 @@ import java.util.concurrent.Executor;
 @Mixin(ReloadableResourceManager.class)
 public class MixinReloadableResourceManager {
 
-    @Inject(method = "reload", at=@At("TAIL"))
+    @Inject(method = "reload", at=@At("HEAD"))
     public void loadSkies(Executor prepareExecutor, Executor applyExecutor, CompletableFuture<Unit> initialStage, List<ResourcePack> resourcePacks, CallbackInfoReturnable<ResourceReload> cir){
         HypixelAbstractionLayer.clearPlayerData();
-        //if(AxolotlClient.initalized)SkyResourceManager.reload(resourcePacks);
-        //else{SkyResourceManager.packs=resourcePacks;}
+	    SkyResourceManager.reload(resourcePacks);
 
         PackDisplayHud hud = (PackDisplayHud) HudManager.getINSTANCE().get(PackDisplayHud.ID);
         if(hud.isEnabled()){

@@ -2,6 +2,7 @@ package io.github.moehreag.axolotlclient;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.moehreag.axolotlclient.config.AxolotlClientConfig;
+import io.github.moehreag.axolotlclient.config.Color;
 import io.github.moehreag.axolotlclient.config.ConfigManager;
 import io.github.moehreag.axolotlclient.config.options.BooleanOption;
 import io.github.moehreag.axolotlclient.config.options.OptionCategory;
@@ -15,20 +16,19 @@ import io.github.moehreag.axolotlclient.util.DiscordRPC;
 import io.github.moehreag.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.pack.ResourcePack;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Matrix4f;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
+import org.quiltmc.qsl.lifecycle.api.client.event.ClientTickEvents;
 import org.quiltmc.qsl.resource.loader.api.ResourceLoader;
 import org.quiltmc.qsl.resource.loader.api.ResourcePackActivationType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,7 +38,7 @@ import java.util.UUID;
 
 public class AxolotlClient implements ClientModInitializer {
 
-	public static Logger LOGGER = LogManager.getLogger("AxolotlClient");
+	public static Logger LOGGER = LoggerFactory.getLogger("AxolotlClient");
 
 	public static AxolotlClientConfig CONFIG;
 	public static String onlinePlayers = "";
@@ -77,6 +77,7 @@ public class AxolotlClient implements ClientModInitializer {
 		modules.forEach((identifier, abstractModule) -> abstractModule.lateInit());
 
 		ResourceLoader.registerBuiltinResourcePack(new Identifier("axolotlclient", "axolotlclient-ui"), container, ResourcePackActivationType.NORMAL);
+		ClientTickEvents.START.register(client -> tickClient());
 
 		LOGGER.info("AxolotlClient Initialized");
 	}
@@ -98,10 +99,12 @@ public class AxolotlClient implements ClientModInitializer {
 	}
 
 
-	public static void TickClient(){
+	public static void tickClient(){
 
 		HudManager.tick();
 		HypixelMods.getInstance().tick();
+		DiscordRPC.update();
+		Color.tickChroma();
 
 		if(tickTime % 20 == 0){
 			if(MinecraftClient.getInstance().getCurrentServerEntry() != null){

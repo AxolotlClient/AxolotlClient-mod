@@ -2,10 +2,6 @@ package io.github.moehreag.axolotlclient.config.options;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
-import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.gui.widget.SliderWidget;
-import net.minecraft.client.option.GameOptions;
-import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
 
 public class FloatOption extends OptionBase implements Option{
@@ -36,11 +32,6 @@ public class FloatOption extends OptionBase implements Option{
     @Override
     public OptionType getType() {
         return OptionType.FLOAT;
-    }
-
-    @Override
-    public String getName() {
-        return this.name;
     }
 
     @Override

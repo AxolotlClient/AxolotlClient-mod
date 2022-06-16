@@ -1,11 +1,11 @@
 package io.github.moehreag.axolotlclient.config.screen;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.Tessellator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormats;
+import io.github.moehreag.axolotlclient.AxolotlClient;
 import io.github.moehreag.axolotlclient.config.ConfigManager;
 import io.github.moehreag.axolotlclient.config.options.BooleanOption;
 import io.github.moehreag.axolotlclient.config.options.ColorOption;
@@ -30,7 +30,6 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.widget.ButtonListWidget;
-import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
@@ -54,13 +53,13 @@ public class ButtonWidgetList extends ButtonListWidget {
         if(!category.getSubCategories().isEmpty()) {
             for (int i = 0; i < category.getSubCategories().size(); i += 2) {
                 OptionCategory subCat = category.getSubCategories().get(i);
-                ButtonWidget buttonWidget = this.createCategoryWidget(width / 2 - 155, subCat);
+                CategoryWidget buttonWidget = this.createCategoryWidget(width / 2 - 155, subCat);
 
                 OptionCategory subCat2 = i < category.getSubCategories().size() - 1 ? category.getSubCategories().get(i + 1) : null;
-                ButtonWidget buttonWidget2 = this.createCategoryWidget(width / 2 - 155 + 160, subCat2);
+                CategoryWidget buttonWidget2 = this.createCategoryWidget(width / 2 - 155 + 160, subCat2);
 
-	            this.addEntry(new Pair(buttonWidget, buttonWidget2));
-				this.entries.add(new Pair(buttonWidget, buttonWidget2));
+	            this.addEntry(new CategoryPair(subCat, buttonWidget, subCat2, buttonWidget2));
+	            this.entries.add(new CategoryPair(subCat, buttonWidget, subCat2, buttonWidget2));
             }
             this.addEntry(new Spacer());
 			this.entries.add(new Spacer());
@@ -83,7 +82,7 @@ public class ButtonWidgetList extends ButtonListWidget {
 		return super.addEntry(entry);
 	}
 
-	private ButtonWidget createCategoryWidget(int x, OptionCategory cat){
+	private CategoryWidget createCategoryWidget(int x, OptionCategory cat){
         if(cat==null) {
             return null;
         } else {
@@ -117,49 +116,6 @@ public class ButtonWidgetList extends ButtonListWidget {
 		int k = this.getRowLeft();
 		int l = this.top + 4 - (int)this.getScrollAmount();
 
-		this.renderList(matrices, k, l, mouseX, mouseY, delta);
-		if (MinecraftClient.getInstance().world == null) {
-			RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
-			RenderSystem.setShaderTexture(0, DrawableHelper.OPTIONS_BACKGROUND_TEXTURE);
-			RenderSystem.enableDepthTest();
-			RenderSystem.depthFunc(519);
-			bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
-			bufferBuilder.vertex(this.left, this.top, -100.0).uv(0.0F, (float)this.top / 32.0F).color(64, 64, 64, 255).next();
-			bufferBuilder.vertex((this.left + this.width), this.top, -100.0)
-				.uv((float)this.width / 32.0F, (float)this.top / 32.0F)
-				.color(64, 64, 64, 255)
-				.next();
-			bufferBuilder.vertex((this.left + this.width), 0.0, -100.0).uv((float)this.width / 32.0F, 0.0F).color(64, 64, 64, 255).next();
-			bufferBuilder.vertex(this.left, 0.0, -100.0).uv(0.0F, 0.0F).color(64, 64, 64, 255).next();
-			bufferBuilder.vertex(this.left, this.height, -100.0).uv(0.0F, (float)this.height / 32.0F).color(64, 64, 64, 255).next();
-			bufferBuilder.vertex((this.left + this.width), this.height, -100.0)
-				.uv((float)this.width / 32.0F, (float)this.height / 32.0F)
-				.color(64, 64, 64, 255)
-				.next();
-			bufferBuilder.vertex((this.left + this.width), this.bottom, -100.0)
-				.uv((float)this.width / 32.0F, (float)this.bottom / 32.0F)
-				.color(64, 64, 64, 255)
-				.next();
-			bufferBuilder.vertex(this.left, this.bottom, -100.0).uv(0.0F, (float)this.bottom / 32.0F).color(64, 64, 64, 255).next();
-			tessellator.draw();
-			RenderSystem.depthFunc(515);
-			RenderSystem.disableDepthTest();
-			RenderSystem.enableBlend();
-			RenderSystem.blendFuncSeparate(GlStateManager.class_4535.SRC_ALPHA, GlStateManager.class_4534.ONE_MINUS_SRC_ALPHA, GlStateManager.class_4535.ZERO, GlStateManager.class_4534.ONE);
-			RenderSystem.disableTexture();
-			RenderSystem.setShader(GameRenderer::getPositionColorShader);
-			bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-			bufferBuilder.vertex(this.left, (this.top + 4), 0.0).color(0, 0, 0, 0).next();
-			bufferBuilder.vertex(this.right, (this.top + 4), 0.0).color(0, 0, 0, 0).next();
-			bufferBuilder.vertex(this.right, this.top, 0.0).color(0, 0, 0, 255).next();
-			bufferBuilder.vertex(this.left, this.top, 0.0).color(0, 0, 0, 255).next();
-			bufferBuilder.vertex(this.left, this.bottom, 0.0).color(0, 0, 0, 255).next();
-			bufferBuilder.vertex(this.right, this.bottom, 0.0).color(0, 0, 0, 255).next();
-			bufferBuilder.vertex(this.right, (this.bottom - 4), 0.0).color(0, 0, 0, 0).next();
-			bufferBuilder.vertex(this.left, (this.bottom - 4), 0.0).color(0, 0, 0, 0).next();
-			tessellator.draw();
-		}
-
 		int o = this.getMaxScroll();
 		if (o > 0) {
 			RenderSystem.disableTexture();
@@ -187,8 +143,9 @@ public class ButtonWidgetList extends ButtonListWidget {
 			tessellator.draw();
 		}
 
-		this.renderDecorations(matrices, mouseX, mouseY);
 		RenderSystem.enableTexture();
+		this.renderList(matrices, k, l, mouseX, mouseY, delta);
+
 		RenderSystem.disableBlend();
     }
 
@@ -196,6 +153,11 @@ public class ButtonWidgetList extends ButtonListWidget {
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
 		setFocused(null);
 		return super.mouseClicked(mouseX, mouseY, button);
+	}
+
+	@Override
+	public int getRowLeft() {
+		return this.width / 2 -155;
 	}
 
 	@Override
@@ -230,7 +192,7 @@ public class ButtonWidgetList extends ButtonListWidget {
 	}
 
 	@Environment(EnvType.CLIENT)
-    public static class Pair extends ButtonListWidget.ButtonEntry {
+    public class Pair extends ButtonListWidget.ButtonEntry {
         protected final MinecraftClient client = MinecraftClient.getInstance();
         protected final ClickableWidget left;
         protected final ClickableWidget right;
@@ -259,6 +221,24 @@ public class ButtonWidgetList extends ButtonListWidget {
             }
 
         }
+
+		protected void renderTooltip(MatrixStack matrices, Option option, int x, int y){
+			if(MinecraftClient.getInstance().currentScreen instanceof OptionsScreenBuilder &&
+				AxolotlClient.CONFIG.showOptionTooltips.get() && option.getTooltip()!=null){
+				GL11.glDisable(GL11.GL_SCISSOR_TEST);
+				((OptionsScreenBuilder) MinecraftClient.getInstance().currentScreen).renderTooltip(matrices, option, x, y);
+				Util.applyScissor(new Rectangle(0, top, width, bottom-top));
+			}
+		}
+
+		protected void renderTooltip(MatrixStack matrices, OptionCategory category, int x, int y){
+			if(MinecraftClient.getInstance().currentScreen instanceof OptionsScreenBuilder &&
+				AxolotlClient.CONFIG.showCategoryTooltips.get() && category.getTooltip()!=null){
+				GL11.glDisable(GL11.GL_SCISSOR_TEST);
+				((OptionsScreenBuilder) MinecraftClient.getInstance().currentScreen).renderTooltip(matrices, category, x, y);
+				Util.applyScissor(new Rectangle(0, top, width, bottom-top));
+			}
+		}
 
 	    @Override
 	    public boolean mouseClicked(double mouseX, double mouseY, int button) {
@@ -335,7 +315,31 @@ public class ButtonWidgetList extends ButtonListWidget {
 		}
     }
 
-    public static class OptionEntry extends Pair {
+	public class CategoryPair extends Pair {
+
+		protected OptionCategory left;
+		protected OptionCategory right;
+
+		public CategoryPair(OptionCategory catLeft, CategoryWidget btnLeft, OptionCategory catRight, CategoryWidget btnRight) {
+			super(btnLeft, btnRight);
+			left = catLeft;
+			right = catRight;
+		}
+
+		@Override
+		public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+			super.render(matrices, index, y, x, entryWidth, entryHeight, mouseX, mouseY, hovered, tickDelta);
+
+			if(super.left!=null && super.left.isMouseOver(mouseX, mouseY)){
+				renderTooltip(matrices, left, mouseX, mouseY);
+			}
+			if(super.right !=null && super.right.isMouseOver(mouseX, mouseY)){
+				renderTooltip(matrices, right, mouseX, mouseY);
+			}
+		}
+	}
+
+    public class OptionEntry extends Pair {
 
         private final Option option;
 		protected int width;
@@ -343,22 +347,26 @@ public class ButtonWidgetList extends ButtonListWidget {
         public OptionEntry(ClickableWidget left, Option option, int width) {
             super(left, null);
             this.option = option;
-            if(left instanceof BooleanWidget) left.x = width / 2 - 155 + 160 + 57;
-            else left.x = width / 2 - 155 + 160;
+            if(left instanceof BooleanWidget) left.x = width / 2 + 5 + 57;
+            else left.x = width / 2 + 5;
 			this.width=width;
         }
 
 	    @Override
 	    public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
 
-            DrawableHelper.drawTextWithShadow(matrices, client.textRenderer, option.getTranslatedName(), width/2-155, y + 5, -1);
+            DrawableHelper.drawTextWithShadow(matrices, client.textRenderer, option.getTranslatedName(), x, y + 5, -1);
             left.y = y;
             left.render(matrices, mouseX, mouseY, tickDelta);
+
+		    if(mouseX>=x && mouseX<=left.x + left.getWidth() && mouseY>= y && mouseY<= y + 20){
+			    renderTooltip(matrices, option, mouseX, mouseY);
+		    }
 
         }
     }
 
-    public static class Spacer extends Pair {
+    public class Spacer extends Pair {
 
         public Spacer() {
             super(null, null);

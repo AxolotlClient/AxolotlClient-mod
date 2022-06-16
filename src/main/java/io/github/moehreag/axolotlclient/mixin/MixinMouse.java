@@ -12,6 +12,7 @@ public abstract class MixinMouse {
 
 	@Inject(method = "onMouseButton", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/KeyBind;setKeyPressed(Lcom/mojang/blaze3d/platform/InputUtil$Key;Z)V"))
 	private void onMouseButton(long window, int button, int action, int mods, CallbackInfo ci) {
+		System.out.println(action);
 		if (action == 1) {
 			Hooks.MOUSE_INPUT.invoker().onMouseButton(window, button, action, mods);
 		}

@@ -3,9 +3,6 @@ package io.github.moehreag.axolotlclient.config.options;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import io.github.moehreag.axolotlclient.config.Color;
-import io.github.moehreag.axolotlclient.config.screen.widgets.ColorOptionWidget;
-import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.option.GameOptions;
 import org.jetbrains.annotations.NotNull;
 
 public class ColorOption extends OptionBase implements Option {
@@ -31,12 +28,6 @@ public class ColorOption extends OptionBase implements Option {
     public OptionType getType() {
         return OptionType.COLOR;
     }
-
-    @Override
-    public String getName() {
-        return this.name;
-    }
-
     @Override
     public void setValueFromJsonElement(@NotNull JsonElement element) {
         value=Color.parse(element.getAsString());

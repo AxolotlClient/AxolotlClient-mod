@@ -7,9 +7,6 @@ public interface EnumOption extends Option {
         return OptionType.ENUM;
     }
 
-    @Override
-    String getName();
-
     Enum<?> get();
 
     Enum<?> next();

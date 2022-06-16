@@ -30,7 +30,7 @@ public class KeystrokeHud extends AbstractHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "keystrokehud");
 
 	public KeystrokeHud() {
-		super(150, 30);
+		super(53, 61);
 	}
 
     private final ColorOption pressedTextColor = new ColorOption("heldtextcolor", Color.parse("#FF000000"));
