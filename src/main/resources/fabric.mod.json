@@ -23,7 +23,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "io.github.moehreag.axolotlclient.AxolotlClient"
+      "io.github.axolotlclient.AxolotlClient"
     ]
   },
   "mixins": [
