@@ -21,9 +21,9 @@ public class SkyboxManager {
 
     private static final SkyboxManager INSTANCE = new SkyboxManager();
 
-    public void renderSkyboxes(){
+    public void renderSkyboxes(float brightness){
         this.skyboxes.stream().filter(this.renderPredicate).forEach(this.active_skies::add);
-        this.active_skies.forEach(skyboxInstance -> {if(skyboxInstance!=null)skyboxInstance.renderSkybox();});
+        this.active_skies.forEach(skyboxInstance -> {if(skyboxInstance!=null)skyboxInstance.render(brightness);});
         this.active_skies.removeIf((skybox) -> skybox.getAlpha() <= MINIMUM_ALPHA);
     }
 

@@ -30,14 +30,13 @@ public class FSBSkyboxInstance extends SkyboxInstance{
             this.fade[1] = props.get("fade").getAsJsonObject().get("endFadeIn").getAsInt();
             this.fade[2] = props.get("fade").getAsJsonObject().get("startFadeOut").getAsInt();
             this.fade[3] = props.get("fade").getAsJsonObject().get("endFadeOut").getAsInt();
+
+            this.blendMode = parseBlend(props.get("blend").getAsJsonObject().get("type").getAsString());
     }
 
     public void renderSkybox(){
         this.alpha = getAlpha();
         this.distance=MinecraftClient.getInstance().options.viewDistance;
-
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
@@ -73,6 +72,5 @@ public class FSBSkyboxInstance extends SkyboxInstance{
             tessellator.draw();
             GlStateManager.popMatrix();
         }
-        GlStateManager.disableBlend();
     }
 }

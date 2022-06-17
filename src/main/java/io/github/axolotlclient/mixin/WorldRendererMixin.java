@@ -57,14 +57,14 @@ public abstract class WorldRendererMixin {
 
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder bufferBuilder = tessellator.getBuffer();
+            float n = 1.0F - this.world.getRainGradient(f);
 
             this.client.profiler.push("Custom Skies");
-            SkyboxManager.getInstance().renderSkyboxes();
+            SkyboxManager.getInstance().renderSkyboxes(n);
 
             this.client.profiler.pop();
 
             GlStateManager.pushMatrix();
-            float n = 1.0F - this.world.getRainGradient(f);
             GlStateManager.color4f(1.0F, 1.0F, 1.0F, n);
             GlStateManager.rotatef(-90.0F, 0.0F, 1.0F, 0.0F);
             GlStateManager.rotatef(this.world.getSkyAngle(f) * 360.0F, 1.0F, 0.0F, 0.0F);
@@ -188,7 +188,7 @@ public abstract class WorldRendererMixin {
     }
 
 
-    @ModifyArg(method = "method_1380", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/GL11;glLineWidth(F)V"))
+    @ModifyArg(method = "method_1380", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/GL11;glLineWidth(F)V"), remap = false)
     public float OutlineWidth(float width){
         if(AxolotlClient.CONFIG.enableCustomOutlines.get() && AxolotlClient.CONFIG.outlineWidth.get()>1){
             return 1.0F+ AxolotlClient.CONFIG.outlineWidth.get();
