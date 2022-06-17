@@ -1,11 +1,23 @@
 package io.github.axolotlclient.mixin;
 
+import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.NetworkHelper;
 import io.github.axolotlclient.config.Color;
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hud.gui.hud.CPSHud;
 import io.github.axolotlclient.modules.sky.SkyResourceManager;
+import io.github.axolotlclient.modules.zoom.Zoom;
 import io.github.axolotlclient.util.DiscordRPC;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
@@ -15,15 +27,6 @@ import net.minecraft.client.texture.TextureManager;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.player.ClientPlayerEntity;
 import net.minecraft.world.level.LevelInfo;
-import org.lwjgl.LWJGLException;
-import org.lwjgl.opengl.Display;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(MinecraftClient.class)
 public abstract class MinecraftClientMixin {
@@ -96,9 +99,21 @@ public abstract class MinecraftClientMixin {
     @Inject(method = "tick", at = @At("HEAD"))
     public void tickClient(CallbackInfo ci){
         Color.tickChroma();
-
         AxolotlClient.TickClient();
         DiscordRPC.update();
+        Zoom.tick();
+    }
+
+
+    @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lorg/lwjgl/input/Mouse;getEventDWheel()I"))
+    public int onScroll() {
+        int amount = Mouse.getEventDWheel();
+        if(amount != 0) {
+            if(Zoom.scroll(amount)) {
+                return 0;
+            }
+        }
+        return amount;
     }
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getTime()J", ordinal = 0))
