@@ -6,6 +6,7 @@ import io.github.moehreag.axolotlclient.config.Color;
 import io.github.moehreag.axolotlclient.modules.hud.HudManager;
 import io.github.moehreag.axolotlclient.modules.hud.gui.hud.CPSHud;
 import io.github.moehreag.axolotlclient.modules.sky.SkyResourceManager;
+import io.github.moehreag.axolotlclient.modules.zoom.Zoom;
 import io.github.moehreag.axolotlclient.util.DiscordRPC;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
@@ -16,6 +17,7 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.player.ClientPlayerEntity;
 import net.minecraft.world.level.LevelInfo;
 import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -96,9 +98,21 @@ public abstract class MinecraftClientMixin {
     @Inject(method = "tick", at = @At("HEAD"))
     public void tickClient(CallbackInfo ci){
         Color.tickChroma();
-
         AxolotlClient.TickClient();
         DiscordRPC.update();
+        Zoom.tick();
+    }
+
+
+    @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lorg/lwjgl/input/Mouse;getEventDWheel()I"))
+    public int onScroll() {
+        int amount = Mouse.getEventDWheel();
+        if(amount != 0) {
+            if(Zoom.scroll(amount)) {
+                return 0;
+            }
+        }
+        return amount;
     }
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getTime()J", ordinal = 0))

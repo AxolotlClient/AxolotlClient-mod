@@ -113,10 +113,11 @@ public abstract class GameRendererMixin {
 
     @Inject(method = "getFov", at = @At(value = "RETURN", ordinal = 1), cancellable = true)
     public void setZoom(float tickDelta, boolean changingFov, CallbackInfoReturnable<Float> cir){
-        Zoom.manageZoom();
-        if(Zoom.isZoomed()||Zoom.isFadingOut()){
-            cir.setReturnValue(Zoom.getFov(cir.getReturnValue()));
-        } else if(!AxolotlClient.CONFIG.dynamicFOV.get()) {
+        Zoom.update();
+
+        float returnValue = cir.getReturnValue();
+
+        if (!AxolotlClient.CONFIG.dynamicFOV.get()) {
             Entity entity = this.client.getCameraEntity();
             float f = changingFov ? client.options.fov:70F;
             if (entity instanceof LivingEntity && ((LivingEntity)entity).getHealth() <= 0.0F) {
@@ -128,8 +129,12 @@ public abstract class GameRendererMixin {
             if (block.getMaterial() == Material.WATER) {
                 f = f * 60.0F / 70.0F;
             }
-            cir.setReturnValue(f);
+            returnValue = f;
         }
+
+        returnValue = Zoom.getFov(returnValue, tickDelta);
+
+        cir.setReturnValue(returnValue);
     }
 
     @Redirect(method = "updateLightmap", at = @At(value = "FIELD", target = "Lnet/minecraft/client/options/GameOptions;gamma:F", opcode = Opcodes.GETFIELD))
