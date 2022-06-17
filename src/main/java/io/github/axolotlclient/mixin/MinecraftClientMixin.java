@@ -98,10 +98,7 @@ public abstract class MinecraftClientMixin {
 
     @Inject(method = "tick", at = @At("HEAD"))
     public void tickClient(CallbackInfo ci){
-        Color.tickChroma();
-        AxolotlClient.TickClient();
-        DiscordRPC.update();
-        Zoom.tick();
+        AxolotlClient.tickClient();
     }
 
 

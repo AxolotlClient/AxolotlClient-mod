@@ -20,11 +20,6 @@ public class AxolotlClientConfig {
     public final BooleanOption customSky = new BooleanOption("customSky", true);
     public final BooleanOption showSunMoon = new BooleanOption("showSunMoon", true);
     public final IntegerOption cloudHeight = new IntegerOption("cloudHeight", 128, 100, 512);
-    public final FloatOption zoomDivisor = new FloatOption("zoomDivisor", 1F, 16F, 4F);
-    public final FloatOption zoomSpeed = new FloatOption("zoomSpeed", 1F, 10F, 7.5F);
-    public final BooleanOption zoomScrolling = new BooleanOption("zoomScrolling", false);
-    public final BooleanOption decreaseSensitivity = new BooleanOption("decreaseSensitivity", true);
-    public final BooleanOption smoothCamera = new BooleanOption("smoothCamera", false);
     public final BooleanOption dynamicFOV = new BooleanOption("dynamicFov", true);
     public final BooleanOption fullBright = new BooleanOption("fullBright", false);
     public final IntegerOption chromaSpeed = new IntegerOption("chromaSpeed", 20, 10, 50);
@@ -53,7 +48,6 @@ public class AxolotlClientConfig {
     public final OptionCategory general = new OptionCategory(new Identifier("axolotlclient", "general"), "general");
     public final OptionCategory nametagOptions = new OptionCategory(new Identifier("axolotlclient", "nametagOptions"), "nametagOptions");
     public final OptionCategory rendering = new OptionCategory(new Identifier("axolotlclient", "rendering"), "rendering");
-    public final OptionCategory zoom = new OptionCategory("zoom");
     public final OptionCategory outlines= new OptionCategory("blockOutlines");
     public final OptionCategory motionBlur = new OptionCategory("motionBlur");
 
@@ -85,7 +79,6 @@ public class AxolotlClientConfig {
         categories.add(nametagOptions);
         categories.add(rendering);
 
-        rendering.addSubCategory(zoom);
         rendering.addSubCategory(outlines);
 
         categories.forEach(OptionCategory::clearOptions);
@@ -117,12 +110,6 @@ public class AxolotlClientConfig {
         motionBlur.add(motionBlurStrength);
         motionBlur.add(motionBlurInGuis);
         rendering.addSubCategory(motionBlur);
-
-        zoom.add(zoomDivisor);
-        zoom.add(zoomSpeed);
-        zoom.add(zoomScrolling);
-        zoom.add(decreaseSensitivity);
-        zoom.add(smoothCamera);
 
         outlines.add(enableCustomOutlines);
         outlines.add(outlineColor);

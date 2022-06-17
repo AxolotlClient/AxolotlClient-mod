@@ -1,6 +1,10 @@
 package io.github.axolotlclient.modules.zoom;
 
 import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.config.AxolotlClientConfig;
+import io.github.axolotlclient.config.options.BooleanOption;
+import io.github.axolotlclient.config.options.FloatOption;
+import io.github.axolotlclient.config.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.util.Util;
 import net.legacyfabric.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -21,10 +25,26 @@ public class Zoom extends AbstractModule {
     private static float animatedFactor = 1;
     private static float lastReturnedFov;
 
+    public static final FloatOption zoomDivisor = new FloatOption("zoomDivisor", 1F, 16F, 4F);
+    public static final FloatOption zoomSpeed = new FloatOption("zoomSpeed", 1F, 10F, 7.5F);
+    public static final BooleanOption zoomScrolling = new BooleanOption("zoomScrolling", false);
+    public static final BooleanOption decreaseSensitivity = new BooleanOption("decreaseSensitivity", true);
+    public static final BooleanOption smoothCamera = new BooleanOption("smoothCamera", false);
+
+    public final OptionCategory zoom = new OptionCategory("zoom");
+
     public static final Identifier ID = new Identifier("zoom");
 
     @Override
     public void init() {
+        zoom.add(zoomDivisor);
+        zoom.add(zoomSpeed);
+        zoom.add(zoomScrolling);
+        zoom.add(decreaseSensitivity);
+        zoom.add(smoothCamera);
+
+        AxolotlClient.CONFIG.rendering.addSubCategory(zoom);
+
         keyBinding = new KeyBinding("key.zoom", 46, "category.axolotlclient");
         KeyBindingHelper.registerKeyBinding(keyBinding);
         active = false;
@@ -35,7 +55,7 @@ public class Zoom extends AbstractModule {
     }
 
     public static float getFov(float current, float tickDelta) {
-        float result = current * (AxolotlClient.CONFIG.zoomSpeed.get() == 10 ? targetFactor
+        float result = current * (zoomSpeed.get() == 10 ? targetFactor
                 : Util.lerp(lastAnimatedFactor, animatedFactor, tickDelta));
 
         if (lastReturnedFov != 0 && lastReturnedFov != result) {
@@ -49,7 +69,7 @@ public class Zoom extends AbstractModule {
     public static void setOptions() {
         originalSensitivity = MinecraftClient.getInstance().options.sensitivity;
 
-        if (AxolotlClient.CONFIG.smoothCamera.get()) {
+        if (smoothCamera.get()) {
             originalSmoothCamera = MinecraftClient.getInstance().options.smoothCameraEnabled;
             MinecraftClient.getInstance().options.smoothCameraEnabled = true;
         }
@@ -58,7 +78,7 @@ public class Zoom extends AbstractModule {
     }
 
     private static void updateSensitivity() {
-        if (AxolotlClient.CONFIG.decreaseSensitivity.get()) {
+        if (decreaseSensitivity.get()) {
             MinecraftClient.getInstance().options.sensitivity = originalSensitivity / divisor;
         }
     }
@@ -77,8 +97,8 @@ public class Zoom extends AbstractModule {
     }
 
     public static boolean scroll(int amount) {
-        if (active && AxolotlClient.CONFIG.zoomScrolling.get() && amount != 0) {
-            setDivisor(Math.max(1, divisor + (amount / Math.abs(amount))));
+        if (active && zoomScrolling.get() && amount != 0) {
+            setDivisor(Math.max(1, divisor + (amount / (float)Math.abs(amount))));
             updateSensitivity();
             return true;
         }
@@ -88,7 +108,7 @@ public class Zoom extends AbstractModule {
 
     public static void tick() {
         lastAnimatedFactor = animatedFactor;
-        animatedFactor += (targetFactor - animatedFactor) * (AxolotlClient.CONFIG.zoomSpeed.get() / 10F);
+        animatedFactor += (targetFactor - animatedFactor) * (zoomSpeed.get() / 10F);
     }
 
     private static boolean shouldStart() {
@@ -106,7 +126,7 @@ public class Zoom extends AbstractModule {
 
     private static void start() {
         active = true;
-        setDivisor(AxolotlClient.CONFIG.zoomDivisor.get());
+        setDivisor(zoomDivisor.get());
         setOptions();
     }
 

@@ -2,6 +2,7 @@ package io.github.axolotlclient;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.config.AxolotlClientConfig;
+import io.github.axolotlclient.config.Color;
 import io.github.axolotlclient.config.ConfigManager;
 import io.github.axolotlclient.config.options.BooleanOption;
 import io.github.axolotlclient.config.options.OptionCategory;
@@ -11,6 +12,7 @@ import io.github.axolotlclient.modules.hypixel.HypixelMods;
 import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
 import io.github.axolotlclient.modules.motionblur.MotionBlur;
 import io.github.axolotlclient.modules.zoom.Zoom;
+import io.github.axolotlclient.util.DiscordRPC;
 import io.github.axolotlclient.util.Util;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
@@ -95,8 +97,11 @@ public class AxolotlClient implements ModInitializer {
 	}
 
 
-	public static void TickClient(){
+	public static void tickClient(){
 
+		DiscordRPC.update();
+		Zoom.tick();
+		Color.tickChroma();
 		HudManager.tick();
 		HypixelMods.getInstance().tick();
 

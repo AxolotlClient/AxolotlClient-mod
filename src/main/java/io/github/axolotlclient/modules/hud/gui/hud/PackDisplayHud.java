@@ -13,6 +13,7 @@ import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class PackDisplayHud extends AbstractHudEntry {
 
@@ -33,6 +34,16 @@ public class PackDisplayHud extends AbstractHudEntry {
             } catch (Exception ignored) {
             }
         });
+
+        AtomicInteger w = new AtomicInteger(20);
+        widgets.forEach(packWidget -> {
+            int textW = MinecraftClient.getInstance().textRenderer.getStringWidth(packWidget.name)+20;
+            if(textW>w.get())
+                w.set(textW);
+        });
+        width=w.get();
+
+        height=widgets.size()*18;
     }
 
     @Override
@@ -49,8 +60,8 @@ public class PackDisplayHud extends AbstractHudEntry {
         if(outline.get()) outlineRect(getBounds(), outlineColor.get());
 
         int y= pos.y+1;
-        for(PackDisplayHud.packWidget widget:widgets){
-            widget.render(pos.x+1, y);
+        for(int i=widgets.size()-1;i>=0;i--){ // Badly reverse the order (I'm sure there are better ways to do this)
+            widgets.get(i).render(pos.x+1, y);
             y+=18;
         }
 
