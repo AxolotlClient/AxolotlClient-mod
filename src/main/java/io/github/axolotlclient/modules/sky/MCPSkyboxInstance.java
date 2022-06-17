@@ -28,7 +28,7 @@ public class MCPSkyboxInstance extends SkyboxInstance {
         this.alpha=getAlpha();
 
 	    RenderSystem.setShaderColor(1,1,1,1);
-		RenderSystem.enableTexture();
+		//RenderSystem.enableTexture();
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GlStateManager.class_4535.SRC_ALPHA, GlStateManager.class_4534.ONE_MINUS_SRC_ALPHA);
 

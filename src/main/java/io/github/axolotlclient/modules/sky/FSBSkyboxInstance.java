@@ -4,9 +4,11 @@ import com.google.gson.JsonObject;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.BufferRenderer;
 import com.mojang.blaze3d.vertex.Tessellator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormats;
+import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Matrix4f;
@@ -40,9 +42,9 @@ public class FSBSkyboxInstance extends SkyboxInstance{
 		this.alpha=getAlpha();
 
 		RenderSystem.setShaderColor(1,1,1,1);
-		RenderSystem.enableTexture();
 		RenderSystem.enableBlend();
 		RenderSystem.blendFunc(GlStateManager.class_4535.SRC_ALPHA, GlStateManager.class_4534.ONE_MINUS_SRC_ALPHA);
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferBuilder = tessellator.getBufferBuilder();
@@ -81,7 +83,7 @@ public class FSBSkyboxInstance extends SkyboxInstance{
 				bufferBuilder.vertex(matrix4f, -100, -100, 100).uv(0F, 1F).color(1F, 1F, 1F, alpha).next();
 				bufferBuilder.vertex(matrix4f, 100, -100, 100).uv(1F, 1F).color(1F, 1F, 1F, alpha).next();
 				bufferBuilder.vertex(matrix4f, 100, -100, -100).uv(1F, 0F).color(1F, 1F, 1F, alpha).next();
-				tessellator.draw();
+				BufferRenderer.drawWithShader(bufferBuilder.end());
 
 				matrices.pop();
 			}

@@ -18,8 +18,9 @@ public class AxolotlClientConfig {
 
     public final BooleanOption customSky = new BooleanOption("customSky", true);
     public final BooleanOption showSunMoon = new BooleanOption("showSunMoon", true);
-    public final IntegerOption cloudHeight = new IntegerOption("cloudHeight", 128, 100, 512);
-    public final FloatOption zoomDivisor = new FloatOption("zoomDivisor", 1F, 10F, 4F);
+	public final BooleanOption customCloudHeight = new BooleanOption("customCloudHeight", false);
+    public final FloatOption cloudHeight = new FloatOption("cloudHeight", 192F, 100F, 512F);
+    public final FloatOption zoomDivisor = new FloatOption("zoomDivisor", 1F, 50F, 4F);
     public final IntegerOption zoomSpeed = new IntegerOption("zoomSpeed", 5, 1, 10);
     public final BooleanOption decreaseSensitivity = new BooleanOption("decreaseSensitivity", true);
     public final BooleanOption dynamicFOV = new BooleanOption("dynamicFov", true);
@@ -105,6 +106,7 @@ public class AxolotlClientConfig {
 
         rendering.add(customSky);
         rendering.add(showSunMoon);
+		rendering.add(customCloudHeight);
         rendering.add(cloudHeight);
         rendering.add(chromaSpeed);
         rendering.add(dynamicFOV);

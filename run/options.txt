@@ -38,8 +38,8 @@ ao:2
 prioritizeChunkUpdates:0
 biomeBlendRadius:2
 renderClouds:"false"
-resourcePacks:["vanilla","file/testpack","programer_art"]
-incompatibleResourcePacks:["file/testpack"]
+resourcePacks:["vanilla","file/testpack","file/astralex-sky-overlay-for-1-8--sgdsdrgdyhd38745634867djhfkgkdyh.zip"]
+incompatibleResourcePacks:["file/testpack","file/astralex-sky-overlay-for-1-8--sgdsdrgdyhd38745634867djhfkgkdyh.zip"]
 lastServer:
 lang:en_us
 soundDevice:""
