@@ -169,7 +169,6 @@ public abstract class SkyboxInstance {
 	}
 
 	protected void clearBlend(float brightness){
-		//RenderSystem.disableAlphaTest();
 		RenderSystem.enableBlend();
 		RenderSystem.blendFunc(770, 1);
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, brightness);

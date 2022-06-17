@@ -23,18 +23,20 @@ public class FSBSkyboxInstance extends SkyboxInstance{
 
     public FSBSkyboxInstance(JsonObject json){
         super(json);
-            JsonObject props = json.get("properties").getAsJsonObject();
-            JsonObject textures = json.get("textures").getAsJsonObject();
-            this.textures[0] = new Identifier(textures.get("bottom").getAsString());
-            this.textures[1] = new Identifier(textures.get("north").getAsString());
-            this.textures[2] = new Identifier(textures.get("south").getAsString());
-            this.textures[3] = new Identifier(textures.get("top").getAsString());
-            this.textures[4] = new Identifier(textures.get("east").getAsString());
-            this.textures[5] = new Identifier(textures.get("west").getAsString());
-            this.fade[0] = props.get("fade").getAsJsonObject().get("startFadeIn").getAsInt();
-            this.fade[1] = props.get("fade").getAsJsonObject().get("endFadeIn").getAsInt();
-            this.fade[2] = props.get("fade").getAsJsonObject().get("startFadeOut").getAsInt();
-            this.fade[3] = props.get("fade").getAsJsonObject().get("endFadeOut").getAsInt();
+		JsonObject props = json.get("properties").getAsJsonObject();
+		JsonObject textures = json.get("textures").getAsJsonObject();
+		this.textures[0] = new Identifier(textures.get("bottom").getAsString());
+		this.textures[1] = new Identifier(textures.get("north").getAsString());
+		this.textures[2] = new Identifier(textures.get("south").getAsString());
+		this.textures[3] = new Identifier(textures.get("top").getAsString());
+		this.textures[4] = new Identifier(textures.get("east").getAsString());
+		this.textures[5] = new Identifier(textures.get("west").getAsString());
+		this.fade[0] = props.get("fade").getAsJsonObject().get("startFadeIn").getAsInt();
+		this.fade[1] = props.get("fade").getAsJsonObject().get("endFadeIn").getAsInt();
+		this.fade[2] = props.get("fade").getAsJsonObject().get("startFadeOut").getAsInt();
+		this.fade[3] = props.get("fade").getAsJsonObject().get("endFadeOut").getAsInt();
+
+	    this.blendMode = parseBlend(props.get("blend").getAsJsonObject().get("type").getAsString());
     }
 
 	@Override

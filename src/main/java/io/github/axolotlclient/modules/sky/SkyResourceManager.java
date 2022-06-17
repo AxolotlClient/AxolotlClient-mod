@@ -72,29 +72,32 @@ public class SkyResourceManager{
                 int endFadeIn = 0;
                 int startFadeOut= 0;
                 int endFadeOut = 0;
+	            String blend="alpha";
                 InputStream stream = pack.open(ResourceType.CLIENT_RESOURCES, new Identifier("minecraft", loader + "/sky/world0/sky" + i + ".properties"));
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8));
                 String string;
-                while((string = reader.readLine()) != null ){
-                    try{
-                        String[] option = string.split("=");
-                        if(option[0].equals("source"))source= loader+"/sky/world0/"+option[1].split("/")[1];
-                        if(option[0].equals("startFadeIn"))startFadeIn= Integer.parseInt(option[1].split(":")[0]+option[1].split(":")[1]);
-                        if(option[0].equals("endFadeIn"))endFadeIn= Integer.parseInt(option[1].split(":")[0]+option[1].split(":")[1]);
-                        if(option[0].equals("startFadeOut"))startFadeOut= Integer.parseInt(option[1].split(":")[0]+option[1].split(":")[1]);
-                        if(option[0].equals("endFadeOut"))endFadeOut= Integer.parseInt(option[1].split(":")[0]+option[1].split(":")[1]);
+	            while((string = reader.readLine()) != null ){
+		            try{
+			            String[] option = string.split("=");
+			            if(option[0].equals("source"))source= loader+"/sky/world0/"+option[1].split("/")[1];
+			            if(option[0].equals("startFadeIn"))startFadeIn= Integer.parseInt(option[1].split(":")[0]+option[1].split(":")[1]);
+			            if(option[0].equals("endFadeIn"))endFadeIn= Integer.parseInt(option[1].split(":")[0]+option[1].split(":")[1]);
+			            if(option[0].equals("startFadeOut"))startFadeOut= Integer.parseInt(option[1].split(":")[0]+option[1].split(":")[1]);
+			            if(option[0].equals("endFadeOut"))endFadeOut= Integer.parseInt(option[1].split(":")[0]+option[1].split(":")[1]);
+			            if(option[0].equals("blend")) blend=option[1];
 
 
-                    } catch (Exception ignored){}
-                }
-                String text = "{" +
-                        "\"source\":\"" +source+ "\", " +
-                        "\"startFadeIn\":"+startFadeIn/2+", " +
-                        "\"endFadeIn\":"+endFadeIn/2+", " +
-                        "\"startFadeOut\":"+startFadeOut/2+", " +
-                        "\"endFadeOut\":"+endFadeOut/2+
-                        "}";
+		            } catch (Exception ignored){}
+	            }
+	            String text = "{" +
+		            "\"source\":\"" +source+ "\", " +
+		            "\"startFadeIn\":"+startFadeIn/2+", " +
+		            "\"endFadeIn\":"+endFadeIn/2+", " +
+		            "\"startFadeOut\":"+startFadeOut/2+", " +
+		            "\"endFadeOut\":"+endFadeOut/2+", " +
+		            "\"blend\":\""+blend+ "\""+
+		            "}";
                 JsonObject object = gson.fromJson(text, JsonObject.class);
                 if(!source.contains("sunflare")) SkyboxManager.getInstance().addSkybox(new MCPSkyboxInstance(object));
             } catch (IOException e) {
