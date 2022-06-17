@@ -1,7 +1,7 @@
 {
 	"schema_version": 1,
 	"quilt_loader": {
-		"group": "io.github.moehreag.axolotlclient",
+		"group": "io.github.axolotlclient",
 		"id": "axolotlclient",
 		"version": "${version}",
 		"metadata": {
@@ -22,7 +22,7 @@
 		},
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"entrypoints": {
-			"client_init": "io.github.moehreag.axolotlclient.AxolotlClient"
+			"client_init": "io.github.axolotlclient.AxolotlClient"
 		},
 		"depends": [
 			{

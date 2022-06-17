@@ -1,6 +1,6 @@
 {
 	"required": true,
-	"package": "io.github.moehreag.axolotlclient.mixin",
+	"package": "io.github.axolotlclient.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
 
@@ -11,6 +11,7 @@
 		"AccessorMinecraftClient",
 		"AccessorShaderEffect",
 		"MixinAddServerScreen",
+		"MixinBackgroundRenderer",
 		"MixinBossBarHud",
 		"MixinChatHud",
 		"MixinClientBrandRetriever",
