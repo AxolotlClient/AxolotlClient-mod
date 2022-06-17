@@ -187,4 +187,8 @@ public class Util {
 		GL11.glScissor((int) (scissor.x * scale), (int) ((window.getScaledHeight() - scissor.height - scissor.y) * scale), (int) (scissor.width * scale), (int) (scissor.height * scale));
 	}
 
+	public static double lerp(double start, double end, double percent) {
+		return start + ((end - start) * percent);
+	}
+
 }

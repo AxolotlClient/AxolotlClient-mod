@@ -126,6 +126,7 @@ public class AxolotlClient implements ClientModInitializer {
 		HypixelMods.getInstance().tick();
 		DiscordRPC.update();
 		Color.tickChroma();
+		Zoom.tick();
 
 		if(tickTime % 20 == 0){
 			if(MinecraftClient.getInstance().getCurrentServerEntry() != null){

@@ -20,9 +20,6 @@ public class AxolotlClientConfig {
     public final BooleanOption showSunMoon = new BooleanOption("showSunMoon", true);
 	public final BooleanOption customCloudHeight = new BooleanOption("customCloudHeight", false);
     public final FloatOption cloudHeight = new FloatOption("cloudHeight", 192F, 100F, 512F);
-    public final FloatOption zoomDivisor = new FloatOption("zoomDivisor", 1F, 50F, 4F);
-    public final IntegerOption zoomSpeed = new IntegerOption("zoomSpeed", 5, 1, 10);
-    public final BooleanOption decreaseSensitivity = new BooleanOption("decreaseSensitivity", true);
     public final BooleanOption dynamicFOV = new BooleanOption("dynamicFov", true);
     public final BooleanOption fullBright = new BooleanOption("fullBright", false);
     public final IntegerOption chromaSpeed = new IntegerOption("chromaSpeed", 20, 10, 50);
@@ -51,7 +48,6 @@ public class AxolotlClientConfig {
     public final OptionCategory general = new OptionCategory("general");
     public final OptionCategory nametagOptions = new OptionCategory( "nametagOptions");
     public final OptionCategory rendering = new OptionCategory("rendering");
-    public final OptionCategory zoom = new OptionCategory("zoom");
     public final OptionCategory outlines= new OptionCategory("blockOutlines");
     public final OptionCategory motionBlur = new OptionCategory("motionBlur");
 
@@ -83,7 +79,6 @@ public class AxolotlClientConfig {
         categories.add(nametagOptions);
         categories.add(rendering);
 
-        rendering.addSubCategory(zoom);
         rendering.addSubCategory(outlines);
 
         categories.forEach(OptionCategory::clearOptions);
@@ -116,10 +111,6 @@ public class AxolotlClientConfig {
         motionBlur.add(motionBlurStrength);
         motionBlur.add(motionBlurInGuis);
         rendering.addSubCategory(motionBlur);
-
-        zoom.add(zoomDivisor);
-        zoom.add(zoomSpeed);
-        zoom.add(decreaseSensitivity);
 
         outlines.add(enableCustomOutlines);
         outlines.add(outlineColor);

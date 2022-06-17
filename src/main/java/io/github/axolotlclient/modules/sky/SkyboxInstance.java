@@ -1,11 +1,14 @@
 package io.github.axolotlclient.modules.sky;
 
 import com.google.gson.JsonObject;
+import com.mojang.blaze3d.systems.RenderSystem;
+import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -13,7 +16,7 @@ import java.util.Objects;
  * https://github.com/AMereBagatelle/FabricSkyBoxes
  **/
 
-public class SkyboxInstance {
+public abstract class SkyboxInstance {
 
     JsonObject object;
     float alpha = 1F;
@@ -22,7 +25,7 @@ public class SkyboxInstance {
 
     // ! These are the options variables.  Do not mess with these.
     protected float maxAlpha = 1f;
-    int distance;
+    protected int blendMode;
 
     public SkyboxInstance(JsonObject json){
         this.object=json;
@@ -92,6 +95,91 @@ public class SkyboxInstance {
         return  maxPossibleAlpha;
     }
 
-    public void renderSkybox(MatrixStack matrices){
-    }
+	protected int parseBlend(String str){
+		if (str == null) {
+			return 1;
+		} else {
+
+			switch (str.toLowerCase(Locale.ENGLISH).trim()) {
+				case "alpha":
+					return 0;
+				case "add":
+					return 1;
+				case "subtract":
+					return 2;
+				case "multiply":
+					return 3;
+				case "dodge":
+					return 4;
+				case "burn":
+					return 5;
+				case "screen":
+					return 6;
+				case "overlay":
+					return 7;
+				case "replace":
+					return 8;
+				default:
+					AxolotlClient.LOGGER.warn("Unknown blend: " + str);
+					return 1;
+			}
+		}
+	}
+
+	protected void setupBlend(float brightness){
+
+		switch (blendMode) {
+			case 0 -> {
+				RenderSystem.enableBlend();
+				RenderSystem.blendFunc(770, 771);
+			}
+			case 1 -> {
+				RenderSystem.enableBlend();
+				RenderSystem.blendFunc(770, 1);
+			}
+			case 2 -> {
+				RenderSystem.enableBlend();
+				RenderSystem.blendFunc(775, 0);
+			}
+			case 3 -> {
+				RenderSystem.enableBlend();
+				RenderSystem.blendFunc(774, 771);
+			}
+			case 4 -> {
+				RenderSystem.enableBlend();
+				RenderSystem.blendFunc(1, 1);
+			}
+			case 5 -> {
+				RenderSystem.enableBlend();
+				RenderSystem.blendFunc(0, 769);
+			}
+			case 6 -> {
+				RenderSystem.enableBlend();
+				RenderSystem.blendFunc(1, 769);
+			}
+			case 7 -> {
+				RenderSystem.enableBlend();
+				RenderSystem.blendFunc(774, 768);
+			}
+			case 8 -> RenderSystem.disableBlend();
+		}
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, brightness);
+
+		RenderSystem.enableTexture();
+	}
+
+	protected void clearBlend(float brightness){
+		//RenderSystem.disableAlphaTest();
+		RenderSystem.enableBlend();
+		RenderSystem.blendFunc(770, 1);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, brightness);
+	}
+
+	public void render(MatrixStack matrices, float brightness){
+		setupBlend(brightness);
+		renderSkybox(matrices);
+		clearBlend(brightness);
+	}
+
+	public abstract void renderSkybox(MatrixStack matrices);
 }

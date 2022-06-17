@@ -1,12 +1,10 @@
 package io.github.axolotlclient.modules.sky;
 
-import com.google.common.collect.Iterables;
 import net.minecraft.client.util.math.MatrixStack;
 
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.function.Predicate;
-import java.util.stream.StreamSupport;
 
 /**
  * This implementation of custom skies is based on the FabricSkyBoxes mod by AMereBagatelle
@@ -25,9 +23,9 @@ public class SkyboxManager {
 
     private static final SkyboxManager INSTANCE = new SkyboxManager();
 
-    public void renderSkyboxes(MatrixStack matrices){
+    public void renderSkyboxes(MatrixStack matrices, float brightness){
         this.skyboxes.stream().filter(this.renderPredicate).forEach(this.active_skies::add);
-        this.active_skies.forEach(skyboxInstance -> {if(skyboxInstance!=null)skyboxInstance.renderSkybox(matrices);});
+        this.active_skies.forEach(skyboxInstance -> {if(skyboxInstance!=null)skyboxInstance.render(matrices, brightness);});
         this.active_skies.removeIf((skybox) -> skybox.getAlpha() <= MINIMUM_ALPHA);
     }
 
@@ -35,10 +33,6 @@ public class SkyboxManager {
         skyboxes.clear();
         active_skies.clear();
     }
-
-	public float getTotalAlpha() {
-		return (float) StreamSupport.stream(Iterables.concat(this.skyboxes).spliterator(), false).mapToDouble(SkyboxInstance::getAlpha).sum();
-	}
 
     public void removeSkybox(SkyboxInstance skybox){
         this.skyboxes.remove(skybox);

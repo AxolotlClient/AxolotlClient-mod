@@ -12,12 +12,6 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-/* Debugging...
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import io.github.moehreag.branding.Axolotlclient;
-*/
-
 @Mixin(MinecraftClient.class)
 public class MixinMinecraftClient {
 

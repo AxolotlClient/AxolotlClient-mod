@@ -74,7 +74,7 @@ public abstract class MixinWorldRenderer {
 			VertexBuffer.unbind();
 
 			this.client.getProfiler().push("Custom Skies");
-			SkyboxManager.getInstance().renderSkyboxes(matrices);
+			SkyboxManager.getInstance().renderSkyboxes(matrices, world.getRainGradient(tickDelta));
 
 			this.client.getProfiler().pop();
 

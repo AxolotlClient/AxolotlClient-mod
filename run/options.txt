@@ -1,5 +1,5 @@
 version:3105
-quilt_available_resource_packs:["programer_art","vanilla","file/testpack","file/square_textured","file/astralex-sky-overlay-for-1-8--sgdsdrgdyhd38745634867djhfkgkdyh.zip","file/OF-Testpack"]
+quilt_available_resource_packs:["programer_art","vanilla","file/testpack","file/square_textured","file/astralex-sky-overlay-for-1-8--sgdsdrgdyhd38745634867djhfkgkdyh.zip","file/OF-Testpack","file/! §bNebula - [sky only]"]
 autoJump:false
 autoSuggestions:true
 chatColors:true
@@ -22,7 +22,7 @@ toggleSprint:false
 darkMojangStudiosBackground:false
 hideLightningFlashes:false
 mouseSensitivity:0.5
-fov:0.375
+fov:0.4
 screenEffectScale:1.0
 fovEffectScale:1.0
 darknessEffectScale:1.0
@@ -38,8 +38,8 @@ ao:2
 prioritizeChunkUpdates:0
 biomeBlendRadius:2
 renderClouds:"false"
-resourcePacks:["vanilla","file/testpack","file/astralex-sky-overlay-for-1-8--sgdsdrgdyhd38745634867djhfkgkdyh.zip"]
-incompatibleResourcePacks:["file/testpack","file/astralex-sky-overlay-for-1-8--sgdsdrgdyhd38745634867djhfkgkdyh.zip"]
+resourcePacks:["vanilla","file/! §bNebula - [sky only]","file/testpack","file/astralex-sky-overlay-for-1-8--sgdsdrgdyhd38745634867djhfkgkdyh.zip"]
+incompatibleResourcePacks:["file/! §bNebula - [sky only]","file/testpack","file/astralex-sky-overlay-for-1-8--sgdsdrgdyhd38745634867djhfkgkdyh.zip"]
 lastServer:
 lang:en_us
 soundDevice:""

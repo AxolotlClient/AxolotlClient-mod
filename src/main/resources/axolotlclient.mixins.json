@@ -26,6 +26,7 @@
 		"MixinKeyboardInput",
 		"MixinLightmapManager",
 		"MixinLivingEntityRenderer",
+		"MixinMinecraftClient",
 		"MixinMinecraftClientGame",
 		"MixinMinecraftServer",
 		"MixinModStatus",

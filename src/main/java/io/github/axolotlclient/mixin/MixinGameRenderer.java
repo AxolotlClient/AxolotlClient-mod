@@ -25,10 +25,6 @@ public abstract class MixinGameRenderer {
     @Final
     @Shadow private MinecraftClient client;
 
-    @Shadow private float viewDistance;
-
-	@Shadow public abstract void tick();
-
 	/*@Inject(method = "renderFog", at = @At("HEAD"), cancellable = true)
     public void noFog(int i, float tickDelta, CallbackInfo ci){
 
@@ -93,10 +89,10 @@ public abstract class MixinGameRenderer {
 
     @Inject(method = "getFov", at = @At(value = "RETURN", ordinal = 1), cancellable = true)
     public void setZoom(Camera camera, float tickDelta, boolean changingFov, CallbackInfoReturnable<Double> cir){
-        Zoom.manageZoom();
-        if(Zoom.isZoomed()||Zoom.isFadingOut()){
-            cir.setReturnValue(Zoom.getFov(cir.getReturnValue()));
-        } else if(!AxolotlClient.CONFIG.dynamicFOV.get()) {
+	    Zoom.update();
+	    double returnValue = cir.getReturnValue();
+
+		if(!AxolotlClient.CONFIG.dynamicFOV.get()) {
             Entity entity = this.client.getCameraEntity();
             double f = changingFov ? client.options.getFov().get() :70F;
             if (entity instanceof LivingEntity && ((LivingEntity)entity).getHealth() <= 0.0F) {
@@ -108,8 +104,11 @@ public abstract class MixinGameRenderer {
 	        if (cameraSubmersionType == CameraSubmersionType.LAVA || cameraSubmersionType == CameraSubmersionType.WATER) {
 		        f *= MathHelper.lerp(this.client.options.getFovEffectScale().get(), 1.0, 0.85714287F);
 	        }
-            cir.setReturnValue(f);
+            returnValue = f;
         }
+	    returnValue = Zoom.getFov(returnValue, tickDelta);
+
+	    cir.setReturnValue(returnValue);
     }
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;viewport(IIII)V",
