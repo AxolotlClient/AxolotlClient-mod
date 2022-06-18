@@ -37,6 +37,7 @@ public class SkyResourceManager{
                                 new InputStreamReader(stream, StandardCharsets.UTF_8))
                                 .lines()
                                 .collect(Collectors.joining("\n"));
+	                    AxolotlClient.LOGGER.info("Loading FSB skies in pack "+pack.getName()+" !");
                         loadSky(text);
                     } catch (IOException e) {
                         break;

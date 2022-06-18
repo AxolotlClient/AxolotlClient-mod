@@ -27,8 +27,8 @@ public class ColorSelectionWidget extends ButtonWidget {
         super(0, 0, 100, 50, Text.empty(), buttonWidget -> {});
         this.option=option;
         Window window= MinecraftClient.getInstance().getWindow();
-        width=window.getWidth()-200;
-        height=window.getHeight()-100;
+        width=window.getScaledWidth()-200;
+        height=window.getScaledHeight()-100;
 
         pickerImage = new Rectangle(120, 70, width/2, height/3);
 

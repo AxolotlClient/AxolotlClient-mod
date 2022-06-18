@@ -1,5 +1,6 @@
 package io.github.axolotlclient.mixin;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.motionblur.MotionBlur;
 import io.github.axolotlclient.modules.zoom.Zoom;
@@ -111,15 +112,15 @@ public abstract class MixinGameRenderer {
 	    cir.setReturnValue(returnValue);
     }
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;viewport(IIII)V",
-            shift = Shift.BEFORE))
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/framebuffer/Framebuffer;beginWrite(Z)V",
+            shift = Shift.BEFORE), remap = false)
     public void worldMotionBlur(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
         motionBlur(tickDelta, startTime, tick, null);
     }
 
     @Inject(method = "render", at = @At("TAIL"))
     public void motionBlur(float tickDelta, long startTime, boolean tick, CallbackInfo ci){
-        if(ci !=null && !AxolotlClient.CONFIG.motionBlurInGuis.get()) {
+        if(ci != null && !AxolotlClient.CONFIG.motionBlurInGuis.get()) {
             return;
         }
 

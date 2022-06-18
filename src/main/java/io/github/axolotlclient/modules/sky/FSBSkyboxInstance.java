@@ -36,7 +36,9 @@ public class FSBSkyboxInstance extends SkyboxInstance{
 		this.fade[2] = props.get("fade").getAsJsonObject().get("startFadeOut").getAsInt();
 		this.fade[3] = props.get("fade").getAsJsonObject().get("endFadeOut").getAsInt();
 
-	    this.blendMode = parseBlend(props.get("blend").getAsJsonObject().get("type").getAsString());
+		try {
+			this.blendMode = parseBlend(props.get("blend").getAsJsonObject().get("type").getAsString());
+		} catch (Exception ignored){}
     }
 
 	@Override

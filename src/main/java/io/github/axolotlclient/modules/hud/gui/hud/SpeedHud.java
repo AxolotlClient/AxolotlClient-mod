@@ -52,11 +52,6 @@ public class SpeedHud extends CleanHudEntry {
     }
 
     @Override
-    public void addConfigOptions(List<Option> options) {
-        super.addConfigOptions(options);
-    }
-
-    @Override
     public String getPlaceholder() {
         return "4.67 m/s";
     }

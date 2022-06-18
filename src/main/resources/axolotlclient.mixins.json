@@ -37,6 +37,7 @@
 		"MixinPlayerListHud",
 		"MixinPlayerRenderer",
 		"MixinReloadableResourceManager",
+		"MixinRenderSystem",
 		"MixinTitleScreen",
 		"MixinWindow",
 		"MixinWorldRenderer"

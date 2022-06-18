@@ -21,7 +21,9 @@ public class MCPSkyboxInstance extends SkyboxInstance {
         this.fade[1] = json.get("endFadeIn").getAsInt();
         this.fade[2] = json.get("startFadeOut").getAsInt();
         this.fade[3] = json.get("endFadeOut").getAsInt();
-	    this.blendMode=parseBlend(json.get("blend").getAsString());
+	    try {
+			this.blendMode=parseBlend(json.get("blend").getAsString());
+        } catch (Exception ignored){}
     }
 
     @Override

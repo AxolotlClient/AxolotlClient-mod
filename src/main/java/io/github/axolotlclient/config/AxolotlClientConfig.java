@@ -19,7 +19,7 @@ public class AxolotlClientConfig {
     public final BooleanOption customSky = new BooleanOption("customSky", true);
     public final BooleanOption showSunMoon = new BooleanOption("showSunMoon", true);
 	public final BooleanOption customCloudHeight = new BooleanOption("customCloudHeight", false);
-    public final FloatOption cloudHeight = new FloatOption("cloudHeight", 192F, 100F, 512F);
+    public final FloatOption cloudHeight = new FloatOption("cloudHeight", 100F, 512F, 192F);
     public final BooleanOption dynamicFOV = new BooleanOption("dynamicFov", true);
     public final BooleanOption fullBright = new BooleanOption("fullBright", false);
     public final IntegerOption chromaSpeed = new IntegerOption("chromaSpeed", 20, 10, 50);
@@ -36,12 +36,10 @@ public class AxolotlClientConfig {
     public final ColorOption loadingScreenColor = new ColorOption("loadingBgColor", new Color(-1));
     public final BooleanOption nightMode = new BooleanOption("nightMode", false);
 
-    public final BooleanOption rotateWorld = new BooleanOption("rotateWorld", false);
-
     public final BooleanOption enableCustomOutlines = new BooleanOption("enabled", false);
     public final ColorOption outlineColor = new ColorOption("color", Color.parse("#04000000"));
     public final BooleanOption outlineChroma = new BooleanOption("chroma", false);
-    public final IntegerOption outlineWidth = new IntegerOption("outlineWidth", 1, 1, 10);
+    public final DoubleOption outlineWidth = new DoubleOption("outlineWidth", 1, 1, 10);
 
     public final BooleanOption creditsBGM = new BooleanOption("creditsBGM", true);
 
@@ -115,7 +113,7 @@ public class AxolotlClientConfig {
         outlines.add(enableCustomOutlines);
         outlines.add(outlineColor);
         outlines.add(outlineChroma);
-        outlines.add(outlineWidth);
+        //outlines.add(outlineWidth); // I could not get this to have an effect.
 
         AxolotlClient.config.add(creditsBGM);
 

@@ -22,7 +22,7 @@ toggleSprint:false
 darkMojangStudiosBackground:false
 hideLightningFlashes:false
 mouseSensitivity:0.5
-fov:0.4
+fov:1.0
 screenEffectScale:1.0
 fovEffectScale:1.0
 darknessEffectScale:1.0
@@ -38,8 +38,8 @@ ao:2
 prioritizeChunkUpdates:0
 biomeBlendRadius:2
 renderClouds:"false"
-resourcePacks:["vanilla","file/! §bNebula - [sky only]","file/testpack","file/astralex-sky-overlay-for-1-8--sgdsdrgdyhd38745634867djhfkgkdyh.zip"]
-incompatibleResourcePacks:["file/! §bNebula - [sky only]","file/testpack","file/astralex-sky-overlay-for-1-8--sgdsdrgdyhd38745634867djhfkgkdyh.zip"]
+resourcePacks:["vanilla","file/! §bNebula - [sky only]","file/testpack"]
+incompatibleResourcePacks:["file/! §bNebula - [sky only]","file/testpack"]
 lastServer:
 lang:en_us
 soundDevice:""

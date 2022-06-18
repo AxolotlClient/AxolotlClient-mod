@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.config.options.BooleanOption;
 import io.github.axolotlclient.config.options.FloatOption;
+import io.github.axolotlclient.config.options.IntegerOption;
 import io.github.axolotlclient.config.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.util.Util;
@@ -31,6 +32,7 @@ public class Zoom extends AbstractModule {
 	public static final BooleanOption zoomScrolling = new BooleanOption("zoomScrolling", false);
 	public static final BooleanOption decreaseSensitivity = new BooleanOption("decreaseSensitivity", true);
 	public static final BooleanOption smoothCamera = new BooleanOption("smoothCamera", false);
+	public static final IntegerOption zoomScrollStep = new IntegerOption("zoomScrollStep", 5, 1, 20);
 
 	public final OptionCategory zoom = new OptionCategory("zoom");
 
@@ -41,6 +43,7 @@ public class Zoom extends AbstractModule {
 		zoom.add(zoomDivisor);
 		zoom.add(zoomSpeed);
 		zoom.add(zoomScrolling);
+		zoom.add(zoomScrollStep);
 		zoom.add(decreaseSensitivity);
 		zoom.add(smoothCamera);
 
@@ -82,7 +85,7 @@ public class Zoom extends AbstractModule {
 
 	private static void updateSensitivity() {
 		if (decreaseSensitivity.get()) {
-			MinecraftClient.getInstance().options.getMouseSensitivity().set(originalSensitivity / divisor);
+			MinecraftClient.getInstance().options.getMouseSensitivity().set(originalSensitivity / (divisor*4));
 		}
 	}
 
@@ -101,7 +104,7 @@ public class Zoom extends AbstractModule {
 
 	public static boolean scroll(double amount) {
 		if (active && zoomScrolling.get() && amount != 0) {
-			setDivisor(Math.max(1, divisor + (amount / (float)Math.abs(amount))));
+			setDivisor(Math.max(1, divisor + (amount*zoomScrollStep.get() / Math.abs(amount))));
 			updateSensitivity();
 			return true;
 		}
