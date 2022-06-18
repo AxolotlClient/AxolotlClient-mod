@@ -43,7 +43,7 @@ public class PackDisplayHud extends AbstractHudEntry {
         });
         width=w.get();
 
-        height=widgets.size()*18;
+        height=(widgets.size()-1)*18+18;
     }
 
     @Override
@@ -71,6 +71,7 @@ public class PackDisplayHud extends AbstractHudEntry {
     @Override
     public void renderPlaceholder() {
         renderPlaceholderBackground();
+        hovered=false;
     }
 
     @Override
@@ -100,7 +101,7 @@ public class PackDisplayHud extends AbstractHudEntry {
             GlStateManager.color3f(textColor.get().getRed(), textColor.get().getGreen(), textColor.get().getBlue());
             GlStateManager.bindTexture(texture);
             drawTexture(x, y, 0, 0, 16, 16, 16, 16);
-            drawString(MinecraftClient.getInstance().textRenderer, name, x + 18, y + 6, textColor.get().getAsInt(), shadow.get());
+            drawString(MinecraftClient.getInstance().textRenderer, name, x + 18, y + 6, chroma.get()? textColor.getChroma().getAsInt() : textColor.get().getAsInt(), shadow.get());
         }
 
     }
@@ -115,5 +116,6 @@ public class PackDisplayHud extends AbstractHudEntry {
         options.add(outlineColor);
         options.add(shadow);
         options.add(textColor);
+        options.add(chroma);
     }
 }

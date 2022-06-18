@@ -26,12 +26,13 @@ public class ReloadableResourceManagerImplMixin {
         if(AxolotlClient.initalized)SkyResourceManager.reload(resourcePacks);
         else{SkyResourceManager.packs=resourcePacks;}
 
+        AxolotlClient.packs=resourcePacks;
+
         PackDisplayHud hud = (PackDisplayHud) HudManager.getINSTANCE().get(PackDisplayHud.ID);
         if(hud.isEnabled()){
             hud.widgets.clear();
+            hud.init();
         }
-
-        AxolotlClient.packs=resourcePacks;
     }
 
     @Inject(method = "getResource", at = @At("HEAD"), cancellable = true)
