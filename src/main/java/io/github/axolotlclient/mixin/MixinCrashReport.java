@@ -14,13 +14,13 @@ public class MixinCrashReport {
 
 	@Inject(method = "addStackTrace", at = @At(value = "TAIL"))
 	public void addAxolotlclientInfo(StringBuilder builder, CallbackInfo ci){
+		if (!Objects.equals(AxolotlClient.badmod, "")) {
 			builder.append("\n\n")
 				.append("---- Axolotlclient Information ----\n");
-			if (!Objects.equals(AxolotlClient.badmod, "")){
-				builder.append("Unsupported Mods were found!\n")
-					.append("Suspected mod: ")
-					.append(AxolotlClient.badmod);
-			}
+			builder.append("Unsupported Mods were found!\n")
+				.append("Suspected mod: ")
+				.append(AxolotlClient.badmod);
 			builder.append("\n\n");
+		}
 	}
 }

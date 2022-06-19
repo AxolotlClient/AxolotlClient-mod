@@ -15,9 +15,7 @@ import net.minecraft.util.math.MathHelper;
 import java.text.DecimalFormat;
 
 public class OptionSliderWidget extends ButtonWidget {
-	/*public OptionSliderWidget(int x, int y, int width, Text text, PressAction pressAction) {
-		super(x, y, width, 20, text, pressAction);
-	}*/
+
     private final DecimalFormat format = new DecimalFormat("##.#");
     private final DecimalFormat intformat = new DecimalFormat("##");
 

@@ -115,4 +115,9 @@ public class OptionsScreenBuilder extends Screen {
 		for(String s:tooltip) text.add(Text.literal(s));
 		this.renderTooltip(matrices, text, x, y);
 	}
+
+	@Override
+	public boolean isPauseScreen() {
+		return false;
+	}
 }

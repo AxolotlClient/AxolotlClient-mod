@@ -2,7 +2,6 @@ package io.github.axolotlclient.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClient;
-import net.minecraft.obfuscate.DontObfuscate;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -13,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(RenderSystem.class)
 public abstract class MixinRenderSystem {
 
-	@Shadow @Final @DontObfuscate
+	@Shadow(remap = false) @Final
 	private static float[] shaderColor;
 
 	@Inject(method = "_setShaderColor", at = @At(value = "HEAD"), cancellable = true, remap = false)

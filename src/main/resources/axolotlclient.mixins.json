@@ -15,6 +15,7 @@
 		"MixinChatHud",
 		"MixinClientBrandRetriever",
 		"MixinClientPlayerEntity",
+		"MixinClientWorld",
 		"MixinCrashReport",
 		"MixinDebugHud",
 		"MixinDownloadingTerrainScreen",

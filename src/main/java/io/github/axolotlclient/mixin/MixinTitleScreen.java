@@ -1,8 +1,10 @@
 package io.github.axolotlclient.mixin;
 
 
+import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.hud.HudEditScreen;
+import io.github.axolotlclient.modules.zoom.Zoom;
 import io.github.axolotlclient.util.DiscordRPC;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
@@ -20,6 +22,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Mixin(TitleScreen.class)
@@ -32,6 +35,10 @@ public abstract class MixinTitleScreen extends Screen{
 	@Inject(method = "initWidgetsNormal", at = @At("HEAD"))
 	public void inMenu(int y, int spacingY, CallbackInfo ci){
 		DiscordRPC.startup();
+		if(MinecraftClient.getInstance().options.saveToolbarActivatorKey.keyEquals(Zoom.keyBinding)){
+			MinecraftClient.getInstance().options.saveToolbarActivatorKey.setBoundKey(InputUtil.UNKNOWN_KEY);
+			AxolotlClient.LOGGER.info("Unbound \"Save Toolbar Activator\" to resolve conflict with the zoom key!");
+		}
 	}
 
 	@ModifyArgs(method = "initWidgetsNormal", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget;<init>(IIIILnet/minecraft/text/Text;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;Lnet/minecraft/client/gui/widget/ButtonWidget$TooltipSupplier;)V", ordinal = 1))
@@ -47,6 +54,11 @@ public abstract class MixinTitleScreen extends Screen{
 			"/AxolotlClient "+
 			(QuiltLoader.getModContainer("axolotlclient").isPresent() ?
 				QuiltLoader.getModContainer("axolotlclient").get().metadata().version().raw():"");
+	}
+
+	@Inject(method = "areRealmsNotificationsEnabled", at = @At("HEAD"), cancellable = true)
+	public void noRealmsIcons(CallbackInfoReturnable<Boolean> cir){
+		cir.setReturnValue(false);
 	}
 
 	@Inject(method = "init", at = @At("HEAD"))

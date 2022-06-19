@@ -20,7 +20,7 @@ public class Zoom extends AbstractModule {
 	public static boolean active;
 	private static Double originalSensitivity;
 	private static boolean originalSmoothCamera;
-	private static KeyBind keyBinding;
+	public static KeyBind keyBinding;
 	private static double targetFactor = 1;
 	private static double divisor;
 	private static float lastAnimatedFactor = 1;
@@ -51,6 +51,7 @@ public class Zoom extends AbstractModule {
 
 		keyBinding = new KeyBind("key.zoom", InputUtil.KEY_C_CODE, "category.axolotlclient");
 		KeyBindingHelper.registerKeyBinding(keyBinding);
+
 		active = false;
 	}
 
@@ -85,7 +86,7 @@ public class Zoom extends AbstractModule {
 
 	private static void updateSensitivity() {
 		if (decreaseSensitivity.get()) {
-			MinecraftClient.getInstance().options.getMouseSensitivity().set(originalSensitivity / (divisor*4));
+			MinecraftClient.getInstance().options.getMouseSensitivity().set(originalSensitivity / (divisor*divisor));
 		}
 	}
 

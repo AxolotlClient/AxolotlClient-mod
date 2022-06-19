@@ -1,6 +1,5 @@
 package io.github.axolotlclient.mixin;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.motionblur.MotionBlur;
 import io.github.axolotlclient.modules.zoom.Zoom;
@@ -15,7 +14,6 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.At.Shift;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -112,8 +110,7 @@ public abstract class MixinGameRenderer {
 	    cir.setReturnValue(returnValue);
     }
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/framebuffer/Framebuffer;beginWrite(Z)V",
-            shift = Shift.BEFORE), remap = false)
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getFramebuffer()Lcom/mojang/blaze3d/framebuffer/Framebuffer;"))
     public void worldMotionBlur(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
         motionBlur(tickDelta, startTime, tick, null);
     }

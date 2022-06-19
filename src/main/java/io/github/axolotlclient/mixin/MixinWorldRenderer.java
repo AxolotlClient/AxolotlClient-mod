@@ -57,8 +57,8 @@ public abstract class MixinWorldRenderer {
 
 	@Shadow @Nullable private VertexBuffer lightSkyBuffer;
 
-	@Inject(method = "renderSky", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;disableTexture()V"), cancellable = true, remap = false)
-	public void renderSky(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Camera preStep, boolean bl, Runnable runnable, CallbackInfo ci){
+	@Inject(method = "renderSky", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;disableTexture()V", ordinal = 0), cancellable = true)
+	public void renderCustomSky(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Camera preStep, boolean bl, Runnable runnable, CallbackInfo ci){
 		if(AxolotlClient.CONFIG.customSky.get() && SkyboxManager.getInstance().hasSkyBoxes() && !QuiltLoader.isModLoaded("fabricskyboxes")) {
 			RenderSystem.disableTexture();
 			Vec3d vec3d = this.world.getSkyColor(this.client.gameRenderer.getCamera().getPos(), tickDelta);
