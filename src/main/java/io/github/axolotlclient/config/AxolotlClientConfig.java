@@ -2,7 +2,6 @@ package io.github.axolotlclient.config;
 
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.config.options.*;
-import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +16,8 @@ public class AxolotlClientConfig {
     public final BooleanOption customBadge = new BooleanOption("customBadge", false);
     public final StringOption badgeText = new StringOption("badgeText", "");
 
+    public final BooleanOption timeChangerEnabled = new BooleanOption("enabled", false);
+    public final IntegerOption customTime = new IntegerOption("time", 0, 0, 24000);
     public final BooleanOption customSky = new BooleanOption("customSky", true);
     public final BooleanOption showSunMoon = new BooleanOption("showSunMoon", true);
     public final IntegerOption cloudHeight = new IntegerOption("cloudHeight", 128, 100, 512);
@@ -45,11 +46,12 @@ public class AxolotlClientConfig {
 
     public final BooleanOption creditsBGM = new BooleanOption("creditsBGM", true);
 
-    public final OptionCategory general = new OptionCategory(new Identifier("axolotlclient", "general"), "general");
-    public final OptionCategory nametagOptions = new OptionCategory(new Identifier("axolotlclient", "nametagOptions"), "nametagOptions");
-    public final OptionCategory rendering = new OptionCategory(new Identifier("axolotlclient", "rendering"), "rendering");
+    public final OptionCategory general = new OptionCategory("general");
+    public final OptionCategory nametagOptions = new OptionCategory("nametagOptions");
+    public final OptionCategory rendering = new OptionCategory("rendering");
     public final OptionCategory outlines= new OptionCategory("blockOutlines");
     public final OptionCategory motionBlur = new OptionCategory("motionBlur");
+    public final OptionCategory timeChanger = new OptionCategory("timeChanger");
 
     private final List<Option> options = new ArrayList<>();
     private final List<OptionCategory> categories = new ArrayList<>();
@@ -110,6 +112,10 @@ public class AxolotlClientConfig {
         motionBlur.add(motionBlurStrength);
         motionBlur.add(motionBlurInGuis);
         rendering.addSubCategory(motionBlur);
+
+        timeChanger.add(timeChangerEnabled);
+        timeChanger.add(customTime);
+        rendering.addSubCategory(timeChanger);
 
         outlines.add(enableCustomOutlines);
         outlines.add(outlineColor);
