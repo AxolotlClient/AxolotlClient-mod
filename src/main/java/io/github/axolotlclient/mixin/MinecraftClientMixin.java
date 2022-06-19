@@ -31,7 +31,6 @@ import net.minecraft.world.level.LevelInfo;
 @Mixin(MinecraftClient.class)
 public abstract class MinecraftClientMixin {
 
-
     @Shadow @Final private String gameVersion;
 
     @Shadow public GameOptions options;
@@ -43,7 +42,15 @@ public abstract class MinecraftClientMixin {
     @Shadow private TextureManager textureManager;
 
     /**
-     * @author meohreag
+     * @author TheKodeToad & Sk1erLLC (initially created this fix).
+     * @reason unnecessary garbage collection
+     */
+    @Redirect(method = "connect(Lnet/minecraft/client/world/ClientWorld;Ljava/lang/String;)V", at = @At(value = "INVOKE", target = "Ljava/lang/System;gc()V"))
+    public void noWorldGC() {
+    }
+
+    /**
+     * @author moehreag
      * @reason Customize Window title for use in AxolotlClient
      */
     @Inject(method = "setPixelFormat", at = @At("TAIL"))
