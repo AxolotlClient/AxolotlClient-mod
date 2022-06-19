@@ -43,9 +43,11 @@ public abstract class MixinTitleScreen extends Screen{
 
 	@ModifyArgs(method = "initWidgetsNormal", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget;<init>(IIIILnet/minecraft/text/Text;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;Lnet/minecraft/client/gui/widget/ButtonWidget$TooltipSupplier;)V", ordinal = 1))
 	public void noRealmsbutOptionsButton(Args args){
-		args.set(4, Text.translatable("config"));
-		args.set(5, (ButtonWidget.PressAction) buttonWidget ->
-			MinecraftClient.getInstance().setScreen(new HudEditScreen(this)));
+		if(!QuiltLoader.isModLoaded("modmenu")) {
+			args.set(4, Text.translatable("config"));
+			args.set(5, (ButtonWidget.PressAction) buttonWidget ->
+				MinecraftClient.getInstance().setScreen(new HudEditScreen(this)));
+		}
 	}
 
 	@ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;drawStringWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V"), index = 2)

@@ -13,6 +13,11 @@ repositories {
 	maven {
 		url 'https://repo.hypixel.net/repository/Hypixel/'
 	}
+
+	maven {
+		name 'TerraformersMC Maven'
+		url 'https://maven.terraformersmc.com/releases/'
+	}
 }
 
 loom {
@@ -32,6 +37,8 @@ dependencies {
 	// QSL is not a complete API; You will need Quilted Fabric API to fill in the gaps.
 	// Quilted Fabric API will automatically pull in the correct QSL version.
 	modImplementation "org.quiltmc.quilted-fabric-api:quilted-fabric-api:${quilted_fabric_api_version}-${minecraft_version}"
+
+	modImplementation "com.terraformersmc:modmenu:4.0.0"
 
 	implementation include ('com.github.Vatuu:discord-rpc:1.6.2')
 

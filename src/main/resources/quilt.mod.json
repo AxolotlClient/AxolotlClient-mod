@@ -22,7 +22,8 @@
 		},
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"entrypoints": {
-			"client_init": "io.github.axolotlclient.AxolotlClient"
+			"client_init": "io.github.axolotlclient.AxolotlClient",
+			"modmenu": [ "io.github.axolotlclient.config.modmenu.ModMenuCompat" ]
 		},
 		"depends": [
 			{
