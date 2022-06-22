@@ -49,11 +49,14 @@ public class OptionsScreenBuilder extends Screen {
         this.list.render(mouseX, mouseY, tickDelta);
         drawCenteredString(textRenderer, cat.getTranslatedName(), width/2, 25, -1);
 
-        if(picker!=null){
-            picker.render(MinecraftClient.getInstance(), mouseX, mouseY);
-        }
 
         super.render(mouseX, mouseY, tickDelta);
+
+        if(picker!=null){
+            GlStateManager.disableDepthTest();
+            picker.render(MinecraftClient.getInstance(), mouseX, mouseY);
+            GlStateManager.enableDepthTest();
+        }
     }
 
     public void openColorPicker(ColorOption option){
@@ -72,26 +75,40 @@ public class OptionsScreenBuilder extends Screen {
     protected void mouseClicked(int mouseX, int mouseY, int button) {
         super.mouseClicked(mouseX, mouseY, button);
 
-        this.list.entries.forEach(pair -> {
-            if(pair.left instanceof StringOptionWidget && ((StringOptionWidget) pair.left).textField.isFocused()){
-                ((StringOptionWidget) pair.left).textField.mouseClicked(mouseX, mouseY, button);
-            }
-            if(pair.left instanceof ColorOptionWidget){
-                if(((ColorOptionWidget) pair.left).textField.isFocused()) {
-                    ((ColorOptionWidget) pair.left).textField.mouseClicked(mouseX, mouseY, button);
-                }
-            }
-        });
+
 
         if(picker!=null){
             if(!picker.isMouseOver(MinecraftClient.getInstance(), mouseX, mouseY)) {
                 closeColorPicker();
+                this.list.mouseClicked(mouseX, mouseY, button);this.list.entries.forEach(pair -> {
+                    if(pair.left instanceof StringOptionWidget && ((StringOptionWidget) pair.left).textField.isFocused()){
+                        ((StringOptionWidget) pair.left).textField.mouseClicked(mouseX, mouseY, button);
+                    }
+                    if(pair.left instanceof ColorOptionWidget){
+                        if(((ColorOptionWidget) pair.left).textField.isFocused()) {
+                            ((ColorOptionWidget) pair.left).textField.mouseClicked(mouseX, mouseY, button);
+                        }
+                    }
+                });
+
             } else {
                 picker.onClick(mouseX, mouseY);
             }
+        } else {
+            this.list.mouseClicked(mouseX, mouseY, button);
+            this.list.entries.forEach(pair -> {
+                if(pair.left instanceof StringOptionWidget && ((StringOptionWidget) pair.left).textField.isFocused()){
+                    ((StringOptionWidget) pair.left).textField.mouseClicked(mouseX, mouseY, button);
+                }
+                if(pair.left instanceof ColorOptionWidget){
+                    if(((ColorOptionWidget) pair.left).textField.isFocused()) {
+                        ((ColorOptionWidget) pair.left).textField.mouseClicked(mouseX, mouseY, button);
+                    }
+                }
+            });
         }
 
-        this.list.mouseClicked(mouseX, mouseY, button);
+
     }
 
     @Override

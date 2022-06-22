@@ -1,30 +1,21 @@
 package io.github.axolotlclient.mixin;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.axolotlclient.modules.hud.HudManager;
-import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hypixel.autoboop.AutoBoop;
 import io.github.axolotlclient.modules.hypixel.autogg.AutoGG;
+import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.ChatHud;
-import net.minecraft.client.util.Window;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ChatHud.class)
 public abstract class ChatHudMixin {
-
-    @Shadow @Final private MinecraftClient client;
-
-    @Shadow public abstract int getWidth();
 
     @Inject(method = "addMessage(Lnet/minecraft/text/Text;IIZ)V", at = @At("HEAD"))
     public void autoGG(Text message, int messageId, int timestamp, boolean bl, CallbackInfo ci){
@@ -32,7 +23,37 @@ public abstract class ChatHudMixin {
         AutoBoop.Instance.onMessage(message);
     }
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;fill(IIIII)V"))
+    @ModifyArg(method = "addMessage(Lnet/minecraft/text/Text;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;addMessage(Lnet/minecraft/text/Text;IIZ)V"))
+    public Text editChat(Text message) {
+        String msg = message.asString();
+
+        if(NickHider.Instance.hideOwnName.get() || NickHider.Instance.hideOtherNames.get()) {
+            String playerName = MinecraftClient.getInstance().player.getCustomName();
+            if (NickHider.Instance.hideOwnName.get() && msg.contains(playerName)) {
+                msg = msg.replaceAll(playerName, NickHider.Instance.hiddenNameSelf.get());
+
+            }
+
+            if (NickHider.Instance.hideOtherNames.get()) {
+                for (PlayerEntity player : MinecraftClient.getInstance().world.playerEntities) {
+                    if (msg.contains(player.getCustomName())) {
+                        msg = msg.replaceAll(player.getCustomName(), NickHider.Instance.hiddenNameOthers.get());
+                    }
+                }
+            }
+
+
+            return new LiteralText(msg).setStyle(message.getStyle().deepCopy());
+        }
+        return message;
+    }
+
+    @ModifyArg(method = "addMessage(Lnet/minecraft/text/Text;I)V", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;info(Ljava/lang/String;)V"), remap = false)
+    public String noNamesInLogIfHidden(String message){
+        return editChat(new LiteralText(message)).getString();
+    }
+
+    /*@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;fill(IIIII)V"))
     public void customChatHud(int x, int y, int x2, int y2, int color){
         io.github.axolotlclient.modules.hud.gui.hud.ChatHud hud = (io.github.axolotlclient.modules.hud.gui.hud.ChatHud) HudManager.getINSTANCE().get(io.github.axolotlclient.modules.hud.gui.hud.ChatHud.ID);
         if(hud.isEnabled()){
@@ -62,5 +83,5 @@ public abstract class ChatHudMixin {
             instance.drawWithShadow(text, x, y, color);
         }
         return 0;
-    }
+    }*/
 }

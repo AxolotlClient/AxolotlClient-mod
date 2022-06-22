@@ -1,12 +1,13 @@
 plugins {
 	id 'fabric-loom' version "0.12-SNAPSHOT"
+	id 'io.github.juuxel.loom-quiltflower' version '1.7.+' // For loom 0.8-0.9, 0.11+
 	id 'maven-publish'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
-archivesBaseName = project.archives_base_name +"-" + project.minecraft_version
+archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
 
@@ -23,7 +24,7 @@ repositories {
 }
 
 loom {
-	setIntermediaryUrl('https://maven.legacyfabric.net/net/fabricmc/intermediary/%1$s/intermediary-%1$s-v2.jar');
+	setIntermediaryUrl('https://maven.legacyfabric.net/net/fabricmc/intermediary/%1$s/intermediary-%1$s-v2.jar')
 	accessWidenerPath = file("src/main/resources/axolotlclient.accesswidener")
 }
 

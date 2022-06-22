@@ -13,7 +13,6 @@ import net.minecraft.util.Identifier;
 import org.lwjgl.opengl.GL11;
 
 import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
 
 public class ColorSelectionWidget extends ButtonWidget {
     private final ColorOption option;
@@ -28,7 +27,7 @@ public class ColorSelectionWidget extends ButtonWidget {
         width=window.getWidth()-200;
         height=window.getHeight()-100;
 
-        pickerImage = new Rectangle(120, 70, width/2, height/3);
+        pickerImage = new Rectangle(120, 70, width/2, height/2);
 
         //rect = new Rectangle(100, 50, width-200, height-100);
     }
@@ -50,17 +49,18 @@ public class ColorSelectionWidget extends ButtonWidget {
 
     public void onClick(int mouseX, int mouseY){
         if(pickerImage.isMouseOver(mouseX, mouseY)) {
-            ByteBuffer buf = ByteBuffer.allocateDirect(4);
-            IntBuffer color = buf.asIntBuffer();
+            ByteBuffer pixels = ByteBuffer.allocateDirect(16);
+            //IntBuffer pixels = IntBuffer.allocate(4);
+            //IntBuffer color = buf.asIntBuffer();
 
             MinecraftClient.getInstance().getFramebuffer().bind(true);
-            GL11.glReadPixels(mouseX, mouseY, 1, 1, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buf);
+            GL11.glReadPixels(mouseX, mouseY, 1, 1, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, pixels);
 
-            System.out.println(buf.get());
+            String color = (pixels.get(0) & 0xFF) +""+ (pixels.get(1) & 0xFF)+ (pixels.get(2) & 0xFF)+ (pixels.get(3) & 0xFF);
+            System.out.println(color);
 
-            option.set(new Color(buf.get(0) & 0xFF, buf.get(1) & 0xFF, buf.get(2) & 0xFF, buf.get(3) & 0xFF));
+            option.set(new Color(pixels.get(0) & 0xFF, pixels.get(1) & 0xFF, pixels.get(2) & 0xFF, pixels.get(3) & 0xFF));
         }
     }
-
 
 }

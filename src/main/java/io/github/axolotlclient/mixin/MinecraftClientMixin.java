@@ -1,6 +1,24 @@
 package io.github.axolotlclient.mixin;
 
+import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.NetworkHelper;
+import io.github.axolotlclient.modules.hud.HudManager;
+import io.github.axolotlclient.modules.hud.gui.hud.CPSHud;
+import io.github.axolotlclient.modules.sky.SkyResourceManager;
+import io.github.axolotlclient.modules.zoom.Zoom;
+import io.github.axolotlclient.util.DiscordRPC;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.RunArgs;
+import net.minecraft.client.gl.Framebuffer;
+import net.minecraft.client.options.GameOptions;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.texture.TextureManager;
+import net.minecraft.client.util.ScreenshotUtils;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.player.ClientPlayerEntity;
+import net.minecraft.world.level.LevelInfo;
 import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.spongepowered.asm.mixin.Final;
@@ -10,23 +28,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.NetworkHelper;
-import io.github.axolotlclient.config.Color;
-import io.github.axolotlclient.modules.hud.HudManager;
-import io.github.axolotlclient.modules.hud.gui.hud.CPSHud;
-import io.github.axolotlclient.modules.sky.SkyResourceManager;
-import io.github.axolotlclient.modules.zoom.Zoom;
-import io.github.axolotlclient.util.DiscordRPC;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.RunArgs;
-import net.minecraft.client.options.GameOptions;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.texture.TextureManager;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.player.ClientPlayerEntity;
-import net.minecraft.world.level.LevelInfo;
 
 @Mixin(MinecraftClient.class)
 public abstract class MinecraftClientMixin {
@@ -41,6 +42,8 @@ public abstract class MinecraftClientMixin {
     @Shadow protected abstract void loadLogo(TextureManager textureManager) throws LWJGLException;
 
     @Shadow private TextureManager textureManager;
+
+    @Shadow private Framebuffer fbo;
 
     /**
      * @author meohreag
@@ -60,6 +63,20 @@ public abstract class MinecraftClientMixin {
         try {
             this.loadLogo(this.textureManager);
         } catch (Exception ignored){}
+    }
+
+    // Fix taking a screenshot when pressing '<' (Because it has the same keyCode as F2)
+    @Inject(method = "handleKeyInput", at = @At(value = "HEAD"), cancellable = true)
+    public void iTryToFixTheScreenshotKey(CallbackInfo ci){
+        int i = Keyboard.getEventKey() == 0 ? Keyboard.getEventCharacter() : Keyboard.getEventKey();
+
+        if (i != 0 && !Keyboard.isRepeatEvent() && !Keyboard.getEventKeyState()) {
+            // We don't need the stream utils since the streaming integration is out of service anyway
+            if (i == options.keyScreenshot.getCode() && !(Keyboard.getEventCharacter() == '<')) {
+                MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(ScreenshotUtils.saveScreenshot(MinecraftClient.getInstance().runDirectory, MinecraftClient.getInstance().width, MinecraftClient.getInstance().height, this.fbo));
+            }
+        }
+        ci.cancel();
     }
 
     // Don't ask me why we need both here, but otherwise it looks ugly

@@ -15,7 +15,7 @@ public abstract class ChatScreenMixin {
     @ModifyArgs(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;getTextAt(II)Lnet/minecraft/text/Text;"))
     public void redirectMousePos(Args args){
         io.github.axolotlclient.modules.hud.gui.hud.ChatHud hud = (io.github.axolotlclient.modules.hud.gui.hud.ChatHud) HudManager.getINSTANCE().get(io.github.axolotlclient.modules.hud.gui.hud.ChatHud.ID);
-        if(hud.isEnabled()){
+        if(hud!=null && hud.isEnabled()){
             Window window = new Window(MinecraftClient.getInstance());
             int x=args.get(0);
             int y = args.get(1);
@@ -35,7 +35,7 @@ public abstract class ChatScreenMixin {
     @ModifyArgs(method = "mouseClicked", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;getTextAt(II)Lnet/minecraft/text/Text;"))
     public void redirectMousePosOnClick(Args args){
         io.github.axolotlclient.modules.hud.gui.hud.ChatHud hud = (io.github.axolotlclient.modules.hud.gui.hud.ChatHud) HudManager.getINSTANCE().get(io.github.axolotlclient.modules.hud.gui.hud.ChatHud.ID);
-        if(hud.isEnabled()){
+        if(hud != null && hud.isEnabled()){
             int x=args.get(0);
             int y = args.get(1);
             Window window = new Window(MinecraftClient.getInstance());

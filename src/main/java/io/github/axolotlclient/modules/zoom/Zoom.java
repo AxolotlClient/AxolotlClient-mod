@@ -1,7 +1,6 @@
 package io.github.axolotlclient.modules.zoom;
 
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.config.AxolotlClientConfig;
 import io.github.axolotlclient.config.options.BooleanOption;
 import io.github.axolotlclient.config.options.FloatOption;
 import io.github.axolotlclient.config.options.OptionCategory;
