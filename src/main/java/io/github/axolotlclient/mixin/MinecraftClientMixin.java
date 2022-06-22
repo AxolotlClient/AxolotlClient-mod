@@ -32,7 +32,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(MinecraftClient.class)
 public abstract class MinecraftClientMixin {
 
-
     @Shadow @Final private String gameVersion;
 
     @Shadow public GameOptions options;
@@ -46,7 +45,15 @@ public abstract class MinecraftClientMixin {
     @Shadow private Framebuffer fbo;
 
     /**
-     * @author meohreag
+     * @author TheKodeToad & Sk1erLLC (initially created this fix).
+     * @reason unnecessary garbage collection
+     */
+    @Redirect(method = "connect(Lnet/minecraft/client/world/ClientWorld;Ljava/lang/String;)V", at = @At(value = "INVOKE", target = "Ljava/lang/System;gc()V"))
+    public void noWorldGC() {
+    }
+
+    /**
+     * @author moehreag
      * @reason Customize Window title for use in AxolotlClient
      */
     @Inject(method = "setPixelFormat", at = @At("TAIL"))
