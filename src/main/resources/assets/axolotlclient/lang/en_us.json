@@ -49,6 +49,8 @@
 
 	"motionBlur": "Motion Blur",
 	"zoom": "Zoom",
+	"timeChanger": "Time Changer",
+	"time": "Time",
 	"blockOutlines": "Block Outlines",
 	"outlineWidth": "Outline Width",
 
@@ -79,7 +81,8 @@
 	"nickhider": "NickHider",
 	"hiddenNameSelf": "Hide yourself as:",
 	"hiddenNameOthers": "Hide others as:",
-	"hideOwnName": "Hide your own name. <br>Also filters your name in chat messages.",
+	"hideOwnName": "Hide your name",
+	"hideOwnName.tooltip": "Hides your own name. <br>Also filters your name in chat messages.",
 	"hideOtherNames": "Hide others' names",
 	"hideOtherNames.tooltip": "Hides other people's names. <br>Only filters chat names.",
 	"hideOwnSkin": "Hide your own skin",

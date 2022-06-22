@@ -20,12 +20,12 @@ public abstract class MixinPlayerRenderer {
     public void modifiyName(Args args){
         if(AxolotlClient.CONFIG != null) {
             AbstractClientPlayerEntity player = args.get(0);
-            if(player.getUuid()== MinecraftClient.getInstance().player.getUuid() &&
+            if(player.getUuid() == MinecraftClient.getInstance().player.getUuid() &&
                     NickHider.Instance.hideOwnName.get()){
-                args.set(2, Text.literal(NickHider.Instance.hiddenNameSelf.get()));
+                args.set(1, Text.literal(NickHider.Instance.hiddenNameSelf.get()));
             } else if(player.getUuid()!=MinecraftClient.getInstance().player.getUuid() &&
                     NickHider.Instance.hideOtherNames.get()){
-                args.set(2, Text.literal(NickHider.Instance.hiddenNameOthers.get()));
+                args.set(1, Text.literal(NickHider.Instance.hiddenNameOthers.get()));
             }
         }
     }

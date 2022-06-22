@@ -3,14 +3,17 @@ package io.github.axolotlclient.mixin;
 import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.PlayerListHud;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(PlayerListHud.class)
@@ -38,5 +41,16 @@ public abstract class MixinPlayerListHud {
 		}
 		cachedPlayer=null;
 		return instance.drawWithShadow(matrices, text, x, y, color);
+	}
+
+	@ModifyArg(method = "getPlayerName", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;applyGameModeFormatting(Lnet/minecraft/client/network/PlayerListEntry;Lnet/minecraft/text/MutableText;)Lnet/minecraft/text/Text;"), index = 1)
+	public MutableText hideNames(MutableText name){
+		if(NickHider.Instance.hideOwnName.get()){
+			return Text.literal(NickHider.Instance.hiddenNameSelf.get());
+		}
+		if(NickHider.Instance.hideOtherNames.get()){
+			return Text.literal(NickHider.Instance.hiddenNameOthers.get());
+		}
+		return name;
 	}
 }

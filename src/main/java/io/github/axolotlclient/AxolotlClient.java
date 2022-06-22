@@ -21,6 +21,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.pack.ResourcePack;
+import net.minecraft.scoreboard.Team;
 import net.minecraft.util.Identifier;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.loader.api.QuiltLoader;
@@ -152,8 +153,8 @@ public class AxolotlClient implements ClientModInitializer {
 
 				int x = -(MinecraftClient.getInstance().textRenderer.getWidth(
 						entity.getUuid() == MinecraftClient.getInstance().player.getUuid()?
-						(NickHider.Instance.hideOwnName.get() ? NickHider.Instance.hiddenNameSelf.get(): entity.getName().getString()):
-						(NickHider.Instance.hideOtherNames.get() ? NickHider.Instance.hiddenNameOthers.get(): entity.getName().getString())
+						(NickHider.Instance.hideOwnName.get() ? NickHider.Instance.hiddenNameSelf.get(): Team.decorateName(entity.getScoreboardTeam(), entity.getName()).getString()):
+						(NickHider.Instance.hideOtherNames.get() ? NickHider.Instance.hiddenNameOthers.get(): Team.decorateName(entity.getScoreboardTeam(), entity.getName()).getString())
 				)/2 + (AxolotlClient.CONFIG.customBadge.get() ? MinecraftClient.getInstance().textRenderer.getWidth(AxolotlClient.CONFIG.badgeText.get()): 10));
 
 				RenderSystem.setShaderColor(1, 1, 1, 1);
