@@ -186,15 +186,6 @@ public abstract class MixinWorldRenderer {
 		}
 	}
 
-	@Redirect(method = "renderClouds(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/math/Matrix4f;FDDD)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/SkyProperties;getCloudsHeight()F"))
-	public float customCloudHeight(SkyProperties instance){
-
-		if(AxolotlClient.CONFIG.customCloudHeight.get()) {
-			return AxolotlClient.CONFIG.cloudHeight.get();
-		}
-		return instance.getCloudsHeight();
-	}
-
     @ModifyArgs(method = "drawBlockOutline", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/WorldRenderer;drawShapeOutline(Lnet/minecraft/client/util/math/MatrixStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;Lnet/minecraft/util/shape/VoxelShape;DDDFFFF)V"))
     public void customOutlineColor(Args args){
         if(AxolotlClient.CONFIG.enableCustomOutlines.get()){

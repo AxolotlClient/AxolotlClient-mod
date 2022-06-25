@@ -20,8 +20,6 @@ public class AxolotlClientConfig {
 	public final IntegerOption customTime = new IntegerOption("time", 0, 0, 24000);
     public final BooleanOption customSky = new BooleanOption("customSky", true);
     public final BooleanOption showSunMoon = new BooleanOption("showSunMoon", true);
-	public final BooleanOption customCloudHeight = new BooleanOption("customCloudHeight", false);
-    public final FloatOption cloudHeight = new FloatOption("cloudHeight", 100F, 512F, 192F);
     public final BooleanOption dynamicFOV = new BooleanOption("dynamicFov", true);
     public final BooleanOption fullBright = new BooleanOption("fullBright", false);
     public final IntegerOption chromaSpeed = new IntegerOption("chromaSpeed", 20, 10, 50);
@@ -103,8 +101,6 @@ public class AxolotlClientConfig {
 
         rendering.add(customSky);
         rendering.add(showSunMoon);
-		rendering.add(customCloudHeight);
-        rendering.add(cloudHeight);
         rendering.add(chromaSpeed);
         rendering.add(dynamicFOV);
         rendering.add(fullBright);
