@@ -24,7 +24,7 @@ public class AutoBoop implements AbstractHypixelMod {
     }
 
     public void onMessage(Text message){
-        if(message.getString().contains("Friend >") && message.getString().contains("joined.")){
+        if(enabled.get() && message.getString().contains("Friend >") && message.getString().contains("joined.")){
             String player = message.getString().substring(message.getString().indexOf(">") + 2, message.getString().lastIndexOf(" "));
             Util.sendChatMessage( "/boop "+player);
         }

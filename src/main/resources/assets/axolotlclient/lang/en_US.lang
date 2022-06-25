@@ -44,6 +44,8 @@ inGuis=Apply to GUIs
 
 motionBlur=Motion Blur
 zoom=Zoom
+timeChanger=Time Changer
+time=Time
 blockOutlines=Block Outlines
 outlineWidth=Outline Width
 
@@ -78,6 +80,7 @@ hideOwnName=Hide your own name
 hideOtherNames=Hide others' names
 hideOwnSkin=Hide your own skin
 hideOtherSkins=Hide others' skins
+autoBoop=AutoBoop
 
 category.axolotlclient=AxolotlClient
 
