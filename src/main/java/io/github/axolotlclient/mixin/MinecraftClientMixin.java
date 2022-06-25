@@ -74,16 +74,17 @@ public abstract class MinecraftClientMixin {
 
     // Fix taking a screenshot when pressing '<' (Because it has the same keyCode as F2)
     @Inject(method = "handleKeyInput", at = @At(value = "HEAD"), cancellable = true)
-    public void iTryToFixTheScreenshotKey(CallbackInfo ci){
+    public void iTryToFixTheScreenshotKey(CallbackInfo ci) {
         int i = Keyboard.getEventKey() == 0 ? Keyboard.getEventCharacter() : Keyboard.getEventKey();
 
         if (i != 0 && !Keyboard.isRepeatEvent() && !Keyboard.getEventKeyState()) {
-            // We don't need the stream utils since the streaming integration is out of service anyway
-            if (i == options.keyScreenshot.getCode() && !(Keyboard.getEventCharacter() == '<')) {
-                MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(ScreenshotUtils.saveScreenshot(MinecraftClient.getInstance().runDirectory, MinecraftClient.getInstance().width, MinecraftClient.getInstance().height, this.fbo));
+            if (i == options.keyScreenshot.getCode()) {
+                if (!(Keyboard.getEventCharacter() == '<')) {
+                    MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(ScreenshotUtils.saveScreenshot(MinecraftClient.getInstance().runDirectory, MinecraftClient.getInstance().width, MinecraftClient.getInstance().height, this.fbo));
+                }
+                ci.cancel();
             }
         }
-        ci.cancel();
     }
 
     // Don't ask me why we need both here, but otherwise it looks ugly
