@@ -49,6 +49,10 @@ public class ButtonWidgetList extends ButtonListWidget {
 
     public ButtonWidgetList(MinecraftClient minecraftClient, int width, int height, int top, int bottom, int entryHeight, OptionCategory category) {
         super(minecraftClient, width, height, top, bottom, entryHeight);
+
+        this.setRenderBackground(false);
+        this.setRenderHorizontalShadows(false);
+        this.setRenderHeader(false, 0);
         //this.category=category; // same as above
 
         if(!category.getSubCategories().isEmpty()) {
@@ -102,52 +106,6 @@ public class ButtonWidgetList extends ButtonListWidget {
             else if (option instanceof EnumOption) return new EnumOptionWidget(x, 0, (EnumOption) option);
         }
         return null;
-    }
-
-	@Override
-	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-		this.renderBackground(matrices);
-		int i = this.getScrollbarPositionX();
-		int j = i + 6;
-		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder bufferBuilder = tessellator.getBufferBuilder();
-		RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
-		((AccessorButtonListWidget)this).setHoveredEntry(this.isMouseOver(mouseX, mouseY) ? this.getEntryAtPosition(mouseX, mouseY) : null);
-
-		int k = this.getRowLeft();
-		int l = this.top + 4 - (int)this.getScrollAmount();
-
-		int o = this.getMaxScroll();
-		if (o > 0) {
-			RenderSystem.disableTexture();
-			RenderSystem.setShader(GameRenderer::getPositionColorShader);
-			int m = (int)((float)((this.bottom - this.top) * (this.bottom - this.top)) / (float)this.getMaxPosition());
-			m = MathHelper.clamp(m, 32, this.bottom - this.top - 8);
-			int n = (int)this.getScrollAmount() * (this.bottom - this.top - m) / o + this.top;
-			if (n < this.top) {
-				n = this.top;
-			}
-
-			bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-			bufferBuilder.vertex(i, this.bottom, 0.0).color(0, 0, 0, 255).next();
-			bufferBuilder.vertex(j, this.bottom, 0.0).color(0, 0, 0, 255).next();
-			bufferBuilder.vertex(j, this.top, 0.0).color(0, 0, 0, 255).next();
-			bufferBuilder.vertex(i, this.top, 0.0).color(0, 0, 0, 255).next();
-			bufferBuilder.vertex(i, (n + m), 0.0).color(128, 128, 128, 255).next();
-			bufferBuilder.vertex(j, (n + m), 0.0).color(128, 128, 128, 255).next();
-			bufferBuilder.vertex(j, n, 0.0).color(128, 128, 128, 255).next();
-			bufferBuilder.vertex(i, n, 0.0).color(128, 128, 128, 255).next();
-			bufferBuilder.vertex(i, (n + m - 1), 0.0).color(192, 192, 192, 255).next();
-			bufferBuilder.vertex((j - 1), (n + m - 1), 0.0).color(192, 192, 192, 255).next();
-			bufferBuilder.vertex((j - 1), n, 0.0).color(192, 192, 192, 255).next();
-			bufferBuilder.vertex(i, n, 0.0).color(192, 192, 192, 255).next();
-			tessellator.draw();
-		}
-
-		RenderSystem.enableTexture();
-		this.renderList(matrices, k, l, mouseX, mouseY, delta);
-
-		RenderSystem.disableBlend();
     }
 
 	@Override

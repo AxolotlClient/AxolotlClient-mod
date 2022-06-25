@@ -67,7 +67,13 @@ public class OptionsScreenBuilder extends Screen {
         return picker!=null;
     }
 
-	@Override
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
+        return list.mouseScrolled(mouseX, mouseY, amount);
+        //return super.mouseScrolled(mouseX, mouseY, amount);
+    }
+
+    @Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
 		if(picker!=null){
 			if(!picker.isMouseOver(mouseX, mouseY)) {
