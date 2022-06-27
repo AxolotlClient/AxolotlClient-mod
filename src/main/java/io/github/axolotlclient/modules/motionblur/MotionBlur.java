@@ -33,9 +33,11 @@ public class MotionBlur extends AbstractModule {
     }
 
     public void onUpdate() {
-        if(shader == null ||
+        if( (shader == null ||
 	        MinecraftClient.getInstance().getWindow().getWidth()!=lastWidth ||
-	        MinecraftClient.getInstance().getWindow().getHeight()!=lastHeight) {
+            MinecraftClient.getInstance().getWindow().getHeight()!=lastHeight ) &&
+            MinecraftClient.getInstance().getWindow().getWidth() > 0 &&
+            MinecraftClient.getInstance().getWindow().getHeight() > 0) {
             currentBlur=getBlur();
             try {
                 shader = new ShaderEffect(client.getTextureManager(),
