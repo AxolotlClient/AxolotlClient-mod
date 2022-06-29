@@ -11,6 +11,7 @@ import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hypixel.HypixelMods;
 import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
 import io.github.axolotlclient.modules.motionblur.MotionBlur;
+import io.github.axolotlclient.modules.scrollableTooltips.ScrollableTooltips;
 import io.github.axolotlclient.modules.zoom.Zoom;
 import io.github.axolotlclient.util.DiscordRPC;
 import io.github.axolotlclient.util.Util;
@@ -47,7 +48,7 @@ public class AxolotlClient implements ModInitializer {
 
 	public static final OptionCategory config = new OptionCategory(new Identifier("storedOptions"), "storedOptions");
 	public static final BooleanOption someNiceBackground = new BooleanOption("defNoSecret", false);
-	public static final HashMap<Identifier, AbstractModule> modules= new HashMap<>();
+	public static final HashMap<Identifier, AbstractModule> modules = new HashMap<>();
 
 	public static Integer tickTime = 0;
 
@@ -85,6 +86,7 @@ public class AxolotlClient implements ModInitializer {
 		modules.put(HudManager.ID, HudManager.getINSTANCE());
 		modules.put(HypixelMods.ID, HypixelMods.INSTANCE);
 		modules.put(MotionBlur.ID, new MotionBlur());
+		modules.put(ScrollableTooltips.ID, ScrollableTooltips.Instance);
 	}
 
 	public static boolean isUsingClient(UUID uuid){
