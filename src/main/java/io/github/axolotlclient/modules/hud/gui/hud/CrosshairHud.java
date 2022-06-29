@@ -59,8 +59,11 @@ public class CrosshairHud extends AbstractHudEntry {
 
         GlStateManager.enableAlphaTest();
         scale();
-        DrawPosition pos = getPos().subtract(0, -1);
+
         Color color = getColor();
+        GlStateManager.color4f((float) color.getRed() / 255, (float) color.getGreen() / 255, (float) color.getBlue() / 255, 1F);
+        GlStateManager.blendFuncSeparate(775, 769, 1, 0);
+        DrawPosition pos = getPos().subtract(0, -1);
         if (type.get() == CrosshairHudOption.CrosshairOption.DOT) {
 
             fillRect(new Rectangle(pos.x + (width / 2) - 1, pos.y + (height / 2) - 2, 3, 3), color);
@@ -75,7 +78,7 @@ public class CrosshairHud extends AbstractHudEntry {
             MinecraftClient.getInstance().getTextureManager().bindTexture(DrawableHelper.GUI_ICONS_TEXTURE);
 
             // Draw crosshair
-            GlStateManager.color4f((float) color.getRed() / 255, (float) color.getGreen() / 255, (float) color.getBlue() / 255, 1F);
+            //GlStateManager.color4f((float) color.getRed() / 255, (float) color.getGreen() / 255, (float) color.getBlue() / 255, 1F);
             client.inGameHud.drawTexture((int) (((new Window(client).getScaledWidth() / getScale()) - 14) / 2),
                     (int) (((new Window(client).getScaledHeight() / getScale()) - 14) / 2), 0, 0, 16, 16);
 

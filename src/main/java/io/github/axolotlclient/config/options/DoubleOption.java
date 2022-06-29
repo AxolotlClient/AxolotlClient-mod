@@ -4,18 +4,22 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import org.jetbrains.annotations.NotNull;
 
-public class DoubleOption extends OptionBase implements Option{
+public class DoubleOption extends OptionBase {
 
     private double option;
     private final double Default;
     private final double min;
     private final double max;
 
-    public DoubleOption(String name, double Default, double min, double max) {
-        super(name);
+    public DoubleOption(String name, String tooltipLocation, double Default, double min, double max) {
+        super(name, tooltipLocation);
         this.Default=Default;
         this.min=min;
         this.max=max;
+    }
+
+    public DoubleOption(String name, double Default, double min, double max) {
+        this(name, null, Default, min, max);
     }
 
     public double get(){

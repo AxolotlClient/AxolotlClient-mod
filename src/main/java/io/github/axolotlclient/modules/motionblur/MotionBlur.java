@@ -35,7 +35,7 @@ public class MotionBlur extends AbstractModule {
     }
 
     public void onUpdate() {
-        if(shader == null || client.width!=lastWidth || client.height!=lastHeight) {
+        if((shader == null || client.width!=lastWidth || client.height!=lastHeight) && client.height!=0 && client.width!=0) {
             currentBlur=getBlur();
             try {
                 shader = new ShaderEffect(client.getTextureManager(),

@@ -10,7 +10,15 @@ public interface Tooltippable {
     String getName();
 
 
-    default @Nullable String getTooltip(){
+    default String getTooltip(){
+        return this.getTooltip(null);
+    }
+    default @Nullable String getTooltip(String location){
+        if(location!=null){
+            if(!Objects.equals(I18n.translate(location + ".tooltip"), location + ".tooltip")) {
+                return I18n.translate(location + ".tooltip");
+            }
+        }
         if(!Objects.equals(I18n.translate(getName() + ".tooltip"), getName() + ".tooltip")) {
             return I18n.translate(getName() + ".tooltip");
         }

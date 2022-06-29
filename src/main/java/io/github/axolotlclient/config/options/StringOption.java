@@ -4,14 +4,18 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import org.jetbrains.annotations.NotNull;
 
-public class StringOption extends OptionBase implements Option{
+public class StringOption extends OptionBase {
 
     private String value;
     private final String def;
 
-    public StringOption(String name, String def){
-        super(name);
+    public StringOption(String name, String tooltipLocation, String def){
+        super(name, tooltipLocation);
         this.def = def;
+    }
+
+    public StringOption(String name, String def){
+        this(name, null, def);
     }
 
     public String get(){

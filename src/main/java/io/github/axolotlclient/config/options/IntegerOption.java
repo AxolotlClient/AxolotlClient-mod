@@ -4,7 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import org.jetbrains.annotations.NotNull;
 
-public class IntegerOption extends OptionBase implements Option{
+public class IntegerOption extends OptionBase {
 
     private int option;
     private final int Default;
@@ -12,7 +12,11 @@ public class IntegerOption extends OptionBase implements Option{
     private final int max;
 
     public IntegerOption(String name, int Default, int min, int max) {
-        super(name);
+        this(name, null, Default, min, max);
+    }
+
+    public IntegerOption(String name, String tooltipLocation, int Default, int min, int max) {
+        super(name, tooltipLocation);
         this.Default=Default;
         this.min=min;
         this.max=max;

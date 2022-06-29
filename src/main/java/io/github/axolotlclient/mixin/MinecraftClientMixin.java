@@ -9,11 +9,10 @@ import io.github.axolotlclient.modules.zoom.Zoom;
 import io.github.axolotlclient.util.DiscordRPC;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
-import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.options.GameOptions;
+import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.texture.TextureManager;
-import net.minecraft.client.util.ScreenshotUtils;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.player.ClientPlayerEntity;
 import net.minecraft.world.level.LevelInfo;
@@ -41,8 +40,6 @@ public abstract class MinecraftClientMixin {
     @Shadow protected abstract void loadLogo(TextureManager textureManager) throws LWJGLException;
 
     @Shadow private TextureManager textureManager;
-
-    @Shadow private Framebuffer fbo;
 
     /**
      * @author TheKodeToad & Sk1erLLC (initially created this fix).
@@ -72,19 +69,15 @@ public abstract class MinecraftClientMixin {
         } catch (Exception ignored){}
     }
 
+    @Redirect(method = "handleKeyInput", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/options/KeyBinding;getCode()I", ordinal = 5))
     // Fix taking a screenshot when pressing '<' (Because it has the same keyCode as F2)
-    @Inject(method = "handleKeyInput", at = @At(value = "HEAD"), cancellable = true)
-    public void iTryToFixTheScreenshotKey(CallbackInfo ci) {
-        int i = Keyboard.getEventKey() == 0 ? Keyboard.getEventCharacter() : Keyboard.getEventKey();
+    public int iTryToFixTheScreenshotKey(KeyBinding instance) {
 
-        if (i != 0 && !Keyboard.isRepeatEvent() && !Keyboard.getEventKeyState()) {
-            if (i == options.keyScreenshot.getCode()) {
-                if (!(Keyboard.getEventCharacter() == '<')) {
-                    MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(ScreenshotUtils.saveScreenshot(MinecraftClient.getInstance().runDirectory, MinecraftClient.getInstance().width, MinecraftClient.getInstance().height, this.fbo));
-                }
-                ci.cancel();
-            }
+        if (Keyboard.getEventCharacter() != '<') {
+            return instance.getCode();
         }
+
+        return -999; // There is no key with this Code, but this is what we want here.
     }
 
     // Don't ask me why we need both here, but otherwise it looks ugly

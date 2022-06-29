@@ -4,18 +4,22 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import org.jetbrains.annotations.NotNull;
 
-public class FloatOption extends OptionBase implements Option{
+public class FloatOption extends OptionBase {
 
     float min;
     float max;
     float def;
     float value;
 
-    public FloatOption(String name, Float min, Float max, Float def) {
-        super(name);
+    public FloatOption(String name, String tooltipLocation, Float def, Float min, Float max) {
+        super(name, tooltipLocation);
         this.min=min;
         this.max=max;
         this.def=def;
+    }
+
+    public FloatOption(String name, Float min, Float max, Float def) {
+        this(name, null, def, min, max);
     }
 
     public float get(){

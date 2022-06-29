@@ -21,11 +21,4 @@ public interface Option extends Tooltippable {
     void setDefaults();
 
     JsonElement getJson();
-
-    default @Nullable String getTooltip(){
-        if(!Objects.equals(I18n.translate(getName() + ".tooltip"), getName() + ".tooltip")) {
-            return I18n.translate(getName() + ".tooltip");
-        }
-        return null;
-    }
 }
