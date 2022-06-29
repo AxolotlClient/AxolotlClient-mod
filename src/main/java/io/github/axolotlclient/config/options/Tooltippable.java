@@ -9,10 +9,10 @@ public interface Tooltippable {
 
     String getName();
 
-
     default String getTooltip(){
         return this.getTooltip(null);
     }
+
     default @Nullable String getTooltip(String location){
         if(location!=null){
             if(!Objects.equals(I18n.translate(location + ".tooltip"), location + ".tooltip")) {

@@ -13,6 +13,7 @@ import io.github.axolotlclient.modules.hud.util.DrawUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.resource.language.I18n;
 
 import java.util.Arrays;
@@ -46,11 +47,13 @@ public class OptionsScreenBuilder extends Screen {
             DrawUtil.fill(0, height*5/6, width, height, 0xFF86007d);
         }
 
-        this.list.render(mouseX, mouseY, tickDelta);
+
         drawCenteredString(textRenderer, cat.getTranslatedName(), width/2, 25, -1);
 
 
         super.render(mouseX, mouseY, tickDelta);
+
+        this.list.render(mouseX, mouseY, tickDelta);
 
         if(picker!=null){
             GlStateManager.disableDepthTest();
@@ -160,6 +163,5 @@ public class OptionsScreenBuilder extends Screen {
     public void renderTooltip(Tooltippable tooltippable, int x, int y){
         String[] tooltip = Objects.requireNonNull(tooltippable.getTooltip()).split("<br>");
         this.renderTooltip(Arrays.asList(tooltip), x, y);
-        GlStateManager.disableLighting();
     }
 }
