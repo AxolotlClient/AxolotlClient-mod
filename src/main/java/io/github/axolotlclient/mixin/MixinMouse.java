@@ -1,5 +1,6 @@
 package io.github.axolotlclient.mixin;
 
+import io.github.axolotlclient.modules.scrollableTooltips.ScrollableTooltips;
 import io.github.axolotlclient.modules.zoom.Zoom;
 import io.github.axolotlclient.util.Hooks;
 import net.minecraft.client.Mouse;
@@ -19,11 +20,20 @@ public abstract class MixinMouse {
 		}
 	}
 
+    @Inject(method = "onMouseScroll", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;mouseScrolled(DDD)Z"))
+    public void scrollTooltips(long window, double scrollDeltaX, double scrollDeltaY, CallbackInfo ci){
+        if(ScrollableTooltips.Instance.enabled.get() && Math.signum(scrollDeltaY)!=0){
+            ScrollableTooltips.Instance.onScroll(Math.signum(scrollDeltaY) > 0);
+        }
+    }
+
 	@ModifyArg(method = "onMouseScroll", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerInventory;scrollInHotbar(D)V"))
 	public double scrollZoom(double scrollAmount){
-		if(scrollAmount != 0 && Zoom.scroll(scrollAmount)){
-			return 0;
-		}
+
+        if(scrollAmount != 0 && Zoom.scroll(scrollAmount)){
+            return 0;
+        }
+
 		return scrollAmount;
 	}
 }

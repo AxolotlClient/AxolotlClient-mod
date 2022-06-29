@@ -14,9 +14,13 @@ public class ColorOption extends OptionBase implements Option {
         this(name, Color.parse(def));
     }
 
-    public ColorOption(String name, Color def){
+    public ColorOption(String name, String tooltipLocation, Color def){
         super(name);
         this.def=def;
+    }
+
+    public ColorOption(String name, Color def){
+        this(name, null, def);
     }
 
     public Color get(){

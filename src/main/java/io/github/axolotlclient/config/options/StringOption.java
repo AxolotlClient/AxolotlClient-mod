@@ -9,9 +9,13 @@ public class StringOption extends OptionBase implements Option{
     private String value;
     private final String def;
 
-    public StringOption(String name, String def){
-        super(name);
+    public StringOption(String name, String tooltipLocation, String def){
+        super(name, tooltipLocation);
         this.def = def;
+    }
+
+    public StringOption(String name, String def){
+        this(name, null, def);
     }
 
     public String get(){

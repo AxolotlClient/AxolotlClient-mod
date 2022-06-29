@@ -11,11 +11,15 @@ public class FloatOption extends OptionBase implements Option{
     float def;
     float option;
 
-    public FloatOption(String name, Float min, Float max, Float def) {
-        super(name);
+    public FloatOption(String name, String tooltipLocation, Float def, Float min, Float max) {
+        super(name, tooltipLocation);
         this.min=min;
         this.max=max;
         this.def=def;
+    }
+
+    public FloatOption(String name, Float min, Float max, Float def) {
+        this(name, null, def, min, max);
     }
 
     public float get(){

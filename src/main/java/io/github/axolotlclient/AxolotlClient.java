@@ -11,6 +11,7 @@ import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hypixel.HypixelMods;
 import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
 import io.github.axolotlclient.modules.motionblur.MotionBlur;
+import io.github.axolotlclient.modules.scrollableTooltips.ScrollableTooltips;
 import io.github.axolotlclient.modules.zoom.Zoom;
 import io.github.axolotlclient.util.DiscordRPC;
 import io.github.axolotlclient.util.Util;
@@ -48,8 +49,6 @@ public class AxolotlClient implements ClientModInitializer {
 
 	public static List<ResourcePack> packs = new ArrayList<>();
 	public static HashMap<Identifier, Resource> runtimeResources = new HashMap<>();
-
-	public static boolean initalized = false;
 
 	public static final Identifier badgeIcon = new Identifier("axolotlclient", "textures/badge.png");
 
@@ -109,6 +108,7 @@ public class AxolotlClient implements ClientModInitializer {
 		modules.put(HudManager.ID, HudManager.getINSTANCE());
 		modules.put(HypixelMods.ID, HypixelMods.INSTANCE);
 		modules.put(MotionBlur.ID, new MotionBlur());
+        modules.put(ScrollableTooltips.ID, ScrollableTooltips.Instance);
 	}
 
 	public static boolean isUsingClient(UUID uuid){
