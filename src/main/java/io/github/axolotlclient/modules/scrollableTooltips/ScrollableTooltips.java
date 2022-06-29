@@ -1,13 +1,11 @@
 package io.github.axolotlclient.modules.scrollableTooltips;
 
-import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.config.options.BooleanOption;
 import io.github.axolotlclient.config.options.IntegerOption;
 import io.github.axolotlclient.config.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.option.KeyBind;
 import net.minecraft.util.Identifier;
 
 public class ScrollableTooltips extends AbstractModule {

@@ -119,10 +119,23 @@ public class ButtonWidgetList extends ButtonListWidget {
 		return this.width / 2 -155;
 	}
 
+
+    protected void renderTooltips(MatrixStack matrices, int x, int y, int mouseX, int mouseY){
+        int i = this.getEntryCount();
+
+        for(int j = 0; j < i; ++j) {
+            int k = this.getRowTop(j);
+            entries.get(j).renderTooltips(matrices, x, k, mouseX, mouseY);
+        }
+    }
+
 	@Override
 	protected void renderList(MatrixStack matrices, int x, int y, int mouseX, int mouseY, float delta) {
 		Util.applyScissor(new Rectangle(0, top, this.width, bottom-top));
 		super.renderList(matrices, x, y, mouseX, mouseY, delta);
+
+        renderTooltips(matrices, x, y, mouseX, mouseY);
+
 		GL11.glDisable(GL11.GL_SCISSOR_TEST);
 	}
 
@@ -178,6 +191,10 @@ public class ButtonWidgetList extends ButtonListWidget {
                 this.right.y = y;
                 this.right.render(matrices, mouseX, mouseY, tickDelta);
             }
+
+        }
+
+        public void renderTooltips(MatrixStack matrices, int x, int y, int mouseX, int mouseY){
 
         }
 
@@ -278,9 +295,13 @@ public class ButtonWidgetList extends ButtonListWidget {
 
 		@Override
 		public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-			super.render(matrices, index, y, x, entryWidth, entryHeight, mouseX, mouseY, hovered, tickDelta);
+            super.render(matrices, index, y, x, entryWidth, entryHeight, mouseX, mouseY, hovered, tickDelta);
 
-			if(AxolotlClient.CONFIG.showCategoryTooltips.get()) {
+        }
+
+        @Override
+        public void renderTooltips(MatrixStack matrices, int x, int y, int mouseX, int mouseY) {
+            if(AxolotlClient.CONFIG.showCategoryTooltips.get()) {
 				if (super.left != null && super.left.isMouseOver(mouseX, mouseY)) {
 					renderTooltip(matrices, left, mouseX, mouseY);
 				}
@@ -310,6 +331,10 @@ public class ButtonWidgetList extends ButtonListWidget {
             DrawableHelper.drawTextWithShadow(matrices, client.textRenderer, option.getTranslatedName(), x, y + 5, -1);
             left.y = y;
             left.render(matrices, mouseX, mouseY, tickDelta);
+        }
+
+        @Override
+        public void renderTooltips(MatrixStack matrices, int x, int y, int mouseX, int mouseY) {
 
 		    if(AxolotlClient.CONFIG.showOptionTooltips.get() &&
 			    mouseX>=x && mouseX<=left.x + left.getWidth() && mouseY>= y && mouseY<= y + 20){
