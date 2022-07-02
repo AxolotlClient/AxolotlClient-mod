@@ -141,17 +141,14 @@ public class ButtonWidgetList extends EntryListWidget {
         }
     }
 
-    public void renderTooltips(int x, int y, int mouseX, int mouseY){
+    protected void renderTooltips(int x, int y, int mouseX, int mouseY){
         int i = this.getEntryCount();
 
         for(int j = 0; j < i; ++j) {
             Pair pair = entries.get(j);
 
             int k = y + j * this.entryHeight + this.headerHeight;
-            //int l = this.entryHeight - 4;
-            //if (k > this.yEnd || k + l < this.yStart) {
-                pair.renderTooltips(x, k, mouseX, mouseY);
-            //}
+            pair.renderTooltips(x, k, mouseX, mouseY);
         }
     }
 
