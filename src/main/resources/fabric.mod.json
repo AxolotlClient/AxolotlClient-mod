@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "axolotlclient",
+  "version": "${version}",
+  "name": "AxolotlClient",
+  "description": "Mod for AxolotlClient",
+  "authors": [
+    "moehreag"
+  ],
+  "contributors":[
+    "YakisikliBaran",
+    "DragonEggBedrockBreaking",
+    "kuchenag",
+    "TheKodeToad"
+  ],
+  "contact": {
+	  "homepage": "https://moehreag.duckdns.org/",
+	  "issues": "https://github.com/AxolotlClient/Axolotlclient-mod/issues",
+	  "sources": "https://github.com/Axolotlclient?tab=repositories"
+  },
+  "license": "LGPL-3.0-or-later",
+  "icon": "assets/axolotlclient/icon.png",
+  "accessWidener" : "axolotlclient.accesswidener",
+  "environment": "*",
+  "entrypoints": {
+	  "client": ["io.github.axolotlclient.AxolotlClient"],
+	  "modmenu": ["io.github.axolotlclient.config.modmenu.ModMenuCompat"]
+  },
+  "mixins": [
+    "axolotlclient.mixins.json"
+  ],
+  "custom": {
+    "modmenu:clientsideOnly": true
+  },
+  "depends": {
+    "fabricloader": ">=0.12.0",
+    "minecraft": "1.19",
+    "fabric": ">0.55.0"
+  }
+}

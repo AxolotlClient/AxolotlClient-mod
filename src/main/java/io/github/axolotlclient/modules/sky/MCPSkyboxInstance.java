@@ -3,10 +3,10 @@ package io.github.axolotlclient.modules.sky;
 import com.google.gson.JsonObject;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.Tessellator;
-import com.mojang.blaze3d.vertex.VertexFormat;
-import com.mojang.blaze3d.vertex.VertexFormats;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexFormat;
+import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Matrix4f;
@@ -33,10 +33,10 @@ public class MCPSkyboxInstance extends SkyboxInstance {
 	    RenderSystem.setShaderColor(1,1,1,1);
 		//RenderSystem.enableTexture();
         RenderSystem.enableBlend();
-        RenderSystem.blendFunc(GlStateManager.class_4535.SRC_ALPHA, GlStateManager.class_4534.ONE_MINUS_SRC_ALPHA);
+        RenderSystem.blendFunc(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA);
 
         Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferBuilder = tessellator.getBufferBuilder();
+        BufferBuilder bufferBuilder = tessellator.getBuffer();
 	    RenderSystem.setShaderTexture(0, textures[0]);
 
         for (int i = 0; i < 6; ++i) {
@@ -81,12 +81,12 @@ public class MCPSkyboxInstance extends SkyboxInstance {
                     u=0;
                 }
 
-	            Matrix4f matrix4f = matrices.peek().getPosition();
+	            Matrix4f matrix4f = matrices.peek().getPositionMatrix();
                 bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
-                bufferBuilder.vertex(matrix4f, -100, -100, -100).uv(u, v).color(1F, 1F, 1F, alpha).next();
-                bufferBuilder.vertex(matrix4f, -100, -100, 100).uv(u, v+0.5F).color(1F, 1F, 1F, alpha).next();
-                bufferBuilder.vertex(matrix4f, 100, -100, 100).uv(u+1/3F, v+0.5F).color(1F, 1F, 1F, alpha).next();
-                bufferBuilder.vertex(matrix4f, 100, -100, -100).uv(u+1/3F, v).color(1F, 1F, 1F, alpha).next();
+                bufferBuilder.vertex(matrix4f, -100, -100, -100).texture(u, v).color(1F, 1F, 1F, alpha).next();
+                bufferBuilder.vertex(matrix4f, -100, -100, 100).texture(u, v+0.5F).color(1F, 1F, 1F, alpha).next();
+                bufferBuilder.vertex(matrix4f, 100, -100, 100).texture(u+1/3F, v+0.5F).color(1F, 1F, 1F, alpha).next();
+                bufferBuilder.vertex(matrix4f, 100, -100, -100).texture(u+1/3F, v).color(1F, 1F, 1F, alpha).next();
 
                 tessellator.draw();
                 matrices.pop();

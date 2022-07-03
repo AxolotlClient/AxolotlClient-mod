@@ -118,8 +118,8 @@ public class CreditsScreen extends Screen {
     }
 
 	@Override
-	public void closeScreen() {
+	public void removed() {
 		stopBGM();
-		super.closeScreen();
+		super.removed();
 	}
 }

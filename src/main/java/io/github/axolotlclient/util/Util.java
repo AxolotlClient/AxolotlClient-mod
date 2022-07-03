@@ -3,14 +3,14 @@ package io.github.axolotlclient.util;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.mojang.blaze3d.glfw.Window;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.Address;
 import net.minecraft.client.network.AllowedAddressResolver;
+import net.minecraft.client.network.ChatPreviewer;
 import net.minecraft.client.network.ServerAddress;
 import net.minecraft.client.network.ServerInfo;
-import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.util.Window;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.NetworkState;
 import net.minecraft.network.listener.ClientQueryPacketListener;
@@ -24,7 +24,6 @@ import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.ScoreboardPlayerScore;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.text.Text;
-import net.minecraft.unmapped.C_fijiyucq;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -85,10 +84,10 @@ public class Util {
 	}
 
 	// I suppose this is something introduced with the chat cryptography features in 1.19
-	private static final C_fijiyucq whateverThisIs = new C_fijiyucq(MinecraftClient.getInstance());
+	private static final ChatPreviewer whateverThisIs = new ChatPreviewer(MinecraftClient.getInstance());
 	public static void sendChatMessage(String msg) {
-		Text text = whateverThisIs.method_44037(msg);
-		MinecraftClient.getInstance().player.method_44096(msg, text);
+		Text text = whateverThisIs.tryConsumeResponse(msg);
+		MinecraftClient.getInstance().player.sendChatMessage(msg, text);
 	}
 
 	public static List<String> getSidebar() {

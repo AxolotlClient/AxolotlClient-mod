@@ -2,10 +2,10 @@ package io.github.axolotlclient.mixin;
 
 import io.github.axolotlclient.NetworkHelper;
 import io.github.axolotlclient.util.DiscordRPC;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
-import org.quiltmc.loader.api.QuiltLoader;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -34,8 +34,8 @@ public class MixinMinecraftClient {
 
 	@Inject(method = "getVersionType", at = @At("HEAD"), cancellable = true)
     public void noVersionType(CallbackInfoReturnable<String> cir){
-        if(QuiltLoader.getModContainer("axolotlclient").isPresent()) {
-            cir.setReturnValue(QuiltLoader.getModContainer("axolotlclient").get().metadata().version().raw());
+        if(FabricLoader.getInstance().getModContainer("axolotlclient").isPresent()) {
+            cir.setReturnValue(FabricLoader.getInstance().getModContainer("axolotlclient").get().getMetadata().getVersion().getFriendlyString());
         }
     }
 
@@ -50,8 +50,4 @@ public class MixinMinecraftClient {
 		DiscordRPC.shutdown();
 	}
 
-	@Inject(method = "startOnlineMode", at = @At(value = "HEAD", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;method_1236(Lnet/minecraft/entity/player/PlayerEntity;)V", shift = At.Shift.AFTER))
-	public void login(CallbackInfo ci){
-		NetworkHelper.setOnline();
-	}
 }

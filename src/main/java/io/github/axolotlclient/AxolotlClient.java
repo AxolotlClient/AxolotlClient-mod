@@ -15,21 +15,20 @@ import io.github.axolotlclient.modules.scrollableTooltips.ScrollableTooltips;
 import io.github.axolotlclient.modules.zoom.Zoom;
 import io.github.axolotlclient.util.DiscordRPC;
 import io.github.axolotlclient.util.Util;
+import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.resource.Resource;
-import net.minecraft.resource.pack.ResourcePack;
+import net.minecraft.resource.ResourcePack;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.util.Identifier;
-import org.quiltmc.loader.api.ModContainer;
-import org.quiltmc.loader.api.QuiltLoader;
-import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
-import org.quiltmc.qsl.lifecycle.api.client.event.ClientTickEvents;
-import org.quiltmc.qsl.resource.loader.api.ResourceLoader;
-import org.quiltmc.qsl.resource.loader.api.ResourcePackActivationType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,19 +62,19 @@ public class AxolotlClient implements ClientModInitializer {
 	public static boolean showWarning = true;
 
 	@Override
-	public void onInitializeClient(ModContainer container) {
+	public void onInitializeClient() {
 
-		if (QuiltLoader.isModLoaded("ares")){
+		if (FabricLoader.getInstance().isModLoaded("ares")){
 			badmod = "Ares Client";
-		} else if (QuiltLoader.isModLoaded("inertia")) {
+		} else if (FabricLoader.getInstance().isModLoaded("inertia")) {
 			badmod = "Inertia Client";
-		} else if (QuiltLoader.isModLoaded("meteor-client")) {
+		} else if (FabricLoader.getInstance().isModLoaded("meteor-client")) {
 			badmod = "Meteor Client";
-		} else if (QuiltLoader.isModLoaded("wurst")) {
+		} else if (FabricLoader.getInstance().isModLoaded("wurst")) {
 			badmod = "Wurst Client";
-		} else if (QuiltLoader.isModLoaded("baritone")) {
+		} else if (FabricLoader.getInstance().isModLoaded("baritone")) {
 			badmod = "Baritone";
-		} else if (QuiltLoader.isModLoaded("xaerominimap")) {
+		} else if (FabricLoader.getInstance().isModLoaded("xaerominimap")) {
 			badmod = "Xaero's Minimap";
 		} else {
 			showWarning = false;
@@ -97,8 +96,11 @@ public class AxolotlClient implements ClientModInitializer {
 
 		modules.forEach((identifier, abstractModule) -> abstractModule.lateInit());
 
-		ResourceLoader.registerBuiltinResourcePack(new Identifier("axolotlclient", "axolotlclient-ui"), container, ResourcePackActivationType.NORMAL);
-		ClientTickEvents.START.register(client -> tickClient());
+        if(FabricLoader.getInstance().getModContainer("axolotlclient").isPresent()) {
+            ResourceManagerHelper.registerBuiltinResourcePack(new Identifier("axolotlclient", "axolotlclient-ui"),
+                FabricLoader.getInstance().getModContainer("axolotlclient").get(), ResourcePackActivationType.NORMAL);
+        }
+		ClientTickEvents.START_CLIENT_TICK.register(client -> tickClient());
 
 		LOGGER.info("AxolotlClient Initialized");
 	}

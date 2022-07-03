@@ -1,18 +1,18 @@
 package io.github.axolotlclient.modules.hud.util;
 
-import com.mojang.blaze3d.lighting.DiffuseLighting;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.Tessellator;
-import com.mojang.blaze3d.vertex.VertexFormat;
-import com.mojang.blaze3d.vertex.VertexFormats;
 import io.github.axolotlclient.config.Color;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.render.OverlayTexture;
+import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.VertexFormat;
+import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
@@ -139,11 +139,11 @@ public class ItemUtil {
 
 	public static void renderGuiItemModel(MatrixStack matrices, ItemStack stack, float x, float y) {
 		MinecraftClient client = MinecraftClient.getInstance();
-		BakedModel model = client.getItemRenderer().getHeldItemModel(stack, null, client.player, (int) (x * y));
+		BakedModel model = client.getItemRenderer().getModel(stack, null, client.player, (int) (x * y));
 		client.getTextureManager().getTexture(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).setFilter(false, false);
 		RenderSystem.setShaderTexture(0, PlayerScreenHandler.BLOCK_ATLAS_TEXTURE);
 		RenderSystem.enableBlend();
-		RenderSystem.blendFunc(GlStateManager.class_4535.SRC_ALPHA, GlStateManager.class_4534.ONE_MINUS_SRC_ALPHA);
+		RenderSystem.blendFunc(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA);
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		matrices.push();
 		matrices.translate(x, y, (100.0F + client.getItemRenderer().zOffset));
@@ -154,7 +154,7 @@ public class ItemUtil {
 		VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
 		boolean bl = !model.isSideLit();
 		if (bl) {
-			DiffuseLighting.setupFlatGuiLighting();
+			DiffuseLighting.method_34742();
 		}
 
 		client.getItemRenderer().renderItem(stack, ModelTransformation.Mode.GUI, false, matrices, immediate, 15728880,
@@ -162,7 +162,7 @@ public class ItemUtil {
 		immediate.draw();
 		RenderSystem.enableDepthTest();
 		if (bl) {
-			DiffuseLighting.setup3DGuiLighting();
+			DiffuseLighting.enableGuiDepthLighting();
 		}
 
 		matrices.pop();

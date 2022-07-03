@@ -1,10 +1,10 @@
 package io.github.axolotlclient.modules.hud.snapping;
 
-import com.mojang.blaze3d.glfw.Window;
 import io.github.axolotlclient.config.Color;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.util.Window;
 import net.minecraft.client.util.math.MatrixStack;
 
 import java.util.HashSet;
@@ -116,7 +116,7 @@ public class SnappingHelper {
     }
 
     public Integer getHalfYSnap() {
-        int height = (int) (window.getScaledHeight() / 2);
+        int height = window.getScaledHeight() / 2;
         int pos = current.y + Math.round((float) current.height / 2);
         if (height - distance <= pos && height + distance >= pos) {
             return height;
@@ -125,7 +125,7 @@ public class SnappingHelper {
     }
 
     public Integer getHalfXSnap() {
-        int width = (int) (window.getScaledWidth() / 2);
+        int width = window.getScaledWidth() / 2;
         int pos = current.x + Math.round((float) current.width / 2);
         if (width - distance <= pos && width + distance >= pos) {
             return width;

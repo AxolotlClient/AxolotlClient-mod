@@ -1,11 +1,11 @@
 package io.github.axolotlclient.modules.motionblur;
 
 import com.google.gson.JsonSyntaxException;
-import com.mojang.blaze3d.shader.GlUniform;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.mixin.AccessorShaderEffect;
 import io.github.axolotlclient.modules.AbstractModule;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.GlUniform;
 import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.resource.Resource;
 import net.minecraft.util.Identifier;
@@ -52,7 +52,7 @@ public class MotionBlur extends AbstractModule {
             ((AccessorShaderEffect)shader).getPasses().forEach(shader -> {
                 GlUniform blendFactor = shader.getProgram().getUniformByName("BlendFactor");
                 if(blendFactor!=null){
-                    blendFactor.setFloat(getBlur());
+                    blendFactor.set(getBlur());
                 }
             });
             currentBlur=getBlur();

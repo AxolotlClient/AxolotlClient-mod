@@ -1,8 +1,8 @@
 package io.github.axolotlclient.mixin;
 
-import com.mojang.blaze3d.glfw.Window;
 import io.github.axolotlclient.NetworkHelper;
 import io.github.axolotlclient.util.DiscordRPC;
+import net.minecraft.client.util.Window;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

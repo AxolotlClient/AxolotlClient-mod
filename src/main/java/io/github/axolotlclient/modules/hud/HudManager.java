@@ -1,6 +1,5 @@
 package io.github.axolotlclient.modules.hud;
 
-import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.config.Color;
 import io.github.axolotlclient.config.options.OptionCategory;
@@ -29,7 +28,8 @@ import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.option.KeyBind;
+import net.minecraft.client.option.KeyBinding;
+import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
@@ -58,7 +58,7 @@ public class HudManager extends AbstractModule {
     private final MinecraftClient client = MinecraftClient.getInstance();
     private static final HudManager INSTANCE = new HudManager();
 
-    static KeyBind key = new KeyBind("key.openHud", InputUtil.KEY_RIGHT_SHIFT_CODE, "category.axolotlclient");
+    static KeyBinding key = new KeyBinding("key.openHud", InputUtil.GLFW_KEY_RIGHT_SHIFT, "category.axolotlclient");
 
     public void save(){
 

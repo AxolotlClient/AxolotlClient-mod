@@ -1,21 +1,20 @@
 package io.github.axolotlclient.mixin;
 
-
-import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.hud.HudEditScreen;
 import io.github.axolotlclient.modules.zoom.Zoom;
 import io.github.axolotlclient.util.DiscordRPC;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import org.quiltmc.loader.api.QuiltLoader;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -35,7 +34,7 @@ public abstract class MixinTitleScreen extends Screen{
 	@Inject(method = "initWidgetsNormal", at = @At("HEAD"))
 	public void inMenu(int y, int spacingY, CallbackInfo ci){
 		DiscordRPC.startup();
-		if(MinecraftClient.getInstance().options.saveToolbarActivatorKey.keyEquals(Zoom.keyBinding)){
+		if(MinecraftClient.getInstance().options.saveToolbarActivatorKey.equals(Zoom.keyBinding)){
 			MinecraftClient.getInstance().options.saveToolbarActivatorKey.setBoundKey(InputUtil.UNKNOWN_KEY);
 			AxolotlClient.LOGGER.info("Unbound \"Save Toolbar Activator\" to resolve conflict with the zoom key!");
 		}
@@ -43,7 +42,7 @@ public abstract class MixinTitleScreen extends Screen{
 
 	@ModifyArgs(method = "initWidgetsNormal", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget;<init>(IIIILnet/minecraft/text/Text;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;Lnet/minecraft/client/gui/widget/ButtonWidget$TooltipSupplier;)V", ordinal = 1))
 	public void noRealmsbutOptionsButton(Args args){
-		if(!QuiltLoader.isModLoaded("modmenu")) {
+		if(!FabricLoader.getInstance().isModLoaded("modmenu")) {
 			args.set(4, Text.translatable("config"));
 			args.set(5, (ButtonWidget.PressAction) buttonWidget ->
 				MinecraftClient.getInstance().setScreen(new HudEditScreen(this)));
@@ -54,8 +53,8 @@ public abstract class MixinTitleScreen extends Screen{
 	public String setVersionText(String s){
 		return "Minecraft "+ SharedConstants.getGameVersion().getName() +
 			"/AxolotlClient "+
-			(QuiltLoader.getModContainer("axolotlclient").isPresent() ?
-				QuiltLoader.getModContainer("axolotlclient").get().metadata().version().raw():"");
+			(FabricLoader.getInstance().getModContainer("axolotlclient").isPresent() ?
+				FabricLoader.getInstance().getModContainer("axolotlclient").get().getMetadata().getVersion().getFriendlyString():"");
 	}
 
 	@Inject(method = "areRealmsNotificationsEnabled", at = @At("HEAD"), cancellable = true)

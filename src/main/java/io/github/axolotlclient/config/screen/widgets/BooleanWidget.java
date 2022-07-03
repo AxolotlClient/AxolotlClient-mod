@@ -2,6 +2,7 @@ package io.github.axolotlclient.config.screen.widgets;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.config.options.BooleanOption;
+import io.github.axolotlclient.config.screen.OptionsScreenBuilder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
@@ -23,10 +24,12 @@ public class BooleanWidget extends ButtonWidget {
         return option.get()? Text.translatable("options."+"on"): Text.translatable ("options."+"off");
     }
 
-    /*@Override
-    public boolean isMouseOver(MinecraftClient client, int mouseX, int mouseY) {
-        return mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
-    }*/
+    @Override
+    public boolean isMouseOver(double mouseX, double mouseY) {
+        if(MinecraftClient.getInstance().currentScreen instanceof OptionsScreenBuilder &&
+            ((OptionsScreenBuilder) MinecraftClient.getInstance().currentScreen).isPickerOpen()) return false;
+        return super.isMouseOver(mouseX, mouseY);
+    }
 
 	@Override
 	public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {

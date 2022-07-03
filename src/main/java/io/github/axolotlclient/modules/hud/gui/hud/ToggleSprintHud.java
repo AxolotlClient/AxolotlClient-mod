@@ -7,7 +7,7 @@ import io.github.axolotlclient.config.options.Option;
 import io.github.axolotlclient.config.options.StringOption;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.option.KeyBind;
+import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
@@ -28,8 +28,8 @@ public class ToggleSprintHud extends CleanHudEntry {
     private final BooleanOption randomPlaceholder = new BooleanOption("randomPlaceholder", false);
     private final StringOption placeholder = new StringOption("placeholder", "");
 
-    KeyBind sprintToggle = new KeyBind("key.toggleSprint", GLFW.GLFW_KEY_K, "category.axolotlclient");
-    KeyBind sneakToggle = new KeyBind("key.toggleSneak", GLFW.GLFW_KEY_I, "category.axolotlclient");
+    KeyBinding sprintToggle = new KeyBinding("key.toggleSprint", GLFW.GLFW_KEY_K, "category.axolotlclient");
+    KeyBinding sneakToggle = new KeyBinding("key.toggleSneak", GLFW.GLFW_KEY_I, "category.axolotlclient");
 
     public BooleanOption sprintToggled = new BooleanOption("sprintToggled", false);
     private boolean sprintWasPressed = false;
@@ -52,7 +52,7 @@ public class ToggleSprintHud extends CleanHudEntry {
     private void loadRandomPlaceholder(){
         try {
             BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(MinecraftClient.getInstance().getResourceManager().getResourceOrThrow(new Identifier("axolotlclient", "texts/splashes.txt")).open(), StandardCharsets.UTF_8)
+                    new InputStreamReader(MinecraftClient.getInstance().getResourceManager().getResourceOrThrow(new Identifier("axolotlclient", "texts/splashes.txt")).getInputStream(), StandardCharsets.UTF_8)
             );
             String string;
             while((string = bufferedReader.readLine()) != null) {

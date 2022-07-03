@@ -6,10 +6,10 @@ import io.github.axolotlclient.modules.hud.gui.hud.PackDisplayHud;
 import io.github.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
 import io.github.axolotlclient.modules.sky.SkyResourceManager;
 import io.github.axolotlclient.modules.sky.SkyboxManager;
-import net.minecraft.resource.ReloadableResourceManager;
+import net.minecraft.resource.ReloadableResourceManagerImpl;
 import net.minecraft.resource.Resource;
+import net.minecraft.resource.ResourcePack;
 import net.minecraft.resource.ResourceReload;
-import net.minecraft.resource.pack.ResourcePack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Unit;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,7 +22,7 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
-@Mixin(ReloadableResourceManager.class)
+@Mixin(ReloadableResourceManagerImpl.class)
 public class MixinReloadableResourceManager {
 
 	@Inject(method = "reload", at = @At("HEAD"))
@@ -46,7 +46,7 @@ public class MixinReloadableResourceManager {
 
     }
 
-    @Inject(method = "method_14486", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getResource", at = @At("HEAD"), cancellable = true)
     public void getResource(Identifier id, CallbackInfoReturnable<Optional<Resource>> cir){
         if(AxolotlClient.runtimeResources.get(id) != null){
             cir.setReturnValue(Optional.of(AxolotlClient.runtimeResources.get(id)));

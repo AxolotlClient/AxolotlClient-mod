@@ -4,7 +4,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.config.options.DoubleOption;
 import io.github.axolotlclient.config.options.FloatOption;
 import io.github.axolotlclient.config.options.IntegerOption;
-import io.github.axolotlclient.config.options.Option;
+import io.github.axolotlclient.config.options.OptionBase;
+import io.github.axolotlclient.config.screen.OptionsScreenBuilder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
@@ -21,7 +22,7 @@ public class OptionSliderWidget extends ButtonWidget {
 
     private double value;
     public boolean dragging;
-    private final Option option;
+    private final OptionBase option;
     private final double min;
     private final double max;
 
@@ -44,13 +45,21 @@ public class OptionSliderWidget extends ButtonWidget {
         this(x, y, option, option.getMin(), option.getMax());
     }
 
-    public OptionSliderWidget(int x, int y, IntegerOption option, float min, float max) {
-        super(x, y, 150, 20, Text.empty(), buttonWidget -> {});
+    public OptionSliderWidget(int x, int y, int width, int height, IntegerOption option) {
+        this(x, y, width, height, option, option.getMin(), option.getMax());
+    }
+
+    public OptionSliderWidget(int x, int y, int width, int height, IntegerOption option, float min, float max) {
+        super(x, y, width, height, Text.empty(), buttonWidget -> {});
         this.option = option;
         this.min = min;
         this.max = max;
         this.value = (option.get() - min) / (max - min);
         this.message = this.getMessage();
+    }
+
+    public OptionSliderWidget(int x, int y, IntegerOption option, float min, float max) {
+        this(x, y, 150, 20, option, min, max);
     }
 
     public OptionSliderWidget(int x, int y, DoubleOption option) {
@@ -76,7 +85,7 @@ public class OptionSliderWidget extends ButtonWidget {
     }
 
     public Text getMessage() {
-        return Text.of(""+ (option instanceof IntegerOption? getSliderValueAsInt(): this.getSliderValue()));
+        return Text.of(""+ (option instanceof IntegerOption? getSliderValueAsInt()+"".split("\\.")[0]: this.getSliderValue()));
     }
 
     protected int getYImage(boolean isHovered) {
@@ -122,19 +131,34 @@ public class OptionSliderWidget extends ButtonWidget {
         }
     }
 
-    public boolean isMouseOver(double mouseX, double mouseY) {
-        if (super.isMouseOver(mouseX, mouseY)) {
-            this.value = (float)(mouseX - (this.x + 4)) / (float)(this.width - 8);
-            this.value = MathHelper.clamp(this.value, 0.0F, 1.0F);
-            if (option instanceof FloatOption) ((FloatOption) option).set(getSliderValue());
-            else if (option instanceof DoubleOption) ((DoubleOption) option).set(getSliderValue());
-            else if (option instanceof IntegerOption) ((IntegerOption) option).set(getSliderValueAsInt());
-            this.message = getMessage();
-            this.dragging = true;
-            return true;
-        } else {
+    protected boolean canHover(){
+        if(MinecraftClient.getInstance().currentScreen instanceof OptionsScreenBuilder &&
+            ((OptionsScreenBuilder) MinecraftClient.getInstance().currentScreen).isPickerOpen()){
+            this.hovered = false;
             return false;
         }
+        return true;
+    }
+
+    public boolean isMouseOver(double mouseX, double mouseY) {
+        if(canHover()) {
+            if (super.isMouseOver(mouseX, mouseY)) {
+                this.value = (float) (mouseX - (this.x + 4)) / (float) (this.width - 8);
+                this.value = MathHelper.clamp(this.value, 0.0F, 1.0F);
+                if (option instanceof FloatOption)
+                    ((FloatOption) option).set(getSliderValue());
+                else if (option instanceof DoubleOption)
+                    ((DoubleOption) option).set(getSliderValue());
+                else if (option instanceof IntegerOption)
+                    ((IntegerOption) option).set(getSliderValueAsInt());
+                this.message = getMessage();
+                this.dragging = true;
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
     }
 
 	@Override
@@ -142,5 +166,9 @@ public class OptionSliderWidget extends ButtonWidget {
 		this.dragging = false;
 		return super.mouseReleased(mouseX, mouseY, button);
 	}
+
+    public OptionBase getOption(){
+        return option;
+    }
 
 }

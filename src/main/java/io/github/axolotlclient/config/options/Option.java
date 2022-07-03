@@ -1,6 +1,7 @@
 package io.github.axolotlclient.config.options;
 
 import com.google.gson.JsonElement;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
 public interface Option extends Tooltippable {
@@ -9,7 +10,7 @@ public interface Option extends Tooltippable {
 
     String getName();
 
-    default Text getTranslatedName(){
+    default MutableText getTranslatedName(){
         return Text.translatable(this.getName());
     }
 

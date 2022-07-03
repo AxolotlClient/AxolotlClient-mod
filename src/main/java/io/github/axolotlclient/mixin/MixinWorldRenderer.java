@@ -2,20 +2,20 @@ package io.github.axolotlclient.mixin;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.BufferRenderer;
-import com.mojang.blaze3d.vertex.Tessellator;
-import com.mojang.blaze3d.vertex.VertexBuffer;
-import com.mojang.blaze3d.vertex.VertexFormat;
-import com.mojang.blaze3d.vertex.VertexFormats;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.sky.SkyboxManager;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.VertexBuffer;
 import net.minecraft.client.render.BackgroundRenderer;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.BufferRenderer;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.render.ShaderProgram;
-import net.minecraft.client.render.SkyProperties;
+import net.minecraft.client.render.Shader;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexFormat;
+import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
@@ -25,14 +25,12 @@ import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import org.jetbrains.annotations.Nullable;
-import org.quiltmc.loader.api.QuiltLoader;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
@@ -57,21 +55,21 @@ public abstract class MixinWorldRenderer {
 
 	@Shadow @Nullable private VertexBuffer lightSkyBuffer;
 
-	@Inject(method = "renderSky", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;disableTexture()V", ordinal = 0), cancellable = true)
-	public void renderCustomSky(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Camera preStep, boolean bl, Runnable runnable, CallbackInfo ci){
-		if(AxolotlClient.CONFIG.customSky.get() && SkyboxManager.getInstance().hasSkyBoxes() && !QuiltLoader.isModLoaded("fabricskyboxes")) {
+	@Inject(method = "renderSky*", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;disableTexture()V", ordinal = 0), cancellable = true)
+	private void renderCustomSky(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Camera preStep, boolean bl, Runnable runnable, CallbackInfo ci){
+		if(AxolotlClient.CONFIG.customSky.get() && SkyboxManager.getInstance().hasSkyBoxes() && !FabricLoader.getInstance().isModLoaded("fabricskyboxes")) {
 			RenderSystem.disableTexture();
 			Vec3d vec3d = this.world.getSkyColor(this.client.gameRenderer.getCamera().getPos(), tickDelta);
 			float f = (float) vec3d.x;
 			float g = (float) vec3d.y;
 			float h = (float) vec3d.z;
-			BackgroundRenderer.setShaderFogColor();
-			BufferBuilder bufferBuilder = Tessellator.getInstance().getBufferBuilder();
+			BackgroundRenderer.setFogBlack();
+			BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
 			RenderSystem.depthMask(false);
 			RenderSystem.setShaderColor(f, g, h, 1.0F);
-			ShaderProgram shaderProgram = RenderSystem.getShader();
+			Shader shaderProgram = RenderSystem.getShader();
 			this.lightSkyBuffer.bind();
-			this.lightSkyBuffer.setShader(matrices.peek().getPosition(), projectionMatrix, shaderProgram);
+			this.lightSkyBuffer.draw(matrices.peek().getPositionMatrix(), projectionMatrix, shaderProgram);
 			VertexBuffer.unbind();
 
 			this.client.getProfiler().push("Custom Skies");
@@ -81,7 +79,7 @@ public abstract class MixinWorldRenderer {
 
 			RenderSystem.enableBlend();
 			RenderSystem.defaultBlendFunc();
-			float[] fs = this.world.getSkyProperties().getFogColorOverride(this.world.getSkyAngle(tickDelta), tickDelta);
+			float[] fs = this.world.getDimensionEffects().getFogColorOverride(this.world.getSkyAngle(tickDelta), tickDelta);
 			if (fs != null) {
 				RenderSystem.setShader(GameRenderer::getPositionColorShader);
 				RenderSystem.disableTexture();
@@ -94,7 +92,7 @@ public abstract class MixinWorldRenderer {
 				float j = fs[0];
 				float k = fs[1];
 				float l = fs[2];
-				Matrix4f matrix4f = matrices.peek().getPosition();
+				Matrix4f matrix4f = matrices.peek().getPositionMatrix();
 				bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR);
 				bufferBuilder.vertex(matrix4f, 0.0F, 100.0F, 0.0F).color(j, k, l, fs[3]).next();
 				int m = 16;
@@ -111,7 +109,7 @@ public abstract class MixinWorldRenderer {
 			}
 
 			RenderSystem.enableTexture();
-			RenderSystem.blendFuncSeparate(GlStateManager.class_4535.SRC_ALPHA, GlStateManager.class_4534.ONE, GlStateManager.class_4535.ONE, GlStateManager.class_4534.ZERO);
+			RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
 
 
 			if(AxolotlClient.CONFIG.showSunMoon.get()) {
@@ -120,15 +118,15 @@ public abstract class MixinWorldRenderer {
 				RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, i);
 				matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-90.0F));
 				matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(this.world.getSkyAngle(tickDelta) * 360.0F));
-				Matrix4f matrix4f2 = matrices.peek().getPosition();
+				Matrix4f matrix4f2 = matrices.peek().getPositionMatrix();
 				float k = 30.0F;
 				RenderSystem.setShader(GameRenderer::getPositionTexShader);
 				RenderSystem.setShaderTexture(0, SUN);
 				bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-				bufferBuilder.vertex(matrix4f2, -k, 100.0F, -k).uv(0.0F, 0.0F).next();
-				bufferBuilder.vertex(matrix4f2, k, 100.0F, -k).uv(1.0F, 0.0F).next();
-				bufferBuilder.vertex(matrix4f2, k, 100.0F, k).uv(1.0F, 1.0F).next();
-				bufferBuilder.vertex(matrix4f2, -k, 100.0F, k).uv(0.0F, 1.0F).next();
+				bufferBuilder.vertex(matrix4f2, -k, 100.0F, -k).texture(0.0F, 0.0F).next();
+				bufferBuilder.vertex(matrix4f2, k, 100.0F, -k).texture(1.0F, 0.0F).next();
+				bufferBuilder.vertex(matrix4f2, k, 100.0F, k).texture(1.0F, 1.0F).next();
+				bufferBuilder.vertex(matrix4f2, -k, 100.0F, k).texture(0.0F, 1.0F).next();
 				BufferRenderer.drawWithShader(bufferBuilder.end());
 				k = 20.0F;
 				RenderSystem.setShaderTexture(0, MOON_PHASES);
@@ -140,10 +138,10 @@ public abstract class MixinWorldRenderer {
 				float p = (float) (s + 1) / 4.0F;
 				float q = (float) (m + 1) / 2.0F;
 				bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-				bufferBuilder.vertex(matrix4f2, -k, -100.0F, k).uv(p, q).next();
-				bufferBuilder.vertex(matrix4f2, k, -100.0F, k).uv(t, q).next();
-				bufferBuilder.vertex(matrix4f2, k, -100.0F, -k).uv(t, o).next();
-				bufferBuilder.vertex(matrix4f2, -k, -100.0F, -k).uv(p, o).next();
+				bufferBuilder.vertex(matrix4f2, -k, -100.0F, k).texture(p, q).next();
+				bufferBuilder.vertex(matrix4f2, k, -100.0F, k).texture(t, q).next();
+				bufferBuilder.vertex(matrix4f2, k, -100.0F, -k).texture(t, o).next();
+				bufferBuilder.vertex(matrix4f2, -k, -100.0F, -k).texture(p, o).next();
 				BufferRenderer.drawWithShader(bufferBuilder.end());
 
 
@@ -153,7 +151,7 @@ public abstract class MixinWorldRenderer {
 					RenderSystem.setShaderColor(u, u, u, u);
 					BackgroundRenderer.clearFog();
 					this.starsBuffer.bind();
-					this.starsBuffer.setShader(matrices.peek().getPosition(), projectionMatrix, GameRenderer.getPositionShader());
+					this.starsBuffer.draw(matrices.peek().getPositionMatrix(), projectionMatrix, GameRenderer.getPositionShader());
 					VertexBuffer.unbind();
 					runnable.run();
 				}
@@ -169,12 +167,12 @@ public abstract class MixinWorldRenderer {
 				matrices.push();
 				matrices.translate(0.0, 12.0, 0.0);
 				this.darkSkyBuffer.bind();
-				this.darkSkyBuffer.setShader(matrices.peek().getPosition(), projectionMatrix, shaderProgram);
+				this.darkSkyBuffer.draw(matrices.peek().getPositionMatrix(), projectionMatrix, shaderProgram);
 				VertexBuffer.unbind();
 				matrices.pop();
 			}
 
-			if (this.world.getSkyProperties().isAlternateSkyColor()) {
+			if (this.world.getDimensionEffects().isAlternateSkyColor()) {
 				RenderSystem.setShaderColor(f * 0.2F + 0.04F, g * 0.2F + 0.04F, h * 0.6F + 0.1F, 1.0F);
 			} else {
 				RenderSystem.setShaderColor(f, g, h, 1.0F);
@@ -186,7 +184,7 @@ public abstract class MixinWorldRenderer {
 		}
 	}
 
-    @ModifyArgs(method = "drawBlockOutline", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/WorldRenderer;drawShapeOutline(Lnet/minecraft/client/util/math/MatrixStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;Lnet/minecraft/util/shape/VoxelShape;DDDFFFF)V"))
+    @ModifyArgs(method = "drawBlockOutline", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/WorldRenderer;drawCuboidShapeOutline(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;Lnet/minecraft/util/shape/VoxelShape;DDDFFFF)V"))
     public void customOutlineColor(Args args){
         if(AxolotlClient.CONFIG.enableCustomOutlines.get()){
             if(AxolotlClient.CONFIG.outlineChroma.get()){

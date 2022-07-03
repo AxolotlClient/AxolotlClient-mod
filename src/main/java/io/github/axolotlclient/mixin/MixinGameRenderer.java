@@ -93,7 +93,7 @@ public abstract class MixinGameRenderer {
 
 		if(!AxolotlClient.CONFIG.dynamicFOV.get()) {
             Entity entity = this.client.getCameraEntity();
-            double f = changingFov ? client.options.getFov().get() :70F;
+            double f = changingFov ? client.options.getFov().getValue() :70F;
             if (entity instanceof LivingEntity && ((LivingEntity)entity).getHealth() <= 0.0F) {
                 float g = (float)((LivingEntity)entity).deathTime + tickDelta;
                 f /= (1.0F - 500.0F / (g + 500.0F)) * 2.0F + 1.0F;
@@ -101,7 +101,7 @@ public abstract class MixinGameRenderer {
 
 	        CameraSubmersionType cameraSubmersionType = camera.getSubmersionType();
 	        if (cameraSubmersionType == CameraSubmersionType.LAVA || cameraSubmersionType == CameraSubmersionType.WATER) {
-		        f *= MathHelper.lerp(this.client.options.getFovEffectScale().get(), 1.0, 0.85714287F);
+		        f *= MathHelper.lerp(this.client.options.getFovEffectScale().getValue(), 1.0, 0.85714287F);
 	        }
             returnValue = f;
         }
@@ -110,7 +110,7 @@ public abstract class MixinGameRenderer {
 	    cir.setReturnValue(returnValue);
     }
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getFramebuffer()Lcom/mojang/blaze3d/framebuffer/Framebuffer;"))
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/Framebuffer;beginWrite(Z)V"))
     public void worldMotionBlur(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
         motionBlur(tickDelta, startTime, tick, null);
     }

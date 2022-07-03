@@ -1,10 +1,6 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.Tessellator;
-import com.mojang.blaze3d.vertex.VertexFormat;
-import com.mojang.blaze3d.vertex.VertexFormats;
 import io.github.axolotlclient.config.options.BooleanOption;
 import io.github.axolotlclient.config.options.ColorOption;
 import io.github.axolotlclient.config.options.enumOptions.CrosshairHudOption;
@@ -16,7 +12,11 @@ import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.block.AbstractChestBlock;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.option.AttackIndicator;
+import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Camera;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexFormat;
+import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
@@ -94,7 +94,7 @@ public class CrosshairHud extends AbstractHudEntry {
 			RenderSystem.setShaderColor(1, 1, 1, 1);
 
 			// Draw attack indicator
-			if (this.client.options.getAttackIndicator().get() == AttackIndicator.CROSSHAIR) {
+			if (this.client.options.getAttackIndicator().getValue() == AttackIndicator.CROSSHAIR) {
 				float progress = this.client.player.getAttackCooldownProgress(0.0F);
 
 				// Whether a cross should be displayed under the indicator
@@ -117,12 +117,12 @@ public class CrosshairHud extends AbstractHudEntry {
 				}
 			}
 		}
-		if (this.client.options.getAttackIndicator().get() == AttackIndicator.CROSSHAIR) {
+		if (this.client.options.getAttackIndicator().getValue() == AttackIndicator.CROSSHAIR) {
 			float progress = this.client.player.getAttackCooldownProgress(0.0F);
 			if (progress != 1.0F) {
-				fill(matrices.peek().getPosition(), pos.x + (width / 2F) - 6, pos.y + (height / 2F) + 9, 11, 1,
+				fill(matrices.peek().getPositionMatrix(), pos.x + (width / 2F) - 6, pos.y + (height / 2F) + 9, 11, 1,
 					attackIndicatorBackgroundColor.get().getAsInt());
-				fill(matrices.peek().getPosition(), pos.x + (width / 2F) - 6, pos.y + (height / 2F) + 9,
+				fill(matrices.peek().getPositionMatrix(), pos.x + (width / 2F) - 6, pos.y + (height / 2F) + 9,
 					progress * 11, 1, attackIndicatorForegroundColor.get().getAsInt());
 			}
 		}
@@ -149,7 +149,7 @@ public class CrosshairHud extends AbstractHudEntry {
 		float r = (float) (color >> 16 & 255) / 255.0F;
 		float g = (float) (color >> 8 & 255) / 255.0F;
 		float b = (float) (color & 255) / 255.0F;
-		BufferBuilder bufferBuilder = Tessellator.getInstance().getBufferBuilder();
+		BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
 		RenderSystem.enableBlend();
 		RenderSystem.disableTexture();
 		RenderSystem.defaultBlendFunc();

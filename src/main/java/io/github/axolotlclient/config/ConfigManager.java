@@ -8,7 +8,8 @@ import com.google.gson.JsonParser;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.config.options.Option;
 import io.github.axolotlclient.config.options.OptionCategory;
-import org.quiltmc.loader.api.QuiltLoader;
+import net.fabricmc.loader.api.FabricLoader;
+
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -19,7 +20,7 @@ import java.util.List;
 
 public class ConfigManager{
     private static final List<OptionCategory> categories = AxolotlClient.CONFIG.config;
-    private static final Path confPath = QuiltLoader.getConfigDir().resolve("AxolotlClient.json");
+    private static final Path confPath = FabricLoader.getInstance().getConfigDir().resolve("AxolotlClient.json");
 
     public static void save(){
         try{
