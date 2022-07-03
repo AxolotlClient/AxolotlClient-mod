@@ -187,6 +187,10 @@
 	"contributors": "Contributors:",
 	"other_people": "Other People:",
 
+	"pickColor": "Pick Color",
+	"currentColor": "Current",
+	"alpha": "Alpha",
+
 	"back": "Back",
 	"close": "Close"
 }
