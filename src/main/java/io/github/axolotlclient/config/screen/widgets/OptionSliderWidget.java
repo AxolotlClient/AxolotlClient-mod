@@ -39,13 +39,21 @@ public class OptionSliderWidget extends ButtonWidget {
         this(id, x, y, option, option.getMin(), option.getMax());
     }
 
-    public OptionSliderWidget(int id, int x, int y, IntegerOption option, float min, float max) {
-        super(id, x, y, 150, 20, "");
+    public OptionSliderWidget(int id, int x, int y, int width, int height, IntegerOption option) {
+        this(id, x, y, width, height, option, option.getMin(), option.getMax());
+    }
+
+    public OptionSliderWidget(int id, int x, int y, int width, int height, IntegerOption option, float min, float max) {
+        super(id, x, y, width, height, "");
         this.option = option;
         this.min = min;
         this.max = max;
         this.value = (option.get() - min) / (max - min);
         this.message = this.getMessage();
+    }
+
+    public OptionSliderWidget(int id, int x, int y, IntegerOption option, float min, float max) {
+        this(id, x, y, 150, 20, option, min, max);
     }
 
     public OptionSliderWidget(int id, int x, int y, DoubleOption option) {
@@ -70,7 +78,7 @@ public class OptionSliderWidget extends ButtonWidget {
         return Integer.parseInt(intformat.format(this.min + (this.max - this.min) * this.value));
     }
 
-    private @NotNull String getMessage() {
+    protected @NotNull String getMessage() {
         return ""+ (option instanceof IntegerOption? getSliderValueAsInt(): this.getSliderValue());
     }
 

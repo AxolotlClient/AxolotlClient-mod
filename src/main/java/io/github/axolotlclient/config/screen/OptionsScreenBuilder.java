@@ -13,7 +13,6 @@ import io.github.axolotlclient.modules.hud.util.DrawUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.resource.language.I18n;
 
 import java.util.Arrays;
@@ -59,6 +58,8 @@ public class OptionsScreenBuilder extends Screen {
             GlStateManager.disableDepthTest();
             picker.render(MinecraftClient.getInstance(), mouseX, mouseY);
             GlStateManager.enableDepthTest();
+        } else {
+            list.renderTooltips(mouseX, mouseY);
         }
     }
 
@@ -66,7 +67,8 @@ public class OptionsScreenBuilder extends Screen {
         picker = new ColorSelectionWidget(option);
     }
 
-    public void closeColorPicker(){
+    public void closeColorPicker() {
+        ConfigManager.save();
         picker=null;
     }
 
@@ -75,12 +77,21 @@ public class OptionsScreenBuilder extends Screen {
     }
 
     @Override
+    protected void mouseDragged(int i, int j, int k, long l) {
+        if(!isPickerOpen()) {
+            super.mouseDragged(i, j, k, l);
+        }
+    }
+
+    @Override
     protected void mouseClicked(int mouseX, int mouseY, int button) {
-        super.mouseClicked(mouseX, mouseY, button);
+        if(!isPickerOpen()) {
+            super.mouseClicked(mouseX, mouseY, button);
+        }
 
 
 
-        if(picker!=null){
+        if(isPickerOpen()){
             if(!picker.isMouseOver(MinecraftClient.getInstance(), mouseX, mouseY)) {
                 closeColorPicker();
                 this.list.mouseClicked(mouseX, mouseY, button);this.list.entries.forEach(pair -> {
@@ -118,6 +129,7 @@ public class OptionsScreenBuilder extends Screen {
     protected void mouseReleased(int mouseX, int mouseY, int button) {
         super.mouseReleased(mouseX, mouseY, button);
         this.list.mouseReleased(mouseX, mouseY, button);
+        if(isPickerOpen()) picker.mouseReleased(mouseX, mouseY);
     }
 
     @Override
@@ -146,7 +158,9 @@ public class OptionsScreenBuilder extends Screen {
     @Override
     public void handleMouse() {
         super.handleMouse();
-        this.list.handleMouse();
+        if(!isPickerOpen()) {
+            this.list.handleMouse();
+        }
     }
 
     @Override
@@ -158,6 +172,14 @@ public class OptionsScreenBuilder extends Screen {
     @Override
     public boolean shouldPauseGame() {
         return false;
+    }
+
+    @Override
+    public void resize(MinecraftClient client, int width, int height) {
+        if(isPickerOpen()){
+            picker.init();
+        }
+        super.resize(client, width, height);
     }
 
     public void renderTooltip(Tooltippable tooltippable, int x, int y){

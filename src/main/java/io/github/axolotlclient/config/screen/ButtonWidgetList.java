@@ -141,15 +141,16 @@ public class ButtonWidgetList extends EntryListWidget {
         }
     }
 
-    protected void renderTooltips(int x, int y, int mouseX, int mouseY){
+    protected void renderTooltips(int mouseX, int mouseY){
+        Util.applyScissor(new Rectangle(0, yStart, this.width, yEnd-yStart));
         int i = this.getEntryCount();
 
         for(int j = 0; j < i; ++j) {
             Pair pair = entries.get(j);
 
-            int k = y + j * this.entryHeight + this.headerHeight;
-            pair.renderTooltips(x, k, mouseX, mouseY);
+            pair.renderTooltips(mouseX, mouseY);
         }
+        GL11.glDisable(GL11.GL_SCISSOR_TEST);
     }
 
     @Override
@@ -161,7 +162,6 @@ public class ButtonWidgetList extends EntryListWidget {
     protected void renderList(int x, int y, int mouseX, int mouseY) {
         Util.applyScissor(new Rectangle(0, yStart, this.width, yEnd-yStart));
         super.renderList(x, y, mouseX, mouseY);
-        renderTooltips(x, y, mouseX, mouseY);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
 
@@ -229,7 +229,7 @@ public class ButtonWidgetList extends EntryListWidget {
 
         }
 
-        public void renderTooltips(int x, int y, int mouseX, int mouseY){
+        public void renderTooltips(int mouseX, int mouseY){
 
         }
 
@@ -316,7 +316,7 @@ public class ButtonWidgetList extends EntryListWidget {
 
         }
 
-        public void renderTooltips(int x, int y, int mouseX, int mouseY){
+        public void renderTooltips(int mouseX, int mouseY){
             if(AxolotlClient.CONFIG.showCategoryTooltips.get()) {
                 if (super.left != null && super.left.isMouseOver(client, mouseX, mouseY)) {
                     renderTooltip(left, mouseX, mouseY);
@@ -331,6 +331,7 @@ public class ButtonWidgetList extends EntryListWidget {
     public class OptionEntry extends Pair {
 
         private final Option option;
+        protected int renderX;
 
         public OptionEntry(ButtonWidget left, Option option, int width) {
             super(left, null);
@@ -346,11 +347,12 @@ public class ButtonWidgetList extends EntryListWidget {
             left.y = y;
             left.render(client, mouseX, mouseY);
 
+            renderX = x;
         }
 
-        public void renderTooltips(int x, int y, int mouseX, int mouseY){
+        public void renderTooltips(int mouseX, int mouseY){
             if(AxolotlClient.CONFIG.showOptionTooltips.get() &&
-                    (mouseX>=x && mouseX<=left.x + left.getWidth() && mouseY>= y && mouseY<= y + 20)){
+                    (mouseX>=renderX && mouseX<=left.x + left.getWidth() && mouseY>= left.y && mouseY<= left.y + 20)){
                 renderTooltip(option, mouseX, mouseY);
             }
         }
