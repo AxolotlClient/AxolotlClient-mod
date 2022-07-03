@@ -2,6 +2,7 @@ package io.github.axolotlclient.config.screen.widgets;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.config.options.StringOption;
+import io.github.axolotlclient.config.screen.OptionsScreenBuilder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -47,6 +48,13 @@ public class StringOptionWidget extends ButtonWidget {
         this.option.set(textField.getText());
     }
 
-
-
+    @Override
+    public boolean isMouseOver(MinecraftClient client, int mouseX, int mouseY) {
+        if(MinecraftClient.getInstance().currentScreen instanceof OptionsScreenBuilder &&
+                ((OptionsScreenBuilder) MinecraftClient.getInstance().currentScreen).isPickerOpen()){
+            this.hovered = false;
+            return false;
+        }
+        return super.isMouseOver(client, mouseX, mouseY);
+    }
 }

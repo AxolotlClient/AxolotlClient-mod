@@ -85,9 +85,7 @@ public class OptionsScreenBuilder extends Screen {
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int button) {
-        if(!isPickerOpen()) {
-            super.mouseClicked(mouseX, mouseY, button);
-        }
+        super.mouseClicked(mouseX, mouseY, button);
 
 
 
@@ -135,6 +133,9 @@ public class OptionsScreenBuilder extends Screen {
     @Override
     protected void buttonClicked(ButtonWidget button) {
         if(button.id==0){
+            if(isPickerOpen()){
+                closeColorPicker();
+            }
             ConfigManager.save();
             MinecraftClient.getInstance().openScreen(parent);
         } else if(button.id==99){
@@ -145,6 +146,9 @@ public class OptionsScreenBuilder extends Screen {
     @Override
     public void tick() {
         this.list.tick();
+        if(isPickerOpen()){
+            picker.tick();
+        }
     }
 
     @Override
@@ -166,7 +170,11 @@ public class OptionsScreenBuilder extends Screen {
     @Override
     protected void keyPressed(char character, int code) {
         super.keyPressed(character, code);
-        this.list.keyPressed(character, code);
+        if(!isPickerOpen()) {
+            this.list.keyPressed(character, code);
+        } else {
+            picker.keyPressed(character, code);
+        }
     }
 
     @Override
