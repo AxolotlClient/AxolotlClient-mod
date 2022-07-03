@@ -1,6 +1,7 @@
 package io.github.axolotlclient.config.screen;
 
 import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.config.ConfigManager;
 import io.github.axolotlclient.config.options.ColorOption;
 import io.github.axolotlclient.config.options.OptionCategory;
 import io.github.axolotlclient.config.options.Tooltippable;
@@ -50,6 +51,8 @@ public class OptionsScreenBuilder extends Screen {
 
         if(picker!=null){
             picker.render(matrices, mouseX, mouseY, delta);
+        } else {
+            list.renderTooltips(matrices, mouseX, mouseY);
         }
 
         super.render(matrices, mouseX, mouseY, delta);
@@ -60,6 +63,7 @@ public class OptionsScreenBuilder extends Screen {
     }
 
     public void closeColorPicker(){
+        ConfigManager.save();
         picker=null;
     }
 
@@ -74,6 +78,14 @@ public class OptionsScreenBuilder extends Screen {
     }
 
     @Override
+    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+        if(isPickerOpen()){
+            return false;
+        }
+        return list.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+    }
+
+    @Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
 		if(picker!=null){
 			if(!picker.isMouseOver(mouseX, mouseY)) {
@@ -81,18 +93,25 @@ public class OptionsScreenBuilder extends Screen {
 			} else {
 				picker.onClick(mouseX, mouseY);
 			}
+            return true;
 		}
 		return super.mouseClicked(mouseX, mouseY, button);
 	}
 
 	@Override
 	public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        if(isPickerOpen() && picker.mouseReleased(mouseX, mouseY, button)){
+            return true;
+        }
 		return this.list.mouseReleased(mouseX, mouseY, button) || super.mouseReleased(mouseX, mouseY, button);
 	}
 
 	@Override
     public void tick() {
         this.list.tick();
+        if(isPickerOpen()){
+            picker.tick();
+        }
     }
 
     @Override
@@ -101,17 +120,29 @@ public class OptionsScreenBuilder extends Screen {
 
 		this.addSelectableChild(list);
 
-        this.addDrawableChild(new ButtonWidget(this.width/2-100, this.height-40, 200, 20, Text.translatable("back"), buttonWidget -> MinecraftClient.getInstance().setScreen(parent)));
+        this.addDrawableChild(new ButtonWidget(this.width/2-100, this.height-40, 200, 20, Text.translatable("back"), buttonWidget -> {
+            if(isPickerOpen()){
+                closeColorPicker();
+            }
+            ConfigManager.save();
+            MinecraftClient.getInstance().setScreen(parent);
+        }));
         if(Objects.equals(cat.getName(), "config")) this.addDrawableChild(new ButtonWidget(this.width-106, this.height-26, 100, 20, Text.translatable("credits"), buttonWidget -> MinecraftClient.getInstance().setScreen(new CreditsScreen(this))));
     }
 
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if(isPickerOpen() && picker.keyPressed(keyCode, scanCode, modifiers)){
+            return true;
+        }
 		return this.list.keyPressed(keyCode, scanCode, modifiers) || super.keyPressed(keyCode, scanCode, modifiers);
 	}
 
 	@Override
 	public boolean charTyped(char chr, int modifiers) {
+        if(isPickerOpen() && picker.charTyped(chr, modifiers)){
+            return true;
+        }
 		return list.charTyped(chr, modifiers);
 	}
 
@@ -126,4 +157,13 @@ public class OptionsScreenBuilder extends Screen {
 	public boolean isPauseScreen() {
 		return false;
 	}
+
+    @Override
+    public void resize(MinecraftClient client, int width, int height) {
+        if(isPickerOpen()){
+            picker.init();
+        }
+        ConfigManager.save();
+        super.resize(client, width, height);
+    }
 }

@@ -33,6 +33,12 @@ public class CategoryWidget extends ButtonWidget {
 
 	@Override
 	public boolean isMouseOver(double mouseX, double mouseY) {
+        if(MinecraftClient.getInstance().currentScreen instanceof OptionsScreenBuilder &&
+            ((OptionsScreenBuilder) MinecraftClient.getInstance().currentScreen).isPickerOpen()){
+            this.hovered = false;
+            return false;
+        }
+
         if(enabledButton!=null && enabledButton.isMouseOver(mouseX, mouseY)) {
             this.hovered = false;
         }

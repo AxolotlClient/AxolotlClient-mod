@@ -36,4 +36,8 @@ public class Rectangle {
         return mouseX>=x && mouseX<=x+width && mouseY >=y && mouseY <= y+height;
     }
 
+    public boolean isMouseOver(double mouseX, double mouseY){
+        return mouseX>=x && mouseX<=x+width && mouseY >=y && mouseY <= y+height;
+    }
+
 }

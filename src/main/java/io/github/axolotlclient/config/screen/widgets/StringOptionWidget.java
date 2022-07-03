@@ -1,6 +1,7 @@
 package io.github.axolotlclient.config.screen.widgets;
 
 import io.github.axolotlclient.config.options.StringOption;
+import io.github.axolotlclient.config.screen.OptionsScreenBuilder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
@@ -57,13 +58,9 @@ public class StringOptionWidget extends TextFieldWidget {
 
 	@Override
 	public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-
-        //GlStateManager.disableDepthTest();
-        //MinecraftClient.getInstance().textRenderer.draw(I18n.translate(option.getName()), x, y, -1);
         textField.y = y;
         textField.x = x;
         textField.render(matrices, mouseX, mouseY, delta);
-        //GlStateManager.enableDepthTest();
     }
 
 	@Override
@@ -78,4 +75,14 @@ public class StringOptionWidget extends TextFieldWidget {
 		textField.setTextFieldFocused(focused);
 		super.setTextFieldFocused(focused);
 	}
+
+    @Override
+    public boolean isMouseOver(double mouseX, double mouseY) {
+        if(MinecraftClient.getInstance().currentScreen instanceof OptionsScreenBuilder &&
+            ((OptionsScreenBuilder) MinecraftClient.getInstance().currentScreen).isPickerOpen()){
+            this.hovered = false;
+            return false;
+        }
+        return super.isMouseOver(mouseX, mouseY);
+    }
 }

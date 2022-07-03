@@ -1,10 +1,5 @@
 package io.github.axolotlclient.config.screen;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.Tessellator;
-import com.mojang.blaze3d.vertex.VertexFormat;
-import com.mojang.blaze3d.vertex.VertexFormats;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.config.ConfigManager;
 import io.github.axolotlclient.config.options.BooleanOption;
@@ -23,7 +18,6 @@ import io.github.axolotlclient.config.screen.widgets.ColorOptionWidget;
 import io.github.axolotlclient.config.screen.widgets.EnumOptionWidget;
 import io.github.axolotlclient.config.screen.widgets.OptionSliderWidget;
 import io.github.axolotlclient.config.screen.widgets.StringOptionWidget;
-import io.github.axolotlclient.mixin.AccessorButtonListWidget;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import io.github.axolotlclient.util.Util;
 import net.fabricmc.api.EnvType;
@@ -32,9 +26,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.widget.ButtonListWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -120,22 +112,19 @@ public class ButtonWidgetList extends ButtonListWidget {
 	}
 
 
-    protected void renderTooltips(MatrixStack matrices, int x, int y, int mouseX, int mouseY){
+    public void renderTooltips(MatrixStack matrices, int mouseX, int mouseY){
+        Util.applyScissor(new Rectangle(0, top, this.width, bottom-top));
         int i = this.getEntryCount();
-
         for(int j = 0; j < i; ++j) {
-            int k = this.getRowTop(j);
-            entries.get(j).renderTooltips(matrices, x, k, mouseX, mouseY);
+            entries.get(j).renderTooltips(matrices, mouseX, mouseY);
         }
+        GL11.glDisable(GL11.GL_SCISSOR_TEST);
     }
 
 	@Override
 	protected void renderList(MatrixStack matrices, int x, int y, int mouseX, int mouseY, float delta) {
 		Util.applyScissor(new Rectangle(0, top, this.width, bottom-top));
 		super.renderList(matrices, x, y, mouseX, mouseY, delta);
-
-        renderTooltips(matrices, x, y, mouseX, mouseY);
-
 		GL11.glDisable(GL11.GL_SCISSOR_TEST);
 	}
 
@@ -194,7 +183,7 @@ public class ButtonWidgetList extends ButtonListWidget {
 
         }
 
-        public void renderTooltips(MatrixStack matrices, int x, int y, int mouseX, int mouseY){
+        public void renderTooltips(MatrixStack matrices, int mouseX, int mouseY){
 
         }
 
@@ -300,7 +289,7 @@ public class ButtonWidgetList extends ButtonListWidget {
         }
 
         @Override
-        public void renderTooltips(MatrixStack matrices, int x, int y, int mouseX, int mouseY) {
+        public void renderTooltips(MatrixStack matrices, int mouseX, int mouseY) {
             if(AxolotlClient.CONFIG.showCategoryTooltips.get()) {
 				if (super.left != null && super.left.isMouseOver(mouseX, mouseY)) {
 					renderTooltip(matrices, left, mouseX, mouseY);
@@ -316,6 +305,7 @@ public class ButtonWidgetList extends ButtonListWidget {
 
         private final Option option;
 		protected int width;
+        protected int renderX;
 
         public OptionEntry(ClickableWidget left, Option option, int width) {
             super(left, null);
@@ -331,13 +321,15 @@ public class ButtonWidgetList extends ButtonListWidget {
             DrawableHelper.drawTextWithShadow(matrices, client.textRenderer, option.getTranslatedName(), x, y + 5, -1);
             left.y = y;
             left.render(matrices, mouseX, mouseY, tickDelta);
+
+            renderX = x;
         }
 
         @Override
-        public void renderTooltips(MatrixStack matrices, int x, int y, int mouseX, int mouseY) {
+        public void renderTooltips(MatrixStack matrices, int mouseX, int mouseY) {
 
 		    if(AxolotlClient.CONFIG.showOptionTooltips.get() &&
-			    mouseX>=x && mouseX<=left.x + left.getWidth() && mouseY>= y && mouseY<= y + 20){
+			    mouseX>=renderX && mouseX<=left.x + left.getWidth() && mouseY>= left.y && mouseY<= left.y + 20){
 			    renderTooltip(matrices, option, mouseX, mouseY);
 		    }
 
