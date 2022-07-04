@@ -188,6 +188,9 @@ other_people=Other People:
 pickColor=Pick Color
 currentColor=Current
 alpha=Alpha
+red=Red
+green=Green
+blue=Blue
 
 back=Back
 close=Close

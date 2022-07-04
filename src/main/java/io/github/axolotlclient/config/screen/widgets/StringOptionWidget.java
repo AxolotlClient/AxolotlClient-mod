@@ -35,7 +35,6 @@ public class StringOptionWidget extends ButtonWidget {
     @Override
     public void render(MinecraftClient client, int mouseX, int mouseY) {
         GlStateManager.disableDepthTest();
-        //MinecraftClient.getInstance().textRenderer.draw(I18n.translate(option.getName()), x, y, -1);
         textField.y = y;
         textField.x = x;
         textField.render();
