@@ -114,10 +114,7 @@ public class ButtonWidgetList extends ButtonListWidget {
 
     public void renderTooltips(MatrixStack matrices, int mouseX, int mouseY){
         Util.applyScissor(new Rectangle(0, top, this.width, bottom-top));
-        int i = this.getEntryCount();
-        for(int j = 0; j < i; ++j) {
-            entries.get(j).renderTooltips(matrices, mouseX, mouseY);
-        }
+        entries.forEach(pair -> pair.renderTooltips(matrices, mouseX, mouseY));
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
     }
 
@@ -292,10 +289,18 @@ public class ButtonWidgetList extends ButtonListWidget {
         public void renderTooltips(MatrixStack matrices, int mouseX, int mouseY) {
             if(AxolotlClient.CONFIG.showCategoryTooltips.get()) {
 				if (super.left != null && super.left.isMouseOver(mouseX, mouseY)) {
-					renderTooltip(matrices, left, mouseX, mouseY);
+                    if(AxolotlClient.CONFIG.quickToggles.get() && ((CategoryWidget)super.left).enabledButton != null && ((CategoryWidget)super.left).enabledButton.isMouseOver(mouseX, mouseY)){
+                        renderTooltip(matrices, ((CategoryWidget) super.left).enabledButton.option, mouseX, mouseY);
+                    } else {
+                        renderTooltip(matrices, left, mouseX, mouseY);
+                    }
 				}
 				if (super.right != null && super.right.isMouseOver(mouseX, mouseY)) {
-					renderTooltip(matrices, right, mouseX, mouseY);
+                    if(AxolotlClient.CONFIG.quickToggles.get() && ((CategoryWidget)super.right).enabledButton != null && ((CategoryWidget)super.right).enabledButton.isMouseOver(mouseX, mouseY)){
+                        renderTooltip(matrices, ((CategoryWidget) super.right).enabledButton.option, mouseX, mouseY);
+                    } else {
+                        renderTooltip(matrices, right, mouseX, mouseY);
+                    }
 				}
 			}
 		}
@@ -327,7 +332,6 @@ public class ButtonWidgetList extends ButtonListWidget {
 
         @Override
         public void renderTooltips(MatrixStack matrices, int mouseX, int mouseY) {
-
 		    if(AxolotlClient.CONFIG.showOptionTooltips.get() &&
 			    mouseX>=renderX && mouseX<=left.x + left.getWidth() && mouseY>= left.y && mouseY<= left.y + 20){
 			    renderTooltip(matrices, option, mouseX, mouseY);

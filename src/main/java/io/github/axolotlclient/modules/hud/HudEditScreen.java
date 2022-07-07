@@ -69,7 +69,6 @@ public class HudEditScreen extends Screen {
     }
 
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
-		super.mouseClicked(mouseX, mouseY, button);
 		Optional<AbstractHudEntry> entry = HudManager.getINSTANCE().getEntryXY((int) Math.round(mouseX), (int) Math.round(mouseY));
 		if (button == 0) {
 			mouseDown = true;
@@ -80,6 +79,7 @@ public class HudEditScreen extends Screen {
 				return true;
 			} else {
 				current = null;
+                return super.mouseClicked(mouseX, mouseY, button);
 			}
 		} else if (button == 1) {
 			entry.ifPresent(abstractHudEntry -> MinecraftClient.getInstance().setScreen(new OptionsScreenBuilder(this, abstractHudEntry.getOptionsAsCategory())));

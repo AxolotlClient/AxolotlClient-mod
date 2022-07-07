@@ -75,6 +75,13 @@ public class OptionSliderWidget extends ButtonWidget {
         this.message = this.getMessage();
     }
 
+    public void update(){
+        if (option instanceof FloatOption) value =  (((FloatOption) option).get() - min) / (max - min);
+        else if (option instanceof DoubleOption) value =  (((DoubleOption) option).get() - min) / (max - min);
+        else if (option instanceof IntegerOption) value =  (((IntegerOption) option).get() - min) / (max - min);
+        this.message = this.getMessage();
+    }
+
     public float getSliderValue() {
         format.applyLocalizedPattern("###.#");
         return Float.parseFloat(format.format(this.min + (this.max - this.min) * this.value));

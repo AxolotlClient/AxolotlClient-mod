@@ -14,7 +14,7 @@ public class CategoryWidget extends ButtonWidget {
 
     public OptionCategory category;
 
-    private BooleanWidget enabledButton;
+    public BooleanWidget enabledButton;
 
     public CategoryWidget(OptionCategory category, int x, int y, int width, int height) {
         super(x, y, width, 20, category.getTranslatedName().copy().append("..."),

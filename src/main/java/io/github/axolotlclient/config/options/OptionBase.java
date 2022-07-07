@@ -19,7 +19,9 @@ public abstract class OptionBase implements Option {
 
     @Override
     public @Nullable Text getTooltip() {
-        return Option.super.getTooltip(tooltipKeyPrefix);
+        if(tooltipKeyPrefix != null)
+            return Option.super.getTooltip(tooltipKeyPrefix +"."+ getName());
+        else return Option.super.getTooltip();
     }
 
 	public String getName(){
