@@ -113,7 +113,7 @@ public class Zoom extends AbstractModule {
 		return false;
 	}
 
-	public static void tick() {
+	public void tick() {
 		lastAnimatedFactor = animatedFactor;
 		animatedFactor += (targetFactor - animatedFactor) * (zoomSpeed.get() / 10F);
 	}
