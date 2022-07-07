@@ -2,6 +2,7 @@ package io.github.axolotlclient.mixin;
 
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
+import io.github.axolotlclient.modules.hypixel.HypixelMods;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -21,7 +22,7 @@ public abstract class MixinClientWorld {
 	@Inject(method = "removeEntity", at = @At("HEAD"))
     public void onEntityRemoved(int entityId, Entity.RemovalReason removalReason, CallbackInfo ci){
 	    Entity entity = this.getEntityLookup().get(entityId);
-        if(entity instanceof PlayerEntity){
+        if(entity instanceof PlayerEntity && HypixelMods.getInstance().cacheMode.get() == HypixelMods.HypixelCacheMode.ON_PLAYER_DISCONNECT.toString()){
             HypixelAbstractionLayer.handleDisconnectEvents(entity.getUuid());
         }
     }

@@ -24,8 +24,6 @@ loom {
 	accessWidenerPath = file("src/main/resources/axolotlclient.accesswidener")
 }
 
-// All the dependencies are declared at gradle/libs.version.toml and referenced with "libs.<id>"
-// See https://docs.gradle.org/current/userguide/platforms.html for information on how version catalogs work.
 dependencies {
 	minecraft "com.mojang:minecraft:${minecraft_version}"
 	mappings(loom.layered {
@@ -33,9 +31,6 @@ dependencies {
 	})
 
 	modImplementation "org.quiltmc:quilt-loader:${project.loader_version}"
-
-	// QSL is not a complete API; You will need Quilted Fabric API to fill in the gaps.
-	// Quilted Fabric API will automatically pull in the correct QSL version.
 	modImplementation "org.quiltmc.quilted-fabric-api:quilted-fabric-api:${quilted_fabric_api_version}-${minecraft_version}"
 
 	modImplementation "com.terraformersmc:modmenu:4.0.0"
@@ -76,10 +71,6 @@ java {
 	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task if it is present.
 	// If you remove this line, sources will not be generated.
 	withSourcesJar()
-
-	// If this mod is going to be a library, then it should also generate Javadocs in order to aid with developement.
-	// Uncomment this line to generate them.
-	// withJavadocJar()
 }
 
 // If you plan to use a different file for the license, don't forget to change the file name here!
