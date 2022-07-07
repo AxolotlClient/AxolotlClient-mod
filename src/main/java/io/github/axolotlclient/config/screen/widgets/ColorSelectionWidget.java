@@ -24,6 +24,8 @@ public class ColorSelectionWidget extends ButtonWidget {
     private final ColorOption option;
     private Window window;
 
+    protected Rectangle picker;
+
     // Texture based on https://github.com/MartinThoma/LaTeX-examples/blob/master/documents/printer-testpage/printer-testpage.tex
     protected Identifier wheel = new Identifier("axolotlclient", "textures/gui/colorwheel.png");
     protected Rectangle pickerImage;
@@ -57,10 +59,11 @@ public class ColorSelectionWidget extends ButtonWidget {
         width=window.getWidth()-200;
         height=window.getHeight()-100;
 
+        picker = new Rectangle(100, 50, width, height);
+
         pickerImage = new Rectangle(120, 70, width/2, height/2);
         pickerOutline = new Rectangle(pickerImage.x-1, pickerImage.y-1, pickerImage.width+2, pickerImage.height+2);
         currentRect = new Rectangle(pickerImage.x + pickerImage.width + 20, pickerImage.y + 10, width - pickerImage.width - 60, 20);
-
 
         alpha.set(option.get().getAlpha());
 
@@ -140,13 +143,13 @@ public class ColorSelectionWidget extends ButtonWidget {
         DrawUtil.drawString(MinecraftClient.getInstance().textRenderer, I18n.translate("currentColor") + ":" ,currentRect.x, currentRect.y - 10, -1, true);
 
         DrawUtil.fillRect(currentRect, option.get());
-        DrawUtil.outlineRect(pickerOutline, Color.DARK_GRAY.withAlpha(127));
+        DrawUtil.outlineRect(currentRect, Color.DARK_GRAY.withAlpha(127));
 
         GlStateManager.color3f(1, 1, 1);
 
         MinecraftClient.getInstance().getTextureManager().bindTexture(wheel);
         DrawableHelper.drawTexture(pickerImage.x, pickerImage.y, 0, 0, pickerImage.width, pickerImage.height, pickerImage.width, pickerImage.height);
-        DrawUtil.outlineRect(pickerImage, Color.DARK_GRAY);
+        DrawUtil.outlineRect(pickerOutline, Color.DARK_GRAY);
 
         alphaSlider.render(client, mouseX, mouseY);
 
@@ -208,7 +211,6 @@ public class ColorSelectionWidget extends ButtonWidget {
                 }
             }
         }
-
     }
 
     public void onClick(int mouseX, int mouseY){
@@ -278,5 +280,4 @@ public class ColorSelectionWidget extends ButtonWidget {
             }
         }
     }
-
 }

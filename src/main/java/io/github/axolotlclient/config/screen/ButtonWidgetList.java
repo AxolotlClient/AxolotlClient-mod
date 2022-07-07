@@ -143,13 +143,7 @@ public class ButtonWidgetList extends EntryListWidget {
 
     protected void renderTooltips(int mouseX, int mouseY){
         Util.applyScissor(new Rectangle(0, yStart, this.width, yEnd-yStart));
-        int i = this.getEntryCount();
-
-        for(int j = 0; j < i; ++j) {
-            Pair pair = entries.get(j);
-
-            pair.renderTooltips(mouseX, mouseY);
-        }
+        entries.forEach(pair -> pair.renderTooltips(mouseX, mouseY));
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
     }
 
@@ -163,8 +157,6 @@ public class ButtonWidgetList extends EntryListWidget {
         Util.applyScissor(new Rectangle(0, yStart, this.width, yEnd-yStart));
         super.renderList(x, y, mouseX, mouseY);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
-
-
     }
 
     public void tick(){
@@ -319,10 +311,18 @@ public class ButtonWidgetList extends EntryListWidget {
         public void renderTooltips(int mouseX, int mouseY){
             if(AxolotlClient.CONFIG.showCategoryTooltips.get()) {
                 if (super.left != null && super.left.isMouseOver(client, mouseX, mouseY)) {
-                    renderTooltip(left, mouseX, mouseY);
+                    if(AxolotlClient.CONFIG.quickToggles.get() && ((CategoryWidget)super.left).enabledButton != null && ((CategoryWidget)super.left).enabledButton.isMouseOver(client, mouseX, mouseY)){
+                        renderTooltip(((CategoryWidget) super.left).enabledButton.option, mouseX, mouseY);
+                    } else {
+                        renderTooltip(left, mouseX, mouseY);
+                    }
                 }
                 if (super.right != null && super.right.isMouseOver(client, mouseX, mouseY)) {
-                    renderTooltip(right, mouseX, mouseY);
+                    if(AxolotlClient.CONFIG.quickToggles.get() && ((CategoryWidget)super.right).enabledButton != null && ((CategoryWidget)super.right).enabledButton.isMouseOver(client, mouseX, mouseY)){
+                        renderTooltip(((CategoryWidget) super.right).enabledButton.option, mouseX, mouseY);
+                    } else {
+                        renderTooltip(right, mouseX, mouseY);
+                    }
                 }
             }
         }

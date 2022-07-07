@@ -10,7 +10,7 @@ public class EnumOptionWidget extends ButtonWidget {
 
     private final EnumOption option;
     public EnumOptionWidget(int id, int x, int y, EnumOption option) {
-        super(id, x, y, 150, 20, Util.getTranslationIfExists(option.get().toString()));
+        super(id, x, y, 150, 20, Util.getTranslationIfExists(option.get()));
         this.option=option;
     }
 
@@ -25,6 +25,6 @@ public class EnumOptionWidget extends ButtonWidget {
     }
 
     public void mouseClicked(){
-        this.message = option.next().toString();
+        this.message = Util.getTranslationIfExists(option.next());
     }
 }

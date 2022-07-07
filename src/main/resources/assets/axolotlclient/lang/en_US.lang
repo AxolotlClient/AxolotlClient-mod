@@ -64,6 +64,10 @@ showBadges=Show Badges
 
 hypixel-mods=Hypixel Mods
 hypixel_api_key=Hypixel API Key
+cache_mode=Cache Mode
+cache_mode.tooltip=When cached player data should be cleared <br> <br>On Client Disconnect: Clear when you disconnect from the server. <br>On Player disconnect: Clears a player's data when they disconnect.
+ON_CLIENT_DISCONNECT=On Client Disconnect
+ON_PLAYER_DISCONNECT=On Player Disconnect
 levelhead=LevelHead
 levelHeadMode=LevelHead Mode
 autogg=AutoGG
@@ -82,10 +86,13 @@ nickhider=NickHider
 hiddenNameSelf=Hide yourself as:
 hiddenNameOthers=Hide others as:
 hideOwnName=Hide your own name
+hideOwnName.tooltip=Hides your own name.
 hideOtherNames=Hide others' names
+hideOtherNames.tooltip=Hides other people's names.
 hideOwnSkin=Hide your own skin
 hideOtherSkins=Hide others' skins
 autoBoop=AutoBoop
+autoBoop.enabled.tooltip=Whether to run /boop <player> when a friend of yours joins hypixel.
 
 category.axolotlclient=AxolotlClient
 
