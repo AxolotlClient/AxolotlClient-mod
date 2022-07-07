@@ -101,11 +101,9 @@ public class AxolotlClient implements ModInitializer {
 
 	public static void tickClient(){
 
+		modules.forEach((identifier, abstractModule) -> abstractModule.tick());
 		DiscordRPC.update();
-		Zoom.tick();
 		Color.tickChroma();
-		HudManager.tick();
-		HypixelMods.getInstance().tick();
 
 		if(tickTime % 20 == 0){
 			if(MinecraftClient.getInstance().getCurrentServerEntry() != null){

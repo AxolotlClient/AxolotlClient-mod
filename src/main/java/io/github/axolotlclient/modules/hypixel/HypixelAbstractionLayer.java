@@ -1,6 +1,5 @@
 package io.github.axolotlclient.modules.hypixel;
 
-import io.github.axolotlclient.config.options.enumOptions.LevelHeadOption;
 import io.github.axolotlclient.modules.hypixel.levelhead.LevelHead;
 import io.github.axolotlclient.util.ThreadExecuter;
 import net.hypixel.api.HypixelAPI;
@@ -63,12 +62,12 @@ public class HypixelAbstractionLayer {
         }
         if(loadPlayerDataIfAbsent(uuid)) {
             try {
-                Enum<?> mode = LevelHead.getInstance().mode.get();
-                if(mode == LevelHeadOption.LevelHeadMode.NETWORK){
+                String mode = LevelHead.getInstance().mode.get();
+                if(Objects.equals(mode, LevelHead.LevelHeadMode.NETWORK.toString())){
                     return (int) cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer().getNetworkLevel();
-                } else if (mode == LevelHeadOption.LevelHeadMode.BEDWARS){
+                } else if (Objects.equals(mode, LevelHead.LevelHeadMode.BEDWARS.toString())){
                     return cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer().getIntProperty("achievements.bedwars_level", 0);
-                } else if (mode == LevelHeadOption.LevelHeadMode.SKYWARS){
+                } else if (Objects.equals(mode, LevelHead.LevelHeadMode.SKYWARS.toString())){
                     int exp = cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer().getIntProperty("stats.SkyWars.skywars_experience", 0);
                     return Math.round(ExpCalculator.getLevelForExp(exp));
                 }

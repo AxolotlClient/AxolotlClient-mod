@@ -2,7 +2,7 @@ package io.github.axolotlclient.modules.hypixel.levelhead;
 
 import io.github.axolotlclient.config.options.BooleanOption;
 import io.github.axolotlclient.config.options.ColorOption;
-import io.github.axolotlclient.config.options.enumOptions.LevelHeadOption;
+import io.github.axolotlclient.config.options.EnumOption;
 import io.github.axolotlclient.config.options.OptionCategory;
 import io.github.axolotlclient.config.Color;
 import io.github.axolotlclient.modules.hypixel.AbstractHypixelMod;
@@ -16,7 +16,7 @@ public class LevelHead implements AbstractHypixelMod {
     public BooleanOption enabled = new BooleanOption("enabled", false);
     public BooleanOption background = new BooleanOption("background", false);
     public ColorOption textColor = new ColorOption("textColor", Color.GOLD);
-    public LevelHeadOption mode = new LevelHeadOption("levelHeadMode");
+    public EnumOption mode = new EnumOption("levelHeadMode", LevelHeadMode.values(), LevelHeadMode.NETWORK.toString());
 
     @Override
     public void init() {
@@ -34,5 +34,11 @@ public class LevelHead implements AbstractHypixelMod {
     @Override
     public OptionCategory getCategory() {
         return category;
+    }
+
+    public enum LevelHeadMode{
+        NETWORK,
+        BEDWARS,
+        SKYWARS
     }
 }

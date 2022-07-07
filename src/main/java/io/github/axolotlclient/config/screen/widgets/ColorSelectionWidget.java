@@ -22,11 +22,13 @@ import java.util.Objects;
 
 public class ColorSelectionWidget extends ButtonWidget {
     private final ColorOption option;
+    private Window window;
 
     // Texture based on https://github.com/MartinThoma/LaTeX-examples/blob/master/documents/printer-testpage/printer-testpage.tex
     protected Identifier wheel = new Identifier("axolotlclient", "textures/gui/colorwheel.png");
     protected Rectangle pickerImage;
     protected Rectangle currentRect;
+    protected Rectangle pickerOutline;
 
     protected IntegerOption alpha = new IntegerOption("alpha", 0, 0, 255);
     protected OptionSliderWidget alphaSlider;
@@ -51,12 +53,14 @@ public class ColorSelectionWidget extends ButtonWidget {
     }
 
     public void init(){
-        Window window= new Window(MinecraftClient.getInstance());
+        window = new Window(MinecraftClient.getInstance());
         width=window.getWidth()-200;
         height=window.getHeight()-100;
 
         pickerImage = new Rectangle(120, 70, width/2, height/2);
+        pickerOutline = new Rectangle(pickerImage.x-1, pickerImage.y-1, pickerImage.width+2, pickerImage.height+2);
         currentRect = new Rectangle(pickerImage.x + pickerImage.width + 20, pickerImage.y + 10, width - pickerImage.width - 60, 20);
+
 
         alpha.set(option.get().getAlpha());
 
@@ -131,12 +135,12 @@ public class ColorSelectionWidget extends ButtonWidget {
         DrawUtil.fillRect(new Rectangle(100, 50, width, height), Color.DARK_GRAY.withAlpha(127));
         DrawUtil.outlineRect(new Rectangle(100, 50, width, height), Color.BLACK);
 
-        drawCenteredString(MinecraftClient.getInstance().textRenderer, I18n.translate("pickColor"), new Window(MinecraftClient.getInstance()).getWidth()/2, 54, -1);
+        drawCenteredString(MinecraftClient.getInstance().textRenderer, I18n.translate("pickColor"), window.getWidth()/2, 54, -1);
 
         DrawUtil.drawString(MinecraftClient.getInstance().textRenderer, I18n.translate("currentColor") + ":" ,currentRect.x, currentRect.y - 10, -1, true);
 
         DrawUtil.fillRect(currentRect, option.get());
-        DrawUtil.outlineRect(currentRect, Color.DARK_GRAY.withAlpha(127));
+        DrawUtil.outlineRect(pickerOutline, Color.DARK_GRAY.withAlpha(127));
 
         GlStateManager.color3f(1, 1, 1);
 
@@ -172,6 +176,7 @@ public class ColorSelectionWidget extends ButtonWidget {
                 option.set(new Color(option.get().getRed(), option.get().getGreen(), option.get().getBlue(), alpha.get()));
             } else {
                 alpha.set(option.get().getAlpha());
+                alphaSlider.update();
             }
         }
 
@@ -215,7 +220,6 @@ public class ColorSelectionWidget extends ButtonWidget {
             // Helped in the complete confusion:
             // https://github.com/MrCrayfish/MrCrayfishDeviceMod/blob/2a06b20ad8873855885285f3cee6a682e161e24c/src/main/java/com/mrcrayfish/device/util/GLHelper.java#L71
 
-            Window window = new Window(MinecraftClient.getInstance());
             int scale = window.getScaleFactor();
             GL11.glReadPixels(mouseX * scale,
                     MinecraftClient.getInstance().height - mouseY * scale - scale,

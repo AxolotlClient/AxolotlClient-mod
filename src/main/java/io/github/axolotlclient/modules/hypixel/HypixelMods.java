@@ -1,6 +1,7 @@
 package io.github.axolotlclient.modules.hypixel;
 
 import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.config.options.EnumOption;
 import io.github.axolotlclient.config.options.OptionCategory;
 import io.github.axolotlclient.config.options.StringOption;
 import io.github.axolotlclient.modules.AbstractModule;
@@ -21,6 +22,7 @@ public class HypixelMods extends AbstractModule {
     public static HypixelMods INSTANCE = new HypixelMods();
 
     public StringOption hypixel_api_key = new StringOption("hypixel_api_key", "");
+    public EnumOption cacheMode = new EnumOption("cache_mode", HypixelApiCacheMode.values(), HypixelApiCacheMode.ON_CLIENT_DISCONNECT.toString());
 
     private final OptionCategory category = new OptionCategory(new Identifier("hypixel"), "hypixel-mods");
     private final List<AbstractHypixelMod> subModules = new ArrayList<>();
@@ -29,6 +31,7 @@ public class HypixelMods extends AbstractModule {
     public void init() {
 
         category.add(hypixel_api_key);
+        category.add(cacheMode);
 
         addSubModule(LevelHead.getInstance());
         addSubModule(AutoGG.Instance);
@@ -61,7 +64,10 @@ public class HypixelMods extends AbstractModule {
         this.category.addSubCategory(mod.getCategory());
     }
 
-    public OptionCategory getCategory() {
-        return null;
+    public enum HypixelApiCacheMode {
+        ON_CLIENT_DISCONNECT,
+        ON_PLAYER_DISCONNECT,
+
+
     }
 }

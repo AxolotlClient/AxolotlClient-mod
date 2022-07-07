@@ -6,6 +6,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ServerInfo;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.texture.Texture;
 import net.minecraft.client.util.Window;
 import net.minecraft.network.ClientConnection;
@@ -25,6 +26,7 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
 
 import java.net.InetAddress;
@@ -69,6 +71,18 @@ public class Util {
 
     public static void sendChatMessage(String msg){
         MinecraftClient.getInstance().player.sendChatMessage(msg);
+    }
+
+    public static String getTranslationIfExists(String key){
+        if(getTranslationIfExistsOrNull(key)==null)return key;
+        return getTranslationIfExistsOrNull(key);
+    }
+
+    public static @Nullable String getTranslationIfExistsOrNull(String key){
+        if(!Objects.equals(I18n.translate(key), key)) {
+            return I18n.translate(key);
+        }
+        return null;
     }
 
     public static String getGame(){

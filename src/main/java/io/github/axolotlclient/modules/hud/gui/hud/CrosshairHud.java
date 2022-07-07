@@ -1,12 +1,12 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import io.github.axolotlclient.config.Color;
 import io.github.axolotlclient.config.options.BooleanOption;
 import io.github.axolotlclient.config.options.ColorOption;
-import io.github.axolotlclient.config.options.enumOptions.CrosshairHudOption;
+import io.github.axolotlclient.config.options.EnumOption;
 import io.github.axolotlclient.config.options.Option;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
-import io.github.axolotlclient.config.Color;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.block.ChestBlock;
@@ -21,6 +21,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -31,7 +32,7 @@ import java.util.List;
 public class CrosshairHud extends AbstractHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "crosshairhud");
 
-    private final CrosshairHudOption type = new CrosshairHudOption("type");
+    private final EnumOption type = new EnumOption("type", CrosshairOption.values(), CrosshairOption.TEXTURE.toString());
     private final BooleanOption showInF5 = new BooleanOption("showInF5", false);
     public final BooleanOption showInF3 = new BooleanOption("showInF3", false);
     private final ColorOption defaultColor = new ColorOption("defaultcolor",  "#FFFFFFFF");
@@ -64,16 +65,16 @@ public class CrosshairHud extends AbstractHudEntry {
         GlStateManager.color4f((float) color.getRed() / 255, (float) color.getGreen() / 255, (float) color.getBlue() / 255, 1F);
         GlStateManager.blendFuncSeparate(775, 769, 1, 0);
         DrawPosition pos = getPos().subtract(0, -1);
-        if (type.get() == CrosshairHudOption.CrosshairOption.DOT) {
+        if (Objects.equals(type.get(), CrosshairOption.DOT.toString())) {
 
             fillRect(new Rectangle(pos.x + (width / 2) - 1, pos.y + (height / 2) - 2, 3, 3), color);
-        } else if (type.get() == CrosshairHudOption.CrosshairOption.CROSS) {
+        } else if (Objects.equals(type.get(), CrosshairOption.CROSS.toString())) {
 
             fillRect(new Rectangle(pos.x + (width / 2) - 5, pos.y + (height / 2) - 1, 6, 1), color);
             fillRect(new Rectangle(pos.x + (width / 2) + 1, pos.y + (height / 2) - 1, 5, 1), color);
             fillRect(new Rectangle(pos.x + (width / 2), pos.y + (height / 2) - 6, 1, 6), color);
             fillRect(new Rectangle(pos.x + (width / 2), pos.y + (height / 2), 1, 5), color);
-        } else if (type.get() == CrosshairHudOption.CrosshairOption.TEXTURE) {
+        } else if (Objects.equals(type.get(), CrosshairOption.TEXTURE.toString())) {
 
             MinecraftClient.getInstance().getTextureManager().bindTexture(DrawableHelper.GUI_ICONS_TEXTURE);
 
@@ -131,6 +132,12 @@ public class CrosshairHud extends AbstractHudEntry {
         options.add(defaultColor);
         options.add(entityColor);
         options.add(containerColor);
+    }
+
+    public enum CrosshairOption{
+        CROSS,
+        DOT,
+        TEXTURE
     }
 
 }

@@ -184,7 +184,7 @@ public class OptionsScreenBuilder extends Screen {
 
     @Override
     public void resize(MinecraftClient client, int width, int height) {
-        if(isPickerOpen()){
+        if(picker!=null){
             picker.init();
         }
         super.resize(client, width, height);

@@ -1,5 +1,6 @@
 package io.github.axolotlclient.config.options;
 
+import io.github.axolotlclient.util.Util;
 import net.minecraft.client.resource.language.I18n;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,9 +20,6 @@ public interface Tooltippable {
                 return I18n.translate(location + ".tooltip");
             }
         }
-        if(!Objects.equals(I18n.translate(getName() + ".tooltip"), getName() + ".tooltip")) {
-            return I18n.translate(getName() + ".tooltip");
-        }
-        return null;
+        return Util.getTranslationIfExistsOrNull(getName()+".tooltip");
     }
 }
