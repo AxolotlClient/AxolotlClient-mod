@@ -1,5 +1,6 @@
 package io.github.axolotlclient.config.screen.widgets;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.config.Color;
 import io.github.axolotlclient.config.options.ColorOption;
 import io.github.axolotlclient.config.screen.OptionsScreenBuilder;
@@ -8,6 +9,7 @@ import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.util.Identifier;
 
 import java.util.Objects;
 
@@ -18,6 +20,10 @@ public class ColorOptionWidget extends ButtonWidget {
     public final TextFieldWidget textField;
     private final ButtonWidget openPicker;
 
+    // Pipette icon in KDE plasma icon theme 'BeautyLine' by Sajjad Abdollahzadeh <sajjad606@gmail.com>
+    // https://store.kde.org/p/1425426
+    // License: GPL-3
+    protected final Identifier pipette = new Identifier("axolotlclient","textures/gui/pipette.png");
 
     public ColorOptionWidget(int id, int x, int y, ColorOption option) {
         super(id, x, y, 150, 20, "");
@@ -31,9 +37,9 @@ public class ColorOptionWidget extends ButtonWidget {
                 DrawUtil.fill(x, y, x+width, y+height, option.get().getAsInt());
                 DrawUtil.outlineRect(new Rectangle(x, y, width, height), new Color(-6250336));
 
-                // Color picker icon, indicating there will be a better, bigger color selection dialog
-                // for everyone uncomfortable with hexcodes (to be made first)
-                //drawTexture(x, y, 0, 0, 20, 20, 21, 21);
+                GlStateManager.color3f(1, 1,1);
+                MinecraftClient.getInstance().getTextureManager().bindTexture(pipette);
+                drawTexture(x, y, 0, 0, 20, 20, 21, 21);
             }
         };
     }
@@ -65,7 +71,7 @@ public class ColorOptionWidget extends ButtonWidget {
 
     public void mouseClicked(int mouseX, int mouseY){
         if(openPicker.isMouseOver(MinecraftClient.getInstance(), mouseX, mouseY)){
-            // WIP -> open Color picking dialog
+
             if(MinecraftClient.getInstance().currentScreen instanceof OptionsScreenBuilder){
                 ((OptionsScreenBuilder) MinecraftClient.getInstance().currentScreen).openColorPicker(option);
             }

@@ -85,6 +85,7 @@ public class CrosshairHud extends AbstractHudEntry {
 
 
         }
+        GlStateManager.disableBlend();
         GlStateManager.popMatrix();
         GlStateManager.disableAlphaTest();
 

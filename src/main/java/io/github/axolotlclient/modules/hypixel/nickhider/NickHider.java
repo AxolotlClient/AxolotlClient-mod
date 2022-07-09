@@ -4,6 +4,10 @@ import io.github.axolotlclient.config.options.BooleanOption;
 import io.github.axolotlclient.config.options.OptionCategory;
 import io.github.axolotlclient.config.options.StringOption;
 import io.github.axolotlclient.modules.hypixel.AbstractHypixelMod;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 
 public class NickHider implements AbstractHypixelMod {
 
@@ -26,6 +30,30 @@ public class NickHider implements AbstractHypixelMod {
         category.add(hideOtherNames);
         category.add(hideOwnSkin);
         category.add(hideOtherSkins);
+    }
+
+    public Text editMessage(Text message){
+        String msg = message.asString();
+
+        if(hideOwnName.get() || hideOtherNames.get()) {
+            String playerName = MinecraftClient.getInstance().player.getCustomName();
+            if (hideOwnName.get() && msg.contains(playerName)) {
+                msg = msg.replaceAll(playerName, hiddenNameSelf.get());
+
+            }
+
+            if (hideOtherNames.get()) {
+                for (PlayerEntity player : MinecraftClient.getInstance().world.playerEntities) {
+                    if (msg.contains(player.getCustomName())) {
+                        msg = msg.replaceAll(player.getCustomName(), hiddenNameOthers.get());
+                    }
+                }
+            }
+
+
+            return new LiteralText(msg).setStyle(message.getStyle().deepCopy());
+        }
+        return message;
     }
 
     @Override

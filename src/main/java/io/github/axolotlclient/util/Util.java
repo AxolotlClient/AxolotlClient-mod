@@ -3,6 +3,7 @@ package io.github.axolotlclient.util;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ServerInfo;
@@ -67,6 +68,27 @@ public class Util {
     public static int getTicksBetween(int start, int end) {
         if (end < start) end += 24000;
         return end - start;
+    }
+
+    public static DrawPosition toGlCoords(int x, int y){
+        return toGlCoords(new DrawPosition(x, y));
+    }
+
+    public static DrawPosition toGlCoords(DrawPosition pos){
+        int scale = new Window(MinecraftClient.getInstance()).getScaleFactor();
+        return new DrawPosition(pos.x * scale,
+                MinecraftClient.getInstance().height - pos.y * scale - scale);
+    }
+
+    public static DrawPosition toMCCoords(int x, int y){
+        return toMCCoords(new DrawPosition(x, y));
+    }
+
+    public static DrawPosition toMCCoords(DrawPosition pos){
+        Window window = new Window(MinecraftClient.getInstance());
+        int x = pos.x * window.getWidth() / MinecraftClient.getInstance().width;
+        int y = window.getHeight() - pos.y * window.getHeight() / MinecraftClient.getInstance().height - 1;
+        return new DrawPosition(x, y);
     }
 
     public static void sendChatMessage(String msg){

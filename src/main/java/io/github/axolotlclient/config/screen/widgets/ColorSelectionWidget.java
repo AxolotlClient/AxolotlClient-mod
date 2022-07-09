@@ -4,8 +4,10 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.config.Color;
 import io.github.axolotlclient.config.options.ColorOption;
 import io.github.axolotlclient.config.options.IntegerOption;
+import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
+import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -222,9 +224,9 @@ public class ColorSelectionWidget extends ButtonWidget {
             // Helped in the complete confusion:
             // https://github.com/MrCrayfish/MrCrayfishDeviceMod/blob/2a06b20ad8873855885285f3cee6a682e161e24c/src/main/java/com/mrcrayfish/device/util/GLHelper.java#L71
 
-            int scale = window.getScaleFactor();
-            GL11.glReadPixels(mouseX * scale,
-                    MinecraftClient.getInstance().height - mouseY * scale - scale,
+            DrawPosition mousePos = Util.toGlCoords(new DrawPosition(mouseX, mouseY));
+            GL11.glReadPixels(mousePos.x,
+                    mousePos.y,
                     1, 1, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, pixelBuffer);
 
             final int r = pixelBuffer.get(0) & 0xff;

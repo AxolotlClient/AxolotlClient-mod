@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [],
   "client": [
+    "AccessorChatHud",
     "AccessorShaderEffect",
     "AccessorSoundManager",
     "AccessorSoundSystem",
@@ -17,6 +18,7 @@
     "DebugHudMixin",
     "GlStateManagerMixin",
     "HandledScreenMixin",
+    "HeldItemRendererMixin",
     "ChatScreenMixin",
     "ClientBrandRetrieverMixin",
     "AddServerScreenMixin",
