@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(net.minecraft.client.gui.hud.BossBarHud.class)
-public class MixinBossBarHud {
+public abstract class MixinBossBarHud {
 
 	@Inject(method = "render", at = @At("HEAD"), cancellable = true)
 	public void render(MatrixStack matrices, CallbackInfo ci) {

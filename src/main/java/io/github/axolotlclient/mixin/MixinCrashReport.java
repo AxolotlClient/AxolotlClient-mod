@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Objects;
 
 @Mixin(CrashReport.class)
-public class MixinCrashReport {
+public abstract class MixinCrashReport {
 
 	@Inject(method = "addStackTrace", at = @At(value = "TAIL"))
 	public void addAxolotlclientInfo(StringBuilder builder, CallbackInfo ci){

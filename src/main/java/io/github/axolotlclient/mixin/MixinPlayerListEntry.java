@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PlayerListEntry.class)
-public class MixinPlayerListEntry {
+public abstract class MixinPlayerListEntry {
 
     @Shadow @Final private GameProfile profile;
 

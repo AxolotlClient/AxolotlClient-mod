@@ -24,6 +24,7 @@
 		"MixinGameRenderer",
 		"MixinHandledScreen",
 		"MixinInGameHud",
+		"MixinInGameOverlayRenderer",
 		"MixinKeyBind",
 		"MixinKeyboardInput",
 		"MixinLightmapManager",

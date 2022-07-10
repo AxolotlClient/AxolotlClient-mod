@@ -15,7 +15,6 @@ import java.util.List;
 public class iconHud extends AbstractHudEntry {
 
     public Identifier ID = new Identifier("axolotlclient", "iconhud");
-    private final ColorOption color = new ColorOption("color", new Color(255, 255, 255, 0));
 
     public iconHud() {
         super(15, 15);
@@ -25,9 +24,9 @@ public class iconHud extends AbstractHudEntry {
     public void render(MatrixStack matrices) {
         scale(matrices);
         DrawPosition pos = getPos();
+
         RenderSystem.setShaderTexture(0, AxolotlClient.badgeIcon);
-        if(chroma.get())RenderSystem.setShaderColor(textColor.getChroma().getRed(), textColor.getChroma().getGreen(), textColor.getChroma().getBlue(), 1F);
-        else {RenderSystem.setShaderColor(color.get().getRed(), color.get().getGreen(), color.get().getBlue(), 1F);}
+
         drawTexture(matrices, pos.x, pos.y, 0, 0, width, height, width, height);
 
         matrices.pop();
@@ -35,12 +34,7 @@ public class iconHud extends AbstractHudEntry {
 
     @Override
     public void renderPlaceholder(MatrixStack matrices) {
-        scale(matrices);
-        DrawPosition pos = getPos();
-        RenderSystem.setShaderTexture(0, AxolotlClient.badgeIcon);
-        RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
-        drawTexture(matrices, pos.x, pos.y, 0, 0, width, height, width, height);
-        matrices.pop();
+        render(matrices);
         hovered = false;
     }
 
@@ -57,7 +51,5 @@ public class iconHud extends AbstractHudEntry {
     @Override
     public void addConfigOptions(List<Option> options) {
         super.addConfigOptions(options);
-        options.add(color);
-        options.add(chroma);
     }
 }

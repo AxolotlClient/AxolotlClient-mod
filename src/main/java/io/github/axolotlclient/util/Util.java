@@ -4,13 +4,13 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.mojang.blaze3d.glfw.Window;
+import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.Address;
 import net.minecraft.client.network.AllowedAddressResolver;
 import net.minecraft.client.network.ServerAddress;
 import net.minecraft.client.network.ServerInfo;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.NetworkState;
 import net.minecraft.network.listener.ClientQueryPacketListener;
@@ -83,6 +83,27 @@ public class Util {
 
 		return game;
 	}
+
+    public static DrawPosition toGlCoords(int x, int y){
+        return toGlCoords(new DrawPosition(x, y));
+    }
+
+    public static DrawPosition toGlCoords(DrawPosition pos){
+        double scale = MinecraftClient.getInstance().getWindow().getScaleFactor();
+        return new DrawPosition((int) (pos.x * scale),
+            (int) (MinecraftClient.getInstance().getWindow().getFramebufferHeight() - pos.y * scale - scale));
+    }
+
+    public static DrawPosition toMCCoords(int x, int y){
+        return toMCCoords(new DrawPosition(x, y));
+    }
+
+    public static DrawPosition toMCCoords(DrawPosition pos){
+        Window window = MinecraftClient.getInstance().getWindow();
+        int x = pos.x * window.getWidth() / window.getFramebufferWidth();
+        int y = window.getHeight() - pos.y * window.getHeight() / window.getFramebufferHeight() - 1;
+        return new DrawPosition(x, y);
+    }
 
 	// I suppose this is something introduced with the chat cryptography features in 1.19
 	private static final C_fijiyucq whateverThisIs = new C_fijiyucq(MinecraftClient.getInstance());

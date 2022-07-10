@@ -1,5 +1,6 @@
 package io.github.axolotlclient.config.screen.widgets;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.config.Color;
 import io.github.axolotlclient.config.options.ColorOption;
 import io.github.axolotlclient.config.screen.OptionsScreenBuilder;
@@ -10,6 +11,7 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 
 import java.util.Objects;
 
@@ -20,6 +22,7 @@ public class ColorOptionWidget extends ButtonWidget {
     public final TextFieldWidget textField;
     private final ButtonWidget openPicker;
 
+    protected Identifier pipette = new Identifier("axolotlclient", "textures/gui/pipette.png");
 
     public ColorOptionWidget(int x, int y, ColorOption option) {
         super(x, y, 150, 20, Text.of(""), buttonWidget -> {});
@@ -33,16 +36,14 @@ public class ColorOptionWidget extends ButtonWidget {
                 DrawUtil.fill(matrices, x, y, x+width, y+height, option.get().getAsInt());
                 DrawUtil.outlineRect(matrices, new Rectangle(x, y, width, height), new Color(-6250336));
 
-                // Color picker icon, indicating there will be a better, bigger color selection dialog
-                // for everyone uncomfortable with hexcodes (to be made first)
-                //drawTexture(x, y, 0, 0, 20, 20, 21, 21);
+                RenderSystem.setShaderTexture(0, pipette);
+                drawTexture(matrices, x, y, 0, 0, 20, 20, 21, 21);
             }
         };
     }
 
 	@Override
 	public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-
 
         textField.y = y;
         textField.x = x;
@@ -57,7 +58,6 @@ public class ColorOptionWidget extends ButtonWidget {
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if(openPicker.isMouseOver(mouseX, mouseY)){
-            // WIP -> open Color picking dialog
             if(MinecraftClient.getInstance().currentScreen instanceof OptionsScreenBuilder){
                 ((OptionsScreenBuilder) MinecraftClient.getInstance().currentScreen).openColorPicker(option);
             }

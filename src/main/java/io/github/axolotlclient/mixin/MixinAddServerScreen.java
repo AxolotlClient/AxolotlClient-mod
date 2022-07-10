@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AddServerScreen.class)
-public class MixinAddServerScreen {
+public abstract class MixinAddServerScreen {
 
     @Shadow private TextFieldWidget serverNameField;
 

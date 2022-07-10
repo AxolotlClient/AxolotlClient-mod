@@ -40,7 +40,7 @@ import java.util.Objects;
 public class CrosshairHud extends AbstractHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "crosshairhud");
 
-    private final EnumOption type = new EnumOption("type", CrosshairOption.values(), CrosshairOption.TEXTURE);
+    private final EnumOption type = new EnumOption("crosshair_type", CrosshairOption.values(), CrosshairOption.TEXTURE);
     private final BooleanOption showInF5 = new BooleanOption("showInF5", false);
     public final BooleanOption showInF3 = new BooleanOption("showInF3", false);
     private final ColorOption defaultColor = new ColorOption("defaultcolor",  "#FFFFFFFF");
@@ -69,9 +69,8 @@ public class CrosshairHud extends AbstractHudEntry {
 	public void render(MatrixStack matrices) {
 		if(!client.options.getPerspective().isFirstPerson() && !showInF5.get())return;
 
-		//matrices.push();
+
 		scale(matrices);
-		//DrawPosition pos = getPos().subtract(0, -1);
         DrawPosition pos = new DrawPosition(MinecraftClient.getInstance().getWindow().getScaledWidth()/2 - width/2, MinecraftClient.getInstance().getWindow().getScaledHeight()/2 - height/2);
 		Color color = getColor();
 		if (Objects.equals(type.get(), CrosshairOption.DOT.toString())) {
@@ -166,7 +165,7 @@ public class CrosshairHud extends AbstractHudEntry {
 		bufferBuilder.vertex(matrix, x2, y2, 0.0F).color(r, g, b, alpha).next();
 		bufferBuilder.vertex(matrix, x2, y, 0.0F).color(r, g, b, alpha).next();
 		bufferBuilder.vertex(matrix, x, y, 0.0F).color(r, g, b, alpha).next();
-		//bufferBuilder.end();
+
 		Tessellator.getInstance().draw();
 		RenderSystem.enableTexture();
 		RenderSystem.disableBlend();

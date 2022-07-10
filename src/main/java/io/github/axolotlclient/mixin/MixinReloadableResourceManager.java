@@ -23,7 +23,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
 @Mixin(ReloadableResourceManager.class)
-public class MixinReloadableResourceManager {
+public abstract class MixinReloadableResourceManager {
 
 	@Inject(method = "reload", at = @At("HEAD"))
 	public void reloadStart(Executor prepareExecutor, Executor applyExecutor, CompletableFuture<Unit> initialStage, List<ResourcePack> packs, CallbackInfoReturnable<ResourceReload> cir){

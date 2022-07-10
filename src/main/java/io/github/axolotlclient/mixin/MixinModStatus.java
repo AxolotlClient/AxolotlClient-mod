@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
 @Mixin(ModStatus.class)
-public class MixinModStatus {
+public abstract class MixinModStatus {
 
 	/**
 	 * @author moehreag

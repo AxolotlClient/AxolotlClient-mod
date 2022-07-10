@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 
 @Mixin(MinecraftClientGame.class)
-public class MixinMinecraftClientGame {
+public abstract class MixinMinecraftClientGame {
 	@Inject(method = "onStartGameSession", at = @At("HEAD"))
 	public void startup(CallbackInfo ci){
 		/*if(AxolotlClient.features){

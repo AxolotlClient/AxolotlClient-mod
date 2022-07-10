@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(KeyboardInput.class)
-public class MixinKeyboardInput {
+public abstract class MixinKeyboardInput {
 
 
     /**

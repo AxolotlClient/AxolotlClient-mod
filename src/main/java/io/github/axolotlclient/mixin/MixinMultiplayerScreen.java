@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Objects;
 
 @Mixin(MultiplayerScreen.class)
-public class MixinMultiplayerScreen {
+public abstract class MixinMultiplayerScreen {
 
     @Inject(method = "init", at = @At("HEAD"))
     public void freePlayerData(CallbackInfo ci){

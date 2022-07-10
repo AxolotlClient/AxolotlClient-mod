@@ -23,6 +23,7 @@ public class AxolotlClientConfig {
     public final BooleanOption dynamicFOV = new BooleanOption("dynamicFov", true);
     public final BooleanOption fullBright = new BooleanOption("fullBright", false);
     public final IntegerOption chromaSpeed = new IntegerOption("chromaSpeed", 20, 10, 50);
+    public final BooleanOption lowFire = new BooleanOption("lowFire", false);
 
     public final BooleanOption motionBlurEnabled = new BooleanOption("enabled", false);
     public final FloatOption motionBlurStrength = new FloatOption("strength", 1F, 99F, 50F);
@@ -104,6 +105,7 @@ public class AxolotlClientConfig {
         rendering.add(chromaSpeed);
         rendering.add(dynamicFOV);
         rendering.add(fullBright);
+        rendering.add(lowFire);
 
         motionBlur.add(motionBlurEnabled);
         motionBlur.add(motionBlurStrength);
