@@ -53,7 +53,7 @@ public class ConfigManager{
     }
 
     public static void load() {
-        loadDefaults();
+
         try {
             JsonObject config = new JsonParser().parse(new FileReader(confPath.toString())).getAsJsonObject();
 
@@ -77,8 +77,10 @@ public class ConfigManager{
                 }
             }
         } catch (Exception e){
-            AxolotlClient.LOGGER.error("Failed to load config! Using default values...");}
-        save();
+            AxolotlClient.LOGGER.error("Failed to load config! Using default values...");
+            loadDefaults();
+        }
+        //save();
     }
 
     private static void loadDefaults(){

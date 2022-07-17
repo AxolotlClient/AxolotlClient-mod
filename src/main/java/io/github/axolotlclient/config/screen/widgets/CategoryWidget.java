@@ -50,7 +50,7 @@ public class CategoryWidget extends ButtonWidget {
             TextRenderer textRenderer = client.textRenderer;
             client.getTextureManager().bindTexture(WIDGETS_LOCATION);
             GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-            this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height && !(enabledButton!=null && enabledButton.isHovered());
+            this.hovered = isMouseOver(client, mouseX, mouseY);
             int i = this.getYImage(this.hovered);
             GlStateManager.enableBlend();
             GlStateManager.blendFuncSeparate(770, 771, 1, 0);

@@ -4,6 +4,7 @@ import net.minecraft.client.resource.language.I18n;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class OptionCategory implements Tooltippable {
@@ -25,6 +26,10 @@ public class OptionCategory implements Tooltippable {
     public List<Option> getOptions(){return options;}
 
     public void add(Option option){options.add(option);}
+
+    public void add(Option... options){
+        Collections.addAll(this.options, options);
+    }
 
     public void add(List<Option> options){this.options.addAll(options);}
 

@@ -236,18 +236,18 @@ public class ButtonWidgetList extends EntryListWidget {
 
         public boolean mouseClicked(int index, int mouseX, int mouseY, int button, int x, int y) {
             if (this.left.isMouseOver(this.client, mouseX, mouseY)) {
-                onClick(this.left, mouseX, mouseY);
+                onClick(this.left, mouseX, mouseY, button);
 
                 return true;
             } else if (this.right != null && this.right.isMouseOver(this.client, mouseX, mouseY)) {
-                onClick(this.right, mouseX, mouseY);
+                onClick(this.right, mouseX, mouseY, button);
 
                 return true;
             }
             return false;
         }
 
-        protected void onClick(ButtonWidget button, int mouseX, int mouseY){
+        protected void onClick(ButtonWidget button, int mouseX, int mouseY, int mB){
             if (button instanceof OptionSliderWidget){
                 button.isMouseOver(client, mouseX, mouseY);
                 ConfigManager.save();
@@ -256,7 +256,7 @@ public class ButtonWidgetList extends EntryListWidget {
 
             } else if (button instanceof EnumOptionWidget) {
                 button.playDownSound(client.getSoundManager());
-                ((EnumOptionWidget) button).mouseClicked();
+                ((EnumOptionWidget) button).mouseClicked(mB);
                 ConfigManager.save();
 
             } else if (button instanceof StringOptionWidget) {

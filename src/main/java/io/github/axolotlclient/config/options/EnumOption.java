@@ -73,6 +73,12 @@ public class EnumOption extends OptionBase {
         return get();
     }
 
+    public String last(){
+        i--;
+        if(i<0)i=values.length-1;
+        return get();
+    }
+
     @Override
     public JsonElement getJson() {
         return new JsonPrimitive(get());

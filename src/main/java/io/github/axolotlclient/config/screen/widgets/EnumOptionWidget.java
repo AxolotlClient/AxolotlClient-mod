@@ -24,7 +24,11 @@ public class EnumOptionWidget extends ButtonWidget {
         return super.isMouseOver(client, mouseX, mouseY);
     }
 
-    public void mouseClicked(){
-        this.message = Util.getTranslationIfExists(option.next());
+    public void mouseClicked(int button){
+        if(button==1) {
+            this.message = Util.getTranslationIfExists(option.last());
+        } else {
+            this.message = Util.getTranslationIfExists(option.next());
+        }
     }
 }
