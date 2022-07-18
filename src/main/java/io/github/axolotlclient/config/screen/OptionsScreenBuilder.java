@@ -34,21 +34,19 @@ public class OptionsScreenBuilder extends Screen {
 
     @Override
     public void render(int mouseX, int mouseY, float tickDelta) {
-        if(this.client.world!=null)DrawUtil.fill(0,0, width, height, 0xB0100E0E);
-        else renderDirtBackground(0);
-
         if(AxolotlClient.someNiceBackground.get()) { // Credit to pridelib for the colors
-            DrawUtil.fill(0, 0, width, height/6, 0xFFff0018);
-            DrawUtil.fill(0, height/6, width, height*2/6, 0xFFffa52c);
-            DrawUtil.fill(0, height*2/6, width, height/2, 0xFFffff41);
-            DrawUtil.fill(0, height*2/3, width, height*5/6, 0xFF0000f9);
-            DrawUtil.fill(0, height/2, width, height*2/3, 0xFF008018);
-            DrawUtil.fill(0, height*5/6, width, height, 0xFF86007d);
+            DrawUtil.fill(0, 0, width, height/6, 0x0Fff0018);
+            DrawUtil.fill(0, height/6, width, height*2/6, 0x0Fffa52c);
+            DrawUtil.fill(0, height*2/6, width, height/2, 0x0Fffff41);
+            DrawUtil.fill(0, height*2/3, width, height*5/6, 0x0F0000f9);
+            DrawUtil.fill(0, height/2, width, height*2/3, 0x0F008018);
+            DrawUtil.fill(0, height*5/6, width, height, 0x0F86007d);
+        } else {
+            if(this.client.world!=null)DrawUtil.fill(0,0, width, height, 0xB0100E0E);
+            else renderDirtBackground(0);
         }
 
-
         drawCenteredString(textRenderer, cat.getTranslatedName(), width/2, 25, -1);
-
 
         super.render(mouseX, mouseY, tickDelta);
 
@@ -87,8 +85,6 @@ public class OptionsScreenBuilder extends Screen {
     protected void mouseClicked(int mouseX, int mouseY, int button) {
         super.mouseClicked(mouseX, mouseY, button);
 
-
-
         if(isPickerOpen()){
             if(!picker.isMouseOver(MinecraftClient.getInstance(), mouseX, mouseY)) {
                 closeColorPicker();
@@ -119,8 +115,6 @@ public class OptionsScreenBuilder extends Screen {
                 }
             });
         }
-
-
     }
 
     @Override

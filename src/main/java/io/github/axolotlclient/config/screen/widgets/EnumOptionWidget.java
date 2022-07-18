@@ -5,12 +5,13 @@ import io.github.axolotlclient.config.screen.OptionsScreenBuilder;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.resource.language.I18n;
 
 public class EnumOptionWidget extends ButtonWidget {
 
     private final EnumOption option;
     public EnumOptionWidget(int id, int x, int y, EnumOption option) {
-        super(id, x, y, 150, 20, Util.getTranslationIfExists(option.get()));
+        super(id, x, y, 150, 20, I18n.translate(option.get()));
         this.option=option;
     }
 
@@ -26,9 +27,9 @@ public class EnumOptionWidget extends ButtonWidget {
 
     public void mouseClicked(int button){
         if(button==1) {
-            this.message = Util.getTranslationIfExists(option.last());
+            this.message = I18n.translate(option.last());
         } else {
-            this.message = Util.getTranslationIfExists(option.next());
+            this.message = I18n.translate(option.next());
         }
     }
 }

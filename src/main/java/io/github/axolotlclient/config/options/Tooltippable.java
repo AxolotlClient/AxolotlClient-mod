@@ -14,8 +14,9 @@ public interface Tooltippable {
     }
 
     default @Nullable String getTooltip(String location){
-        if(!Objects.equals(I18n.translate(location + ".tooltip"), location + ".tooltip")) {
-            return I18n.translate(location + ".tooltip");
+        String translation = I18n.translate(location + ".tooltip");
+        if(!Objects.equals(translation, location + ".tooltip")) {
+            return translation;
         }
         return null;
     }
