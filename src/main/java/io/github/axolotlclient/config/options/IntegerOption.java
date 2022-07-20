@@ -2,9 +2,13 @@ package io.github.axolotlclient.config.options;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
+import io.github.axolotlclient.config.CommandResponse;
 import org.jetbrains.annotations.NotNull;
 
-public class IntegerOption extends OptionBase {
+import java.util.Collections;
+import java.util.List;
+
+public class IntegerOption extends OptionBase<Integer> {
 
     private int option;
     private final int Default;
@@ -22,7 +26,7 @@ public class IntegerOption extends OptionBase {
         this.max=max;
     }
 
-    public int get(){
+    public Integer get(){
         return option;
     }
 
@@ -50,5 +54,24 @@ public class IntegerOption extends OptionBase {
     @Override
     public JsonElement getJson() {
         return new JsonPrimitive(option);
+    }
+
+    @Override
+    protected CommandResponse onCommandExecution(String[] args) {
+        try {
+            if (args.length > 0) {
+                set(Integer.parseInt(args[0]));
+                return new CommandResponse(true, "Successfully set "+getName()+" to "+get()+"!");
+            }
+        } catch (NumberFormatException ignored){
+            return new CommandResponse(false, "Please specify the number to set "+getName()+" to!");
+        }
+
+        return new CommandResponse(true, getName() + " is currently set to '"+get()+"'.");
+    }
+
+    @Override
+    public List<String> getCommandSuggestions() {
+        return Collections.singletonList(String.valueOf(Default));
     }
 }

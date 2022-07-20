@@ -2,12 +2,11 @@ package io.github.axolotlclient.config.options;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
+import io.github.axolotlclient.config.CommandResponse;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
-public class EnumOption extends OptionBase {
+public class EnumOption extends OptionBase<String> {
 
     private int i;
 
@@ -82,5 +81,37 @@ public class EnumOption extends OptionBase {
     @Override
     public JsonElement getJson() {
         return new JsonPrimitive(get());
+    }
+
+    @Override
+    protected CommandResponse onCommandExecution(String[] args) {
+        if(args.length>0){
+            if(args[0].equals("next")){
+                next();
+                return new CommandResponse(true, "Successfully set "+getName()+" to "+get()+"!");
+            } else if(args[0].equals("last")){
+                last();
+                return new CommandResponse(true, "Successfully set "+getName()+" to "+get()+"!");
+            }
+
+            try {
+                int value = Integer.parseInt(args[0]);
+                if(value>values.length-1 || value < 0){
+                    throw new IndexOutOfBoundsException();
+                }
+                i=value;
+                return new CommandResponse(true, "Successfully set "+getName()+" to "+get()+" (Index: "+i+")!");
+            } catch (IndexOutOfBoundsException e){
+                return new CommandResponse(false, "Please specify an index within the bounds of 0<=i<"+values.length+"!");
+            } catch (NumberFormatException ignored){
+                return new CommandResponse(false, "Please specify either next, last or an index for a specific value!");
+            }
+        }
+        return new CommandResponse(true, getName() + " is currently set to '"+get()+"'.");
+    }
+
+    @Override
+    public List<String> getCommandSuggestions() {
+        return Arrays.asList(values);
     }
 }

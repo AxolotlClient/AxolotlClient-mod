@@ -22,7 +22,7 @@
   "accessWidener" : "axolotlclient.accesswidener",
   "environment": "*",
   "entrypoints": {
-    "main": [
+    "client": [
       "io.github.axolotlclient.AxolotlClient"
     ]
   },

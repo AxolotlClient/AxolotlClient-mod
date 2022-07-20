@@ -13,8 +13,9 @@ import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
 import io.github.axolotlclient.modules.motionblur.MotionBlur;
 import io.github.axolotlclient.modules.scrollableTooltips.ScrollableTooltips;
 import io.github.axolotlclient.modules.zoom.Zoom;
-import io.github.axolotlclient.util.DiscordRPC;
+import io.github.axolotlclient.modules.rpc.DiscordRPC;
 import io.github.axolotlclient.util.Util;
+import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
@@ -31,7 +32,7 @@ import java.nio.file.Path;
 import java.util.*;
 
 
-public class AxolotlClient implements ModInitializer {
+public class AxolotlClient implements ClientModInitializer {
 
 	public static Logger LOGGER = LogManager.getLogger("AxolotlClient");
 
@@ -53,7 +54,7 @@ public class AxolotlClient implements ModInitializer {
 	public static Integer tickTime = 0;
 
 	@Override
-	public void onInitialize() {
+	public void onInitializeClient() {
 
 		CONFIG = new AxolotlClientConfig();
 		config.add(someNiceBackground);
@@ -68,7 +69,7 @@ public class AxolotlClient implements ModInitializer {
 
 		ConfigManager.load();
 
-		if (CONFIG.enableRPC.get()) io.github.axolotlclient.util.DiscordRPC.startup();
+		//if (CONFIG.enableRPC.get()) io.github.axolotlclient.util.DiscordRPC.startup();
 
 		modules.forEach((identifier, abstractModule) -> abstractModule.lateInit());
 
@@ -87,6 +88,7 @@ public class AxolotlClient implements ModInitializer {
 		modules.put(HypixelMods.ID, HypixelMods.INSTANCE);
 		modules.put(MotionBlur.ID, new MotionBlur());
 		modules.put(ScrollableTooltips.ID, ScrollableTooltips.Instance);
+		modules.put(DiscordRPC.ID, DiscordRPC.getInstance());
 	}
 
 	public static boolean isUsingClient(UUID uuid){
@@ -102,7 +104,7 @@ public class AxolotlClient implements ModInitializer {
 	public static void tickClient(){
 
 		modules.forEach((identifier, abstractModule) -> abstractModule.tick());
-		DiscordRPC.update();
+		//net.arikia.dev.drpc.DiscordRPC.discordRunCallbacks();
 		Color.tickChroma();
 
 		if(tickTime % 20 == 0){

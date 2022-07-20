@@ -33,8 +33,8 @@ public class AxolotlClientConfig {
     public final BooleanOption showOptionTooltips = new BooleanOption("showOptionTooltips", true);
     public final BooleanOption showCategoryTooltips = new BooleanOption("showCategoryTooltips", false);
     public final BooleanOption quickToggles = new BooleanOption("quickToggles", false);
-    public final BooleanOption enableRPC = new BooleanOption("enableRPC", true);
-    public final BooleanOption showActivity = new BooleanOption("showActivity", true);
+    //public final BooleanOption enableRPC = new BooleanOption("enableRPC", true);
+    //public final BooleanOption showActivity = new BooleanOption("showActivity", true);
     public final ColorOption loadingScreenColor = new ColorOption("loadingBgColor", new Color(-1));
     public final BooleanOption nightMode = new BooleanOption("nightMode", false);
 
@@ -94,8 +94,8 @@ public class AxolotlClientConfig {
         nametagOptions.add(customBadge);
         nametagOptions.add(badgeText);
 
-        general.add(enableRPC);
-        general.add(showActivity);
+        //general.add(enableRPC);
+        //general.add(showActivity);
         general.add(loadingScreenColor);
         general.add(nightMode);
         general.add(quickToggles);

@@ -2,9 +2,13 @@ package io.github.axolotlclient.config.options;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
+import io.github.axolotlclient.config.CommandResponse;
 import org.jetbrains.annotations.NotNull;
 
-public class StringOption extends OptionBase {
+import java.util.Collections;
+import java.util.List;
+
+public class StringOption extends OptionBase<String> {
 
     private String value;
     private final String def;
@@ -44,5 +48,24 @@ public class StringOption extends OptionBase {
     @Override
     public JsonElement getJson() {
         return new JsonPrimitive(value);
+    }
+
+    @Override
+    protected CommandResponse onCommandExecution(String[] args) {
+        if(args.length>0){
+            StringBuilder v = new StringBuilder();
+            for(String s:args){
+                v.append(s);
+                v.append(" ");
+            }
+            set(v.toString());
+            return new CommandResponse(true, "Successfully set "+getName()+" to "+v+"!");
+        }
+        return new CommandResponse(true, getName() + " is currently set to '"+get()+"'.");
+    }
+
+    @Override
+    public List<String> getCommandSuggestions() {
+        return Collections.singletonList(String.valueOf(def));
     }
 }

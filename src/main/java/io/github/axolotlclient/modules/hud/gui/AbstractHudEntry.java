@@ -38,7 +38,7 @@ public abstract class AbstractHudEntry extends DrawUtil {
     private final DoubleOption x = new DoubleOption("x", getDefaultX(), 0, 1);
     private final DoubleOption y = new DoubleOption("y", getDefaultY(), 0, 1);
 
-    private List<Option> options;
+    private List<OptionBase<?>> options;
 
     protected boolean hovered = false;
     protected MinecraftClient client = MinecraftClient.getInstance();
@@ -125,8 +125,8 @@ public abstract class AbstractHudEntry extends DrawUtil {
     }
 
     public Rectangle getScaledBounds() {
-        return new Rectangle(getX(), getY(), Math.round(width * (float) scale.get()),
-                Math.round(height * (float) scale.get()));
+        return new Rectangle(getX(), getY(), (int) Math.round(width *  scale.get()),
+                (int) Math.round(height * scale.get()));
     }
 
     /**
@@ -138,7 +138,7 @@ public abstract class AbstractHudEntry extends DrawUtil {
     }
 
     public float getScale() {
-        return (float) scale.get();
+        return scale.get().floatValue();
     }
 
     public void scale() {
@@ -155,12 +155,12 @@ public abstract class AbstractHudEntry extends DrawUtil {
     }
 
     public DrawPosition getScaledPos(float scale) {
-        int scaledX = floatToInt((float) x.get(), (int) new Window(client).getScaledWidth(), Math.round(width * scale));
-        int scaledY = floatToInt((float) y.get(), (int) new Window(client).getScaledHeight(), Math.round(height * scale));
+        int scaledX = floatToInt( x.get().floatValue(), (int) new Window(client).getScaledWidth(), Math.round(width * scale));
+        int scaledY = floatToInt( y.get().floatValue(), (int) new Window(client).getScaledHeight(), Math.round(height * scale));
         return new DrawPosition(scaledX, scaledY);
     }
 
-    public List<Option> getOptions() {
+    public List<OptionBase<?>> getOptions() {
         if (options == null) {
             options = new ArrayList<>();
             addConfigOptions(options);
@@ -175,7 +175,7 @@ public abstract class AbstractHudEntry extends DrawUtil {
     }
 
     public OptionCategory getAllOptions() {
-        List<Option> options = new ArrayList<>(getOptions());
+        List<OptionBase<?>> options = new ArrayList<>(getOptions());
         options.add(x);
         options.add(y);
         OptionCategory cat = new OptionCategory(getId(), getNameKey());
@@ -183,7 +183,7 @@ public abstract class AbstractHudEntry extends DrawUtil {
         return cat;
     }
 
-    public void addConfigOptions(List<Option> options) {
+    public void addConfigOptions(List<OptionBase<?>> options) {
         options.add(enabled);
         options.add(scale);
     }

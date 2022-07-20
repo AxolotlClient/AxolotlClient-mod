@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.config.options.BooleanOption;
 import io.github.axolotlclient.config.options.ColorOption;
-import io.github.axolotlclient.config.options.Option;
+import io.github.axolotlclient.config.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.config.Color;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
@@ -93,7 +93,7 @@ public class ScoreboardHud extends AbstractHudEntry {
         String text = objective.getDisplayName();
         int displayNameWidth = client.textRenderer.getStringWidth(text);
         int maxWidth = displayNameWidth;
-        int spacerWidth = client.textRenderer.getStringWidth(": ");
+        int spacerWidth = client.textRenderer.getStringWidth("  ");
 
         ScoreboardPlayerScore scoreboardPlayerScore;
         String formattedText;
@@ -165,7 +165,7 @@ public class ScoreboardHud extends AbstractHudEntry {
     }
 
     @Override
-    public void addConfigOptions(List<Option> options) {
+    public void addConfigOptions(List<OptionBase<?>> options) {
         super.addConfigOptions(options);
         options.add(background);
         options.add(topColor);

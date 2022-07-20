@@ -5,10 +5,14 @@ import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
+import net.legacyfabric.fabric.api.registry.CommandRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.texture.Texture;
 import net.minecraft.client.util.Window;
+import net.minecraft.command.AbstractCommand;
+import net.minecraft.command.CommandException;
+import net.minecraft.command.CommandSource;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.NetworkState;
 import net.minecraft.network.ServerAddress;
@@ -26,6 +30,7 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 import org.lwjgl.opengl.GL11;
 
 import java.net.InetAddress;
@@ -91,6 +96,46 @@ public class Util {
 
     public static void sendChatMessage(String msg){
         MinecraftClient.getInstance().player.sendChatMessage(msg);
+    }
+
+    public static void sendChatMessage(Text msg){
+        MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(msg);
+    }
+
+    public static void registerCommand(String command, CommandExecutionCallback onExecution){
+        registerCommand(command, null, onExecution);
+    }
+
+    public static void registerCommand(String command, CommandSuggestionCallback suggestions, CommandExecutionCallback onExecution){
+        CommandRegistry.INSTANCE.register(new AbstractCommand() {
+            @Override
+            public String getCommandName() {
+                return command;
+            }
+
+            @Override
+            public String getUsageTranslationKey(CommandSource source) {
+                return "commands."+command+".usage";
+            }
+
+            @Override
+            public void execute(CommandSource source, String[] args) throws CommandException {
+                onExecution.onExecution(args);
+            }
+
+            @Override
+            public List<String> getAutoCompleteHints(CommandSource source, String[] args, BlockPos pos) {
+                return suggestions.getSuggestions(source, args, pos);
+            }
+        });
+    }
+
+    public interface CommandExecutionCallback {
+        void onExecution(String[] args);
+    }
+
+    public interface CommandSuggestionCallback {
+        List<String> getSuggestions(CommandSource source, String[] args, BlockPos pos);
     }
 
     public static String getGame(){
