@@ -1,5 +1,7 @@
 package io.github.axolotlclient;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import io.github.axolotlclient.util.ThreadExecuter;
 import net.minecraft.client.MinecraftClient;
 import org.apache.http.HttpResponse;
@@ -11,6 +13,10 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
 import java.util.UUID;
 
 
@@ -97,7 +103,53 @@ public class NetworkHelper {
                 AxolotlClient.LOGGER.error("Error while logging off!");
             }
         }
+    }
 
+    public static JsonElement getRequest(String site) {
+        try {
+
+            CloseableHttpClient client = HttpClients.custom().disableAutomaticRetries().build();
+            HttpGet get = new HttpGet(site);
+            HttpResponse response = client.execute(get);
+
+            int status = response.getStatusLine().getStatusCode();
+            if (status != 200) {
+                AxolotlClient.LOGGER.warn("API request failed, status code " + status);
+                return null;
+            }
+
+            String body = EntityUtils.toString(response.getEntity());
+            client.close();
+
+            JsonParser parser = new JsonParser();
+            return parser.parse(body);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String getUuid(String username) {
+        JsonElement response = getRequest("https://api.mojang.com/users/profiles/minecraft/" + username);
+        if (response == null)
+            return null;
+        return response.getAsJsonObject().get("id").getAsString();
+    }
+
+    public static BufferedImage getImage(String imgUrl) {
+        try (CloseableHttpClient client = HttpClients.custom().disableAutomaticRetries().build()) {
+
+            HttpGet get = new HttpGet(imgUrl);
+            HttpResponse response = client.execute(get);
+
+            client.close();
+            return ImageIO.read(response.getEntity().getContent());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

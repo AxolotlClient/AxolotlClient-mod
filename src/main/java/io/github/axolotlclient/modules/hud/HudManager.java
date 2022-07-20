@@ -7,7 +7,6 @@ import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.gui.hud.*;
 import io.github.axolotlclient.config.Color;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
-import io.github.axolotlclient.modules.rpc.RPCMicHud;
 import net.legacyfabric.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.legacyfabric.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;

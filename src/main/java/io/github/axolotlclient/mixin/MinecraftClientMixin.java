@@ -4,9 +4,9 @@ import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.NetworkHelper;
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hud.gui.hud.CPSHud;
+import io.github.axolotlclient.modules.rpc.DiscordRPC;
 import io.github.axolotlclient.modules.sky.SkyResourceManager;
 import io.github.axolotlclient.modules.zoom.Zoom;
-import io.github.axolotlclient.util.DiscordRPC;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
 import net.minecraft.client.options.GameOptions;
@@ -104,8 +104,8 @@ public abstract class MinecraftClientMixin {
     }
 
     @Inject(method = "startGame", at = @At("HEAD"))
-    public void startup(String worldName, String string, LevelInfo levelInfo, CallbackInfo ci){
-        DiscordRPC.startup();
+    public void startup(String worldFileName, String worldName, LevelInfo levelInfo, CallbackInfo ci){
+        DiscordRPC.setWorld(worldFileName);
     }
 
     @Inject(method = "stop", at = @At("HEAD"))
