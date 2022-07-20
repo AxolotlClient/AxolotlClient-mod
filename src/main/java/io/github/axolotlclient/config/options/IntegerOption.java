@@ -2,9 +2,10 @@ package io.github.axolotlclient.config.options;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
+import io.github.axolotlclient.config.CommandResponse;
 import org.jetbrains.annotations.NotNull;
 
-public class IntegerOption extends OptionBase implements Option{
+public class IntegerOption extends OptionBase<Integer> {
 
     private int option;
     private final int Default;
@@ -22,7 +23,7 @@ public class IntegerOption extends OptionBase implements Option{
         this.max=max;
     }
 
-    public int get(){
+    public Integer get(){
         return option;
     }
 
@@ -50,5 +51,20 @@ public class IntegerOption extends OptionBase implements Option{
     @Override
     public JsonElement getJson() {
         return new JsonPrimitive(option);
+    }
+
+    @Override
+    protected CommandResponse onCommandExecution(String arg) {
+        try {
+            if (arg.length() > 0) {
+                set(Integer.parseInt(arg));
+                return new CommandResponse(true, "Successfully set "+getName()+" to "+get()+"!");
+            }
+        } catch (NumberFormatException ignored){
+            return new CommandResponse(false, "Please specify the number to set "+getName()+" to!");
+        }
+
+        return new CommandResponse(true, getName() + " is currently set to '"+get()+"'.");
+
     }
 }

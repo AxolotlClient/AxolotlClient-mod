@@ -36,7 +36,7 @@ public class BooleanWidget extends ButtonWidget {
 
         RenderSystem.setShaderTexture(0, ClickableWidget.WIDGETS_TEXTURE);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
+        this.hovered = isMouseOver(mouseX, mouseY);
 
         renderBg(matrices);
         renderSwitch(matrices);

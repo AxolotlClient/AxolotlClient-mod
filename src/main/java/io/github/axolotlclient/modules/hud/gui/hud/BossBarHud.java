@@ -6,6 +6,7 @@ import io.github.axolotlclient.config.Color;
 import io.github.axolotlclient.config.options.BooleanOption;
 import io.github.axolotlclient.config.options.ColorOption;
 import io.github.axolotlclient.config.options.Option;
+import io.github.axolotlclient.config.options.OptionBase;
 import io.github.axolotlclient.mixin.AccessorBossBarHud;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
@@ -130,7 +131,7 @@ public class BossBarHud extends AbstractHudEntry {
     }
 
     @Override
-    public void addConfigOptions(List<Option> options) {
+    public void addConfigOptions(List<OptionBase<?>> options) {
         super.addConfigOptions(options);
         options.add(text);
         options.add(textColor);

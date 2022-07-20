@@ -11,9 +11,9 @@ import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hypixel.HypixelMods;
 import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
 import io.github.axolotlclient.modules.motionblur.MotionBlur;
+import io.github.axolotlclient.modules.rpc.DiscordRPC;
 import io.github.axolotlclient.modules.scrollableTooltips.ScrollableTooltips;
 import io.github.axolotlclient.modules.zoom.Zoom;
-import io.github.axolotlclient.util.DiscordRPC;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
@@ -93,12 +93,10 @@ public class AxolotlClient implements ClientModInitializer {
 
 		ConfigManager.load();
 
-		if (CONFIG.enableRPC.get()) DiscordRPC.startup();
-
 		modules.forEach((identifier, abstractModule) -> abstractModule.lateInit());
 
 		ResourceLoader.registerBuiltinResourcePack(new Identifier("axolotlclient", "axolotlclient-ui"), container, ResourcePackActivationType.NORMAL);
-		ClientTickEvents.START.register(client -> tickClient());
+		ClientTickEvents.END.register(client -> tickClient());
 
 		LOGGER.info("AxolotlClient Initialized");
 	}
@@ -109,6 +107,7 @@ public class AxolotlClient implements ClientModInitializer {
 		modules.put(HypixelMods.ID, HypixelMods.INSTANCE);
 		modules.put(MotionBlur.ID, new MotionBlur());
         modules.put(ScrollableTooltips.ID, ScrollableTooltips.Instance);
+        modules.put(DiscordRPC.ID, DiscordRPC.getInstance());
 	}
 
 	public static boolean isUsingClient(UUID uuid){
@@ -124,7 +123,6 @@ public class AxolotlClient implements ClientModInitializer {
 	public static void tickClient(){
 
         modules.forEach((identifier, abstractModule) -> abstractModule.tick());
-		DiscordRPC.update();
 		Color.tickChroma();
 
 		if(tickTime % 20 == 0){

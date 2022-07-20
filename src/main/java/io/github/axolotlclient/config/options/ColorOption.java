@@ -3,9 +3,10 @@ package io.github.axolotlclient.config.options;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import io.github.axolotlclient.config.Color;
+import io.github.axolotlclient.config.CommandResponse;
 import org.jetbrains.annotations.NotNull;
 
-public class ColorOption extends OptionBase implements Option {
+public class ColorOption extends OptionBase<Color> {
 
     private final Color def;
     private Color value;
@@ -49,6 +50,22 @@ public class ColorOption extends OptionBase implements Option {
 
     public Color getChroma(){
         return Color.getChroma();
+    }
+
+    @Override
+    protected CommandResponse onCommandExecution(String arg) {
+        if(arg.length()>0){
+            Color newColor = Color.parse(arg);
+            if(newColor== Color.ERROR){
+                return new CommandResponse(false, "Please enter a valid Color in Hex format!");
+            } else {
+                set(newColor);
+                return new CommandResponse(true, "Successfully set "+getName() + " to "+arg);
+            }
+
+        }
+
+        return new CommandResponse(true, getName() + " is currently set to '"+get()+"'.");
     }
 
 }

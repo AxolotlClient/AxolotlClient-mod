@@ -196,27 +196,27 @@ public class ButtonWidgetList extends ButtonListWidget {
 	    @Override
 	    public boolean mouseClicked(double mouseX, double mouseY, int button) {
             if (this.left.isMouseOver(mouseX, mouseY)) {
-                onClick(this.left, mouseX, mouseY);
+                onClick(this.left, mouseX, mouseY, button);
 
                 return true;
             } else if (this.right != null && this.right.isMouseOver(mouseX, mouseY)) {
-                onClick(this.right, mouseX, mouseY);
+                onClick(this.right, mouseX, mouseY, button);
 
                 return true;
             }
             return false;
         }
 
-        protected void onClick(ClickableWidget button, double mouseX, double mouseY){
+        protected void onClick(ClickableWidget button, double mouseX, double mouseY, int mB){
             if (button instanceof OptionSliderWidget){
                 button.isMouseOver(mouseX, mouseY);
                 ConfigManager.save();
             } else if (button instanceof CategoryWidget) {
-                button.mouseClicked(mouseX, mouseY, 0);
+                button.mouseClicked(mouseX, mouseY, mB);
 
             } else if (button instanceof EnumOptionWidget) {
                 button.playDownSound(client.getSoundManager());
-                button.mouseClicked(mouseX, mouseY, 0);
+                button.mouseClicked(mouseX, mouseY, mB);
                 ConfigManager.save();
 
             } else if (button instanceof StringOptionWidget) {

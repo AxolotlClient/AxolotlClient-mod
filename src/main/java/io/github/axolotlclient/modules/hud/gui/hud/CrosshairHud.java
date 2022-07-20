@@ -10,6 +10,7 @@ import io.github.axolotlclient.config.options.BooleanOption;
 import io.github.axolotlclient.config.options.ColorOption;
 import io.github.axolotlclient.config.options.EnumOption;
 import io.github.axolotlclient.config.options.Option;
+import io.github.axolotlclient.config.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
@@ -203,7 +204,7 @@ public class CrosshairHud extends AbstractHudEntry {
     }
 
     @Override
-    public void addConfigOptions(List<Option> options) {
+    public void addConfigOptions(List<OptionBase<?>> options) {
         super.addConfigOptions(options);
         options.add(type);
         options.add(showInF5);

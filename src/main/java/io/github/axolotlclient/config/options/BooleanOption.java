@@ -2,9 +2,10 @@ package io.github.axolotlclient.config.options;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
+import io.github.axolotlclient.config.CommandResponse;
 import org.jetbrains.annotations.NotNull;
 
-public class BooleanOption extends OptionBase {
+public class BooleanOption extends OptionBase<Boolean> {
 
     private boolean option;
     private final boolean Default;
@@ -18,7 +19,7 @@ public class BooleanOption extends OptionBase {
         this(name, null, Default);
     }
 
-    public boolean get(){
+    public Boolean get(){
         return option;
     }
 
@@ -44,6 +45,30 @@ public class BooleanOption extends OptionBase {
 
     public void toggle(){
         this.option=!option;
+    }
+
+    @Override
+    protected CommandResponse onCommandExecution(String arg) {
+        if(arg.length()>0){
+            switch (arg) {
+                case "toggle" -> {
+                    toggle();
+                    return new CommandResponse(true, "Successfully toggled " + getName() + "!");
+                }
+                case "true" -> {
+                    set(true);
+                    return new CommandResponse(true, "Successfully set " + getName() + " to true!");
+                }
+                case "false" -> {
+                    set(false);
+                    return new CommandResponse(true, "Successfully set " + getName() + " to false!");
+                }
+            }
+
+            return new CommandResponse(false, "Please specify either toggle, true or false!");
+        }
+
+        return new CommandResponse(true, getName() + " is currently set to '"+get()+"'.");
     }
 
 }

@@ -15,6 +15,7 @@
 		"MixinChatHud",
 		"MixinClientBrandRetriever",
 		"MixinClientPlayerEntity",
+		"MixinClientPlayNetworkHandler",
 		"MixinClientWorld",
 		"MixinCrashReport",
 		"MixinDebugHud",
@@ -43,7 +44,7 @@
 		"MixinRenderSystem",
 		"MixinScreen",
 		"MixinTitleScreen",
-		"MixinWindow",
+		"MixinWorldListWidgetEntry",
 		"MixinWorldRenderer"
 	],
 	"server": [],

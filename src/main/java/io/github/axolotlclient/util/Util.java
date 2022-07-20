@@ -4,6 +4,8 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.mojang.blaze3d.glfw.Window;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import io.github.axolotlclient.config.options.OptionCategory;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;
@@ -26,10 +28,13 @@ import net.minecraft.scoreboard.Team;
 import net.minecraft.text.Text;
 import net.minecraft.unmapped.C_fijiyucq;
 import org.lwjgl.opengl.GL11;
+import org.quiltmc.qsl.command.api.client.ClientCommandManager;
+import org.quiltmc.qsl.command.api.client.QuiltClientCommandSource;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -55,6 +60,12 @@ public class Util {
     public static int getTicksBetween(int start, int end) {
         if (end < start) end += 24000;
         return end - start;
+    }
+
+    public static void registerCommand(LiteralArgumentBuilder<QuiltClientCommandSource> builder){
+        if(ClientCommandManager.getDispatcher() != null) {
+            ClientCommandManager.getDispatcher().register(builder);
+        }
     }
 
 	public static String getGame(){
@@ -111,6 +122,10 @@ public class Util {
 		Text text = whateverThisIs.method_44037(msg);
 		MinecraftClient.getInstance().player.method_44096(msg, text);
 	}
+
+    public static void sendChatMessage(Text msg){
+        MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(msg);
+    }
 
 	public static List<String> getSidebar() {
 		List<String> lines = new ArrayList<>();

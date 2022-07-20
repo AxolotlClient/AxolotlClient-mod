@@ -8,7 +8,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="AxolotlClient-branding.main" options="--add-modules java.base,java.net.http" />
+      <module name="AxolotlClient-branding.main" options="--add-modules java.base,java.net.http,java.desktop" />
     </option>
   </component>
 </project>

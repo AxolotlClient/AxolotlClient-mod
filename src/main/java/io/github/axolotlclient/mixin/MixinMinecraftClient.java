@@ -1,7 +1,7 @@
 package io.github.axolotlclient.mixin;
 
 import io.github.axolotlclient.NetworkHelper;
-import io.github.axolotlclient.util.DiscordRPC;
+import io.github.axolotlclient.modules.rpc.DiscordRPC;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
@@ -39,19 +39,9 @@ public abstract class MixinMinecraftClient {
         }
     }
 
-	@Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;checkIs64Bit()Z"))
-	public void startup(RunArgs runArgs, CallbackInfo ci){
-		DiscordRPC.startup();
-	}
-
 	@Inject(method = "stop", at = @At("HEAD"))
 	public void stop(CallbackInfo ci){
 		NetworkHelper.setOffline();
 		DiscordRPC.shutdown();
-	}
-
-	@Inject(method = "startOnlineMode", at = @At(value = "HEAD", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;method_1236(Lnet/minecraft/entity/player/PlayerEntity;)V", shift = At.Shift.AFTER))
-	public void login(CallbackInfo ci){
-		NetworkHelper.setOnline();
 	}
 }

@@ -1,6 +1,7 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
 import io.github.axolotlclient.config.options.Option;
+import io.github.axolotlclient.config.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import net.minecraft.client.util.math.MatrixStack;
@@ -53,7 +54,7 @@ public abstract class CleanHudEntry extends AbstractHudEntry {
     }
 
     @Override
-    public void addConfigOptions(List<Option> options) {
+    public void addConfigOptions(List<OptionBase<?>> options) {
         super.addConfigOptions(options);
         options.add(textColor);
         options.add(chroma);

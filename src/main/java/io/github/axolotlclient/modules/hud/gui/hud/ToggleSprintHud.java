@@ -4,6 +4,7 @@ import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.config.ConfigManager;
 import io.github.axolotlclient.config.options.BooleanOption;
 import io.github.axolotlclient.config.options.Option;
+import io.github.axolotlclient.config.options.OptionBase;
 import io.github.axolotlclient.config.options.StringOption;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
@@ -125,7 +126,7 @@ public class ToggleSprintHud extends CleanHudEntry {
     }
 
     @Override
-    public void addConfigOptions(List<Option> options) {
+    public void addConfigOptions(List<OptionBase<?>> options) {
         super.addConfigOptions(options);
         options.add(toggleSprint);
         options.add(toggleSneak);

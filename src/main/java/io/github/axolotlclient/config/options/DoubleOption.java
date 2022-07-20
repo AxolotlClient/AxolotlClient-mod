@@ -2,9 +2,10 @@ package io.github.axolotlclient.config.options;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
+import io.github.axolotlclient.config.CommandResponse;
 import org.jetbrains.annotations.NotNull;
 
-public class DoubleOption extends OptionBase implements Option {
+public class DoubleOption extends OptionBase<Double> {
 
     private double option;
     private final double Default;
@@ -22,7 +23,7 @@ public class DoubleOption extends OptionBase implements Option {
         this(name, null, Default, min, max);
     }
 
-    public double get(){
+    public Double get(){
         return option;
     }
 
@@ -52,4 +53,18 @@ public class DoubleOption extends OptionBase implements Option {
         return new JsonPrimitive(option);
     }
 
+    @Override
+    protected CommandResponse onCommandExecution(String arg) {
+        try {
+            if (arg.length() > 0) {
+                set(Double.parseDouble(arg));
+                return new CommandResponse(true, "Successfully set "+getName()+" to "+get()+"!");
+            }
+        } catch (NumberFormatException ignored){
+            return new CommandResponse(false, "Please specify the number to set "+getName()+" to!");
+        }
+
+        return new CommandResponse(true, getName() + " is currently set to '"+get()+"'.");
+
+    }
 }
