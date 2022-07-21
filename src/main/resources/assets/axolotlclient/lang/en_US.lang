@@ -10,10 +10,6 @@ resource_loading_finished=Loading finished! Starting Minecraft...
 
 general=General
 general.tooltip=General Options
-enableRPC=Enable RPC
-enableRPC.tooltip=Whether to enable Discord RPC.
-showActivity=Show Activity
-showActivity.tooltip=Whether to show your current In-Game Activity.
 loadingBgColor=Loading Screen Color
 loadingBgColor.tooltip=The Background Color of the loading Screen.
 nightMode=Night Mode
@@ -194,6 +190,12 @@ background=Background
 outline=Outline
 outlineColor=Outline Color
 shadow=Shadow
+
+rpc=Discord RPC
+showActivity=Show Activity
+showActivity.tooltip=Whether to show your current In-Game Activity.
+showTime=Show Time
+showTime.tooltip=Whether to show a timestamp.
 
 credits=Credits
 creditsBGM=BGM

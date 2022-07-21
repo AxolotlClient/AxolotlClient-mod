@@ -3,11 +3,9 @@ package io.github.axolotlclient.config.options;
 import io.github.axolotlclient.config.ConfigManager;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.resource.language.I18n;
-import net.minecraft.command.CommandSource;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
 
 import java.util.*;
 
@@ -83,9 +81,9 @@ public class OptionCategory implements Tooltippable {
         }
     }
 
-    protected List<String> getCommandSuggestions(CommandSource source, String[] args, BlockPos pos){
+    protected List<String> getCommandSuggestions(String[] args){
         List<String> list = new ArrayList<>();
-        if(args.length>1){
+        if(args.length>=1){
             for(OptionBase<?> o:getOptions()){
                 if(o.getName().equals(args[0])){
                     list.addAll(o.getCommandSuggestions());

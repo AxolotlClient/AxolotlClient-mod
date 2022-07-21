@@ -1,6 +1,6 @@
 package io.github.axolotlclient.config.options;
 
-import io.github.axolotlclient.config.CommandResponse;
+import io.github.axolotlclient.util.clientCommands.CommandResponse;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Formatting;

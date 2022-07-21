@@ -3,7 +3,7 @@ package io.github.axolotlclient.config.options;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import io.github.axolotlclient.config.Color;
-import io.github.axolotlclient.config.CommandResponse;
+import io.github.axolotlclient.util.clientCommands.CommandResponse;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;

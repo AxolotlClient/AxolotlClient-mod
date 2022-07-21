@@ -72,6 +72,16 @@ if (System.getProperty("os.name").toLowerCase().contains("mac")) {
 	}
 }
 
+// Fix netty with Java 17+ (be happy if it didn't break for you)
+configurations.all {
+	resolutionStrategy {
+		dependencySubstitution {
+			substitute module('io.netty:netty-all:4.0.23.Final') with module('io.netty:netty-all:4.0.25.Final')
+		}
+		force 'io.netty:netty-all:4.0.25.Final'
+	}
+}
+
 processResources {
 	inputs.property "version", project.version
 

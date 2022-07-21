@@ -1,4 +1,4 @@
-package io.github.axolotlclient.config;
+package io.github.axolotlclient.util.clientCommands;
 
 public class CommandResponse {
 

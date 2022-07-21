@@ -5,13 +5,14 @@ import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
+import io.github.axolotlclient.util.clientCommands.ClientCommands;
+import io.github.axolotlclient.util.clientCommands.Command;
 import net.legacyfabric.fabric.api.registry.CommandRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.texture.Texture;
 import net.minecraft.client.util.Window;
 import net.minecraft.command.AbstractCommand;
-import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.NetworkState;
@@ -102,11 +103,11 @@ public class Util {
         MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(msg);
     }
 
-    public static void registerCommand(String command, CommandExecutionCallback onExecution){
-        registerCommand(command, null, onExecution);
+    public static void registerCommand(String command, Command.CommandSuggestionCallback suggestions, Command.CommandExecutionCallback onExecution){
+        ClientCommands.getInstance().registerCommand(command, suggestions, onExecution);
     }
 
-    public static void registerCommand(String command, CommandSuggestionCallback suggestions, CommandExecutionCallback onExecution){
+    /*public static void registerCommand(String command, CommandSuggestionCallback suggestions, CommandExecutionCallback onExecution){
         CommandRegistry.INSTANCE.register(new AbstractCommand() {
             @Override
             public String getCommandName() {
@@ -119,7 +120,7 @@ public class Util {
             }
 
             @Override
-            public void execute(CommandSource source, String[] args) throws CommandException {
+            public void execute(CommandSource source, String[] args) {
                 onExecution.onExecution(args);
             }
 
@@ -128,7 +129,7 @@ public class Util {
                 return suggestions.getSuggestions(source, args, pos);
             }
         });
-    }
+    }*/
 
     public interface CommandExecutionCallback {
         void onExecution(String[] args);
@@ -136,6 +137,12 @@ public class Util {
 
     public interface CommandSuggestionCallback {
         List<String> getSuggestions(CommandSource source, String[] args, BlockPos pos);
+    }
+
+    public static String[] copyArrayWithoutFirstEntry(String[] strings) {
+        String[] strings2 = new String[strings.length - 1];
+        System.arraycopy(strings, 1, strings2, 0, strings.length - 1);
+        return strings2;
     }
 
     public static String getGame(){
