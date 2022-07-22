@@ -23,6 +23,13 @@ public class BooleanWidget extends ButtonWidget {
         this.message = option.get()? I18n.translate ("options."+"on"): I18n.translate ("options."+"off");
     }
 
+    public void mouseClicked(int mouseX, int mouseY, int button){
+        if(!option.getForceDisabled()){
+            option.toggle();
+        }
+        updateMessage();
+    }
+
     @Override
     public boolean isMouseOver(MinecraftClient client, int mouseX, int mouseY) {
         if(MinecraftClient.getInstance().currentScreen instanceof OptionsScreenBuilder &&
@@ -40,7 +47,9 @@ public class BooleanWidget extends ButtonWidget {
         this.hovered = isMouseOver(client, mouseX, mouseY);
 
         renderBg();
-        renderSwitch();
+        if(!option.getForceDisabled()) {
+            renderSwitch();
+        }
 
         int color = option.get()? 0x55FF55 : 0xFF5555;
 

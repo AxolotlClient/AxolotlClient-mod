@@ -4,14 +4,18 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import io.github.axolotlclient.util.clientCommands.CommandResponse;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class BooleanOption extends OptionBase<Boolean> {
 
     private boolean option;
     private final boolean Default;
+    private boolean forceOff = false;
+    private DisableReason disableReason;
 
     public BooleanOption(String name, String tooltipLocation, boolean Default) {
         super(name, tooltipLocation);
@@ -23,10 +27,15 @@ public class BooleanOption extends OptionBase<Boolean> {
     }
 
     public Boolean get(){
+        if(getForceDisabled()) return false;
         return option;
     }
 
-    public void set(boolean set){option = set;}
+    public void set(boolean set){
+        if(!getForceDisabled()) {
+            option = set;
+        }
+    }
 
     @Override
     public OptionType getType() {
@@ -35,7 +44,9 @@ public class BooleanOption extends OptionBase<Boolean> {
 
     @Override
     public void setValueFromJsonElement(@NotNull JsonElement element) {
-        option = element.getAsBoolean();
+        if(!getForceDisabled()) {
+            option = element.getAsBoolean();
+        }
     }
 
     @Override
@@ -48,13 +59,37 @@ public class BooleanOption extends OptionBase<Boolean> {
     }
 
     public void toggle(){
-        this.option=!option;
+        if(!getForceDisabled()) {
+            this.option = !option;
+        }
+    }
+
+    public boolean getForceDisabled(){
+        return forceOff;
+    }
+
+    public void setForceOff(boolean forceOff, DisableReason reason){
+        this.forceOff=forceOff;
+        disableReason=reason;
+    }
+
+    @Override
+    public @Nullable String getTooltip(String location) {
+        if(getForceDisabled()){
+            return super.getTooltip("disableReason."+disableReason.toString().toLowerCase(Locale.ROOT));
+        }
+        return super.getTooltip(location);
     }
 
     @Override
     protected CommandResponse onCommandExecution(String[] args) {
         if(args.length>0){
+
             String arg = args[0];
+            if(forceOff){
+                return new CommandResponse(false, "You cannot use this option since it's force disabled.");
+            }
+
             switch (arg) {
                 case "toggle":
                     toggle();

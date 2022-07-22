@@ -1,5 +1,7 @@
 package io.github.axolotlclient.util;
 
+import java.util.Locale;
+
 public class OSUtil {
 
     private static OperatingSystem OS;
@@ -10,7 +12,7 @@ public class OSUtil {
 
             for (OperatingSystem o : OperatingSystem.values()) {
                 for (String v : o.getStrings()) {
-                    if (s.contains(v)) {
+                    if (s.trim().toLowerCase(Locale.ROOT).contains(v)) {
                         OS = o;
                         return OS;
                     }

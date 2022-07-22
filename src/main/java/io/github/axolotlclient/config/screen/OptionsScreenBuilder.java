@@ -2,6 +2,7 @@ package io.github.axolotlclient.config.screen;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.config.Color;
 import io.github.axolotlclient.config.ConfigManager;
 import io.github.axolotlclient.config.options.ColorOption;
 import io.github.axolotlclient.config.options.OptionCategory;
@@ -35,12 +36,13 @@ public class OptionsScreenBuilder extends Screen {
     @Override
     public void render(int mouseX, int mouseY, float tickDelta) {
         if(AxolotlClient.someNiceBackground.get()) { // Credit to pridelib for the colors
-            DrawUtil.fill(0, 0, width, height/6, 0x0Fff0018);
-            DrawUtil.fill(0, height/6, width, height*2/6, 0x0Fffa52c);
-            DrawUtil.fill(0, height*2/6, width, height/2, 0x0Fffff41);
-            DrawUtil.fill(0, height*2/3, width, height*5/6, 0x0F0000f9);
-            DrawUtil.fill(0, height/2, width, height*2/3, 0x0F008018);
-            DrawUtil.fill(0, height*5/6, width, height, 0x0F86007d);
+            int alpha=client.world==null?255:127;
+            DrawUtil.fill(0, 0, width, height/6, new Color(0xFFff0018).withAlpha(alpha).getAsInt());
+            DrawUtil.fill(0, height/6, width, height*2/6, new Color(0xFFffa52c).withAlpha(alpha).getAsInt());
+            DrawUtil.fill(0, height*2/6, width, height/2, new Color(0xFFffff41).withAlpha(alpha).getAsInt());
+            DrawUtil.fill(0, height*2/3, width, height*5/6, new Color(0xFF0000f9).withAlpha(alpha).getAsInt());
+            DrawUtil.fill(0, height/2, width, height*2/3, new Color(0xFF008018).withAlpha(alpha).getAsInt());
+            DrawUtil.fill(0, height*5/6, width, height, new Color(0xFF86007d).withAlpha(alpha).getAsInt());
         } else {
             if(this.client.world!=null)DrawUtil.fill(0,0, width, height, 0xB0100E0E);
             else renderDirtBackground(0);

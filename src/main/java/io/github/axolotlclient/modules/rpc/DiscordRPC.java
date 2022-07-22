@@ -7,9 +7,11 @@ import de.jcm.discordgamesdk.activity.Activity;
 import de.jcm.discordgamesdk.activity.ActivityType;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.config.options.BooleanOption;
+import io.github.axolotlclient.config.options.DisableReason;
 import io.github.axolotlclient.config.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.modules.rpc.gameSdk.GameSdkDownloader;
+import io.github.axolotlclient.util.OSUtil;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
@@ -52,6 +54,9 @@ public class DiscordRPC extends AbstractModule {
 
         AxolotlClient.CONFIG.addCategory(category);
 
+        if(OSUtil.getOS()== OSUtil.OperatingSystem.OTHER){
+            enabled.setForceOff(true, DisableReason.CRASH);
+        }
     }
 
     public void initRPC(){
@@ -123,9 +128,11 @@ public class DiscordRPC extends AbstractModule {
     }
 
     public static void setWorld(String world){
-        currentActivity.setDetails("World: "+ world);
-        if(discordRPC.isOpen()) {
-            discordRPC.activityManager().updateActivity(currentActivity);
+        if(running && currentActivity!=null) {
+            currentActivity.setDetails("World: " + world);
+            if (discordRPC.isOpen()) {
+                discordRPC.activityManager().updateActivity(currentActivity);
+            }
         }
     }
 

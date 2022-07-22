@@ -265,8 +265,7 @@ public class ButtonWidgetList extends EntryListWidget {
 
             } else if (button instanceof BooleanWidget) {
                 button.playDownSound(client.getSoundManager());
-                ((BooleanWidget) button).option.toggle();
-                ((BooleanWidget) button).updateMessage();
+                ((BooleanWidget) button).mouseClicked(mouseX, mouseY, mB);
                 ConfigManager.save();
 
             } else if (button instanceof ColorOptionWidget) {

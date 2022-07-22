@@ -38,8 +38,9 @@ public class CategoryWidget extends ButtonWidget {
             return false;
         }
 
-        if(enabledButton!=null && enabledButton.isMouseOver(client, mouseX, mouseY)) {
+        if(enabledButton!=null && enabledButton.isMouseOver(client, mouseX, mouseY) ) {
             this.hovered = false;
+            return true;
         }
         return super.isMouseOver(client, mouseX, mouseY);
     }
@@ -50,7 +51,7 @@ public class CategoryWidget extends ButtonWidget {
             TextRenderer textRenderer = client.textRenderer;
             client.getTextureManager().bindTexture(WIDGETS_LOCATION);
             GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-            this.hovered = isMouseOver(client, mouseX, mouseY);
+            this.hovered = super.isMouseOver(client, mouseX, mouseY)&& (enabledButton == null || !enabledButton.isMouseOver(client, mouseX, mouseY));
             int i = this.getYImage(this.hovered);
             GlStateManager.enableBlend();
             GlStateManager.blendFuncSeparate(770, 771, 1, 0);
@@ -78,8 +79,7 @@ public class CategoryWidget extends ButtonWidget {
         playDownSound(MinecraftClient.getInstance().getSoundManager());
         if(enabledButton!=null &&
                 enabledButton.isHovered()) {
-            enabledButton.option.toggle();
-            enabledButton.updateMessage();
+            enabledButton.mouseClicked(mouseX, mouseY, 0);
         } else {
             MinecraftClient.getInstance().openScreen(new OptionsScreenBuilder(MinecraftClient.getInstance().currentScreen, category));
         }
