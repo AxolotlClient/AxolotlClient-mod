@@ -8,10 +8,6 @@
 
 	"general": "General",
 	"general.tooltip": "General Options",
-	"enableRPC": "Enable RPC",
-	"enableRPC.tooltip": "Whether to enable Discord RPC.",
-	"showActivity": "Show Activity",
-	"showActivity.tooltip": "Whether to show your current In-Game Activity.",
 	"loadingBgColor": "Loading Screen Color",
 	"loadingBgColor.tooltip": "The Background Color of the loading Screen.",
 	"nightMode": "Night Mode",
@@ -201,6 +197,12 @@
 	"outlineColor": "Outline Color",
 	"shadow": "Shadow",
 
+	"rpc": "Discord RPC",
+	"showActivity": "Show Activity",
+	"showActivity.tooltip": "Whether to show your current In-Game Activity.",
+	"showTime": "Show Time",
+	"showTime.tooltip": "Whether to show a timestamp.",
+
 	"credits": "Credits",
 	"creditsBGM": "BGM",
 	"contributors": "Contributors:",
@@ -209,6 +211,12 @@
 	"pickColor": "Pick Color",
 	"currentColor": "Current",
 	"alpha": "Alpha",
+	"red": "Red",
+	"green": "Green",
+	"blue": "Blue",
+
+	"disableReason.crash.tooltip": "This option has been disabled <br>because it would crash your game.",
+	"disableReason.ban_reason.tooltip": "This option is disabled <br>because it is known to be bannable on your current server.",
 
 	"back": "Back",
 	"close": "Close"

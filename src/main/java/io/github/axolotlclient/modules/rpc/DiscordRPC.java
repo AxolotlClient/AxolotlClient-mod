@@ -7,9 +7,11 @@ import de.jcm.discordgamesdk.activity.Activity;
 import de.jcm.discordgamesdk.activity.ActivityType;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.config.options.BooleanOption;
+import io.github.axolotlclient.config.options.DisableReason;
 import io.github.axolotlclient.config.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.modules.rpc.gameSdk.GameSdkDownloader;
+import io.github.axolotlclient.util.OSUtil;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
@@ -51,6 +53,10 @@ public class DiscordRPC extends AbstractModule {
         category.add(enabled, showTime, showActivity);
 
         AxolotlClient.CONFIG.addCategory(category);
+
+        if(OSUtil.getOS() == OSUtil.OperatingSystem.OTHER){
+            enabled.setForceOff(true, DisableReason.CRASH);
+        }
 
     }
 

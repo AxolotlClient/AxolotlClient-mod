@@ -1,6 +1,7 @@
 package io.github.axolotlclient.config.screen;
 
 import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.config.Color;
 import io.github.axolotlclient.config.ConfigManager;
 import io.github.axolotlclient.config.options.ColorOption;
 import io.github.axolotlclient.config.options.OptionCategory;
@@ -34,16 +35,17 @@ public class OptionsScreenBuilder extends Screen {
 
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        if(MinecraftClient.getInstance().world!=null)DrawUtil.fill(matrices, 0,0, width, height, 0xB0100E0E);
-        else renderBackgroundTexture(0);
-
         if(AxolotlClient.someNiceBackground.get()) { // Credit to pridelib for the colors
-            DrawUtil.fill(matrices, 0, 0, width, height/6, 0xFFff0018);
-            DrawUtil.fill(matrices, 0, height/6, width, height*2/6, 0xFFffa52c);
-            DrawUtil.fill(matrices, 0, height*2/6, width, height/2, 0xFFffff41);
-            DrawUtil.fill(matrices, 0, height*2/3, width, height*5/6, 0xFF0000f9);
-            DrawUtil.fill(matrices, 0, height/2, width, height*2/3, 0xFF008018);
-            DrawUtil.fill(matrices, 0, height*5/6, width, height, 0xFF86007d);
+            int alpha=MinecraftClient.getInstance().world==null?255:127;
+            DrawUtil.fill(matrices, 0, 0, width, height/6, new Color(0xFFff0018).withAlpha(alpha).getAsInt());
+            DrawUtil.fill(matrices, 0, height/6, width, height*2/6, new Color(0xFFffa52c).withAlpha(alpha).getAsInt());
+            DrawUtil.fill(matrices, 0, height*2/6, width, height/2, new Color(0xFFffff41).withAlpha(alpha).getAsInt());
+            DrawUtil.fill(matrices, 0, height*2/3, width, height*5/6, new Color(0xFF0000f9).withAlpha(alpha).getAsInt());
+            DrawUtil.fill(matrices, 0, height/2, width, height*2/3, new Color(0xFF008018).withAlpha(alpha).getAsInt());
+            DrawUtil.fill(matrices, 0, height*5/6, width, height, new Color(0xFF86007d).withAlpha(alpha).getAsInt());
+        } else {
+            if(MinecraftClient.getInstance().world!=null)DrawUtil.fill(matrices,0,0, width, height, 0xB0100E0E);
+            else renderBackgroundTexture(0);
         }
 
         this.list.render(matrices, mouseX, mouseY, delta);

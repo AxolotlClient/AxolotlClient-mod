@@ -3,12 +3,18 @@ package io.github.axolotlclient.config.options;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import io.github.axolotlclient.config.CommandResponse;
+import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Locale;
 
 public class BooleanOption extends OptionBase<Boolean> {
 
     private boolean option;
     private final boolean Default;
+    private boolean forceOff = false;
+    private DisableReason disableReason;
 
     public BooleanOption(String name, String tooltipLocation, boolean Default) {
         super(name, tooltipLocation);
@@ -20,18 +26,26 @@ public class BooleanOption extends OptionBase<Boolean> {
     }
 
     public Boolean get(){
+        if(getForceDisabled()) return false;
         return option;
     }
 
-    public void set(boolean set){option = set;}
+    public void set(boolean set){
+        if(!getForceDisabled()) {
+            option = set;
+        }
+    }
 
     @Override
     public OptionType getType() {
         return OptionType.BOOLEAN;
     }
+
     @Override
     public void setValueFromJsonElement(@NotNull JsonElement element) {
-        option = element.getAsBoolean();
+        if(!getForceDisabled()) {
+            option = element.getAsBoolean();
+        }
     }
 
     @Override
@@ -45,6 +59,23 @@ public class BooleanOption extends OptionBase<Boolean> {
 
     public void toggle(){
         this.option=!option;
+    }
+
+    public boolean getForceDisabled(){
+        return forceOff;
+    }
+
+    public void setForceOff(boolean forceOff, DisableReason reason){
+        this.forceOff=forceOff;
+        disableReason=reason;
+    }
+
+    @Override
+    public @Nullable Text getTooltip(String location) {
+        if(getForceDisabled()){
+            return super.getTooltip("disableReason."+disableReason.toString().toLowerCase(Locale.ROOT));
+        }
+        return super.getTooltip(location);
     }
 
     @Override

@@ -17,7 +17,6 @@ public class BooleanWidget extends ButtonWidget {
         super(x, y, width, height, Text.of(""), buttonWidget -> option.toggle());
         this.active=true;
         this.option=option;
-        //updateMessage();
     }
 
     public Text getMessage(){
@@ -39,7 +38,9 @@ public class BooleanWidget extends ButtonWidget {
         this.hovered = isMouseOver(mouseX, mouseY);
 
         renderBg(matrices);
-        renderSwitch(matrices);
+        if(!option.getForceDisabled()) {
+            renderSwitch(matrices);
+        }
 
         int color = option.get()? 0x55FF55 : 0xFF5555;
 
