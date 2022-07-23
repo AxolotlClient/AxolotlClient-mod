@@ -9,24 +9,48 @@ sky_loading_text=Lade Himmelstexturen aus Pack
 resource_loading_finished=Laden beendet! Starte Minecraft...
 
 general=Allgemein
-general.title=Allgemeine Optionen
-enableRPC=Aktiviere RPC
+general.tooltip=Allgemeine Optionen
 showActivity=Zeige Aktivität
 loadingBgColor=Ladebildschirmfarbe
+loadingBgColor.tooltip=Die Hintergrundfarbe des Ladebildschirms
 nightMode=Blaufilter
+nightMode.tooltip=Verringert blaue Farben.
 quickToggles=Quick Toggles
+quickToggles.tooltip=Ob ein kleiner Schalter auf Kategorien angezeigt werden soll,<br>wenn diese eine 'Aktiviert' Option enthalten.
+showOptionTooltips=Option-Tooltips
+showOptionTooltips.tooltip=Ob Tooltips von Optionen im Menü angezeigt werden sollen.
+showCategoryTooltips=Kategorie-Tooltips
+showCategoryTooltips.tooltip=Ob Tooltips von Kategorien im Menü angezeigt werden sollen.
 
 rendering=Renderoptionen
 customSky=Benutzerdefinierte Himmel
 showSunMoon=Zeige Sonne & Mond auf eigenem Himmel
 cloudHeight=Wolkenhöhe
+zoom=Zoom
 zoomDivisor=Zoom Divisor
 zoomSpeed=Zoomgeschwindigkeit
+zoomScrolling=Zoom Scrollen
+zoomScrolling.tooltip=Ob mit scrollen der Zoomfaktor verändert werden kann.
+decreaseSensitivity.tooltip=Ob während gezoomt wird die Maussensitivität verringert werden soll.
+smoothCamera=Smooth Camera
+smoothCamera.tooltip=Whether to enable smooth camera while zoomed.
 decreaseSensitivity=Reduziere Sensitivität
 dynamicFov=Dynamisches FOV
 fullBright=FullBright
+lowFire=Low Fire
+lowFire.tooltip=Verringert die Höhe des Feuer-Overlays
+motionBlur=Motion Blur
 strength=Stärke
 inGuis=in GUIs anwenden
+timeChanger=Time Changer
+time=Time
+blockOutlines=Block Outlines
+outlineWidth=Breite
+scrollableTooltips=Scrollable Tooltips
+shiftHorizontalScroll=Horizontales Scrollen (wenn Taste gedrückt)
+shiftHorizontalScroll.tooltip=Ob horizontal gescrollt werden soll, <br>falls ein spezifischer Knopf gedrückt ist. <br>Dieser kann in den Controls-Einstellungen geändert werden.
+scrollAmount=Scrollstufe
+scrollAmount.tooltip=Wie viel der Tooltip beim scrollen verschoben wird.
 
 nametagOptions=Nametag Optionen
 showOwnNametag=Zeige eigenes Nametag
@@ -59,6 +83,14 @@ hideOwnName=Verstecke deinen Namen
 hideOtherNames=Verstecke Namen anderer
 hideOwnSkin=Verstecke deinen Skin
 hideOtherSkins=Verstecke andere Skins
+cache_mode=Cache Mode
+cache_mode.tooltip=Wann gecachte Spielerdaten gelöscht werden sollen.<br> <br>Bei Client Disconnect: Lösche Daten wenn du den Server verlässt. <br>Bei Spieler disconnect: Löschen Daten eines Spielers, wenn dieser die Welt verlässt.
+ON_CLIENT_DISCONNECT=Bei Client Disconnect
+ON_PLAYER_DISCONNECT=Bei Spieler Disconnect
+hideOwnName.tooltip=Verstecke deinen Namen.
+hideOtherNames.tooltip=Verstecke die Namen anderer.
+autoBoop=AutoBoop
+autoBoop.enabled.tooltip=Ob /boop <player> ausgeführt werden soll, wenn ein Freund Hypixel betritt.
 
 category.axolotlclient=AxolotlClient
 
@@ -66,6 +98,7 @@ key.zoom=Zoom
 key.openHud=Öffne Hud Editor
 key.toggleSneak=Toggle Sneaking
 key.toggleSprint=Toggle Sprinting
+key.scrollHorizontally=Horizontales Scrollen
 
 hud=Hud Optionen
 pinghud=Ping Hud
@@ -83,7 +116,7 @@ backgroundcolor=Hintergrundfarbe (Hauptteil)
 scores=Zeige Werte
 scorecolor=Wertfarbe
 crosshairhud=Crosshair HUD
-type=Typ
+crosshair_type=Typ
 showInF5=In Er-Perspektive zeigen
 showInF3=In Debug-HUD Anzeige erzwingen
 defaultcolor=Farbe (default)
@@ -116,16 +149,23 @@ showA=Zeige A
 showS=Zeige S
 showD=Zeige D
 showSpace=Zeige Leertaste
-
+iphud=IPHud
+IconHud=IconHUD
 togglesprint=ToggleModifiers
 randomPlaceholder=Zufälliger Platzhalter
 sprinting_toggled=Sprinting [Toggled]
 sneaking_toggled=Sneaking [Toggled]
 sprinting_pressed=Sprinting [Key held]
 sneaking_pressed=Sneaking [Key held]
-
-iphud=IPHud
-IconHud=IconHUD
+showProtectionLevel=Zeige Schutzlevel
+chatHistoryLength=Chatverlaufslänge
+chatHistoryLength.tooltip=Verändert die Länge des Chatverlaufs. <br>Unendlich wenn beim Maximum. <br>Funktioniert auch im Vanilla-chat.
+chathud.background.tooltip=Ob der Chathintergrund aktiviert ist.<br>Funktioniert auch im Vanilla-chat.
+scrollbarColor=Scrollleistenfarbe
+lineSpacing=Zeilenabstand
+timeout=Timeout
+reachdisplayhud=ReachDisplay HUD
+blocks=Blöcke
 
 toggleSprint=Erlaube Sprint toggle
 toggleSneak=Erlaube Sneak toggle
@@ -151,4 +191,25 @@ outline=Umrandung
 outlineColor=Umrandungsfarbe
 shadow=Schatten
 
+rpc=Discord RPC
+showActivity.tooltip=Ob deine geradige In-Game Aktivität angezeigt werden soll.
+showTime=Zeige Zeitstempel
+showTime.tooltip=Ob ein Zeitstempel in Discord angezeigt werden soll.
+
+credits=Credits
+creditsBGM=BGM
+contributors=Contributors:
+other_people=Andere Menschen:
+
+pickColor=Wähle eine Farbe
+currentColor=Gerade gewählt
+alpha=Transparenz
+red=Rot
+green=Grün
+blue=Blau
+
+disableReason.crash.tooltip=Diese Option ist deaktiviert <br>da sie dein Spiel crashen würde.
+disableReason.ban_reason.tooltip=Diese Option ist deaktiviert <br>da sie zu einem Ban auf deinem geradigen Server führen kann.
+
 back=Zurück
+close=Schließen

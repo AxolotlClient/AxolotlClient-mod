@@ -7,13 +7,10 @@ import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import io.github.axolotlclient.util.clientCommands.ClientCommands;
 import io.github.axolotlclient.util.clientCommands.Command;
-import net.legacyfabric.fabric.api.registry.CommandRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.texture.Texture;
 import net.minecraft.client.util.Window;
-import net.minecraft.command.AbstractCommand;
-import net.minecraft.command.CommandSource;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.NetworkState;
 import net.minecraft.network.ServerAddress;
@@ -31,7 +28,7 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 
 import java.net.InetAddress;
@@ -107,38 +104,6 @@ public class Util {
         ClientCommands.getInstance().registerCommand(command, suggestions, onExecution);
     }
 
-    /*public static void registerCommand(String command, CommandSuggestionCallback suggestions, CommandExecutionCallback onExecution){
-        CommandRegistry.INSTANCE.register(new AbstractCommand() {
-            @Override
-            public String getCommandName() {
-                return command;
-            }
-
-            @Override
-            public String getUsageTranslationKey(CommandSource source) {
-                return "commands."+command+".usage";
-            }
-
-            @Override
-            public void execute(CommandSource source, String[] args) {
-                onExecution.onExecution(args);
-            }
-
-            @Override
-            public List<String> getAutoCompleteHints(CommandSource source, String[] args, BlockPos pos) {
-                return suggestions.getSuggestions(source, args, pos);
-            }
-        });
-    }*/
-
-    public interface CommandExecutionCallback {
-        void onExecution(String[] args);
-    }
-
-    public interface CommandSuggestionCallback {
-        List<String> getSuggestions(CommandSource source, String[] args, BlockPos pos);
-    }
-
     public static String[] copyArrayWithoutFirstEntry(String[] strings) {
         String[] strings2 = new String[strings.length - 1];
         System.arraycopy(strings, 1, strings2, 0, strings.length - 1);
@@ -151,7 +116,9 @@ public class Util {
 
         if(sidebar.isEmpty()) game = "";
         else if (MinecraftClient.getInstance().getCurrentServerEntry() != null && MinecraftClient.getInstance().getCurrentServerEntry().address.toLowerCase().contains(sidebar.get(0).toLowerCase())){
-            if ( sidebar.get(sidebar.size() -1).toLowerCase(Locale.ENGLISH).contains(MinecraftClient.getInstance().getCurrentServerEntry().address.toLowerCase(Locale.ENGLISH)) || sidebar.get(sidebar.size()-1).contains("Playtime")){
+            if ( sidebar.get(sidebar.size() -1).toLowerCase(Locale.ROOT)
+                    .contains(MinecraftClient.getInstance().getCurrentServerEntry().address.toLowerCase(Locale.ROOT)) ||
+                    sidebar.get(sidebar.size()-1).contains("Playtime")){
                 game = "In Lobby";
             }  else {
                 if (sidebar.get(sidebar.size()-1).contains("--------")){
@@ -172,6 +139,13 @@ public class Util {
         return Formatting.strip( game);
     }
 
+    public static double calculateDistance(Vec3d pos1, Vec3d pos2){
+        return calculateDistance(pos1.x, pos2.x, pos1.y, pos2.y, pos1.z, pos2.z);
+    }
+
+    public static double calculateDistance(double x1, double x2, double y1, double y2, double z1, double z2) {
+        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2) + Math.pow(z2 - z1, 2));
+    }
 
     public static List<String> getSidebar() {
         List<String> lines = new ArrayList<>();

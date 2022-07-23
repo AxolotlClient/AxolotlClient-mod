@@ -29,7 +29,7 @@ import java.util.Objects;
 public class CrosshairHud extends AbstractHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "crosshairhud");
 
-    private final EnumOption type = new EnumOption("type", CrosshairOption.values(), CrosshairOption.TEXTURE.toString());
+    private final EnumOption type = new EnumOption("crosshair_type", CrosshairOption.values(), CrosshairOption.TEXTURE.toString());
     private final BooleanOption showInF5 = new BooleanOption("showInF5", false);
     public final BooleanOption showInF3 = new BooleanOption("showInF3", false);
     private final ColorOption defaultColor = new ColorOption("defaultcolor",  "#FFFFFFFF");
@@ -60,7 +60,10 @@ public class CrosshairHud extends AbstractHudEntry {
 
         Color color = getColor();
         GlStateManager.color4f((float) color.getRed() / 255, (float) color.getGreen() / 255, (float) color.getBlue() / 255, 1F);
-        GlStateManager.blendFuncSeparate(775, 769, 1, 0);
+        if(color==defaultColor.get()) {
+            GlStateManager.enableBlend();
+            GlStateManager.blendFuncSeparate(775, 769, 1, 0);
+        }
         DrawPosition pos = getPos().subtract(0, -1);
         if (Objects.equals(type.get(), CrosshairOption.DOT.toString())) {
 

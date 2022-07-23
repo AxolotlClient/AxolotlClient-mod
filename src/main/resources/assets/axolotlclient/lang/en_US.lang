@@ -39,7 +39,6 @@ strength=Strength
 inGuis=Apply to GUIs
 lowFire=Low Fire
 lowFire.tooltip=Reduces the height of the fire overlay if you are burning
-
 motionBlur=Motion Blur
 zoom=Zoom
 timeChanger=Time Changer
@@ -117,7 +116,7 @@ backgroundcolor=Backgroundcolor (Main part)
 scores=Show Scores
 scorecolor=Score color
 crosshairhud=Crosshair HUD
-type=Type
+crosshair_type=Type
 showInF5=Show in 3rd Perspective
 showInF3=Force on Debug HUD
 defaultcolor=Color (default)
@@ -156,14 +155,14 @@ showA=Show A
 showS=Show S
 showD=Show D
 showSpace=Show Spacebar
-
+reachdisplayhud=ReachDisplay HUD
+blocks=Blocks
 togglesprint=ToggleModifiers
 randomPlaceholder=Random Placeholder
 sprinting_toggled=Sprinting [Toggled]
 sneaking_toggled=Sneaking [Toggled]
 sprinting_pressed=Sprinting [Key held]
 sneaking_pressed=Sneaking [Key held]
-
 iphud=IP HUD
 IconHud=Icon HUD
 

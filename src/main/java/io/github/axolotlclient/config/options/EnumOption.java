@@ -94,6 +94,13 @@ public class EnumOption extends OptionBase<String> {
                 return new CommandResponse(true, "Successfully set "+getName()+" to "+get()+"!");
             }
 
+            for (int i=0;i<values.length;i++){
+                if(args[0].equalsIgnoreCase(values[i])){
+                    this.i=i;
+                    return new CommandResponse(true, "Successfully set "+getName()+" to "+get()+" (Index: "+i+")!");
+                }
+            }
+
             try {
                 int value = Integer.parseInt(args[0]);
                 if(value>values.length-1 || value < 0){
