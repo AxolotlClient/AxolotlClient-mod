@@ -1,6 +1,5 @@
 package io.github.axolotlclient.config.screen.widgets;
 
-import com.mojang.blaze3d.glfw.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.config.Color;
 import io.github.axolotlclient.config.options.ColorOption;
@@ -13,8 +12,10 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.util.Window;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import org.lwjgl.opengl.GL11;
 
@@ -50,7 +51,7 @@ public class ColorSelectionWidget extends ButtonWidget {
     protected TextFieldWidget textInput;
 
     public ColorSelectionWidget(ColorOption option) {
-        super(100, 50, 0, 0, Text.empty(), (buttonWidget)->{});
+        super(100, 50, 0, 0, Text.of(""), (buttonWidget)->{});
         this.option=option;
         init();
     }
@@ -130,7 +131,7 @@ public class ColorSelectionWidget extends ButtonWidget {
         }
 
         textInput = new TextFieldWidget(MinecraftClient.getInstance().textRenderer,
-            currentRect.x, currentRect.y + currentRect.height + 10, currentRect.width, 20, Text.empty());
+            currentRect.x, currentRect.y + currentRect.height + 10, currentRect.width, 20, Text.of(""));
     }
 
     @Override
@@ -139,16 +140,16 @@ public class ColorSelectionWidget extends ButtonWidget {
         DrawUtil.fillRect(matrices, picker, Color.DARK_GRAY.withAlpha(127));
         DrawUtil.outlineRect(matrices, picker, Color.BLACK);
 
-        drawCenteredText(matrices, MinecraftClient.getInstance().textRenderer, Text.translatable("pickColor"), MinecraftClient.getInstance().getWindow().getScaledWidth()/2, 54, -1);
+        drawCenteredText(matrices, MinecraftClient.getInstance().textRenderer, new TranslatableText("pickColor"), MinecraftClient.getInstance().getWindow().getScaledWidth()/2, 54, -1);
 
-        DrawUtil.drawTextWithShadow(matrices, MinecraftClient.getInstance().textRenderer, Text.translatable("currentColor").append(":") ,currentRect.x, currentRect.y - 10, -1);
+        DrawUtil.drawTextWithShadow(matrices, MinecraftClient.getInstance().textRenderer, new TranslatableText("currentColor").append(":") ,currentRect.x, currentRect.y - 10, -1);
 
         DrawUtil.fillRect(matrices, currentRect, option.get());
         DrawUtil.outlineRect(matrices, currentRect, Color.DARK_GRAY.withAlpha(127));
 
-        RenderSystem.setShaderColor(1, 1, 1, 1);
+        RenderSystem.color4f(1, 1, 1, 1);
 
-        RenderSystem.setShaderTexture(0, wheel);
+        MinecraftClient.getInstance().getTextureManager().bindTexture(wheel);
         DrawableHelper.drawTexture(matrices, pickerImage.x, pickerImage.y, 0, 0, pickerImage.width, pickerImage.height, pickerImage.width, pickerImage.height);
         DrawUtil.outlineRect(matrices, pickerOutline, Color.DARK_GRAY);
 
@@ -176,7 +177,7 @@ public class ColorSelectionWidget extends ButtonWidget {
         }
 
         if(option.get().getAlpha() != alphaSlider.getSliderValueAsInt()){
-            if(alphaSlider.isHoveredOrFocused() || alphaSlider.dragging){
+            if(alphaSlider.isHovered() || alphaSlider.dragging){
                 option.set(new Color(option.get().getRed(), option.get().getGreen(), option.get().getBlue(), alpha.get()));
             } else {
                 alpha.set(option.get().getAlpha());
@@ -186,7 +187,7 @@ public class ColorSelectionWidget extends ButtonWidget {
 
         if(slidersVisible) {
             if (option.get().getRed() != redSlider.getSliderValueAsInt()) {
-                if (redSlider.isHoveredOrFocused() || redSlider.dragging) {
+                if (redSlider.isHovered() || redSlider.dragging) {
                     option.set(new Color(red.get(), option.get().getGreen(), option.get().getBlue(), option.get().getAlpha()));
                 } else {
                     red.set(option.get().getRed());
@@ -195,7 +196,7 @@ public class ColorSelectionWidget extends ButtonWidget {
             }
 
             if (option.get().getGreen() != greenSlider.getSliderValueAsInt()) {
-                if (greenSlider.isHoveredOrFocused() || greenSlider.dragging) {
+                if (greenSlider.isHovered() || greenSlider.dragging) {
                     option.set(new Color(option.get().getRed(), green.get(), option.get().getBlue(), option.get().getAlpha()));
                 } else {
                     green.set(option.get().getGreen());
@@ -204,7 +205,7 @@ public class ColorSelectionWidget extends ButtonWidget {
             }
 
             if (option.get().getBlue() != blueSlider.getSliderValueAsInt()) {
-                if (blueSlider.isHoveredOrFocused() || blueSlider.dragging) {
+                if (blueSlider.isHovered() || blueSlider.dragging) {
                     option.set(new Color(option.get().getRed(), option.get().getGreen(), blue.get(), option.get().getAlpha()));
                 } else {
                     blue.set(option.get().getBlue());

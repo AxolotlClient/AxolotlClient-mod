@@ -1,22 +1,19 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
 import io.github.axolotlclient.config.options.BooleanOption;
-import io.github.axolotlclient.config.options.Option;
 import io.github.axolotlclient.config.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.ItemUtil;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -46,10 +43,10 @@ public class ArmorHud extends AbstractHudEntry {
 		if(outline.get()) outlineRect(matrices, getBounds(), outlineColor.get());
 		int lastY = 2 + (4 * 20);
 		assert client.player != null;
-		renderMainItem(matrices, client.player.getInventory().getMainHandStack().copy(), pos.x + 2, pos.y + lastY);
+		renderMainItem(matrices, client.player.inventory.getMainHandStack().copy(), pos.x + 2, pos.y + lastY);
 		lastY = lastY - 20;
 		for (int i = 0; i <= 3; i++) {
-			ItemStack item = client.player.getInventory().armor.get(i);
+			ItemStack item = client.player.inventory.armor.get(i);
 			renderItem(matrices, item.copy(), pos.x + 2, lastY + pos.y);
 			lastY = lastY - 20;
 		}
@@ -60,14 +57,14 @@ public class ArmorHud extends AbstractHudEntry {
 
 		if(showProtLvl.get() && stack.hasEnchantments()) {
 			for (int i = 0; i < stack.getEnchantments().size(); ++i) {
-				NbtCompound nbtCompound = stack.getEnchantments().getCompound(i);
-				Registry.ENCHANTMENT
-					.getOrEmpty(EnchantmentHelper.getIdFromNbt(nbtCompound))
-					.ifPresent(e -> {
-						if (Objects.equals(e.getTranslationKey(), Enchantments.PROTECTION.getTranslationKey())) {
-							stack.setCount(EnchantmentHelper.getLevelFromNbt(nbtCompound));
-						}
-					});
+				CompoundTag compoundTag = stack.getEnchantments().getCompound(i);
+                Registry.ENCHANTMENT
+                    .getOrEmpty(Identifier.tryParse(compoundTag.getString("id")))
+                    .ifPresent(enchantment -> {
+                        if(enchantment.equals(Enchantments.PROTECTION)) {
+                            stack.setCount(compoundTag.getInt("lvl"));
+                        }
+                    });
 			}
 		}
 		ItemUtil.renderGuiItemModel(matrices, stack, x, y);

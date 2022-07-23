@@ -3,7 +3,7 @@ package io.github.axolotlclient.mixin;
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hud.gui.hud.ToggleSprintHud;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.option.KeyBind;
+import net.minecraft.client.options.KeyBinding;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -21,10 +21,10 @@ public abstract class MixinClientPlayerEntity {
             method = "tickMovement",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/option/KeyBind;isPressed()Z"
+                    target = "Lnet/minecraft/client/options/KeyBinding;isPressed()Z"
             )
     )
-    private boolean alwaysPressed(KeyBind sprintKey) {
+    private boolean alwaysPressed(KeyBinding sprintKey) {
         ToggleSprintHud hud = (ToggleSprintHud) HudManager.getINSTANCE().get(ToggleSprintHud.ID);
         return hud.sprintToggled.get() || sprintKey.isPressed();
     }

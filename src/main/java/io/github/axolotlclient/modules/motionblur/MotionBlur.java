@@ -1,17 +1,20 @@
 package io.github.axolotlclient.modules.motionblur;
 
 import com.google.gson.JsonSyntaxException;
-import com.mojang.blaze3d.shader.GlUniform;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.mixin.AccessorShaderEffect;
 import io.github.axolotlclient.modules.AbstractModule;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.GlUniform;
 import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.resource.Resource;
+import net.minecraft.resource.metadata.ResourceMetadataReader;
 import net.minecraft.util.Identifier;
 import org.apache.commons.io.IOUtils;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 public class MotionBlur extends AbstractModule {
 
@@ -52,7 +55,7 @@ public class MotionBlur extends AbstractModule {
             ((AccessorShaderEffect)shader).getPasses().forEach(shader -> {
                 GlUniform blendFactor = shader.getProgram().getUniformByName("BlendFactor");
                 if(blendFactor!=null){
-                    blendFactor.setFloat(getBlur());
+                    blendFactor.set(getBlur());
                 }
             });
             currentBlur=getBlur();
@@ -66,45 +69,72 @@ public class MotionBlur extends AbstractModule {
         return AxolotlClient.CONFIG.motionBlurStrength.get()/100F;
     }
 
-    public class MotionBlurShader extends Resource {
+    public class MotionBlurShader implements Resource {
 
-	    public MotionBlurShader() {
-		    super("", ()-> IOUtils.toInputStream(String.format("{" +
-			    "    \"targets\": [" +
-			    "        \"swap\"," +
-			    "        \"previous\"" +
-			    "    ]," +
-			    "    \"passes\": [" +
-			    "        {" +
-			    "            \"name\": \"motion_blur\"," +
-			    "            \"intarget\": \"minecraft:main\"," +
-			    "            \"outtarget\": \"swap\"," +
-			    "            \"auxtargets\": [" +
-			    "                {" +
-			    "                    \"name\": \"PrevSampler\"," +
-			    "                    \"id\": \"previous\"" +
-			    "                }" +
-			    "            ]," +
-			    "            \"uniforms\": [" +
-			    "                {" +
-			    "                    \"name\": \"BlendFactor\"," +
-			    "                    \"values\": [ %s ]" +
-			    "                }" +
-			    "            ]" +
-			    "        }," +
-			    "        {" +
-			    "            \"name\": \"blit\"," +
-			    "            \"intarget\": \"swap\"," +
-			    "            \"outtarget\": \"previous\"" +
-			    "        }," +
-			    "        {" +
-			    "            \"name\": \"blit\"," +
-			    "            \"intarget\": \"swap\"," +
-			    "            \"outtarget\": \"minecraft:main\"" +
-			    "        }" +
-			    "    ]" +
-			    "}", getBlur()) , "utf-8"));
-	    }
+        @Override
+        public Identifier getId() {
+            return null;
+        }
+
+        @Override
+        public InputStream getInputStream() {
+            try {
+                return IOUtils.toInputStream(String.format("{" +
+                    "    \"targets\": [" +
+                    "        \"swap\"," +
+                    "        \"previous\"" +
+                    "    ]," +
+                    "    \"passes\": [" +
+                    "        {" +
+                    "            \"name\": \"motion_blur\"," +
+                    "            \"intarget\": \"minecraft:main\"," +
+                    "            \"outtarget\": \"swap\"," +
+                    "            \"auxtargets\": [" +
+                    "                {" +
+                    "                    \"name\": \"PrevSampler\"," +
+                    "                    \"id\": \"previous\"" +
+                    "                }" +
+                    "            ]," +
+                    "            \"uniforms\": [" +
+                    "                {" +
+                    "                    \"name\": \"BlendFactor\"," +
+                    "                    \"values\": [ %s ]" +
+                    "                }" +
+                    "            ]" +
+                    "        }," +
+                    "        {" +
+                    "            \"name\": \"blit\"," +
+                    "            \"intarget\": \"swap\"," +
+                    "            \"outtarget\": \"previous\"" +
+                    "        }," +
+                    "        {" +
+                    "            \"name\": \"blit\"," +
+                    "            \"intarget\": \"swap\"," +
+                    "            \"outtarget\": \"minecraft:main\"" +
+                    "        }" +
+                    "    ]" +
+                    "}", getBlur()) , "utf-8");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Nullable
+        @Override
+        public <T> T getMetadata(ResourceMetadataReader<T> resourceMetadataReader) {
+            return null;
+        }
+
+        @Override
+        public String getResourcePackName() {
+            return null;
+        }
+
+        @Override
+        public void close() {
+
+        }
     }
 
 

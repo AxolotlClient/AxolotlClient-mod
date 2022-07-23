@@ -1,6 +1,5 @@
 package io.github.axolotlclient.modules.zoom;
 
-import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.config.options.BooleanOption;
 import io.github.axolotlclient.config.options.FloatOption;
@@ -10,8 +9,9 @@ import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.util.Util;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.option.KeyBind;
+import net.minecraft.client.options.KeyBinding;
 import net.minecraft.util.Identifier;
+import org.lwjgl.glfw.GLFW;
 
 
 //Based on https://github.com/LogicalGeekBoy/logical_zoom/blob/master/src/main/java/com/logicalgeekboy/logical_zoom/LogicalZoom.java
@@ -20,7 +20,7 @@ public class Zoom extends AbstractModule {
 	public static boolean active;
 	private static Double originalSensitivity;
 	private static boolean originalSmoothCamera;
-	public static KeyBind keyBinding;
+	public static KeyBinding keyBinding;
 	private static double targetFactor = 1;
 	private static double divisor;
 	private static float lastAnimatedFactor = 1;
@@ -49,7 +49,7 @@ public class Zoom extends AbstractModule {
 
 		AxolotlClient.CONFIG.rendering.addSubCategory(zoom);
 
-		keyBinding = new KeyBind("key.zoom", InputUtil.KEY_C_CODE, "category.axolotlclient");
+		keyBinding = new KeyBinding("key.zoom", GLFW.GLFW_KEY_C, "category.axolotlclient");
 		KeyBindingHelper.registerKeyBinding(keyBinding);
 
 		active = false;
@@ -74,11 +74,11 @@ public class Zoom extends AbstractModule {
 	}
 
 	public static void setOptions() {
-		originalSensitivity = MinecraftClient.getInstance().options.getMouseSensitivity().get();
+		originalSensitivity = MinecraftClient.getInstance().options.mouseSensitivity;
 
 		if (smoothCamera.get()) {
-			originalSmoothCamera = MinecraftClient.getInstance().options.cinematicCamera;
-			MinecraftClient.getInstance().options.cinematicCamera = true;
+			originalSmoothCamera = MinecraftClient.getInstance().options.smoothCameraEnabled;
+			MinecraftClient.getInstance().options.smoothCameraEnabled = true;
 		}
 
 		updateSensitivity();
@@ -86,13 +86,13 @@ public class Zoom extends AbstractModule {
 
 	private static void updateSensitivity() {
 		if (decreaseSensitivity.get()) {
-			MinecraftClient.getInstance().options.getMouseSensitivity().set(originalSensitivity / (divisor*divisor));
+			MinecraftClient.getInstance().options.mouseSensitivity = (originalSensitivity / (divisor*divisor));
 		}
 	}
 
 	public static void restoreOptions() {
-		MinecraftClient.getInstance().options.getMouseSensitivity().set(originalSensitivity);
-		MinecraftClient.getInstance().options.cinematicCamera = originalSmoothCamera;
+		MinecraftClient.getInstance().options.mouseSensitivity = originalSensitivity;
+		MinecraftClient.getInstance().options.smoothCameraEnabled = originalSmoothCamera;
 	}
 
 	public static void update() {

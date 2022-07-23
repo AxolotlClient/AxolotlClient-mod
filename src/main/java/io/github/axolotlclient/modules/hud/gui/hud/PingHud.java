@@ -21,7 +21,6 @@ public class PingHud extends CleanHudEntry {
     public String getValue() {
 
         return Util.currentServerPing + " ms";
-        //return "0 ms";
     }
 
     @Override

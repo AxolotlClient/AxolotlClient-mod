@@ -44,7 +44,7 @@ public abstract class MixinEntityRenderer<T extends Entity> {
                     float x = textRenderer.getWidth(text)/2F;
                     float y = string.getString().contains("deadmau5")?-20:-10;
 
-					Matrix4f matrix4f = matrices.peek().getPosition();
+					Matrix4f matrix4f = matrices.peek().getModel();
 	                MinecraftClient.getInstance().textRenderer.draw(text, x, y, LevelHead.getInstance().textColor.get().getAsInt(), AxolotlClient.CONFIG.useShadows.get(), matrix4f, vertexConsumers, false, LevelHead.getInstance().background.get()? 127 : 0, light);
 
                 } else if(!HypixelAbstractionLayer.hasValidAPIKey()){

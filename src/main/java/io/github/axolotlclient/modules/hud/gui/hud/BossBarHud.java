@@ -1,11 +1,9 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.config.Color;
 import io.github.axolotlclient.config.options.BooleanOption;
 import io.github.axolotlclient.config.options.ColorOption;
-import io.github.axolotlclient.config.options.Option;
 import io.github.axolotlclient.config.options.OptionBase;
 import io.github.axolotlclient.mixin.AccessorBossBarHud;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
@@ -15,6 +13,7 @@ import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.ClientBossBar;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.boss.BossBar;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
@@ -34,9 +33,9 @@ public class BossBarHud extends AbstractHudEntry {
 
     public static final Identifier ID = new Identifier("kronhud", "bossbarhud");
 	private static final Identifier BARS_TEXTURE = new Identifier("textures/gui/bars.png");
-	private final BossBar placeholder = new CustomBossBar(Text.literal("Boss bar"), BossBar.Color.WHITE, BossBar.Style.PROGRESS);
+	private final BossBar placeholder = new CustomBossBar(new LiteralText("Boss bar"), BossBar.Color.WHITE, BossBar.Style.PROGRESS);
 	private final BossBar placeholder2 = Util.make(() -> {
-		BossBar boss = new CustomBossBar(Text.literal("More boss bars..."), BossBar.Color.PURPLE, BossBar.Style.PROGRESS);
+		BossBar boss = new CustomBossBar(new LiteralText("More boss bars..."), BossBar.Color.PURPLE, BossBar.Style.PROGRESS);
 		boss.setPercent(0.45F);
 		return boss;
 	});
@@ -93,18 +92,18 @@ public class BossBarHud extends AbstractHudEntry {
 	}
 
 	private void renderBossBar(MatrixStack matrices, int x, int y, BossBar bossBar) {
-		RenderSystem.setShaderTexture(0, BARS_TEXTURE);
+		MinecraftClient.getInstance().getTextureManager().bindTexture(BARS_TEXTURE);
 		if (bar.get()) {
 			DrawableHelper.drawTexture(matrices, x, y, 0, bossBar.getColor().ordinal() * 5 * 2, 182, 5, 256, 256);
-			if (bossBar.getStyle() != BossBar.Style.PROGRESS) {
-				DrawableHelper.drawTexture(matrices, x, y, 0, 80 + (bossBar.getStyle().ordinal() - 1) * 5 * 2, 182, 5, 256, 256);
+			if (bossBar.getOverlay() != BossBar.Style.PROGRESS) {
+				DrawableHelper.drawTexture(matrices, x, y, 0, 80 + (bossBar.getOverlay().ordinal() - 1) * 5 * 2, 182, 5, 256, 256);
 			}
 
 			int i = (int) (bossBar.getPercent() * 183.0F);
 			if (i > 0) {
 				DrawableHelper.drawTexture(matrices, x, y, 0, bossBar.getColor().ordinal() * 5 * 2 + 5, i, 5, 256, 256);
-				if (bossBar.getStyle() != BossBar.Style.PROGRESS) {
-					DrawableHelper.drawTexture(matrices, x, y, 0, 80 + (bossBar.getStyle().ordinal() - 1) * 5 * 2 + 5, i, 5, 256, 256);
+				if (bossBar.getOverlay() != BossBar.Style.PROGRESS) {
+					DrawableHelper.drawTexture(matrices, x, y, 0, 80 + (bossBar.getOverlay().ordinal() - 1) * 5 * 2 + 5, i, 5, 256, 256);
 				}
 			}
 		}
@@ -141,7 +140,7 @@ public class BossBarHud extends AbstractHudEntry {
     }
 
 	public static class CustomBossBar extends BossBar {
-		public CustomBossBar(Text name, Color color, Style style) {
+		public CustomBossBar(Text name, net.minecraft.entity.boss.BossBar.Color color, Style style) {
 			super(MathHelper.randomUuid(), name, color, style);
 		}
 	}

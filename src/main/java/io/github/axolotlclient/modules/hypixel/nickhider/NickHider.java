@@ -6,6 +6,7 @@ import io.github.axolotlclient.config.options.StringOption;
 import io.github.axolotlclient.modules.hypixel.AbstractHypixelMod;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 
 public class NickHider implements AbstractHypixelMod {
@@ -54,7 +55,7 @@ public class NickHider implements AbstractHypixelMod {
                 }
             }
 
-            return Text.literal(msg).copy().setStyle(message.getStyle());
+            return new LiteralText(msg).copy().setStyle(message.getStyle());
         }
         return message;
     }

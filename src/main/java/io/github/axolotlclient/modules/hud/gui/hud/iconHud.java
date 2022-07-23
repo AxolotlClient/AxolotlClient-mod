@@ -1,13 +1,10 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.config.Color;
-import io.github.axolotlclient.config.options.ColorOption;
-import io.github.axolotlclient.config.options.Option;
 import io.github.axolotlclient.config.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
@@ -26,7 +23,7 @@ public class iconHud extends AbstractHudEntry {
         scale(matrices);
         DrawPosition pos = getPos();
 
-        RenderSystem.setShaderTexture(0, AxolotlClient.badgeIcon);
+        MinecraftClient.getInstance().getTextureManager().bindTexture(AxolotlClient.badgeIcon);
 
         drawTexture(matrices, pos.x, pos.y, 0, 0, width, height, width, height);
 

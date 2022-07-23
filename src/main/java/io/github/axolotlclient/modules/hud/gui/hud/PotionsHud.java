@@ -2,12 +2,11 @@ package io.github.axolotlclient.modules.hud.gui.hud;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.config.Color;
-import io.github.axolotlclient.config.options.Option;
 import io.github.axolotlclient.config.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.texture.StatusEffectSpriteManager;
 import net.minecraft.client.util.math.MatrixStack;
@@ -16,7 +15,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectUtil;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
@@ -53,17 +52,17 @@ public class PotionsHud extends AbstractHudEntry {
 				}
 
 				Sprite sprite = statusEffectSpriteManager.getSprite(type);
-				RenderSystem.setShaderTexture(0, sprite.getAtlas().getId());
-				RenderSystem.setShaderColor(1, 1, 1, 1);
+				MinecraftClient.getInstance().getTextureManager().bindTexture(sprite.getAtlas().getId());
+				RenderSystem.color4f(1, 1, 1, 1);
 				DrawableHelper.drawSprite(matrices, pos.x, pos.y + 1 + lastY, 0, 18, 18, sprite);
 
                 MutableText text = type.getName().copy();
                 if (effect.getAmplifier() == 2) {
-                    text.append(" ").append(Text.translatable("enchantment.level.2"));
+                    text.append(" ").append(new TranslatableText("enchantment.level.2"));
                 } else if (effect.getAmplifier() == 3) {
-                    text.append(" ").append(Text.translatable("enchantment.level.3"));
+                    text.append(" ").append(new TranslatableText("enchantment.level.3"));
                 } else if (effect.getAmplifier() == 4) {
-                    text.append(" ").append(Text.translatable("enchantment.level.4"));
+                    text.append(" ").append(new TranslatableText("enchantment.level.4"));
                 }
 
                 drawTextWithShadow(matrices, client.textRenderer, text, pos.x + 20, pos.y + 4 + lastY, textColor.get().getAsInt());
@@ -87,16 +86,16 @@ public class PotionsHud extends AbstractHudEntry {
 		StatusEffectInstance effect = new StatusEffectInstance(StatusEffects.SPEED);
 		StatusEffect type = effect.getEffectType();
 		Sprite sprite = statusEffectSpriteManager.getSprite(type);
-		RenderSystem.setShaderTexture(0, sprite.getAtlas().getId());
-		RenderSystem.setShaderColor(1, 1, 1, 1);
+		MinecraftClient.getInstance().getTextureManager().bindTexture(sprite.getAtlas().getId());
+		RenderSystem.color4f(1, 1, 1, 1);
 		DrawableHelper.drawSprite(matrices, pos.x + 1, pos.y + 1, 0, 18, 18, sprite);
         MutableText text = type.getName().copy();
         if (effect.getAmplifier() == 2) {
-            text.append(" ").append(Text.translatable("enchantment.level.2"));
+            text.append(" ").append(new TranslatableText("enchantment.level.2"));
         } else if (effect.getAmplifier() == 3) {
-            text.append(" ").append(Text.translatable("enchantment.level.3"));
+            text.append(" ").append(new TranslatableText("enchantment.level.3"));
         } else if (effect.getAmplifier() == 4) {
-            text.append(" ").append(Text.translatable("enchantment.level.4"));
+            text.append(" ").append(new TranslatableText("enchantment.level.4"));
         }
 
         drawTextWithShadow(matrices, client.textRenderer, text, pos.x + 20, pos.y + 7, Color.WHITE.getAsInt());

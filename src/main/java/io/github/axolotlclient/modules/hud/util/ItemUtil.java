@@ -1,18 +1,18 @@
 package io.github.axolotlclient.modules.hud.util;
 
-import com.mojang.blaze3d.lighting.DiffuseLighting;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.Tessellator;
-import com.mojang.blaze3d.vertex.VertexFormat;
-import com.mojang.blaze3d.vertex.VertexFormats;
 import io.github.axolotlclient.config.Color;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.render.OverlayTexture;
+import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
@@ -55,9 +55,9 @@ public class ItemUtil {
 		if (client.player == null) {
 			return null;
 		}
-		items.addAll(client.player.getInventory().armor);
-		items.addAll(client.player.getInventory().offHand);
-		items.addAll(client.player.getInventory().main);
+		items.addAll(client.player.inventory.armor);
+		items.addAll(client.player.inventory.offHand);
+		items.addAll(client.player.inventory.main);
 		return items;
 	}
 
@@ -137,94 +137,88 @@ public class ItemUtil {
 		return list;
 	}
 
-	public static void renderGuiItemModel(MatrixStack matrices, ItemStack stack, float x, float y) {
-		MinecraftClient client = MinecraftClient.getInstance();
-		BakedModel model = client.getItemRenderer().getHeldItemModel(stack, null, client.player, (int) (x * y));
-		client.getTextureManager().getTexture(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).setFilter(false, false);
-		RenderSystem.setShaderTexture(0, PlayerScreenHandler.BLOCK_ATLAS_TEXTURE);
-		RenderSystem.enableBlend();
-		RenderSystem.blendFunc(GlStateManager.class_4535.SRC_ALPHA, GlStateManager.class_4534.ONE_MINUS_SRC_ALPHA);
-		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-		matrices.push();
-		matrices.translate(x, y, (100.0F + client.getItemRenderer().zOffset));
-		matrices.translate(8.0D, 8.0D, 0.0D);
-		matrices.scale(1.0F, -1.0F, 1.0F);
-		matrices.scale(16.0F, 16.0F, 16.0F);
-		RenderSystem.applyModelViewMatrix();
-		VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
-		boolean bl = !model.isSideLit();
-		if (bl) {
-			DiffuseLighting.setupFlatGuiLighting();
-		}
+    public static void renderGuiItemModel(MatrixStack matrices, ItemStack stack, int x, int y) {
+        matrices.push();
+        MinecraftClient client = MinecraftClient.getInstance();
+        ItemRenderer itemRenderer = client.getItemRenderer();
+        BakedModel model = itemRenderer.getHeldItemModel(stack, null, null);
+        RenderSystem.defaultAlphaFunc();
+        RenderSystem.enableBlend();
+        RenderSystem.blendFunc(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA);
+        matrices.translate(x + 8, y + 8, 100 + 50);
+        matrices.scale(16, -16, 16);
+        VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
+        boolean bl = !model.isSideLit();
+        if (bl) {
+            DiffuseLighting.disableGuiDepthLighting();
+        }
+        itemRenderer.renderItem(stack, ModelTransformation.Mode.GUI, false, matrices, immediate, 15728880, OverlayTexture.DEFAULT_UV, model);
+        immediate.draw();
+        RenderSystem.enableDepthTest();
+        if (bl) {
+            DiffuseLighting.enableGuiDepthLighting();
+        }
+        matrices.pop();
+    }
 
-		client.getItemRenderer().renderItem(stack, ModelTransformation.Mode.GUI, false, matrices, immediate, 15728880,
-			OverlayTexture.DEFAULT_UV, model);
-		immediate.draw();
-		RenderSystem.enableDepthTest();
-		if (bl) {
-			DiffuseLighting.setup3DGuiLighting();
-		}
+    public static void renderGuiItemOverlay(MatrixStack matrices, TextRenderer renderer, ItemStack stack, int x, int y, String countLabel, int textColor, boolean shadow) {
+        matrices.push();
+        if (!stack.isEmpty()) {
+            if (stack.getCount() != 1 || countLabel != null) {
+                String string = countLabel == null ? String.valueOf(stack.getCount()) : countLabel;
+                matrices.translate(0.0D, 0.0D, 50 + 200.0F);
+                VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
+                DrawUtil.drawString(matrices, renderer, string, (x + 19 - 2 - renderer.getWidth(string)), (y + 6 + 3), textColor, shadow);
+                immediate.draw();
+                matrices.translate(0.0D, 0.0D,  - 50 - 200.0F);
+            }
 
-		matrices.pop();
-		RenderSystem.applyModelViewMatrix();
-	}
+            if (stack.isDamaged()) {
+                RenderSystem.disableDepthTest();
+                RenderSystem.disableTexture();
+                RenderSystem.disableBlend();
+                Tessellator tessellator = Tessellator.getInstance();
+                BufferBuilder bufferBuilder = tessellator.getBuffer();
+                float f = (float) stack.getDamage();
+                float g = (float) stack.getMaxDamage();
+                float h = Math.max(0.0F, (g - f) / g);
+                int i = Math.round(13.0F - f * 13.0F / g);
+                int j = MathHelper.hsvToRgb(h / 3.0F, 1.0F, 1.0F);
+                renderGuiQuad(bufferBuilder, x + 2, y + 13, 13, 2, 0, 0, 0, 255);
+                renderGuiQuad(bufferBuilder, x + 2, y + 13, i, 1, j >> 16 & 255, j >> 8 & 255, j & 255, 255);
+                RenderSystem.enableBlend();
+                RenderSystem.enableTexture();
+                RenderSystem.enableDepthTest();
+            }
 
-	public static void renderGuiItemOverlay(MatrixStack matrices, TextRenderer renderer, ItemStack stack, int x, int y,
-	                                        String countLabel, int textColor, boolean shadow) {
-		MinecraftClient client = MinecraftClient.getInstance();
-		if (stack.isEmpty()) {
-			return;
-		}
+            ClientPlayerEntity clientPlayerEntity = MinecraftClient.getInstance().player;
+            float k = clientPlayerEntity == null ? 0.0F : clientPlayerEntity.getItemCooldownManager().getCooldownProgress(stack.getItem(), MinecraftClient.getInstance().getTickDelta());
+            if (k > 0.0F) {
+                RenderSystem.disableDepthTest();
+                RenderSystem.disableTexture();
+                RenderSystem.enableBlend();
+                RenderSystem.defaultBlendFunc();
+                Tessellator tessellator2 = Tessellator.getInstance();
+                BufferBuilder bufferBuilder2 = tessellator2.getBuffer();
+                renderGuiQuad(bufferBuilder2, x, y + MathHelper.floor(16.0F * (1.0F - k)), 16, MathHelper.ceil(16.0F * k), 255, 255, 255, 127);
+                RenderSystem.enableTexture();
+                RenderSystem.enableDepthTest();
+            }
 
-		if (stack.getCount() != 1 || countLabel != null) {
-			String string = countLabel == null ? String.valueOf(stack.getCount()) :
-				countLabel;
-			matrices.translate(0.0, 0.0, client.getItemRenderer().zOffset + 200.0F);
-			DrawUtil.drawString(matrices, renderer, string, (x + 19 - 2 - renderer.getWidth(string)),
-				y + 6 + 3,
-				textColor, shadow);
-		}
+        }
+        matrices.pop();
+    }
 
-		if (stack.isItemBarVisible()) {
-			RenderSystem.disableDepthTest();
-			RenderSystem.disableTexture();
-			RenderSystem.disableBlend();
-			int i = stack.getItemBarStep();
-			int j = stack.getItemBarColor();
-			DrawUtil.fillRect(matrices, new Rectangle(x + 2, y + 13, 13, 2), Color.BLACK);
-			DrawUtil.fillRect(matrices, new Rectangle(x + 2, y + 13, i, 1), new Color(j >> 16 & 255, j >> 8 & 255,
-				j & 255,
-				255));
-			RenderSystem.enableBlend();
-			RenderSystem.enableTexture();
-			RenderSystem.enableDepthTest();
-		}
+    // Minecraft has decided to not use matrixstack's in their itemrender class. So this is implementing itemRenderer stuff with matrices.s
 
-		ClientPlayerEntity clientPlayerEntity = MinecraftClient.getInstance().player;
-		float f = clientPlayerEntity == null ? 0.0F : clientPlayerEntity.getItemCooldownManager().getCooldownProgress(stack.getItem(), MinecraftClient.getInstance().getTickDelta());
-		if (f > 0.0F) {
-			RenderSystem.disableDepthTest();
-			RenderSystem.disableTexture();
-			RenderSystem.enableBlend();
-			RenderSystem.defaultBlendFunc();
-			DrawUtil.fillRect(matrices, new Rectangle(x, y + MathHelper.floor(16.0F * (1.0F - f)), 16,
-				MathHelper.ceil(16.0F * f)), Color.WHITE.withAlpha(127));
-			RenderSystem.enableTexture();
-			RenderSystem.enableDepthTest();
-		}
-
-	}
-
-	// Minecraft has decided to not use matrixstack's in their itemrender class. So this is implementing itemRenderer stuff with matrices.
-
-	public void renderGuiQuad(BufferBuilder buffer, int x, int y, int width, int height, int red, int green, int blue, int alpha) {
-		buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-		buffer.vertex(x, y, 0.0D).color(red, green, blue, alpha).next();
-		buffer.vertex(x, y + height, 0.0D).color(red, green, blue, alpha).next();
-		buffer.vertex(x + width, y + height, 0.0D).color(red, green, blue, alpha).next();
-		buffer.vertex(x + width, y, 0.0D).color(red, green, blue, alpha).next();
-		Tessellator.getInstance().draw();
-	}
+    public static void renderGuiQuad(BufferBuilder buffer, int x, int y, int width, int height, int red, int green, int blue, int alpha) {
+        buffer.begin(7, VertexFormats.POSITION_COLOR);
+        buffer.vertex(x, y, 0.0D).color(red, green, blue, alpha).next();
+        buffer.vertex(x, y + height, 0.0D).color(red, green, blue, alpha).next();
+        buffer.vertex(x + width, y + height, 0.0D).color(red, green, blue, alpha).next();
+        buffer.vertex(x + width, y, 0.0D).color(red, green, blue, alpha).next();
+        Tessellator.getInstance().draw();
+    }
 
 	public static class ItemStorage {
 		public final ItemStack stack;

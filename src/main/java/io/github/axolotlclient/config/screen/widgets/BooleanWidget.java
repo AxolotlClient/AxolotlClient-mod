@@ -4,10 +4,11 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.config.options.BooleanOption;
 import io.github.axolotlclient.config.screen.OptionsScreenBuilder;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.widget.AbstractButtonWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 
 public class BooleanWidget extends ButtonWidget {
 
@@ -20,7 +21,7 @@ public class BooleanWidget extends ButtonWidget {
     }
 
     public Text getMessage(){
-        return option.get()? Text.translatable("options."+"on"): Text.translatable ("options."+"off");
+        return option.get()? new TranslatableText("options."+"on"): new TranslatableText("options."+"off");
     }
 
     @Override
@@ -33,8 +34,8 @@ public class BooleanWidget extends ButtonWidget {
 	@Override
 	public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 
-        RenderSystem.setShaderTexture(0, ClickableWidget.WIDGETS_TEXTURE);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        MinecraftClient.getInstance().getTextureManager().bindTexture(AbstractButtonWidget.WIDGETS_LOCATION);
+        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.hovered = isMouseOver(mouseX, mouseY);
 
         renderBg(matrices);

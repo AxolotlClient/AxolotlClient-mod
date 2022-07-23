@@ -1,15 +1,10 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.Tessellator;
-import com.mojang.blaze3d.vertex.VertexFormat;
-import com.mojang.blaze3d.vertex.VertexFormats;
 import io.github.axolotlclient.config.Color;
 import io.github.axolotlclient.config.options.BooleanOption;
 import io.github.axolotlclient.config.options.ColorOption;
 import io.github.axolotlclient.config.options.EnumOption;
-import io.github.axolotlclient.config.options.Option;
 import io.github.axolotlclient.config.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
@@ -17,16 +12,19 @@ import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.block.AbstractChestBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.option.AttackIndicator;
+import net.minecraft.client.options.AttackIndicator;
+import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Camera;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Matrix4f;
-import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -83,26 +81,26 @@ public class CrosshairHud extends AbstractHudEntry {
 			fillRect(matrices, new Rectangle(pos.x + (width / 2) - 1, pos.y + (height / 2), 1, 5), color);
 		} else if (Objects.equals(type.get(), CrosshairOption.DIRECTION.toString())) {
 			Camera camera = this.client.gameRenderer.getCamera();
-			MatrixStack matrixStack = RenderSystem.getModelViewStack();
+			MatrixStack matrixStack = new MatrixStack();
 			matrixStack.push();
 			matrixStack.translate(pos.x + (width/2F), pos.y + (height / 2F), 0);
-			matrixStack.multiply(Vec3f.NEGATIVE_X.getDegreesQuaternion(camera.getPitch()));
-			matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(camera.getYaw()));
+			matrixStack.multiply(Vector3f.NEGATIVE_X.getDegreesQuaternion(camera.getPitch()));
+			matrixStack.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(camera.getYaw()));
 			matrixStack.scale(-getScale(), -getScale(), getScale());
-			RenderSystem.applyModelViewMatrix();
+			//RenderSystem.applyModelViewMatrix();
 			RenderSystem.renderCrosshair(10);
 			matrixStack.pop();
-			RenderSystem.applyModelViewMatrix();
+			//RenderSystem.applyModelViewMatrix();
 		} else if (Objects.equals(type.get(), CrosshairOption.TEXTURE.toString())) {
-			RenderSystem.setShaderTexture(0, DrawableHelper.GUI_ICONS_TEXTURE);
+			MinecraftClient.getInstance().getTextureManager().bindTexture(DrawableHelper.GUI_ICONS_TEXTURE);
 
 			// Draw crosshair
-			RenderSystem.setShaderColor((float) color.getRed() / 255, (float) color.getGreen() / 255, (float) color.getBlue() / 255, (float) color.getAlpha() / 255);
+			RenderSystem.color4f((float) color.getRed() / 255, (float) color.getGreen() / 255, (float) color.getBlue() / 255, (float) color.getAlpha() / 255);
 			client.inGameHud.drawTexture(matrices, (int) (((client.getWindow().getScaledWidth() / getScale()) - 15) / 2), (int) (((client.getWindow().getScaledHeight() / getScale()) - 15) / 2), 0, 0, 15, 15);
-			RenderSystem.setShaderColor(1, 1, 1, 1);
+			RenderSystem.color4f(1, 1, 1, 1);
 
 			// Draw attack indicator
-			if (this.client.options.getAttackIndicator().get() == AttackIndicator.CROSSHAIR) {
+			if (this.client.options.attackIndicator == AttackIndicator.CROSSHAIR) {
 				float progress = this.client.player.getAttackCooldownProgress(0.0F);
 
 				// Whether a cross should be displayed under the indicator
@@ -125,12 +123,12 @@ public class CrosshairHud extends AbstractHudEntry {
 				}
 			}
 		}
-		if (this.client.options.getAttackIndicator().get() == AttackIndicator.CROSSHAIR) {
+		if (this.client.options.attackIndicator == AttackIndicator.CROSSHAIR) {
 			float progress = this.client.player.getAttackCooldownProgress(0.0F);
 			if (progress != 1.0F) {
-				fill(matrices.peek().getPosition(), pos.x + (width / 2F) - 6, pos.y + (height / 2F) + 9, 11, 1,
+				fill(matrices.peek().getModel(), pos.x + (width / 2F) - 6, pos.y + (height / 2F) + 9, 11, 1,
 					attackIndicatorBackgroundColor.get().getAsInt());
-				fill(matrices.peek().getPosition(), pos.x + (width / 2F) - 6, pos.y + (height / 2F) + 9,
+				fill(matrices.peek().getModel(), pos.x + (width / 2F) - 6, pos.y + (height / 2F) + 9,
 					progress * 11, 1, attackIndicatorForegroundColor.get().getAsInt());
 			}
 		}
@@ -157,11 +155,11 @@ public class CrosshairHud extends AbstractHudEntry {
 		float r = (float) (color >> 16 & 255) / 255.0F;
 		float g = (float) (color >> 8 & 255) / 255.0F;
 		float b = (float) (color & 255) / 255.0F;
-		BufferBuilder bufferBuilder = Tessellator.getInstance().getBufferBuilder();
+		BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
 		RenderSystem.enableBlend();
 		RenderSystem.disableTexture();
 		RenderSystem.defaultBlendFunc();
-		bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
+		bufferBuilder.begin(7, VertexFormats.POSITION_COLOR);
 		bufferBuilder.vertex(matrix, x, y2, 0.0F).color(r, g, b, alpha).next();
 		bufferBuilder.vertex(matrix, x2, y2, 0.0F).color(r, g, b, alpha).next();
 		bufferBuilder.vertex(matrix, x2, y, 0.0F).color(r, g, b, alpha).next();

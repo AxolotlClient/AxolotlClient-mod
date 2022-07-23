@@ -15,23 +15,22 @@ import io.github.axolotlclient.modules.rpc.DiscordRPC;
 import io.github.axolotlclient.modules.scrollableTooltips.ScrollableTooltips;
 import io.github.axolotlclient.modules.zoom.Zoom;
 import io.github.axolotlclient.util.Util;
+import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.resource.Resource;
-import net.minecraft.resource.pack.ResourcePack;
+import net.minecraft.resource.ResourcePack;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.util.Identifier;
-import org.quiltmc.loader.api.ModContainer;
-import org.quiltmc.loader.api.QuiltLoader;
-import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
-import org.quiltmc.qsl.lifecycle.api.client.event.ClientTickEvents;
-import org.quiltmc.qsl.resource.loader.api.ResourceLoader;
-import org.quiltmc.qsl.resource.loader.api.ResourcePackActivationType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +40,7 @@ import java.util.UUID;
 
 public class AxolotlClient implements ClientModInitializer {
 
-	public static Logger LOGGER = LoggerFactory.getLogger("AxolotlClient");
+	public static Logger LOGGER = LogManager.getLogger("AxolotlClient");
 
 	public static AxolotlClientConfig CONFIG;
 	public static String onlinePlayers = "";
@@ -63,19 +62,19 @@ public class AxolotlClient implements ClientModInitializer {
 	public static boolean showWarning = true;
 
 	@Override
-	public void onInitializeClient(ModContainer container) {
+	public void onInitializeClient() {
 
-		if (QuiltLoader.isModLoaded("ares")){
+		if (FabricLoader.getInstance().isModLoaded("ares")){
 			badmod = "Ares Client";
-		} else if (QuiltLoader.isModLoaded("inertia")) {
+		} else if (FabricLoader.getInstance().isModLoaded("inertia")) {
 			badmod = "Inertia Client";
-		} else if (QuiltLoader.isModLoaded("meteor-client")) {
+		} else if (FabricLoader.getInstance().isModLoaded("meteor-client")) {
 			badmod = "Meteor Client";
-		} else if (QuiltLoader.isModLoaded("wurst")) {
+		} else if (FabricLoader.getInstance().isModLoaded("wurst")) {
 			badmod = "Wurst Client";
-		} else if (QuiltLoader.isModLoaded("baritone")) {
+		} else if (FabricLoader.getInstance().isModLoaded("baritone")) {
 			badmod = "Baritone";
-		} else if (QuiltLoader.isModLoaded("xaerominimap")) {
+		} else if (FabricLoader.getInstance().isModLoaded("xaerominimap")) {
 			badmod = "Xaero's Minimap";
 		} else {
 			showWarning = false;
@@ -95,8 +94,12 @@ public class AxolotlClient implements ClientModInitializer {
 
 		modules.forEach((identifier, abstractModule) -> abstractModule.lateInit());
 
-		ResourceLoader.registerBuiltinResourcePack(new Identifier("axolotlclient", "axolotlclient-ui"), container, ResourcePackActivationType.NORMAL);
-		ClientTickEvents.END.register(client -> tickClient());
+        FabricLoader.getInstance().getModContainer("axolotlclient").ifPresent(container ->
+		    ResourceManagerHelper.registerBuiltinResourcePack(
+                new Identifier("axolotlclient", "axolotlclient-ui"),
+                container, ResourcePackActivationType.NORMAL)
+        );
+		ClientTickEvents.END_CLIENT_TICK.register(client -> tickClient());
 
 		LOGGER.info("AxolotlClient Initialized");
 	}
@@ -145,15 +148,16 @@ public class AxolotlClient implements ClientModInitializer {
 		if(entity instanceof PlayerEntity){
 
 			if(AxolotlClient.CONFIG.showBadges.get() && AxolotlClient.isUsingClient(entity.getUuid())) {
-				RenderSystem.setShaderTexture(0, AxolotlClient.badgeIcon);
+                MinecraftClient.getInstance().getTextureManager().bindTexture(badgeIcon);
 
 				int x = -(MinecraftClient.getInstance().textRenderer.getWidth(
 						entity.getUuid() == MinecraftClient.getInstance().player.getUuid()?
-						(NickHider.Instance.hideOwnName.get() ? NickHider.Instance.hiddenNameSelf.get(): Team.decorateName(entity.getScoreboardTeam(), entity.getName()).getString()):
-						(NickHider.Instance.hideOtherNames.get() ? NickHider.Instance.hiddenNameOthers.get(): Team.decorateName(entity.getScoreboardTeam(), entity.getName()).getString())
+						(NickHider.Instance.hideOwnName.get() ? NickHider.Instance.hiddenNameSelf.get(): Team.modifyText(entity.getScoreboardTeam(), entity.getName()).getString()):
+						(NickHider.Instance.hideOtherNames.get() ? NickHider.Instance.hiddenNameOthers.get(): Team.modifyText(entity.getScoreboardTeam(), entity.getName()).getString())
 				)/2 + (AxolotlClient.CONFIG.customBadge.get() ? MinecraftClient.getInstance().textRenderer.getWidth(AxolotlClient.CONFIG.badgeText.get()): 10));
 
-				RenderSystem.setShaderColor(1, 1, 1, 1);
+
+				RenderSystem.color4f(1, 1, 1, 1);
 
 				if(AxolotlClient.CONFIG.customBadge.get()) {
 					if(AxolotlClient.CONFIG.useShadows.get()) {

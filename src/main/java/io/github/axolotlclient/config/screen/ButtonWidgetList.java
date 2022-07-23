@@ -1,5 +1,6 @@
 package io.github.axolotlclient.config.screen;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.config.ConfigManager;
 import io.github.axolotlclient.config.options.BooleanOption;
@@ -24,13 +25,16 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.widget.AbstractButtonWidget;
 import net.minecraft.client.gui.widget.ButtonListWidget;
-import net.minecraft.client.gui.widget.ClickableWidget;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class ButtonWidgetList extends ButtonListWidget {
@@ -42,8 +46,6 @@ public class ButtonWidgetList extends ButtonListWidget {
     public ButtonWidgetList(MinecraftClient minecraftClient, int width, int height, int top, int bottom, int entryHeight, OptionCategory category) {
         super(minecraftClient, width, height, top, bottom, entryHeight);
 
-        this.setRenderBackground(false);
-        this.setRenderHorizontalShadows(false);
         this.setRenderHeader(false, 0);
         //this.category=category; // same as above
 
@@ -66,7 +68,7 @@ public class ButtonWidgetList extends ButtonListWidget {
 
             Option option = category.getOptions().get(i);
             if(option.getName().equals("x")||option.getName().equals("y")) continue;
-            ClickableWidget buttonWidget = this.createWidget(width / 2 - 155+160, option);
+            AbstractButtonWidget buttonWidget = this.createWidget(width / 2 - 155+160, option);
 
             addEntry(new OptionEntry(buttonWidget, option, width));
 			this.entries.add(new OptionEntry(buttonWidget, option, width));
@@ -87,7 +89,7 @@ public class ButtonWidgetList extends ButtonListWidget {
         }
     }
 
-    private ClickableWidget createWidget(int x, Option option) {
+    private AbstractButtonWidget createWidget(int x, Option option) {
         if (option != null) {
             if (option instanceof FloatOption) return new OptionSliderWidget(x, 0, (FloatOption) option);
             else if (option instanceof IntegerOption) return new OptionSliderWidget(x, 0, (IntegerOption) option);
@@ -116,6 +118,52 @@ public class ButtonWidgetList extends ButtonListWidget {
         Util.applyScissor(new Rectangle(0, top, this.width, bottom-top));
         entries.forEach(pair -> pair.renderTooltips(matrices, mouseX, mouseY));
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
+    }
+
+    @Override
+    public void render(MatrixStack matrixStack, int i, int j, float f) {
+        int k = this.getScrollbarPositionX();
+        int l = k + 6;
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferBuilder = tessellator.getBuffer();
+        this.client.getTextureManager().bindTexture(DrawableHelper.BACKGROUND_TEXTURE);
+        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+
+        int m = this.getRowLeft();
+        int n = this.top + 4 - (int)this.getScrollAmount();
+
+        this.renderList(matrixStack, m, n, i, j, f);
+
+        RenderSystem.disableTexture();
+        int q = Math.max(0, this.getMaxPosition() - (this.bottom - this.top - 4));;
+        if (q > 0) {
+            int r = (int)((float)((this.bottom - this.top) * (this.bottom - this.top)) / (float)this.getMaxPosition());
+            r = MathHelper.clamp(r, 32, this.bottom - this.top - 8);
+            int s = (int)this.getScrollAmount() * (this.bottom - this.top - r) / q + this.top;
+            if (s < this.top) {
+                s = this.top;
+            }
+
+            bufferBuilder.begin(7, VertexFormats.POSITION_COLOR_TEXTURE);
+            bufferBuilder.vertex(k, this.bottom, 0.0).color(0, 0, 0, 255).texture(0.0F, 1.0F).next();
+            bufferBuilder.vertex(l, this.bottom, 0.0).color(0, 0, 0, 255).texture(1.0F, 1.0F).next();
+            bufferBuilder.vertex(l, this.top, 0.0).color(0, 0, 0, 255).texture(1.0F, 0.0F).next();
+            bufferBuilder.vertex(k, this.top, 0.0).color(0, 0, 0, 255).texture(0.0F, 0.0F).next();
+            bufferBuilder.vertex(k, (s + r), 0.0).color(128, 128, 128, 255).texture(0.0F, 1.0F).next();
+            bufferBuilder.vertex(l, (s + r), 0.0).color(128, 128, 128, 255).texture(1.0F, 1.0F).next();
+            bufferBuilder.vertex(l, s, 0.0).color(128, 128, 128, 255).texture(1.0F, 0.0F).next();
+            bufferBuilder.vertex(k, s, 0.0).color(128, 128, 128, 255).texture(0.0F, 0.0F).next();
+            bufferBuilder.vertex(k, (s + r - 1), 0.0).color(192, 192, 192, 255).texture(0.0F, 1.0F).next();
+            bufferBuilder.vertex((l - 1), (s + r - 1), 0.0).color(192, 192, 192, 255).texture(1.0F, 1.0F).next();
+            bufferBuilder.vertex((l - 1), s, 0.0).color(192, 192, 192, 255).texture(1.0F, 0.0F).next();
+            bufferBuilder.vertex(k, s, 0.0).color(192, 192, 192, 255).texture(0.0F, 0.0F).next();
+            tessellator.draw();
+        }
+        
+        RenderSystem.enableTexture();
+        RenderSystem.shadeModel(7424);
+        RenderSystem.enableAlphaTest();
+        RenderSystem.disableBlend();
     }
 
 	@Override
@@ -152,13 +200,13 @@ public class ButtonWidgetList extends ButtonListWidget {
 	@Environment(EnvType.CLIENT)
     public class Pair extends ButtonListWidget.ButtonEntry {
         protected final MinecraftClient client = MinecraftClient.getInstance();
-        protected final ClickableWidget left;
-        protected final ClickableWidget right;
+        protected final AbstractButtonWidget left;
+        protected final AbstractButtonWidget right;
 
 		protected final boolean tickable;
 
-        public Pair(ClickableWidget left, ClickableWidget right) {
-			super(new HashMap<>());
+        public Pair(AbstractButtonWidget left, AbstractButtonWidget right) {
+			super(new ArrayList<>());
 	        this.left = left;
             this.right = right;
 
@@ -207,7 +255,7 @@ public class ButtonWidgetList extends ButtonListWidget {
             return false;
         }
 
-        protected void onClick(ClickableWidget button, double mouseX, double mouseY, int mB){
+        protected void onClick(AbstractButtonWidget button, double mouseX, double mouseY, int mB){
             if (button instanceof OptionSliderWidget){
                 button.isMouseOver(mouseX, mouseY);
                 ConfigManager.save();
@@ -312,7 +360,7 @@ public class ButtonWidgetList extends ButtonListWidget {
 		protected int width;
         protected int renderX;
 
-        public OptionEntry(ClickableWidget left, Option option, int width) {
+        public OptionEntry(AbstractButtonWidget left, Option option, int width) {
             super(left, null);
             this.option = option;
             if(left instanceof BooleanWidget) left.x = width / 2 + 5 + 57;

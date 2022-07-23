@@ -6,8 +6,8 @@ import io.github.axolotlclient.config.options.BooleanOption;
 import io.github.axolotlclient.config.options.OptionCategory;
 import io.github.axolotlclient.config.screen.OptionsScreenBuilder;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.widget.AbstractButtonWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.util.math.MatrixStack;
 
 public class CategoryWidget extends ButtonWidget {
@@ -48,13 +48,13 @@ public class CategoryWidget extends ButtonWidget {
 	@Override
 	public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         if (this.visible) {
-	        RenderSystem.setShaderTexture(0, ClickableWidget.WIDGETS_TEXTURE);
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height && !(enabledButton!=null && enabledButton.isHoveredOrFocused());
+	        MinecraftClient.getInstance().getTextureManager().bindTexture(AbstractButtonWidget.WIDGETS_LOCATION);
+            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+            this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height && !(enabledButton!=null && enabledButton.isHovered());
             int i = this.getYImage(this.hovered);
             this.drawTexture(matrices, this.x, this.y, 0, 46 + i * 20, this.width / 2, this.height);
             this.drawTexture(matrices,this.x + this.width / 2, this.y, 200 - this.width / 2, 46 + i * 20, this.width / 2, this.height);
-            this.renderBackground(matrices, MinecraftClient.getInstance(), mouseX, mouseY);
+            this.renderBg(matrices, MinecraftClient.getInstance(), mouseX, mouseY);
             int j = 14737632;
             if (!this.active) {
                 j = 10526880;
@@ -75,13 +75,13 @@ public class CategoryWidget extends ButtonWidget {
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
 
         if(enabledButton!=null &&
-                enabledButton.isHoveredOrFocused()) {
+                enabledButton.isHovered()) {
 	        playDownSound(MinecraftClient.getInstance().getSoundManager());
             enabledButton.option.toggle();
 			return false;
             //enabledButton.updateMessage();
         } else {
-            MinecraftClient.getInstance().setScreen(new OptionsScreenBuilder(MinecraftClient.getInstance().currentScreen, category));
+            MinecraftClient.getInstance().openScreen(new OptionsScreenBuilder(MinecraftClient.getInstance().currentScreen, category));
         }
 		return super.mouseClicked(mouseX, mouseY, button);
     }

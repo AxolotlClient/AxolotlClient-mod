@@ -129,41 +129,51 @@ public abstract class SkyboxInstance {
 	protected void setupBlend(float brightness){
 
 		switch (blendMode) {
-			case 0 -> {
+            case 0:
 				RenderSystem.enableBlend();
 				RenderSystem.blendFunc(770, 771);
-			}
-			case 1 -> {
+                break;
+
+            case 1:
 				RenderSystem.enableBlend();
 				RenderSystem.blendFunc(770, 1);
-			}
-			case 2 -> {
+                break;
+
+            case 2:
 				RenderSystem.enableBlend();
 				RenderSystem.blendFunc(775, 0);
-			}
-			case 3 -> {
+                break;
+
+            case 3:
 				RenderSystem.enableBlend();
 				RenderSystem.blendFunc(774, 771);
-			}
-			case 4 -> {
+                break;
+
+            case 4:
 				RenderSystem.enableBlend();
 				RenderSystem.blendFunc(1, 1);
-			}
-			case 5 -> {
+                break;
+
+            case 5:
 				RenderSystem.enableBlend();
 				RenderSystem.blendFunc(0, 769);
-			}
-			case 6 -> {
+                break;
+
+            case 6:
 				RenderSystem.enableBlend();
 				RenderSystem.blendFunc(1, 769);
-			}
-			case 7 -> {
+                break;
+
+            case 7:
 				RenderSystem.enableBlend();
 				RenderSystem.blendFunc(774, 768);
-			}
-			case 8 -> RenderSystem.disableBlend();
+                break;
+
+            case 8:
+                RenderSystem.disableBlend();
+                break;
 		}
-		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, brightness);
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, brightness);
 
 		RenderSystem.enableTexture();
 	}
@@ -171,7 +181,7 @@ public abstract class SkyboxInstance {
 	protected void clearBlend(float brightness){
 		RenderSystem.enableBlend();
 		RenderSystem.blendFunc(770, 1);
-		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, brightness);
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, brightness);
 	}
 
 	public void render(MatrixStack matrices, float brightness){

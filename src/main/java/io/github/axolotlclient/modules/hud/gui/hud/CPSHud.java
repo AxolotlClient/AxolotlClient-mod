@@ -1,7 +1,6 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
 import io.github.axolotlclient.config.options.BooleanOption;
-import io.github.axolotlclient.config.options.Option;
 import io.github.axolotlclient.config.options.OptionBase;
 import io.github.axolotlclient.util.Hooks;
 import net.minecraft.util.Identifier;
@@ -35,9 +34,9 @@ public class CPSHud extends CleanHudEntry {
         });
         Hooks.KEYBIND_PRESS.register((key) -> {
             if (fromKeybindings.get()) {
-                if (key.equals(client.options.attackKey)) {
+                if (key.equals(client.options.keyAttack)) {
                     ClickList.LEFT.click();
-                } else if (key.equals(client.options.useKey)) {
+                } else if (key.equals(client.options.keyUse)) {
                     ClickList.RIGHT.click();
                 }
             }

@@ -3,18 +3,17 @@ package io.github.axolotlclient.util;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.mojang.blaze3d.glfw.Window;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import io.github.axolotlclient.config.options.OptionCategory;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
+import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.Address;
-import net.minecraft.client.network.AllowedAddressResolver;
-import net.minecraft.client.network.ServerAddress;
 import net.minecraft.client.network.ServerInfo;
+import net.minecraft.client.util.Window;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.NetworkState;
+import net.minecraft.network.ServerAddress;
 import net.minecraft.network.listener.ClientQueryPacketListener;
 import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket;
 import net.minecraft.network.packet.c2s.query.QueryPingC2SPacket;
@@ -26,15 +25,13 @@ import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.ScoreboardPlayerScore;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.text.Text;
-import net.minecraft.unmapped.C_fijiyucq;
+import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
-import org.quiltmc.qsl.command.api.client.ClientCommandManager;
-import org.quiltmc.qsl.command.api.client.QuiltClientCommandSource;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -63,10 +60,8 @@ public class Util {
         return end - start;
     }
 
-    public static void registerCommand(LiteralArgumentBuilder<QuiltClientCommandSource> builder){
-        if(ClientCommandManager.getDispatcher() != null) {
-            ClientCommandManager.getDispatcher().register(builder);
-        }
+    public static void registerCommand(LiteralArgumentBuilder<FabricClientCommandSource> builder){
+        ClientCommandManager.DISPATCHER.register(builder);
     }
 
 	public static String getGame(){
@@ -96,6 +91,14 @@ public class Util {
 		return game;
 	}
 
+    public static double calculateDistance(Vec3d pos1, Vec3d pos2){
+        return calculateDistance(pos1.x, pos2.x, pos1.y, pos2.y, pos1.z, pos2.z);
+    }
+
+    public static double calculateDistance(double x1, double x2, double y1, double y2, double z1, double z2) {
+        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2) + Math.pow(z2 - z1, 2));
+    }
+
     public static DrawPosition toGlCoords(int x, int y){
         return toGlCoords(new DrawPosition(x, y));
     }
@@ -117,11 +120,8 @@ public class Util {
         return new DrawPosition(x, y);
     }
 
-	// I suppose this is something introduced with the chat cryptography features in 1.19
-	private static final C_fijiyucq whateverThisIs = new C_fijiyucq(MinecraftClient.getInstance());
 	public static void sendChatMessage(String msg) {
-		Text text = whateverThisIs.method_44037(msg);
-		MinecraftClient.getInstance().player.method_44096(msg, text);
+		MinecraftClient.getInstance().player.sendChatMessage(msg);
 	}
 
     public static void sendChatMessage(Text msg){
@@ -173,49 +173,40 @@ public class Util {
 		{
 			try
 			{
-				var address = ServerAddress.parse(server.address);
-				var optional = AllowedAddressResolver.DEFAULT.resolve(address).map(Address::getInetSocketAddress);
+				ServerAddress address = ServerAddress.parse(server.address);
 
+                ClientConnection manager = ClientConnection.connect(InetAddress.getByName(address.getAddress()), address.getPort(), false);
+                manager.setPacketListener(new ClientQueryPacketListener() {
 
-				if (optional.isPresent())
-				{
+                    @Override
+                    public void onResponse(QueryResponseS2CPacket packet) {
+                        this.currentSystemTime = net.minecraft.util.Util.getMeasuringTimeMs();
+                        manager.send(new QueryPingC2SPacket(this.currentSystemTime));
+                    }
 
-					ClientConnection manager = ClientConnection.connect( optional.get(), false);
-					manager.setPacketListener(new ClientQueryPacketListener()
-					{
-						@Override
-						public void onResponse(QueryResponseS2CPacket packet) {
-							this.currentSystemTime = net.minecraft.util.Util.getMeasuringTimeMs();
-							manager.send(new QueryPingC2SPacket(this.currentSystemTime));
-						}
+                    @Override
+                    public void onPong(QueryPongS2CPacket packet) {
+                        long time = this.currentSystemTime;
+                        long latency = net.minecraft.util.Util.getMeasuringTimeMs();
+                        Util.currentServerPing = (int) (latency - time);
+                        manager.disconnect(Text.of(""));
+                    }
 
-						@Override
-						public void onPong(QueryPongS2CPacket packet) {
-							var time = this.currentSystemTime;
-							var latency = net.minecraft.util.Util.getMeasuringTimeMs();
-							Util.currentServerPing = (int) (latency - time);
-							manager.disconnect(Text.of(""));
-						}
+                    private long currentSystemTime = 0L;
 
-						private long currentSystemTime = 0L;
+                    @Override
+                    public void onDisconnected(Text reason) {}
 
-						@Override
-						public void onDisconnected(Text reason) {
-
-						}
-
-						@Override
-						public ClientConnection getConnection()
+                    @Override
+                    public ClientConnection getConnection()
 						{
 							return manager;
 						}
-					});
-					manager.send(new HandshakeC2SPacket(address.getAddress(), address.getPort(), NetworkState.STATUS));
-					manager.send(new QueryRequestC2SPacket());
-				}
-			}
-			catch (Exception ignored){}
-		});
+                });
+                manager.send(new HandshakeC2SPacket(address.getAddress(), address.getPort(), NetworkState.STATUS));
+                manager.send(new QueryRequestC2SPacket());
+            } catch (Exception ignored){}
+        });
 	}
 
 	public static void applyScissor(Rectangle scissor){

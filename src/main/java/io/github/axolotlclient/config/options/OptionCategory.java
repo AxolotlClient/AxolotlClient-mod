@@ -3,12 +3,14 @@ package io.github.axolotlclient.config.options;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import io.github.axolotlclient.util.Util;
+import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
-import org.quiltmc.qsl.command.api.client.ClientCommandManager;
-import org.quiltmc.qsl.command.api.client.ClientCommandRegistrationCallback;
-import org.quiltmc.qsl.command.api.client.QuiltClientCommandSource;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,7 +26,7 @@ public class OptionCategory implements Tooltippable {
     public OptionCategory(String key){
 	    this.name =key;
 
-        ClientCommandRegistrationCallback.EVENT.register((dispatcher, buildContext, environment) -> Util.registerCommand(buildCommand()));
+        CommandRegistrationCallback.EVENT.register((dispatcher, buildContext) -> Util.registerCommand(buildCommand()));
     }
 
 	public OptionCategory(Identifier Id, String key){
@@ -58,10 +60,10 @@ public class OptionCategory implements Tooltippable {
         return name;
     }
 
-    public Text getTranslatedName(){return Text.translatable(name);}
+    public Text getTranslatedName(){return new TranslatableText(name);}
 
-    public LiteralArgumentBuilder<QuiltClientCommandSource> buildCommand(){
-        LiteralArgumentBuilder<QuiltClientCommandSource> builder = ClientCommandManager.literal(getName());
+    public LiteralArgumentBuilder<FabricClientCommandSource> buildCommand(){
+        LiteralArgumentBuilder<FabricClientCommandSource> builder = ClientCommandManager.literal(getName());
         for(OptionBase<?> o:getOptions()){
             o.getCommand(builder);
         }
@@ -70,7 +72,7 @@ public class OptionCategory implements Tooltippable {
             for (OptionBase<?> o : getOptions()) {
                 string.append("    ").append(Formatting.AQUA).append(o.getName()).append(": ").append(o.get()).append("\n");
             }
-            Util.sendChatMessage(Text.literal(Formatting.BLUE + "Values in this category are: \n" + string));
+            Util.sendChatMessage(new LiteralText(Formatting.BLUE + "Values in this category are: \n" + string));
             return Command.SINGLE_SUCCESS;
         });
         return builder;

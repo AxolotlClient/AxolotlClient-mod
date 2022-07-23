@@ -3,7 +3,6 @@ package io.github.axolotlclient.modules.hud.gui.hud;
 import io.github.axolotlclient.config.Color;
 import io.github.axolotlclient.config.options.ColorOption;
 import io.github.axolotlclient.config.options.IntegerOption;
-import io.github.axolotlclient.config.options.Option;
 import io.github.axolotlclient.config.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
@@ -34,23 +33,35 @@ public class CoordsHud extends AbstractHudEntry {
     }
 
     public static String getZDir(int dir) {
-	    return switch (dir) {
-		    case 5 -> "++";
-		    case 4, 6 -> "+";
-		    case 8, 2 -> "-";
-		    case 1 -> "--";
-		    default -> "";
-	    };
+        switch (dir) {
+            case 5:
+                return "++";
+            case 4:
+            case 6:
+                return "+";
+            case 8:
+            case 2:
+                return "-";
+            case 1:
+                return "--";
+        }
+        return "";
     }
 
     public static String getXDir(int dir) {
-	    return switch (dir) {
-		    case 3 -> "++";
-		    case 2, 4 -> "+";
-		    case 6, 8 -> "-";
-		    case 7 -> "--";
-		    default -> "";
-	    };
+        switch (dir) {
+            case 3:
+                return "++";
+            case 2:
+            case 4:
+                return "+";
+            case 6:
+            case 8:
+                return "-";
+            case 7:
+                return "--";
+        }
+        return "";
     }
 
     /**
@@ -99,11 +110,13 @@ public class CoordsHud extends AbstractHudEntry {
 		if(outline.get()) {
 			outlineRect(matrices, getBounds(), outlineColor.get());
 		}
-		StringBuilder format = new StringBuilder("#");
-		if (decimalPlaces.get() > 0) {
-			format.append(".");
-			format.append("0".repeat(Math.max(0, decimalPlaces.get())));
-		}
+        StringBuilder format = new StringBuilder("#");
+        if (decimalPlaces.get() > 0) {
+            format.append(".");
+            for (int i = 0; i < decimalPlaces.get(); i++) {
+                format.append("0");
+            }
+        }
 		DecimalFormat df = new DecimalFormat(format.toString());
 		df.setRoundingMode(RoundingMode.CEILING);
 		double x = client.player.getX();
@@ -146,10 +159,12 @@ public class CoordsHud extends AbstractHudEntry {
 		scale(matrices);
 		DrawPosition pos = getPos();
 		StringBuilder format = new StringBuilder("#");
-		if (decimalPlaces.get() > 0) {
-			format.append(".");
-			format.append("#".repeat(Math.max(0, decimalPlaces.get())));
-		}
+        if (decimalPlaces.get() > 0) {
+            format.append(".");
+            for (int i = 0; i < decimalPlaces.get(); i++) {
+                format.append("0");
+            }
+        }
 
 		DecimalFormat df = new DecimalFormat(format.toString());
 		df.setRoundingMode(RoundingMode.FLOOR);
@@ -181,18 +196,37 @@ public class CoordsHud extends AbstractHudEntry {
 	}
 
     public String getWordedDirection(int dir) {
-	    return switch (dir) {
-		    case 1 -> "N";
-		    case 2 -> "NE";
-		    case 3 -> "E";
-		    case 4 -> "SE";
-		    case 5 -> "S";
-		    case 6 -> "SW";
-		    case 7 -> "W";
-		    case 8 -> "NW";
-		    case 0 -> "?";
-		    default -> "";
-	    };
+        String direction = "";
+        switch (dir) {
+            case 1:
+                direction = "N";
+                break;
+            case 2:
+                direction = "NE";
+                break;
+            case 3:
+                direction = "E";
+                break;
+            case 4:
+                direction = "SE";
+                break;
+            case 5:
+                direction = "S";
+                break;
+            case 6:
+                direction = "SW";
+                break;
+            case 7:
+                direction = "W";
+                break;
+            case 8:
+                direction = "NW";
+                break;
+            case 0:
+                direction = "?";
+                break;
+        }
+        return direction;
     }
 
     @Override

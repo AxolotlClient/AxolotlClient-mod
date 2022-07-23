@@ -1,7 +1,6 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
 import io.github.axolotlclient.config.options.BooleanOption;
-import io.github.axolotlclient.config.options.Option;
 import io.github.axolotlclient.config.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
@@ -73,7 +72,7 @@ public class ArrowHud extends AbstractHudEntry {
 			return;
 		}
 		if (!allArrowTypes.get()) {
-			currentArrow = client.player.getArrowType(Items.BOW.getDefaultStack());
+			currentArrow = client.player.getArrowType(Items.BOW.getStackForRender());
 		} else {
 			currentArrow = new ItemStack(Items.ARROW);
 		}

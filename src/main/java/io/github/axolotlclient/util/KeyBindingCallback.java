@@ -1,7 +1,7 @@
 package io.github.axolotlclient.util;
 
-import com.mojang.blaze3d.platform.InputUtil;
-import net.minecraft.client.option.KeyBind;
+import net.minecraft.client.options.KeyBinding;
+import net.minecraft.client.util.InputUtil;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -16,6 +16,6 @@ public final class KeyBindingCallback {
 	}
 
     public interface OnPress {
-        void onPress(KeyBind binding);
+        void onPress(KeyBinding binding);
     }
 }

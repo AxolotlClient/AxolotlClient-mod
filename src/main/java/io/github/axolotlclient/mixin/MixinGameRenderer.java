@@ -5,11 +5,10 @@ import io.github.axolotlclient.modules.motionblur.MotionBlur;
 import io.github.axolotlclient.modules.zoom.Zoom;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.CameraSubmersionType;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.fluid.FluidState;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -93,16 +92,16 @@ public abstract class MixinGameRenderer {
 
 		if(!AxolotlClient.CONFIG.dynamicFOV.get()) {
             Entity entity = this.client.getCameraEntity();
-            double f = changingFov ? client.options.getFov().get() :70F;
+            double f = changingFov ? client.options.fov :70F;
             if (entity instanceof LivingEntity && ((LivingEntity)entity).getHealth() <= 0.0F) {
                 float g = (float)((LivingEntity)entity).deathTime + tickDelta;
                 f /= (1.0F - 500.0F / (g + 500.0F)) * 2.0F + 1.0F;
             }
 
-	        CameraSubmersionType cameraSubmersionType = camera.getSubmersionType();
-	        if (cameraSubmersionType == CameraSubmersionType.LAVA || cameraSubmersionType == CameraSubmersionType.WATER) {
-		        f *= MathHelper.lerp(this.client.options.getFovEffectScale().get(), 1.0, 0.85714287F);
-	        }
+            FluidState fluidState = camera.getSubmergedFluidState();
+            if (!fluidState.isEmpty()) {
+                f *= 60.0 / 70.0;
+            }
             returnValue = f;
         }
 	    returnValue = Zoom.getFov(returnValue, tickDelta);
@@ -110,7 +109,7 @@ public abstract class MixinGameRenderer {
 	    cir.setReturnValue(returnValue);
     }
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getFramebuffer()Lcom/mojang/blaze3d/framebuffer/Framebuffer;"))
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getFramebuffer()Lnet/minecraft/client/gl/Framebuffer;"))
     public void worldMotionBlur(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
         motionBlur(tickDelta, startTime, tick, null);
     }

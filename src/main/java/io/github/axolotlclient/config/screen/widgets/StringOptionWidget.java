@@ -5,21 +5,18 @@ import io.github.axolotlclient.config.screen.OptionsScreenBuilder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 
 public class StringOptionWidget extends TextFieldWidget {
 
 	public final StringOption option;
-	/*public StringOptionWidget(int x, int y, int width, StringOption option) {
-		super(MinecraftClient.getInstance().textRenderer, x, y, width, 20, Text.of(option.get()));
-		this.option=option;
-	}*/
 
     public TextFieldWidget textField;
 
     public StringOptionWidget(int x, int y, StringOption option){
-        super(MinecraftClient.getInstance().textRenderer, x, y, 150, 40, Text.literal(option.get()));
-        textField = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, x, y, 150, 20, Text.empty()){
+        super(MinecraftClient.getInstance().textRenderer, x, y, 150, 40, new LiteralText(option.get()));
+        textField = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, x, y, 150, 20, Text.of("")){
 	        @Override
 	        public boolean mouseClicked(double mouseX, double mouseY, int button) {
                 if(isMouseOver(mouseX, mouseY)) {
@@ -70,11 +67,10 @@ public class StringOptionWidget extends TextFieldWidget {
 		}
 	}
 
-	@Override
-	public void setTextFieldFocused(boolean focused) {
-		textField.setTextFieldFocused(focused);
-		super.setTextFieldFocused(focused);
-	}
+    @Override
+    public boolean changeFocus(boolean bl) {
+        return textField.changeFocus(bl) || super.changeFocus(bl);
+    }
 
     @Override
     public boolean isMouseOver(double mouseX, double mouseY) {

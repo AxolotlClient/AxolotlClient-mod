@@ -13,7 +13,6 @@ public class FPSHud extends CleanHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "fpshud");
 
     public FPSHud() {
-        //super(x, y, scale);
         super();
     }
 

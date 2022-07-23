@@ -25,7 +25,7 @@ public abstract class MixinChatHud {
         return NickHider.Instance.editMessage(message);
 	}
 
-	@ModifyArg(method = "addMessage(Lnet/minecraft/text/Text;I)V", at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;info(Ljava/lang/String;Ljava/lang/Object;)V"), index = 1, remap = false)
+	@ModifyArg(method = "addMessage(Lnet/minecraft/text/Text;I)V", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;info(Ljava/lang/String;Ljava/lang/Object;)V"), index = 1, remap = false)
 	public Object noNamesInLogIfHidden(Object o){
 		return editChat((Text.of((String) o))).getString();
 	}

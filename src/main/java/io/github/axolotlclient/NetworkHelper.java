@@ -121,7 +121,8 @@ public class NetworkHelper {
             String body = EntityUtils.toString(response.getEntity());
             client.close();
 
-            return JsonParser.parseReader(new StringReader(body));
+            JsonParser parser = new JsonParser();
+            return parser.parse(new StringReader(body));
 
         } catch (IOException e) {
             e.printStackTrace();

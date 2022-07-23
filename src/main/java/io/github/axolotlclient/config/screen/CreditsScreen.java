@@ -12,6 +12,7 @@ import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -54,7 +55,7 @@ public class CreditsScreen extends Screen {
 		super.render(matrices, mouseX, mouseY, delta);
 
 
-        drawCenteredText(matrices, this.textRenderer, I18n.translate("credits"), width/2, height/4-40, -1);
+        drawCenteredText(matrices, this.textRenderer, new TranslatableText("credits"), width/2, height/4-40, -1);
 
         int authorX = width/6;
         int textX = width/2;
@@ -83,20 +84,20 @@ public class CreditsScreen extends Screen {
 
     @Override
     public void init() {
-        this.addDrawableChild(new ButtonWidget(
+        this.addButton(new ButtonWidget(
 			width/2 -75, height - 50 + 22, 150, 20,
-	        Text.translatable("back"), buttonWidget -> {MinecraftClient.getInstance().setScreen(parent); stopBGM();}));
+	        new TranslatableText("back"), buttonWidget -> {MinecraftClient.getInstance().openScreen(parent); stopBGM();}));
 
         initCredits();
 
-        this.addDrawableChild(new ButtonWidget(6, this.height-26, 100, 20,
-                Text.translatable("creditsBGM").append(": ").append(Text.translatable(AxolotlClient.CONFIG.creditsBGM.get()?"options.on":"options.off")),
+        this.addButton(new ButtonWidget(6, this.height-26, 100, 20,
+                new TranslatableText("creditsBGM").append(": ").append(new TranslatableText(AxolotlClient.CONFIG.creditsBGM.get()?"options.on":"options.off")),
 	        buttonWidget -> {
 				AxolotlClient.CONFIG.creditsBGM.toggle();
 				ConfigManager.save();
 				stopBGM();
-				buttonWidget.setMessage(Text.translatable("creditsBGM").append(": ")
-					.append(Text.translatable(AxolotlClient.CONFIG.creditsBGM.get()?"options.on":"options.off")));
+				buttonWidget.setMessage(new TranslatableText("creditsBGM").append(": ")
+					.append(new TranslatableText(AxolotlClient.CONFIG.creditsBGM.get()?"options.on":"options.off")));
 	        }
         ));
     }
@@ -118,8 +119,8 @@ public class CreditsScreen extends Screen {
     }
 
 	@Override
-	public void closeScreen() {
+	public void onClose() {
 		stopBGM();
-		super.closeScreen();
+		super.onClose();
 	}
 }

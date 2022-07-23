@@ -17,7 +17,7 @@ public abstract class MixinWorldListWidgetEntry {
 
     @Inject(method = "play", at = @At("HEAD"))
     public void onSPWorldJoin(CallbackInfo ci){
-        if(!level.isUnavailable()){
+        if(!level.isLocked()){
             DiscordRPC.setWorld(level.getDisplayName());
         }
     }

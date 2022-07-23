@@ -12,7 +12,9 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -120,16 +122,19 @@ public class OptionsScreenBuilder extends Screen {
     public void init() {
         this.list = new ButtonWidgetList(this.client, this.width, this.height, 50, this.height - 50, 25, cat);
 
-		this.addSelectableChild(list);
+		this.addChild(list);
 
-        this.addDrawableChild(new ButtonWidget(this.width/2-100, this.height-40, 200, 20, Text.translatable("back"), buttonWidget -> {
+        this.addButton(new ButtonWidget(this.width/2-100, this.height-40, 200, 20, new TranslatableText("back"), buttonWidget -> {
             if(isPickerOpen()){
                 closeColorPicker();
             }
             ConfigManager.save();
-            MinecraftClient.getInstance().setScreen(parent);
+            MinecraftClient.getInstance().openScreen(parent);
         }));
-        if(Objects.equals(cat.getName(), "config")) this.addDrawableChild(new ButtonWidget(this.width-106, this.height-26, 100, 20, Text.translatable("credits"), buttonWidget -> MinecraftClient.getInstance().setScreen(new CreditsScreen(this))));
+        if(Objects.equals(cat.getName(), "config"))
+            this.addButton(new ButtonWidget(this.width-106,
+                this.height-26, 100, 20, new TranslatableText("credits"),
+                buttonWidget -> MinecraftClient.getInstance().openScreen(new CreditsScreen(this))));
     }
 
 	@Override
@@ -151,7 +156,7 @@ public class OptionsScreenBuilder extends Screen {
 	public void renderTooltip(MatrixStack matrices, Tooltippable option, int x, int y){
 		List<Text> text = new ArrayList<>();
 		String[] tooltip = Objects.requireNonNull(option.getTooltip()).getString().split("<br>");
-		for(String s:tooltip) text.add(Text.literal(s));
+		for(String s:tooltip) text.add(new LiteralText(s));
 		this.renderTooltip(matrices, text, x, y);
 	}
 

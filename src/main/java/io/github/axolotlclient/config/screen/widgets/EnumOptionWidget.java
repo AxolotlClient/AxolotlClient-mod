@@ -5,13 +5,14 @@ import io.github.axolotlclient.config.screen.OptionsScreenBuilder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 
 public class EnumOptionWidget extends ButtonWidget {
 
     EnumOption option;
 
     public EnumOptionWidget(int x, int y, EnumOption option) {
-        super(x, y, 150, 20, Text.translatable(option.get()), buttonWidget -> buttonWidget.setMessage(Text.translatable(option.next())));
+        super(x, y, 150, 20, new TranslatableText(option.get()), buttonWidget -> buttonWidget.setMessage(new TranslatableText(option.next())));
         this.option=option;
     }
 
@@ -28,9 +29,9 @@ public class EnumOptionWidget extends ButtonWidget {
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if(button==1) {
-            setMessage(Text.translatable(option.last()));
+            setMessage(new TranslatableText(option.last()));
         } else {
-            setMessage(Text.translatable(option.next()));
+            setMessage(new TranslatableText(option.next()));
         }
         return true;
     }

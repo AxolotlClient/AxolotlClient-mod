@@ -3,16 +3,15 @@ package io.github.axolotlclient.modules.sky;
 import com.google.gson.JsonObject;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.BufferRenderer;
-import com.mojang.blaze3d.vertex.Tessellator;
-import com.mojang.blaze3d.vertex.VertexFormat;
-import com.mojang.blaze3d.vertex.VertexFormats;
-import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.BufferRenderer;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Matrix4f;
-import net.minecraft.util.math.Vec3f;
 
 /**
  * This implementation of custom skies is based on the FabricSkyBoxes mod by AMereBagatelle
@@ -45,13 +44,13 @@ public class FSBSkyboxInstance extends SkyboxInstance{
 	public void renderSkybox(MatrixStack matrices) {
 		this.alpha=getAlpha();
 
-		RenderSystem.setShaderColor(1,1,1,1);
+		RenderSystem.color4f(1,1,1,1);
 		RenderSystem.enableBlend();
-		RenderSystem.blendFunc(GlStateManager.class_4535.SRC_ALPHA, GlStateManager.class_4534.ONE_MINUS_SRC_ALPHA);
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.blendFunc(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA);
+		//RenderSystem.se(GameRenderer::getPositionTexShader);
 
 		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder bufferBuilder = tessellator.getBufferBuilder();
+		BufferBuilder bufferBuilder = tessellator.getBuffer();
 
 		for (int i = 0; i < 6; ++i) {
 			// 0 = bottom
@@ -63,31 +62,31 @@ public class FSBSkyboxInstance extends SkyboxInstance{
 
 			if (textures[i] != null) {
 
-				RenderSystem.setShaderTexture(0, textures[i]);
+				MinecraftClient.getInstance().getTextureManager().bindTexture(textures[i]);
 				matrices.push();
 
 				if (i == 1) {
-					matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(90.0F));
+					matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(90.0F));
 				} else if (i == 2) {
-					matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-90.0F));
-					matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180.0F));
+					matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(-90.0F));
+					matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(180.0F));
 				} else if (i == 3) {
-					matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(180.0F));
-					matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(90.0F));
+					matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(180.0F));
+					matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(90.0F));
 				} else if (i == 4) {
-					matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(90.0F));
-					matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-90.0F));
+					matrices.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(90.0F));
+					matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(-90.0F));
 				} else if (i == 5) {
-					matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(-90.0F));
-					matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(90.0F));
+					matrices.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(-90.0F));
+					matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(90.0F));
 				}
-				Matrix4f matrix4f = matrices.peek().getPosition();
-				bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
-				bufferBuilder.vertex(matrix4f, -100, -100, -100).uv(0F, 0F).color(1F, 1F, 1F, alpha).next();
-				bufferBuilder.vertex(matrix4f, -100, -100, 100).uv(0F, 1F).color(1F, 1F, 1F, alpha).next();
-				bufferBuilder.vertex(matrix4f, 100, -100, 100).uv(1F, 1F).color(1F, 1F, 1F, alpha).next();
-				bufferBuilder.vertex(matrix4f, 100, -100, -100).uv(1F, 0F).color(1F, 1F, 1F, alpha).next();
-				BufferRenderer.drawWithShader(bufferBuilder.end());
+				Matrix4f matrix4f = matrices.peek().getModel();
+				bufferBuilder.begin(7, VertexFormats.POSITION_TEXTURE_COLOR);
+				bufferBuilder.vertex(matrix4f, -100, -100, -100).texture(0F, 0F).color(1F, 1F, 1F, alpha).next();
+				bufferBuilder.vertex(matrix4f, -100, -100, 100).texture(0F, 1F).color(1F, 1F, 1F, alpha).next();
+				bufferBuilder.vertex(matrix4f, 100, -100, 100).texture(1F, 1F).color(1F, 1F, 1F, alpha).next();
+				bufferBuilder.vertex(matrix4f, 100, -100, -100).texture(1F, 0F).color(1F, 1F, 1F, alpha).next();
+				BufferRenderer.draw(bufferBuilder);
 
 				matrices.pop();
 			}

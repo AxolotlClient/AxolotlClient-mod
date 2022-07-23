@@ -1,6 +1,7 @@
 package io.github.axolotlclient.config.options;
 
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
@@ -15,8 +16,8 @@ public interface Tooltippable {
 
 	default @Nullable Text getTooltip(String location){
 
-        if(!Objects.equals(Text.translatable(location + ".tooltip").getString(), location + ".tooltip")) {
-            return Text.translatable(location + ".tooltip");
+        if(!Objects.equals(new TranslatableText(location + ".tooltip").getString(), location + ".tooltip")) {
+            return new TranslatableText(location + ".tooltip");
         }
 
 		return null;

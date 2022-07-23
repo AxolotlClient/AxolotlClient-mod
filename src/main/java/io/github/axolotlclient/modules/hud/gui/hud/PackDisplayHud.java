@@ -1,17 +1,17 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.texture.NativeImage;
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.config.options.Option;
 import io.github.axolotlclient.config.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.resource.pack.ResourcePack;
+import net.minecraft.resource.ResourcePack;
 import net.minecraft.util.Identifier;
 
 import java.io.InputStream;
@@ -106,8 +106,8 @@ public class PackDisplayHud extends AbstractHudEntry {
         }
 
         public void render(MatrixStack matrices, int x, int y) {
-            RenderSystem.setShaderColor(1, 1, 1, 1F);
-            RenderSystem.setShaderTexture(0, texture);
+            RenderSystem.color4f(1, 1, 1, 1F);
+            GlStateManager.bindTexture(texture);
             DrawableHelper.drawTexture(matrices, x, y, 0, 0, 16, 16, 16, 16);
             drawString(matrices, MinecraftClient.getInstance().textRenderer, name, x + 18, y + 6, chroma.get()? textColor.getChroma().getAsInt() : textColor.get().getAsInt(), shadow.get());
         }

@@ -7,8 +7,8 @@ import io.github.axolotlclient.config.options.IntegerOption;
 import io.github.axolotlclient.config.options.OptionBase;
 import io.github.axolotlclient.config.screen.OptionsScreenBuilder;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.widget.AbstractButtonWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
@@ -22,7 +22,7 @@ public class OptionSliderWidget extends ButtonWidget {
 
     private double value;
     public boolean dragging;
-    private final OptionBase option;
+    private final OptionBase<?> option;
     private final double min;
     private final double max;
 
@@ -33,7 +33,7 @@ public class OptionSliderWidget extends ButtonWidget {
     }
 
     public OptionSliderWidget(int x, int y, FloatOption option, float min, float max) {
-        super(x, y, 150, 20, Text.empty(), buttonWidget -> {});
+        super(x, y, 150, 20, Text.of(""), buttonWidget -> {});
         this.option = option;
         this.min = min;
         this.max = max;
@@ -50,7 +50,7 @@ public class OptionSliderWidget extends ButtonWidget {
     }
 
     public OptionSliderWidget(int x, int y, int width, int height, IntegerOption option, float min, float max) {
-        super(x, y, width, height, Text.empty(), buttonWidget -> {});
+        super(x, y, width, height, Text.of(""), buttonWidget -> {});
         this.option = option;
         this.min = min;
         this.max = max;
@@ -67,7 +67,7 @@ public class OptionSliderWidget extends ButtonWidget {
     }
 
     public OptionSliderWidget(int x, int y, DoubleOption option, double min, double max) {
-        super(x, y, 150, 20, Text.empty(), buttonWidget -> {});
+        super(x, y, 150, 20, Text.of(""), buttonWidget -> {});
         this.option = option;
         this.min = min;
         this.max = max;
@@ -122,8 +122,8 @@ public class OptionSliderWidget extends ButtonWidget {
                 this.message = this.getMessage();
             }
 
-            RenderSystem.setShaderTexture(0, ClickableWidget.WIDGETS_TEXTURE);
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            MinecraftClient.getInstance().getTextureManager().bindTexture(AbstractButtonWidget.WIDGETS_LOCATION);
+            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 	        this.drawTexture(matrices, this.x, this.y, 0, 46, this.width / 2, this.height);
 	        this.drawTexture(matrices, this.x + this.width / 2, this.y, 200 - this.width / 2, 46, this.width / 2, this.height);
@@ -174,7 +174,7 @@ public class OptionSliderWidget extends ButtonWidget {
 		return super.mouseReleased(mouseX, mouseY, button);
 	}
 
-    public OptionBase getOption(){
+    public OptionBase<?> getOption(){
         return option;
     }
 

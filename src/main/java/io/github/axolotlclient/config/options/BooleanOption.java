@@ -82,18 +82,18 @@ public class BooleanOption extends OptionBase<Boolean> {
     protected CommandResponse onCommandExecution(String arg) {
         if(arg.length()>0){
             switch (arg) {
-                case "toggle" -> {
+                case "toggle":
                     toggle();
                     return new CommandResponse(true, "Successfully toggled " + getName() + "!");
-                }
-                case "true" -> {
+
+                case "true":
                     set(true);
                     return new CommandResponse(true, "Successfully set " + getName() + " to true!");
-                }
-                case "false" -> {
+
+                case "false":
                     set(false);
                     return new CommandResponse(true, "Successfully set " + getName() + " to false!");
-                }
+
             }
 
             return new CommandResponse(false, "Please specify either toggle, true or false!");

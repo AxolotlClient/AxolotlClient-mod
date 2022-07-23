@@ -10,5 +10,5 @@ public interface AccessorButtonListWidget {
 
 	@Accessor
 	<E extends EntryListWidget.Entry<E>>
-	void setHoveredEntry(E hoveredEntry);
+	void setSelected(E hoveredEntry);
 }

@@ -3,12 +3,11 @@ package io.github.axolotlclient.modules.hud.gui.hud;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.config.ConfigManager;
 import io.github.axolotlclient.config.options.BooleanOption;
-import io.github.axolotlclient.config.options.Option;
 import io.github.axolotlclient.config.options.OptionBase;
 import io.github.axolotlclient.config.options.StringOption;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.option.KeyBind;
+import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
@@ -29,8 +28,8 @@ public class ToggleSprintHud extends CleanHudEntry {
     private final BooleanOption randomPlaceholder = new BooleanOption("randomPlaceholder", false);
     private final StringOption placeholder = new StringOption("placeholder", "");
 
-    KeyBind sprintToggle = new KeyBind("key.toggleSprint", GLFW.GLFW_KEY_K, "category.axolotlclient");
-    KeyBind sneakToggle = new KeyBind("key.toggleSneak", GLFW.GLFW_KEY_I, "category.axolotlclient");
+    KeyBinding sprintToggle = new KeyBinding("key.toggleSprint", GLFW.GLFW_KEY_K, "category.axolotlclient");
+    KeyBinding sneakToggle = new KeyBinding("key.toggleSneak", GLFW.GLFW_KEY_I, "category.axolotlclient");
 
     public BooleanOption sprintToggled = new BooleanOption("sprintToggled", false);
     private boolean sprintWasPressed = false;
@@ -53,7 +52,7 @@ public class ToggleSprintHud extends CleanHudEntry {
     private void loadRandomPlaceholder(){
         try {
             BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(MinecraftClient.getInstance().getResourceManager().getResourceOrThrow(new Identifier("axolotlclient", "texts/splashes.txt")).open(), StandardCharsets.UTF_8)
+                    new InputStreamReader(MinecraftClient.getInstance().getResourceManager().getResource(new Identifier("axolotlclient", "texts/splashes.txt")).getInputStream(), StandardCharsets.UTF_8)
             );
             String string;
             while((string = bufferedReader.readLine()) != null) {
@@ -94,8 +93,8 @@ public class ToggleSprintHud extends CleanHudEntry {
     @Override
     public String getValue(){
 
-        if(client.options.sneakKey.isPressed())return I18n.translate("sneaking_pressed");
-        if(client.options.sprintKey.isPressed())return I18n.translate("sprinting_pressed");
+        if(client.options.keySneak.isPressed())return I18n.translate("sneaking_pressed");
+        if(client.options.keySprint.isPressed())return I18n.translate("sprinting_pressed");
 
         if(toggleSneak.get() && sneakToggled.get()){
             return I18n.translate("sneaking_toggled");

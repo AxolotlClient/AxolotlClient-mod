@@ -14,6 +14,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 
 import java.awt.*;
 import java.util.List;
@@ -36,7 +37,7 @@ public class HudEditScreen extends Screen {
     private final Screen parent;
 
     public HudEditScreen(Screen parent){
-	    super(Text.empty());
+	    super(Text.of(""));
 	    snapping.setDefaults();
         updateSnapState();
         manager = HudManager.getINSTANCE();
@@ -82,7 +83,7 @@ public class HudEditScreen extends Screen {
                 return super.mouseClicked(mouseX, mouseY, button);
 			}
 		} else if (button == 1) {
-			entry.ifPresent(abstractHudEntry -> MinecraftClient.getInstance().setScreen(new OptionsScreenBuilder(this, abstractHudEntry.getOptionsAsCategory())));
+			entry.ifPresent(abstractHudEntry -> MinecraftClient.getInstance().openScreen(new OptionsScreenBuilder(this, abstractHudEntry.getOptionsAsCategory())));
 		}
 		return false;
 	}
@@ -129,30 +130,30 @@ public class HudEditScreen extends Screen {
 
     @Override
     public void init() {
-	    this.addDrawableChild(new ButtonWidget(width / 2 - 50,
+	    this.addButton(new ButtonWidget(width / 2 - 50,
 		    height/2+ 12,
 		    100, 20,
-		    Text.translatable("hud.snapping").append(": ").append(Text.translatable(snapping.get()?"options.on":"options.off")),
+		    new TranslatableText("hud.snapping").append(": ").append(new TranslatableText(snapping.get()?"options.on":"options.off")),
 		    buttonWidget -> {
 			snapping.toggle();
-			buttonWidget.setMessage(Text.translatable("hud.snapping").append(": ").append(Text.translatable(snapping.get()?"options.on":"options.off")));
+			buttonWidget.setMessage(new TranslatableText("hud.snapping").append(": ").append(new TranslatableText(snapping.get()?"options.on":"options.off")));
 			ConfigManager.save();
 		}));
 
-		this.addDrawableChild(new ButtonWidget(width / 2 - 75,
+		this.addButton(new ButtonWidget(width / 2 - 75,
 			height/2-10,
 			150, 20,
-			Text.translatable("hud.clientOptions"),
-			buttonWidget -> MinecraftClient.getInstance().setScreen(
+			new TranslatableText("hud.clientOptions"),
+			buttonWidget -> MinecraftClient.getInstance().openScreen(
 				new OptionsScreenBuilder(this, new OptionCategory("config")
 					.addSubCategories(AxolotlClient.CONFIG.getCategories())))));
 
-        if(parent!=null)addDrawableChild(new ButtonWidget(
+        if(parent!=null)addButton(new ButtonWidget(
                 width/2 -75, height - 50 + 22, 150, 20,
-                Text.translatable("back"), buttonWidget -> MinecraftClient.getInstance().setScreen(parent)));
-        else addDrawableChild(new ButtonWidget(
+                new TranslatableText("back"), buttonWidget -> MinecraftClient.getInstance().openScreen(parent)));
+        else addButton(new ButtonWidget(
                 width/2 -75, height - 50 + 22, 150, 20,
-                Text.translatable("close"), buttonWidget -> MinecraftClient.getInstance().setScreen(null)));
+                new TranslatableText("close"), buttonWidget -> MinecraftClient.getInstance().openScreen(null)));
 
     }
 

@@ -1,6 +1,5 @@
 package io.github.axolotlclient.config.screen.widgets;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.config.Color;
 import io.github.axolotlclient.config.options.ColorOption;
 import io.github.axolotlclient.config.screen.OptionsScreenBuilder;
@@ -36,7 +35,7 @@ public class ColorOptionWidget extends ButtonWidget {
                 DrawUtil.fill(matrices, x, y, x+width, y+height, option.get().getAsInt());
                 DrawUtil.outlineRect(matrices, new Rectangle(x, y, width, height), new Color(-6250336));
 
-                RenderSystem.setShaderTexture(0, pipette);
+                MinecraftClient.getInstance().getTextureManager().bindTexture(pipette);
                 drawTexture(matrices, x, y, 0, 0, 20, 20, 21, 21);
             }
         };
@@ -65,7 +64,7 @@ public class ColorOptionWidget extends ButtonWidget {
             textField.mouseClicked(mouseX, mouseY, 0);
 
         } else {
-			textField.setTextFieldFocused(false);
+			textField.changeFocus(false);
 	        if(MinecraftClient.getInstance().currentScreen instanceof OptionsScreenBuilder){
 		        ((OptionsScreenBuilder) MinecraftClient.getInstance().currentScreen).closeColorPicker();
 	        }
