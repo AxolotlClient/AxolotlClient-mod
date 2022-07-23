@@ -36,6 +36,7 @@
 		"MixinModStatus",
 		"MixinMouse",
 		"MixinMultiplayerScreen",
+		"MixinPlayerEntity",
 		"MixinPlayerEntityRenderer",
 		"MixinPlayerListEntry",
 		"MixinPlayerListHud",

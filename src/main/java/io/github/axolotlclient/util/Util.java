@@ -5,7 +5,6 @@ import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.mojang.blaze3d.glfw.Window;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import io.github.axolotlclient.config.options.OptionCategory;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;
@@ -27,6 +26,7 @@ import net.minecraft.scoreboard.ScoreboardPlayerScore;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.text.Text;
 import net.minecraft.unmapped.C_fijiyucq;
+import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 import org.quiltmc.qsl.command.api.client.ClientCommandManager;
 import org.quiltmc.qsl.command.api.client.QuiltClientCommandSource;
@@ -34,7 +34,6 @@ import org.quiltmc.qsl.command.api.client.QuiltClientCommandSource;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -95,6 +94,14 @@ public class Util {
 
 		return game;
 	}
+
+    public static double calculateDistance(Vec3d pos1, Vec3d pos2){
+        return calculateDistance(pos1.x, pos2.x, pos1.y, pos2.y, pos1.z, pos2.z);
+    }
+
+    public static double calculateDistance(double x1, double x2, double y1, double y2, double z1, double z2) {
+        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2) + Math.pow(z2 - z1, 2));
+    }
 
     public static DrawPosition toGlCoords(int x, int y){
         return toGlCoords(new DrawPosition(x, y));

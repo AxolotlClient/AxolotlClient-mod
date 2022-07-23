@@ -1,5 +1,6 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.Tessellator;
@@ -41,7 +42,7 @@ import java.util.Objects;
 public class CrosshairHud extends AbstractHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "crosshairhud");
 
-    private final EnumOption type = new EnumOption("crosshair_type", CrosshairOption.values(), CrosshairOption.TEXTURE);
+    private final EnumOption type = new EnumOption("type", CrosshairOption.values(), CrosshairOption.TEXTURE);
     private final BooleanOption showInF5 = new BooleanOption("showInF5", false);
     public final BooleanOption showInF3 = new BooleanOption("showInF3", false);
     private final ColorOption defaultColor = new ColorOption("defaultcolor",  "#FFFFFFFF");
@@ -71,16 +72,33 @@ public class CrosshairHud extends AbstractHudEntry {
 		if(!client.options.getPerspective().isFirstPerson() && !showInF5.get())return;
 
 
+
 		scale(matrices);
         DrawPosition pos = new DrawPosition(MinecraftClient.getInstance().getWindow().getScaledWidth()/2 - width/2, MinecraftClient.getInstance().getWindow().getScaledHeight()/2 - height/2);
 		Color color = getColor();
 		if (Objects.equals(type.get(), CrosshairOption.DOT.toString())) {
+            if(color==defaultColor.get()) {
+                RenderSystem.enableBlend();
+                RenderSystem.blendFuncSeparate(GlStateManager.class_4535.ONE_MINUS_DST_COLOR, GlStateManager.class_4534.ONE_MINUS_SRC_COLOR, GlStateManager.class_4535.ONE, GlStateManager.class_4534.ZERO);
+            }
 			fillRect(matrices, new Rectangle(pos.x + (width / 2) - 2, pos.y + (height / 2) - 2, 3, 3), color);
+            if(color==defaultColor.get()) {
+                RenderSystem.defaultBlendFunc();
+                RenderSystem.disableBlend();
+            }
 		} else if (Objects.equals(type.get(), CrosshairOption.CROSS.toString())) {
+            if(color==defaultColor.get()) {
+                RenderSystem.enableBlend();
+                RenderSystem.blendFuncSeparate(GlStateManager.class_4535.ONE_MINUS_DST_COLOR, GlStateManager.class_4534.ONE_MINUS_SRC_COLOR, GlStateManager.class_4535.ONE, GlStateManager.class_4534.ZERO);
+            }
 			fillRect(matrices, new Rectangle(pos.x + (width / 2) - 6, pos.y + (height / 2) - 1, 6, 1), color);
 			fillRect(matrices, new Rectangle(pos.x + (width / 2), pos.y + (height / 2) - 1, 5, 1), color);
 			fillRect(matrices, new Rectangle(pos.x + (width / 2) - 1, pos.y + (height / 2) - 6, 1, 6), color);
 			fillRect(matrices, new Rectangle(pos.x + (width / 2) - 1, pos.y + (height / 2), 1, 5), color);
+            if(color==defaultColor.get()) {
+                RenderSystem.defaultBlendFunc();
+                RenderSystem.disableBlend();
+            }
 		} else if (Objects.equals(type.get(), CrosshairOption.DIRECTION.toString())) {
 			Camera camera = this.client.gameRenderer.getCamera();
 			MatrixStack matrixStack = RenderSystem.getModelViewStack();
@@ -94,6 +112,10 @@ public class CrosshairHud extends AbstractHudEntry {
 			matrixStack.pop();
 			RenderSystem.applyModelViewMatrix();
 		} else if (Objects.equals(type.get(), CrosshairOption.TEXTURE.toString())) {
+            if(color==defaultColor.get()) {
+                RenderSystem.enableBlend();
+                RenderSystem.blendFuncSeparate(GlStateManager.class_4535.ONE_MINUS_DST_COLOR, GlStateManager.class_4534.ONE_MINUS_SRC_COLOR, GlStateManager.class_4535.ONE, GlStateManager.class_4534.ZERO);
+            }
 			RenderSystem.setShaderTexture(0, DrawableHelper.GUI_ICONS_TEXTURE);
 
 			// Draw crosshair
@@ -101,8 +123,13 @@ public class CrosshairHud extends AbstractHudEntry {
 			client.inGameHud.drawTexture(matrices, (int) (((client.getWindow().getScaledWidth() / getScale()) - 15) / 2), (int) (((client.getWindow().getScaledHeight() / getScale()) - 15) / 2), 0, 0, 15, 15);
 			RenderSystem.setShaderColor(1, 1, 1, 1);
 
+            if(color==defaultColor.get()) {
+                RenderSystem.defaultBlendFunc();
+                RenderSystem.disableBlend();
+            }
 			// Draw attack indicator
 			if (this.client.options.getAttackIndicator().get() == AttackIndicator.CROSSHAIR) {
+
 				float progress = this.client.player.getAttackCooldownProgress(0.0F);
 
 				// Whether a cross should be displayed under the indicator
@@ -125,6 +152,7 @@ public class CrosshairHud extends AbstractHudEntry {
 				}
 			}
 		}
+
 		if (this.client.options.getAttackIndicator().get() == AttackIndicator.CROSSHAIR) {
 			float progress = this.client.player.getAttackCooldownProgress(0.0F);
 			if (progress != 1.0F) {
