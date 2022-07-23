@@ -34,20 +34,8 @@ public class ConfigManager{
         JsonObject config = new JsonObject();
         for(OptionCategory category : categories) {
             JsonObject object = new JsonObject();
-            for (Option option : category.getOptions()) {
 
-                object.add(option.getName(), option.getJson());
-            }
-
-            if(!category.getSubCategories().isEmpty()){
-                for(OptionCategory sub:category.getSubCategories()){
-                    JsonObject subOption = new JsonObject();
-                    sub.getOptions().forEach(option ->  subOption.add(option.getName(), option.getJson()));
-                    object.add(sub.getName(), subOption);
-                }
-            }
-
-            config.add(category.getName(), object);
+            config.add(category.getName(), getConfig(object, category));
 
         }
 
@@ -56,35 +44,50 @@ public class ConfigManager{
         Files.write(confPath, Collections.singleton(gson.toJson(config)));
     }
 
+    private static JsonObject getConfig(JsonObject object, OptionCategory category){
+        for (Option option : category.getOptions()) {
+
+            object.add(option.getName(), option.getJson());
+        }
+
+        if(!category.getSubCategories().isEmpty()){
+            for(OptionCategory sub:category.getSubCategories()){
+                JsonObject subOption = new JsonObject();
+                object.add(sub.getName(), getConfig(subOption, sub));
+            }
+        }
+        return object;
+    }
+
     public static void load() {
 
         try {
-            JsonObject config = JsonParser.parseReader(new FileReader(confPath.toString())).getAsJsonObject();
+            JsonObject config = new JsonParser().parse(new FileReader(confPath.toString())).getAsJsonObject();
 
             for(OptionCategory category:categories) {
-                for (Option option : category.getOptions()) {
-                    JsonObject cat = config.get(category.getName()).getAsJsonObject();
-                    if (cat.has(option.getName())) {
-                        JsonElement part = cat.get(option.getName());
-                        option.setValueFromJsonElement(part);
-                    }
-                }
-                if(!category.getSubCategories().isEmpty()){
-                    for (OptionCategory sub: category.getSubCategories()) {
-                        JsonObject subCat = config.get(category.getName()).getAsJsonObject().get(sub.getName()).getAsJsonObject();
-                        for(Option option: sub.getOptions()){
-                            if(subCat.has(option.getName())){
-                                option.setValueFromJsonElement(subCat.get(option.getName()));
-                            }
-                        }
-                    }
-                }
+                setOptions(config.get(category.getName()).getAsJsonObject(), category);
             }
         } catch (Exception e){
-            AxolotlClient.LOGGER.error("Failed to load config! Using default values...");
+            AxolotlClient.LOGGER.error("Failed to load config! Using default values... \nError: ");
+            e.printStackTrace();
             loadDefaults();
         }
         //save();
+    }
+
+    private static void setOptions(JsonObject config, OptionCategory category){
+        for (Option option : category.getOptions()) {
+            if (config.has(option.getName())) {
+                JsonElement part = config.get(option.getName());
+                option.setValueFromJsonElement(part);
+            }
+        }
+        if(!category.getSubCategories().isEmpty()){
+            for (OptionCategory sub: category.getSubCategories()) {
+                JsonObject subCat = config.get(sub.getName()).getAsJsonObject();
+                setOptions(subCat, sub);
+            }
+        }
     }
 
     private static void loadDefaults(){

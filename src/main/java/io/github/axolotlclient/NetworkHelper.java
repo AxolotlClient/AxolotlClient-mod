@@ -16,6 +16,7 @@ import org.apache.http.util.EntityUtils;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.UUID;
 
 
@@ -120,8 +121,7 @@ public class NetworkHelper {
             String body = EntityUtils.toString(response.getEntity());
             client.close();
 
-            JsonParser parser = new JsonParser();
-            return parser.parse(body);
+            return JsonParser.parseReader(new StringReader(body));
 
         } catch (IOException e) {
             e.printStackTrace();
