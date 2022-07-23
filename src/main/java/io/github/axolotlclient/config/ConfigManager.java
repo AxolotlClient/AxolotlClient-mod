@@ -62,7 +62,7 @@ public class ConfigManager{
     public static void load() {
 
         try {
-            JsonObject config = new JsonParser().parse(new FileReader(confPath.toString())).getAsJsonObject();
+            JsonObject config = JsonParser.parseReader(new FileReader(confPath.toString())).getAsJsonObject();
 
             for(OptionCategory category:categories) {
                 setOptions(config.get(category.getName()).getAsJsonObject(), category);
