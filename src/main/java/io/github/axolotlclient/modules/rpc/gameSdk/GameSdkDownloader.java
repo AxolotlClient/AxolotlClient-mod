@@ -99,6 +99,7 @@ public class GameSdkDownloader {
         zin.close();
     }
 
+    private static boolean retriedExtractingJni = false;
     private static void extractJni(File jni) throws IOException {
         String arch = System.getProperty("os.arch").toLowerCase(Locale.ROOT);
         if (arch.equals("x86_64")) {
@@ -116,7 +117,13 @@ public class GameSdkDownloader {
         );
 
         InputStream in = DiscordRPC.class.getResourceAsStream(path);
-        Files.copy(in, jni.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        if(in!=null){
+            Files.copy(in, jni.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } else if(!retriedExtractingJni) {
+            AxolotlClient.LOGGER.warn("Extracting JNI failed, retrying!");
+            retriedExtractingJni=true;
+            extractJni(jni);
+        }
     }
 
     private static void loadNative(File sdk, File jni) {

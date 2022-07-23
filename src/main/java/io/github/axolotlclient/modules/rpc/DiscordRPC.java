@@ -64,38 +64,41 @@ public class DiscordRPC extends AbstractModule {
 
         GameSdkDownloader.downloadSdk();
 
-        CreateParams params = new CreateParams();
+        if(enabled.get()) {
 
-        params.setClientID(875835666729152573L);
-        params.setFlags(CreateParams.Flags.DEFAULT);
+            CreateParams params = new CreateParams();
 
-        DiscordEventHandler handler = new DiscordEventHandler();
-        params.registerEventHandler(handler);
+            params.setClientID(875835666729152573L);
+            params.setFlags(CreateParams.Flags.DEFAULT);
 
-        try {
-            discordRPC = new Core(params);
+            DiscordEventHandler handler = new DiscordEventHandler();
+            params.registerEventHandler(handler);
 
-            running = true;
-            Thread callBacks = new Thread(() -> {
-                while(enabled.get() && running) {
+            try {
+                discordRPC = new Core(params);
 
-                    discordRPC.runCallbacks();
+                running = true;
+                Thread callBacks = new Thread(() -> {
+                    while (enabled.get() && running) {
 
-                    try {
-                        Thread.sleep(16);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        discordRPC.runCallbacks();
+
+                        try {
+                            Thread.sleep(16);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
 
-                discordRPC.close();
-                Thread.currentThread().interrupt();
-            });
-            callBacks.start();
-            AxolotlClient.LOGGER.info("Started RPC Core");
-        } catch (Exception e){
-            AxolotlClient.LOGGER.error("An error occured: ");
-            e.printStackTrace();
+                    discordRPC.close();
+                    Thread.currentThread().interrupt();
+                });
+                callBacks.start();
+                AxolotlClient.LOGGER.info("Started RPC Core");
+            } catch (Exception e) {
+                AxolotlClient.LOGGER.error("An error occured: ");
+                e.printStackTrace();
+            }
         }
     }
 
