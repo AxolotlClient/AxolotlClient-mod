@@ -33,8 +33,6 @@ public class AxolotlClientConfig {
     public final BooleanOption showOptionTooltips = new BooleanOption("showOptionTooltips", true);
     public final BooleanOption showCategoryTooltips = new BooleanOption("showCategoryTooltips", false);
     public final BooleanOption quickToggles = new BooleanOption("quickToggles", false);
-    //public final BooleanOption enableRPC = new BooleanOption("enableRPC", true);
-    //public final BooleanOption showActivity = new BooleanOption("showActivity", true);
     public final ColorOption loadingScreenColor = new ColorOption("loadingBgColor", new Color(-1));
     public final BooleanOption nightMode = new BooleanOption("nightMode", false);
 
@@ -82,8 +80,6 @@ public class AxolotlClientConfig {
         categories.add(nametagOptions);
         categories.add(rendering);
 
-        rendering.addSubCategory(outlines);
-
         categories.forEach(OptionCategory::clearOptions);
 
         nametagOptions.add(showOwnNametag);
@@ -94,21 +90,20 @@ public class AxolotlClientConfig {
         nametagOptions.add(customBadge);
         nametagOptions.add(badgeText);
 
-        //general.add(enableRPC);
-        //general.add(showActivity);
         general.add(loadingScreenColor);
         general.add(nightMode);
         general.add(quickToggles);
         general.add(showOptionTooltips);
         general.add(showCategoryTooltips);
 
-        rendering.add(customSky);
-        rendering.add(showSunMoon);
-        rendering.add(cloudHeight);
-        rendering.add(chromaSpeed);
-        rendering.add(dynamicFOV);
-        rendering.add(fullBright);
-        rendering.add(lowFire);
+        rendering.add(customSky,
+                showSunMoon,
+                cloudHeight,
+                chromaSpeed,
+                dynamicFOV,
+                fullBright,
+                lowFire
+        );
 
         motionBlur.add(motionBlurEnabled);
         motionBlur.add(motionBlurStrength);
@@ -123,6 +118,7 @@ public class AxolotlClientConfig {
         outlines.add(outlineColor);
         outlines.add(outlineChroma);
         outlines.add(outlineWidth);
+        rendering.addSubCategory(outlines);
 
         AxolotlClient.config.add(creditsBGM);
 
