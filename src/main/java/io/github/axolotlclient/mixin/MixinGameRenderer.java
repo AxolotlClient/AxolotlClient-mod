@@ -1,5 +1,6 @@
 package io.github.axolotlclient.mixin;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.motionblur.MotionBlur;
 import io.github.axolotlclient.modules.zoom.Zoom;
@@ -127,6 +128,8 @@ public abstract class MixinGameRenderer {
             blur.onUpdate();
             blur.shader.render(tickDelta);
         }
+
+        RenderSystem.enableTexture();
 
         this.client.getProfiler().pop();
     }
