@@ -5,6 +5,7 @@ import io.github.axolotlclient.config.options.*;
 import io.github.axolotlclient.mixin.AccessorChatHud;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
+import io.github.axolotlclient.modules.hud.util.DrawUtil;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.ChatHudLine;
@@ -73,7 +74,7 @@ public class ChatHud extends AbstractHudEntry {
                                 }
                                 String string = chatHudLine.getText().asFormattedString();
                                 GlStateManager.enableBlend();
-                                this.client.textRenderer.drawWithShadow(string, (float)pos.x, (float)(y - 8), 16777215 + (chatOpacity << 24));
+                                DrawUtil.drawString(client.textRenderer, string, pos.x, (y - 8), 16777215 + (chatOpacity << 24), shadow.get());
                                 GlStateManager.disableAlphaTest();
                                 GlStateManager.disableBlend();
                             }
@@ -188,6 +189,7 @@ public class ChatHud extends AbstractHudEntry {
     @Override
     public void addConfigOptions(List<OptionBase<?>> options) {
         super.addConfigOptions(options);
+        options.add(shadow);
         options.add(background);
         options.add(bgColor);
         options.add(lineSpacing);
