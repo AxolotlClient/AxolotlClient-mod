@@ -11,12 +11,11 @@ import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hypixel.HypixelMods;
 import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
 import io.github.axolotlclient.modules.motionblur.MotionBlur;
+import io.github.axolotlclient.modules.rpc.DiscordRPC;
 import io.github.axolotlclient.modules.scrollableTooltips.ScrollableTooltips;
 import io.github.axolotlclient.modules.zoom.Zoom;
-import io.github.axolotlclient.modules.rpc.DiscordRPC;
 import io.github.axolotlclient.util.Util;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
@@ -127,6 +126,9 @@ public class AxolotlClient implements ClientModInitializer {
 		if(entity instanceof PlayerEntity){
 
 			if(AxolotlClient.CONFIG.showBadges.get() && AxolotlClient.isUsingClient(entity.getUuid())) {
+				GlStateManager.alphaFunc(516, 0.1F);
+				GlStateManager.enableDepthTest();
+				GlStateManager.enableAlphaTest();
 				MinecraftClient.getInstance().getTextureManager().bindTexture(AxolotlClient.badgeIcon);
 
 				int x = -(MinecraftClient.getInstance().textRenderer.getStringWidth(
