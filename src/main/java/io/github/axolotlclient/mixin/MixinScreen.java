@@ -22,8 +22,8 @@ public abstract class MixinScreen {
                 return;
             }
 
-            args.set(3, (int) args.get(3) + ScrollableTooltips.Instance.tooltipOffsetX);
-            args.set(4, (int) args.get(4) + ScrollableTooltips.Instance.tooltipOffsetY);
+            args.set(2, (int) args.get(2) + ScrollableTooltips.Instance.tooltipOffsetX);
+            args.set(3, (int) args.get(3) + ScrollableTooltips.Instance.tooltipOffsetY);
         }
     }
 }
