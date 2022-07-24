@@ -30,7 +30,7 @@ public abstract class AbstractHudEntry extends DrawUtil {
     public int height;
 
     protected BooleanOption enabled = new BooleanOption("enabled",false);
-    public DoubleOption scale = new DoubleOption("scale", 1, 0.1F, 2);
+    public DoubleOption scale = new DoubleOption("scale", 1, 0.1F, 5);
     protected final ColorOption textColor = new ColorOption("textColor", Color.WHITE);
     protected final BooleanOption chroma = new BooleanOption("chroma", false);
     protected BooleanOption shadow = new BooleanOption("shadow",  getShadowDefault());

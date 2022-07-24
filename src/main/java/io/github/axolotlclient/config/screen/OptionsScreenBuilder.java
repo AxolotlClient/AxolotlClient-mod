@@ -142,7 +142,20 @@ public class OptionsScreenBuilder extends Screen {
         if(isPickerOpen() && picker.keyPressed(keyCode, scanCode, modifiers)){
             return true;
         }
-		return this.list.keyPressed(keyCode, scanCode, modifiers) || super.keyPressed(keyCode, scanCode, modifiers);
+
+        if (keyCode == 256 && this.shouldCloseOnEsc()) {
+            this.onClose();
+            return true;
+        } else if (keyCode == 258) {
+            boolean bl = !hasShiftDown();
+            if (!this.changeFocus(bl)) {
+                this.changeFocus(bl);
+            }
+
+            return false;
+        }
+
+		return this.list.keyPressed(keyCode, scanCode, modifiers);
 	}
 
 	@Override

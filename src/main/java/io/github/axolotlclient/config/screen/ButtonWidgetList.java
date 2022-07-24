@@ -287,13 +287,20 @@ public class ButtonWidgetList extends ButtonListWidget {
 
 		@Override
 		public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-			if(left!=null && left.keyPressed(keyCode, scanCode, modifiers)) return true;
-			return super.keyPressed(keyCode, scanCode, modifiers);
-		}
+            if(left instanceof StringOptionWidget || left instanceof ColorOptionWidget){
+                return left.keyPressed(keyCode, scanCode, modifiers);
+            }
+            return false;
+            //return left != null && left.keyPressed(keyCode, scanCode, modifiers);
+        }
 
 		@Override
 		public boolean charTyped(char c, int modifiers) {
-			return this.left != null && left.charTyped(c, modifiers);
+            if(left instanceof StringOptionWidget || left instanceof ColorOptionWidget){
+                return left.charTyped(c, modifiers);
+            }
+            return false;
+			//return this.left != null && left.charTyped(c, modifiers);
 		}
 
 		@Override

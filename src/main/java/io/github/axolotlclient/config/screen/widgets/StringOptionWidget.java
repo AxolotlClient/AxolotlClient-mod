@@ -45,12 +45,12 @@ public class StringOptionWidget extends TextFieldWidget {
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 		this.textField.keyPressed(keyCode, scanCode, modifiers);
 		this.option.set(textField.getText());
-		return super.keyPressed(keyCode, scanCode, modifiers);
+		return true;//super.keyPressed(keyCode, scanCode, modifiers);
 	}
 
 	@Override
 	public boolean charTyped(char chr, int modifiers) {
-		return textField.charTyped(chr, modifiers) || super.charTyped(chr, modifiers);
+		return textField.charTyped(chr, modifiers);
 	}
 
 	@Override
