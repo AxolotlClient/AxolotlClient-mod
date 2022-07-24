@@ -94,7 +94,6 @@ public abstract class MixinWorldRenderer {
                 Matrix4f matrix4f = matrixStack.peek().getModel();
                 bufferBuilder.begin(6, VertexFormats.POSITION_COLOR);
                 bufferBuilder.vertex(matrix4f, 0.0F, 100.0F, 0.0F).color(k, l, m, fs[3]).next();
-                int n = 16;
 
                 for(int o = 0; o <= 16; ++o) {
                     float p = (float)o * (float) (Math.PI * 2) / 16.0F;
@@ -118,30 +117,32 @@ public abstract class MixinWorldRenderer {
             matrixStack.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(this.world.getSkyAngle(tickDelta) * 360.0F));
             Matrix4f matrix4f2 = matrixStack.peek().getModel();
             float l = 30.0F;
-            MinecraftClient.getInstance().getTextureManager().bindTexture(SUN);
-            bufferBuilder.begin(7, VertexFormats.POSITION_TEXTURE);
-            bufferBuilder.vertex(matrix4f2, -l, 100.0F, -l).texture(0.0F, 0.0F).next();
-            bufferBuilder.vertex(matrix4f2, l, 100.0F, -l).texture(1.0F, 0.0F).next();
-            bufferBuilder.vertex(matrix4f2, l, 100.0F, l).texture(1.0F, 1.0F).next();
-            bufferBuilder.vertex(matrix4f2, -l, 100.0F, l).texture(0.0F, 1.0F).next();
-            bufferBuilder.end();
-            BufferRenderer.draw(bufferBuilder);
-            l = 20.0F;
-            MinecraftClient.getInstance().getTextureManager().bindTexture(MOON_PHASES);
-            int s = this.world.getMoonPhase();
-            int t = s % 4;
-            int n = s / 4 % 2;
-            float u = (float)(t) / 4.0F;
-            float p = (float)(n) / 2.0F;
-            float q = (float)(t + 1) / 4.0F;
-            float r = (float)(n + 1) / 2.0F;
-            bufferBuilder.begin(7, VertexFormats.POSITION_TEXTURE);
-            bufferBuilder.vertex(matrix4f2, -l, -100.0F, l).texture(q, r).next();
-            bufferBuilder.vertex(matrix4f2, l, -100.0F, l).texture(u, r).next();
-            bufferBuilder.vertex(matrix4f2, l, -100.0F, -l).texture(u, p).next();
-            bufferBuilder.vertex(matrix4f2, -l, -100.0F, -l).texture(q, p).next();
-            bufferBuilder.end();
-            BufferRenderer.draw(bufferBuilder);
+            if(AxolotlClient.CONFIG.showSunMoon.get()) {
+                MinecraftClient.getInstance().getTextureManager().bindTexture(SUN);
+                bufferBuilder.begin(7, VertexFormats.POSITION_TEXTURE);
+                bufferBuilder.vertex(matrix4f2, -l, 100.0F, -l).texture(0.0F, 0.0F).next();
+                bufferBuilder.vertex(matrix4f2, l, 100.0F, -l).texture(1.0F, 0.0F).next();
+                bufferBuilder.vertex(matrix4f2, l, 100.0F, l).texture(1.0F, 1.0F).next();
+                bufferBuilder.vertex(matrix4f2, -l, 100.0F, l).texture(0.0F, 1.0F).next();
+                bufferBuilder.end();
+                BufferRenderer.draw(bufferBuilder);
+                l = 20.0F;
+                MinecraftClient.getInstance().getTextureManager().bindTexture(MOON_PHASES);
+                int s = this.world.getMoonPhase();
+                int t = s % 4;
+                int n = s / 4 % 2;
+                float u = (float) (t) / 4.0F;
+                float p = (float) (n) / 2.0F;
+                float q = (float) (t + 1) / 4.0F;
+                float r = (float) (n + 1) / 2.0F;
+                bufferBuilder.begin(7, VertexFormats.POSITION_TEXTURE);
+                bufferBuilder.vertex(matrix4f2, -l, -100.0F, l).texture(q, r).next();
+                bufferBuilder.vertex(matrix4f2, l, -100.0F, l).texture(u, r).next();
+                bufferBuilder.vertex(matrix4f2, l, -100.0F, -l).texture(u, p).next();
+                bufferBuilder.vertex(matrix4f2, -l, -100.0F, -l).texture(q, p).next();
+                bufferBuilder.end();
+                BufferRenderer.draw(bufferBuilder);
+            }
             RenderSystem.disableTexture();
             float v = this.world.method_23787(tickDelta) * j;
             if (v > 0.0F) {

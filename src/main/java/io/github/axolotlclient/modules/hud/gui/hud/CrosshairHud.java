@@ -79,7 +79,7 @@ public class CrosshairHud extends AbstractHudEntry {
 			fillRect(matrices, new Rectangle(pos.x + (width / 2), pos.y + (height / 2) - 1, 5, 1), color);
 			fillRect(matrices, new Rectangle(pos.x + (width / 2) - 1, pos.y + (height / 2) - 6, 1, 6), color);
 			fillRect(matrices, new Rectangle(pos.x + (width / 2) - 1, pos.y + (height / 2), 1, 5), color);
-		} else if (Objects.equals(type.get(), CrosshairOption.DIRECTION.toString())) {
+		} /*else if (Objects.equals(type.get(), CrosshairOption.DIRECTION.toString())) {
 			Camera camera = this.client.gameRenderer.getCamera();
 			MatrixStack matrixStack = new MatrixStack();
 			matrixStack.push();
@@ -91,7 +91,7 @@ public class CrosshairHud extends AbstractHudEntry {
 			RenderSystem.renderCrosshair(10);
 			matrixStack.pop();
 			//RenderSystem.applyModelViewMatrix();
-		} else if (Objects.equals(type.get(), CrosshairOption.TEXTURE.toString())) {
+		}*/ else if (Objects.equals(type.get(), CrosshairOption.TEXTURE.toString())) {
 			MinecraftClient.getInstance().getTextureManager().bindTexture(DrawableHelper.GUI_ICONS_TEXTURE);
 
 			// Draw crosshair
@@ -123,7 +123,7 @@ public class CrosshairHud extends AbstractHudEntry {
 				}
 			}
 		}
-		if (this.client.options.attackIndicator == AttackIndicator.CROSSHAIR) {
+		if (!type.get().equalsIgnoreCase(CrosshairOption.TEXTURE.toString()) && this.client.options.attackIndicator == AttackIndicator.CROSSHAIR) {
 			float progress = this.client.player.getAttackCooldownProgress(0.0F);
 			if (progress != 1.0F) {
 				fill(matrices.peek().getModel(), pos.x + (width / 2F) - 6, pos.y + (height / 2F) + 9, 11, 1,
@@ -218,7 +218,7 @@ public class CrosshairHud extends AbstractHudEntry {
         CROSS,
         DOT,
         TEXTURE,
-        DIRECTION
+        //DIRECTION
     }
 
 }

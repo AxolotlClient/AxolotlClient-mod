@@ -86,6 +86,7 @@ public class FSBSkyboxInstance extends SkyboxInstance{
 				bufferBuilder.vertex(matrix4f, -100, -100, 100).texture(0F, 1F).color(1F, 1F, 1F, alpha).next();
 				bufferBuilder.vertex(matrix4f, 100, -100, 100).texture(1F, 1F).color(1F, 1F, 1F, alpha).next();
 				bufferBuilder.vertex(matrix4f, 100, -100, -100).texture(1F, 0F).color(1F, 1F, 1F, alpha).next();
+                bufferBuilder.end();
 				BufferRenderer.draw(bufferBuilder);
 
 				matrices.pop();

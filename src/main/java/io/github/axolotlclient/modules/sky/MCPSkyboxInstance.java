@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.BufferRenderer;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
@@ -80,13 +81,14 @@ public class MCPSkyboxInstance extends SkyboxInstance {
                 }
 
 	            Matrix4f matrix4f = matrices.peek().getModel();
-                bufferBuilder.begin(7, VertexFormats.POSITION_COLOR_TEXTURE);
+                bufferBuilder.begin(7, VertexFormats.POSITION_TEXTURE_COLOR);
                 bufferBuilder.vertex(matrix4f, -100, -100, -100).texture(u, v).color(1F, 1F, 1F, alpha).next();
                 bufferBuilder.vertex(matrix4f, -100, -100, 100).texture(u, v+0.5F).color(1F, 1F, 1F, alpha).next();
                 bufferBuilder.vertex(matrix4f, 100, -100, 100).texture(u+1/3F, v+0.5F).color(1F, 1F, 1F, alpha).next();
                 bufferBuilder.vertex(matrix4f, 100, -100, -100).texture(u+1/3F, v).color(1F, 1F, 1F, alpha).next();
 
-                tessellator.draw();
+                bufferBuilder.end();
+                BufferRenderer.draw(bufferBuilder);
                 matrices.pop();
             }
         }
