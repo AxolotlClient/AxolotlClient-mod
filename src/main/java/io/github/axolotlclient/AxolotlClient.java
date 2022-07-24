@@ -145,6 +145,7 @@ public class AxolotlClient implements ClientModInitializer {
 		if(entity instanceof PlayerEntity){
 
 			if(AxolotlClient.CONFIG.showBadges.get() && AxolotlClient.isUsingClient(entity.getUuid())) {
+                RenderSystem.enableDepthTest();
 				RenderSystem.setShaderTexture(0, AxolotlClient.badgeIcon);
 
 				int x = -(MinecraftClient.getInstance().textRenderer.getWidth(
