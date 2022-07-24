@@ -148,7 +148,7 @@
 	"showD": "Zeige D",
 	"showSpace": "Zeige Leertaste",
 	"iphud": "IPHud",
-	"IconHud": "IconHUD",
+	"iconhud": "IconHUD",
 	"togglesprint": "ToggleModifiers",
 	"randomPlaceholder": "Zufälliger Platzhalter",
 	"sprinting_toggled": "Sprinting [Toggled]",
@@ -210,6 +210,22 @@
 	"disableReason.ban_reason.tooltip": "Diese Option ist deaktiviert <br>da sie zu einem Ban auf deinem geradigen Server führen kann.",
 	
 	"back": "Zurück",
-	"close": "Schließen"
+	"close": "Schließen",
+	"rendering.tooltip": "Rendering Options",
+	"customSky.tooltip": "Whether to enable custom skies.",
+	"showSunMoon.tooltip": "Whether to show sun and moon on custom skies.",
+	"customCloudHeight": "Custom Cloud Height",
+	"customCloudHeight.tooltip": "Whether to use a custom cloud height.",
+	"cloudHeight.tooltip": "The custom cloud height to use <br>Needs custom cloud height enabled.",
+	"zoomScrollStep": "Scroll Step",
+	"NETWORK": "Network",
+	"BEDWARS": "Bedwars",
+	"SKYWARS": "Skywars",
+	"attackindicatorbg": "Attack Indicator (Background)",
+	"attackindicatorfb": "Attack Indicator (Foreground)",
+	"TEXTURE": "Texture",
+	"DIRECTION": "Direction",
+	"DOT": "Dot",
+	"CROSS": "Cross"
 
 }
