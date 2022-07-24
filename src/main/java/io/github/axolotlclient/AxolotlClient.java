@@ -148,6 +148,7 @@ public class AxolotlClient implements ClientModInitializer {
 		if(entity instanceof PlayerEntity){
 
 			if(AxolotlClient.CONFIG.showBadges.get() && AxolotlClient.isUsingClient(entity.getUuid())) {
+                RenderSystem.enableDepthTest();
                 MinecraftClient.getInstance().getTextureManager().bindTexture(badgeIcon);
 
 				int x = -(MinecraftClient.getInstance().textRenderer.getWidth(
@@ -155,7 +156,6 @@ public class AxolotlClient implements ClientModInitializer {
 						(NickHider.Instance.hideOwnName.get() ? NickHider.Instance.hiddenNameSelf.get(): Team.modifyText(entity.getScoreboardTeam(), entity.getName()).getString()):
 						(NickHider.Instance.hideOtherNames.get() ? NickHider.Instance.hiddenNameOthers.get(): Team.modifyText(entity.getScoreboardTeam(), entity.getName()).getString())
 				)/2 + (AxolotlClient.CONFIG.customBadge.get() ? MinecraftClient.getInstance().textRenderer.getWidth(AxolotlClient.CONFIG.badgeText.get()): 10));
-
 
 				RenderSystem.color4f(1, 1, 1, 1);
 
@@ -167,8 +167,6 @@ public class AxolotlClient implements ClientModInitializer {
 					}
 				}
 				else DrawableHelper.drawTexture(matrices, x, 0, 0, 0, 8, 8, 8, 8);
-
-
 			}
 		}
 	}
