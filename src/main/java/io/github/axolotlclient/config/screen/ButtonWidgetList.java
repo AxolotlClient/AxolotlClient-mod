@@ -35,10 +35,10 @@ public class ButtonWidgetList extends EntryListWidget {
         if(!category.getSubCategories().isEmpty()) {
             for (int i = 0; i < category.getSubCategories().size(); i += 2) {
                 OptionCategory subCat = category.getSubCategories().get(i);
-                CategoryWidget buttonWidget = this.createCategoryWidget(width / 2 - 155, subCat);
+                ButtonWidget buttonWidget = this.createCategoryWidget(width / 2 - 155, subCat);
 
                 OptionCategory subCat2 = i < category.getSubCategories().size() - 1 ? category.getSubCategories().get(i + 1) : null;
-                CategoryWidget buttonWidget2 = this.createCategoryWidget(width / 2 - 155 + 160, subCat2);
+                ButtonWidget buttonWidget2 = this.createCategoryWidget(width / 2 - 155 + 160, subCat2);
 
                 this.entries.add(new CategoryPair(subCat, buttonWidget, subCat2, buttonWidget2));
             }
@@ -55,11 +55,11 @@ public class ButtonWidgetList extends EntryListWidget {
         }
     }
 
-    private CategoryWidget createCategoryWidget(int x, OptionCategory cat){
+    private ButtonWidget createCategoryWidget(int x, OptionCategory cat){
         if(cat==null) {
             return null;
         } else {
-            return new CategoryWidget(cat, x, 0,150, 20);
+            return OptionWidgetProvider.getCategoryWidget(x, 0,150, 20, cat);
         }
     }
 
@@ -69,14 +69,13 @@ public class ButtonWidgetList extends EntryListWidget {
 
     private ButtonWidget createWidget(int x, Option option) {
         if (option != null) {
-            int i = 0;
-            if (option instanceof FloatOption) return new OptionSliderWidget(i, x, 0, (FloatOption) option);
-            else if (option instanceof IntegerOption) return new OptionSliderWidget(i, x, 0, (IntegerOption) option);
-            else if (option instanceof DoubleOption) return new OptionSliderWidget(i, x, 0, (DoubleOption) option);
-            else if (option instanceof BooleanOption) return new BooleanWidget(i, x, 0, 35, 20, (BooleanOption) option);
-            else if (option instanceof StringOption) return new StringOptionWidget(i, x, 0, (StringOption) option);
-            else if (option instanceof ColorOption) return new ColorOptionWidget(i, x, 0, (ColorOption) option);
-            else if (option instanceof EnumOption) return new EnumOptionWidget(i, x, 0, (EnumOption) option);
+            if (option instanceof FloatOption) return OptionWidgetProvider.getFloatWidget(x, 0, (FloatOption) option);
+            else if (option instanceof IntegerOption) return OptionWidgetProvider.getIntegerWidget(x, 0, (IntegerOption) option);
+            else if (option instanceof DoubleOption) return OptionWidgetProvider.getDoubleWidget(x, 0, (DoubleOption) option);
+            else if (option instanceof BooleanOption) return OptionWidgetProvider.getBooleanWidget(x, 0, 35, 20, (BooleanOption) option);
+            else if (option instanceof StringOption) return OptionWidgetProvider.getStringWidget(x, 0, (StringOption) option);
+            else if (option instanceof ColorOption) return OptionWidgetProvider.getColorWidget(x, 0, (ColorOption) option);
+            else if (option instanceof EnumOption) return OptionWidgetProvider.getEnumWidget(x, 0, (EnumOption) option);
         }
         return null;
     }
@@ -295,7 +294,7 @@ public class ButtonWidgetList extends EntryListWidget {
         protected OptionCategory left;
         protected OptionCategory right;
 
-        public CategoryPair(OptionCategory catLeft, CategoryWidget btnLeft, OptionCategory catRight, CategoryWidget btnRight) {
+        public CategoryPair(OptionCategory catLeft, ButtonWidget btnLeft, OptionCategory catRight, ButtonWidget btnRight) {
             super(btnLeft, btnRight);
             left = catLeft;
             right = catRight;
