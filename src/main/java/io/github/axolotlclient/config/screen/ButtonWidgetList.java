@@ -17,6 +17,7 @@ import io.github.axolotlclient.config.screen.widgets.CategoryWidget;
 import io.github.axolotlclient.config.screen.widgets.ColorOptionWidget;
 import io.github.axolotlclient.config.screen.widgets.EnumOptionWidget;
 import io.github.axolotlclient.config.screen.widgets.OptionSliderWidget;
+import io.github.axolotlclient.config.screen.widgets.OptionWidgetProvider;
 import io.github.axolotlclient.config.screen.widgets.StringOptionWidget;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import io.github.axolotlclient.util.Util;
@@ -25,6 +26,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.widget.ButtonListWidget;
+import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import org.lwjgl.opengl.GL11;
@@ -50,10 +52,10 @@ public class ButtonWidgetList extends ButtonListWidget {
         if(!category.getSubCategories().isEmpty()) {
             for (int i = 0; i < category.getSubCategories().size(); i += 2) {
                 OptionCategory subCat = category.getSubCategories().get(i);
-                CategoryWidget buttonWidget = this.createCategoryWidget(width / 2 - 155, subCat);
+                ClickableWidget buttonWidget = this.createCategoryWidget(width / 2 - 155, subCat);
 
                 OptionCategory subCat2 = i < category.getSubCategories().size() - 1 ? category.getSubCategories().get(i + 1) : null;
-                CategoryWidget buttonWidget2 = this.createCategoryWidget(width / 2 - 155 + 160, subCat2);
+                ClickableWidget buttonWidget2 = this.createCategoryWidget(width / 2 - 155 + 160, subCat2);
 
 	            this.addEntry(new CategoryPair(subCat, buttonWidget, subCat2, buttonWidget2));
 	            this.entries.add(new CategoryPair(subCat, buttonWidget, subCat2, buttonWidget2));
@@ -79,23 +81,23 @@ public class ButtonWidgetList extends ButtonListWidget {
 		return super.addEntry(entry);
 	}
 
-	private CategoryWidget createCategoryWidget(int x, OptionCategory cat){
+	private ClickableWidget createCategoryWidget(int x, OptionCategory cat){
         if(cat==null) {
             return null;
         } else {
-            return new CategoryWidget(cat, x, 0,150, 20);
+            return OptionWidgetProvider.getCategoryWidget(x, 0,150, 20, cat);
         }
     }
 
     private ClickableWidget createWidget(int x, Option option) {
         if (option != null) {
-            if (option instanceof FloatOption) return new OptionSliderWidget(x, 0, (FloatOption) option);
-            else if (option instanceof IntegerOption) return new OptionSliderWidget(x, 0, (IntegerOption) option);
-            else if (option instanceof DoubleOption) return new OptionSliderWidget(x, 0, (DoubleOption) option);
-            else if (option instanceof BooleanOption) return new BooleanWidget(x, 0, 35, 20, (BooleanOption) option);
-            else if (option instanceof StringOption) return new StringOptionWidget(x, 0, (StringOption) option);
-            else if (option instanceof ColorOption) return new ColorOptionWidget(x, 0, (ColorOption) option);
-            else if (option instanceof EnumOption) return new EnumOptionWidget(x, 0, (EnumOption) option);
+            if (option instanceof FloatOption) return OptionWidgetProvider.getFloatWidget(x, 0, (FloatOption) option);
+            else if (option instanceof IntegerOption) return OptionWidgetProvider.getIntegerWidget(x, 0, (IntegerOption) option);
+            else if (option instanceof DoubleOption) return OptionWidgetProvider.getDoubleWidget(x, 0, (DoubleOption) option);
+            else if (option instanceof BooleanOption) return OptionWidgetProvider.getBooleanWidget(x, 0, 35, 20, (BooleanOption) option);
+            else if (option instanceof StringOption) return OptionWidgetProvider.getStringWidget(x, 0, (StringOption) option);
+            else if (option instanceof ColorOption) return OptionWidgetProvider.getColorWidget(x, 0, (ColorOption) option);
+            else if (option instanceof EnumOption) return OptionWidgetProvider.getEnumWidget(x, 0, (EnumOption) option);
         }
         return null;
     }
@@ -273,7 +275,7 @@ public class ButtonWidgetList extends ButtonListWidget {
 		protected OptionCategory left;
 		protected OptionCategory right;
 
-		public CategoryPair(OptionCategory catLeft, CategoryWidget btnLeft, OptionCategory catRight, CategoryWidget btnRight) {
+		public CategoryPair(OptionCategory catLeft, ClickableWidget btnLeft, OptionCategory catRight, ClickableWidget btnRight) {
 			super(btnLeft, btnRight);
 			left = catLeft;
 			right = catRight;
