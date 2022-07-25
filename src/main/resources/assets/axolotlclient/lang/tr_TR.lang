@@ -2,37 +2,37 @@ language.name=Türkçe
 language.region=TR
 language.code=tr_TR
 
-config=AxolotlClient Ayarları
+config=AxolotlClient Seçenekleri
 title_short=Client Ayarları
 
 sky_loading_text=Gökyüzü bundan yükleniliyor:
 resource_loading_finished=Yüklenme Bitti! Minecraft Başlatılıyor...
 loadingBgColor.tooltip=Yüklenme ekranın arkaplan rengi.
 general=Genel
-general.title=Genel Ayarlar
+general.title=Genel Seçenekler
 loadingBgColor=Yüklenme Ekranı Rengi
 
 nightMode=Gece Modu
 nightMode.tooltip=Mavi renkleri azaltır.
 quickToggles=Hızlı Ayarlama
-quickToggles.tooltip='Etkin' ayarı içeren <br>kategorilerde küçük bir etkinleştirme düğmesi ekler.
-showOptionTooltips=Ayar ipucularını Göster
-showOptionTooltips.tooltip=Ayarlarda ipucuları gösterme ayarı.
+quickToggles.tooltip='Etkin' seçeneği içeren <br>kategorilerde küçük bir etkinleştirme düğmesi ekler.
+showOptionTooltips=Seçenek ipuçlarını Göster
+showOptionTooltips.tooltip=Seçeneklerde ipuçları gösterme ayarı.
 showCategoryTooltips=Kategori İpuçlarını Göster
-showCategoryTooltips.tooltip=Menüdeki kategorilerin ipucularını gösterme ayarı.
+showCategoryTooltips.tooltip=Menüdeki kategorilerin ipucularını gösterme seçeneği.
 
-rendering=İşleme Ayarları
+rendering=İşleme Seçenekleri
 customSky=Özel Gökyüzü
 showSunMoon=Özel Güneş & Ay
 cloudHeight=Bulut Yüksekliği
 zoomDivisor=FOV Bölümü
 zoomSpeed=Animasyon Hızı
 zoomScrolling=Kaydırarak Yakınlaş
-zoomScrolling.tooltip=Kaydırarak yakınlaşma faktörünü modifiye etme ayarı.
+zoomScrolling.tooltip=Kaydırarak yakınlaşma faktörünü modifiye etme seçeneği.
 decreaseSensitivity=Duyarlılığı Azalt
-decreaseSensitivity.tooltip=Yakınlaştırılınca fare duyarlılığını ayarlama ayarı.
+decreaseSensitivity.tooltip=Yakınlaştırılınca fare duyarlılığını ayarlama seçeneği.
 smoothCamera=Pürüzsüz Kamera
-smoothCamera.tooltip=Yakınlaştırılken pürüzsüz kamerayı etkinleştirme ayarı.
+smoothCamera.tooltip=Yakınlaştırılken pürüzsüz kamerayı etkinleştirme seçeneği.
 dynamicFov=Dinamik Görüş Alanı
 fullBright=TamParlak
 strength=Sertlik
@@ -51,7 +51,7 @@ shiftHorizontalScroll.tooltip=Eğer özel tuş <br> basıldıysa yatay kaydırma
 scrollAmount=Kaydırma Miktarı
 scrollAmount.tooltip=Kaydırılınca,bu aracı bu kadar hareket ettir.
 
-nametagOptions=Takma Ad Ayarları
+nametagOptions=Takma Ad Seçenekleri
 showOwnNametag=Kendi Takma Adı'nı göster
 useShadows=Gölgeleri Zorla
 nametagBackground=Takma Ad Arkaplanı
@@ -89,9 +89,9 @@ hideOtherNames.tooltip=Diğer insanların adlarını saklar.
 hideOwnSkin=Kendi Ciltini Sakla
 hideOtherSkins=Diğerlerinin Ciltlerini Sakla
 autoBoop=OtoBoop
-autoBoop.enabled.tooltip=Senin bir arkadaşın hypixel'e girince /boop <oyuncu> yazma ayarı.
+autoBoop.enabled.tooltip=Senin bir arkadaşın hypixel'e girince /boop <oyuncu> yazma seçeneği.
 
-category.axolotlclient=AxolotlClient
+category.axolotlclient=Axolotl Client
 
 key.zoom=Yakınlaştırma
 key.openHud=Arayüz Düzenleyicisini aç
@@ -99,7 +99,7 @@ key.toggleSneak=Otomatik Eğilme
 key.toggleSprint=Otomatik Koşma
 key.scrollHorizontally=Yatay Kaydır
 
-hud=Arayüz Ayarları
+hud=Arayüz Seçenekleri
 pinghud=Gecikme Arayüzü
 cpshud=CPS Arayüzü
 cpskeybind=Tuş-Bağından CPS
@@ -137,8 +137,10 @@ scrollbarColor=Kaydırma-barı Rengi
 lineSpacing=Satır Aralaması
 arrowhud=Ok Arayüzü
 dynamic=Dinamik
-itemupdatehud=EşyaDurumu Arayüzü
+itemupdatehud=Eşya Durumu Arayüzü
 packdisplayhud=Paket Bilgisi Arayüzü
+realtimehud=Gerçek Zaman Arayüzü
+showSeconds=Saniyeleri Göster
 timeout=Zaman Aşımı
 text=Yazı
 bar=Can Barı
@@ -153,15 +155,15 @@ showA=A'yı Göster
 showS=S'yi Göster
 showD=D'yi Göster
 showSpace=Boşluk'u Göster
-
+reachdisplayhud=Hedef Gösterme Arayüzü
+blocks=Bloklar
 togglesprint=Otomatik Niteleme
 randomPlaceholder=Rastgele Yer-tutucu
 sprinting_toggled=Koşma [Etkin]
 sneaking_toggled=Eğilme [Etkin]
 sprinting_pressed=Koşuluyor [Tuş Basılı]
 sneaking_pressed=Eğilmiş [Tuş Basılı]
-
-iphud=İP Arayüzü
+iphud=Adres Arayüzü
 IconHud=Simge Arayüzü
 
 toggleSprint=Otomatik Koşma'ya izin ver
@@ -170,7 +172,7 @@ sneakToggled=Otomatik Eğilme şuan kullanılıyor
 sprintToggled=Otomatik Koşma şuan kullanılıyor
 
 hud.snapping=Yapıştırma
-hud.clientOptions=Client Ayarları
+hud.clientOptions=Client Seçenekleri
 
 enabled=Etkinleştirilmiş
 scale=Boyut
@@ -187,6 +189,22 @@ background=Arkaplan
 outline=Anahat
 outlineColor=Anahat Rengi
 shadow=Gölge
+
+rpc=Discord RPC
+showActivity=Aktiviteyi Göster
+showActivity.tooltip=Şimdiki Oyun-İçi aktiviteni gösterme seçeneği.
+showTime=Zamanı Göster
+showTime.tooltip=Bir zaman damgası gösterme seçeneği.
+
+pickColor=Renk Seç
+currentColor=Şimdiki
+alpha=Alfa
+red=Kırmızı
+green=Yeşil
+blue=Mavi
+
+disableReason.crash.tooltip=Bu seçenek devre dışı bırakıldı <br>çünkü oyununu çökertir.
+disableReason.ban_reason.tooltip=Bu seçenek devre dışı bırakıldı <br>çünkü şimdiki sunucununzda banlanabilir diye biliniyor.
 
 credits=Katkıda Bulunanlar
 creditsBGM=Müzik
