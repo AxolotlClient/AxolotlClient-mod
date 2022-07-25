@@ -2,37 +2,56 @@ language.name=Türkçe
 language.region=TR
 language.code=tr_TR
 
-config=AxolotlClient Ayarları
+config=AxolotlClient Seçenekleri
 title_short=Client Ayarları
 
 sky_loading_text=Gökyüzü bundan yükleniliyor:
 resource_loading_finished=Yüklenme Bitti! Minecraft Başlatılıyor...
-
+loadingBgColor.tooltip=Yüklenme ekranın arkaplan rengi.
 general=Genel
-general.title=Genel Ayarlar
-enableRPC=RPC'yi Etkinleştir
-showActivity=Aktivite'yi Göster
+general.title=Genel Seçenekler
 loadingBgColor=Yüklenme Ekranı Rengi
-nightMode=Gece Modu
 
-rendering=İşleme Ayarları
+nightMode=Gece Modu
+nightMode.tooltip=Mavi renkleri azaltır.
+quickToggles=Hızlı Ayarlama
+quickToggles.tooltip='Etkin' seçeneği içeren <br>kategorilerde küçük bir etkinleştirme düğmesi ekler.
+showOptionTooltips=Seçenek ipuçlarını Göster
+showOptionTooltips.tooltip=Seçeneklerde ipuçları gösterme ayarı.
+showCategoryTooltips=Kategori İpuçlarını Göster
+showCategoryTooltips.tooltip=Menüdeki kategorilerin ipucularını gösterme seçeneği.
+
+rendering=İşleme Seçenekleri
 customSky=Özel Gökyüzü
 showSunMoon=Özel Güneş & Ay
 cloudHeight=Bulut Yüksekliği
-zoomDivisor=Yakınlaştırma Bölümü
-zoomSpeed=Yakınlaştırma Hızı
+zoomDivisor=FOV Bölümü
+zoomSpeed=Animasyon Hızı
+zoomScrolling=Kaydırarak Yakınlaş
+zoomScrolling.tooltip=Kaydırarak yakınlaşma faktörünü modifiye etme seçeneği.
 decreaseSensitivity=Duyarlılığı Azalt
+decreaseSensitivity.tooltip=Yakınlaştırılınca fare duyarlılığını ayarlama seçeneği.
+smoothCamera=Pürüzsüz Kamera
+smoothCamera.tooltip=Yakınlaştırılken pürüzsüz kamerayı etkinleştirme seçeneği.
 dynamicFov=Dinamik Görüş Alanı
 fullBright=TamParlak
 strength=Sertlik
 inGuis=Tüm Arayüzlere Uygula
-
+lowFire=Düşük Ateş
+lowFire.tooltip=Eğer yanıyorsan ateş arayüzünün yüksekliğini azaltır
 motionBlur=Hareket Bulanıklığı
 zoom=Yakınlaştırma
+timeChanger=Zaman Değiştirici
+time=Zaman
 blockOutlines=Blok Anahatları
 outlineWidth=Anahat Genişliği
+scrollableTooltips=Kaydırılabilir Araçlar
+shiftHorizontalScroll=Yatay Kaydır (eğer tuş basıldıysa)
+shiftHorizontalScroll.tooltip=Eğer özel tuş <br> basıldıysa yatay kaydırmaya izin ver. <br>Tuş Kontroller Menüsünden değiştirilebilir.
+scrollAmount=Kaydırma Miktarı
+scrollAmount.tooltip=Kaydırılınca,bu aracı bu kadar hareket ettir.
 
-nametagOptions=Takma Ad Ayarları
+nametagOptions=Takma Ad Seçenekleri
 showOwnNametag=Kendi Takma Adı'nı göster
 useShadows=Gölgeleri Zorla
 nametagBackground=Takma Ad Arkaplanı
@@ -41,8 +60,12 @@ customBadge=Özel Rozetler
 showBadges=Rozetleri Göster
 
 hypixel-mods=Hypixel Eklentileri
-levelhead=SeviyeEtiketi
 hypixel_api_key=Hypixel API Anahtarı
+cache_mode=Önbellek Modu
+cache_mode.tooltip=Önbelleğe alınmış oyuncu verisi ne zaman temizlenmeli <br> <br>Alıcı Bağlantıyı Kesince: Sunucudan bağlantıyı kesince temizle. <br>Oyuncu Bağlantıyı Kesince: Bir oyuncunun verilerini bağlantıyı kesince temizle.
+ON_CLIENT_DISCONNECT=Alıcı Bağlantıyı Kesince
+ON_PLAYER_DISCONNECT=Oyuncu Bağlantıyı Kesince
+levelhead=SeviyeEtiketi
 levelHeadMode=SeviyeEtiketi Modu
 autogg=OtomatikGG
 printGG=GG Yazdır
@@ -60,24 +83,30 @@ nickhider=Takma Ad Saklayıcı
 hiddenNameSelf=Kendini bu adla sakla:
 hiddenNameOthers=Diğerleri bu adla sakla:
 hideOwnName=Kendi Adını Sakla
+hideOwnName.tooltip=Kendi adını saklar.
 hideOtherNames=Diğerlerinin adını bu adla sakla:
+hideOtherNames.tooltip=Diğer insanların adlarını saklar.
 hideOwnSkin=Kendi Ciltini Sakla
 hideOtherSkins=Diğerlerinin Ciltlerini Sakla
+autoBoop=OtoBoop
+autoBoop.enabled.tooltip=Senin bir arkadaşın hypixel'e girince /boop <oyuncu> yazma seçeneği.
 
-category.axolotlclient=AxolotlClient
+category.axolotlclient=Axolotl Client
 
 key.zoom=Yakınlaştırma
 key.openHud=Arayüz Düzenleyicisini aç
 key.toggleSneak=Otomatik Eğilme
 key.toggleSprint=Otomatik Koşma
+key.scrollHorizontally=Yatay Kaydır
 
-hud=Arayüz Ayarları
+hud=Arayüz Seçenekleri
 pinghud=Gecikme Arayüzü
 cpshud=CPS Arayüzü
 cpskeybind=Tuş-Bağından CPS
 rightcps=Sağ Klik CPS'ini göster
 fpshud=FPS Arayüzü
 armorhud=Zırh Arayüzü
+showProtectionLevel=Koruma Seviyesini Göster
 potionshud=İksir Arayüzü
 keystrokehud=Tuş-Göstergesi
 speedhud=Hız Arayüzü
@@ -100,11 +129,18 @@ coordshud=Koordinatlar Arayüzü
 actionbarhud=Eylem Barı Arayüzü
 actionBarPlaceholder=Eylem Barı
 bossbarhud=Can Barı Arayüzü
-chathud=Sohbet HUD
+chathud=Sohbet Arayüzü
+chatHistoryLength=Sohbet Geçmiş Boyutu
+chatHistoryLength.tooltip=Sohbet geçmişinin limitini ayarlar. <br>Maximum'a ayarlanınınca sonsuzdur. <br>Sıradan sohbetde'de çalışıyor.
+chathud.background.tooltip=Sohbet arkaplanını etkinleştirir yada devre dışı bırakır <br>Sıradan sohbetde'de çalışıyor.
+scrollbarColor=Kaydırma-barı Rengi
+lineSpacing=Satır Aralaması
 arrowhud=Ok Arayüzü
 dynamic=Dinamik
-itemupdatehud=EşyaDurumu Arayüzü
+itemupdatehud=Eşya Durumu Arayüzü
 packdisplayhud=Paket Bilgisi Arayüzü
+realtimehud=Gerçek Zaman Arayüzü
+showSeconds=Saniyeleri Göster
 timeout=Zaman Aşımı
 text=Yazı
 bar=Can Barı
@@ -119,15 +155,15 @@ showA=A'yı Göster
 showS=S'yi Göster
 showD=D'yi Göster
 showSpace=Boşluk'u Göster
-
+reachdisplayhud=Hedef Gösterme Arayüzü
+blocks=Bloklar
 togglesprint=Otomatik Niteleme
 randomPlaceholder=Rastgele Yer-tutucu
 sprinting_toggled=Koşma [Etkin]
 sneaking_toggled=Eğilme [Etkin]
 sprinting_pressed=Koşuluyor [Tuş Basılı]
 sneaking_pressed=Eğilmiş [Tuş Basılı]
-
-iphud=İP Arayüzü
+iphud=Adres Arayüzü
 IconHud=Simge Arayüzü
 
 toggleSprint=Otomatik Koşma'ya izin ver
@@ -136,7 +172,7 @@ sneakToggled=Otomatik Eğilme şuan kullanılıyor
 sprintToggled=Otomatik Koşma şuan kullanılıyor
 
 hud.snapping=Yapıştırma
-hud.clientOptions=Client Ayarları
+hud.clientOptions=Client Seçenekleri
 
 enabled=Etkinleştirilmiş
 scale=Boyut
@@ -153,6 +189,22 @@ background=Arkaplan
 outline=Anahat
 outlineColor=Anahat Rengi
 shadow=Gölge
+
+rpc=Discord RPC
+showActivity=Aktiviteyi Göster
+showActivity.tooltip=Şimdiki Oyun-İçi aktiviteni gösterme seçeneği.
+showTime=Zamanı Göster
+showTime.tooltip=Bir zaman damgası gösterme seçeneği.
+
+pickColor=Renk Seç
+currentColor=Şimdiki
+alpha=Alfa
+red=Kırmızı
+green=Yeşil
+blue=Mavi
+
+disableReason.crash.tooltip=Bu seçenek devre dışı bırakıldı <br>çünkü oyununu çökertir.
+disableReason.ban_reason.tooltip=Bu seçenek devre dışı bırakıldı <br>çünkü şimdiki sunucununzda banlanabilir diye biliniyor.
 
 credits=Katkıda Bulunanlar
 creditsBGM=Müzik
