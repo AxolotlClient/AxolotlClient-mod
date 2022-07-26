@@ -58,7 +58,7 @@ public class BooleanWidget extends ButtonWidget {
     }
 
     private void renderSwitch(){
-        int x = option.get() ? this.x + width - 9: this.x;
+        int x = option.get() ? this.x + width - width/5: this.x;
         this.drawTexture(x, this.y, 0, 66 + (hovered ? 20:0), 4, this.height/2);
         this.drawTexture(x, this.y + height/2, 0, 86 - height/2 + (hovered ? 20:0), 4, this.height/2);
         this.drawTexture(x + 4, this.y, 200 - 4, 66 + (hovered ? 20:0), 4, this.height);

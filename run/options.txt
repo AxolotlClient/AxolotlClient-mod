@@ -5,17 +5,17 @@ gamma:1.0
 saturation:0.0
 renderDistance:12
 guiScale:2
-particles:0
+particles:1
 bobView:true
 anaglyph3d:false
-maxFps:120
+maxFps:260
 fboEnable:true
 difficulty:2
 fancyGraphics:true
 ao:2
 renderClouds:false
-resourcePacks:["! §bNebula - [sky only]","astralex-sky-overlay-for-1-8.zip"]
-incompatibleResourcePacks:["! §bNebula - [sky only]"]
+resourcePacks:["astralex-sky-overlay-for-1-8.zip"]
+incompatibleResourcePacks:[]
 lastServer:
 lang:en_US
 chatVisibility:0
@@ -93,6 +93,7 @@ key_key.hotbar.9:33
 key_key.openHud:54
 key_key.toggleSprint:23
 key_key.toggleSneak:37
+key_key.scrollHorizontally:42
 key_key.zoom:46
 soundCategory_master:0.4668874
 soundCategory_music:0.471831

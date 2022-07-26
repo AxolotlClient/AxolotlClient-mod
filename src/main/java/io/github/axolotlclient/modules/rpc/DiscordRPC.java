@@ -68,7 +68,7 @@ public class DiscordRPC extends AbstractModule {
             CreateParams params = new CreateParams();
 
             params.setClientID(875835666729152573L);
-            params.setFlags(CreateParams.Flags.DEFAULT);
+            params.setFlags(CreateParams.Flags.NO_REQUIRE_DISCORD);
 
             DiscordEventHandler handler = new DiscordEventHandler();
             params.registerEventHandler(handler);

@@ -41,10 +41,10 @@ public abstract class ChatHudMixin {
         return NickHider.Instance.editMessage(message);
     }
 
-    @Inject(method = "addMessage(Lnet/minecraft/text/Text;I)V", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;info(Ljava/lang/String;)V"), cancellable = true, remap = false)
+    /*@Inject(method = "addMessage(Lnet/minecraft/text/Text;I)V", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;info(Ljava/lang/String;)V"), cancellable = true, remap = false)
     public void noSuggestions(Text message, int i, CallbackInfo ci){
         if(i!=0) ci.cancel();
-    }
+    }*/
 
     @ModifyArg(method = "addMessage(Lnet/minecraft/text/Text;I)V", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;info(Ljava/lang/String;)V"), remap = false)
     public String noNamesInLogIfHidden(String message){
