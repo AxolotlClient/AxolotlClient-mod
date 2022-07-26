@@ -33,7 +33,7 @@ public class PackDisplayHud extends AbstractHudEntry {
     public void init() {
         AxolotlClient.packs.forEach(pack -> {
             try {
-                if(!pack.getName().equalsIgnoreCase("Default") )//&& pack.getIcon()!=null)
+                if(!pack.getName().equalsIgnoreCase("Default") && !pack.getName().equalsIgnoreCase("Fabric Mods"))//&& pack.getIcon()!=null)
                     widgets.add(new packWidget(pack));
             } catch (Exception ignored) {
             }

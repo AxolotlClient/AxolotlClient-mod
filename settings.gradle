@@ -1,8 +1,8 @@
 pluginManagement {
 	repositories {
 		maven {
-			name = 'Quilt'
-			url = 'https://maven.quiltmc.org/repository/release/'
+			name = 'CombatReforged'
+			url = 'https://maven.combatreforged.com/'
 		}
 		// Currently needed for Intermediary and other temporary dependencies
 		maven {

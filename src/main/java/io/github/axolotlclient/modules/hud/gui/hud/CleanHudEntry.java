@@ -1,5 +1,6 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
+import io.github.axolotlclient.config.Color;
 import io.github.axolotlclient.config.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
@@ -32,9 +33,9 @@ public abstract class CleanHudEntry extends AbstractHudEntry {
             fillRect(matrices, getBounds(), backgroundColor.get());
         }
         if(outline.get()) outlineRect(matrices, getBounds(), outlineColor.get());
-        drawCenteredString(matrices, client.textRenderer, getValue(),
-                new DrawPosition(pos.x + (Math.round(width) / 2),
-                pos.y + (Math.round((float) height / 2)) - 4),
+        drawString(matrices, getValue(),
+                pos.x,
+                pos.y + (Math.round((float) height / 2) - 4),
                 chroma.get()? textColor.getChroma() : textColor.get(),
                 shadow.get());
         matrices.pop();
@@ -45,9 +46,9 @@ public abstract class CleanHudEntry extends AbstractHudEntry {
         renderPlaceholderBackground(matrices);
         scale(matrices);
         DrawPosition pos = getPos();
-        drawCenteredString(matrices, client.textRenderer, getPlaceholder(),
-                new DrawPosition(pos.x + (width / 2),
-                pos.y + (height / 2) - 4), -1, shadow.get());
+        drawString(matrices, getPlaceholder(),
+                pos.x,
+                pos.y + (height / 2) - 4, Color.WHITE, shadow.get());
         matrices.pop();
         hovered = false;
     }
@@ -56,6 +57,7 @@ public abstract class CleanHudEntry extends AbstractHudEntry {
     public void addConfigOptions(List<OptionBase<?>> options) {
         super.addConfigOptions(options);
         options.add(textColor);
+        options.add(textAlignment);
         options.add(chroma);
         options.add(shadow);
         options.add(background);

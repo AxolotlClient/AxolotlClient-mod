@@ -9,6 +9,11 @@ version = project.version
 group = project.maven_group
 
 repositories {
+	maven {
+		name = 'CombatReforged'
+		url = 'https://maven.combatreforged.com/'
+	}
+
 	maven { url 'https://jitpack.io' }
 	maven {
 		url 'https://repo.hypixel.net/repository/Hypixel/'

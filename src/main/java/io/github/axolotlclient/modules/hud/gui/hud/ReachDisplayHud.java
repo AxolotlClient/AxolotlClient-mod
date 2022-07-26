@@ -4,7 +4,6 @@ import io.github.axolotlclient.config.options.IntegerOption;
 import io.github.axolotlclient.config.options.OptionBase;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;

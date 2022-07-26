@@ -129,7 +129,7 @@
 	"entitycolor": "Color (Entities)",
 	"blockcolor": "Color (Container)",
 	"attackindicatorbg": "Attack Indicator (Background)",
-	"attackindicatorfb": "Attack Indicator (Foreground)",
+	"attackindicatorfg": "Attack Indicator (Foreground)",
 	"TEXTURE": "Texture",
 	"DIRECTION": "Direction",
 	"DOT": "Dot",
@@ -198,6 +198,7 @@
 	"outline": "Outline",
 	"outlineColor": "Outline Color",
 	"shadow": "Shadow",
+	"textAlignment": "Text Alignment",
 
 	"rpc": "Discord RPC",
 	"showActivity": "Show Activity",

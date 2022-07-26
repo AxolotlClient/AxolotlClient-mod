@@ -126,26 +126,26 @@ public class CoordsHud extends AbstractHudEntry {
 		int dir = getDirection(yaw);
 		String direction = getWordedDirection(dir);
 		TextRenderer textRenderer = client.textRenderer;
-		drawString(matrices, textRenderer, "X", pos.x + 1, pos.y + 2, firstColor.get().getAsInt(),
+		drawString(matrices, "X", pos.x + 1, pos.y + 2, firstColor.get(),
 			shadow.get());
-		drawString(matrices, textRenderer, String.valueOf(df.format(x)), pos.x + 11, pos.y + 2,
-			secondColor.get().getAsInt(), shadow.get());
+		drawString(matrices, String.valueOf(df.format(x)), pos.x + 11, pos.y + 2,
+			secondColor.get(), shadow.get());
 
-		drawString(matrices, textRenderer, "Y", pos.x + 1, pos.y + 12, firstColor.get().getAsInt(),
+		drawString(matrices, "Y", pos.x + 1, pos.y + 12, firstColor.get(),
 			shadow.get());
-		drawString(matrices, textRenderer, String.valueOf(df.format(y)), pos.x + 11, pos.y + 12,
-			secondColor.get().getAsInt(), shadow.get());
+		drawString(matrices, String.valueOf(df.format(y)), pos.x + 11, pos.y + 12,
+			secondColor.get(), shadow.get());
 
-		drawString(matrices, textRenderer, "Z", pos.x + 1, pos.y + 22, firstColor.get().getAsInt(),
+		drawString(matrices, "Z", pos.x + 1, pos.y + 22, firstColor.get(),
 			shadow.get());
-		drawString(matrices, textRenderer, String.valueOf(df.format(z)), pos.x + 11, pos.y + 22,
-			secondColor.get().getAsInt(), shadow.get());
+		drawString(matrices, String.valueOf(df.format(z)), pos.x + 11, pos.y + 22,
+			secondColor.get(), shadow.get());
 
-		drawString(matrices, textRenderer, direction, pos.x + 60, pos.y + 12,
-			firstColor.get().getAsInt(), shadow.get());
+		drawString(matrices, direction, pos.x + 60, pos.y + 12,
+			firstColor.get(), shadow.get());
 
-		drawString(matrices, textRenderer, getXDir(dir), pos.x + 60, pos.y + 2,
-			secondColor.get().getAsInt(), shadow.get());
+		drawString(matrices, getXDir(dir), pos.x + 60, pos.y + 2,
+			secondColor.get(), shadow.get());
 		textRenderer.drawWithShadow(matrices, getZDir(dir), pos.x + 60, pos.y + 22,
 			secondColor.get().getAsInt(), shadow.get());
 
@@ -232,6 +232,7 @@ public class CoordsHud extends AbstractHudEntry {
     @Override
     public void addConfigOptions(List<OptionBase<?>> options) {
         super.addConfigOptions(options);
+        options.add(textAlignment);
         options.add(background);
         options.add(backgroundColor);
         options.add(outline);

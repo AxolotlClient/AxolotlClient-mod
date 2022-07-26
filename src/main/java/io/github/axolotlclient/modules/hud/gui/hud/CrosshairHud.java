@@ -107,7 +107,7 @@ public class CrosshairHud extends AbstractHudEntry {
 				boolean targetingEntity = false;
 				if (this.client.targetedEntity != null && this.client.targetedEntity instanceof LivingEntity
 					&& progress >= 1.0F) {
-					targetingEntity = this.client.player.getAttackCooldownProgressPerTick() > 5.0F;
+					targetingEntity = this.client.player.method_31235() > 5.0F;
 					targetingEntity &= this.client.targetedEntity.isAlive();
 				}
 
@@ -125,7 +125,7 @@ public class CrosshairHud extends AbstractHudEntry {
 		}
 		if (!type.get().equalsIgnoreCase(CrosshairOption.TEXTURE.toString()) && this.client.options.attackIndicator == AttackIndicator.CROSSHAIR) {
 			float progress = this.client.player.getAttackCooldownProgress(0.0F);
-			if (progress != 1.0F) {
+			if (progress < 1.0F) {
 				fill(matrices.peek().getModel(), pos.x + (width / 2F) - 6, pos.y + (height / 2F) + 9, 11, 1,
 					attackIndicatorBackgroundColor.get().getAsInt());
 				fill(matrices.peek().getModel(), pos.x + (width / 2F) - 6, pos.y + (height / 2F) + 9,

@@ -116,13 +116,16 @@ public class HudManager extends AbstractModule {
     }
 
     public void render(MatrixStack matrices) {
+        client.getProfiler().push("Hud Modules");
         if (!(client.currentScreen instanceof HudEditScreen) && !client.options.debugEnabled) {
             for (AbstractHudEntry hud : getEntries()) {
                 if (hud.isEnabled()) {
+                    client.getProfiler().swap(hud.getName());
                     hud.renderHud(matrices);
                 }
             }
         }
+        client.getProfiler().pop();
     }
 
     public Optional<AbstractHudEntry> getEntryXY(int x, int y) {

@@ -72,7 +72,7 @@ public class ArrowHud extends AbstractHudEntry {
 			return;
 		}
 		if (!allArrowTypes.get()) {
-			currentArrow = client.player.getArrowType(Items.BOW.getStackForRender());
+			currentArrow = client.player.getArrowType(Items.BOW.getDefaultStack());
 		} else {
 			currentArrow = new ItemStack(Items.ARROW);
 		}

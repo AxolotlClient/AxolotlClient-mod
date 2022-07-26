@@ -4,6 +4,7 @@ import io.github.axolotlclient.config.Color;
 import io.github.axolotlclient.config.options.BooleanOption;
 import io.github.axolotlclient.config.options.ColorOption;
 import io.github.axolotlclient.config.options.DoubleOption;
+import io.github.axolotlclient.config.options.EnumOption;
 import io.github.axolotlclient.config.options.OptionBase;
 import io.github.axolotlclient.config.options.OptionCategory;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
@@ -31,6 +32,7 @@ public abstract class AbstractHudEntry extends DrawUtil {
 
     protected BooleanOption enabled = new BooleanOption("enabled",false);
     public DoubleOption scale = new DoubleOption("scale", 1, 0.1F, 5);
+    protected EnumOption textAlignment = new EnumOption("textAlignment", new String[]{"center", "left", "right"}, "center");
     protected final ColorOption textColor = new ColorOption("textColor", Color.WHITE);
     protected final BooleanOption chroma = new BooleanOption("chroma", false);
     protected BooleanOption shadow = new BooleanOption("shadow",  getShadowDefault());
@@ -189,6 +191,20 @@ public abstract class AbstractHudEntry extends DrawUtil {
     public void addConfigOptions(List<OptionBase<?>> options) {
         options.add(enabled);
         options.add(scale);
+    }
+
+    protected void drawString(MatrixStack matrices, String s, int x, int y, Color color, boolean shadow){
+        switch (textAlignment.get()){
+            case "center":
+                drawCenteredString(matrices, MinecraftClient.getInstance().textRenderer, s, x+width/2, y, color.getAsInt());
+                break;
+            case "left":
+                DrawUtil.drawString(matrices, MinecraftClient.getInstance().textRenderer, s, x, y, color.getAsInt(), shadow);
+                break;
+            case "right":
+                DrawUtil.drawString(matrices, MinecraftClient.getInstance().textRenderer, s, x+width - MinecraftClient.getInstance().textRenderer.getWidth(s), y, color.getAsInt(), shadow);
+                break;
+        }
     }
 
     public boolean isEnabled() {

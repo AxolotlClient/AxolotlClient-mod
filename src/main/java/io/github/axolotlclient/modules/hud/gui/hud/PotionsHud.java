@@ -67,7 +67,7 @@ public class PotionsHud extends AbstractHudEntry {
 
                 drawTextWithShadow(matrices, client.textRenderer, text, pos.x + 20, pos.y + 4 + lastY, textColor.get().getAsInt());
 				drawString(matrices, client.textRenderer, StatusEffectUtil.durationToString(effect, 1),
-					pos.x + 20+4, pos.y + 6 + 10 + lastY, textColor.get().getAsInt(), shadow.get());
+					pos.x + 20+4, pos.y + 6 + 10 + lastY, 8355711, shadow.get());
 
 				lastY += 33;
 			}
