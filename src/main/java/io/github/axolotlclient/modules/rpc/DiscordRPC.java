@@ -62,9 +62,9 @@ public class DiscordRPC extends AbstractModule {
 
     public void initRPC(){
 
-        GameSdkDownloader.downloadSdk();
-
         if(enabled.get()) {
+
+            GameSdkDownloader.downloadSdk();
 
             CreateParams params = new CreateParams();
 
