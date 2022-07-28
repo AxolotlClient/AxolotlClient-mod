@@ -11,5 +11,30 @@ Not on minecraft.net!
 AxolotlClient-branding/tree/1.8.9!
 Türkçe'de kullanılabilir!
 ඞ!
-Also...!
+Also ...!
 The Module Update!
+made with luv :3!
+Popular in Berlin!
+Works with pacmc!
+NO_REQUIRE_DISCORD!
+Supports FOSS!
+Downloadable from LibreWolf!
+Toggleable in over 200 options!
+Hall of Fame!
+Merhaba!
+Mostly bug-free!
+FFA!
+Incredibly Customizable!
+Intended for Minecraft!
+Privacy friendly!
+Ye!
+Creative!
+if(AxolotlClient.someNiceBackground.get())!
+Sleep friendly!
+Licensed under LGPL-3!
+On modrinth.com
+Works with PolyMC!
+Chroma colors supported!
+Commit change-able!
+Can show activity!
+Upto 40 splashes!

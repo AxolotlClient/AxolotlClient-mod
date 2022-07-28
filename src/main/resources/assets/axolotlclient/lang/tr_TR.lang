@@ -2,14 +2,14 @@ language.name=Türkçe
 language.region=TR
 language.code=tr_TR
 
-config=AxolotlClient Seçenekleri
+config=AxolotlClient Ayarları
 title_short=Client Ayarları
 
 sky_loading_text=Gökyüzü bundan yükleniliyor:
 resource_loading_finished=Yüklenme Bitti! Minecraft Başlatılıyor...
 loadingBgColor.tooltip=Yüklenme ekranın arkaplan rengi.
 general=Genel
-general.title=Genel Seçenekler
+general.title=Genel Ayarlar
 loadingBgColor=Yüklenme Ekranı Rengi
 
 nightMode=Gece Modu
@@ -19,20 +19,20 @@ quickToggles.tooltip='Etkin' seçeneği içeren <br>kategorilerde küçük bir e
 showOptionTooltips=Seçenek ipuçlarını Göster
 showOptionTooltips.tooltip=Seçeneklerde ipuçları gösterme ayarı.
 showCategoryTooltips=Kategori İpuçlarını Göster
-showCategoryTooltips.tooltip=Menüdeki kategorilerin ipucularını gösterme seçeneği.
+showCategoryTooltips.tooltip=Menüdeki kategorilerin ipucularını gösterme ayarı.
 
-rendering=İşleme Seçenekleri
+rendering=İşleme Ayarları
 customSky=Özel Gökyüzü
 showSunMoon=Özel Güneş & Ay
 cloudHeight=Bulut Yüksekliği
 zoomDivisor=FOV Bölümü
 zoomSpeed=Animasyon Hızı
 zoomScrolling=Kaydırarak Yakınlaş
-zoomScrolling.tooltip=Kaydırarak yakınlaşma faktörünü modifiye etme seçeneği.
+zoomScrolling.tooltip=Kaydırarak yakınlaşma faktörünü modifiye etme ayarı.
 decreaseSensitivity=Duyarlılığı Azalt
-decreaseSensitivity.tooltip=Yakınlaştırılınca fare duyarlılığını ayarlama seçeneği.
+decreaseSensitivity.tooltip=Yakınlaştırılınca fare duyarlılığını ayarlama ayarı.
 smoothCamera=Pürüzsüz Kamera
-smoothCamera.tooltip=Yakınlaştırılken pürüzsüz kamerayı etkinleştirme seçeneği.
+smoothCamera.tooltip=Yakınlaştırılken pürüzsüz kamerayı etkinleştirme ayarı.
 dynamicFov=Dinamik Görüş Alanı
 fullBright=TamParlak
 strength=Sertlik
@@ -51,7 +51,7 @@ shiftHorizontalScroll.tooltip=Eğer özel tuş <br> basıldıysa yatay kaydırma
 scrollAmount=Kaydırma Miktarı
 scrollAmount.tooltip=Kaydırılınca,bu aracı bu kadar hareket ettir.
 
-nametagOptions=Takma Ad Seçenekleri
+nametagOptions=Takma Ad Ayarları
 showOwnNametag=Kendi Takma Adı'nı göster
 useShadows=Gölgeleri Zorla
 nametagBackground=Takma Ad Arkaplanı
@@ -59,7 +59,7 @@ badgeText=Özel Rozet Yazısı
 customBadge=Özel Rozetler
 showBadges=Rozetleri Göster
 
-hypixel-mods=Hypixel Eklentileri
+hypixel-mods=Hypixel Modları
 hypixel_api_key=Hypixel API Anahtarı
 cache_mode=Önbellek Modu
 cache_mode.tooltip=Önbelleğe alınmış oyuncu verisi ne zaman temizlenmeli <br> <br>Alıcı Bağlantıyı Kesince: Sunucudan bağlantıyı kesince temizle. <br>Oyuncu Bağlantıyı Kesince: Bir oyuncunun verilerini bağlantıyı kesince temizle.
@@ -91,7 +91,7 @@ hideOtherSkins=Diğerlerinin Ciltlerini Sakla
 autoBoop=OtoBoop
 autoBoop.enabled.tooltip=Senin bir arkadaşın hypixel'e girince /boop <oyuncu> yazma seçeneği.
 
-category.axolotlclient=Axolotl Client
+category.axolotlclient=AxolotlClient
 
 key.zoom=Yakınlaştırma
 key.openHud=Arayüz Düzenleyicisini aç
@@ -99,7 +99,7 @@ key.toggleSneak=Otomatik Eğilme
 key.toggleSprint=Otomatik Koşma
 key.scrollHorizontally=Yatay Kaydır
 
-hud=Arayüz Seçenekleri
+hud=Arayüz Ayarları
 pinghud=Gecikme Arayüzü
 cpshud=CPS Arayüzü
 cpskeybind=Tuş-Bağından CPS
@@ -172,7 +172,7 @@ sneakToggled=Otomatik Eğilme şuan kullanılıyor
 sprintToggled=Otomatik Koşma şuan kullanılıyor
 
 hud.snapping=Yapıştırma
-hud.clientOptions=Client Seçenekleri
+hud.clientOptions=Client Ayarları
 
 enabled=Etkinleştirilmiş
 scale=Boyut
@@ -192,9 +192,14 @@ shadow=Gölge
 
 rpc=Discord RPC
 showActivity=Aktiviteyi Göster
-showActivity.tooltip=Şimdiki Oyun-İçi aktiviteni gösterme seçeneği.
+showActivity.tooltip=Şimdiki Oyun-İçi aktiviteni gösterme ayarı.
 showTime=Zamanı Göster
-showTime.tooltip=Bir zaman damgası gösterme seçeneği.
+showTime.tooltip=Bir zaman damgası gösterme ayarı.
+
+credits=Katkıda Bulunanlar
+creditsBGM=Müzik
+contributors=Katılımcılar:
+other_people=Diğer Kişiler:
 
 pickColor=Renk Seç
 currentColor=Şimdiki
@@ -205,11 +210,6 @@ blue=Mavi
 
 disableReason.crash.tooltip=Bu seçenek devre dışı bırakıldı <br>çünkü oyununu çökertir.
 disableReason.ban_reason.tooltip=Bu seçenek devre dışı bırakıldı <br>çünkü şimdiki sunucununzda banlanabilir diye biliniyor.
-
-credits=Katkıda Bulunanlar
-creditsBGM=Müzik
-contributors=Katılımcılar:
-other_people=Diğer Kişiler:
 
 back=Geri
 close=Kapat
