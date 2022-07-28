@@ -11,7 +11,7 @@ Not on minecraft.net!
 AxolotlClient-branding/tree/1.8.9!
 Türkçe'de kullanılabilir!
 ඞ!
-Also...!
+Also ...!
 The Module Update!
 made with luv :3!
 Popular in Berlin!
@@ -31,7 +31,7 @@ Ye!
 Creative!
 if(AxolotlClient.someNiceBackground.get())!
 Sleep friendly!
-Licensed under GPL-3!
+Licensed under LGPL-3!
 On modrinth.com
 Works with PolyMC!
 Chroma colors supported!
