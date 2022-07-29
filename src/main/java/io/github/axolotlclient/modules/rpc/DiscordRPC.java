@@ -28,7 +28,7 @@ public class DiscordRPC extends AbstractModule {
 
     private static DiscordRPC Instance;
 
-    public static Identifier ID = new Identifier("axolotlclient", "rpc");
+    public static final Identifier ID = new Identifier("axolotlclient", "rpc");
 
     public OptionCategory category = new OptionCategory("rpc");
 
@@ -48,6 +48,7 @@ public class DiscordRPC extends AbstractModule {
         return Instance;
     }
 
+    @Override
     public void init() {
 
         category.add(enabled, showTime, showActivity);
@@ -146,6 +147,7 @@ public class DiscordRPC extends AbstractModule {
         }
     }
 
+    @Override
     public void tick(){
 
         if (!running && enabled.get()){

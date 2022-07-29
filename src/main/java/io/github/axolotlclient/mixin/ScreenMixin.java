@@ -17,16 +17,16 @@ public abstract class ScreenMixin {
 
     @ModifyArgs(method = "renderTooltip(Lnet/minecraft/item/ItemStack;II)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;renderTooltip(Ljava/util/List;II)V"))
     public void modifyTooltipPosition(Args args){
-        if(ScrollableTooltips.Instance.enabled.get()) {
+        if(ScrollableTooltips.instance.enabled.get()) {
 
             if((MinecraftClient.getInstance().currentScreen instanceof CreativeInventoryScreen) &&
                     ((CreativeInventoryScreen)MinecraftClient.getInstance().currentScreen).getSelectedTab() != ItemGroup.INVENTORY.getIndex()){
                 return;
             }
 
-            ScrollableTooltips.Instance.onRenderTooltip();
-            args.set(1, (int)args.get(1) + ScrollableTooltips.Instance.tooltipOffsetX);
-            args.set(2, (int)args.get(2) + ScrollableTooltips.Instance.tooltipOffsetY);
+            ScrollableTooltips.instance.onRenderTooltip();
+            args.set(1, (int)args.get(1) + ScrollableTooltips.instance.tooltipOffsetX);
+            args.set(2, (int)args.get(2) + ScrollableTooltips.instance.tooltipOffsetY);
         }
     }
 

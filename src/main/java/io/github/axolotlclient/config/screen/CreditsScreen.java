@@ -110,8 +110,8 @@ public class CreditsScreen extends Screen {
     private void initCredits(){
         credits.put("moehreag", new String[]{"Author, Programming", "https://github.com/moehreag"});
         credits.put("YakisikliBaran", new String[]{"Turkish Translation"});
-        credits.put("DragonEggBedrockBreaking", new String[]{"Bugfixing, inspiration of new Features"});
-        credits.put("TheKodeToad", new String[]{"Letting me use your Motion Blur implementation"});
+        credits.put("DragonEggBedrockBreaking", new String[]{"Bugfixing, inspiration of new features"});
+        credits.put("TheKodeToad", new String[]{"Contributor (Motion Blur, Zoom and Freelook)"});
         credits.put("kuchenag", new String[]{"Art"});
 
         other.put("DarkKronicle", new String[]{"Author of KronHUD, the best HUD mod!"});

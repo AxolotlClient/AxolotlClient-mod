@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 public class HudManager extends AbstractModule {
 
-    public static Identifier ID = new Identifier("hud");
+    public static final Identifier ID = new Identifier("hud");
 
     private final Map<Identifier, AbstractHudEntry> entries = new HashMap<>();
 
@@ -44,6 +44,7 @@ public class HudManager extends AbstractModule {
         return INSTANCE;
     }
 
+    @Override
     public void init(){
 
         Color.setupChroma();
@@ -78,6 +79,7 @@ public class HudManager extends AbstractModule {
         entries.forEach((identifier, abstractHudEntry) -> abstractHudEntry.init());
     }
 
+    @Override
     public void tick(){
         if(key.isPressed()) MinecraftClient.getInstance().openScreen(new HudEditScreen());
         INSTANCE.entries.forEach((identifier, abstractHudEntry) -> {
