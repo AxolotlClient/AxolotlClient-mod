@@ -11,12 +11,12 @@ import net.minecraft.entity.Entity;
 @Mixin(EntityRenderDispatcher.class)
 public class EntityRenderDispatcherMixin {
 
-    @Redirect(method = "method_10200", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;yaw"))
+    @Redirect(method = "method_10200", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;yaw:F"))
     public float freelook$yaw(Entity entity) {
         return Freelook.INSTANCE.yaw(entity.yaw);
     }
 
-    @Redirect(method = "method_10200", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;prevYaw"))
+    @Redirect(method = "method_10200", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;prevYaw:F"))
     public float freelook$prevYaw(Entity entity) {
         return Freelook.INSTANCE.yaw(entity.prevYaw);
     }

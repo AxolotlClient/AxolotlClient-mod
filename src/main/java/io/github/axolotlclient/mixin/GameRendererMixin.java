@@ -204,7 +204,7 @@ public abstract class GameRendererMixin {
         return Freelook.INSTANCE.pitch(entity.pitch);
     }
 
-    @Redirect(method = "transformCamera", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;prevPitch"))
+    @Redirect(method = "transformCamera", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;prevPitch:F"))
     public float freelook$prevPitch(Entity entity) {
         return Freelook.INSTANCE.pitch(entity.prevPitch);
     }
