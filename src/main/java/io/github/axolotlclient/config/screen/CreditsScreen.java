@@ -229,7 +229,7 @@ public class CreditsScreen extends Screen {
 
         credits.add(new Credit("moehreag", "Author, Programming", "https://github.com/moehreag"));
         credits.add(new Credit("YakisikliBaran", "Turkish Translation"));
-        credits.add(new Credit("TheKodeToad", "Contributor", "Motion Blur", "Free Perspective"));
+        credits.add(new Credit("TheKodeToad", "Contributor", "Motion Blur", "Freelook", "Zoom"));
         credits.add(new Credit("DragonEggBedrockBreaking", "Bugfixing", "Inspiration of new Features"));
 
         credits.add(new SpacerTitle("- - - - - - "+I18n.translate("other_people")+" - - - - - -"));
@@ -381,7 +381,9 @@ public class CreditsScreen extends Screen {
 
         public void mouseClicked(int mouseX, int mouseY){
             lines.forEach((integer, s) -> {
-                if(mouseY>=integer && mouseY<integer+12){
+                if((mouseY>=integer && mouseY<integer+12) &&
+                        mouseX >= width/2-MinecraftClient.getInstance().textRenderer.getStringWidth(s)/2 &&
+                        mouseX<= width/2+ MinecraftClient.getInstance().textRenderer.getStringWidth(s)/2){
                     handleTextClick(new LiteralText(s).setStyle(new Style().setClickEvent(effects.get(Formatting.strip(s)))));
                 }
             });
