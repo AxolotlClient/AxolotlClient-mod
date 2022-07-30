@@ -41,7 +41,8 @@
     "ScreenMixin",
     "TextureManagerMixin",
     "TitleScreenMixin",
-    "WorldRendererMixin"
+    "WorldRendererMixin",
+    "SharedConstantsMixin"
   ],
   "injectors": {
     "defaultRequire": 1

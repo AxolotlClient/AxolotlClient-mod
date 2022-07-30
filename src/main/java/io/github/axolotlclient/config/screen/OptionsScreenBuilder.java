@@ -15,6 +15,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.resource.language.I18n;
+import org.lwjgl.input.Keyboard;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -149,6 +150,7 @@ public class OptionsScreenBuilder extends Screen {
 
     @Override
     public void init() {
+        Keyboard.enableRepeatEvents(true);
         this.list = new ButtonWidgetList(this.client, this.width, this.height, 50, this.height - 50, 25, cat);
 
         this.buttons.add(new ButtonWidget(0, this.width/2-100, this.height-40, 200, 20, I18n.translate("back")));
@@ -161,6 +163,11 @@ public class OptionsScreenBuilder extends Screen {
         if(!isPickerOpen()) {
             this.list.handleMouse();
         }
+    }
+
+    @Override
+    public void removed() {
+        Keyboard.enableRepeatEvents(false);
     }
 
     @Override
