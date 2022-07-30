@@ -17,7 +17,7 @@ import java.io.InputStream;
 
 public class MotionBlur extends AbstractModule {
 
-    public static Identifier ID = new Identifier("motion_blur");
+    public static final Identifier ID = new Identifier("motion_blur");
 
     private final Identifier shaderLocation = new Identifier("minecraft:shaders/post/motion_blur.json");
 

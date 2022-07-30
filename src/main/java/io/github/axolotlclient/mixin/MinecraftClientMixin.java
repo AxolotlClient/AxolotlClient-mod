@@ -123,10 +123,8 @@ public abstract class MinecraftClientMixin {
     @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lorg/lwjgl/input/Mouse;getEventDWheel()I"), remap = false)
     public int onScroll() {
         int amount = Mouse.getEventDWheel();
-        if(amount != 0) {
-            if(Zoom.scroll(amount)) {
-                return 0;
-            }
+        if(amount != 0 && Zoom.scroll(amount)) {
+            return 0;
         }
         return amount;
     }

@@ -61,7 +61,9 @@ public class ConfigManager{
             JsonObject config = new JsonParser().parse(new FileReader(confPath.toString())).getAsJsonObject();
 
             for(OptionCategory category:categories) {
-                setOptions(config.get(category.getName()).getAsJsonObject(), category);
+                if(config.has(category.getName())) {
+                    setOptions(config.get(category.getName()).getAsJsonObject(), category);
+                }
             }
         } catch (Exception e){
             AxolotlClient.LOGGER.error("Failed to load config! Using default values... \nError: ");

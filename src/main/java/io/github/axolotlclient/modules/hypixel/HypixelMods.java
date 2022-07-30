@@ -17,14 +17,14 @@ import java.util.List;
 
 public class HypixelMods extends AbstractModule {
 
-    public static Identifier ID = new Identifier("hypixel");
+    public static final Identifier ID = new Identifier("hypixel");
 
-    public static HypixelMods INSTANCE = new HypixelMods();
+    public static final HypixelMods INSTANCE = new HypixelMods();
 
     public StringOption hypixel_api_key = new StringOption("hypixel_api_key", "");
     public EnumOption cacheMode = new EnumOption("cache_mode", HypixelApiCacheMode.values(), HypixelApiCacheMode.ON_CLIENT_DISCONNECT.toString());
 
-    private final OptionCategory category = new OptionCategory(new Identifier("hypixel"), "hypixel-mods");
+    private final OptionCategory category = new OptionCategory(ID, "hypixel-mods");
     private final List<AbstractHypixelMod> subModules = new ArrayList<>();
 
     @Override
@@ -44,6 +44,7 @@ public class HypixelMods extends AbstractModule {
         AxolotlClient.CONFIG.addCategory(category);
     }
 
+    @Override
     public void tick(){
         subModules.forEach(abstractHypixelMod -> {
             if(abstractHypixelMod.tickable())abstractHypixelMod.tick();

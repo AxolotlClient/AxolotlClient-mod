@@ -3,6 +3,7 @@ package io.github.axolotlclient.mixin;
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.modules.freelook.Freelook;
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hud.gui.hud.CrosshairHud;
 import io.github.axolotlclient.modules.motionblur.MotionBlur;
@@ -18,6 +19,8 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.player.ClientPlayerEntity;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 import org.objectweb.asm.Opcodes;
@@ -175,5 +178,34 @@ public abstract class GameRendererMixin {
         }
 
         this.client.profiler.pop();
+    }
+
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/ClientPlayerEntity;increaseTransforms(FF)V"))
+    public void updateFreelook(ClientPlayerEntity entity, float yaw, float pitch) {
+        Freelook freelook = Freelook.INSTANCE;
+
+        if(freelook.consumeRotation(yaw, pitch)) return;
+
+        entity.increaseTransforms(yaw, pitch);
+    }
+
+    @Redirect(method = "transformCamera", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;yaw:F"))
+    public float freelook$yaw(Entity entity) {
+        return Freelook.INSTANCE.yaw(entity.yaw);
+    }
+
+    @Redirect(method = "transformCamera", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;prevYaw:F"))
+    public float freelook$prevYaw(Entity entity) {
+        return Freelook.INSTANCE.yaw(entity.prevYaw);
+    }
+
+    @Redirect(method = "transformCamera", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;pitch:F"))
+    public float freelook$pitch(Entity entity) {
+        return Freelook.INSTANCE.pitch(entity.pitch);
+    }
+
+    @Redirect(method = "transformCamera", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;prevPitch:F"))
+    public float freelook$prevPitch(Entity entity) {
+        return Freelook.INSTANCE.pitch(entity.prevPitch);
     }
 }

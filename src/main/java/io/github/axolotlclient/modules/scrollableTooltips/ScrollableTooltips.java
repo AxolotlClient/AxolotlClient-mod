@@ -14,14 +14,14 @@ import org.lwjgl.input.Mouse;
 
 public class ScrollableTooltips extends AbstractModule {
 
-    public static Identifier ID = new Identifier("scrollabletooltips");
+    public static final Identifier ID = new Identifier("scrollabletooltips");
 
     public int tooltipOffsetX;
     public int tooltipOffsetY;
 
     protected KeyBinding key = new KeyBinding("key.scrollHorizontally", Keyboard.KEY_LSHIFT, "category.axolotlclient");
 
-    public static ScrollableTooltips Instance = new ScrollableTooltips();
+    public static ScrollableTooltips instance = new ScrollableTooltips();
 
     private final OptionCategory category = new OptionCategory("scrollableTooltips");
 
