@@ -196,6 +196,13 @@ showActivity.tooltip=Şimdiki Oyun-İçi aktiviteni gösterme ayarı.
 showTime=Zamanı Göster
 showTime.tooltip=Bir zaman damgası gösterme ayarı.
 
+freelook=Özgür Bakış
+perspective=Perspektif
+FIRST_PERSON=Birinci Şahıs
+THIRD_PERSON_BACK=Üçüncü Şahıs (Arka)
+THIRD_PERSON_FRONT=Üçüncü Şahıs (Ön)
+invert=Tersine Çevir
+
 credits=Katkıda Bulunanlar
 creditsBGM=Müzik
 contributors=Katılımcılar:
