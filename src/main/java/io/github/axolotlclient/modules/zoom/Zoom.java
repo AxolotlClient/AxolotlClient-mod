@@ -54,10 +54,10 @@ public class Zoom extends AbstractModule {
     }
 
     public static float getFov(float current, float tickDelta) {
-        float result = current * (zoomSpeed.get() == 10 ? targetFactor
-                : Util.lerp(lastAnimatedFactor, animatedFactor, tickDelta));
+        float result = current
+                * (zoomSpeed.get() == 10 ? targetFactor : Util.lerp(lastAnimatedFactor, animatedFactor, tickDelta));
 
-        if (lastReturnedFov != 0 && lastReturnedFov != result) {
+        if(lastReturnedFov != 0 && lastReturnedFov != result) {
             MinecraftClient.getInstance().worldRenderer.scheduleTerrainUpdate();
         }
         lastReturnedFov = result;
@@ -68,7 +68,7 @@ public class Zoom extends AbstractModule {
     public static void setOptions() {
         originalSensitivity = MinecraftClient.getInstance().options.sensitivity;
 
-        if (smoothCamera.get()) {
+        if(smoothCamera.get()) {
             originalSmoothCamera = MinecraftClient.getInstance().options.smoothCameraEnabled;
             MinecraftClient.getInstance().options.smoothCameraEnabled = true;
         }
@@ -77,7 +77,7 @@ public class Zoom extends AbstractModule {
     }
 
     private static void updateSensitivity() {
-        if (decreaseSensitivity.get()) {
+        if(decreaseSensitivity.get()) {
             MinecraftClient.getInstance().options.sensitivity = originalSensitivity / divisor;
         }
     }
@@ -96,8 +96,8 @@ public class Zoom extends AbstractModule {
     }
 
     public static boolean scroll(int amount) {
-        if (active && zoomScrolling.get() && amount != 0) {
-            setDivisor(Math.max(1, divisor + (amount / (float)Math.abs(amount))));
+        if(active && zoomScrolling.get() && amount != 0) {
+            setDivisor(Math.max(1, divisor + (amount / (float) Math.abs(amount))));
             updateSensitivity();
             return true;
         }
@@ -105,6 +105,7 @@ public class Zoom extends AbstractModule {
         return false;
     }
 
+    @Override
     public void tick() {
         lastAnimatedFactor = animatedFactor;
         animatedFactor += (targetFactor - animatedFactor) * (zoomSpeed.get() / 10F);

@@ -42,7 +42,9 @@
     "TextureManagerMixin",
     "TitleScreenMixin",
     "WorldRendererMixin",
-    "SharedConstantsMixin"
+    "SharedConstantsMixin",
+    "RenderDataMixin",
+    "EntityRenderDispatcherMixin"
   ],
   "injectors": {
     "defaultRequire": 1

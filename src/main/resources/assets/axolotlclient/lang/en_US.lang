@@ -196,6 +196,13 @@ showActivity.tooltip=Whether to show your current In-Game Activity.
 showTime=Show Time
 showTime.tooltip=Whether to show a timestamp.
 
+freelook=Freelook
+perspective=Perspective
+FIRST_PERSON=First Person
+THIRD_PERSON_BACK=Third Person (Back)
+THIRD_PERSON_FRONT=Third Person (Front)
+invert=Invert
+
 credits=Credits
 creditsBGM=BGM
 contributors=Contributors

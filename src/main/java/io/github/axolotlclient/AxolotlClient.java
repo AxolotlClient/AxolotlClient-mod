@@ -7,6 +7,7 @@ import io.github.axolotlclient.config.ConfigManager;
 import io.github.axolotlclient.config.options.BooleanOption;
 import io.github.axolotlclient.config.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
+import io.github.axolotlclient.modules.freelook.Freelook;
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hypixel.HypixelMods;
 import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
@@ -54,14 +55,13 @@ public class AxolotlClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
-
 		CONFIG = new AxolotlClientConfig();
 		config.add(someNiceBackground);
 		config.add(CONFIG.rotateWorld);
 
 		getModules();
 		CONFIG.init();
-		modules.forEach((identifier, abstractModule) -> abstractModule.init());
+        modules.values().forEach(AbstractModule::init);
 
 		CONFIG.config.addAll(CONFIG.getCategories());
 		CONFIG.config.add(config);
@@ -70,7 +70,7 @@ public class AxolotlClient implements ClientModInitializer {
 
 		//if (CONFIG.enableRPC.get()) io.github.axolotlclient.util.DiscordRPC.startup();
 
-		modules.forEach((identifier, abstractModule) -> abstractModule.lateInit());
+		modules.values().forEach(AbstractModule::lateInit);
 
 		FabricLoader.getInstance().getModContainer("axolotlclient").ifPresent(modContainer -> {
 			Optional<Path> optional = modContainer.findPath("resourcepacks/AxolotlClientUI.zip");
@@ -86,8 +86,9 @@ public class AxolotlClient implements ClientModInitializer {
 		modules.put(HudManager.ID, HudManager.getINSTANCE());
 		modules.put(HypixelMods.ID, HypixelMods.INSTANCE);
 		modules.put(MotionBlur.ID, new MotionBlur());
-		modules.put(ScrollableTooltips.ID, ScrollableTooltips.Instance);
+		modules.put(ScrollableTooltips.ID, ScrollableTooltips.instance);
 		modules.put(DiscordRPC.ID, DiscordRPC.getInstance());
+		modules.put(Freelook.ID, Freelook.INSTANCE);
 	}
 
 	public static boolean isUsingClient(UUID uuid){
@@ -101,8 +102,8 @@ public class AxolotlClient implements ClientModInitializer {
 
 
 	public static void tickClient(){
+		modules.values().forEach(AbstractModule::tick);
 
-		modules.forEach((identifier, abstractModule) -> abstractModule.tick());
 		//net.arikia.dev.drpc.DiscordRPC.discordRunCallbacks();
 		Color.tickChroma();
 
