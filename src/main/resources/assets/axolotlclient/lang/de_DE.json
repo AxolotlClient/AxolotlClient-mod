@@ -96,8 +96,7 @@
 	"key.openHud": "Öffne Hud Editor",
 	"key.toggleSneak": "Toggle Sneaking",
 	"key.toggleSprint": "Toggle Sprinting",
-	"key.scrollHorizontally": "Horizontales Scrollen",
-	
+
 	"hud": "Hud Optionen",
 	"pinghud": "Ping Hud",
 	"cpshud": "CPS Hud",
@@ -222,7 +221,7 @@
 	"BEDWARS": "Bedwars",
 	"SKYWARS": "Skywars",
 	"attackindicatorbg": "Attack Indicator (Background)",
-	"attackindicatorfb": "Attack Indicator (Foreground)",
+	"attackindicatorfg": "Attack Indicator (Foreground)",
 	"TEXTURE": "Texture",
 	"DIRECTION": "Direction",
 	"DOT": "Dot",

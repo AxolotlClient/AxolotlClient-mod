@@ -127,7 +127,7 @@ public class Util {
 	// I suppose this is something introduced with the chat cryptography features in 1.19
 	private static final C_fijiyucq whateverThisIs = new C_fijiyucq(MinecraftClient.getInstance());
 	public static void sendChatMessage(String msg) {
-		Text text = whateverThisIs.method_44037(msg);
+        Text text = net.minecraft.util.Util.map(whateverThisIs.method_44037(msg), C_fijiyucq.C_hzhktnuf::response);
 		MinecraftClient.getInstance().player.method_44096(msg, text);
 	}
 

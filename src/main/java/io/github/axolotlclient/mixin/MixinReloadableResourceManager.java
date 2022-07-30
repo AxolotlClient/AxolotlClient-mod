@@ -46,7 +46,7 @@ public abstract class MixinReloadableResourceManager {
 
     }
 
-    @Inject(method = "method_14486", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getResource", at = @At("HEAD"), cancellable = true)
     public void getResource(Identifier id, CallbackInfoReturnable<Optional<Resource>> cir){
         if(AxolotlClient.runtimeResources.get(id) != null){
             cir.setReturnValue(Optional.of(AxolotlClient.runtimeResources.get(id)));

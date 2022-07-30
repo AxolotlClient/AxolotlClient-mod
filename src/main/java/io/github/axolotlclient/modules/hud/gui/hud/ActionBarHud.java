@@ -3,7 +3,6 @@ package io.github.axolotlclient.modules.hud.gui.hud;
 import io.github.axolotlclient.config.Color;
 import io.github.axolotlclient.config.options.BooleanOption;
 import io.github.axolotlclient.config.options.IntegerOption;
-import io.github.axolotlclient.config.options.Option;
 import io.github.axolotlclient.config.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import net.minecraft.client.MinecraftClient;
@@ -49,33 +48,14 @@ public class ActionBarHud extends AbstractHudEntry {
 
 			matrices.push();
 			scale(matrices);
-			if (shadow.get()){
-				client.textRenderer.drawWithShadow(matrices, actionBar,
-					(float)getPos().x + Math.round((float) width /2) -  (float) client.textRenderer.getWidth(actionBar) /2,
-					(float)getPos().y + 3,
-					customTextColor.get() ? (textColor.get().getAlpha()==255 ?
-						new Color(
-							textColor.get().getRed(),
-							textColor.get().getGreen(),
-							textColor.get().getBlue(),
-							vanillaColor.getAlpha()).getAsInt():
-						textColor.get().getAsInt()) :
-						color
-				);
-			} else {
-
-				client.textRenderer.draw(matrices, actionBar,
-					(float)getPos().x + Math.round((float) width /2) - ((float) client.textRenderer.getWidth(actionBar) /2),
-					(float)getPos().y + 3,
-					customTextColor.get() ? (textColor.get().getAlpha()==255 ?
-						new Color(textColor.get().getRed(),
-							textColor.get().getGreen(),
-							textColor.get().getBlue(),
-							vanillaColor.getAlpha()).getAsInt():
-						textColor.get().getAsInt()) :
-						color
-				);
-			}
+            drawString(matrices, actionBar.asOrderedText().toString(), getPos().x, getPos().y + 3, customTextColor.get() ? (textColor.get().getAlpha()==255 ?
+                new Color(
+                    textColor.get().getRed(),
+                    textColor.get().getGreen(),
+                    textColor.get().getBlue(),
+                    vanillaColor.getAlpha()):
+                textColor.get()) :
+                vanillaColor, shadow.get());
 			matrices.pop();
 			ticksShown++;
 		} else {
@@ -107,5 +87,6 @@ public class ActionBarHud extends AbstractHudEntry {
     public void addConfigOptions(List<OptionBase<?>> options){
         super.addConfigOptions(options);
         options.add(shadow);
+        options.add(textAlignment);
     }
 }

@@ -49,6 +49,12 @@ public class DrawUtil extends DrawableHelper{
                 color, shadow);
     }
 
+    public static void drawCenteredString(MatrixStack matrices, TextRenderer renderer, String text, int x, int y, int color, boolean shadow){
+        drawString(matrices, renderer, text, x - renderer.getWidth(text) / 2,
+            y,
+            color, shadow);
+    }
+
     public static void drawString(MatrixStack matrices, TextRenderer renderer, String text, int x, int y,
                                   int color, boolean shadow) {
         if(shadow) {

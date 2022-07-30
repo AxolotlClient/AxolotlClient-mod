@@ -65,7 +65,9 @@ public class ConfigManager{
             JsonObject config = JsonParser.parseReader(new FileReader(confPath.toString())).getAsJsonObject();
 
             for(OptionCategory category:categories) {
-                setOptions(config.get(category.getName()).getAsJsonObject(), category);
+                if(config.has(category.getName())) {
+                    setOptions(config.get(category.getName()).getAsJsonObject(), category);
+                }
             }
         } catch (Exception e){
             AxolotlClient.LOGGER.error("Failed to load config! Using default values... \nError: ");
@@ -84,8 +86,10 @@ public class ConfigManager{
         }
         if(!category.getSubCategories().isEmpty()){
             for (OptionCategory sub: category.getSubCategories()) {
-                JsonObject subCat = config.get(sub.getName()).getAsJsonObject();
-                setOptions(subCat, sub);
+                if(config.has(sub.getName())) {
+                    JsonObject subCat = config.get(sub.getName()).getAsJsonObject();
+                    setOptions(subCat, sub);
+                }
             }
         }
     }

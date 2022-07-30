@@ -129,7 +129,7 @@
 	"entitycolor": "Renk (Varlıklar)",
 	"blockcolor": "Renk (İçeren)",
 	"attackindicatorbg": "Saldırı Göstergesi (Arkaplan)",
-	"attackindicatorfb": "Saldırı Göstergesi (Önplan)",
+	"attackindicatorfg": "Saldırı Göstergesi (Önplan)",
 	"TEXTURE": "Doku",
 	"DIRECTION": "Yön",
 	"DOT": "Nokta",

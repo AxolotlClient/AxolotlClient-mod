@@ -7,6 +7,7 @@ import io.github.axolotlclient.config.ConfigManager;
 import io.github.axolotlclient.config.options.BooleanOption;
 import io.github.axolotlclient.config.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
+import io.github.axolotlclient.modules.freelook.Freelook;
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hypixel.HypixelMods;
 import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
@@ -76,7 +77,9 @@ public class AxolotlClient implements ClientModInitializer {
 		} else if (QuiltLoader.isModLoaded("baritone")) {
 			badmod = "Baritone";
 		} else if (QuiltLoader.isModLoaded("xaerominimap")) {
-			badmod = "Xaero's Minimap";
+            badmod = "Xaero's Minimap";
+        } else if (QuiltLoader.isModLoaded("essential")){
+            badmod = "Essential";
 		} else {
 			showWarning = false;
 		}
@@ -86,14 +89,14 @@ public class AxolotlClient implements ClientModInitializer {
 
 		getModules();
 		CONFIG.init();
-		modules.forEach((identifier, abstractModule) -> abstractModule.init());
+		modules.values().forEach(AbstractModule::init);
 
 		CONFIG.config.addAll(CONFIG.getCategories());
 		CONFIG.config.add(config);
 
 		ConfigManager.load();
 
-		modules.forEach((identifier, abstractModule) -> abstractModule.lateInit());
+		modules.values().forEach(AbstractModule::lateInit);
 
 		ResourceLoader.registerBuiltinResourcePack(new Identifier("axolotlclient", "axolotlclient-ui"), container, ResourcePackActivationType.NORMAL);
 		ClientTickEvents.END.register(client -> tickClient());
@@ -108,6 +111,7 @@ public class AxolotlClient implements ClientModInitializer {
 		modules.put(MotionBlur.ID, new MotionBlur());
         modules.put(ScrollableTooltips.ID, ScrollableTooltips.Instance);
         modules.put(DiscordRPC.ID, DiscordRPC.getInstance());
+        modules.put(Freelook.ID, Freelook.INSTANCE);
 	}
 
 	public static boolean isUsingClient(UUID uuid){
@@ -122,7 +126,7 @@ public class AxolotlClient implements ClientModInitializer {
 
 	public static void tickClient(){
 
-        modules.forEach((identifier, abstractModule) -> abstractModule.tick());
+        modules.values().forEach(AbstractModule::tick);
 		Color.tickChroma();
 
 		if(tickTime % 20 == 0){

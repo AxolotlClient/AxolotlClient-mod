@@ -112,11 +112,7 @@ public class BossBarHud extends AbstractHudEntry {
 			Text text = bossBar.getName();
 			float textX = x + ((float) width / 2) - ((float) client.textRenderer.getWidth(text) / 2);
 			float textY = y - 9;
-			if (shadow.get()) {
-				client.textRenderer.drawWithShadow(matrices, text, textX, textY, textColor.get().getAsInt());
-			} else {
-				client.textRenderer.draw(matrices, text, textX, textY, textColor.get().getAsInt());
-			}
+			drawString(matrices, text.getString(), (int) textX, (int) textY, textColor.get(), shadow.get());
 		}
 	}
 
@@ -135,6 +131,7 @@ public class BossBarHud extends AbstractHudEntry {
         super.addConfigOptions(options);
         options.add(text);
         options.add(textColor);
+        options.add(textAlignment);
         options.add(shadow);
         options.add(bar);
         options.add(barColor);

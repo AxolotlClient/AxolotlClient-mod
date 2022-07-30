@@ -26,7 +26,6 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.widget.ButtonListWidget;
-import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import org.lwjgl.opengl.GL11;
@@ -121,9 +120,9 @@ public class ButtonWidgetList extends ButtonListWidget {
     }
 
 	@Override
-	protected void renderList(MatrixStack matrices, int x, int y, int mouseX, int mouseY, float delta) {
+	protected void renderList(MatrixStack matrices, int x, int y, float delta) {
 		Util.applyScissor(new Rectangle(0, top, this.width, bottom-top));
-		super.renderList(matrices, x, y, mouseX, mouseY, delta);
+		super.renderList(matrices, x, y, delta);
 		GL11.glDisable(GL11.GL_SCISSOR_TEST);
 	}
 

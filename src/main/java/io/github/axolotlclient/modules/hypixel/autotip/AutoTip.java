@@ -3,6 +3,7 @@ package io.github.axolotlclient.modules.hypixel.autotip;
 import io.github.axolotlclient.config.options.BooleanOption;
 import io.github.axolotlclient.config.options.OptionCategory;
 import io.github.axolotlclient.modules.hypixel.AbstractHypixelMod;
+import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.minecraft.unmapped.C_fijiyucq;
@@ -40,8 +41,7 @@ public class AutoTip implements AbstractHypixelMod {
                     enabled.get()) {
 
                 if(MinecraftClient.getInstance().player!=null) {
-	                Text text = this.whateverThisIs.method_44037("/tip all");
-	                MinecraftClient.getInstance().player.method_44096("/tip all", text);
+	                Util.sendChatMessage("/tip all");
                     lastTime = System.currentTimeMillis();
                 }
             }
