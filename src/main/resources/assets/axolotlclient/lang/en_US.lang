@@ -98,6 +98,7 @@ key.openHud=Open Hud Editor
 key.toggleSneak=Toggle Sneaking
 key.toggleSprint=Toggle Sprinting
 key.scrollHorizontally=Scroll Horizontally
+key.freelook=Freelook
 
 hud=Hud Options
 pinghud=Ping HUD
