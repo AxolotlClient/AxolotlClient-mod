@@ -82,6 +82,8 @@ public class ConfigManager{
             if (config.has(option.getName())) {
                 JsonElement part = config.get(option.getName());
                 option.setValueFromJsonElement(part);
+            } else {
+                option.setDefaults();
             }
         }
         if(!category.getSubCategories().isEmpty()){

@@ -44,6 +44,7 @@
 		"MixinReloadableResourceManager",
 		"MixinRenderSystem",
 		"MixinScreen",
+		"MixinSplashOverlay",
 		"MixinTitleScreen",
 		"MixinWorldListWidgetEntry",
 		"MixinWorldRenderer"

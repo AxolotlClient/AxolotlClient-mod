@@ -159,6 +159,11 @@ public class CreditsScreen extends Screen {
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)|| creditsList.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
     }
 
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
+        return super.mouseScrolled(mouseX, mouseY, amount) || creditsList.mouseScrolled(mouseX, mouseY, amount);
+    }
+
     private class CreditsList extends EntryListWidget<Credit> {
 
         public CreditsList(MinecraftClient minecraftClient, int width, int height, int top, int bottom, int entryHeight) {

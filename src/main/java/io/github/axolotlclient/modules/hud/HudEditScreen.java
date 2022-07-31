@@ -89,10 +89,12 @@ public class HudEditScreen extends Screen {
 
 	@Override
 	public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        if(current!=null){
+            ConfigManager.save();
+        }
         current = null;
         snap = null;
         mouseDown = false;
-        ConfigManager.save();
 		return super.mouseReleased(mouseX, mouseY, button);
     }
 

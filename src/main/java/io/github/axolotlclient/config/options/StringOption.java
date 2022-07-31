@@ -44,6 +44,7 @@ public class StringOption extends OptionBase<String> {
 
     @Override
     public JsonElement getJson() {
+        if(value==null)setDefaults();
         return new JsonPrimitive(value);
     }
 

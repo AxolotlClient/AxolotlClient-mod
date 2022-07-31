@@ -32,7 +32,7 @@ public class AxolotlClientConfig {
 	public final BooleanOption showOptionTooltips = new BooleanOption("showOptionTooltips", true);
 	public final BooleanOption showCategoryTooltips = new BooleanOption("showCategoryTooltips", false);
     public final BooleanOption quickToggles = new BooleanOption("quickToggles", false);
-    public final ColorOption loadingScreenColor = new ColorOption("loadingBgColor", new Color(-1));
+    public final ColorOption loadingScreenColor = new ColorOption("loadingBgColor", new Color(239, 50, 61, 255));
     public final BooleanOption nightMode = new BooleanOption("nightMode", false);
 
     public final BooleanOption enableCustomOutlines = new BooleanOption("enabled", false);
