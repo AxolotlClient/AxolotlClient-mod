@@ -98,6 +98,7 @@ key.openHud=Arayüz Düzenleyicisini aç
 key.toggleSneak=Otomatik Eğilme
 key.toggleSprint=Otomatik Koşma
 key.scrollHorizontally=Yatay Kaydır
+key.freelook=Özgür Bakış
 
 hud=Arayüz Ayarları
 pinghud=Gecikme Arayüzü
