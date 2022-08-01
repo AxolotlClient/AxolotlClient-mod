@@ -7,6 +7,7 @@ import io.github.axolotlclient.config.ConfigManager;
 import io.github.axolotlclient.config.options.BooleanOption;
 import io.github.axolotlclient.config.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
+import io.github.axolotlclient.modules.freelook.Freelook;
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hypixel.HypixelMods;
 import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
@@ -111,6 +112,7 @@ public class AxolotlClient implements ClientModInitializer {
 		modules.put(MotionBlur.ID, new MotionBlur());
         modules.put(ScrollableTooltips.ID, ScrollableTooltips.Instance);
         modules.put(DiscordRPC.ID, DiscordRPC.getInstance());
+        modules.put(Freelook.ID, Freelook.INSTANCE);
 	}
 
 	public static boolean isUsingClient(UUID uuid){

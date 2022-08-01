@@ -72,6 +72,7 @@ public class CrosshairHud extends AbstractHudEntry {
 		scale(matrices);
         DrawPosition pos = new DrawPosition(MinecraftClient.getInstance().getWindow().getScaledWidth()/2 - width/2, MinecraftClient.getInstance().getWindow().getScaledHeight()/2 - height/2);
 		Color color = getColor();
+        RenderSystem.enableBlend();
 		if (Objects.equals(type.get(), CrosshairOption.DOT.toString())) {
             RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.ONE_MINUS_DST_COLOR, GlStateManager.DstFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
 			fillRect(matrices, new Rectangle(pos.x + (width / 2) - 2, pos.y + (height / 2) - 2, 3, 3), color);
@@ -136,6 +137,7 @@ public class CrosshairHud extends AbstractHudEntry {
 					progress * 11, 1, attackIndicatorForegroundColor.get().getAsInt());
 			}
 		}
+        RenderSystem.disableBlend();
 		matrices.pop();
 	}
 

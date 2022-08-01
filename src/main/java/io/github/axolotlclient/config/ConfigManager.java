@@ -84,8 +84,10 @@ public class ConfigManager {
         }
         if(!category.getSubCategories().isEmpty()){
             for (OptionCategory sub: category.getSubCategories()) {
-                JsonObject subCat = config.get(sub.getName()).getAsJsonObject();
-                setOptions(subCat, sub);
+                if(config.has(sub.getName())) {
+                    JsonObject subCat = config.get(sub.getName()).getAsJsonObject();
+                    setOptions(subCat, sub);
+                }
             }
         }
     }
