@@ -112,13 +112,17 @@ public class HudManager extends AbstractModule {
     }
 
     public void render() {
+        client.profiler.push("Hud Modules");
         if (!(client.currentScreen instanceof HudEditScreen) && !client.options.debugEnabled) {
             for (AbstractHudEntry hud : getEntries()) {
                 if (hud.isEnabled()) {
+                    client.profiler.push(hud.getName());
                     hud.renderHud();
+                    client.profiler.pop();
                 }
             }
         }
+        client.profiler.pop();
     }
 
     public Optional<AbstractHudEntry> getEntryXY(int x, int y) {

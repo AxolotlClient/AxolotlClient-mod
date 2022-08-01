@@ -37,7 +37,7 @@ public class EnumOption extends OptionBase<String> {
 
     @Override
     public void setValueFromJsonElement(JsonElement element) {
-        for(int i=0; i<values.length-1;i++){
+        for(int i=0; i<values.length;i++){
             String v = values[i];
             if(Objects.equals(v, element.getAsString())){
                 this.i = i;
@@ -53,7 +53,7 @@ public class EnumOption extends OptionBase<String> {
             return;
         }
 
-        for(int i=0;i< values.length-1; i++){
+        for(int i=0;i< values.length; i++){
             String v = values[i];
             if(Objects.equals(v, def)){
                 this.i=i;

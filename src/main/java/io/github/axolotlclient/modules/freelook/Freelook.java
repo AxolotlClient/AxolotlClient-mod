@@ -40,7 +40,6 @@ public class Freelook extends AbstractModule {
 
     @Override
     public void tick() {
-        super.tick();
 
         if(!enabled.get()) return;
 
