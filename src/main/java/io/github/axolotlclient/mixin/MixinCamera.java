@@ -27,7 +27,6 @@ public abstract class MixinCamera {
     private void perspectiveUpdatePitchYaw(BlockView area, Entity focusedEntity, boolean thirdPerson, boolean inverseView, float tickDelta, CallbackInfo ci) {
         this.pitch = Freelook.INSTANCE.pitch(pitch) * (inverseView && Freelook.INSTANCE.enabled.get() && Freelook.INSTANCE.active ? -1 : 1);
         this.yaw = Freelook.INSTANCE.yaw(yaw) + (inverseView && Freelook.INSTANCE.enabled.get() && Freelook.INSTANCE.active ? 180 : 0);
-//        System.out.println("Pitch: "+pitch+" Yaw: "+ yaw);
     }
 
     @ModifyArgs(method = "update", at = @At(value = "INVOKE", target = "net/minecraft/client/render/Camera.setRotation(FF)V", ordinal = 0))
