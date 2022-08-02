@@ -48,6 +48,7 @@
 		"MixinScreen",
 		"MixinSplashOverlay",
 		"MixinTitleScreen",
+		"MixinTntEntityRenderer",
 		"MixinWorldListWidgetEntry",
 		"MixinWorldRenderer"
 	],

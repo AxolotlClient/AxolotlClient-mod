@@ -50,7 +50,7 @@ public class ReachDisplayHud extends CleanHudEntry {
         StringBuilder format = new StringBuilder("##");
         if (decimalPlaces.get() > 0) {
             format.append(".");
-            format.append("0".repeat(Math.max(0, decimalPlaces.get())));
+            format.append("#".repeat(Math.max(0, decimalPlaces.get())));
         }
         DecimalFormat df = new DecimalFormat(format.toString());
         df.setRoundingMode(RoundingMode.CEILING);

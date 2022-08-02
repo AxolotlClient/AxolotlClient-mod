@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import java.util.function.IntSupplier;
 
 @Mixin(SplashOverlay.class)
-public class MixinSplashOverlay {
+public abstract class MixinSplashOverlay {
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Ljava/util/function/IntSupplier;getAsInt()I"))
     public int bgColor(IntSupplier instance){
