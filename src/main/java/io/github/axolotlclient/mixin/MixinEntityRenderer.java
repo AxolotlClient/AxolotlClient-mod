@@ -50,7 +50,7 @@ public abstract class MixinEntityRenderer<T extends Entity> {
                     TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
                     String text = "Level: "+ HypixelAbstractionLayer.getPlayerLevel(String.valueOf(entity.getUuid()));
 
-                    float x = textRenderer.getWidth(text)/2F;
+                    float x = -textRenderer.getWidth(text)/2F;
                     float y = string.getString().contains("deadmau5")?-20:-10;
 
 					Matrix4f matrix4f = matrices.peek().getPosition();
