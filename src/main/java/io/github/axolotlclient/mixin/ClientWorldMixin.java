@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Objects;
 
 @Mixin(ClientWorld.class)
-public class ClientWorldMixin {
+public abstract class ClientWorldMixin {
 
     @Inject(method = "onEntityRemoved", at = @At("HEAD"))
     public void onEntityRemoved(Entity entity, CallbackInfo ci){

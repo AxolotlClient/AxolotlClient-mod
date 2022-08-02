@@ -1,5 +1,6 @@
 package io.github.axolotlclient.modules.freelook;
 
+import io.github.axolotlclient.config.options.DisableReason;
 import org.lwjgl.input.Keyboard;
 
 import io.github.axolotlclient.AxolotlClient;
@@ -40,6 +41,12 @@ public class Freelook extends AbstractModule {
 
     @Override
     public void tick() {
+
+        if(isForbidden()){
+            enabled.setForceOff(true, DisableReason.BAN_REASON);
+        } else if (!isForbidden() && enabled.getForceDisabled()){
+            enabled.setForceOff(false, null);
+        }
 
         if(!enabled.get()) return;
 
@@ -100,5 +107,19 @@ public class Freelook extends AbstractModule {
 
         return pitch;
     }
+
+    private boolean isForbidden(){
+        for(String a: disallowed_servers){
+            if(MinecraftClient.getInstance().getCurrentServerEntry() != null &&
+                    MinecraftClient.getInstance().getCurrentServerEntry().address.contains(a)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static final String[] disallowed_servers = new String[]{
+            "hypixel", "mineplex", "gommehd"
+    };
 
 }

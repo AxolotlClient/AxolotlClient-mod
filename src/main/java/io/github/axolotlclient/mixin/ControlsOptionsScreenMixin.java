@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ControlsOptionsScreen.class)
-public class ControlsOptionsScreenMixin {
+public abstract class ControlsOptionsScreenMixin {
 
     @Inject(method = "buttonClicked", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;openScreen(Lnet/minecraft/client/gui/screen/Screen;)V"))
     public void updateKeystroke(ButtonWidget button, CallbackInfo ci){

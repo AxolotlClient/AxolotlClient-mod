@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(TitleScreen.class)
-public class TitleScreenMixin extends Screen {
+public abstract class TitleScreenMixin extends Screen {
 
     @Inject(method = "initWidgetsNormal", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget;<init>(IIILjava/lang/String;)V", ordinal = 2), cancellable = true)
     public void customTextures(int y, int spacingY, CallbackInfo ci){

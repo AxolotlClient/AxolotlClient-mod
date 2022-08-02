@@ -9,7 +9,7 @@ import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.entity.Entity;
 
 @Mixin(EntityRenderDispatcher.class)
-public class EntityRenderDispatcherMixin {
+public abstract class EntityRenderDispatcherMixin {
 
     @Redirect(method = "method_10200", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;yaw:F"))
     public float freelook$yaw(Entity entity) {

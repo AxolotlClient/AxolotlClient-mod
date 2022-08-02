@@ -9,7 +9,7 @@ import net.minecraft.class_321;
 import net.minecraft.entity.player.PlayerEntity;
 
 @Mixin(class_321.class)
-public class RenderDataMixin {
+public abstract class RenderDataMixin {
 
     @Redirect(method = "method_804", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerEntity;yaw:F"))
     private static float freelook$getYaw(PlayerEntity entity) {

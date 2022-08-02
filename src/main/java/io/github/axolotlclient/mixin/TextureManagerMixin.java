@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Map;
 
 @Mixin(TextureManager.class)
-public class TextureManagerMixin {
+public abstract class TextureManagerMixin {
 
     @Shadow @Final private Map<Identifier, Texture> textures;
 

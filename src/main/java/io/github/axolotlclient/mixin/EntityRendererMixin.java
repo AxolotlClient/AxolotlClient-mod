@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(EntityRenderer.class)
-public class EntityRendererMixin<T extends Entity> {
+public abstract class EntityRendererMixin<T extends Entity> {
 
     @Inject(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Ljava/lang/String;III)I"))
     public void addBadges(T entity, String string, double d, double e, double f, int i, CallbackInfo ci){

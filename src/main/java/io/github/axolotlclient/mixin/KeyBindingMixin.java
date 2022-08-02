@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(KeyBinding.class)
-public class KeyBindingMixin {
+public abstract class KeyBindingMixin {
 
     @Shadow private boolean pressed;
 

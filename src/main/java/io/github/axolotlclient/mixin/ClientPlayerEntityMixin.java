@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientPlayerEntity.class)
-public class ClientPlayerEntityMixin {
+public abstract class ClientPlayerEntityMixin {
 
     /**
      * @author DragonEggBedrockBreaking

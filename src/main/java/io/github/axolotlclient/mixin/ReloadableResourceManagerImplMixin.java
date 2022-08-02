@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.List;
 
 @Mixin(ReloadableResourceManagerImpl.class)
-public class ReloadableResourceManagerImplMixin {
+public abstract class ReloadableResourceManagerImplMixin {
 
     @Inject(method = "reload", at=@At("TAIL"))
     public void loadSkies(List<ResourcePack> resourcePacks, CallbackInfo ci){

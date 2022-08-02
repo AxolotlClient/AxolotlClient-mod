@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(DebugHud.class)
-public class DebugHudMixin {
+public abstract class DebugHudMixin {
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiler/Profiler;pop()V"))
     public void onRender(Window window, CallbackInfo ci){
