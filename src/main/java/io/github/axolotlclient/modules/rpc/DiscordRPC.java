@@ -132,7 +132,11 @@ public class DiscordRPC extends AbstractModule {
     }
 
     public static void setWorld(String world){
-        if(running && currentActivity!=null) {
+        if(running) {
+            if(currentActivity==null){
+                DiscordRPC.getInstance().updateRPC();
+            }
+
             currentActivity.setDetails("World: " + world);
             if (discordRPC.isOpen()) {
                 discordRPC.activityManager().updateActivity(currentActivity);

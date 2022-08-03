@@ -11,6 +11,6 @@ public abstract class SharedConstantsMixin {
 
     @Inject(method = "isValidChar", at = @At("HEAD"), cancellable = true)
     private static void noInvalidChars(char chr, CallbackInfoReturnable<Boolean> cir){
-        cir.setReturnValue(true);
+        cir.setReturnValue(chr != 167 && chr != 127);
     }
 }
