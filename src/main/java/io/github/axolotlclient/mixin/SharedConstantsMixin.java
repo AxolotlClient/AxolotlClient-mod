@@ -1,5 +1,7 @@
 package io.github.axolotlclient.mixin;
 
+import io.github.axolotlclient.config.screen.OptionsScreenBuilder;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.SharedConstants;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -11,6 +13,8 @@ public abstract class SharedConstantsMixin {
 
     @Inject(method = "isValidChar", at = @At("HEAD"), cancellable = true)
     private static void noInvalidChars(char chr, CallbackInfoReturnable<Boolean> cir){
-        cir.setReturnValue(chr != 167 && chr != 127);
+        if(chr=='§' && MinecraftClient.getInstance().currentScreen instanceof OptionsScreenBuilder){
+            cir.setReturnValue(true);
+        }
     }
 }
