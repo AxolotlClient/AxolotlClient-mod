@@ -25,7 +25,7 @@ jobs:
           name: AxolotlClient-1.8.9-automation
           path: build/libs/*.jar
   upload:
-    if: "github.ref == 'refs/heads/main' && startsWith(github.event.head_commit.message, '[create release] ')"
+    if: "startsWith(github.event.head_commit.message, '[create release] ')"
     runs-on: ubuntu-latest
     steps:
       - uses: Kir-Antipov/mc-publish@v3.1
