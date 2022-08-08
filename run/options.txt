@@ -1,4 +1,4 @@
-version:3117
+version:3120
 quilt_available_resource_packs:["programer_art","vanilla"]
 autoJump:false
 autoSuggestions:true
@@ -39,7 +39,7 @@ prioritizeChunkUpdates:0
 biomeBlendRadius:2
 renderClouds:"false"
 resourcePacks:["vanilla"]
-incompatibleResourcePacks:["file/! §bNebula - [sky only]","file/testpack"]
+incompatibleResourcePacks:[]
 lastServer:
 lang:en_us
 soundDevice:""
