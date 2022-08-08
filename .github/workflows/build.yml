@@ -32,5 +32,9 @@ jobs:
         with:
           modrinth-id: p2rxzX0q 
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          modrinth-unfeature-mode: subset
+          modrinth-featured: true
           
           github-token: ${{ secrets.GH_TOKEN }}
+          github-generate-changelog: true
+          github-draft: true
