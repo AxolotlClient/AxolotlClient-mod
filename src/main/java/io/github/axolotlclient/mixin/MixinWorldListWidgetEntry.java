@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(WorldListWidget.WorldEntry.class)
+@Mixin(WorldListWidget.Entry.class)
 public abstract class MixinWorldListWidgetEntry {
 
     @Shadow @Final private LevelSummary level;

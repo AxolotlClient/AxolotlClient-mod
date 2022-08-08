@@ -8,6 +8,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.ChatPreview;
 import net.minecraft.client.network.Address;
 import net.minecraft.client.network.AllowedAddressResolver;
 import net.minecraft.client.network.ServerAddress;
@@ -25,7 +26,6 @@ import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.ScoreboardPlayerScore;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.text.Text;
-import net.minecraft.unmapped.C_fijiyucq;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 import org.quiltmc.qsl.command.api.client.ClientCommandManager;
@@ -125,9 +125,9 @@ public class Util {
     }
 
 	// I suppose this is something introduced with the chat cryptography features in 1.19
-	private static final C_fijiyucq whateverThisIs = new C_fijiyucq(MinecraftClient.getInstance());
+	private static final ChatPreview whateverThisIs = new ChatPreview(MinecraftClient.getInstance());
 	public static void sendChatMessage(String msg) {
-        Text text = net.minecraft.util.Util.map(whateverThisIs.method_44037(msg), C_fijiyucq.C_hzhktnuf::response);
+        Text text = net.minecraft.util.Util.map(whateverThisIs.method_44037(msg), ChatPreview.Response::response);
 		MinecraftClient.getInstance().player.method_44096(msg, text);
 	}
 
