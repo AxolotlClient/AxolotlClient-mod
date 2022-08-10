@@ -47,7 +47,7 @@ public class StringOption extends OptionBase<String> {
 
     @Override
     public JsonElement getJson() {
-        return new JsonPrimitive(value);
+        return new JsonPrimitive(value == null?def:value);
     }
 
     @Override

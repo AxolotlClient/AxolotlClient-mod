@@ -39,9 +39,11 @@ public class StringOptionWidget extends ButtonWidget {
         textField.x = x;
         textField.render();
         GlStateManager.enableDepthTest();
+        if(!textField.getText().equals(option.get())){
+            textField.setText(option.get());
+        }
     }
-
-
+    
     public void keyPressed(char c, int code){
         this.textField.keyPressed(c, code);
         this.option.set(textField.getText());
