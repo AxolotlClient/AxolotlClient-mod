@@ -96,11 +96,11 @@ public class SkyResourceManager{
                 while((string = reader.readLine()) != null ){
                     try{
                         String[] option = string.split("=");
-                        if(option[0].equals("source"))source= loader+"/sky/world0/"+option[1].split("/")[1];
-                        if(option[0].equals("startFadeIn"))startFadeIn= Integer.parseInt(option[1].split(":")[0]+option[1].split(":")[1]);
-                        if(option[0].equals("endFadeIn"))endFadeIn= Integer.parseInt(option[1].split(":")[0]+option[1].split(":")[1]);
-                        if(option[0].equals("startFadeOut"))startFadeOut= Integer.parseInt(option[1].split(":")[0]+option[1].split(":")[1]);
-                        if(option[0].equals("endFadeOut"))endFadeOut= Integer.parseInt(option[1].split(":")[0]+option[1].split(":")[1]);
+                        if(option[0].equals("source")) source= loader+"/sky/world0/"+option[1].replace("./","");
+                        if(option[0].equals("startFadeIn")) startFadeIn= Integer.parseInt(option[1].replace(":",""));
+                        if(option[0].equals("endFadeIn")) endFadeIn= Integer.parseInt(option[1].replace(":",""));
+                        if(option[0].equals("startFadeOut")) startFadeOut= Integer.parseInt(option[1].replace(":",""));
+                        if(option[0].equals("endFadeOut")) endFadeOut= Integer.parseInt(option[1].replace(":",""));
                         if(option[0].equals("blend")) blend=option[1];
 
 

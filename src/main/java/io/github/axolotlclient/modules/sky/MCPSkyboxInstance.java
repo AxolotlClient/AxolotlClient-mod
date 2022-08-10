@@ -7,7 +7,6 @@ import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.util.Identifier;
-import org.lwjgl.opengl.GL11;
 
 public class MCPSkyboxInstance extends SkyboxInstance {
 
@@ -33,7 +32,7 @@ public class MCPSkyboxInstance extends SkyboxInstance {
 
         for (int i = 0; i < 6; ++i) {
 
-            if(textures[0]!=null) {
+            if(textures[0]!=null && !textures[0].getPath().equals("")) {
                 MinecraftClient.getInstance().getTextureManager().bindTexture(textures[0]);
                 GlStateManager.pushMatrix();
 
