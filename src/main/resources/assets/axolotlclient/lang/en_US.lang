@@ -50,6 +50,7 @@ shiftHorizontalScroll=Scroll Horizontal (if key pressed)
 shiftHorizontalScroll.tooltip=Allow scrolling horizontally if the specific key <br>is pressed. <br>The key is changeable in the Controls Menu.
 scrollAmount=Scroll Amount
 scrollAmount.tooltip=On scrolling, move the tooltip around this amount.
+tnttime=TntTime
 
 nametagOptions=Nametag Options
 showOwnNametag=Show Own Nametag
