@@ -1,6 +1,7 @@
 package io.github.axolotlclient.mixin;
 
 import io.github.axolotlclient.modules.scrollableTooltips.ScrollableTooltips;
+import io.github.axolotlclient.util.OSUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
@@ -8,7 +9,10 @@ import net.minecraft.item.itemgroup.ItemGroup;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
+
+import java.net.URI;
 
 @Mixin(Screen.class)
 public abstract class ScreenMixin {
@@ -36,4 +40,9 @@ public abstract class ScreenMixin {
         return - (height*2);
     }
 
+    @Inject(method = "openLink", at = @At("HEAD"), cancellable = true)
+    public void openLink(URI link, CallbackInfo ci){
+        OSUtil.getOS().open(link);
+        ci.cancel();
+    }
 }

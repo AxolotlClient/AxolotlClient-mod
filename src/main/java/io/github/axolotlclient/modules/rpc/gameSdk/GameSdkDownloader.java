@@ -72,6 +72,7 @@ public class GameSdkDownloader {
             loadNative(sdk, jni);
         } catch (Exception e) {
             e.printStackTrace();
+            DiscordRPC.getInstance().enabled.set(false);
         }
 
     }

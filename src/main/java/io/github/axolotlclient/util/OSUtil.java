@@ -1,5 +1,14 @@
 package io.github.axolotlclient.util;
 
+import io.github.axolotlclient.AxolotlClient;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+import java.security.AccessController;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 import java.util.Locale;
 
 public class OSUtil {
@@ -38,6 +47,36 @@ public class OSUtil {
 
         OperatingSystem(String... detection) {
             this.s = detection;
+        }
+
+        private void open(URL url) {
+            try {
+                Process process = AccessController.doPrivileged((PrivilegedExceptionAction<Process>) () -> Runtime.getRuntime().exec(this.getURLOpenCommand(url)));
+                process.getInputStream().close();
+                process.getErrorStream().close();
+                process.getOutputStream().close();
+            } catch (IOException | PrivilegedActionException var3) {
+                AxolotlClient.LOGGER.error("Couldn't open url '{}'", url, var3);
+            }
+
+        }
+
+        public void open(URI uri) {
+            try {
+                this.open(uri.toURL());
+            } catch (MalformedURLException var3) {
+                AxolotlClient.LOGGER.error("Couldn't open uri '{}'", uri, var3);
+            }
+
+        }
+
+        private String[] getURLOpenCommand(URL url) {
+            String string = url.toString();
+            if ("file".equals(url.getProtocol())) {
+                string = string.replace("file:", "file://");
+            }
+
+            return new String[]{"xdg-open", string};
         }
     }
 }
