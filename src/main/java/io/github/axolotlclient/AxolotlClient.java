@@ -14,6 +14,7 @@ import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
 import io.github.axolotlclient.modules.motionblur.MotionBlur;
 import io.github.axolotlclient.modules.rpc.DiscordRPC;
 import io.github.axolotlclient.modules.scrollableTooltips.ScrollableTooltips;
+import io.github.axolotlclient.modules.tnttime.TntTime;
 import io.github.axolotlclient.modules.zoom.Zoom;
 import io.github.axolotlclient.util.Util;
 import net.fabricmc.api.ClientModInitializer;
@@ -89,6 +90,7 @@ public class AxolotlClient implements ClientModInitializer {
 		modules.put(ScrollableTooltips.ID, ScrollableTooltips.instance);
 		modules.put(DiscordRPC.ID, DiscordRPC.getInstance());
 		modules.put(Freelook.ID, Freelook.INSTANCE);
+		modules.put(TntTime.ID, TntTime.Instance);
 	}
 
 	public static boolean isUsingClient(UUID uuid){
