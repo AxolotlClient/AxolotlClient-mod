@@ -30,6 +30,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourcePack;
 import net.minecraft.scoreboard.Team;
+import net.minecraft.text.LiteralText;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -164,10 +166,11 @@ public class AxolotlClient implements ClientModInitializer {
 				RenderSystem.color4f(1, 1, 1, 1);
 
 				if(AxolotlClient.CONFIG.customBadge.get()) {
+                    LiteralText badgeText = Util.formatFromCodes(AxolotlClient.CONFIG.badgeText.get());
 					if(AxolotlClient.CONFIG.useShadows.get()) {
-						MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, AxolotlClient.CONFIG.badgeText.get(), x, 0, -1);
+						MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, badgeText, x, 0, -1);
 					} else {
-						MinecraftClient.getInstance().textRenderer.draw(matrices, AxolotlClient.CONFIG.badgeText.get(), x, 0, -1);
+						MinecraftClient.getInstance().textRenderer.draw(matrices, badgeText, x, 0, -1);
 					}
 				}
 				else DrawableHelper.drawTexture(matrices, x, 0, 0, 0, 8, 8, 8, 8);

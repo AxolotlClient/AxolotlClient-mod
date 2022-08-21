@@ -24,12 +24,15 @@ import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.ScoreboardPlayerScore;
 import net.minecraft.scoreboard.Team;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -90,6 +93,33 @@ public class Util {
 
 		return game;
 	}
+
+    public static LiteralText formatFromCodes(String formattedString){
+        LiteralText text = new LiteralText("");
+        String[] arr = formattedString.split("§");
+
+        List<Formatting> modifiers = new ArrayList<>();
+        for (String s:arr){
+
+            Formatting formatting = Formatting.byCode(s.length()>0 ? s.charAt(0) : 0);
+            if(formatting != null && formatting.isModifier()){
+                modifiers.add(formatting);
+                continue;
+            }
+            LiteralText part = new LiteralText(s.length()>0 ? s.substring(1):"");
+            if(formatting != null){
+                part.formatted(formatting);
+
+                if(!modifiers.isEmpty()){
+                    modifiers.forEach(part::formatted);
+                    modifiers.clear();
+                }
+            }
+            text.append(part);
+        }
+
+        return text;
+    }
 
     public static double calculateDistance(Vec3d pos1, Vec3d pos2){
         return calculateDistance(pos1.x, pos2.x, pos1.y, pos2.y, pos1.z, pos2.z);

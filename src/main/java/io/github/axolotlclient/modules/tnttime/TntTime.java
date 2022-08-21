@@ -32,7 +32,7 @@ public class TntTime extends AbstractModule {
 
     @Override
     public void tick() {
-        if(decimalPlaces.get() != decimals){
+        if(decimalPlaces.get() != decimals || format == null){
             StringBuilder string = new StringBuilder("#0");
             if (decimalPlaces.get() > 0) {
                 string.append(".");
