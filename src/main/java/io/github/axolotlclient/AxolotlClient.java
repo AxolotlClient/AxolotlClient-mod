@@ -134,12 +134,6 @@ public class AxolotlClient implements ClientModInitializer {
         modules.forEach((identifier, abstractModule) -> abstractModule.tick());
 		Color.tickChroma();
 
-		if(tickTime % 20 == 0){
-			if(MinecraftClient.getInstance().getCurrentServerEntry() != null){
-				Util.getRealTimeServerPing(MinecraftClient.getInstance().getCurrentServerEntry());
-			}
-		}
-
 		if (tickTime >=6000){
 
 			//System.out.println("Cleared Cache of Other Players!");

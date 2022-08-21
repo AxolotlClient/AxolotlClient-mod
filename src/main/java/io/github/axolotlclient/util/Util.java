@@ -44,8 +44,7 @@ import java.util.stream.Collectors;
 
 public class Util {
 
-	private static final ThreadPoolExecutor REALTIME_PINGER = new ScheduledThreadPoolExecutor(3, new ThreadFactoryBuilder().setNameFormat("Real Time Server Pinger #%d").setDaemon(true).build());
-	public static int currentServerPing;
+
 
 	public static String lastgame;
 	public static String game;
@@ -191,52 +190,6 @@ public class Util {
 		Collections.reverse(lines);
 
 		return lines;
-	}
-
-
-
-	//Indicatia removed this feature...
-	//We still need it :(
-	public static void getRealTimeServerPing(ServerInfo server)
-	{
-		REALTIME_PINGER.submit(() ->
-		{
-			try
-			{
-				ServerAddress address = ServerAddress.parse(server.address);
-
-                ClientConnection manager = ClientConnection.connect(InetAddress.getByName(address.getAddress()), address.getPort(), false);
-                manager.setPacketListener(new ClientQueryPacketListener() {
-
-                    @Override
-                    public void onResponse(QueryResponseS2CPacket packet) {
-                        this.currentSystemTime = net.minecraft.util.Util.getMeasuringTimeMs();
-                        manager.send(new QueryPingC2SPacket(this.currentSystemTime));
-                    }
-
-                    @Override
-                    public void onPong(QueryPongS2CPacket packet) {
-                        long time = this.currentSystemTime;
-                        long latency = net.minecraft.util.Util.getMeasuringTimeMs();
-                        Util.currentServerPing = (int) (latency - time);
-                        manager.disconnect(Text.of(""));
-                    }
-
-                    private long currentSystemTime = 0L;
-
-                    @Override
-                    public void onDisconnected(Text reason) {}
-
-                    @Override
-                    public ClientConnection getConnection()
-						{
-							return manager;
-						}
-                });
-                manager.send(new HandshakeC2SPacket(address.getAddress(), address.getPort(), NetworkState.STATUS));
-                manager.send(new QueryRequestC2SPacket());
-            } catch (Exception ignored){}
-        });
 	}
 
 	public static void applyScissor(Rectangle scissor){
