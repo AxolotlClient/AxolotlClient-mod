@@ -50,7 +50,8 @@
 		"MixinTitleScreen",
 		"MixinTntEntityRenderer",
 		"MixinWorldListWidgetEntry",
-		"MixinWorldRenderer"
+		"MixinWorldRenderer",
+		"SharedConstantsMixin"
 	],
 	"server": [],
 	"injectors": {

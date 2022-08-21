@@ -20,7 +20,7 @@
 	"showCategoryTooltips": "Kategorie-Tooltips",
 	"showCategoryTooltips.tooltip": "Ob Tooltips von Kategorien im Menü angezeigt werden sollen.",
 	
-	"rendering": "Renderoptionen",
+	"rendering": "Rendering",
 	"customSky": "Benutzerdefinierte Himmel",
 	"showSunMoon": "Zeige Sonne & Mond auf eigenem Himmel",
 	"cloudHeight": "Wolkenhöhe",
@@ -210,21 +210,24 @@
 	
 	"back": "Zurück",
 	"close": "Schließen",
-	"rendering.tooltip": "Rendering Options",
-	"customSky.tooltip": "Whether to enable custom skies.",
-	"showSunMoon.tooltip": "Whether to show sun and moon on custom skies.",
-	"customCloudHeight": "Custom Cloud Height",
-	"customCloudHeight.tooltip": "Whether to use a custom cloud height.",
-	"cloudHeight.tooltip": "The custom cloud height to use <br>Needs custom cloud height enabled.",
-	"zoomScrollStep": "Scroll Step",
+
+	"rendering.tooltip": "Rendering Optionen",
+	"customSky.tooltip": "Ob benutzerdefinierte Himmel verwendet werden sollen.",
+	"showSunMoon.tooltip": "Ob Sonne und Mond auf benutzerdefinierten Himmeln gezeigt werden sollen.",
+	"customCloudHeight": "Eigene Wolkenhöhe",
+	"customCloudHeight.tooltip": "Ob eine benutzerdefinierte Wolkenhöhe verwendet werden soll.",
+	"cloudHeight.tooltip": "Die Wolkenhöhe.<br>Benötigt die obere Option.",
+	"zoomScrollStep": "Scrollstufe",
 	"NETWORK": "Network",
 	"BEDWARS": "Bedwars",
 	"SKYWARS": "Skywars",
-	"attackindicatorbg": "Attack Indicator (Background)",
-	"attackindicatorfg": "Attack Indicator (Foreground)",
+	"attackindicatorbg": "Attack Indikator (Hintergrund)",
+	"attackindicatorfg": "Attack Indikator (Vordergrund)",
 	"TEXTURE": "Texture",
-	"DIRECTION": "Direction",
-	"DOT": "Dot",
-	"CROSS": "Cross"
+	"DIRECTION": "Richtung",
+	"DOT": "Punkt",
+	"CROSS": "Kreuz",
+	"tnttime": "TntTime",
+	"textAlignment": "Text Alignment"
 
 }

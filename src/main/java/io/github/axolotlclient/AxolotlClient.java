@@ -25,6 +25,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.pack.ResourcePack;
 import net.minecraft.scoreboard.Team;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.loader.api.QuiltLoader;
@@ -163,10 +164,11 @@ public class AxolotlClient implements ClientModInitializer {
 				RenderSystem.setShaderColor(1, 1, 1, 1);
 
 				if(AxolotlClient.CONFIG.customBadge.get()) {
+                    Text badgeText = Util.formatFromCodes(AxolotlClient.CONFIG.badgeText.get());
 					if(AxolotlClient.CONFIG.useShadows.get()) {
-						MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, AxolotlClient.CONFIG.badgeText.get(), x, 0, -1);
+						MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, badgeText, x, 0, -1);
 					} else {
-						MinecraftClient.getInstance().textRenderer.draw(matrices, AxolotlClient.CONFIG.badgeText.get(), x, 0, -1);
+						MinecraftClient.getInstance().textRenderer.draw(matrices, badgeText, x, 0, -1);
 					}
 				}
 				else DrawableHelper.drawTexture(matrices, x, 0, 0, 0, 8, 8, 8, 8);
