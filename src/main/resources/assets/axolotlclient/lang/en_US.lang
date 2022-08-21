@@ -103,6 +103,7 @@ key.freelook=Freelook
 
 hud=Hud Options
 pinghud=Ping HUD
+refreshTime=Refresh Delay
 cpshud=CPS HUD
 cpskeybind=CPS from Keybinds
 rightcps=Show Rightclick Cps

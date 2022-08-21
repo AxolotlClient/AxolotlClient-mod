@@ -2,51 +2,31 @@ package io.github.axolotlclient.util;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import io.github.axolotlclient.util.clientCommands.ClientCommands;
 import io.github.axolotlclient.util.clientCommands.Command;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.texture.Texture;
 import net.minecraft.client.util.Window;
-import net.minecraft.network.ClientConnection;
-import net.minecraft.network.NetworkState;
-import net.minecraft.network.ServerAddress;
-import net.minecraft.network.listener.ClientQueryPacketListener;
-import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket;
-import net.minecraft.network.packet.c2s.query.QueryPingC2SPacket;
-import net.minecraft.network.packet.c2s.query.QueryRequestC2SPacket;
-import net.minecraft.network.packet.s2c.query.QueryPongS2CPacket;
-import net.minecraft.network.packet.s2c.query.QueryResponseS2CPacket;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.ScoreboardPlayerScore;
 import net.minecraft.scoreboard.Team;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 
-import java.net.InetAddress;
 import java.util.*;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.stream.Collectors;
 
 
 public class Util {
 
     public static Color GlColor = new Color();
-
     private static Map<Identifier, Texture> textures;
-
-    private static final ThreadPoolExecutor REALTIME_PINGER = new ScheduledThreadPoolExecutor(3, new ThreadFactoryBuilder().setNameFormat("Real Time Server Pinger #%d").setDaemon(true).build());
-    public static int currentServerPing = 0;
-
     public static String lastgame;
     public static String game;
 
@@ -180,45 +160,6 @@ public class Util {
         Collections.reverse(lines);
 
         return lines;
-    }
-
-
-
-    //Indicatia removed this feature...
-    //We still need it :(
-    public static void getRealTimeServerPing(ServerInfo server) {
-        REALTIME_PINGER.submit(() -> {
-            try {
-                    ServerAddress address = ServerAddress.parse(server.address);
-                    final ClientConnection manager = ClientConnection.connect(InetAddress.getByName(address.getAddress()), address.getPort(), false);
-
-                    manager.setPacketListener(new ClientQueryPacketListener() {
-                        @Override
-                        public void onResponse(QueryResponseS2CPacket packet) {
-                            this.currentSystemTime = MinecraftClient.getTime();
-                            manager.send(new QueryPingC2SPacket(this.currentSystemTime));
-                        }
-
-                        @Override
-                        public void onPong(QueryPongS2CPacket packet) {
-                            long time = this.currentSystemTime;
-                            long latency = MinecraftClient.getTime();
-                            Util.currentServerPing = (int) (latency - time);
-                            manager.disconnect(new LiteralText(""));
-                        }
-
-                        private long currentSystemTime = 0L;
-
-                        @Override
-                        public void onDisconnected(Text reason) {
-
-                        }
-                    });
-                    manager.send(new HandshakeC2SPacket(47, address.getAddress(), address.getPort(), NetworkState.STATUS));
-                    manager.send(new QueryRequestC2SPacket());
-            }
-            catch (Exception ignored){}
-        });
     }
 
     public static class Color {

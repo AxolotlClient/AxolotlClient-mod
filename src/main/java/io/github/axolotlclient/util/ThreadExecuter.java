@@ -18,4 +18,8 @@ public class ThreadExecuter {
         EXECUTER_SERVICE.schedule(runnable, delay, timeUnit);
     }
 
+    public static void submit(Runnable runnable){
+        EXECUTER_SERVICE.submit(runnable);
+    }
+
 }

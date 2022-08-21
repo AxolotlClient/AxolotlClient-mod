@@ -35,118 +35,109 @@ import java.util.*;
 
 public class AxolotlClient implements ClientModInitializer {
 
-	public static Logger LOGGER = LogManager.getLogger("AxolotlClient");
+    public static Logger LOGGER = LogManager.getLogger("AxolotlClient");
 
-	public static AxolotlClientConfig CONFIG;
-	public static String onlinePlayers = "";
-	public static String otherPlayers = "";
+    public static AxolotlClientConfig CONFIG;
+    public static String onlinePlayers = "";
+    public static String otherPlayers = "";
 
-	public static List<ResourcePack> packs = new ArrayList<>();
-	public static HashMap<Identifier, Resource> runtimeResources = new HashMap<>();
+    public static List<ResourcePack> packs = new ArrayList<>();
+    public static HashMap<Identifier, Resource> runtimeResources = new HashMap<>();
 
-	public static boolean initalized = false;
+    public static boolean initalized = false;
 
-	public static final Identifier badgeIcon = new Identifier("axolotlclient", "textures/badge.png");
+    public static final Identifier badgeIcon = new Identifier("axolotlclient", "textures/badge.png");
 
-	public static final OptionCategory config = new OptionCategory(new Identifier("storedOptions"), "storedOptions");
-	public static final BooleanOption someNiceBackground = new BooleanOption("defNoSecret", false);
-	public static final HashMap<Identifier, AbstractModule> modules = new HashMap<>();
+    public static final OptionCategory config = new OptionCategory(new Identifier("storedOptions"), "storedOptions");
+    public static final BooleanOption someNiceBackground = new BooleanOption("defNoSecret", false);
+    public static final HashMap<Identifier, AbstractModule> modules = new HashMap<>();
 
-	public static Integer tickTime = 0;
+    public static Integer tickTime = 0;
 
-	@Override
-	public void onInitializeClient() {
-		CONFIG = new AxolotlClientConfig();
-		config.add(someNiceBackground);
-		config.add(CONFIG.rotateWorld);
+    @Override
+    public void onInitializeClient() {
+        CONFIG = new AxolotlClientConfig();
+        config.add(someNiceBackground);
+        config.add(CONFIG.rotateWorld);
 
-		getModules();
-		CONFIG.init();
+        getModules();
+        CONFIG.init();
         modules.values().forEach(AbstractModule::init);
 
-		CONFIG.config.addAll(CONFIG.getCategories());
-		CONFIG.config.add(config);
+        CONFIG.config.addAll(CONFIG.getCategories());
+        CONFIG.config.add(config);
 
-		ConfigManager.load();
+        ConfigManager.load();
 
-		//if (CONFIG.enableRPC.get()) io.github.axolotlclient.util.DiscordRPC.startup();
+        modules.values().forEach(AbstractModule::lateInit);
 
-		modules.values().forEach(AbstractModule::lateInit);
+        FabricLoader.getInstance().getModContainer("axolotlclient").ifPresent(modContainer -> {
+            Optional<Path> optional = modContainer.findPath("resourcepacks/AxolotlClientUI.zip");
+            optional.ifPresent(path -> MinecraftClient.getInstance().getResourcePackLoader().method_10366(path.toFile()));
 
-		FabricLoader.getInstance().getModContainer("axolotlclient").ifPresent(modContainer -> {
-			Optional<Path> optional = modContainer.findPath("resourcepacks/AxolotlClientUI.zip");
-			optional.ifPresent(path -> MinecraftClient.getInstance().getResourcePackLoader().method_10366(path.toFile()));
+        });
 
-		});
+        LOGGER.info("AxolotlClient Initialized");
+    }
 
-		LOGGER.info("AxolotlClient Initialized");
-	}
+    public static void getModules(){
+        modules.put(Zoom.ID, new Zoom());
+        modules.put(HudManager.ID, HudManager.getINSTANCE());
+        modules.put(HypixelMods.ID, HypixelMods.INSTANCE);
+        modules.put(MotionBlur.ID, new MotionBlur());
+        modules.put(ScrollableTooltips.ID, ScrollableTooltips.instance);
+        modules.put(DiscordRPC.ID, DiscordRPC.getInstance());
+        modules.put(Freelook.ID, Freelook.INSTANCE);
+        modules.put(TntTime.ID, TntTime.Instance);
+    }
 
-	public static void getModules(){
-		modules.put(Zoom.ID, new Zoom());
-		modules.put(HudManager.ID, HudManager.getINSTANCE());
-		modules.put(HypixelMods.ID, HypixelMods.INSTANCE);
-		modules.put(MotionBlur.ID, new MotionBlur());
-		modules.put(ScrollableTooltips.ID, ScrollableTooltips.instance);
-		modules.put(DiscordRPC.ID, DiscordRPC.getInstance());
-		modules.put(Freelook.ID, Freelook.INSTANCE);
-		modules.put(TntTime.ID, TntTime.Instance);
-	}
-
-	public static boolean isUsingClient(UUID uuid){
-		assert MinecraftClient.getInstance().player != null;
-		if (uuid == MinecraftClient.getInstance().player.getUuid()){
-			return true;
-		} else {
-			return NetworkHelper.getOnline(uuid);
-		}
-	}
+    public static boolean isUsingClient(UUID uuid){
+        assert MinecraftClient.getInstance().player != null;
+        if (uuid == MinecraftClient.getInstance().player.getUuid()){
+            return true;
+        } else {
+            return NetworkHelper.getOnline(uuid);
+        }
+    }
 
 
-	public static void tickClient(){
-		modules.values().forEach(AbstractModule::tick);
+    public static void tickClient(){
+        modules.values().forEach(AbstractModule::tick);
 
-		//net.arikia.dev.drpc.DiscordRPC.discordRunCallbacks();
-		Color.tickChroma();
+        Color.tickChroma();
 
-		if(tickTime % 20 == 0){
-			if(MinecraftClient.getInstance().getCurrentServerEntry() != null){
-				Util.getRealTimeServerPing(MinecraftClient.getInstance().getCurrentServerEntry());
-			}
-		}
+        if (tickTime >=6000){
 
-		if (tickTime >=6000){
+            //System.out.println("Cleared Cache of Other Players!");
+            otherPlayers = "";
+            tickTime = 0;
+        }
+        tickTime++;
 
-			//System.out.println("Cleared Cache of Other Players!");
-			otherPlayers = "";
-			tickTime = 0;
-		}
-		tickTime++;
+    }
 
-	}
+    public static void addBadge(Entity entity){
+        if(entity instanceof PlayerEntity){
 
-	public static void addBadge(Entity entity){
-		if(entity instanceof PlayerEntity){
+            if(AxolotlClient.CONFIG.showBadges.get() && AxolotlClient.isUsingClient(entity.getUuid())) {
+                GlStateManager.alphaFunc(516, 0.1F);
+                GlStateManager.enableDepthTest();
+                GlStateManager.enableAlphaTest();
+                MinecraftClient.getInstance().getTextureManager().bindTexture(AxolotlClient.badgeIcon);
 
-			if(AxolotlClient.CONFIG.showBadges.get() && AxolotlClient.isUsingClient(entity.getUuid())) {
-				GlStateManager.alphaFunc(516, 0.1F);
-				GlStateManager.enableDepthTest();
-				GlStateManager.enableAlphaTest();
-				MinecraftClient.getInstance().getTextureManager().bindTexture(AxolotlClient.badgeIcon);
+                int x = -(MinecraftClient.getInstance().textRenderer.getStringWidth(
+                        entity.getUuid() == MinecraftClient.getInstance().player.getUuid()?
+                                (NickHider.Instance.hideOwnName.get() ? NickHider.Instance.hiddenNameSelf.get(): entity.method_6344().asFormattedString()):
+                                (NickHider.Instance.hideOtherNames.get() ? NickHider.Instance.hiddenNameOthers.get(): entity.method_6344().asFormattedString())
+                )/2 + (AxolotlClient.CONFIG.customBadge.get() ? MinecraftClient.getInstance().textRenderer.getStringWidth(" "+AxolotlClient.CONFIG.badgeText.get()): 10));
 
-				int x = -(MinecraftClient.getInstance().textRenderer.getStringWidth(
-						entity.getUuid() == MinecraftClient.getInstance().player.getUuid()?
-						(NickHider.Instance.hideOwnName.get() ? NickHider.Instance.hiddenNameSelf.get(): entity.method_6344().asFormattedString()):
-						(NickHider.Instance.hideOtherNames.get() ? NickHider.Instance.hiddenNameOthers.get(): entity.method_6344().asFormattedString())
-				)/2 + (AxolotlClient.CONFIG.customBadge.get() ? MinecraftClient.getInstance().textRenderer.getStringWidth(" "+AxolotlClient.CONFIG.badgeText.get()): 10));
+                GlStateManager.color4f(1, 1, 1, 1);
 
-				GlStateManager.color4f(1, 1, 1, 1);
-
-				if(AxolotlClient.CONFIG.customBadge.get()) MinecraftClient.getInstance().textRenderer.draw(AxolotlClient.CONFIG.badgeText.get(), x, 0 ,-1, AxolotlClient.CONFIG.useShadows.get());
-				else DrawableHelper.drawTexture(x, 0, 0, 0, 8, 8, 8, 8);
+                if(AxolotlClient.CONFIG.customBadge.get()) MinecraftClient.getInstance().textRenderer.draw(AxolotlClient.CONFIG.badgeText.get(), x, 0 ,-1, AxolotlClient.CONFIG.useShadows.get());
+                else DrawableHelper.drawTexture(x, 0, 0, 0, 8, 8, 8, 8);
 
 
-			}
-		}
-	}
+            }
+        }
+    }
 }
