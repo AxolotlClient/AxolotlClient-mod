@@ -1,7 +1,7 @@
 plugins {
 	id 'maven-publish'
 	id 'io.github.juuxel.loom-quiltflower' version '1.7.+' // For loom 0.8-0.9, 0.11+
-	id 'fabric-loom' version '0.12.+'
+	id 'fabric-loom' version '0.13.+'
 }
 
 archivesBaseName = project.archives_base_name
@@ -36,9 +36,6 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
-	//modImplementation "org.quiltmc:quilt-loader:${project.loader_version}"
-	//modImplementation "org.quiltmc.quilted-fabric-api:quilted-fabric-api:${quilted_fabric_api_version}-${minecraft_version}"
 
 	modImplementation "com.terraformersmc:modmenu:1.16.23"
 
