@@ -33,10 +33,10 @@ public class TntTime extends AbstractModule {
     @Override
     public void tick() {
         if(decimalPlaces.get() != decimals || format == null){
-            StringBuilder string = new StringBuilder("##");
+            StringBuilder string = new StringBuilder("#0");
             if (decimalPlaces.get() > 0) {
                 string.append(".");
-                string.append("#".repeat(Math.max(0, decimalPlaces.get())));
+                string.append("0".repeat(Math.max(0, decimalPlaces.get())));
             }
             format = new DecimalFormat(string.toString());
             decimals = decimalPlaces.get();

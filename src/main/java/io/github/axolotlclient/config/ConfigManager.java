@@ -61,6 +61,8 @@ public class ConfigManager{
 
     public static void load() {
 
+        loadDefaults();
+
         try {
             JsonObject config = JsonParser.parseReader(new FileReader(confPath.toString())).getAsJsonObject();
 
@@ -72,9 +74,7 @@ public class ConfigManager{
         } catch (Exception e){
             AxolotlClient.LOGGER.error("Failed to load config! Using default values... \nError: ");
             e.printStackTrace();
-            loadDefaults();
         }
-        //save();
     }
 
     private static void setOptions(JsonObject config, OptionCategory category){
@@ -97,15 +97,15 @@ public class ConfigManager{
     }
 
     private static void loadDefaults(){
-        AxolotlClient.CONFIG.config.forEach(OptionCategory -> {
-            OptionCategory.getOptions().forEach(Option::setDefaults);
-            if(!OptionCategory.getSubCategories().isEmpty()){
-                for(OptionCategory category : OptionCategory.getSubCategories()){
-                    category.getOptions().forEach(Option::setDefaults);
-                }
-            }
-        });
+        AxolotlClient.CONFIG.config.forEach(ConfigManager::setOptionDefaults);
     }
 
-
+    private static void setOptionDefaults(OptionCategory category){
+        category.getOptions().forEach(Option::setDefaults);
+        if(!category.getSubCategories().isEmpty()){
+            for (OptionCategory sub: category.getSubCategories()) {
+                setOptionDefaults(sub);
+            }
+        }
+    }
 }
