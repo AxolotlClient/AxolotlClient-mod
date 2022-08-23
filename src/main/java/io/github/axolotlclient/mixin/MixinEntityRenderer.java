@@ -27,6 +27,15 @@ public abstract class MixinEntityRenderer<T extends Entity> {
             AxolotlClient.addBadge(entity, matrices);
     }
 
+    @ModifyArg(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Lnet/minecraft/text/Text;FFIZLnet/minecraft/util/math/Matrix4f;Lnet/minecraft/client/render/VertexConsumerProvider;ZII)I"), index = 8)
+    public int bgColor(int color){
+        if(AxolotlClient.CONFIG.nametagBackground.get()){
+            return color;
+        } else {
+            return 0;
+        }
+    }
+
 	@ModifyArg(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Lnet/minecraft/text/Text;FFIZLnet/minecraft/util/math/Matrix4f;Lnet/minecraft/client/render/VertexConsumerProvider;ZII)I"), index = 4)
 	public boolean enableShadows(boolean shadow){
 		return AxolotlClient.CONFIG.useShadows.get();

@@ -2,24 +2,13 @@ package io.github.axolotlclient.util;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.util.Window;
-import net.minecraft.network.ClientConnection;
-import net.minecraft.network.NetworkState;
-import net.minecraft.network.ServerAddress;
-import net.minecraft.network.listener.ClientQueryPacketListener;
-import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket;
-import net.minecraft.network.packet.c2s.query.QueryPingC2SPacket;
-import net.minecraft.network.packet.c2s.query.QueryRequestC2SPacket;
-import net.minecraft.network.packet.s2c.query.QueryPongS2CPacket;
-import net.minecraft.network.packet.s2c.query.QueryResponseS2CPacket;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.ScoreboardPlayerScore;
@@ -30,21 +19,15 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 
-import java.net.InetAddress;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.stream.Collectors;
 
 public class Util {
-
-
 
 	public static String lastgame;
 	public static String game;
@@ -103,7 +86,6 @@ public class Util {
             Formatting formatting = Formatting.byCode(s.length()>0 ? s.charAt(0) : 0);
             if(formatting != null && formatting.isModifier()){
                 modifiers.add(formatting);
-                continue;
             }
             LiteralText part = new LiteralText(s.length()>0 ? s.substring(1):"");
             if(formatting != null){
@@ -111,12 +93,13 @@ public class Util {
 
                 if(!modifiers.isEmpty()){
                     modifiers.forEach(part::formatted);
-                    modifiers.clear();
+                    if(formatting.equals(Formatting.RESET)) {
+                        modifiers.clear();
+                    }
                 }
             }
             text.append(part);
         }
-
         return text;
     }
 
