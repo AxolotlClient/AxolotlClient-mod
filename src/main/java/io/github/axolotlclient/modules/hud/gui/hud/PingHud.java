@@ -3,7 +3,6 @@ package io.github.axolotlclient.modules.hud.gui.hud;
 import io.github.axolotlclient.config.options.IntegerOption;
 import io.github.axolotlclient.config.options.OptionBase;
 import io.github.axolotlclient.util.ThreadExecuter;
-import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.network.ClientConnection;
@@ -36,6 +35,7 @@ public class PingHud extends CleanHudEntry {
 
     public PingHud() {
         super();
+        updatePing();
     }
 
     @Override
@@ -58,13 +58,19 @@ public class PingHud extends CleanHudEntry {
         return true;
     }
 
+    private void updatePing(){
+        if(MinecraftClient.getInstance().getCurrentServerEntry() != null) {
+            getRealTimeServerPing(MinecraftClient.getInstance().getCurrentServerEntry());
+        } else if (MinecraftClient.getInstance().isIntegratedServerRunning()){
+            currentServerPing = 1;
+        }
+    }
+
     private int second;
     @Override
     public void tick() {
         if(second>=refreshDelay.get()*20){
-            if(MinecraftClient.getInstance().getCurrentServerEntry() != null) {
-                getRealTimeServerPing(MinecraftClient.getInstance().getCurrentServerEntry());
-            }
+            updatePing();
             second=0;
         } else second++;
     }

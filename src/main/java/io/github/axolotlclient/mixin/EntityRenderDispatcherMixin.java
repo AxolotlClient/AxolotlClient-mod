@@ -13,22 +13,22 @@ public abstract class EntityRenderDispatcherMixin {
 
     @Redirect(method = "method_10200", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;yaw:F"))
     public float freelook$yaw(Entity entity) {
-        return Freelook.INSTANCE.yaw(entity.yaw);
+        return Freelook.getInstance().yaw(entity.yaw);
     }
 
     @Redirect(method = "method_10200", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;prevYaw:F"))
     public float freelook$prevYaw(Entity entity) {
-        return Freelook.INSTANCE.yaw(entity.prevYaw);
+        return Freelook.getInstance().yaw(entity.prevYaw);
     }
 
     @Redirect(method = "method_10200", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;pitch:F"))
     public float freelook$pitch(Entity entity) {
-        return Freelook.INSTANCE.pitch(entity.pitch);
+        return Freelook.getInstance().pitch(entity.pitch);
     }
 
     @Redirect(method = "method_10200", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;prevPitch:F"))
     public float freelook$prevPitch(Entity entity) {
-        return Freelook.INSTANCE.pitch(entity.prevPitch);
+        return Freelook.getInstance().pitch(entity.prevPitch);
     }
 
 }

@@ -131,7 +131,7 @@ public abstract class MinecraftClientMixin {
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getTime()J", ordinal = 0))
     public void onMouseButton(CallbackInfo ci){
-        CPSHud cpshud = (CPSHud) HudManager.getINSTANCE().get(CPSHud.ID);
+        CPSHud cpshud = (CPSHud) HudManager.getInstance().get(CPSHud.ID);
         if(cpshud.isEnabled()){
             cpshud.click();
         }

@@ -19,6 +19,8 @@ public class MotionBlur extends AbstractModule {
 
     public static final Identifier ID = new Identifier("motion_blur");
 
+    private static final MotionBlur Instance = new MotionBlur();
+
     private final Identifier shaderLocation = new Identifier("minecraft:shaders/post/motion_blur.json");
 
     public ShaderEffect shader;
@@ -28,6 +30,10 @@ public class MotionBlur extends AbstractModule {
     private int lastWidth;
 
     private int lastHeight;
+
+    public static MotionBlur getInstance(){
+        return Instance;
+    }
 
     @Override
     public void init() {

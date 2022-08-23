@@ -24,7 +24,7 @@ public abstract class InGameHudMixin {
 
     @Inject(method = "renderScoreboardObjective", at = @At("HEAD"), cancellable = true)
     public void customScoreBoard(ScoreboardObjective objective, Window window, CallbackInfo ci){
-        ScoreboardHud hud = (ScoreboardHud) HudManager.getINSTANCE().get(ScoreboardHud.ID);
+        ScoreboardHud hud = (ScoreboardHud) HudManager.getInstance().get(ScoreboardHud.ID);
         if(hud.isEnabled()){
             ci.cancel();
         }
@@ -32,7 +32,7 @@ public abstract class InGameHudMixin {
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;method_9429()Z"))
     public boolean noCrosshair(InGameHud instance){
-        CrosshairHud hud = (CrosshairHud) HudManager.getINSTANCE().get(CrosshairHud.ID);
+        CrosshairHud hud = (CrosshairHud) HudManager.getInstance().get(CrosshairHud.ID);
         if(hud.isEnabled()) {
             GlStateManager.blendFuncSeparate(775, 769, 1, 0);
             GlStateManager.enableAlphaTest();
@@ -43,7 +43,7 @@ public abstract class InGameHudMixin {
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Ljava/lang/String;III)I", ordinal = 0))
     public int actionBar(TextRenderer instance, String text, int x, int y, int color){
-        ActionBarHud hud = (ActionBarHud) HudManager.getINSTANCE().get(ActionBarHud.ID);
+        ActionBarHud hud = (ActionBarHud) HudManager.getInstance().get(ActionBarHud.ID);
         if(hud.isEnabled()){
             hud.setActionBar(text, color);
             return 0;
@@ -53,7 +53,7 @@ public abstract class InGameHudMixin {
 
     @Inject(method = "renderBossBar", at = @At("HEAD"), cancellable = true)
     public void CustomBossBar(CallbackInfo ci){
-        BossBarHud hud = (BossBarHud) HudManager.getINSTANCE().get(BossBarHud.ID);
+        BossBarHud hud = (BossBarHud) HudManager.getInstance().get(BossBarHud.ID);
         if(hud.isEnabled()){
             ci.cancel();
         }

@@ -13,12 +13,12 @@ public abstract class RenderDataMixin {
 
     @Redirect(method = "method_804", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerEntity;yaw:F"))
     private static float freelook$getYaw(PlayerEntity entity) {
-        return Freelook.INSTANCE.yaw(entity.yaw);
+        return Freelook.getInstance().yaw(entity.yaw);
     }
 
     @Redirect(method = "method_804", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerEntity;pitch:F"))
     private static float freelook$getPitch(PlayerEntity entity) {
-        return Freelook.INSTANCE.pitch(entity.pitch);
+        return Freelook.getInstance().pitch(entity.pitch);
     }
 
 }

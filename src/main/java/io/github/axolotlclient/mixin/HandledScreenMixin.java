@@ -18,9 +18,9 @@ public abstract class HandledScreenMixin {
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;popMatrix()V"))
     public void resetScrollOnSlotChange(int mouseX, int mouseY, float tickDelta, CallbackInfo ci){
 
-        if(ScrollableTooltips.instance.enabled.get() && cachedSlot != focusedSlot){
+        if(ScrollableTooltips.getInstance().enabled.get() && cachedSlot != focusedSlot){
             cachedSlot = focusedSlot;
-            ScrollableTooltips.instance.resetScroll();
+            ScrollableTooltips.getInstance().resetScroll();
         }
 
     }

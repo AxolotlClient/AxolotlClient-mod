@@ -148,7 +148,7 @@ public abstract class GameRendererMixin {
 
     @Inject(method = "renderDebugCrosshair", at = @At("HEAD"), cancellable = true)
     public void customCrosshairF3(float tickDelta, CallbackInfo ci){
-        CrosshairHud hud = (CrosshairHud) HudManager.getINSTANCE().get(CrosshairHud.ID);
+        CrosshairHud hud = (CrosshairHud) HudManager.getInstance().get(CrosshairHud.ID);
         if(hud.isEnabled() && this.client.options.debugEnabled
                 && !this.client.options.hudHidden
                 && hud.showInF3.get()) {
@@ -172,7 +172,7 @@ public abstract class GameRendererMixin {
         this.client.profiler.push("Motion Blur");
 
         if(AxolotlClient.CONFIG.motionBlurEnabled.get() && GLX.shadersSupported) {
-            MotionBlur blur = (MotionBlur) AxolotlClient.modules.get(MotionBlur.ID);
+            MotionBlur blur = MotionBlur.getInstance();
             blur.onUpdate();
             blur.shader.render(tickDelta);
         }
@@ -182,7 +182,7 @@ public abstract class GameRendererMixin {
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/ClientPlayerEntity;increaseTransforms(FF)V"))
     public void updateFreelook(ClientPlayerEntity entity, float yaw, float pitch) {
-        Freelook freelook = Freelook.INSTANCE;
+        Freelook freelook = Freelook.getInstance();
 
         if(freelook.consumeRotation(yaw, pitch)) return;
 
@@ -191,21 +191,21 @@ public abstract class GameRendererMixin {
 
     @Redirect(method = "transformCamera", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;yaw:F"))
     public float freelook$yaw(Entity entity) {
-        return Freelook.INSTANCE.yaw(entity.yaw);
+        return Freelook.getInstance().yaw(entity.yaw);
     }
 
     @Redirect(method = "transformCamera", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;prevYaw:F"))
     public float freelook$prevYaw(Entity entity) {
-        return Freelook.INSTANCE.yaw(entity.prevYaw);
+        return Freelook.getInstance().yaw(entity.prevYaw);
     }
 
     @Redirect(method = "transformCamera", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;pitch:F"))
     public float freelook$pitch(Entity entity) {
-        return Freelook.INSTANCE.pitch(entity.pitch);
+        return Freelook.getInstance().pitch(entity.pitch);
     }
 
     @Redirect(method = "transformCamera", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;prevPitch:F"))
     public float freelook$prevPitch(Entity entity) {
-        return Freelook.INSTANCE.pitch(entity.prevPitch);
+        return Freelook.getInstance().pitch(entity.prevPitch);
     }
 }

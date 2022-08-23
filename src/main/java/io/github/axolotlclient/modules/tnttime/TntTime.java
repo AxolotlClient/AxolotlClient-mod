@@ -16,7 +16,7 @@ import java.text.DecimalFormat;
 public class TntTime extends AbstractModule {
 
     public static Identifier ID = new Identifier("tnttime");
-    public static TntTime Instance = new TntTime();
+    private static final TntTime Instance = new TntTime();
 
     private DecimalFormat format = new DecimalFormat("##");
     private int decimals;
@@ -24,6 +24,10 @@ public class TntTime extends AbstractModule {
     private final OptionCategory category = new OptionCategory("tnttime");
     public final BooleanOption enabled = new BooleanOption("enabled", false);
     private final IntegerOption decimalPlaces = new IntegerOption("decimalPlaces", 2, 0, 6);
+
+    public static TntTime getInstance() {
+        return Instance;
+    }
 
     @Override
     public void init() {

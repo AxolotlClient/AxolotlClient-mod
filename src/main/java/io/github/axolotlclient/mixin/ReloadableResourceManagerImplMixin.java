@@ -28,8 +28,8 @@ public abstract class ReloadableResourceManagerImplMixin {
 
         AxolotlClient.packs=resourcePacks;
 
-        PackDisplayHud hud = (PackDisplayHud) HudManager.getINSTANCE().get(PackDisplayHud.ID);
-        if(hud.isEnabled()){
+        PackDisplayHud hud = (PackDisplayHud) HudManager.getInstance().get(PackDisplayHud.ID);
+        if(hud != null && hud.isEnabled()){
             hud.widgets.clear();
             hud.init();
         }

@@ -27,7 +27,10 @@ public class SkyResourceManager{
     public static List<ResourcePack> packs;
 
     public static void reload(List<ResourcePack> resourcePacks) {
-        if(!AxolotlClient.CONFIG.customSky.get())return;
+        if(!AxolotlClient.CONFIG.customSky.get()){
+            SkyboxManager.getInstance().clearSkyboxes();
+            return;
+        }
         SkyLoadingScreen loadingScreen = new SkyLoadingScreen();
         loadingScreen.render();
         SkyboxManager.getInstance().clearSkyboxes();

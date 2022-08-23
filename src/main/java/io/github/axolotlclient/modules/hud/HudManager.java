@@ -36,11 +36,7 @@ public class HudManager extends AbstractModule {
 
     static KeyBinding key = new KeyBinding("key.openHud", 54, "category.axolotlclient");
 
-    public void save(){
-
-    }
-
-    public static HudManager getINSTANCE(){
+    public static HudManager getInstance(){
         return INSTANCE;
     }
 
@@ -82,7 +78,7 @@ public class HudManager extends AbstractModule {
     @Override
     public void tick(){
         if(key.isPressed()) MinecraftClient.getInstance().openScreen(new HudEditScreen());
-        INSTANCE.entries.forEach((identifier, abstractHudEntry) -> {
+        entries.values().forEach(abstractHudEntry -> {
             if(abstractHudEntry.tickable())abstractHudEntry.tick();
         });
     }

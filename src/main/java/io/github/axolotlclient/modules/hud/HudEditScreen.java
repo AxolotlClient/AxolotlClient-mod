@@ -37,7 +37,7 @@ public class HudEditScreen extends Screen {
     public HudEditScreen(Screen parent){
         snapping.setDefaults();
         updateSnapState();
-        manager = HudManager.getINSTANCE();
+        manager = HudManager.getInstance();
         mouseDown = false;
         this.parent=parent;
     }
@@ -170,11 +170,6 @@ public class HudEditScreen extends Screen {
         if(current!=null && current.tickable()) {
             current.tick();
         }
-    }
-
-    @Override
-    public void removed() {
-        manager.save();
     }
 
     @Override

@@ -11,7 +11,6 @@ import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.client.gui.hud.ChatHudLine;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -53,7 +52,7 @@ public abstract class ChatHudMixin {
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;fill(IIIII)V", ordinal = 0))
     public void noBg(int x, int y, int x2, int y2, int color) {
-        io.github.axolotlclient.modules.hud.gui.hud.ChatHud hud = (io.github.axolotlclient.modules.hud.gui.hud.ChatHud) HudManager.getINSTANCE().get(io.github.axolotlclient.modules.hud.gui.hud.ChatHud.ID);
+        io.github.axolotlclient.modules.hud.gui.hud.ChatHud hud = (io.github.axolotlclient.modules.hud.gui.hud.ChatHud) HudManager.getInstance().get(io.github.axolotlclient.modules.hud.gui.hud.ChatHud.ID);
         if(hud.background.get()) {
             DrawableHelper.fill(x, y, x2, y2, color);
         }
@@ -61,7 +60,7 @@ public abstract class ChatHudMixin {
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
     public void render(int ticks, CallbackInfo ci){
-        io.github.axolotlclient.modules.hud.gui.hud.ChatHud hud = (io.github.axolotlclient.modules.hud.gui.hud.ChatHud) HudManager.getINSTANCE().get(io.github.axolotlclient.modules.hud.gui.hud.ChatHud.ID);
+        io.github.axolotlclient.modules.hud.gui.hud.ChatHud hud = (io.github.axolotlclient.modules.hud.gui.hud.ChatHud) HudManager.getInstance().get(io.github.axolotlclient.modules.hud.gui.hud.ChatHud.ID);
         if(hud.isEnabled()){
             hud.ticks = ticks;
             ci.cancel();
@@ -70,7 +69,7 @@ public abstract class ChatHudMixin {
 
     @Inject(method = "getTextAt", at = @At("HEAD"), cancellable = true)
     public void getTextAt(int x, int y, CallbackInfoReturnable<Text> cir){
-        io.github.axolotlclient.modules.hud.gui.hud.ChatHud hud = (io.github.axolotlclient.modules.hud.gui.hud.ChatHud) HudManager.getINSTANCE().get(io.github.axolotlclient.modules.hud.gui.hud.ChatHud.ID);
+        io.github.axolotlclient.modules.hud.gui.hud.ChatHud hud = (io.github.axolotlclient.modules.hud.gui.hud.ChatHud) HudManager.getInstance().get(io.github.axolotlclient.modules.hud.gui.hud.ChatHud.ID);
         if(hud!=null && hud.isEnabled()) {
             DrawPosition pos = Util.toMCCoords(x, y);
             cir.setReturnValue(hud.getTextAt(pos.x, pos.y));
@@ -79,7 +78,7 @@ public abstract class ChatHudMixin {
 
     @ModifyConstant(method = "addMessage(Lnet/minecraft/text/Text;IIZ)V", constant = @Constant(intValue = 100), expect = 2)
     public int moreChatHistory(int constant){
-        io.github.axolotlclient.modules.hud.gui.hud.ChatHud hud = (io.github.axolotlclient.modules.hud.gui.hud.ChatHud) HudManager.getINSTANCE().get(io.github.axolotlclient.modules.hud.gui.hud.ChatHud.ID);
+        io.github.axolotlclient.modules.hud.gui.hud.ChatHud hud = (io.github.axolotlclient.modules.hud.gui.hud.ChatHud) HudManager.getInstance().get(io.github.axolotlclient.modules.hud.gui.hud.ChatHud.ID);
         int length = hud.chatHistory.get();
 
         if(length == hud.chatHistory.getMax()){

@@ -16,7 +16,6 @@ import io.github.axolotlclient.modules.rpc.DiscordRPC;
 import io.github.axolotlclient.modules.scrollableTooltips.ScrollableTooltips;
 import io.github.axolotlclient.modules.tnttime.TntTime;
 import io.github.axolotlclient.modules.zoom.Zoom;
-import io.github.axolotlclient.util.Util;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
@@ -50,7 +49,7 @@ public class AxolotlClient implements ClientModInitializer {
 
     public static final OptionCategory config = new OptionCategory(new Identifier("storedOptions"), "storedOptions");
     public static final BooleanOption someNiceBackground = new BooleanOption("defNoSecret", false);
-    public static final HashMap<Identifier, AbstractModule> modules = new HashMap<>();
+    public static final List<AbstractModule> modules = new ArrayList<>();
 
     public static Integer tickTime = 0;
 
@@ -62,14 +61,14 @@ public class AxolotlClient implements ClientModInitializer {
 
         getModules();
         CONFIG.init();
-        modules.values().forEach(AbstractModule::init);
+        modules.forEach(AbstractModule::init);
 
         CONFIG.config.addAll(CONFIG.getCategories());
         CONFIG.config.add(config);
 
         ConfigManager.load();
 
-        modules.values().forEach(AbstractModule::lateInit);
+        modules.forEach(AbstractModule::lateInit);
 
         FabricLoader.getInstance().getModContainer("axolotlclient").ifPresent(modContainer -> {
             Optional<Path> optional = modContainer.findPath("resourcepacks/AxolotlClientUI.zip");
@@ -81,14 +80,14 @@ public class AxolotlClient implements ClientModInitializer {
     }
 
     public static void getModules(){
-        modules.put(Zoom.ID, new Zoom());
-        modules.put(HudManager.ID, HudManager.getINSTANCE());
-        modules.put(HypixelMods.ID, HypixelMods.INSTANCE);
-        modules.put(MotionBlur.ID, new MotionBlur());
-        modules.put(ScrollableTooltips.ID, ScrollableTooltips.instance);
-        modules.put(DiscordRPC.ID, DiscordRPC.getInstance());
-        modules.put(Freelook.ID, Freelook.INSTANCE);
-        modules.put(TntTime.ID, TntTime.Instance);
+        modules.add(Zoom.getInstance());
+        modules.add(HudManager.getInstance());
+        modules.add(HypixelMods.getInstance());
+        modules.add(MotionBlur.getInstance());
+        modules.add(ScrollableTooltips.getInstance());
+        modules.add(DiscordRPC.getInstance());
+        modules.add(Freelook.getInstance());
+        modules.add(TntTime.getInstance());
     }
 
     public static boolean isUsingClient(UUID uuid){
@@ -102,7 +101,7 @@ public class AxolotlClient implements ClientModInitializer {
 
 
     public static void tickClient(){
-        modules.values().forEach(AbstractModule::tick);
+        modules.forEach(AbstractModule::tick);
 
         Color.tickChroma();
 
@@ -117,7 +116,7 @@ public class AxolotlClient implements ClientModInitializer {
     }
 
     public static void addBadge(Entity entity){
-        if(entity instanceof PlayerEntity){
+        if(entity instanceof PlayerEntity && !entity.isSneaking()){
 
             if(AxolotlClient.CONFIG.showBadges.get() && AxolotlClient.isUsingClient(entity.getUuid())) {
                 GlStateManager.alphaFunc(516, 0.1F);

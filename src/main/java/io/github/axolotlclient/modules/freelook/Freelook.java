@@ -17,7 +17,7 @@ import net.minecraft.util.Identifier;
 public class Freelook extends AbstractModule {
 
     public static final Identifier ID = new Identifier("freelook");
-    public static final Freelook INSTANCE = new Freelook();
+    private static final Freelook INSTANCE = new Freelook();
     private static final KeyBinding KEY = new KeyBinding("key.freelook", Keyboard.KEY_V, "category.axolotlclient");
 
     private final MinecraftClient client = MinecraftClient.getInstance();
@@ -31,6 +31,10 @@ public class Freelook extends AbstractModule {
     private final BooleanOption invert = new BooleanOption("invert", false);
 
     private int previousPerspective;
+
+    public static Freelook getInstance() {
+        return INSTANCE;
+    }
 
     @Override
     public void init() {

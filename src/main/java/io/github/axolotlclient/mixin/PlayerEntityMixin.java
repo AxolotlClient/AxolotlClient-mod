@@ -22,10 +22,15 @@ public abstract class PlayerEntityMixin extends Entity {
     @Inject(method = "method_3216", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;initializeAttribute(Lnet/minecraft/entity/attribute/EntityAttribute;)Lnet/minecraft/entity/attribute/EntityAttributeInstance;"))
     public void getReach(Entity entity, CallbackInfo ci){
         if((Object)this == MinecraftClient.getInstance().player || entity.equals(MinecraftClient.getInstance().player)){
-            ReachDisplayHud hud = (ReachDisplayHud) HudManager.getINSTANCE().get(ReachDisplayHud.ID);
+            ReachDisplayHud hud = (ReachDisplayHud) HudManager.getInstance().get(ReachDisplayHud.ID);
             if(hud != null && hud.isEnabled()){
                 hud.updateDistance(Util.calculateDistance(super.getPos(), entity.getPos()));
             }
         }
+    }
+
+    @Inject(method = "method_3216", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;method_6150(Lnet/minecraft/entity/Entity;)V"))
+    public void alwaysCrit(Entity entity, CallbackInfo ci){
+        MinecraftClient.getInstance().player.addCritParticles(entity);
     }
 }

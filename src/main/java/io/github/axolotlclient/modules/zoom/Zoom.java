@@ -34,6 +34,11 @@ public class Zoom extends AbstractModule {
 
     public static final Identifier ID = new Identifier("zoom");
 
+    private static final Zoom Instance = new Zoom();
+    public static Zoom getInstance() {
+        return Instance;
+    }
+
     @Override
     public void init() {
         zoom.add(zoomDivisor);
