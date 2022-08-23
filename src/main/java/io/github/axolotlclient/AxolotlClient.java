@@ -26,6 +26,7 @@ import net.minecraft.resource.Resource;
 import net.minecraft.resource.pack.ResourcePack;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.loader.api.QuiltLoader;
@@ -143,7 +144,7 @@ public class AxolotlClient implements ClientModInitializer {
 	}
 
 	public static void addBadge(Entity entity, MatrixStack matrices){
-		if(entity instanceof PlayerEntity){
+		if(entity instanceof PlayerEntity && !entity.isSneaky()){
 
 			if(AxolotlClient.CONFIG.showBadges.get() && AxolotlClient.isUsingClient(entity.getUuid())) {
                 RenderSystem.enableDepthTest();
@@ -153,7 +154,7 @@ public class AxolotlClient implements ClientModInitializer {
 						entity.getUuid() == MinecraftClient.getInstance().player.getUuid()?
 						(NickHider.Instance.hideOwnName.get() ? NickHider.Instance.hiddenNameSelf.get(): Team.decorateName(entity.getScoreboardTeam(), entity.getName()).getString()):
 						(NickHider.Instance.hideOtherNames.get() ? NickHider.Instance.hiddenNameOthers.get(): Team.decorateName(entity.getScoreboardTeam(), entity.getName()).getString())
-				)/2 + (AxolotlClient.CONFIG.customBadge.get() ? MinecraftClient.getInstance().textRenderer.getWidth(" "+AxolotlClient.CONFIG.badgeText.get()): 10));
+				)/2 + (AxolotlClient.CONFIG.customBadge.get() ? MinecraftClient.getInstance().textRenderer.getWidth(" "+ Formatting.strip(AxolotlClient.CONFIG.badgeText.get())): 10));
 
 				RenderSystem.setShaderColor(1, 1, 1, 1);
 

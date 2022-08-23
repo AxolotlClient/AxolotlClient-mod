@@ -89,7 +89,6 @@ public class Util {
             Formatting formatting = Formatting.byCode(s.length()>0 ? s.charAt(0) : 0);
             if(formatting != null && formatting.isModifier()){
                 modifiers.add(formatting);
-                continue;
             }
             MutableText part = Text.literal(s.length()>0 ? s.substring(1):"");
             if(formatting != null){
@@ -97,12 +96,13 @@ public class Util {
 
                 if(!modifiers.isEmpty()){
                     modifiers.forEach(part::formatted);
-                    modifiers.clear();
+                    if(formatting.equals(Formatting.RESET)) {
+                        modifiers.clear();
+                    }
                 }
             }
             text.append(part);
         }
-
         return text;
     }
 
