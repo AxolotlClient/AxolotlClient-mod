@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.config.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
+import io.github.axolotlclient.util.Util;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -54,12 +55,8 @@ public class PotionsHud extends AbstractHudEntry {
                 }
 
                 String string = I18n.translate(statusEffect.getTranslationKey());
-                 if (statusEffectInstance.getAmplifier() == 2) {
-                    string = string + " " + I18n.translate("enchantment.level.2");
-                } else if (statusEffectInstance.getAmplifier() == 3) {
-                    string = string + " " + I18n.translate("enchantment.level.3");
-                } else if (statusEffectInstance.getAmplifier() == 4) {
-                    string = string + " " + I18n.translate("enchantment.level.4");
+                 if (statusEffectInstance.getAmplifier() != 1) {
+                    string += " " + Util.toRoman(statusEffectInstance.getAmplifier());
                 }
 
                 client.textRenderer.drawWithShadow(string, (float)(i + 10 + 18), (float)(y + 6), textColor.get().getAsInt());

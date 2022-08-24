@@ -22,6 +22,8 @@ import org.lwjgl.opengl.GL11;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.util.Collections.nCopies;
+
 
 public class Util {
 
@@ -88,6 +90,20 @@ public class Util {
         String[] strings2 = new String[strings.length - 1];
         System.arraycopy(strings, 1, strings2, 0, strings.length - 1);
         return strings2;
+    }
+
+    public static String splitAtCapitalLetters(String string){
+        if(string==null || string.isEmpty()){
+            return "";
+        }
+        StringBuilder builder = new StringBuilder();
+        for(char c:string.toCharArray()){
+            if(Character.isUpperCase(c) && c != string.charAt(0)){
+                builder.append(" ");
+            }
+            builder.append(c);
+        }
+        return builder.toString();
     }
 
     public static String getGame(){
@@ -190,4 +206,23 @@ public class Util {
         return start + ((end - start) * percent);
     }
 
+    // https://stackoverflow.com/questions/12967896/converting-integers-to-roman-numerals-java
+    public static String toRoman(int number) {
+        if(number>0) {
+            return String.join("", nCopies(number, "I"))
+                    .replace("IIIII", "V")
+                    .replace("IIII", "IV")
+                    .replace("VV", "X")
+                    .replace("VIV", "IX")
+                    .replace("XXXXX", "L")
+                    .replace("XXXX", "XL")
+                    .replace("LL", "C")
+                    .replace("LXL", "XC")
+                    .replace("CCCCC", "D")
+                    .replace("CCCC", "CD")
+                    .replace("DD", "M")
+                    .replace("DCD", "CM");
+        }
+        return "";
+    }
 }

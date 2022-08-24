@@ -26,10 +26,10 @@ public abstract class OptionBase<T> implements Option {
     public abstract T get();
 
     @Override
-    public @Nullable String getTooltip() {
+    public @Nullable String getTooltipLocation() {
         if(tooltipKeyPrefix != null)
-            return Option.super.getTooltip(tooltipKeyPrefix +"."+ getName());
-        else return Option.super.getTooltip();
+            return tooltipKeyPrefix +"."+ name;
+        else return name;
     }
 
     public String getName(){

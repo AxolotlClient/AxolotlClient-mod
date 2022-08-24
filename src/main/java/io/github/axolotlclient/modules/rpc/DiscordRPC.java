@@ -97,8 +97,12 @@ public class DiscordRPC extends AbstractModule {
                 callBacks.start();
                 AxolotlClient.LOGGER.info("Started RPC Core");
             } catch (Exception e) {
-                AxolotlClient.LOGGER.error("An error occured: ");
-                e.printStackTrace();
+                if(!e.getMessage().contains("INTERNAL_ERROR")) {
+                    AxolotlClient.LOGGER.error("An error occured: ");
+                    e.printStackTrace();
+                } else {
+                    enabled.set(false);
+                }
             }
         }
     }

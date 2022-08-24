@@ -51,6 +51,14 @@ shiftHorizontalScroll.tooltip=Allow scrolling horizontally if the specific key <
 scrollAmount=Scroll Amount
 scrollAmount.tooltip=On scrolling, move the tooltip around this amount.
 tnttime=TntTime
+particles=Particles
+particles.color.tooltip=The color of the particle. <br>Needs "Custom Color" enabled.
+count=Multiplier
+count.tooltip=How much to increase the amount of particles spawned.<br>Only works on EmitterParticles <br>(all that spread out and consist of usually 16 single ones, <br>e.g. Crit Particles).
+customColor=Custom Color
+customColor.tooltip=Whether to use a custom color for this Particle.
+alwaysCrit=Always Show
+alwaysCrit.tooltip=Whether to always emit these particles when hitting.
 
 nametagOptions=Nametag Options
 showOwnNametag=Show Own Nametag
@@ -90,7 +98,7 @@ hideOtherNames.tooltip=Hides other people's names.
 hideOwnSkin=Hide your own skin
 hideOtherSkins=Hide others' skins
 autoBoop=AutoBoop
-autoBoop.enabled.tooltip=Whether to run /boop <player> when a friend of yours joins hypixel.
+autoBoop.enabled.tooltip=Whether to run /boop <player> <br>when a friend of yours joins hypixel.
 
 category.axolotlclient=AxolotlClient
 

@@ -32,10 +32,19 @@ public class BooleanWidget extends ButtonWidget {
 
     @Override
     public boolean isMouseOver(MinecraftClient client, int mouseX, int mouseY) {
-        if(MinecraftClient.getInstance().currentScreen instanceof OptionsScreenBuilder &&
-                ((OptionsScreenBuilder) MinecraftClient.getInstance().currentScreen).isPickerOpen()) return false;
+        if(canHover()) {
+            return mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
+        }
+        return false;
+    }
 
-        return mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
+    protected boolean canHover(){
+        if(MinecraftClient.getInstance().currentScreen instanceof OptionsScreenBuilder &&
+                ((OptionsScreenBuilder) MinecraftClient.getInstance().currentScreen).isPickerOpen()){
+            this.hovered = false;
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -58,7 +67,7 @@ public class BooleanWidget extends ButtonWidget {
     }
 
     private void renderSwitch(){
-        int x = option.get() ? this.x + width - width/5: this.x;
+        int x = option.get() ? this.x + width - 8: this.x;
         this.drawTexture(x, this.y, 0, 66 + (hovered ? 20:0), 4, this.height/2);
         this.drawTexture(x, this.y + height/2, 0, 86 - height/2 + (hovered ? 20:0), 4, this.height/2);
         this.drawTexture(x + 4, this.y, 200 - 4, 66 + (hovered ? 20:0), 4, this.height);

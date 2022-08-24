@@ -1,9 +1,12 @@
 package io.github.axolotlclient.mixin;
 
+import io.github.axolotlclient.config.options.BooleanOption;
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hud.gui.hud.ReachDisplayHud;
+import io.github.axolotlclient.modules.particles.Particles;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.particle.ParticleType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
@@ -31,6 +34,11 @@ public abstract class PlayerEntityMixin extends Entity {
 
     @Inject(method = "method_3216", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;method_6150(Lnet/minecraft/entity/Entity;)V"))
     public void alwaysCrit(Entity entity, CallbackInfo ci){
-        MinecraftClient.getInstance().player.addCritParticles(entity);
+        if(((BooleanOption)Particles.getInstance().particleOptions.get(ParticleType.CRIT).get("alwaysCrit")).get()) {
+            MinecraftClient.getInstance().player.addCritParticles(entity);
+        }
+        if(((BooleanOption)Particles.getInstance().particleOptions.get(ParticleType.CRIT_MAGIC).get("alwaysCrit")).get()) {
+            MinecraftClient.getInstance().player.addEnchantedHitParticles(entity);
+        }
     }
 }

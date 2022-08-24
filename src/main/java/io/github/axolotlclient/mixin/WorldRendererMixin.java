@@ -199,21 +199,14 @@ public abstract class WorldRendererMixin {
     @Inject(method = "method_1380", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;color4f(FFFF)V", shift = At.Shift.AFTER))
     public void customOutlineColor(PlayerEntity playerEntity, BlockHitResult blockHitResult, int i, float f, CallbackInfo ci){
         if(AxolotlClient.CONFIG.enableCustomOutlines.get()){
-            if(AxolotlClient.CONFIG.outlineChroma.get()){
-                GlStateManager.color4f(AxolotlClient.CONFIG.outlineColor.getChroma().getRed(),
-                        AxolotlClient.CONFIG.outlineColor.getChroma().getGreen(),
-                        AxolotlClient.CONFIG.outlineColor.getChroma().getBlue(),
-                        AxolotlClient.CONFIG.outlineColor.getChroma().getAlpha());
-            } else {
-                GlStateManager.clearColor();
+            GlStateManager.clearColor();
 
-                int color = AxolotlClient.CONFIG.outlineColor.get().getAsInt();
-                float a = (float)(color >> 24 & 0xFF) / 255.0F;
-                float r = (float)(color >> 16 & 0xFF) / 255.0F;
-                float g = (float)(color >> 8 & 0xFF) / 255.0F;
-                float b = (float)(color & 0xFF) / 255.0F;
-                GlStateManager.color4f(r,g,b,a);
-            }
+            int color = AxolotlClient.CONFIG.outlineColor.get().getAsInt();
+            float a = (float)(color >> 24 & 0xFF) / 255.0F;
+            float r = (float)(color >> 16 & 0xFF) / 255.0F;
+            float g = (float)(color >> 8 & 0xFF) / 255.0F;
+            float b = (float)(color & 0xFF) / 255.0F;
+            GlStateManager.color4f(r,g,b,a);
         }
     }
 }

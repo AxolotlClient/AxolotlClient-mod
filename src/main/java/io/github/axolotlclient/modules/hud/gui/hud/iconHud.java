@@ -26,8 +26,7 @@ public class iconHud extends AbstractHudEntry {
         scale();
         DrawPosition pos = getPos();
         this.client.getTextureManager().bindTexture(AxolotlClient.badgeIcon);
-        if(chroma.get())GlStateManager.color4f(textColor.getChroma().getRed(), textColor.getChroma().getGreen(), textColor.getChroma().getBlue(), 1F);
-        else {GlStateManager.color4f(color.get().getRed(), color.get().getGreen(), color.get().getBlue(), 1F);}
+        GlStateManager.color4f(color.get().getRed(), color.get().getGreen(), color.get().getBlue(), 1F);
         drawTexture(pos.x, pos.y, 0, 0, width, height, width, height);
 
         GlStateManager.popMatrix();
@@ -61,6 +60,5 @@ public class iconHud extends AbstractHudEntry {
     public void addConfigOptions(List<OptionBase<?>> options) {
         super.addConfigOptions(options);
         options.add(color);
-        options.add(chroma);
     }
 }

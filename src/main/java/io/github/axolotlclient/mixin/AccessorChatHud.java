@@ -14,9 +14,6 @@ public interface AccessorChatHud {
     int getScrolledLines();
 
     @Accessor
-    boolean getHasUnreadNewMessages();
-
-    @Accessor
     List<ChatHudLine> getMessages();
 
     @Accessor

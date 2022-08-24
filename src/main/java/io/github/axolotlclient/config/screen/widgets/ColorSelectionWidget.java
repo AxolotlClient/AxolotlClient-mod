@@ -2,6 +2,7 @@ package io.github.axolotlclient.config.screen.widgets;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.config.Color;
+import io.github.axolotlclient.config.options.BooleanOption;
 import io.github.axolotlclient.config.options.ColorOption;
 import io.github.axolotlclient.config.options.IntegerOption;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
@@ -33,6 +34,9 @@ public class ColorSelectionWidget extends ButtonWidget {
     protected Rectangle pickerImage;
     protected Rectangle currentRect;
     protected Rectangle pickerOutline;
+
+    protected BooleanOption chroma = new BooleanOption("chroma", false);
+    protected BooleanWidget chromaWidget;
 
     protected IntegerOption alpha = new IntegerOption("alpha", 0, 0, 255);
     protected OptionSliderWidget alphaSlider;
@@ -67,6 +71,8 @@ public class ColorSelectionWidget extends ButtonWidget {
         pickerOutline = new Rectangle(pickerImage.x-1, pickerImage.y-1, pickerImage.width+2, pickerImage.height+2);
         currentRect = new Rectangle(pickerImage.x + pickerImage.width + 20, pickerImage.y + 10, width - pickerImage.width - 60, 20);
 
+        chroma.set(option.getChroma());
+
         alpha.set(option.get().getAlpha());
 
         slidersVisible = height>175;
@@ -76,6 +82,18 @@ public class ColorSelectionWidget extends ButtonWidget {
             green.set(option.get().getGreen());
             blue.set(option.get().getBlue());
         }
+
+        chromaWidget = new BooleanWidget(0, currentRect.x, currentRect.y + currentRect.height + 40, currentRect.width, 20, chroma){
+            @Override
+            protected boolean canHover() {
+                return true;
+            }
+
+            @Override
+            public void updateMessage() {
+                this.message = option.getTranslatedName() + ": " + (option.get()? I18n.translate ("options."+"on"): I18n.translate ("options."+"off"));
+            }
+        };
 
         alphaSlider = new OptionSliderWidget(0, pickerImage.x, pickerImage.y + pickerImage.height + 20, pickerImage.width, 20, alpha){
 
@@ -92,7 +110,7 @@ public class ColorSelectionWidget extends ButtonWidget {
 
         if(slidersVisible) {
 
-            redSlider = new OptionSliderWidget(0, currentRect.x, currentRect.y + currentRect.height + 40, currentRect.width, 20, red) {
+            redSlider = new OptionSliderWidget(0, currentRect.x, currentRect.y + currentRect.height + 65, currentRect.width, 20, red) {
 
                 @Override
                 protected boolean canHover() {
@@ -104,7 +122,7 @@ public class ColorSelectionWidget extends ButtonWidget {
                     return getOption().getTranslatedName() + ": " + super.getMessage();
                 }
             };
-            greenSlider = new OptionSliderWidget(0, currentRect.x, currentRect.y + currentRect.height + 65, currentRect.width, 20, green) {
+            greenSlider = new OptionSliderWidget(0, currentRect.x, currentRect.y + currentRect.height + 90, currentRect.width, 20, green) {
 
                 @Override
                 protected boolean canHover() {
@@ -116,7 +134,7 @@ public class ColorSelectionWidget extends ButtonWidget {
                     return getOption().getTranslatedName() + ": " + super.getMessage();
                 }
             };
-            blueSlider = new OptionSliderWidget(0, currentRect.x, currentRect.y + currentRect.height + 90, currentRect.width, 20, blue) {
+            blueSlider = new OptionSliderWidget(0, currentRect.x, currentRect.y + currentRect.height + 115, currentRect.width, 20, blue) {
 
                 @Override
                 protected boolean canHover() {
@@ -152,6 +170,8 @@ public class ColorSelectionWidget extends ButtonWidget {
         MinecraftClient.getInstance().getTextureManager().bindTexture(wheel);
         DrawableHelper.drawTexture(pickerImage.x, pickerImage.y, 0, 0, pickerImage.width, pickerImage.height, pickerImage.width, pickerImage.height);
         DrawUtil.outlineRect(pickerOutline, Color.DARK_GRAY);
+
+        chromaWidget.render(client, mouseX, mouseY);
 
         alphaSlider.render(client, mouseX, mouseY);
 
@@ -243,6 +263,10 @@ public class ColorSelectionWidget extends ButtonWidget {
                 greenSlider.update();
                 blueSlider.update();
             }
+
+        } else if (chromaWidget.isMouseOver(MinecraftClient.getInstance(), mouseX, mouseY)) {
+            chromaWidget.mouseClicked(mouseX, mouseY, 0);
+            option.setChroma(chroma.get());
 
         } else if (alphaSlider.isMouseOver(MinecraftClient.getInstance(), mouseX, mouseY)) {
             option.set(new Color(option.get().getRed(), option.get().getGreen(), option.get().getBlue(), alpha.get()));
