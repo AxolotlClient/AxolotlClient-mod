@@ -65,9 +65,6 @@
 	"count": "Çoğaltacı",
 	"count.tooltip": "Doğan parçacıkların adeti ne kadar arttırılmalı.<br>Sadece Yayılan Parçacıklar ile çalışıyor <br>(etrafa yayılan hepsi ve genellikle 16 taneden oluşan, <br>Kritik Vuruş Parçacıkları v.b.).",
 
-	"nametagOptions": "Nametag Options",
-	"showOwnNametag": "Show Own Nametag",
-
 	"nametagOptions": "Takma Ad Seçenekleri",
 	"showOwnNametag": "Kendi Takma Adı'nı göster",
 	"useShadows": "Gölgeleri Zorla",
