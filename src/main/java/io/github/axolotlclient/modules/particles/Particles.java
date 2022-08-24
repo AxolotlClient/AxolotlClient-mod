@@ -10,10 +10,7 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleType;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Particles extends AbstractModule {
@@ -41,7 +38,7 @@ public class Particles extends AbstractModule {
     private void addParticleOptions(){
         for(ParticleType type : Arrays.stream(ParticleType.values()).sorted(new AlphabeticalComparator()).collect(Collectors.toList())){
             OptionCategory category = new OptionCategory(StringUtils.capitalize(Util.splitAtCapitalLetters(type.getName().replace("_", ""))));
-            HashMap<String, OptionBase<?>> optionsByKey = new HashMap<>();
+            HashMap<String, OptionBase<?>> optionsByKey = new LinkedHashMap<>();
 
             populateMap(optionsByKey,
                     new IntegerOption("count", 1, 1, 20),

@@ -10,21 +10,18 @@ import io.github.axolotlclient.modules.hypixel.autogg.AutoGG;
 import io.github.axolotlclient.modules.hypixel.autotip.AutoTip;
 import io.github.axolotlclient.modules.hypixel.levelhead.LevelHead;
 import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
-import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class HypixelMods extends AbstractModule {
 
-    public static final Identifier ID = new Identifier("hypixel");
-
     public static final HypixelMods INSTANCE = new HypixelMods();
 
     public StringOption hypixel_api_key = new StringOption("hypixel_api_key", "");
     public EnumOption cacheMode = new EnumOption("cache_mode", HypixelApiCacheMode.values(), HypixelApiCacheMode.ON_CLIENT_DISCONNECT.toString());
 
-    private final OptionCategory category = new OptionCategory(ID, "hypixel-mods");
+    private final OptionCategory category = new OptionCategory("hypixel-mods");
     private final List<AbstractHypixelMod> subModules = new ArrayList<>();
 
     @Override

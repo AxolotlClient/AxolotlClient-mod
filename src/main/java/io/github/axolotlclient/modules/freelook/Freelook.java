@@ -1,10 +1,8 @@
 package io.github.axolotlclient.modules.freelook;
 
-import io.github.axolotlclient.config.options.DisableReason;
-import org.lwjgl.input.Keyboard;
-
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.config.options.BooleanOption;
+import io.github.axolotlclient.config.options.DisableReason;
 import io.github.axolotlclient.config.options.EnumOption;
 import io.github.axolotlclient.config.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
@@ -12,11 +10,10 @@ import net.legacyfabric.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.options.KeyBinding;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.Identifier;
+import org.lwjgl.input.Keyboard;
 
 public class Freelook extends AbstractModule {
 
-    public static final Identifier ID = new Identifier("freelook");
     private static final Freelook INSTANCE = new Freelook();
     private static final KeyBinding KEY = new KeyBinding("key.freelook", Keyboard.KEY_V, "category.axolotlclient");
 
@@ -25,7 +22,7 @@ public class Freelook extends AbstractModule {
     private float yaw, pitch;
     private boolean active;
 
-    private final OptionCategory category = new OptionCategory(ID, ID.getPath());
+    private final OptionCategory category = new OptionCategory("freelook");
     private final BooleanOption enabled = new BooleanOption("enabled", false);
     private final EnumOption perspective = new EnumOption("perspective", Perspective.values(), Perspective.THIRD_PERSON_BACK.toString());
     private final BooleanOption invert = new BooleanOption("invert", false);

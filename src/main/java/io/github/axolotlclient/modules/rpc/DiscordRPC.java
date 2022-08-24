@@ -14,7 +14,6 @@ import io.github.axolotlclient.modules.rpc.gameSdk.GameSdkDownloader;
 import io.github.axolotlclient.util.OSUtil;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.util.Identifier;
 
 import java.time.Instant;
 
@@ -27,8 +26,6 @@ import java.time.Instant;
 public class DiscordRPC extends AbstractModule {
 
     private static DiscordRPC Instance;
-
-    public static final Identifier ID = new Identifier("axolotlclient", "rpc");
 
     public OptionCategory category = new OptionCategory("rpc");
 

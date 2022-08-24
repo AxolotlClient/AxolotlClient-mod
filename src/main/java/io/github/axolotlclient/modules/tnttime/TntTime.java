@@ -9,13 +9,11 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
 
 import java.text.DecimalFormat;
 
 public class TntTime extends AbstractModule {
 
-    public static Identifier ID = new Identifier("tnttime");
     private static final TntTime Instance = new TntTime();
 
     private DecimalFormat format = new DecimalFormat("##");

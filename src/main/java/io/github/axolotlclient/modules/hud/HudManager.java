@@ -25,8 +25,6 @@ import java.util.stream.Collectors;
 
 public class HudManager extends AbstractModule {
 
-    public static final Identifier ID = new Identifier("hud");
-
     private final Map<Identifier, AbstractHudEntry> entries = new HashMap<>();
 
     private final OptionCategory hudCategory = new OptionCategory(new Identifier("hud"), "hud");
