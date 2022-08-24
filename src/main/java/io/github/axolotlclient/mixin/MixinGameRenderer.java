@@ -126,7 +126,7 @@ public abstract class MixinGameRenderer {
         this.client.getProfiler().push("Motion Blur");
 
         if(AxolotlClient.CONFIG.motionBlurEnabled.get()) {
-            MotionBlur blur = (MotionBlur) AxolotlClient.modules.get(MotionBlur.ID);
+            MotionBlur blur = MotionBlur.getInstance();
             blur.onUpdate();
             blur.shader.render(tickDelta);
         }

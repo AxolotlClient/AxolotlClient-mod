@@ -36,7 +36,7 @@ public abstract class CleanHudEntry extends AbstractHudEntry {
         drawString(matrices, getValue(),
             pos.x,
             pos.y + (Math.round((float) height / 2) - 4),
-            chroma.get()? textColor.getChroma() : textColor.get(),
+            textColor.get(),
             shadow.get());
         matrices.pop();
     }
@@ -58,7 +58,6 @@ public abstract class CleanHudEntry extends AbstractHudEntry {
         super.addConfigOptions(options);
         options.add(textColor);
         options.add(textAlignment);
-        options.add(chroma);
         options.add(shadow);
         options.add(background);
         options.add(backgroundColor);

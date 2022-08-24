@@ -37,7 +37,7 @@ public abstract class MixinReloadableResourceManager {
 
 	    AxolotlClient.packs=resourcePacks;
 
-        PackDisplayHud hud = (PackDisplayHud) HudManager.getINSTANCE().get(PackDisplayHud.ID);
+        PackDisplayHud hud = (PackDisplayHud) HudManager.getInstance().get(PackDisplayHud.ID);
         if(hud.isEnabled()){
             hud.widgets.clear();
 			hud.init();

@@ -15,7 +15,7 @@ public abstract class MixinDebugHud {
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiler/Profiler;pop()V"))
     public void onRender(MatrixStack matrices, CallbackInfo ci){
 
-        CrosshairHud hud = (CrosshairHud) HudManager.getINSTANCE().get(CrosshairHud.ID);
+        CrosshairHud hud = (CrosshairHud) HudManager.getInstance().get(CrosshairHud.ID);
         if(hud.isEnabled() && hud.showInF3.get()){
             hud.render(matrices);
         }

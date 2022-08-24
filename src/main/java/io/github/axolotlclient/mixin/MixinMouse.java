@@ -22,8 +22,8 @@ public abstract class MixinMouse {
 
     @Inject(method = "onMouseScroll", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;mouseScrolled(DDD)Z"))
     public void scrollTooltips(long window, double scrollDeltaX, double scrollDeltaY, CallbackInfo ci){
-        if(ScrollableTooltips.Instance.enabled.get() && Math.signum(scrollDeltaY)!=0){
-            ScrollableTooltips.Instance.onScroll(Math.signum(scrollDeltaY) > 0);
+        if(ScrollableTooltips.getInstance().enabled.get() && Math.signum(scrollDeltaY)!=0){
+            ScrollableTooltips.getInstance().onScroll(Math.signum(scrollDeltaY) > 0);
         }
     }
 

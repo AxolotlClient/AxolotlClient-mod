@@ -13,7 +13,7 @@ public abstract class MixinBossBarHud {
 
 	@Inject(method = "render", at = @At("HEAD"), cancellable = true)
 	public void render(MatrixStack matrices, CallbackInfo ci) {
-		BossBarHud hud = (BossBarHud) HudManager.getINSTANCE().get(BossBarHud.ID);
+		BossBarHud hud = (BossBarHud) HudManager.getInstance().get(BossBarHud.ID);
 		if (hud != null && hud.isEnabled()) {
 			ci.cancel();
 		}

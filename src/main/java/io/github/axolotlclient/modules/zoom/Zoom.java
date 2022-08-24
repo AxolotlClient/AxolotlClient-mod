@@ -11,11 +11,12 @@ import io.github.axolotlclient.util.Util;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBind;
-import net.minecraft.util.Identifier;
 
 
 //Based on https://github.com/LogicalGeekBoy/logical_zoom/blob/master/src/main/java/com/logicalgeekboy/logical_zoom/LogicalZoom.java
 public class Zoom extends AbstractModule {
+
+    private static final Zoom Instance = new Zoom();
 
 	public static boolean active;
 	private static Double originalSensitivity;
@@ -36,7 +37,9 @@ public class Zoom extends AbstractModule {
 
 	public final OptionCategory zoom = new OptionCategory("zoom");
 
-	public static final Identifier ID = new Identifier("zoom");
+    public static Zoom getInstance(){
+        return Instance;
+    }
 
 	@Override
 	public void init() {

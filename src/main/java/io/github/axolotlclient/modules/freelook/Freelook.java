@@ -16,8 +16,7 @@ import net.minecraft.util.Identifier;
 
 public class Freelook extends AbstractModule {
 
-    public static final Identifier ID = new Identifier("freelook");
-    public static final Freelook INSTANCE = new Freelook();
+    private static final Freelook Instance = new Freelook();
     private static final KeyBind KEY = new KeyBind("key.freelook", InputUtil.KEY_V_CODE, "category.axolotlclient");
 
     private final MinecraftClient client = MinecraftClient.getInstance();
@@ -25,12 +24,16 @@ public class Freelook extends AbstractModule {
     private float yaw, pitch;
     public boolean active;
 
-    private final OptionCategory category = new OptionCategory(ID, ID.getPath());
+    private final OptionCategory category = new OptionCategory("freelook");
     public final BooleanOption enabled = new BooleanOption("enabled", false);
     private final EnumOption perspective = new EnumOption("perspective", Perspective.values(), Perspective.THIRD_PERSON_BACK);
     private final BooleanOption invert = new BooleanOption("invert", false);
 
     private Perspective previousPerspective;
+
+    public static Freelook getInstance(){
+        return Instance;
+    }
 
     @Override
     public void init() {

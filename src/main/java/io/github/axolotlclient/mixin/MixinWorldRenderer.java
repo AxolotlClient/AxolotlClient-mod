@@ -189,27 +189,15 @@ public abstract class MixinWorldRenderer {
     @ModifyArgs(method = "drawBlockOutline", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/WorldRenderer;drawShapeOutline(Lnet/minecraft/client/util/math/MatrixStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;Lnet/minecraft/util/shape/VoxelShape;DDDFFFF)V"))
     public void customOutlineColor(Args args){
         if(AxolotlClient.CONFIG.enableCustomOutlines.get()){
-            if(AxolotlClient.CONFIG.outlineChroma.get()){
-	            int color = AxolotlClient.CONFIG.outlineColor.getChroma().getAsInt();
-	            float a = (float)(color >> 24 & 0xFF) / 255.0F;
-	            float r = (float)(color >> 16 & 0xFF) / 255.0F;
-	            float g = (float)(color >> 8 & 0xFF) / 255.0F;
-	            float b = (float)(color & 0xFF) / 255.0F;
-	            args.set(6, r);
-	            args.set(7, g);
-	            args.set(8, b);
-	            args.set(9, a);
-            } else {
-                int color = AxolotlClient.CONFIG.outlineColor.get().getAsInt();
-                float a = (float)(color >> 24 & 0xFF) / 255.0F;
-                float r = (float)(color >> 16 & 0xFF) / 255.0F;
-                float g = (float)(color >> 8 & 0xFF) / 255.0F;
-                float b = (float)(color & 0xFF) / 255.0F;
-	            args.set(6, r);
-	            args.set(7, g);
-	            args.set(8, b);
-	            args.set(9, a);
-            }
+            int color = AxolotlClient.CONFIG.outlineColor.get().getAsInt();
+            float a = (float)(color >> 24 & 0xFF) / 255.0F;
+            float r = (float)(color >> 16 & 0xFF) / 255.0F;
+            float g = (float)(color >> 8 & 0xFF) / 255.0F;
+            float b = (float)(color & 0xFF) / 255.0F;
+            args.set(6, r);
+            args.set(7, g);
+            args.set(8, b);
+            args.set(9, a);
         }
     }
 }

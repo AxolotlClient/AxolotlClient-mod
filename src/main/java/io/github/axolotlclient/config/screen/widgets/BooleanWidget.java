@@ -25,9 +25,19 @@ public class BooleanWidget extends ButtonWidget {
 
     @Override
     public boolean isMouseOver(double mouseX, double mouseY) {
+        if(canHover()) {
+            return super.isMouseOver(mouseX, mouseY);
+        }
+        return false;
+    }
+
+    protected boolean canHover(){
         if(MinecraftClient.getInstance().currentScreen instanceof OptionsScreenBuilder &&
-            ((OptionsScreenBuilder) MinecraftClient.getInstance().currentScreen).isPickerOpen()) return false;
-        return super.isMouseOver(mouseX, mouseY);
+            ((OptionsScreenBuilder) MinecraftClient.getInstance().currentScreen).isPickerOpen()){
+            this.hovered = false;
+            return false;
+        }
+        return true;
     }
 
 	@Override
@@ -49,7 +59,7 @@ public class BooleanWidget extends ButtonWidget {
     }
 
     private void renderSwitch(MatrixStack matrixStack){
-        int x = option.get() ? this.x + width - width/5: this.x;
+        int x = option.get() ? this.x + width - 8: this.x;
         this.drawTexture(matrixStack, x, this.y, 0, 66 + (hovered ? 20:0), 4, this.height/2);
         this.drawTexture(matrixStack, x, this.y + height/2, 0, 86 - height/2 + (hovered ? 20:0), 4, this.height/2);
         this.drawTexture(matrixStack, x + 4, this.y, 200 - 4, 66 + (hovered ? 20:0), 4, this.height);

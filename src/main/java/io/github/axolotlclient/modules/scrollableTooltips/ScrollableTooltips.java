@@ -6,24 +6,25 @@ import io.github.axolotlclient.config.options.IntegerOption;
 import io.github.axolotlclient.config.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.Identifier;
 
 public class ScrollableTooltips extends AbstractModule {
-
-    public static Identifier ID = new Identifier("scrollabletooltips");
 
     public int tooltipOffsetX;
     public int tooltipOffsetY;
 
     //protected KeyBind key = new KeyBind("scrollHorizontally", InputUtil.KEY_LEFT_SHIFT_CODE, "category.axolotlclient");
 
-    public static ScrollableTooltips Instance = new ScrollableTooltips();
+    private static final ScrollableTooltips Instance = new ScrollableTooltips();
 
     private final OptionCategory category = new OptionCategory("scrollableTooltips");
 
     public final BooleanOption enabled = new BooleanOption("enabled", false);
     public final BooleanOption enableShiftHorizontalScroll = new BooleanOption("shiftHorizontalScroll", true);
     protected final IntegerOption scrollAmount = new IntegerOption("scrollAmount", 5, 1, 20);
+
+    public static ScrollableTooltips getInstance(){
+        return Instance;
+    }
 
     @Override
     public void init() {

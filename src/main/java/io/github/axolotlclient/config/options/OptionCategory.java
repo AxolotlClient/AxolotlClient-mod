@@ -11,6 +11,7 @@ import org.quiltmc.qsl.command.api.client.ClientCommandRegistrationCallback;
 import org.quiltmc.qsl.command.api.client.QuiltClientCommandSource;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class OptionCategory implements Tooltippable {
         Collections.addAll(this.options, options);
     }
 
-    public void add(List<OptionBase<?>> options){this.options.addAll(options);}
+    public void add(Collection<OptionBase<?>> options){this.options.addAll(options);}
 
     public void addSubCategory(OptionCategory category){subCategories.add(category);}
 

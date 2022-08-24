@@ -109,7 +109,7 @@ public class PackDisplayHud extends AbstractHudEntry {
             RenderSystem.setShaderColor(1, 1, 1, 1F);
             RenderSystem.setShaderTexture(0, texture);
             DrawableHelper.drawTexture(matrices, x, y, 0, 0, 16, 16, 16, 16);
-            drawString(matrices, MinecraftClient.getInstance().textRenderer, name, x + 18, y + 6, chroma.get()? textColor.getChroma().getAsInt() : textColor.get().getAsInt(), shadow.get());
+            drawString(matrices, MinecraftClient.getInstance().textRenderer, name, x + 18, y + 6, textColor.get().getAsInt(), shadow.get());
         }
 
     }
@@ -124,6 +124,5 @@ public class PackDisplayHud extends AbstractHudEntry {
         options.add(outlineColor);
         options.add(shadow);
         options.add(textColor);
-		options.add(chroma);
     }
 }

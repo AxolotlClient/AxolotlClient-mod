@@ -231,7 +231,6 @@ public class KeystrokeHud extends AbstractHudEntry {
     public void addConfigOptions(List<OptionBase<?>> options) {
         super.addConfigOptions(options);
         options.add(textColor);
-        options.add(chroma);
         options.add(pressedTextColor);
         options.add(shadow);
         options.add(background);
@@ -305,9 +304,9 @@ public class KeystrokeHud extends AbstractHudEntry {
         }
 
         public Color getFGColor() {
-            return key.isPressed() ? Color.blend(chroma.get()? textColor.getChroma() : textColor.get(), chroma.get()? textColor.getChroma() : pressedTextColor.get(), getPercentPressed()) :
-                    Color.blend(chroma.get()? textColor.getChroma() : pressedTextColor.get(),
-                            chroma.get()? textColor.getChroma() : textColor.get(),
+            return key.isPressed() ? Color.blend(textColor.get(), pressedTextColor.get(), getPercentPressed()) :
+                    Color.blend(pressedTextColor.get(),
+                            textColor.get(),
                             getPercentPressed());
         }
 

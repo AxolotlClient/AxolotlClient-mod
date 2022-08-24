@@ -3,6 +3,7 @@ package io.github.axolotlclient.config.screen.widgets;
 import com.mojang.blaze3d.glfw.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.config.Color;
+import io.github.axolotlclient.config.options.BooleanOption;
 import io.github.axolotlclient.config.options.ColorOption;
 import io.github.axolotlclient.config.options.IntegerOption;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
@@ -32,6 +33,9 @@ public class ColorSelectionWidget extends ButtonWidget {
     protected Rectangle pickerImage;
     protected Rectangle currentRect;
     protected Rectangle pickerOutline;
+
+    protected BooleanOption chroma = new BooleanOption("chroma", false);
+    protected BooleanWidget chromaWidget;
 
     protected IntegerOption alpha = new IntegerOption("alpha", 0, 0, 255);
     protected OptionSliderWidget alphaSlider;
@@ -66,6 +70,8 @@ public class ColorSelectionWidget extends ButtonWidget {
         pickerOutline = new Rectangle(pickerImage.x-1, pickerImage.y-1, pickerImage.width+2, pickerImage.height+2);
         currentRect = new Rectangle(pickerImage.x + pickerImage.width + 20, pickerImage.y + 10, width - pickerImage.width - 60, 20);
 
+        chroma.set(option.getChroma());
+
         alpha.set(option.get().getAlpha());
 
         slidersVisible = height>175;
@@ -75,6 +81,18 @@ public class ColorSelectionWidget extends ButtonWidget {
             green.set(option.get().getGreen());
             blue.set(option.get().getBlue());
         }
+
+        chromaWidget = new BooleanWidget(currentRect.x, currentRect.y + currentRect.height + 40, currentRect.width, 20, chroma){
+            @Override
+            protected boolean canHover() {
+                return true;
+            }
+
+            @Override
+            public Text getMessage() {
+                return option.getTranslatedName().append(": ").append(super.getMessage());
+            }
+        };
 
         alphaSlider = new OptionSliderWidget(pickerImage.x, pickerImage.y + pickerImage.height + 20, pickerImage.width, 20, alpha){
 
@@ -91,7 +109,7 @@ public class ColorSelectionWidget extends ButtonWidget {
 
         if(slidersVisible) {
 
-            redSlider = new OptionSliderWidget(currentRect.x, currentRect.y + currentRect.height + 40, currentRect.width, 20, red) {
+            redSlider = new OptionSliderWidget(currentRect.x, currentRect.y + currentRect.height + 65, currentRect.width, 20, red) {
 
                 @Override
                 protected boolean canHover() {
@@ -103,7 +121,7 @@ public class ColorSelectionWidget extends ButtonWidget {
                     return getOption().getTranslatedName().append(": ").append(super.getMessage());
                 }
             };
-            greenSlider = new OptionSliderWidget(currentRect.x, currentRect.y + currentRect.height + 65, currentRect.width, 20, green) {
+            greenSlider = new OptionSliderWidget(currentRect.x, currentRect.y + currentRect.height + 90, currentRect.width, 20, green) {
 
                 @Override
                 protected boolean canHover() {
@@ -115,7 +133,7 @@ public class ColorSelectionWidget extends ButtonWidget {
                     return getOption().getTranslatedName().append(": ").append(super.getMessage());
                 }
             };
-            blueSlider = new OptionSliderWidget(currentRect.x, currentRect.y + currentRect.height + 90, currentRect.width, 20, blue) {
+            blueSlider = new OptionSliderWidget(currentRect.x, currentRect.y + currentRect.height + 115, currentRect.width, 20, blue) {
 
                 @Override
                 protected boolean canHover() {
@@ -151,6 +169,8 @@ public class ColorSelectionWidget extends ButtonWidget {
         RenderSystem.setShaderTexture(0, wheel);
         DrawableHelper.drawTexture(matrices, pickerImage.x, pickerImage.y, 0, 0, pickerImage.width, pickerImage.height, pickerImage.width, pickerImage.height);
         DrawUtil.outlineRect(matrices, pickerOutline, Color.DARK_GRAY);
+
+        chromaWidget.render(matrices, mouseX, mouseY, delta);
 
         alphaSlider.render(matrices, mouseX, mouseY, delta);
 
@@ -240,6 +260,9 @@ public class ColorSelectionWidget extends ButtonWidget {
                 greenSlider.update();
                 blueSlider.update();
             }
+        } else if (chromaWidget.isMouseOver(mouseX, mouseY)) {
+            chromaWidget.mouseClicked(mouseX, mouseY, 0);
+            option.setChroma(chroma.get());
 
         } else if (alphaSlider.isMouseOver(mouseX, mouseY)) {
             option.set(new Color(option.get().getRed(), option.get().getGreen(), option.get().getBlue(), alpha.get()));

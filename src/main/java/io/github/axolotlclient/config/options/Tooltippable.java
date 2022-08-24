@@ -9,8 +9,12 @@ public interface Tooltippable {
 
 	String getName();
 
+    default String getTooltipLocation(){
+        return getName();
+    }
+
     default Text getTooltip(){
-        return getTooltip(getName());
+        return getTooltip(getTooltipLocation());
     }
 
 	default @Nullable Text getTooltip(String location){

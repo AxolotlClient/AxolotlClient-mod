@@ -12,7 +12,7 @@ public abstract class MixinEntity {
 
     @Inject(method = "changeLookDirection", at = @At("HEAD"), cancellable = true)
     public void interceptMovement(double cursorDeltaX, double cursorDeltaY, CallbackInfo callback) {
-        if(Freelook.INSTANCE.consumeRotation(cursorDeltaX, cursorDeltaY)) {
+        if(Freelook.getInstance().consumeRotation(cursorDeltaX, cursorDeltaY)) {
             callback.cancel();
         }
     }

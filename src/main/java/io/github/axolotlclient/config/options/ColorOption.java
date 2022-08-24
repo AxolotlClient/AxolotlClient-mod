@@ -1,6 +1,7 @@
 package io.github.axolotlclient.config.options;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import io.github.axolotlclient.config.Color;
 import io.github.axolotlclient.config.CommandResponse;
@@ -10,13 +11,18 @@ public class ColorOption extends OptionBase<Color> {
 
     private final Color def;
     private Color value;
+    private boolean chroma;
 
     public ColorOption(String name, String def){
         this(name, Color.parse(def));
     }
 
+    public ColorOption(String name, int def){
+        this(name, new Color(def));
+    }
+
     public ColorOption(String name, String tooltipLocation, Color def){
-        super(name);
+        super(name, tooltipLocation);
         this.def=def;
     }
 
@@ -25,17 +31,34 @@ public class ColorOption extends OptionBase<Color> {
     }
 
     public Color get(){
-        return value;
+        return chroma ? Color.getChroma().withAlpha(value.getAlpha()) : value;
     }
-    public void set(Color set){this.value=set;}
+
+    public void set(Color set){
+        this.value=set;
+    }
+
+    public void set(Color set, boolean chroma){
+        set(set);
+        this.chroma=chroma;
+    }
+
+    public void setChroma(boolean set){
+        chroma=set;
+    }
 
     @Override
     public OptionType getType() {
         return OptionType.COLOR;
     }
+
     @Override
     public void setValueFromJsonElement(@NotNull JsonElement element) {
-        value=Color.parse(element.getAsString());
+        try {
+            chroma = element.getAsJsonObject().get("chroma").getAsBoolean();
+            value = Color.parse(element.getAsJsonObject().get("color").getAsString());
+        } catch (Exception ignored){
+        }
     }
 
     @Override
@@ -45,11 +68,14 @@ public class ColorOption extends OptionBase<Color> {
 
     @Override
     public JsonElement getJson() {
-        return new JsonPrimitive(String.valueOf(value));
+        JsonObject object = new JsonObject();
+        object.add("color",new JsonPrimitive(value.toString()));
+        object.add("chroma", new JsonPrimitive(chroma));
+        return object;
     }
 
-    public Color getChroma(){
-        return Color.getChroma();
+    public boolean getChroma(){
+        return chroma;
     }
 
     @Override

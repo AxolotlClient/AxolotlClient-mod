@@ -12,6 +12,7 @@ import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hypixel.HypixelMods;
 import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
 import io.github.axolotlclient.modules.motionblur.MotionBlur;
+import io.github.axolotlclient.modules.particles.Particles;
 import io.github.axolotlclient.modules.rpc.DiscordRPC;
 import io.github.axolotlclient.modules.scrollableTooltips.ScrollableTooltips;
 import io.github.axolotlclient.modules.tnttime.TntTime;
@@ -58,7 +59,7 @@ public class AxolotlClient implements ClientModInitializer {
 
 	public static final OptionCategory config = new OptionCategory("storedOptions");
 	public static final BooleanOption someNiceBackground = new BooleanOption("defNoSecret", false);
-	public static final HashMap<Identifier, AbstractModule> modules= new HashMap<>();
+	public static final List<AbstractModule> modules= new ArrayList<>();
 
 	public static Integer tickTime = 0;
 
@@ -92,14 +93,14 @@ public class AxolotlClient implements ClientModInitializer {
 
 		getModules();
 		CONFIG.init();
-		modules.values().forEach(AbstractModule::init);
+		modules.forEach(AbstractModule::init);
 
 		CONFIG.config.addAll(CONFIG.getCategories());
 		CONFIG.config.add(config);
 
 		ConfigManager.load();
 
-		modules.values().forEach(AbstractModule::lateInit);
+		modules.forEach(AbstractModule::lateInit);
 
 		ResourceLoader.registerBuiltinResourcePack(new Identifier("axolotlclient", "axolotlclient-ui"), container, ResourcePackActivationType.NORMAL);
 		ClientTickEvents.END.register(client -> tickClient());
@@ -108,14 +109,15 @@ public class AxolotlClient implements ClientModInitializer {
 	}
 
 	public static void getModules(){
-		modules.put(Zoom.ID, new Zoom());
-		modules.put(HudManager.ID, HudManager.getINSTANCE());
-		modules.put(HypixelMods.ID, HypixelMods.INSTANCE);
-		modules.put(MotionBlur.ID, new MotionBlur());
-        modules.put(ScrollableTooltips.ID, ScrollableTooltips.Instance);
-        modules.put(DiscordRPC.ID, DiscordRPC.getInstance());
-        modules.put(Freelook.ID, Freelook.INSTANCE);
-        modules.put(TntTime.ID, TntTime.Instance);
+		modules.add(Zoom.getInstance());
+		modules.add(HudManager.getInstance());
+		modules.add(HypixelMods.getInstance());
+		modules.add(MotionBlur.getInstance());
+        modules.add(ScrollableTooltips.getInstance());
+        modules.add(DiscordRPC.getInstance());
+        modules.add(Freelook.getInstance());
+        modules.add(TntTime.getInstance());
+        modules.add(Particles.getInstance());
 	}
 
 	public static boolean isUsingClient(UUID uuid){
@@ -130,7 +132,7 @@ public class AxolotlClient implements ClientModInitializer {
 
 	public static void tickClient(){
 
-        modules.values().forEach(AbstractModule::tick);
+        modules.forEach(AbstractModule::tick);
 		Color.tickChroma();
 
 		if (tickTime >=6000){

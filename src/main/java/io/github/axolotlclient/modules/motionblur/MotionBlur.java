@@ -15,7 +15,7 @@ import java.io.IOException;
 
 public class MotionBlur extends AbstractModule {
 
-    public static Identifier ID = new Identifier("motion_blur");
+    private static final MotionBlur Instance = new MotionBlur();
 
     private final Identifier shaderLocation = new Identifier("minecraft:shaders/post/motion_blur.json");
 
@@ -26,6 +26,10 @@ public class MotionBlur extends AbstractModule {
     private int lastWidth;
 
     private int lastHeight;
+
+    public static MotionBlur getInstance(){
+        return Instance;
+    }
 
     @Override
     public void init() {
