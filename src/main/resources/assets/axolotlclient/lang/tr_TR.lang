@@ -50,6 +50,7 @@ shiftHorizontalScroll=Yatay Kaydır (eğer tuş basıldıysa)
 shiftHorizontalScroll.tooltip=Eğer özel tuş <br> basıldıysa yatay kaydırmaya izin ver. <br>Tuş Kontroller Menüsünden değiştirilebilir.
 scrollAmount=Kaydırma Miktarı
 scrollAmount.tooltip=Kaydırılınca,bu aracı bu kadar hareket ettir.
+tnttime=TntSüresi
 
 nametagOptions=Takma Ad Ayarları
 showOwnNametag=Kendi Takma Adı'nı göster
@@ -102,6 +103,7 @@ key.freelook=Özgür Bakış
 
 hud=Arayüz Ayarları
 pinghud=Gecikme Arayüzü
+refreshTime=Yenilenme Gecikmesi
 cpshud=CPS Arayüzü
 cpskeybind=Tuş-Bağından CPS
 rightcps=Sağ Klik CPS'ini göster
