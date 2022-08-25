@@ -82,7 +82,7 @@ public class AxolotlClient implements ClientModInitializer {
 			badmod = "Baritone";
 		} else if (QuiltLoader.isModLoaded("xaerominimap")) {
             badmod = "Xaero's Minimap";
-        } else if (QuiltLoader.isModLoaded("essential")){
+        } else if (QuiltLoader.isModLoaded("essential-container")){
             badmod = "Essential";
 		} else {
 			showWarning = false;

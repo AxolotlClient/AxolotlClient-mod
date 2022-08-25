@@ -41,5 +41,9 @@
 		]
 	},
 	"mixin": "axolotlclient.mixins.json",
-	"access_widener": "axolotlclient.accesswidener"
+	"access_widener": "axolotlclient.accesswidener",
+
+	"minecraft": {
+		"environment": "client"
+	}
 }

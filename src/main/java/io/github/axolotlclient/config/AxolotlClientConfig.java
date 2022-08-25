@@ -37,7 +37,7 @@ public class AxolotlClientConfig {
     public final BooleanOption nightMode = new BooleanOption("nightMode", false);
 
     public final BooleanOption enableCustomOutlines = new BooleanOption("enabled", false);
-    public final ColorOption outlineColor = new ColorOption("color", Color.parse("#04000000"));
+    public final ColorOption outlineColor = new ColorOption("color", Color.parse("#DD000000"));
     public final BooleanOption outlineChroma = new BooleanOption("chroma", false);
     public final DoubleOption outlineWidth = new DoubleOption("outlineWidth", 1, 1, 10);
 
