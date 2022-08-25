@@ -51,6 +51,14 @@ shiftHorizontalScroll.tooltip=Eğer özel tuş <br> basıldıysa yatay kaydırma
 scrollAmount=Kaydırma Miktarı
 scrollAmount.tooltip=Kaydırılınca,bu aracı bu kadar hareket ettir.
 tnttime=TntSüresi
+particles=Parçacıklar
+particles.color.tooltip=Bu Parçacığın rengi. <br>\"Özel Renk\" 'ın etkin olması gerekiyor.
+count=Çoğaltıcı
+count.tooltip=Doğan parçacıkların adeti ne kadar arttırılmalı.<br>Sadece Yayılan Parçacıklar ile çalışıyor <br>(etrafa yayılan hepsi ve genellikle 16 taneden oluşan, <br>Kritik Vuruş Parçacıkları v.b.).
+customColor=Özel Renk
+customColor.tooltip=Bu parçacık için kullanılıcak özel renk seçeneği.
+alwaysCrit=Her Zaman Göster
+alwaysCrit.tooltip=Vururken hep bu parçacıkların yayılma seçeneği.
 
 nametagOptions=Takma Ad Ayarları
 showOwnNametag=Kendi Takma Adı'nı göster
