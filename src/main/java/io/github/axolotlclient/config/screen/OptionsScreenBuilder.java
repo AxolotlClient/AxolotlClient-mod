@@ -11,12 +11,15 @@ import io.github.axolotlclient.modules.hud.util.DrawUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class OptionsScreenBuilder extends Screen {
 
@@ -24,6 +27,7 @@ public class OptionsScreenBuilder extends Screen {
     protected OptionCategory cat;
 
     protected ColorSelectionWidget picker;
+    protected TextFieldWidget searchWidget;
 
     private ButtonWidgetList list;
 
@@ -75,8 +79,10 @@ public class OptionsScreenBuilder extends Screen {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
-        return list.mouseScrolled(mouseX, mouseY, amount);
-        //return super.mouseScrolled(mouseX, mouseY, amount);
+        if(list.isMouseOver(mouseX, mouseY)) {
+            return list.mouseScrolled(mouseX, mouseY, amount);
+        }
+        return super.mouseScrolled(mouseX, mouseY, amount);
     }
 
     @Override
@@ -89,15 +95,21 @@ public class OptionsScreenBuilder extends Screen {
 
     @Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
-		if(picker!=null){
-			if(!picker.isMouseOver(mouseX, mouseY)) {
-				closeColorPicker();
-			} else {
-				picker.onClick(mouseX, mouseY);
-			}
-            return true;
-		}
-		return super.mouseClicked(mouseX, mouseY, button);
+        boolean bl = super.mouseClicked(mouseX, mouseY, button);
+
+        if(isPickerOpen()){
+            if(!picker.isMouseOver(mouseX, mouseY)) {
+                closeColorPicker();
+                this.list.mouseClicked(mouseX, mouseY, button);
+
+            } else {
+                picker.onClick(mouseX, mouseY);
+            }
+        } else {
+            searchWidget.mouseClicked(mouseX, mouseY, button);
+            return bl || this.list.mouseClicked(mouseX, mouseY, button);
+        }
+        return bl;
 	}
 
 	@Override
@@ -105,12 +117,13 @@ public class OptionsScreenBuilder extends Screen {
         if(isPickerOpen() && picker.mouseReleased(mouseX, mouseY, button)){
             return true;
         }
-		return this.list.mouseReleased(mouseX, mouseY, button) || super.mouseReleased(mouseX, mouseY, button);
+        return this.list.mouseReleased(mouseX, mouseY, button) || super.mouseReleased(mouseX, mouseY, button);
 	}
 
 	@Override
     public void tick() {
         this.list.tick();
+        searchWidget.tick();
         if(isPickerOpen()){
             picker.tick();
         }
@@ -118,7 +131,7 @@ public class OptionsScreenBuilder extends Screen {
 
     @Override
     public void init() {
-        this.list = new ButtonWidgetList(this.client, this.width, this.height, 50, this.height - 50, 25, cat);
+        createWidgetList(cat);
 
 		this.addSelectableChild(list);
 
@@ -126,10 +139,51 @@ public class OptionsScreenBuilder extends Screen {
             if(isPickerOpen()){
                 closeColorPicker();
             }
+
             ConfigManager.save();
             MinecraftClient.getInstance().setScreen(parent);
         }));
-        if(Objects.equals(cat.getName(), "config")) this.addDrawableChild(new ButtonWidget(this.width-106, this.height-26, 100, 20, Text.translatable("credits"), buttonWidget -> MinecraftClient.getInstance().setScreen(new CreditsScreen(this))));
+
+        this.addDrawableChild(searchWidget = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width - 120, 20, 100, 20, Text.translatable("search")){
+
+            @Override
+            public boolean mouseClicked(double mouseX, double mouseY, int button) {
+                if(isMouseOver(mouseX, mouseY)) {
+                    if (!isFocused() && super.mouseClicked(mouseX, mouseY, button) && cat.getName().equals("config")) {
+                        MinecraftClient.getInstance().setScreen(new OptionsScreenBuilder(MinecraftClient.getInstance().currentScreen, getAllOptions()));
+                        return true;
+                    }
+                    return super.mouseClicked(mouseX, mouseY, button);
+                }
+                setFocused(false);
+                return false;
+            }
+
+            @Override
+            public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+                super.renderButton(matrices, mouseX, mouseY, delta);
+
+                drawVerticalLine(matrices, x-5, y-1, y+11, -1);
+                drawHorizontalLine(matrices, x-5, x+width, y+11, -1);
+            }
+        });
+
+        if(Objects.equals(cat.getName(), "config")) {
+            this.addDrawableChild(new ButtonWidget(this.width - 106, this.height - 26, 100, 20, Text.translatable("credits"), buttonWidget -> MinecraftClient.getInstance().setScreen(new CreditsScreen(this))));
+        } else {
+            setInitialFocus(searchWidget);
+        }
+        searchWidget.setDrawsBackground(false);
+        searchWidget.setSuggestion(Formatting.ITALIC + Text.translatable("search").append("...").getString());
+        searchWidget.setChangedListener(s -> {
+            list.filter(s);
+
+            if(!s.equals("")){
+                searchWidget.setSuggestion("");
+            } else {
+                searchWidget.setSuggestion(Formatting.ITALIC + Text.translatable("search").append("...").getString());
+            }
+        });
     }
 
 	@Override
@@ -137,7 +191,8 @@ public class OptionsScreenBuilder extends Screen {
         if(isPickerOpen() && picker.keyPressed(keyCode, scanCode, modifiers)){
             return true;
         }
-		return this.list.keyPressed(keyCode, scanCode, modifiers) || super.keyPressed(keyCode, scanCode, modifiers);
+		//return this.list.keyPressed(keyCode, scanCode, modifiers) ||
+        return super.keyPressed(keyCode, scanCode, modifiers);
 	}
 
 	@Override
@@ -145,7 +200,7 @@ public class OptionsScreenBuilder extends Screen {
         if(isPickerOpen() && picker.charTyped(chr, modifiers)){
             return true;
         }
-		return list.charTyped(chr, modifiers);
+        return super.charTyped(chr, modifiers);
 	}
 
 	public void renderTooltip(MatrixStack matrices, Tooltippable option, int x, int y){
@@ -167,5 +222,32 @@ public class OptionsScreenBuilder extends Screen {
         }
         ConfigManager.save();
         super.resize(client, width, height);
+    }
+
+    protected void createWidgetList(OptionCategory category){
+        this.list = new ButtonWidgetList(client, this.width, height, 50, height-50, 25, category);
+    }
+
+    protected OptionCategory getAllOptions(){
+        OptionCategory temp = new OptionCategory("");
+
+        for(OptionCategory cat:AxolotlClient.CONFIG.getCategories()) {
+            setupOptionsList(temp, cat);
+        }
+
+        return new OptionCategory("searchOptions")
+            .addSubCategories(temp.getSubCategories()
+                .stream()
+                .sorted(new Tooltippable.AlphabeticalComparator())
+                .collect(Collectors.toList()));
+    }
+
+    protected void setupOptionsList(OptionCategory target, OptionCategory cat){
+        target.addSubCategory(cat);
+        if(!cat.getSubCategories().isEmpty()){
+            for(OptionCategory sub : cat.getSubCategories()){
+                setupOptionsList(target, sub);
+            }
+        }
     }
 }

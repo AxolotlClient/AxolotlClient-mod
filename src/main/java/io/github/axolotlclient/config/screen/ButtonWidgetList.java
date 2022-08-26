@@ -9,6 +9,7 @@ import io.github.axolotlclient.config.options.EnumOption;
 import io.github.axolotlclient.config.options.FloatOption;
 import io.github.axolotlclient.config.options.IntegerOption;
 import io.github.axolotlclient.config.options.Option;
+import io.github.axolotlclient.config.options.OptionBase;
 import io.github.axolotlclient.config.options.OptionCategory;
 import io.github.axolotlclient.config.options.StringOption;
 import io.github.axolotlclient.config.options.Tooltippable;
@@ -25,20 +26,24 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.gui.widget.ButtonListWidget;
+import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.Text;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
-public class ButtonWidgetList extends ButtonListWidget {
+public class ButtonWidgetList extends AlwaysSelectedEntryListWidget<ButtonWidgetList.Pair> {
 
-    public final List<Pair> entries = new ArrayList<>();
+    public List<Pair> entries;
 
-    //private final OptionCategory category; // Uncomment if needed one day
+    private final OptionCategory category;
 
     public ButtonWidgetList(MinecraftClient minecraftClient, int width, int height, int top, int bottom, int entryHeight, OptionCategory category) {
         super(minecraftClient, width, height, top, bottom, entryHeight);
@@ -46,37 +51,20 @@ public class ButtonWidgetList extends ButtonListWidget {
         this.setRenderBackground(false);
         this.setRenderHorizontalShadows(false);
         this.setRenderHeader(false, 0);
-        //this.category=category; // same as above
+        this.setRenderSelection(false);
+        this.category=category; // same as above
 
-        if(!category.getSubCategories().isEmpty()) {
-            for (int i = 0; i < category.getSubCategories().size(); i += 2) {
-                OptionCategory subCat = category.getSubCategories().get(i);
-                ClickableWidget buttonWidget = this.createCategoryWidget(width / 2 - 155, subCat);
-
-                OptionCategory subCat2 = i < category.getSubCategories().size() - 1 ? category.getSubCategories().get(i + 1) : null;
-                ClickableWidget buttonWidget2 = this.createCategoryWidget(width / 2 - 155 + 160, subCat2);
-
-	            this.addEntry(new CategoryPair(subCat, buttonWidget, subCat2, buttonWidget2));
-	            this.entries.add(new CategoryPair(subCat, buttonWidget, subCat2, buttonWidget2));
-            }
-            this.addEntry(new Spacer());
-			this.entries.add(new Spacer());
-        }
-
-        for (int i = 0; i < (category.getOptions().size()); i ++) {
-
-            Option option = category.getOptions().get(i);
-            if(option.getName().equals("x")||option.getName().equals("y")) continue;
-            ClickableWidget buttonWidget = this.createWidget(width / 2 - 155+160, option);
-
-            addEntry(new OptionEntry(buttonWidget, option, width));
-			this.entries.add(new OptionEntry(buttonWidget, option, width));
+        this.entries = constructEntries(category);
+        for(Pair p:entries){
+            addEntry(p);
         }
     }
 
-	@Override
-	protected int addEntry(ButtonEntry entry) {
-		if(entry instanceof Pair) this.entries.add((Pair)entry);
+
+
+    @Override
+	protected int addEntry(Pair entry) {
+		//if(entry != null) this.entries.add(entry);
 		return super.addEntry(entry);
 	}
 
@@ -104,14 +92,29 @@ public class ButtonWidgetList extends ButtonListWidget {
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
 		setFocused(null);
-		return super.mouseClicked(mouseX, mouseY, button);
+		boolean bl = super.mouseClicked(mouseX, mouseY, button);
+        entries.forEach(pair -> {
+            if(pair.left instanceof StringOptionWidget && ((StringOptionWidget) pair.left).textField.isFocused()){
+                ((StringOptionWidget) pair.left).textField.mouseClicked(mouseX, mouseY, button);
+            }
+            if(pair.left instanceof ColorOptionWidget){
+                if(((ColorOptionWidget) pair.left).textField.isFocused()) {
+                    ((ColorOptionWidget) pair.left).textField.mouseClicked(mouseX, mouseY, button);
+                }
+            }
+        });
+        return bl;
 	}
 
-	@Override
+    @Override
+    public int getRowWidth() {
+        return 400;
+    }
+
+    @Override
 	public int getRowLeft() {
 		return this.width / 2 -155;
 	}
-
 
     public void renderTooltips(MatrixStack matrices, int mouseX, int mouseY){
         Util.applyScissor(new Rectangle(0, top, this.width, bottom-top));
@@ -126,7 +129,13 @@ public class ButtonWidgetList extends ButtonListWidget {
 		GL11.glDisable(GL11.GL_SCISSOR_TEST);
 	}
 
-	private boolean halftick = true;
+    @Override
+    protected int getScrollbarPositionX() {
+        return super.getScrollbarPositionX() + 32;
+    }
+
+    private boolean halftick = true;
+
     public void tick(){
 		if(halftick) {
 			for (Pair pair : entries) {
@@ -140,7 +149,16 @@ public class ButtonWidgetList extends ButtonListWidget {
         for (Pair pair:entries) if(pair.keyPressed(keyCode, scanCode, modifiers)){
 			return true;
         }
-	    return false;
+        if (getSelectedOrNull() != null) {
+            return getSelectedOrNull().keyPressed(keyCode, scanCode, modifiers);
+        }
+	    return super.keyPressed(keyCode, scanCode, modifiers);
+    }
+
+    protected void m_enzpxkzi(MatrixStack matrices, int i, int j, float f, int k, int l, int m, int n, int o) {
+        Pair entry = this.getEntry(k);
+
+        entry.render(matrices, k, m, l, n, o, i, j, Objects.equals(getSelectedOrNull(), entry), f);
     }
 
 	public boolean charTyped(char c, int modifiers){
@@ -150,8 +168,75 @@ public class ButtonWidgetList extends ButtonListWidget {
 		return false;
 	}
 
-	@Environment(EnvType.CLIENT)
-    public class Pair extends ButtonListWidget.ButtonEntry {
+    public void filter(String searchTerm) {
+        this.clearEntries();
+        entries.clear();
+
+        Collection<Tooltippable> children = getEntries();
+
+        List<Tooltippable> matched = children.stream().filter(tooltippable -> {
+            return tooltippable.toString().toLowerCase(Locale.ROOT).contains(searchTerm.toLowerCase(Locale.ROOT));
+        }).collect(Collectors.toList());
+
+        if(!searchTerm.isEmpty()){
+            matched.sort(new Tooltippable.AlphabeticalComparator());
+        }
+
+        OptionCategory filtered = new OptionCategory(category.getName());
+        for (Tooltippable tooltippable : matched) {
+
+            if(tooltippable instanceof OptionBase<?>){
+                filtered.add((OptionBase<?>) tooltippable);
+            } else if (tooltippable instanceof OptionCategory){
+                filtered.addSubCategory((OptionCategory) tooltippable);
+            }
+        }
+        entries = constructEntries(filtered);
+        for(Pair p:entries){
+            addEntry(p);
+        }
+
+
+        if (getScrollAmount() > Math.max(0, this.getMaxPosition() - (this.bottom - this.top - 4))) {
+            setScrollAmount(Math.max(0, this.getMaxPosition() - (this.bottom - this.top - 4)));
+        }
+    }
+
+    protected List<Tooltippable> getEntries(){
+        List<Tooltippable> list = new ArrayList<>(category.getSubCategories());
+        list.addAll(category.getOptions());
+        return list;
+    }
+
+    protected List<Pair> constructEntries(OptionCategory category){
+        List<Pair> entries = new ArrayList<>();
+        if(!category.getSubCategories().isEmpty()) {
+            for (int i = 0; i < category.getSubCategories().size(); i += 2) {
+                OptionCategory subCat = category.getSubCategories().get(i);
+                ClickableWidget buttonWidget = this.createCategoryWidget(width / 2 - 155, subCat);
+
+                OptionCategory subCat2 = i < category.getSubCategories().size() - 1 ? category.getSubCategories().get(i + 1) : null;
+                ClickableWidget buttonWidget2 = this.createCategoryWidget(width / 2 - 155 + 160, subCat2);
+
+                entries.add(new CategoryPair(subCat, buttonWidget, subCat2, buttonWidget2));
+            }
+            entries.add(new Spacer());
+        }
+
+        for (int i = 0; i < (category.getOptions().size()); i ++) {
+
+            Option option = category.getOptions().get(i);
+            if(option.getName().equals("x")||option.getName().equals("y")) continue;
+            ClickableWidget buttonWidget = this.createWidget(width / 2 - 155+160, option);
+
+            //addEntry(new OptionEntry(buttonWidget, option, width));
+            entries.add(new OptionEntry(buttonWidget, option, width));
+        }
+        return entries;
+    }
+
+    @Environment(EnvType.CLIENT)
+    public class Pair extends AlwaysSelectedEntryListWidget.Entry<Pair> {
         protected final MinecraftClient client = MinecraftClient.getInstance();
         protected final ClickableWidget left;
         protected final ClickableWidget right;
@@ -159,7 +244,7 @@ public class ButtonWidgetList extends ButtonListWidget {
 		protected final boolean tickable;
 
         public Pair(ClickableWidget left, ClickableWidget right) {
-			super(new HashMap<>());
+			super();
 	        this.left = left;
             this.right = right;
 
@@ -194,7 +279,7 @@ public class ButtonWidgetList extends ButtonListWidget {
 			}
 		}
 
-	    @Override
+        @Override
 	    public boolean mouseClicked(double mouseX, double mouseY, int button) {
             if (this.left.isMouseOver(mouseX, mouseY)) {
                 onClick(this.left, mouseX, mouseY, button);
@@ -267,6 +352,11 @@ public class ButtonWidgetList extends ButtonListWidget {
 			else if (left instanceof ColorOptionWidget) ((ColorOptionWidget) left).tick();
 
 		}
+
+        @Override
+        public Text getNarration() {
+            return null;
+        }
     }
 
 	public class CategoryPair extends Pair {

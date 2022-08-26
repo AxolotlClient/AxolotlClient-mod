@@ -61,8 +61,10 @@ public class ColorOptionWidget extends ButtonWidget {
             if(MinecraftClient.getInstance().currentScreen instanceof OptionsScreenBuilder){
                 ((OptionsScreenBuilder) MinecraftClient.getInstance().currentScreen).openColorPicker(option);
             }
+            return true;
         } else if(textField.isMouseOver(mouseX, mouseY)) {
-            textField.mouseClicked(mouseX, mouseY, 0);
+            this.playDownSound(MinecraftClient.getInstance().getSoundManager());
+            return textField.mouseClicked(mouseX, mouseY, 0);
 
         } else {
 			textField.setTextFieldFocused(false);
@@ -71,6 +73,23 @@ public class ColorOptionWidget extends ButtonWidget {
 	        }
         }
 		return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean isMouseOver(double mouseX, double mouseY) {
+        if(canHover()) {
+            return super.isMouseOver(mouseX, mouseY);
+        }
+        return false;
+    }
+
+    protected boolean canHover(){
+        if(MinecraftClient.getInstance().currentScreen instanceof OptionsScreenBuilder &&
+            ((OptionsScreenBuilder) MinecraftClient.getInstance().currentScreen).isPickerOpen()){
+            this.hovered = false;
+            return false;
+        }
+        return true;
     }
 
     public void tick(){

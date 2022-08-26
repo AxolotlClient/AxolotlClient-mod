@@ -17,6 +17,7 @@ import io.github.axolotlclient.modules.rpc.DiscordRPC;
 import io.github.axolotlclient.modules.scrollableTooltips.ScrollableTooltips;
 import io.github.axolotlclient.modules.tnttime.TntTime;
 import io.github.axolotlclient.modules.zoom.Zoom;
+import io.github.axolotlclient.util.UnsupportedMod;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
@@ -63,7 +64,7 @@ public class AxolotlClient implements ClientModInitializer {
 
 	public static Integer tickTime = 0;
 
-	public static String badmod="";
+	public static UnsupportedMod badmod;
 	public static boolean titleDisclaimer = false;
 	public static boolean showWarning = true;
 
@@ -71,19 +72,19 @@ public class AxolotlClient implements ClientModInitializer {
 	public void onInitializeClient(ModContainer container) {
 
 		if (QuiltLoader.isModLoaded("ares")){
-			badmod = "Ares Client";
+			badmod = new UnsupportedMod("Ares Client", UnsupportedMod.UnsupportedReason.BAN_REASON);
 		} else if (QuiltLoader.isModLoaded("inertia")) {
-			badmod = "Inertia Client";
+            badmod = new UnsupportedMod("Inertia Client", UnsupportedMod.UnsupportedReason.BAN_REASON);
 		} else if (QuiltLoader.isModLoaded("meteor-client")) {
-			badmod = "Meteor Client";
+            badmod = new UnsupportedMod("Meteor Client", UnsupportedMod.UnsupportedReason.BAN_REASON);
 		} else if (QuiltLoader.isModLoaded("wurst")) {
-			badmod = "Wurst Client";
+            badmod = new UnsupportedMod("Wurst Client", UnsupportedMod.UnsupportedReason.BAN_REASON);
 		} else if (QuiltLoader.isModLoaded("baritone")) {
-			badmod = "Baritone";
+            badmod = new UnsupportedMod("Baritone", UnsupportedMod.UnsupportedReason.BAN_REASON);
 		} else if (QuiltLoader.isModLoaded("xaerominimap")) {
-            badmod = "Xaero's Minimap";
+            badmod = new UnsupportedMod("Xaero's Minimap", UnsupportedMod.UnsupportedReason.UNKNOWN_CONSEQUENSES);
         } else if (QuiltLoader.isModLoaded("essential-container")){
-            badmod = "Essential";
+            badmod = new UnsupportedMod("Essential", UnsupportedMod.UnsupportedReason.MIGHT_CRASH, UnsupportedMod.UnsupportedReason.UNKNOWN_CONSEQUENSES);
 		} else {
 			showWarning = false;
 		}

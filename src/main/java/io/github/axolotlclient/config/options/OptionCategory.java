@@ -61,6 +61,14 @@ public class OptionCategory implements Tooltippable {
 
     public Text getTranslatedName(){return Text.translatable(name);}
 
+    @Override
+    public String toString() {
+        try {
+            return getTranslatedName().getString();
+        } catch (Exception ignored){}
+        return getName();
+    }
+
     public LiteralArgumentBuilder<QuiltClientCommandSource> buildCommand(){
         LiteralArgumentBuilder<QuiltClientCommandSource> builder = ClientCommandManager.literal(getName());
         for(OptionBase<?> o:getOptions()){

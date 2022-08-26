@@ -5,6 +5,7 @@ import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.hud.HudEditScreen;
 import io.github.axolotlclient.modules.zoom.Zoom;
+import io.github.axolotlclient.util.UnsupportedMod;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ConfirmScreen;
@@ -65,6 +66,18 @@ public abstract class MixinTitleScreen extends Screen{
 	public void showBadModsScreen(CallbackInfo ci){
 
 		if (AxolotlClient.showWarning) {
+            StringBuilder description = new StringBuilder();
+            for(int i = 0; i<AxolotlClient.badmod.reason().length; i++){
+                UnsupportedMod.UnsupportedReason reason = AxolotlClient.badmod.reason()[i];
+                if(i>0 && i < AxolotlClient.badmod.reason().length - 1){
+                    description.append(", to ");
+                } else if (i > 0 && i < AxolotlClient.badmod.reason().length){
+                    description.append(" and to ");
+                }
+                description.append(reason);
+            }
+            description.append(". ");
+
 			MinecraftClient.getInstance().setScreen(new ConfirmScreen(
 				(boolean confirmed) -> {
 					if (confirmed) {
@@ -78,9 +91,9 @@ public abstract class MixinTitleScreen extends Screen{
 				},
 				Text.literal("Axolotlclient warning").formatted(Formatting.RED),
 				Text.literal("The mod ").append(
-					Text.literal(AxolotlClient.badmod).formatted(Formatting.BOLD, Formatting.DARK_RED)).append(" is most likely prohibited to be used on many Servers!\n" +
-					"AxolotlClient will not be responsible for any punishment you will get for using it. Proceed with Caution!"),
-				Text.literal("Proceed"), Text.translatable("menu.quit")));
+					Text.literal(AxolotlClient.badmod.name()).formatted(Formatting.BOLD, Formatting.DARK_RED)).append(" is known to ").append(description.toString()).append(
+					"AxolotlClient will not be responsible for any punishment or crashes you will encounter while using it.\n Proceed with Caution!"),
+				Text.translatable("gui.proceed"), Text.translatable("menu.quit")));
 		}
 	}
 
