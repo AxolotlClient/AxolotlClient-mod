@@ -39,7 +39,7 @@ public class AxolotlClientConfig {
     public final BooleanOption rotateWorld = new BooleanOption("rotateWorld", false);
 
     public final BooleanOption enableCustomOutlines = new BooleanOption("enabled", false);
-    public final ColorOption outlineColor = new ColorOption("color", Color.parse("#04000000"));
+    public final ColorOption outlineColor = new ColorOption("color", Color.parse("#DD000000"));
     public final IntegerOption outlineWidth = new IntegerOption("outlineWidth", 1, 1, 10);
 
     public final BooleanOption creditsBGM = new BooleanOption("creditsBGM", true);

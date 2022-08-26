@@ -36,6 +36,14 @@ public abstract class OptionBase<T> implements Option {
         return name;
     }
 
+    @Override
+    public String toString() {
+        try {
+            return getTranslatedName();
+        } catch (Exception ignored){}
+        return getName();
+    }
+
     public void onCommandExec(String[] args){
         CommandResponse response = onCommandExecution(args);
         Util.sendChatMessage( new LiteralText((response.success ? Formatting.GREEN : Formatting.RED) + response.response));

@@ -12,12 +12,12 @@ import net.minecraft.util.Identifier;
 
 import java.util.List;
 
-public class iconHud extends AbstractHudEntry {
+public class IconHud extends AbstractHudEntry {
 
-    public Identifier ID = new Identifier("axolotlclient", "IconHud");
+    public Identifier ID = new Identifier("axolotlclient", "iconHud");
     private final ColorOption color = new ColorOption("color", new Color(255, 255, 255, 0));
 
-    public iconHud() {
+    public IconHud() {
         super(15, 15);
     }
 

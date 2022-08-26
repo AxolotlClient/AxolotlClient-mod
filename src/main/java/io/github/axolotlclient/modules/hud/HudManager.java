@@ -57,7 +57,7 @@ public class HudManager extends AbstractModule {
         add(new KeystrokeHud());
         add(new ToggleSprintHud());
         add(new IPHud());
-        add(new iconHud());
+        add(new IconHud());
         add(new SpeedHud());
         add(new ScoreboardHud());
         add(new CrosshairHud());

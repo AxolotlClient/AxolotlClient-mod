@@ -20,17 +20,21 @@ import net.minecraft.client.render.VertexFormats;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 public class ButtonWidgetList extends EntryListWidget {
 
-    public final List<Pair> entries = Lists.newArrayList();
+    public List<Pair> entries = Lists.newArrayList();
 
-    //private final OptionCategory category; // Uncomment if needed one day
+    private final OptionCategory category;
 
     public ButtonWidgetList(MinecraftClient minecraftClient, int width, int height, int top, int bottom, int entryHeight, OptionCategory category) {
         super(minecraftClient, width, height, top, bottom, entryHeight);
-        //this.category=category; // same as above
+        this.category=category;
 
         if(!category.getSubCategories().isEmpty()) {
             for (int i = 0; i < category.getSubCategories().size(); i += 2) {
@@ -148,7 +152,7 @@ public class ButtonWidgetList extends EntryListWidget {
 
     @Override
     public int getRowWidth() {
-        return 500;
+        return 400;
     }
 
     @Override
@@ -170,6 +174,68 @@ public class ButtonWidgetList extends EntryListWidget {
                 ((ColorOptionWidget) pair.left).tick();
             }
         });
+    }
+
+    public void filter(String searchTerm) {
+        entries.clear();
+
+        Collection<Tooltippable> children = getEntries();
+
+        List<Tooltippable> matched = children.stream().filter(tooltippable -> {
+            return tooltippable.toString().toLowerCase(Locale.ROOT).contains(searchTerm.toLowerCase(Locale.ROOT));
+        }).collect(Collectors.toList());
+
+        if(!searchTerm.isEmpty()){
+            matched.sort(new Tooltippable.AlphabeticalComparator());
+        }
+
+        OptionCategory filtered = new OptionCategory(category.getName());
+        for (Tooltippable tooltippable : matched) {
+
+            if(tooltippable instanceof OptionBase<?>){
+                filtered.add((OptionBase<?>) tooltippable);
+            } else if (tooltippable instanceof OptionCategory){
+                filtered.addSubCategory((OptionCategory) tooltippable);
+            }
+        }
+        entries = constructEntries(filtered);
+
+
+        if (getScrollAmount() > Math.max(0, this.getMaxPosition() - (yEnd - this.yStart - 4))) {
+            scrollAmount = Math.max(0, this.getMaxPosition() - (this.yEnd - this.yStart - 4));
+        }
+    }
+
+    protected List<Tooltippable> getEntries(){
+        List<Tooltippable> list = new ArrayList<>(category.getSubCategories());
+        list.addAll(category.getOptions());
+        return list;
+    }
+
+    protected List<Pair> constructEntries(OptionCategory category){
+        List<Pair> entries = new ArrayList<>();
+        if(!category.getSubCategories().isEmpty()) {
+            for (int i = 0; i < category.getSubCategories().size(); i += 2) {
+                OptionCategory subCat = category.getSubCategories().get(i);
+                ButtonWidget buttonWidget = this.createCategoryWidget(width / 2 - 155, subCat);
+
+                OptionCategory subCat2 = i < category.getSubCategories().size() - 1 ? category.getSubCategories().get(i + 1) : null;
+                ButtonWidget buttonWidget2 = this.createCategoryWidget(width / 2 - 155 + 160, subCat2);
+
+                entries.add(new CategoryPair(subCat, buttonWidget, subCat2, buttonWidget2));
+            }
+            entries.add(new Spacer());
+        }
+
+        for (int i = 0; i < (category.getOptions().size()); i ++) {
+
+            Option option = category.getOptions().get(i);
+            if(option.getName().equals("x")||option.getName().equals("y")) continue;
+            ButtonWidget buttonWidget = this.createWidget(width / 2 - 155, option);
+
+            entries.add(new OptionEntry(buttonWidget, option, width));
+        }
+        return entries;
     }
 
     @Override
@@ -194,6 +260,22 @@ public class ButtonWidgetList extends EntryListWidget {
                 ((ColorOptionWidget) pair.left).keyPressed(c, code);
             }
         });
+    }
+
+    @Override
+    public boolean mouseClicked(int mouseX, int mouseY, int button) {
+        boolean bl = super.mouseClicked(mouseX, mouseY, button);
+        entries.forEach(pair -> {
+            if(pair.left instanceof StringOptionWidget && ((StringOptionWidget) pair.left).textField.isFocused()){
+                ((StringOptionWidget) pair.left).textField.mouseClicked(mouseX, mouseY, button);
+            }
+            if(pair.left instanceof ColorOptionWidget){
+                if(((ColorOptionWidget) pair.left).textField.isFocused()) {
+                    ((ColorOptionWidget) pair.left).textField.mouseClicked(mouseX, mouseY, button);
+                }
+            }
+        });
+        return bl;
     }
 
     @Environment(EnvType.CLIENT)

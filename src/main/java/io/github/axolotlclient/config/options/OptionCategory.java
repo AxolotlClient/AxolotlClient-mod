@@ -55,6 +55,14 @@ public class OptionCategory implements Tooltippable {
 
     public String getTranslatedName(){return I18n.translate(name);}
 
+    @Override
+    public String toString() {
+        try {
+            return getTranslatedName();
+        } catch (Exception ignored){}
+        return getName();
+    }
+
     private void onCommandExec(String[] args) {
         if(args.length>0){
             for(OptionBase<?> o:getOptions()){

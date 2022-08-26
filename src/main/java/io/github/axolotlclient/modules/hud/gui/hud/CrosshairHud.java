@@ -64,6 +64,7 @@ public class CrosshairHud extends AbstractHudEntry {
             GlStateManager.enableBlend();
             GlStateManager.blendFuncSeparate(775, 769, 1, 0);
         }
+
         DrawPosition pos = getPos().subtract(0, -1);
         if (Objects.equals(type.get(), CrosshairOption.DOT.toString())) {
 

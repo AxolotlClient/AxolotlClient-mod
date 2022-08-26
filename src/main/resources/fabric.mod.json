@@ -20,7 +20,7 @@
   "license": "LGPL-3.0-or-later",
   "icon": "assets/axolotlclient/icon.png",
   "accessWidener" : "axolotlclient.accesswidener",
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
     "client": [
       "io.github.axolotlclient.AxolotlClient"

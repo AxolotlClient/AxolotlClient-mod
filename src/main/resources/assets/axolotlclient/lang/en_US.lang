@@ -8,6 +8,8 @@ title_short=Client Options
 sky_loading_text=Loading Skies out of
 resource_loading_finished=Loading finished! Starting Minecraft...
 
+searchOptions=Search all Options
+
 general=General
 general.tooltip=General Options
 loadingBgColor=Loading Screen Color
@@ -175,7 +177,7 @@ sneaking_toggled=Sneaking [Toggled]
 sprinting_pressed=Sprinting [Key held]
 sneaking_pressed=Sneaking [Key held]
 iphud=IP HUD
-IconHud=Icon HUD
+iconHud=Icon HUD
 
 toggleSprint=Allow Sprinting toggle
 toggleSneak=Allow Sneaking toggle
