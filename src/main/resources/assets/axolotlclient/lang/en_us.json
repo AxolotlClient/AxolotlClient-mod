@@ -202,6 +202,7 @@
 	"toggleSneak": "Allow Sneaking toggle",
 	"sneakToggled": "Sneaking currently toggled",
 	"sprintToggled": "Sprinting currently toggled",
+	"hotbarhud": "Hotbar HUD",
 
 	"hud.snapping": "Snapping",
 	"hud.clientOptions": "Client Options",
