@@ -23,7 +23,7 @@ public abstract class MixinPlayerEntity extends Entity {
     @Inject(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getAttributeValue(Lnet/minecraft/entity/attribute/EntityAttribute;)D"))
     public void getReach(Entity entity, CallbackInfo ci){
         if((Object)this == MinecraftClient.getInstance().player || entity.equals(MinecraftClient.getInstance().player)){
-            ReachDisplayHud hud = (ReachDisplayHud) HudManager.getINSTANCE().get(ReachDisplayHud.ID);
+            ReachDisplayHud hud = (ReachDisplayHud) HudManager.getInstance().get(ReachDisplayHud.ID);
             if(hud!=null && hud.isEnabled()){
                 hud.updateDistance(Util.calculateDistance(super.getPos(), entity.getPos()));
             }

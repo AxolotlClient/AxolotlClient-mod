@@ -8,14 +8,12 @@ import io.github.axolotlclient.modules.AbstractModule;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
 
 import java.text.DecimalFormat;
 
 public class TntTime extends AbstractModule {
 
-    public static Identifier ID = new Identifier("tnttime");
-    public static TntTime Instance = new TntTime();
+    private static final TntTime Instance = new TntTime();
 
     private DecimalFormat format;
     private int decimals;
@@ -23,6 +21,10 @@ public class TntTime extends AbstractModule {
     private final OptionCategory category = new OptionCategory("tnttime");
     public final BooleanOption enabled = new BooleanOption("enabled", false);
     private final IntegerOption decimalPlaces = new IntegerOption("decimalplaces", 2, 0, 6);
+
+    public static TntTime getInstance(){
+        return Instance;
+    }
 
     @Override
     public void init() {

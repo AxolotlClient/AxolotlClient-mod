@@ -11,10 +11,12 @@ import io.github.axolotlclient.modules.hud.util.DrawUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Formatting;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,7 @@ public class OptionsScreenBuilder extends Screen {
     protected OptionCategory cat;
 
     protected ColorSelectionWidget picker;
+    protected TextFieldWidget searchWidget;
 
     private ButtonWidgetList list;
 
@@ -58,6 +61,8 @@ public class OptionsScreenBuilder extends Screen {
         } else {
             list.renderTooltips(matrices, mouseX, mouseY);
         }
+
+        searchWidget.render(matrices, mouseX, mouseY, delta);
 
         super.render(matrices, mouseX, mouseY, delta);
     }
@@ -99,7 +104,8 @@ public class OptionsScreenBuilder extends Screen {
 			}
             return true;
 		}
-		return super.mouseClicked(mouseX, mouseY, button);
+
+		return searchWidget.mouseClicked(mouseX, mouseX, button) || super.mouseClicked(mouseX, mouseY, button);
 	}
 
 	@Override
@@ -113,6 +119,7 @@ public class OptionsScreenBuilder extends Screen {
 	@Override
     public void tick() {
         this.list.tick();
+        searchWidget.tick();
         if(isPickerOpen()){
             picker.tick();
         }
@@ -120,21 +127,59 @@ public class OptionsScreenBuilder extends Screen {
 
     @Override
     public void init() {
-        this.list = new ButtonWidgetList(this.client, this.width, this.height, 50, this.height - 50, 25, cat);
+        createWidgetList(cat);
 
-		this.addChild(list);
+        this.addChild(list);
 
         this.addButton(new ButtonWidget(this.width/2-100, this.height-40, 200, 20, new TranslatableText("back"), buttonWidget -> {
             if(isPickerOpen()){
                 closeColorPicker();
             }
+
             ConfigManager.save();
             MinecraftClient.getInstance().openScreen(parent);
         }));
-        if(Objects.equals(cat.getName(), "config"))
-            this.addButton(new ButtonWidget(this.width-106,
-                this.height-26, 100, 20, new TranslatableText("credits"),
-                buttonWidget -> MinecraftClient.getInstance().openScreen(new CreditsScreen(this))));
+
+        this.addChild(searchWidget = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width - 120, 20, 100, 20, new TranslatableText("search")){
+
+            @Override
+            public boolean mouseClicked(double mouseX, double mouseY, int button) {
+                if(isMouseOver(mouseX, mouseY)) {
+                    if (!isFocused() && super.mouseClicked(mouseX, mouseY, button) && cat.getName().equals("config")) {
+                        MinecraftClient.getInstance().openScreen(new OptionsScreenBuilder(MinecraftClient.getInstance().currentScreen, getAllOptions()));
+                        return true;
+                    }
+                    return super.mouseClicked(mouseX, mouseY, button);
+                }
+                setFocused(false);
+                return false;
+            }
+
+            @Override
+            public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+                super.renderButton(matrices, mouseX, mouseY, delta);
+
+                drawVerticalLine(matrices, x-5, y-1, y+11, -1);
+                drawHorizontalLine(matrices, x-5, x+width, y+11, -1);
+            }
+        });
+
+        if(Objects.equals(cat.getName(), "config")) {
+            this.addButton(new ButtonWidget(this.width - 106, this.height - 26, 100, 20, new TranslatableText("credits"), buttonWidget -> MinecraftClient.getInstance().openScreen(new CreditsScreen(this))));
+        } else {
+            setInitialFocus(searchWidget);
+        }
+        searchWidget.setHasBorder(false);
+        searchWidget.setSuggestion(Formatting.ITALIC + new TranslatableText("search").append("...").getString());
+        searchWidget.setChangedListener(s -> {
+            list.filter(s);
+
+            if(!s.equals("")){
+                searchWidget.setSuggestion("");
+            } else {
+                searchWidget.setSuggestion(Formatting.ITALIC + new TranslatableText("search").append("...").getString());
+            }
+        });
     }
 
 	@Override
@@ -155,7 +200,7 @@ public class OptionsScreenBuilder extends Screen {
             return false;
         }
 
-		return this.list.keyPressed(keyCode, scanCode, modifiers);
+		return searchWidget.keyPressed(keyCode, scanCode, modifiers) || this.list.keyPressed(keyCode, scanCode, modifiers);
 	}
 
 	@Override
@@ -163,7 +208,7 @@ public class OptionsScreenBuilder extends Screen {
         if(isPickerOpen() && picker.charTyped(chr, modifiers)){
             return true;
         }
-		return list.charTyped(chr, modifiers);
+		return searchWidget.charTyped(chr, modifiers) || list.charTyped(chr, modifiers);
 	}
 
 	public void renderTooltip(MatrixStack matrices, Tooltippable option, int x, int y){
@@ -185,5 +230,39 @@ public class OptionsScreenBuilder extends Screen {
         }
         ConfigManager.save();
         super.resize(client, width, height);
+    }
+
+    protected void createWidgetList(OptionCategory category){
+        this.list = new ButtonWidgetList(client, this.width, height, 50, height-50, 25, category);
+    }
+
+    protected OptionCategory getAllOptions(){
+        OptionCategory temp = new OptionCategory("");
+
+        for(OptionCategory cat:AxolotlClient.CONFIG.getCategories()) {
+            setupOptionsList(temp, cat);
+        }
+
+        List<OptionCategory> list = temp.getSubCategories();
+
+        if(AxolotlClient.CONFIG.searchSort.get()){
+            if(AxolotlClient.CONFIG.searchSortOrder.get().equals("ASCENDING")) {
+                list.sort(new Tooltippable.AlphabeticalComparator());
+            } else {
+                list.sort(new Tooltippable.AlphabeticalComparator().reversed());
+            }
+        }
+
+        return new OptionCategory("searchOptions")
+            .addSubCategories(list);
+    }
+
+    protected void setupOptionsList(OptionCategory target, OptionCategory cat){
+        target.addSubCategory(cat);
+        if(!cat.getSubCategories().isEmpty()){
+            for(OptionCategory sub : cat.getSubCategories()){
+                setupOptionsList(target, sub);
+            }
+        }
     }
 }

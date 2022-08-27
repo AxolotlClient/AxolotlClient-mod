@@ -43,9 +43,12 @@ public class StringOptionWidget extends TextFieldWidget {
 
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-		this.textField.keyPressed(keyCode, scanCode, modifiers);
-		this.option.set(textField.getText());
-		return true;//super.keyPressed(keyCode, scanCode, modifiers);
+        if(textField.isFocused()) {
+            this.textField.keyPressed(keyCode, scanCode, modifiers);
+            this.option.set(textField.getText());
+            return true;//super.keyPressed(keyCode, scanCode, modifiers);
+        }
+        return false;
 	}
 
 	@Override
@@ -74,11 +77,18 @@ public class StringOptionWidget extends TextFieldWidget {
 
     @Override
     public boolean isMouseOver(double mouseX, double mouseY) {
+        if(canHover()) {
+            return super.isMouseOver(mouseX, mouseY);
+        }
+        return false;
+    }
+
+    protected boolean canHover(){
         if(MinecraftClient.getInstance().currentScreen instanceof OptionsScreenBuilder &&
             ((OptionsScreenBuilder) MinecraftClient.getInstance().currentScreen).isPickerOpen()){
             this.hovered = false;
             return false;
         }
-        return super.isMouseOver(mouseX, mouseY);
+        return true;
     }
 }

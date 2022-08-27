@@ -15,15 +15,15 @@ public abstract class MixinScreen {
 
     @ModifyArgs(method = "renderTooltip(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/item/ItemStack;II)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;renderTooltip(Lnet/minecraft/client/util/math/MatrixStack;Ljava/util/List;II)V"))
     public void modifyTooltipPosition(Args args) {
-        if (ScrollableTooltips.Instance.enabled.get()) {
+        if (ScrollableTooltips.getInstance().enabled.get()) {
 
             if ((MinecraftClient.getInstance().currentScreen instanceof CreativeInventoryScreen) &&
                 ((CreativeInventoryScreen) MinecraftClient.getInstance().currentScreen).getSelectedTab() != ItemGroup.INVENTORY.getIndex()) {
                 return;
             }
 
-            args.set(2, (int) args.get(2) + ScrollableTooltips.Instance.tooltipOffsetX);
-            args.set(3, (int) args.get(3) + ScrollableTooltips.Instance.tooltipOffsetY);
+            args.set(2, (int) args.get(2) + ScrollableTooltips.getInstance().tooltipOffsetX);
+            args.set(3, (int) args.get(3) + ScrollableTooltips.getInstance().tooltipOffsetY);
         }
     }
 }

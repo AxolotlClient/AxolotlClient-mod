@@ -3,6 +3,7 @@ package io.github.axolotlclient.mixin;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.hud.HudEditScreen;
 import io.github.axolotlclient.modules.zoom.Zoom;
+import io.github.axolotlclient.util.UnsupportedMod;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
@@ -65,24 +66,36 @@ public abstract class MixinTitleScreen extends Screen{
 	@Inject(method = "init", at = @At("HEAD"))
 	public void showBadModsScreen(CallbackInfo ci){
 
-		if (AxolotlClient.showWarning) {
-			MinecraftClient.getInstance().openScreen(new ConfirmScreen(
-				(boolean confirmed) -> {
-					if (confirmed) {
-						AxolotlClient.showWarning = false;
-						AxolotlClient.titleDisclaimer = true;
-						System.out.println("Proceed with Caution!");
-						MinecraftClient.getInstance().openScreen(new TitleScreen());
-					} else {
-						MinecraftClient.getInstance().stop();
-					}
-				},
-				new LiteralText("Axolotlclient warning").formatted(Formatting.RED),
-				new LiteralText("The mod ").append(
-					new LiteralText(AxolotlClient.badmod).formatted(Formatting.BOLD, Formatting.DARK_RED)).append(" is most likely prohibited to be used on many Servers!\n" +
-					"AxolotlClient will not be responsible for any punishment you will get for using it. Proceed with Caution!"),
-				new LiteralText("Proceed"), new TranslatableText("menu.quit")));
-		}
+        if (AxolotlClient.showWarning) {
+            StringBuilder description = new StringBuilder();
+            for(int i = 0; i<AxolotlClient.badmod.reason().length; i++){
+                UnsupportedMod.UnsupportedReason reason = AxolotlClient.badmod.reason()[i];
+                if(i>0 && i < AxolotlClient.badmod.reason().length - 1){
+                    description.append(", to ");
+                } else if (i > 0){
+                    description.append(" and to ");
+                }
+                description.append(reason);
+            }
+            description.append(". ");
+
+            MinecraftClient.getInstance().openScreen(new ConfirmScreen(
+                (boolean confirmed) -> {
+                    if (confirmed) {
+                        AxolotlClient.showWarning = false;
+                        AxolotlClient.titleDisclaimer = true;
+                        System.out.println("Proceed with Caution!");
+                        MinecraftClient.getInstance().openScreen(new TitleScreen());
+                    } else {
+                        MinecraftClient.getInstance().stop();
+                    }
+                },
+                new LiteralText("Axolotlclient warning").formatted(Formatting.RED),
+                new LiteralText("The mod ").append(
+                    new LiteralText(AxolotlClient.badmod.name()).formatted(Formatting.BOLD, Formatting.DARK_RED)).append(" is known to ").append(description.toString()).append(
+                    "AxolotlClient will not be responsible for any punishment or crashes you will encounter while using it.\n Proceed with Caution!"),
+                new TranslatableText("gui.proceed"), new TranslatableText("menu.quit")));
+        }
 	}
 
 	@Inject(method = "render", at = @At("TAIL"))

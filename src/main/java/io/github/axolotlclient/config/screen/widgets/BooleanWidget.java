@@ -26,9 +26,19 @@ public class BooleanWidget extends ButtonWidget {
 
     @Override
     public boolean isMouseOver(double mouseX, double mouseY) {
+        if(canHover()) {
+            return super.isMouseOver(mouseX, mouseY);
+        }
+        return false;
+    }
+
+    protected boolean canHover(){
         if(MinecraftClient.getInstance().currentScreen instanceof OptionsScreenBuilder &&
-            ((OptionsScreenBuilder) MinecraftClient.getInstance().currentScreen).isPickerOpen()) return false;
-        return super.isMouseOver(mouseX, mouseY);
+            ((OptionsScreenBuilder) MinecraftClient.getInstance().currentScreen).isPickerOpen()){
+            this.hovered = false;
+            return false;
+        }
+        return true;
     }
 
 	@Override

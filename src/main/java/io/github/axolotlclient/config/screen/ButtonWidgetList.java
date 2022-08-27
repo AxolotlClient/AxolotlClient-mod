@@ -10,6 +10,7 @@ import io.github.axolotlclient.config.options.EnumOption;
 import io.github.axolotlclient.config.options.FloatOption;
 import io.github.axolotlclient.config.options.IntegerOption;
 import io.github.axolotlclient.config.options.Option;
+import io.github.axolotlclient.config.options.OptionBase;
 import io.github.axolotlclient.config.options.OptionCategory;
 import io.github.axolotlclient.config.options.StringOption;
 import io.github.axolotlclient.config.options.Tooltippable;
@@ -36,19 +37,22 @@ import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 public class ButtonWidgetList extends ButtonListWidget {
 
-    public final List<Pair> entries = new ArrayList<>();
+    public List<Pair> entries = new ArrayList<>();
 
-    //private final OptionCategory category; // Uncomment if needed one day
+    private final OptionCategory category; // Uncomment if needed one day
 
     public ButtonWidgetList(MinecraftClient minecraftClient, int width, int height, int top, int bottom, int entryHeight, OptionCategory category) {
         super(minecraftClient, width, height, top, bottom, entryHeight);
 
         this.setRenderHeader(false, 0);
-        //this.category=category; // same as above
+        this.category=category; // same as above
 
         if(!category.getSubCategories().isEmpty()) {
             for (int i = 0; i < category.getSubCategories().size(); i += 2) {
@@ -75,12 +79,6 @@ public class ButtonWidgetList extends ButtonListWidget {
 			this.entries.add(new OptionEntry(buttonWidget, option, width));
         }
     }
-
-	@Override
-	protected int addEntry(ButtonEntry entry) {
-		if(entry instanceof Pair) this.entries.add((Pair)entry);
-		return super.addEntry(entry);
-	}
 
 	private AbstractButtonWidget createCategoryWidget(int x, OptionCategory cat){
         if(cat==null) {
@@ -197,6 +195,88 @@ public class ButtonWidgetList extends ButtonListWidget {
 		}
 		return false;
 	}
+
+    public void filter(final String searchTerm) {
+        clearEntries();
+        entries.clear();
+
+        Collection<Tooltippable> children = getEntries();
+
+        List<Tooltippable> matched = children.stream().filter(tooltippable -> {
+            if(AxolotlClient.CONFIG.searchForOptions.get() && tooltippable instanceof OptionCategory){
+                if(((OptionCategory) tooltippable).getOptions().stream().anyMatch(option -> passesSearch(option.toString(), searchTerm))){
+                    return true;
+                }
+            }
+            return passesSearch(tooltippable.toString(), searchTerm);
+        }).collect(Collectors.toList());
+
+        if(!searchTerm.isEmpty() && AxolotlClient.CONFIG.searchSort.get()){
+            if(AxolotlClient.CONFIG.searchSortOrder.get().equals("ASCENDING")) {
+                matched.sort(new Tooltippable.AlphabeticalComparator());
+            } else {
+                matched.sort(new Tooltippable.AlphabeticalComparator().reversed());
+            }
+        }
+
+        OptionCategory filtered = new OptionCategory(category.getName());
+        for (Tooltippable tooltippable : matched) {
+
+            if(tooltippable instanceof OptionBase<?>){
+                filtered.add((OptionBase<?>) tooltippable);
+            } else if (tooltippable instanceof OptionCategory){
+                filtered.addSubCategory((OptionCategory) tooltippable);
+            }
+        }
+        entries = constructEntries(filtered);
+        for(Pair p:entries){
+            addEntry(p);
+        }
+
+        if (getScrollAmount() > Math.max(0, this.getMaxPosition() - (bottom - this.top - 4))) {
+            setScrollAmount(Math.max(0, this.getMaxPosition() - (this.bottom - this.top - 4)));
+        }
+    }
+
+    protected boolean passesSearch(String string, String search){
+        if(AxolotlClient.CONFIG.searchIgnoreCase.get()) {
+            return string.toLowerCase(Locale.ROOT).contains(search.toLowerCase(Locale.ROOT));
+        }
+        return string.contains(search);
+    }
+
+    protected List<Tooltippable> getEntries(){
+        List<Tooltippable> list = new ArrayList<>(category.getSubCategories());
+        list.addAll(category.getOptions());
+        return list;
+    }
+
+    protected List<Pair> constructEntries(OptionCategory category){
+        List<Pair> entries = new ArrayList<>();
+        if(!category.getSubCategories().isEmpty()) {
+            for (int i = 0; i < category.getSubCategories().size(); i += 2) {
+                OptionCategory subCat = category.getSubCategories().get(i);
+                AbstractButtonWidget buttonWidget = this.createCategoryWidget(width / 2 - 155, subCat);
+
+                OptionCategory subCat2 = i < category.getSubCategories().size() - 1 ? category.getSubCategories().get(i + 1) : null;
+                AbstractButtonWidget buttonWidget2 = this.createCategoryWidget(width / 2 - 155 + 160, subCat2);
+
+                entries.add(new CategoryPair(subCat, buttonWidget, subCat2, buttonWidget2));
+            }
+            entries.add(new Spacer());
+        }
+
+        for (int i = 0; i < (category.getOptions().size()); i ++) {
+
+            Option option = category.getOptions().get(i);
+            if(option.getName().equals("x")||option.getName().equals("y")) continue;
+            AbstractButtonWidget buttonWidget = this.createWidget(width / 2 - 155+160, option);
+
+            //addEntry(new OptionEntry(buttonWidget, option, width));
+            entries.add(new OptionEntry(buttonWidget, option, width));
+        }
+        return entries;
+    }
 
 	@Environment(EnvType.CLIENT)
     public class Pair extends ButtonListWidget.ButtonEntry {

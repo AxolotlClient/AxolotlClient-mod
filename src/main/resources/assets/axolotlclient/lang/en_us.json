@@ -6,6 +6,16 @@
 	"sky_loading_text": "Loading Skies out of",
 	"resource_loading_finished": "Loading finished! Starting Minecraft...",
 
+	"searchOptions": "Search all Options",
+	"search": "Search",
+	"searchFilters": "Search Filters",
+	"searchIgnoreCase": "Ignore Case",
+	"searchForOptions": "Inlude options in search",
+	"searchSort": "Sort results",
+	"searchSortOrder": "Sort Order",
+	"ASCENDING": "Ascending",
+	"DESCENDING": "Descending",
+
 	"general": "General",
 	"general.tooltip": "General Options",
 	"loadingBgColor": "Loading Screen Color",
@@ -57,6 +67,14 @@
 	"shiftHorizontalScroll": "Scroll Horizontally (Shift)",
 	"scrollAmount": "Scroll Amount",
 	"tnttime": "TntTime",
+	"particles": "Particles",
+	"customColor": "Custom Color",
+	"customColor.tooltip": "Whether to use a custom color for this Particle.",
+	"particles.color.tooltip": "The color of the particle. <br>Needs \"Custom Color\" enabled.",
+	"alwaysCrit": "Always Show",
+	"alwaysCrit.tooltip": "Whether to always emit these particles when hitting.",
+	"count": "Multiplier",
+	"count.tooltip": "How much to increase the amount of particles spawned.<br>Only works on EmitterParticles <br>(all that spread out and consist of usually 16 single ones, <br>e.g. Crit Particles).",
 
 	"nametagOptions": "Nametag Options",
 	"showOwnNametag": "Show Own Nametag",
@@ -107,6 +125,7 @@
 	"key.openHud": "Open Hud Editor",
 	"key.toggleSneak": "Toggle Sneaking",
 	"key.toggleSprint": "Toggle Sprinting",
+	"key.freelook": "Freelook",
 
 	"hud": "Hud Options",
 	"pinghud": "Ping HUD",
@@ -210,6 +229,13 @@
 	"showTime": "Show Time",
 	"showTime.tooltip": "Whether to show a timestamp.",
 
+	"freelook": "Freelook",
+	"perspective": "Perspective",
+	"FIRST_PERSON": "First Person",
+	"THIRD_PERSON_BACK": "Third Person (Back)",
+	"THIRD_PERSON_FRONT": "Third Person (Front)",
+	"invert": "Invert",
+
 	"credits": "Credits",
 	"creditsBGM": "BGM",
 	"contributors": "Contributors:",
@@ -221,8 +247,6 @@
 	"red": "Red",
 	"green": "Green",
 	"blue": "Blue",
-
-	"freelook": "Freelook",
 
 	"disableReason.crash.tooltip": "This option has been disabled <br>because it would crash your game.",
 	"disableReason.ban_reason.tooltip": "This option is disabled <br>because it is known to be bannable on your current server.",

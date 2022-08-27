@@ -31,14 +31,12 @@ import java.util.stream.Collectors;
 
 public class HudManager extends AbstractModule {
 
-    public static Identifier ID = new Identifier("hud");
-
     private final Map<Identifier, AbstractHudEntry> entries = new HashMap<>();
 
-    private final OptionCategory hudCategory = new OptionCategory(new Identifier("hud"), "hud");
+    private final OptionCategory hudCategory = new OptionCategory("hud");
 
     private final MinecraftClient client = MinecraftClient.getInstance();
-    private static final HudManager INSTANCE = new HudManager();
+    private static final HudManager Instance = new HudManager();
 
     static KeyBinding key = new KeyBinding("key.openHud", GLFW.GLFW_KEY_RIGHT_SHIFT, "category.axolotlclient");
 
@@ -46,8 +44,8 @@ public class HudManager extends AbstractModule {
 
     }
 
-    public static HudManager getINSTANCE(){
-        return INSTANCE;
+    public static HudManager getInstance(){
+        return Instance;
     }
 
     public void init(){
@@ -86,7 +84,7 @@ public class HudManager extends AbstractModule {
 
     public void tick(){
         if(key.isPressed()) MinecraftClient.getInstance().openScreen(new HudEditScreen());
-        INSTANCE.entries.forEach((identifier, abstractHudEntry) -> {
+        Instance.entries.forEach((identifier, abstractHudEntry) -> {
             if(abstractHudEntry.tickable())abstractHudEntry.tick();
         });
     }

@@ -24,8 +24,8 @@ public abstract class MixinTntEntityRenderer extends EntityRenderer<TntEntity> {
             target = "Lnet/minecraft/client/render/entity/EntityRenderer;render(Lnet/minecraft/entity/Entity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V"),
         cancellable = true)
     public void render(TntEntity entity, float yaw, float delta, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int light, CallbackInfo ci){
-        if(TntTime.Instance.enabled.get()) {
-            super.renderLabelIfPresent(entity, TntTime.Instance.getFuseTime(entity.getFuseTimer()), matrixStack, vertexConsumerProvider, light);
+        if(TntTime.getInstance().enabled.get()) {
+            super.renderLabelIfPresent(entity, TntTime.getInstance().getFuseTime(entity.getFuseTimer()), matrixStack, vertexConsumerProvider, light);
             ci.cancel();
         }
     }

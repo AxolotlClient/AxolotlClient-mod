@@ -13,6 +13,7 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class OptionCategory implements Tooltippable {
         Collections.addAll(this.options, options);
     }
 
-    public void add(List<OptionBase<?>> options){this.options.addAll(options);}
+    public void add(Collection<OptionBase<?>> options){this.options.addAll(options);}
 
     public void addSubCategory(OptionCategory category){subCategories.add(category);}
 
@@ -61,6 +62,14 @@ public class OptionCategory implements Tooltippable {
     }
 
     public Text getTranslatedName(){return new TranslatableText(name);}
+
+    @Override
+    public String toString() {
+        try {
+            return getTranslatedName().getString();
+        } catch (Exception ignored){}
+        return getName();
+    }
 
     public LiteralArgumentBuilder<FabricClientCommandSource> buildCommand(){
         LiteralArgumentBuilder<FabricClientCommandSource> builder = ClientCommandManager.literal(getName());

@@ -10,7 +10,6 @@ import io.github.axolotlclient.util.Util;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.options.KeyBinding;
-import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 
 
@@ -36,7 +35,11 @@ public class Zoom extends AbstractModule {
 
 	public final OptionCategory zoom = new OptionCategory("zoom");
 
-	public static final Identifier ID = new Identifier("zoom");
+    private static final Zoom Instance = new Zoom();
+
+    public static Zoom getInstance(){
+        return Instance;
+    }
 
 	@Override
 	public void init() {

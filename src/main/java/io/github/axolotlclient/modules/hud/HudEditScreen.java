@@ -40,7 +40,7 @@ public class HudEditScreen extends Screen {
 	    super(Text.of(""));
 	    snapping.setDefaults();
         updateSnapState();
-        manager = HudManager.getINSTANCE();
+        manager = HudManager.getInstance();
         mouseDown = false;
         this.parent=parent;
     }
@@ -70,7 +70,7 @@ public class HudEditScreen extends Screen {
     }
 
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
-		Optional<AbstractHudEntry> entry = HudManager.getINSTANCE().getEntryXY((int) Math.round(mouseX), (int) Math.round(mouseY));
+		Optional<AbstractHudEntry> entry = HudManager.getInstance().getEntryXY((int) Math.round(mouseX), (int) Math.round(mouseY));
 		if (button == 0) {
 			mouseDown = true;
 			if (entry.isPresent()) {

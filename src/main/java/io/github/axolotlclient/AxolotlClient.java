@@ -12,10 +12,12 @@ import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hypixel.HypixelMods;
 import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
 import io.github.axolotlclient.modules.motionblur.MotionBlur;
+import io.github.axolotlclient.modules.particles.Particles;
 import io.github.axolotlclient.modules.rpc.DiscordRPC;
 import io.github.axolotlclient.modules.scrollableTooltips.ScrollableTooltips;
 import io.github.axolotlclient.modules.tnttime.TntTime;
 import io.github.axolotlclient.modules.zoom.Zoom;
+import io.github.axolotlclient.util.UnsupportedMod;
 import io.github.axolotlclient.util.Util;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -57,46 +59,48 @@ public class AxolotlClient implements ClientModInitializer {
 
 	public static final OptionCategory config = new OptionCategory("storedOptions");
 	public static final BooleanOption someNiceBackground = new BooleanOption("defNoSecret", false);
-	public static final HashMap<Identifier, AbstractModule> modules= new HashMap<>();
+	public static final List<AbstractModule> modules= new ArrayList<>();
 
 	public static Integer tickTime = 0;
 
-	public static String badmod="";
-	public static boolean titleDisclaimer = false;
-	public static boolean showWarning = true;
+    public static UnsupportedMod badmod;
+    public static boolean titleDisclaimer = false;
+    public static boolean showWarning = true;
 
-	@Override
-	public void onInitializeClient() {
+    @Override
+    public void onInitializeClient() {
 
-		if (FabricLoader.getInstance().isModLoaded("ares")){
-			badmod = "Ares Client";
-		} else if (FabricLoader.getInstance().isModLoaded("inertia")) {
-			badmod = "Inertia Client";
-		} else if (FabricLoader.getInstance().isModLoaded("meteor-client")) {
-			badmod = "Meteor Client";
-		} else if (FabricLoader.getInstance().isModLoaded("wurst")) {
-			badmod = "Wurst Client";
-		} else if (FabricLoader.getInstance().isModLoaded("baritone")) {
-			badmod = "Baritone";
-		} else if (FabricLoader.getInstance().isModLoaded("xaerominimap")) {
-			badmod = "Xaero's Minimap";
-		} else {
-			showWarning = false;
-		}
+        if (FabricLoader.getInstance().isModLoaded("ares")){
+            badmod = new UnsupportedMod("Ares Client", UnsupportedMod.UnsupportedReason.BAN_REASON);
+        } else if (FabricLoader.getInstance().isModLoaded("inertia")) {
+            badmod = new UnsupportedMod("Inertia Client", UnsupportedMod.UnsupportedReason.BAN_REASON);
+        } else if (FabricLoader.getInstance().isModLoaded("meteor-client")) {
+            badmod = new UnsupportedMod("Meteor Client", UnsupportedMod.UnsupportedReason.BAN_REASON);
+        } else if (FabricLoader.getInstance().isModLoaded("wurst")) {
+            badmod = new UnsupportedMod("Wurst Client", UnsupportedMod.UnsupportedReason.BAN_REASON);
+        } else if (FabricLoader.getInstance().isModLoaded("baritone")) {
+            badmod = new UnsupportedMod("Baritone", UnsupportedMod.UnsupportedReason.BAN_REASON);
+        } else if (FabricLoader.getInstance().isModLoaded("xaerominimap")) {
+            badmod = new UnsupportedMod("Xaero's Minimap", UnsupportedMod.UnsupportedReason.UNKNOWN_CONSEQUENSES);
+        } else if (FabricLoader.getInstance().isModLoaded("essential-container")){
+            badmod = new UnsupportedMod("Essential", UnsupportedMod.UnsupportedReason.MIGHT_CRASH, UnsupportedMod.UnsupportedReason.UNKNOWN_CONSEQUENSES);
+        } else {
+            showWarning = false;
+        }
 
 		CONFIG = new AxolotlClientConfig();
 		config.add(someNiceBackground);
 
 		getModules();
 		CONFIG.init();
-		modules.forEach((identifier, abstractModule) -> abstractModule.init());
+		modules.forEach(AbstractModule::init);
 
 		CONFIG.config.addAll(CONFIG.getCategories());
 		CONFIG.config.add(config);
 
 		ConfigManager.load();
 
-		modules.forEach((identifier, abstractModule) -> abstractModule.lateInit());
+		modules.forEach(AbstractModule::lateInit);
 
         FabricLoader.getInstance().getModContainer("axolotlclient").ifPresent(container ->
 		    ResourceManagerHelper.registerBuiltinResourcePack(
@@ -109,14 +113,15 @@ public class AxolotlClient implements ClientModInitializer {
 	}
 
 	public static void getModules(){
-		modules.put(Zoom.ID, new Zoom());
-		modules.put(HudManager.ID, HudManager.getINSTANCE());
-		modules.put(HypixelMods.ID, HypixelMods.INSTANCE);
-		modules.put(MotionBlur.ID, new MotionBlur());
-        modules.put(ScrollableTooltips.ID, ScrollableTooltips.Instance);
-        modules.put(DiscordRPC.ID, DiscordRPC.getInstance());
-        modules.put(Freelook.ID, Freelook.INSTANCE);
-        modules.put(TntTime.ID, TntTime.Instance);
+		modules.add(Zoom.getInstance());
+		modules.add(HudManager.getInstance());
+		modules.add(HypixelMods.getInstance());
+		modules.add(MotionBlur.getInstance());
+        modules.add(ScrollableTooltips.getInstance());
+        modules.add(DiscordRPC.getInstance());
+        modules.add(Freelook.getInstance());
+        modules.add(TntTime.getInstance());
+        modules.add(Particles.getInstance());
 	}
 
 	public static boolean isUsingClient(UUID uuid){
@@ -131,7 +136,7 @@ public class AxolotlClient implements ClientModInitializer {
 
 	public static void tickClient(){
 
-        modules.forEach((identifier, abstractModule) -> abstractModule.tick());
+        modules.forEach(AbstractModule::tick);
 		Color.tickChroma();
 
 		if (tickTime >=6000){

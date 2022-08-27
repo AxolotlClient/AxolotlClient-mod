@@ -14,7 +14,6 @@ import io.github.axolotlclient.modules.rpc.gameSdk.GameSdkDownloader;
 import io.github.axolotlclient.util.OSUtil;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.util.Identifier;
 
 import java.time.Instant;
 
@@ -27,8 +26,6 @@ import java.time.Instant;
 public class DiscordRPC extends AbstractModule {
 
     private static DiscordRPC Instance;
-
-    public static Identifier ID = new Identifier("axolotlclient", "rpc");
 
     public OptionCategory category = new OptionCategory("rpc");
 
@@ -96,8 +93,12 @@ public class DiscordRPC extends AbstractModule {
                 callBacks.start();
                 AxolotlClient.LOGGER.info("Started RPC Core");
             } catch (Exception e) {
-                AxolotlClient.LOGGER.error("An error occured: ");
-                e.printStackTrace();
+                if(!e.getMessage().contains("INTERNAL_ERROR")) {
+                    AxolotlClient.LOGGER.error("An error occured: ");
+                    e.printStackTrace();
+                } else {
+                    enabled.set(false);
+                }
             }
         }
     }
