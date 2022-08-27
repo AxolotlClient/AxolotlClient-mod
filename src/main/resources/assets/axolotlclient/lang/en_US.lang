@@ -69,6 +69,7 @@ customColor=Custom Color
 customColor.tooltip=Whether to use a custom color for this Particle.
 alwaysCrit=Always Show
 alwaysCrit.tooltip=Whether to always emit these particles when hitting.
+hotbarhud=Hotbar HUD
 
 nametagOptions=Nametag Options
 showOwnNametag=Show Own Nametag
