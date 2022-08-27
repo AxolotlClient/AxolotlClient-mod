@@ -70,7 +70,7 @@ customColor=Özel Renk
 customColor.tooltip=Bu parçacık için kullanılıcak özel renk seçeneği.
 alwaysCrit=Her Zaman Göster
 alwaysCrit.tooltip=Vururken hep bu parçacıkların yayılma seçeneği.
-hotbarhud=Eşya Bar Arayüzü
+hotbarhud=Eşya Barı Arayüzü
 
 nametagOptions=Takma Ad Ayarları
 showOwnNametag=Kendi Takma Adı'nı göster
