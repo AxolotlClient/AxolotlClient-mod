@@ -8,6 +8,13 @@
 
 	"searchOptions": "Search all Options",
 	"search": "Search",
+	"searchFilters": "Search Filters",
+	"searchIgnoreCase": "Ignore Case",
+	"searchForOptions": "Inlude options in search",
+	"searchSort": "Sort results",
+	"searchSortOrder": "Order",
+	"ASCENDING": "Ascending",
+	"DESCENDING": "Descending",
 
 	"general": "General",
 	"general.tooltip": "General Options",

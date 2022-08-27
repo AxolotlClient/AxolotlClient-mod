@@ -168,18 +168,27 @@ public class ButtonWidgetList extends AlwaysSelectedEntryListWidget<ButtonWidget
 		return false;
 	}
 
-    public void filter(String searchTerm) {
-        this.clearEntries();
+    public void filter(final String searchTerm) {
+        clearEntries();
         entries.clear();
 
         Collection<Tooltippable> children = getEntries();
 
         List<Tooltippable> matched = children.stream().filter(tooltippable -> {
-            return tooltippable.toString().toLowerCase(Locale.ROOT).contains(searchTerm.toLowerCase(Locale.ROOT));
+            if(AxolotlClient.CONFIG.searchForOptions.get() && tooltippable instanceof OptionCategory){
+                if(((OptionCategory) tooltippable).getOptions().stream().anyMatch(option -> passesSearch(option.toString(), searchTerm))){
+                    return true;
+                }
+            }
+            return passesSearch(tooltippable.toString(), searchTerm);
         }).collect(Collectors.toList());
 
-        if(!searchTerm.isEmpty()){
-            matched.sort(new Tooltippable.AlphabeticalComparator());
+        if(!searchTerm.isEmpty() && AxolotlClient.CONFIG.searchSort.get()){
+            if(AxolotlClient.CONFIG.searchSortOrder.get().equals("ASCENDING")) {
+                matched.sort(new Tooltippable.AlphabeticalComparator());
+            } else {
+                matched.sort(new Tooltippable.AlphabeticalComparator().reversed());
+            }
         }
 
         OptionCategory filtered = new OptionCategory(category.getName());
@@ -196,10 +205,16 @@ public class ButtonWidgetList extends AlwaysSelectedEntryListWidget<ButtonWidget
             addEntry(p);
         }
 
-
-        if (getScrollAmount() > Math.max(0, this.getMaxPosition() - (this.bottom - this.top - 4))) {
+        if (getScrollAmount() > Math.max(0, this.getMaxPosition() - (bottom - this.top - 4))) {
             setScrollAmount(Math.max(0, this.getMaxPosition() - (this.bottom - this.top - 4)));
         }
+    }
+
+    protected boolean passesSearch(String string, String search){
+        if(AxolotlClient.CONFIG.searchIgnoreCase.get()) {
+            return string.toLowerCase(Locale.ROOT).contains(search.toLowerCase(Locale.ROOT));
+        }
+        return string.contains(search);
     }
 
     protected List<Tooltippable> getEntries(){

@@ -19,7 +19,6 @@ import net.minecraft.util.Formatting;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class OptionsScreenBuilder extends Screen {
 
@@ -235,11 +234,18 @@ public class OptionsScreenBuilder extends Screen {
             setupOptionsList(temp, cat);
         }
 
+        List<OptionCategory> list = temp.getSubCategories();
+
+        if(AxolotlClient.CONFIG.searchSort.get()){
+            if(AxolotlClient.CONFIG.searchSortOrder.get().equals("ASCENDING")) {
+                list.sort(new Tooltippable.AlphabeticalComparator());
+            } else {
+                list.sort(new Tooltippable.AlphabeticalComparator().reversed());
+            }
+        }
+
         return new OptionCategory("searchOptions")
-            .addSubCategories(temp.getSubCategories()
-                .stream()
-                .sorted(new Tooltippable.AlphabeticalComparator())
-                .collect(Collectors.toList()));
+            .addSubCategories(list);
     }
 
     protected void setupOptionsList(OptionCategory target, OptionCategory cat){

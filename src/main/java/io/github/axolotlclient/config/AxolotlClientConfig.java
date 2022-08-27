@@ -43,13 +43,18 @@ public class AxolotlClientConfig {
 
     public final BooleanOption creditsBGM = new BooleanOption("creditsBGM", true);
 
+    public final BooleanOption searchForOptions = new BooleanOption("searchForOptions", false);
+    public final BooleanOption searchIgnoreCase = new BooleanOption("searchIgnoreCase", true);
+    public final BooleanOption searchSort = new BooleanOption("searchSort", true);
+    public final EnumOption searchSortOrder = new EnumOption("searchSortOrder", new String[]{"ASCENDING", "DESCENDING"}, "ASCENDING");
+
     public final OptionCategory general = new OptionCategory("general");
     public final OptionCategory nametagOptions = new OptionCategory( "nametagOptions");
     public final OptionCategory rendering = new OptionCategory("rendering");
     public final OptionCategory outlines= new OptionCategory("blockOutlines");
     public final OptionCategory motionBlur = new OptionCategory("motionBlur");
-
 	public final OptionCategory timeChanger = new OptionCategory("timeChanger");
+    public final OptionCategory searchFilters = new OptionCategory("searchFilters");
 
     private final List<Option> options = new ArrayList<>();
     private final List<OptionCategory> categories = new ArrayList<>();
@@ -96,6 +101,9 @@ public class AxolotlClientConfig {
         general.add(quickToggles);
 	    general.add(showOptionTooltips);
 	    general.add(showCategoryTooltips);
+
+        searchFilters.add(searchIgnoreCase, searchForOptions, searchSort, searchSortOrder);
+        general.addSubCategory(searchFilters);
 
         rendering.add(customSky);
         rendering.add(showSunMoon);
