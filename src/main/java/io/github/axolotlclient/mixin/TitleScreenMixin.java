@@ -26,7 +26,7 @@ public abstract class TitleScreenMixin extends Screen {
 
     @Inject(method = "buttonClicked", at = @At("TAIL"))
     public void onClick(ButtonWidget button, CallbackInfo ci){
-        if(button.id==192) MinecraftClient.getInstance().openScreen(new HudEditScreen(this));
+        if(button.id==192) MinecraftClient.getInstance().openScreen(new HudEditScreen(this, true));
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;drawWithShadow(Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V", ordinal = 0))

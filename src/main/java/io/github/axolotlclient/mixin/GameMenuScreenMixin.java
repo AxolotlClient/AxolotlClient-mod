@@ -50,7 +50,7 @@ public abstract class GameMenuScreenMixin extends Screen {
     @Inject(method = "buttonClicked", at = @At("HEAD"))
     public void customButtons(ButtonWidget button, CallbackInfo ci){
         if(button.id==20){
-            MinecraftClient.getInstance().openScreen(new HudEditScreen(new GameMenuScreen()));
+            MinecraftClient.getInstance().openScreen(new HudEditScreen((GameMenuScreen)(Object)this, true));
         }
     }
 }

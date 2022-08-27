@@ -34,8 +34,8 @@ public abstract class AbstractHudEntry extends DrawUtil {
     protected final ColorOption backgroundColor = new ColorOption("bgColor", Color.parse("#64000000"));
     protected final BooleanOption outline = new BooleanOption("outline", false);
     protected final ColorOption outlineColor = new ColorOption("outlineColor", "#75000000");
-    private final DoubleOption x = new DoubleOption("x", getDefaultX(), 0, 1);
-    private final DoubleOption y = new DoubleOption("y", getDefaultY(), 0, 1);
+    private final DoubleOption x = new DoubleOption("x", getDefaultX(), -0.5, 1.5);
+    private final DoubleOption y = new DoubleOption("y", getDefaultY(), -0.5, 1.5);
 
     private List<OptionBase<?>> options;
 
@@ -51,11 +51,17 @@ public abstract class AbstractHudEntry extends DrawUtil {
     public void init(){}
 
     public static int floatToInt(float percent, int max, int offset) {
-        return MathHelper.clamp(Math.round((max - offset) * percent), 0, max);
+        if(percent<0){
+            return -MathHelper.clamp(Math.round((max - offset) * -percent), -1, max);
+        }
+        return MathHelper.clamp(Math.round((max - offset) * percent), -1, max);
     }
 
     public static float intToFloat(int current, int max, int offset) {
-        return MathHelper.clamp((float) (current) / (max - offset), 0, 1);
+        if(current<0){
+            return -MathHelper.clamp((float) (-current) / (max - offset), 0, 2);
+        }
+        return MathHelper.clamp((float) (current) / (max - offset), -1, 2);
     }
 
     public void renderHud() {

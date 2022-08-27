@@ -26,7 +26,7 @@ import java.util.Optional;
 
 public class HudEditScreen extends Screen {
 
-    private final BooleanOption snapping = new BooleanOption("snapping", true);
+    public static final BooleanOption snapping = new BooleanOption("snapping", true);
     private AbstractHudEntry current;
     private DrawPosition offset = null;
     private final HudManager manager;
@@ -34,12 +34,18 @@ public class HudEditScreen extends Screen {
     private SnappingHelper snap;
     private final Screen parent;
 
+    public boolean pause;
+
     public HudEditScreen(Screen parent){
-        snapping.setDefaults();
+        this(parent, false);
+    }
+
+    public HudEditScreen(Screen parent, boolean pause){
         updateSnapState();
         manager = HudManager.getInstance();
         mouseDown = false;
         this.parent=parent;
+        this.pause=pause;
     }
 
     public HudEditScreen(){

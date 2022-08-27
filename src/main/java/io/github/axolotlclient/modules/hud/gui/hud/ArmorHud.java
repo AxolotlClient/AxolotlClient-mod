@@ -9,6 +9,7 @@ import io.github.axolotlclient.modules.hud.util.ItemUtil;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.util.Identifier;
 
@@ -66,13 +67,24 @@ public class ArmorHud extends AbstractHudEntry {
         GlStateManager.popMatrix();
     }
 
+    ItemStack[] placeholders = new ItemStack[]{
+            new ItemStack(Items.IRON_HELMET),
+            new ItemStack(Items.IRON_CHESTPLATE),
+            new ItemStack(Items.IRON_LEGGINGS),
+            new ItemStack(Items.IRON_BOOTS),
+            new ItemStack(Items.IRON_SWORD)
+    };
+
     @Override
     public void renderPlaceholder() {
         renderPlaceholderBackground();
         scale();
         DrawPosition pos = getPos();
-        ItemStack itemStack = new ItemStack(Block.getById(2), 90);
-        ItemUtil.renderGuiItem(itemStack, pos.x, pos.y+82);
+        int y = 2;
+        for(ItemStack stack:placeholders) {
+            ItemUtil.renderGuiItem(stack, pos.x, pos.y + y);
+            y+=20;
+        }
         GlStateManager.popMatrix();
         hovered = false;
     }

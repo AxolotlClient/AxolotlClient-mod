@@ -26,10 +26,10 @@ public class DrawUtil extends DrawableHelper{
     }
 
     private static void outlineRect(int x, int y, int width, int height, int color) {
-        fillRect(x, y, 1, height, color);
-        fillRect(x + width - 1, y, 1, height, color);
-        fillRect(x, y, width, 1, color);
-        fillRect(x, y + height - 1, width, 1, color);
+        fillRect(x, y, 1, height-1, color);
+        fillRect(x + width - 1, y + 1, 1, height-1, color);
+        fillRect(x+1, y, width-1, 1, color);
+        fillRect(x, y + height - 1, width-1, 1, color);
     }
 
 
@@ -45,6 +45,14 @@ public class DrawUtil extends DrawableHelper{
                                           int color, boolean shadow) {
         drawString(renderer, text, position.x - renderer.getStringWidth(text) / 2,
                 position.y,
+                color, shadow);
+    }
+
+    public static void drawCenteredString(TextRenderer renderer,
+                                          String text, int centerX, int y,
+                                          int color, boolean shadow) {
+        drawString(renderer, text, centerX - renderer.getStringWidth(text) / 2,
+                y,
                 color, shadow);
     }
 

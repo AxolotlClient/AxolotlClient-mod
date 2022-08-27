@@ -45,6 +45,7 @@ public class HudManager extends AbstractModule {
 
         KeyBindingHelper.registerKeyBinding(key);
 
+        AxolotlClient.config.add(HudEditScreen.snapping);
         AxolotlClient.CONFIG.addCategory(hudCategory);
 
         HudRenderCallback.EVENT.register((client, tickDelta)->render());
@@ -69,6 +70,7 @@ public class HudManager extends AbstractModule {
         add(new ItemUpdateHud());
         add(new PackDisplayHud());
         add(new RealTimeHud());
+        add(new HotbarHUD());
 
         entries.forEach((identifier, abstractHudEntry) -> abstractHudEntry.init());
     }
