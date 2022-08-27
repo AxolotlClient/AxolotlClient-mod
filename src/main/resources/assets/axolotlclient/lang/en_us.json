@@ -12,7 +12,7 @@
 	"searchIgnoreCase": "Ignore Case",
 	"searchForOptions": "Inlude options in search",
 	"searchSort": "Sort results",
-	"searchSortOrder": "Order",
+	"searchSortOrder": "Sort Order",
 	"ASCENDING": "Ascending",
 	"DESCENDING": "Descending",
 
@@ -125,6 +125,7 @@
 	"key.openHud": "Open Hud Editor",
 	"key.toggleSneak": "Toggle Sneaking",
 	"key.toggleSprint": "Toggle Sprinting",
+	"key.freelook": "Freelook",
 
 	"hud": "Hud Options",
 	"pinghud": "Ping HUD",
