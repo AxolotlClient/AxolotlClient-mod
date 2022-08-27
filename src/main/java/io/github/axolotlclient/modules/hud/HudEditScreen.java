@@ -165,9 +165,4 @@ public class HudEditScreen extends Screen {
         }
     }
 
-    @Override
-    public void removed() {
-        manager.save();
-    }
-
 }

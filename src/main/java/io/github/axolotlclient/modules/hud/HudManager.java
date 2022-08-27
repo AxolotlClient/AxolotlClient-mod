@@ -40,10 +40,6 @@ public class HudManager extends AbstractModule {
 
     static KeyBind key = new KeyBind("key.openHud", InputUtil.KEY_RIGHT_SHIFT_CODE, "category.axolotlclient");
 
-    public void save(){
-
-    }
-
     public static HudManager getInstance(){
         return INSTANCE;
     }
@@ -78,6 +74,7 @@ public class HudManager extends AbstractModule {
         add(new PackDisplayHud());
         add(new RealTimeHud());
         add(new ReachDisplayHud());
+        add(new HotbarHUD());
 
         entries.forEach((identifier, abstractHudEntry) -> abstractHudEntry.init());
     }

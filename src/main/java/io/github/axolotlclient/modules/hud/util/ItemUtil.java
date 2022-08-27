@@ -11,10 +11,12 @@ import io.github.axolotlclient.config.Color;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.json.ModelTransformation;
+import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.PlayerScreenHandler;
@@ -138,35 +140,35 @@ public class ItemUtil {
 	}
 
 	public static void renderGuiItemModel(MatrixStack matrices, ItemStack stack, float x, float y) {
-		MinecraftClient client = MinecraftClient.getInstance();
-		BakedModel model = client.getItemRenderer().getHeldItemModel(stack, null, client.player, (int) (x * y));
-		client.getTextureManager().getTexture(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).setFilter(false, false);
-		RenderSystem.setShaderTexture(0, PlayerScreenHandler.BLOCK_ATLAS_TEXTURE);
-		RenderSystem.enableBlend();
-		RenderSystem.blendFunc(GlStateManager.class_4535.SRC_ALPHA, GlStateManager.class_4534.ONE_MINUS_SRC_ALPHA);
-		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-		matrices.push();
-		matrices.translate(x, y, (100.0F + client.getItemRenderer().zOffset));
-		matrices.translate(8.0D, 8.0D, 0.0D);
-		matrices.scale(1.0F, -1.0F, 1.0F);
-		matrices.scale(16.0F, 16.0F, 16.0F);
-		RenderSystem.applyModelViewMatrix();
-		VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
-		boolean bl = !model.isSideLit();
-		if (bl) {
-			DiffuseLighting.setupFlatGuiLighting();
-		}
+        MinecraftClient client = MinecraftClient.getInstance();
+        BakedModel model = client.getItemRenderer().getHeldItemModel(stack, null, null, 0);
+        client.getTextureManager().getTexture(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).setFilter(false, false);
+        RenderSystem.setShaderTexture(0, PlayerScreenHandler.BLOCK_ATLAS_TEXTURE);
+        RenderSystem.enableBlend();
+        RenderSystem.blendFunc(GlStateManager.class_4535.SRC_ALPHA, GlStateManager.class_4534.ONE_MINUS_SRC_ALPHA);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        matrices.push();
+        matrices.translate(x, y, 100.0F + client.getItemRenderer().zOffset);
+        matrices.translate(8.0, 8.0, 0.0);
+        matrices.scale(1.0F, -1.0F, 1.0F);
+        matrices.scale(16.0F, 16.0F, 16.0F);
+        RenderSystem.applyModelViewMatrix();
+        VertexConsumerProvider.Immediate immediate = client.getBufferBuilders().getEntityVertexConsumers();
+        boolean bl = !model.isSideLit();
+        if (bl) {
+            DiffuseLighting.setupFlatGuiLighting();
+        }
 
-		client.getItemRenderer().renderItem(stack, ModelTransformation.Mode.GUI, false, matrices, immediate, 15728880,
-			OverlayTexture.DEFAULT_UV, model);
-		immediate.draw();
-		RenderSystem.enableDepthTest();
-		if (bl) {
-			DiffuseLighting.setup3DGuiLighting();
-		}
+        client.getItemRenderer().renderItem(stack, ModelTransformation.Mode.GUI, false, matrices, immediate, 15728880,
+            OverlayTexture.DEFAULT_UV, model);
+        immediate.draw();
+        RenderSystem.enableDepthTest();
+        if (bl) {
+            DiffuseLighting.setup3DGuiLighting();
+        }
 
-		matrices.pop();
-		RenderSystem.applyModelViewMatrix();
+        matrices.pop();
+        RenderSystem.applyModelViewMatrix();
 	}
 
 	public static void renderGuiItemOverlay(MatrixStack matrices, TextRenderer renderer, ItemStack stack, int x, int y,
@@ -200,8 +202,8 @@ public class ItemUtil {
 			RenderSystem.enableDepthTest();
 		}
 
-		ClientPlayerEntity clientPlayerEntity = MinecraftClient.getInstance().player;
-		float f = clientPlayerEntity == null ? 0.0F : clientPlayerEntity.getItemCooldownManager().getCooldownProgress(stack.getItem(), MinecraftClient.getInstance().getTickDelta());
+		ClientPlayerEntity clientPlayerEntity = client.player;
+		float f = clientPlayerEntity == null ? 0.0F : clientPlayerEntity.getItemCooldownManager().getCooldownProgress(stack.getItem(), client.getTickDelta());
 		if (f > 0.0F) {
 			RenderSystem.disableDepthTest();
 			RenderSystem.disableTexture();

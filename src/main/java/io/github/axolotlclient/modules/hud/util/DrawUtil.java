@@ -27,10 +27,10 @@ public class DrawUtil extends DrawableHelper{
     }
 
     private static void outlineRect(MatrixStack matrices, int x, int y, int width, int height, int color) {
-        fillRect(matrices, x, y, 1, height, color);
-        fillRect(matrices, x + width - 1, y, 1, height, color);
-        fillRect(matrices, x, y, width, 1, color);
-        fillRect(matrices, x, y + height - 1, width, 1, color);
+        fillRect(matrices, x, y, 1, height-1, color);
+        fillRect(matrices, x + width - 1, y + 1, 1, height-1, color);
+        fillRect(matrices, x+1, y, width-1, 1, color);
+        fillRect(matrices, x, y + height - 1, width-1, 1, color);
     }
 
 

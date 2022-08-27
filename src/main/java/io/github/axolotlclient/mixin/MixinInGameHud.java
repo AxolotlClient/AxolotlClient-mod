@@ -3,19 +3,25 @@ package io.github.axolotlclient.mixin;
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hud.gui.hud.ActionBarHud;
 import io.github.axolotlclient.modules.hud.gui.hud.CrosshairHud;
+import io.github.axolotlclient.modules.hud.gui.hud.HotbarHUD;
 import io.github.axolotlclient.modules.hud.gui.hud.PotionsHud;
 import io.github.axolotlclient.modules.hud.gui.hud.ScoreboardHud;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.scoreboard.ScoreboardObjective;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Mixin(InGameHud.class)
 public abstract class MixinInGameHud {
@@ -65,4 +71,23 @@ public abstract class MixinInGameHud {
 			overlayRemaining = hud.timeShown.get();
 		}
 	}
+
+    @Inject(method = "renderHotbar", at = @At("HEAD"), cancellable = true)
+    public void customHotbar(float tickDelta, MatrixStack matrices, CallbackInfo ci){
+        HotbarHUD hud = (HotbarHUD) HudManager.getInstance().get(HotbarHUD.ID);
+        if(hud.isEnabled()){
+            ci.cancel();
+        }
+    }
+
+    @ModifyArgs(method = "renderHeldItemTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/Text;FFI)I"))
+    public void setItemNamePos(Args args){
+        HotbarHUD hud = (HotbarHUD) HudManager.getInstance().get(HotbarHUD.ID);
+        if(hud.isEnabled()){
+            args.set(2, ((Integer) hud.getX()).floatValue() + (hud.width -
+                MinecraftClient.getInstance().textRenderer.getWidth((StringVisitable) args.get(1)))/2);
+            args.set(3, ((Integer) hud.getY()).floatValue() - 36 +
+                (!MinecraftClient.getInstance().interactionManager.hasStatusBars() ? 14 : 0));
+        }
+    }
 }
