@@ -9,6 +9,14 @@ sky_loading_text=Loading Skies out of
 resource_loading_finished=Loading finished! Starting Minecraft...
 
 searchOptions=Search all Options
+search=Search
+searchFilters=Search Filters
+searchIgnoreCase=Ignore Case
+searchForOptions=Inlude options in search
+searchSort=Sort results
+searchSortOrder=Order
+ASCENDING=Ascending
+DESCENDING=Descending
 
 general=General
 general.tooltip=General Options

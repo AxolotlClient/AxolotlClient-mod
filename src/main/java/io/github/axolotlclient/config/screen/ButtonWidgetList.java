@@ -176,17 +176,26 @@ public class ButtonWidgetList extends EntryListWidget {
         });
     }
 
-    public void filter(String searchTerm) {
+    public void filter(final String searchTerm) {
         entries.clear();
 
         Collection<Tooltippable> children = getEntries();
 
         List<Tooltippable> matched = children.stream().filter(tooltippable -> {
-            return tooltippable.toString().toLowerCase(Locale.ROOT).contains(searchTerm.toLowerCase(Locale.ROOT));
+            if(AxolotlClient.CONFIG.searchForOptions.get() && tooltippable instanceof OptionCategory){
+                if(((OptionCategory) tooltippable).getOptions().stream().anyMatch(option -> passesSearch(option.toString(), searchTerm))){
+                    return true;
+                }
+            }
+            return passesSearch(tooltippable.toString(), searchTerm);
         }).collect(Collectors.toList());
 
-        if(!searchTerm.isEmpty()){
-            matched.sort(new Tooltippable.AlphabeticalComparator());
+        if(!searchTerm.isEmpty() && AxolotlClient.CONFIG.searchSort.get()){
+            if(AxolotlClient.CONFIG.searchSortOrder.get().equals("ASCENDING")) {
+                matched.sort(new Tooltippable.AlphabeticalComparator());
+            } else {
+                matched.sort(new Tooltippable.AlphabeticalComparator().reversed());
+            }
         }
 
         OptionCategory filtered = new OptionCategory(category.getName());
@@ -200,10 +209,16 @@ public class ButtonWidgetList extends EntryListWidget {
         }
         entries = constructEntries(filtered);
 
-
         if (getScrollAmount() > Math.max(0, this.getMaxPosition() - (yEnd - this.yStart - 4))) {
             scrollAmount = Math.max(0, this.getMaxPosition() - (this.yEnd - this.yStart - 4));
         }
+    }
+
+    protected boolean passesSearch(String string, String search){
+        if(AxolotlClient.CONFIG.searchIgnoreCase.get()) {
+            return string.toLowerCase(Locale.ROOT).contains(search.toLowerCase(Locale.ROOT));
+        }
+        return string.contains(search);
     }
 
     protected List<Tooltippable> getEntries(){

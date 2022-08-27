@@ -19,8 +19,8 @@ import net.minecraft.util.Formatting;
 import org.lwjgl.input.Keyboard;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class OptionsScreenBuilder extends Screen {
 
@@ -165,7 +165,8 @@ public class OptionsScreenBuilder extends Screen {
 
                 super.render();
 
-                drawHorizontalLine(x, x+100, y+20-9, -1);
+                drawVerticalLine(x-5, y-1, y+11, -1);
+                drawHorizontalLine(x-5, x+100, y+11, -1);
             }
 
             public boolean isHovered(int mouseX, int mouseY){
@@ -256,11 +257,18 @@ public class OptionsScreenBuilder extends Screen {
             setupOptionsList(temp, cat);
         }
 
+        List<OptionCategory> list = temp.getSubCategories();
+
+        if(AxolotlClient.CONFIG.searchSort.get()){
+            if(AxolotlClient.CONFIG.searchSortOrder.get().equals("ASCENDING")) {
+                list.sort(new Tooltippable.AlphabeticalComparator());
+            } else {
+                list.sort(new Tooltippable.AlphabeticalComparator().reversed());
+            }
+        }
+
         return new OptionCategory("searchOptions")
-                .addSubCategories(temp.getSubCategories()
-                        .stream()
-                        .sorted(new Tooltippable.AlphabeticalComparator())
-                        .collect(Collectors.toList()));
+                .addSubCategories(list);
     }
 
     protected void setupOptionsList(OptionCategory target, OptionCategory cat){
