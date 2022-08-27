@@ -6,6 +6,16 @@
 	"sky_loading_text": "Gökyüzü bundan yükleniliyor:",
 	"resource_loading_finished": "Yüklenme Bitti! Minecraft Başlatılıyor...",
 
+	"searchOptions": "Bütün Seçenekleri Ara",
+	"search": "Arama",
+	"searchFilters": "Arama Filtreleri",
+	"searchIgnoreCase": "Görmezden gelme",
+	"searchForOptions": "Seçenekleri aramada dahil et",
+	"searchSort": "Tür sonuçları",
+	"searchSortOrder": "Tür Sırası",
+	"ASCENDING": "Artan",
+	"DESCENDING": "Azalan",
+	
 	"general": "Genel",
 	"general.tooltip": "Genel Seçenekler",
 	"loadingBgColor": "Yüklenme Ekranı Rengi",
@@ -114,7 +124,8 @@
 	"key.openHud": "Arayüz Düzenleyicisini aç",
 	"key.toggleSneak": "Otomatik Eğilme",
 	"key.toggleSprint": "Otomatik Koşma",
-
+	"key.freelook": "Özgür Bakış",
+	
 	"hud": "Arayüz Seçenekleri",
 	"pinghud": "Gecikme Arayüzü",
 	"refreshTime": "Yenilenme Gecikmesi",
@@ -190,7 +201,8 @@
 	"toggleSneak": "Otomatik Eğilme'ye izin ver",
 	"sneakToggled": "Otomatik Eğilme şuan kullanılıyor",
 	"sprintToggled": "Otomatik Koşma şuan kullanılıyor",
-
+	"hotbarhud": "Eşya Barı Arayüzü",
+	
 	"hud.snapping": "Yapıştırma",
 	"hud.clientOptions": "Client Seçenekleri",
 
@@ -217,6 +229,13 @@
 	"showTime": "Zamanı Göster",
 	"showTime.tooltip": "Bir zaman damgası gösterme seçeneği.",
 
+	"freelook": "Özgür Bakış",
+	"perspective": "Perspektif",
+	"FIRST_PERSON": "Birinci Şahıs",
+	"THIRD_PERSON_BACK": "Üçüncü Şahıs (Arka)",
+	"THIRD_PERSON_FRONT": "Üçüncü Şahıs (Ön)",
+	"invert": "Tersine Çevir",
+	
 	"credits": "Katkıda Bulunanlar",
 	"creditsBGM": "Müzik",
 	"contributors": "Katılımcılar:",
