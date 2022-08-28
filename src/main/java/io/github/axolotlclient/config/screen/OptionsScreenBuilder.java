@@ -251,7 +251,7 @@ public class OptionsScreenBuilder extends Screen {
     }
 
     protected OptionCategory getAllOptions(){
-        OptionCategory temp = new OptionCategory("");
+        OptionCategory temp = new OptionCategory("", false);
 
         for(OptionCategory cat:AxolotlClient.CONFIG.getCategories()) {
             setupOptionsList(temp, cat);
@@ -267,7 +267,7 @@ public class OptionsScreenBuilder extends Screen {
             }
         }
 
-        return new OptionCategory("searchOptions")
+        return new OptionCategory("searchOptions", false)
                 .addSubCategories(list);
     }
 

@@ -77,4 +77,58 @@ public abstract class InGameHudMixin {
                     (!MinecraftClient.getInstance().interactionManager.hasStatusBars() ? 14 : 0));
         }
     }
+
+    @ModifyArgs(method = "renderHorseHealth", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(IIIIII)V"))
+    public void moveHorseHealth(Args args){
+        HotbarHUD hud = (HotbarHUD) HudManager.getInstance().get(HotbarHUD.ID);
+        if(hud.isEnabled()){
+            args.set(0, hud.getX());
+            args.set(1, hud.getY() - 7);
+        }
+    }
+
+    @ModifyArgs(method = "renderExperienceBar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(IIIIII)V"))
+    public void moveXPBar(Args args){
+        HotbarHUD hud = (HotbarHUD) HudManager.getInstance().get(HotbarHUD.ID);
+        if(hud.isEnabled()){
+            args.set(0, hud.getX());
+            args.set(1, hud.getY()-7);
+        }
+    }
+
+    @Redirect(method = "renderExperienceBar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/Window;getHeight()I", ordinal = 1))
+    public int moveXPBarHeight(Window instance){
+        HotbarHUD hud = (HotbarHUD) HudManager.getInstance().get(HotbarHUD.ID);
+        if(hud.isEnabled()){
+            return hud.getY()+22;
+        }
+        return instance.getHeight();
+    }
+
+    @Redirect(method = "renderExperienceBar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/Window;getWidth()I"))
+    public int moveXPBarWidth(Window instance){
+        HotbarHUD hud = (HotbarHUD) HudManager.getInstance().get(HotbarHUD.ID);
+        if(hud.isEnabled()){
+            return hud.getX()*2+hud.width;
+        }
+        return instance.getWidth();
+    }
+
+    @Redirect(method = "renderStatusBars", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/Window;getHeight()I"))
+    public int moveStatusBarsHeight(Window instance){
+        HotbarHUD hud = (HotbarHUD) HudManager.getInstance().get(HotbarHUD.ID);
+        if(hud.isEnabled()){
+            return hud.getY()+22;
+        }
+        return instance.getHeight();
+    }
+
+    @Redirect(method = "renderStatusBars", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/Window;getWidth()I"))
+    public int moveStatusBarsWidth(Window instance){
+        HotbarHUD hud = (HotbarHUD) HudManager.getInstance().get(HotbarHUD.ID);
+        if(hud.isEnabled()){
+            return hud.getX()*2+hud.width;
+        }
+        return instance.getWidth();
+    }
 }

@@ -138,7 +138,7 @@ public class HudEditScreen extends Screen {
 
             button.message = I18n.translate("hud.snapping") + ": "+I18n.translate(snapping.get()?"options.on":"options.off");
         } else if(button.id==3) {
-            client.openScreen(new OptionsScreenBuilder(this, new OptionCategory("config").addSubCategories(AxolotlClient.CONFIG.getCategories())));
+            client.openScreen(new OptionsScreenBuilder(this, new OptionCategory("config", false).addSubCategories(AxolotlClient.CONFIG.getCategories())));
         } else if(button.id==0) {
             client.openScreen(parent);
         } else if(button.id==2) {

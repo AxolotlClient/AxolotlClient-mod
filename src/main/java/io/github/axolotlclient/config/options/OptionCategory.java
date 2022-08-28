@@ -5,25 +5,24 @@ import io.github.axolotlclient.util.Util;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
 
 import java.util.*;
 
 public class OptionCategory implements Tooltippable {
 
-    Identifier Id;
     String name;
     private final List<OptionBase<?>> options = new ArrayList<>();
     private final List<OptionCategory> subCategories = new ArrayList<>();
 
     public OptionCategory(String key){
-        this.name=key;
-        Util.registerCommand(name.toLowerCase(Locale.ENGLISH), this::getCommandSuggestions, this::onCommandExec);
+       this(key, true);
     }
 
-    public OptionCategory(Identifier Id, String key){
-        this(key);
-        this.Id=Id;
+    public OptionCategory(String key, boolean registerCommand){
+        this.name=key;
+        if(registerCommand) {
+            Util.registerCommand(name.toLowerCase(Locale.ENGLISH), this::getCommandSuggestions, this::onCommandExec);
+        }
     }
 
     public List<OptionBase<?>> getOptions(){return options;}
@@ -43,11 +42,6 @@ public class OptionCategory implements Tooltippable {
     public List<OptionCategory> getSubCategories(){return subCategories;}
 
     public void clearOptions(){options.clear();}
-
-    public Identifier getID() {
-        return Id;
-    }
-
 
     public String getName() {
         return name;

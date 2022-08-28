@@ -198,7 +198,7 @@ public class ButtonWidgetList extends EntryListWidget {
             }
         }
 
-        OptionCategory filtered = new OptionCategory(category.getName());
+        OptionCategory filtered = new OptionCategory(category.getName(), false);
         for (Tooltippable tooltippable : matched) {
 
             if(tooltippable instanceof OptionBase<?>){

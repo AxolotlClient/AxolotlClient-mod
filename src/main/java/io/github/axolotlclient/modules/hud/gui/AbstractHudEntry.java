@@ -174,7 +174,7 @@ public abstract class AbstractHudEntry extends DrawUtil {
     }
 
     public OptionCategory getOptionsAsCategory(){
-        OptionCategory cat = new OptionCategory(getId(), getNameKey());
+        OptionCategory cat = new OptionCategory(getNameKey(), false);
         cat.add(getOptions());
         return cat;
     }
@@ -183,7 +183,7 @@ public abstract class AbstractHudEntry extends DrawUtil {
         List<OptionBase<?>> options = new ArrayList<>(getOptions());
         options.add(x);
         options.add(y);
-        OptionCategory cat = new OptionCategory(getId(), getNameKey());
+        OptionCategory cat = new OptionCategory(getNameKey());
         cat.add(options);
         return cat;
     }

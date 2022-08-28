@@ -22,7 +22,7 @@ public class AutoGG implements AbstractHypixelMod {
 
     public static AutoGG Instance = new AutoGG();
 
-    private final OptionCategory category = new OptionCategory(new Identifier("autogg"), "autogg");
+    private final OptionCategory category = new OptionCategory("autogg");
     private final MinecraftClient client = MinecraftClient.getInstance();
     private long lastTime = 0;
     public BooleanOption gg = new BooleanOption("printGG", false);
