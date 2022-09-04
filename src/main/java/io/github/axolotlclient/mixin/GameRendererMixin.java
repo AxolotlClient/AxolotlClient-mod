@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Material;
 import net.minecraft.class_321;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.MouseInput;
 import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -32,6 +33,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.nio.FloatBuffer;
 
@@ -51,6 +53,30 @@ public abstract class GameRendererMixin {
     @Shadow private float fogBlue;
 
     @Shadow private boolean thickFog;
+
+    private float cachedMouseFactor;
+    @Inject(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MouseInput;x:I"), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
+    public void rawMouseInput(float tickDelta, long nanoTime, CallbackInfo ci, boolean displayActive, float f, float g){
+        if(AxolotlClient.CONFIG.rawMouseInput.get()){
+            cachedMouseFactor = g;
+        }
+    }
+
+    @Redirect(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MouseInput;x:I"))
+    public int rawMouseX(MouseInput instance){
+        if(AxolotlClient.CONFIG.rawMouseInput.get()){
+            return (int) (instance.x/cachedMouseFactor * client.options.sensitivity);
+        }
+        return instance.x;
+    }
+
+    @Redirect(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MouseInput;y:I"))
+    public int rawMouseY(MouseInput instance){
+        if(AxolotlClient.CONFIG.rawMouseInput.get()){
+            return (int) (instance.y/cachedMouseFactor * client.options.sensitivity);
+        }
+        return instance.y;
+    }
 
     @Inject(method = "renderFog", at = @At("HEAD"), cancellable = true)
     public void noFog(int i, float tickDelta, CallbackInfo ci){

@@ -35,6 +35,7 @@ public class AxolotlClientConfig {
     public final BooleanOption quickToggles = new BooleanOption("quickToggles", false);
     public final ColorOption loadingScreenColor = new ColorOption("loadingBgColor", new Color(-1));
     public final BooleanOption nightMode = new BooleanOption("nightMode", false);
+    public final BooleanOption rawMouseInput = new BooleanOption("rawMouseInput", false);
 
     public final BooleanOption rotateWorld = new BooleanOption("rotateWorld", false);
 
@@ -100,6 +101,7 @@ public class AxolotlClientConfig {
         general.add(quickToggles);
         general.add(showOptionTooltips);
         general.add(showCategoryTooltips);
+        general.add(rawMouseInput);
 
         searchFilters.add(searchIgnoreCase, searchForOptions, searchSort, searchSortOrder);
         general.addSubCategory(searchFilters);

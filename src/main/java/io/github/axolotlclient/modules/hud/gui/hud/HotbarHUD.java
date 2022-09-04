@@ -35,6 +35,7 @@ public class HotbarHUD extends AbstractHudEntry {
             DrawPosition pos = getPos();
 
             GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+            GlStateManager.enableBlend();
             this.client.getTextureManager().bindTexture(WIDGETS);
             PlayerEntity playerEntity = (PlayerEntity)this.client.getCameraEntity();
             float f = this.zOffset;
@@ -43,7 +44,6 @@ public class HotbarHUD extends AbstractHudEntry {
             this.drawTexture(pos.x - 1 + playerEntity.inventory.selectedSlot * 20, pos.y - 1, 0, 22, 24, 22);
             this.zOffset = f;
             GlStateManager.enableRescaleNormal();
-            GlStateManager.enableBlend();
             GlStateManager.blendFuncSeparate(770, 771, 1, 0);
             DiffuseLighting.enable();
 
