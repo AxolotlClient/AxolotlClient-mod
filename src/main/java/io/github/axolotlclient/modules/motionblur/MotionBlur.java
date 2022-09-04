@@ -52,7 +52,7 @@ public class MotionBlur extends AbstractModule {
                 AxolotlClient.LOGGER.error("Could not load motion blur", e);
             }
         }
-        if(currentBlur!=getBlur()){
+        if(currentBlur!=getBlur() && shader != null){
             ((AccessorShaderEffect)shader).getPasses().forEach(shader -> {
                 GlUniform blendFactor = shader.getProgram().getUniformByName("BlendFactor");
                 if(blendFactor!=null){
@@ -67,7 +67,7 @@ public class MotionBlur extends AbstractModule {
     }
 
     private static float getBlur() {
-        return AxolotlClient.CONFIG.motionBlurStrength.get()/100F;
+        return (float) (AxolotlClient.CONFIG.motionBlurStrength.get()/100F);
     }
 
     public class MotionBlurShader extends Resource {

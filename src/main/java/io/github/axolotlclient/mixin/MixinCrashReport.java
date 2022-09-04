@@ -7,19 +7,17 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Objects;
-
 @Mixin(CrashReport.class)
 public abstract class MixinCrashReport {
 
 	@Inject(method = "addStackTrace", at = @At(value = "TAIL"))
 	public void addAxolotlclientInfo(StringBuilder builder, CallbackInfo ci){
-		if (!Objects.equals(AxolotlClient.badmod, "")) {
+		if (AxolotlClient.badmod != null) {
 			builder.append("\n\n")
-				.append("---- Axolotlclient Information ----\n");
+					.append("---- Axolotlclient Information ----\n");
 			builder.append("Unsupported Mods were found!\n")
-				.append("Suspected mod: ")
-				.append(AxolotlClient.badmod);
+					.append("Suspected mod: ")
+					.append(AxolotlClient.badmod.name());
 			builder.append("\n\n");
 		}
 	}

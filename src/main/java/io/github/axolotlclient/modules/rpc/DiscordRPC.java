@@ -115,7 +115,7 @@ public class DiscordRPC extends AbstractModule {
             activity.setDetails(Util.getGame());
         } else if (showActivity.get() && currentActivity!=null && MinecraftClient.getInstance().world != null){
             activity.setDetails(currentActivity.getDetails());
-        } else if (!showActivity.get() && currentActivity.getDetails().equals("")) {
+        } else if (!showActivity.get() && currentActivity != null && currentActivity.getDetails().equals("")) {
             currentActivity.setDetails("");
         }
 

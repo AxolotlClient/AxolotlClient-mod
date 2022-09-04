@@ -33,7 +33,7 @@ public class HudManager extends AbstractModule {
 
     private final Map<Identifier, AbstractHudEntry> entries = new HashMap<>();
 
-    private final OptionCategory hudCategory = new OptionCategory(new Identifier("hud"), "hud");
+    private final OptionCategory hudCategory = new OptionCategory("hud", false);
 
     private final MinecraftClient client = MinecraftClient.getInstance();
     private static final HudManager INSTANCE = new HudManager();

@@ -17,20 +17,19 @@ import java.util.List;
 
 public class OptionCategory implements Tooltippable {
 
-    Identifier Id;
 	String name;
     private final List<OptionBase<?>> options = new ArrayList<>();
     private final List<OptionCategory> subCategories = new ArrayList<>();
 
     public OptionCategory(String key){
-	    this.name =key;
-
-        ClientCommandRegistrationCallback.EVENT.register((dispatcher, buildContext, environment) -> Util.registerCommand(buildCommand()));
+	    this(key, true);
     }
 
-	public OptionCategory(Identifier Id, String key){
-		this(key);
-		this.Id=Id;
+	public OptionCategory(String key, boolean createCommand){
+        this.name =key;
+        if(createCommand) {
+            ClientCommandRegistrationCallback.EVENT.register((dispatcher, buildContext, environment) -> Util.registerCommand(buildCommand()));
+        }
     }
 
     public List<OptionBase<?>> getOptions(){return options;}
@@ -50,10 +49,6 @@ public class OptionCategory implements Tooltippable {
     public List<OptionCategory> getSubCategories(){return subCategories;}
 
     public void clearOptions(){options.clear();}
-
-    public Identifier getID() {
-        return Id;
-    }
 
     public String getName() {
         return name;

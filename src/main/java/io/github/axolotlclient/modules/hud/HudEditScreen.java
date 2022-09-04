@@ -146,7 +146,7 @@ public class HudEditScreen extends Screen {
 			150, 20,
 			Text.translatable("hud.clientOptions"),
 			buttonWidget -> MinecraftClient.getInstance().setScreen(
-				new OptionsScreenBuilder(this, new OptionCategory("config")
+				new OptionsScreenBuilder(this, new OptionCategory("config", false)
 					.addSubCategories(AxolotlClient.CONFIG.getCategories())))));
 
         if(parent!=null)addDrawableChild(new ButtonWidget(

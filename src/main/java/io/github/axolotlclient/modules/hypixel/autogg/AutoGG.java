@@ -7,7 +7,6 @@ import io.github.axolotlclient.modules.hypixel.AbstractHypixelMod;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +21,7 @@ public class AutoGG implements AbstractHypixelMod {
 
     public static AutoGG Instance = new AutoGG();
 
-    private final OptionCategory category = new OptionCategory(new Identifier("autogg"), "autogg");
+    private final OptionCategory category = new OptionCategory("autogg");
     private final MinecraftClient client = MinecraftClient.getInstance();
     private long lastTime = 0;
     public BooleanOption gg = new BooleanOption("printGG", false);

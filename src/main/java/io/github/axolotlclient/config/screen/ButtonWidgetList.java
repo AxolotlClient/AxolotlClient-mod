@@ -191,7 +191,7 @@ public class ButtonWidgetList extends AlwaysSelectedEntryListWidget<ButtonWidget
             }
         }
 
-        OptionCategory filtered = new OptionCategory(category.getName());
+        OptionCategory filtered = new OptionCategory(category.getName(), false);
         for (Tooltippable tooltippable : matched) {
 
             if(tooltippable instanceof OptionBase<?>){

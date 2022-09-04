@@ -5,13 +5,12 @@ import io.github.axolotlclient.config.options.OptionCategory;
 import io.github.axolotlclient.modules.hypixel.AbstractHypixelMod;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.util.Identifier;
 
 public class AutoTip implements AbstractHypixelMod {
 
     public static AutoTip INSTANCE = new AutoTip();
 
-    private final OptionCategory category = new OptionCategory(new Identifier("autotip"), "autotip");
+    private final OptionCategory category = new OptionCategory("autotip");
 
     private final BooleanOption enabled = new BooleanOption("enabled", false);
     private long lastTime;

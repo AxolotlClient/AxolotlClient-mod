@@ -17,12 +17,12 @@ import java.text.DecimalFormat;
 
 public class OptionSliderWidget extends ButtonWidget {
 
-    private final DecimalFormat format = new DecimalFormat("##.#");
+    private final DecimalFormat format = new DecimalFormat("###.#");
     private final DecimalFormat intformat = new DecimalFormat("##");
 
     private double value;
     public boolean dragging;
-    private final OptionBase option;
+    private final OptionBase<?> option;
     private final double min;
     private final double max;
 
@@ -83,7 +83,7 @@ public class OptionSliderWidget extends ButtonWidget {
     }
 
     public float getSliderValue() {
-        format.applyLocalizedPattern("###.#");
+        format.applyLocalizedPattern("##.#");
         return Float.parseFloat(format.format(this.min + (this.max - this.min) * this.value));
     }
     public int getSliderValueAsInt() {
@@ -174,7 +174,7 @@ public class OptionSliderWidget extends ButtonWidget {
 		return super.mouseReleased(mouseX, mouseY, button);
 	}
 
-    public OptionBase getOption(){
+    public OptionBase<?> getOption(){
         return option;
     }
 

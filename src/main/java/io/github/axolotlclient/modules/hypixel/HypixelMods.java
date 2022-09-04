@@ -22,7 +22,7 @@ public class HypixelMods extends AbstractModule {
     public StringOption hypixel_api_key = new StringOption("hypixel_api_key", "");
     public final EnumOption cacheMode = new EnumOption("cache_mode", HypixelCacheMode.values(), HypixelCacheMode.ON_CLIENT_DISCONNECT);
 
-    private final OptionCategory category = new OptionCategory(new Identifier("hypixel"), "hypixel-mods");
+    private final OptionCategory category = new OptionCategory("hypixel-mods");
     private final List<AbstractHypixelMod> subModules = new ArrayList<>();
 
     public static HypixelMods getInstance(){
