@@ -55,18 +55,30 @@ public class Util {
     }
 
     public static int toGlCoordsX(int x){
+        if (window==null) {
+            window = new Window(MinecraftClient.getInstance());
+        }
         return x * window.getScaleFactor();
     }
 
     public static int toGlCoordsY(int y){
+        if (window==null) {
+            window = new Window(MinecraftClient.getInstance());
+        }
         int scale = window.getScaleFactor();
         return MinecraftClient.getInstance().height - y * scale - scale;
     }
 
     public static int toMCCoordsX(int x){
+        if (window==null) {
+           window = new Window(MinecraftClient.getInstance());
+        }
         return x * window.getWidth() / MinecraftClient.getInstance().width;
     }
     public static int toMCCoordsY(int y){
+        if (window==null) {
+            window = new Window(MinecraftClient.getInstance());
+        }
         return window.getHeight() - y * window.getHeight() / MinecraftClient.getInstance().height - 1;
     }
 
