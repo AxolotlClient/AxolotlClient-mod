@@ -18,6 +18,7 @@ import net.minecraft.scoreboard.Team;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -38,6 +39,8 @@ public class ScoreboardHud extends AbstractHudEntry {
     private final ColorOption scoreColor = new ColorOption("scorecolor", Color.parse("#FFFF5555"));
     
     private final MinecraftClient client = MinecraftClient.getInstance();
+    private final Rectangle inside = new Rectangle(0, 0, 0, 0);
+    private final Rectangle calculated = new Rectangle(0, 0, 0, 0);
     
     public ScoreboardHud() {
         super(200, 146);
@@ -89,7 +92,7 @@ public class ScoreboardHud extends AbstractHudEntry {
             scores = filteredScores;
         }
 
-        List<Pair<ScoreboardPlayerScore, String>> scoresWText = Lists.newArrayListWithCapacity(scores.size());
+        List<Pair<ScoreboardPlayerScore, String>> scoresWText = new ArrayList<>(scores.size());
         String text = objective.getDisplayName();
         int displayNameWidth = client.textRenderer.getStringWidth(text);
         int maxWidth = displayNameWidth;
@@ -116,8 +119,8 @@ public class ScoreboardHud extends AbstractHudEntry {
         int scoreHeight = scoresSize * 9;
         DrawPosition pos = getPos();
         Rectangle bounds = getBounds();
-        Rectangle inside = new Rectangle(pos.x, pos.y, maxWidth, scoreHeight + 9);
-        Rectangle calculated = new Rectangle(bounds.x + bounds.width - inside.width,
+        inside.setData(pos.x, pos.y, maxWidth, scoreHeight + 9);
+        calculated.setData(bounds.x + bounds.width - inside.width,
                 bounds.y + (bounds.height / 2 - inside.height / 2), inside.width, inside.height);
         int scoreY = calculated.y + scoreHeight + 9;
         int scoreX = calculated.x + 2;
@@ -131,7 +134,7 @@ public class ScoreboardHud extends AbstractHudEntry {
             String score = "" + scoreboardPlayerScore2.getScore();
             int relativeY = scoreY - num * 9;
             if (background.get()) {
-                fillRect(new Rectangle(textOffset, relativeY, maxWidth, 9), backgroundColor.get());
+                fillRect(textOffset, relativeY, maxWidth, 9, backgroundColor.get().getAsInt());
             }
             if (shadow.get()) {
                 client.textRenderer.drawWithShadow(scoreText, scoreX, relativeY,
@@ -147,21 +150,20 @@ public class ScoreboardHud extends AbstractHudEntry {
             }
             if (num == scoresSize) {
                 if (background.get()) {
-                    fillRect(new Rectangle(textOffset, relativeY - 10, maxWidth, 9), topColor.get());
-                    fillRect(new Rectangle(scoreX - 2, relativeY - 1, maxWidth, 1),
-                            backgroundColor.get());
+                    fillRect(textOffset, relativeY - 10, maxWidth, 9, topColor.get().getAsInt());
+                    fillRect(scoreX - 2, relativeY - 1, maxWidth, 1,
+                            backgroundColor.get().getAsInt());
                 }
                 int title = (scoreX + maxWidth / 2 - displayNameWidth / 2 - 1);
                 if (shadow.get()) {
                     client.textRenderer.drawWithShadow(text, title, (relativeY - 9), -1);
-                }
-                else {
+                } else {
                     client.textRenderer.draw(text, title, (relativeY - 9), -1);
                 }
             }
         }
-        if(outline.get()) outlineRect(new Rectangle(textOffset, calculated.y-2, maxWidth, calculated.height+2), outlineColor.get());
 
+        if(outline.get()) outlineRect(textOffset, calculated.y-2, maxWidth, calculated.height+2, outlineColor.get().getAsInt());
     }
 
     @Override

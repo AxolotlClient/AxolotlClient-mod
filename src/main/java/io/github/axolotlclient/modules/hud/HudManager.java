@@ -79,7 +79,7 @@ public class HudManager extends AbstractModule {
     public void tick(){
         if(key.isPressed()) MinecraftClient.getInstance().openScreen(new HudEditScreen());
         entries.values().forEach(abstractHudEntry -> {
-            if(abstractHudEntry.tickable())abstractHudEntry.tick();
+            if(abstractHudEntry.tickable() && abstractHudEntry.isEnabled())abstractHudEntry.tick();
         });
     }
 

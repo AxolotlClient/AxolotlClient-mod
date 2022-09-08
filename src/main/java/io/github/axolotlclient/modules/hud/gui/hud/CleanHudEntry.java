@@ -33,9 +33,9 @@ public abstract class CleanHudEntry extends AbstractHudEntry {
         }
         if(outline.get()) outlineRect(getBounds(), outlineColor.get());
         drawCenteredString(client.textRenderer, getValue(),
-                new DrawPosition(pos.x + (Math.round(width) / 2),
-                pos.y + (Math.round((float) height / 2)) - 4),
-                textColor.get(),
+                pos.x + (Math.round(width) / 2),
+                pos.y + (Math.round((float) height / 2)) - 4,
+                textColor.get().getAsInt(),
                 shadow.get());
         GlStateManager.popMatrix();
     }
@@ -46,8 +46,8 @@ public abstract class CleanHudEntry extends AbstractHudEntry {
         scale();
         DrawPosition pos = getPos();
         drawCenteredString(client.textRenderer, getPlaceholder(),
-                new DrawPosition(pos.x + (width / 2),
-                pos.y + (height / 2) - 4), -1, shadow.get());
+                pos.x + (width / 2),
+                pos.y + (height / 2) - 4, -1, shadow.get());
         GlStateManager.popMatrix();
         hovered = false;
     }

@@ -56,7 +56,7 @@ public class PotionsHud extends AbstractHudEntry {
 
                 String string = I18n.translate(statusEffect.getTranslationKey());
                  if (statusEffectInstance.getAmplifier() != 1) {
-                    string += " " + Util.toRoman(statusEffectInstance.getAmplifier());
+                    string += " " + Util.toRoman(statusEffectInstance.getAmplifier()+1);
                 }
 
                 client.textRenderer.drawWithShadow(string, (float)(i + 10 + 18), (float)(y + 6), textColor.get().getAsInt());

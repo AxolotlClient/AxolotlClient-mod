@@ -91,6 +91,8 @@ public class DiscordRPC extends AbstractModule {
                     discordRPC.close();
                     Thread.currentThread().interrupt();
                 });
+                callBacks.setName("Discord RPC Thread");
+                callBacks.setDaemon(true);
                 callBacks.start();
                 AxolotlClient.LOGGER.info("Started RPC Core");
             } catch (Exception e) {

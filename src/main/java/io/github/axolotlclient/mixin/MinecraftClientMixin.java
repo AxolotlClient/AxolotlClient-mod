@@ -7,12 +7,14 @@ import io.github.axolotlclient.modules.hud.gui.hud.CPSHud;
 import io.github.axolotlclient.modules.rpc.DiscordRPC;
 import io.github.axolotlclient.modules.sky.SkyResourceManager;
 import io.github.axolotlclient.modules.zoom.Zoom;
+import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
 import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.texture.TextureManager;
+import net.minecraft.client.util.Window;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.player.ClientPlayerEntity;
 import net.minecraft.world.level.LevelInfo;
@@ -142,4 +144,8 @@ public abstract class MinecraftClientMixin {
         NetworkHelper.setOnline();
     }
 
+    @Inject(method = "method_2923", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/LoadingScreenRenderer;<init>(Lnet/minecraft/client/MinecraftClient;)V"))
+    public void onResize(int i, int j, CallbackInfo ci){
+        Util.window = new Window(MinecraftClient.getInstance());
+    }
 }

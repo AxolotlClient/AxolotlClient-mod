@@ -17,7 +17,7 @@ public class DrawUtil extends DrawableHelper{
                 color.getAsInt());
     }
 
-    private static void fillRect(int x, int y, int width, int height, int color) {
+    public static void fillRect(int x, int y, int width, int height, int color) {
         DrawableHelper.fill(x, y, x + width, y + height, color);
     }
 
@@ -25,7 +25,7 @@ public class DrawUtil extends DrawableHelper{
         outlineRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height, color.getAsInt());
     }
 
-    private static void outlineRect(int x, int y, int width, int height, int color) {
+    public static void outlineRect(int x, int y, int width, int height, int color) {
         fillRect(x, y, 1, height-1, color);
         fillRect(x + width - 1, y + 1, 1, height-1, color);
         fillRect(x+1, y, width-1, 1, color);

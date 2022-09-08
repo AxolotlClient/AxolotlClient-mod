@@ -1,7 +1,6 @@
 package io.github.axolotlclient.mixin;
 
 import io.github.axolotlclient.modules.hud.HudManager;
-import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hypixel.autoboop.AutoBoop;
 import io.github.axolotlclient.modules.hypixel.autogg.AutoGG;
 import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
@@ -23,10 +22,6 @@ import java.util.List;
 @Mixin(ChatHud.class)
 public abstract class ChatHudMixin {
 
-    @Shadow @Final private List<ChatHudLine> messages;
-
-    @Shadow private int scrolledLines;
-
     @Shadow @Final private List<ChatHudLine> visibleMessages;
 
     @Inject(method = "addMessage(Lnet/minecraft/text/Text;IIZ)V", at = @At("HEAD"))
@@ -39,11 +34,6 @@ public abstract class ChatHudMixin {
     public Text editChat(Text message) {
         return NickHider.Instance.editMessage(message);
     }
-
-    /*@Inject(method = "addMessage(Lnet/minecraft/text/Text;I)V", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;info(Ljava/lang/String;)V"), cancellable = true, remap = false)
-    public void noSuggestions(Text message, int i, CallbackInfo ci){
-        if(i!=0) ci.cancel();
-    }*/
 
     @ModifyArg(method = "addMessage(Lnet/minecraft/text/Text;I)V", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;info(Ljava/lang/String;)V"), remap = false)
     public String noNamesInLogIfHidden(String message){
@@ -71,8 +61,7 @@ public abstract class ChatHudMixin {
     public void getTextAt(int x, int y, CallbackInfoReturnable<Text> cir){
         io.github.axolotlclient.modules.hud.gui.hud.ChatHud hud = (io.github.axolotlclient.modules.hud.gui.hud.ChatHud) HudManager.getInstance().get(io.github.axolotlclient.modules.hud.gui.hud.ChatHud.ID);
         if(hud!=null && hud.isEnabled()) {
-            DrawPosition pos = Util.toMCCoords(x, y);
-            cir.setReturnValue(hud.getTextAt(pos.x, pos.y));
+            cir.setReturnValue(hud.getTextAt(Util.toMCCoordsX(x), Util.toMCCoordsY(y)));
         }
     }
 

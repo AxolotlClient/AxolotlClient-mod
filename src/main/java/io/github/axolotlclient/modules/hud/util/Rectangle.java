@@ -36,4 +36,11 @@ public class Rectangle {
         return mouseX>=x && mouseX<=x+width && mouseY >=y && mouseY <= y+height;
     }
 
+    public Rectangle setData(int x, int y, int width, int height){
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        return this;
+    }
 }

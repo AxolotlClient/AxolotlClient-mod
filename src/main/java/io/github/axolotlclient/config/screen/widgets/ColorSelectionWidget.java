@@ -5,7 +5,6 @@ import io.github.axolotlclient.config.Color;
 import io.github.axolotlclient.config.options.BooleanOption;
 import io.github.axolotlclient.config.options.ColorOption;
 import io.github.axolotlclient.config.options.IntegerOption;
-import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import io.github.axolotlclient.util.Util;
@@ -243,10 +242,8 @@ public class ColorSelectionWidget extends ButtonWidget {
 
             // Helped in the complete confusion:
             // https://github.com/MrCrayfish/MrCrayfishDeviceMod/blob/2a06b20ad8873855885285f3cee6a682e161e24c/src/main/java/com/mrcrayfish/device/util/GLHelper.java#L71
-
-            DrawPosition mousePos = Util.toGlCoords(new DrawPosition(mouseX, mouseY));
-            GL11.glReadPixels(mousePos.x,
-                    mousePos.y,
+            GL11.glReadPixels(Util.toGlCoordsX(mouseX),
+                    Util.toGlCoordsY(mouseY),
                     1, 1, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, pixelBuffer);
 
             final int r = pixelBuffer.get(0) & 0xff;

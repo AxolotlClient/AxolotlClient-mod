@@ -36,6 +36,9 @@ public abstract class AbstractHudEntry extends DrawUtil {
     protected final ColorOption outlineColor = new ColorOption("outlineColor", "#75000000");
     private final DoubleOption x = new DoubleOption("x", getDefaultX(), -0.5, 1.5);
     private final DoubleOption y = new DoubleOption("y", getDefaultY(), -0.5, 1.5);
+    private final DrawPosition scaledPos = new DrawPosition(0, 0);
+    private final Rectangle bounds = new Rectangle(0, 0, 0, 0);
+    private final Rectangle scaledBounds = new Rectangle(0, 0, 0, 0);
 
     private List<OptionBase<?>> options;
 
@@ -79,8 +82,6 @@ public abstract class AbstractHudEntry extends DrawUtil {
             fillRect(getScaledBounds(), Color.DARK_GRAY);
         }
         outlineRect(getScaledBounds(), Color.BLACK);
-
-
     }
 
     public abstract Identifier getId();
@@ -130,7 +131,7 @@ public abstract class AbstractHudEntry extends DrawUtil {
     }
 
     public Rectangle getScaledBounds() {
-        return new Rectangle(getX(), getY(), (int) Math.round(width *  scale.get()),
+        return scaledBounds.setData(getX(), getY(), (int) Math.round(width *  scale.get()),
                 (int) Math.round(height * scale.get()));
     }
 
@@ -139,7 +140,7 @@ public abstract class AbstractHudEntry extends DrawUtil {
      * @return The bounds.
      */
     public Rectangle getBounds() {
-        return new Rectangle(getPos().x, getPos().y, width, height);
+        return bounds.setData(getPos().x, getPos().y, width, height);
     }
 
     public float getScale() {
@@ -162,7 +163,9 @@ public abstract class AbstractHudEntry extends DrawUtil {
     public DrawPosition getScaledPos(float scale) {
         int scaledX = floatToInt( x.get().floatValue(), (int) new Window(client).getScaledWidth(), Math.round(width * scale));
         int scaledY = floatToInt( y.get().floatValue(), (int) new Window(client).getScaledHeight(), Math.round(height * scale));
-        return new DrawPosition(scaledX, scaledY);
+        scaledPos.x = scaledX;
+        scaledPos.y = scaledY;
+        return scaledPos;
     }
 
     public List<OptionBase<?>> getOptions() {

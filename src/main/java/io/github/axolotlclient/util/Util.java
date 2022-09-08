@@ -2,7 +2,6 @@ package io.github.axolotlclient.util;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import io.github.axolotlclient.util.clientCommands.ClientCommands;
 import io.github.axolotlclient.util.clientCommands.Command;
@@ -32,6 +31,8 @@ public class Util {
     public static String lastgame;
     public static String game;
 
+    public static Window window;
+
 
     public static Map<Identifier, Texture> getTextures(){
         return textures;
@@ -53,25 +54,20 @@ public class Util {
         return end - start;
     }
 
-    public static DrawPosition toGlCoords(int x, int y){
-        return toGlCoords(new DrawPosition(x, y));
+    public static int toGlCoordsX(int x){
+        return x * window.getScaleFactor();
     }
 
-    public static DrawPosition toGlCoords(DrawPosition pos){
-        int scale = new Window(MinecraftClient.getInstance()).getScaleFactor();
-        return new DrawPosition(pos.x * scale,
-                MinecraftClient.getInstance().height - pos.y * scale - scale);
+    public static int toGlCoordsY(int y){
+        int scale = window.getScaleFactor();
+        return MinecraftClient.getInstance().height - y * scale - scale;
     }
 
-    public static DrawPosition toMCCoords(int x, int y){
-        return toMCCoords(new DrawPosition(x, y));
+    public static int toMCCoordsX(int x){
+        return x * window.getWidth() / MinecraftClient.getInstance().width;
     }
-
-    public static DrawPosition toMCCoords(DrawPosition pos){
-        Window window = new Window(MinecraftClient.getInstance());
-        int x = pos.x * window.getWidth() / MinecraftClient.getInstance().width;
-        int y = window.getHeight() - pos.y * window.getHeight() / MinecraftClient.getInstance().height - 1;
-        return new DrawPosition(x, y);
+    public static int toMCCoordsY(int y){
+        return window.getHeight() - y * window.getHeight() / MinecraftClient.getInstance().height - 1;
     }
 
     public static void sendChatMessage(String msg){

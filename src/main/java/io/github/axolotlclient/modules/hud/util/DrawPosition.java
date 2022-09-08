@@ -17,15 +17,15 @@ public class DrawPosition {
     }
 
     public DrawPosition subtract(int x, int y) {
-        return new DrawPosition(this.x - x, this.y - y);
-    }
-
-    public DrawPosition subtract(DrawPosition position) {
-        return new DrawPosition(position.x, position.y);
+        this.x-=x;
+        this.y-=y;
+        return this;
     }
 
     public DrawPosition divide(float scale) {
-        return new DrawPosition((int) (x / scale), (int) (y / scale));
+        x/=scale;
+        y/=scale;
+        return this;
     }
 
 }
