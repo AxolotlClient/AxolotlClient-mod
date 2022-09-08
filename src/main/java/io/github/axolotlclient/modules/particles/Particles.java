@@ -83,6 +83,10 @@ public class Particles extends AbstractModule {
         return 1;
     }
 
+    public boolean getAlwaysOn(ParticleType type){
+        return enabled.get() && ((BooleanOption)Particles.getInstance().particleOptions.get(type).get("alwaysCrit")).get();
+    }
+
     protected static class AlphabeticalComparator implements Comparator<ParticleType> {
 
         // Function to compare
