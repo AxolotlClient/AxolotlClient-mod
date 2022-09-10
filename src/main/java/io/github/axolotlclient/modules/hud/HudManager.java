@@ -71,6 +71,7 @@ public class HudManager extends AbstractModule {
         add(new PackDisplayHud());
         add(new RealTimeHud());
         add(new HotbarHUD());
+        add(new MemoryHud());
 
         entries.forEach((identifier, abstractHudEntry) -> abstractHudEntry.init());
     }

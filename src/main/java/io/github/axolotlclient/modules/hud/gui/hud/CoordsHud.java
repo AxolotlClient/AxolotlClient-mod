@@ -122,29 +122,28 @@ public class CoordsHud extends AbstractHudEntry {
         double yaw = client.player.getHeadRotation() + 180;
         int dir = getDirection(yaw);
         String direction = getWordedDirection(dir);
-        TextRenderer textRenderer = client.textRenderer;
-        drawString(textRenderer, "X", pos.x + 1, pos.y + 2, firstColor.get().getAsInt(),
+        drawString("X", pos.x + 1, pos.y + 2, firstColor.get(),
                 shadow.get());
-        drawString(textRenderer, String.valueOf(df.format(x)), pos.x + 11, pos.y + 2,
-                secondColor.get().getAsInt(), shadow.get());
+        drawString(String.valueOf(df.format(x)), pos.x + 11, pos.y + 2,
+                secondColor.get(), shadow.get());
 
-        drawString(textRenderer, "Y", pos.x + 1, pos.y + 12, firstColor.get().getAsInt(),
+        drawString("Y", pos.x + 1, pos.y + 12, firstColor.get(),
                 shadow.get());
-        drawString(textRenderer, String.valueOf(df.format(y)), pos.x + 11, pos.y + 12,
-                secondColor.get().getAsInt(), shadow.get());
+        drawString(String.valueOf(df.format(y)), pos.x + 11, pos.y + 12,
+                secondColor.get(), shadow.get());
 
-        drawString(textRenderer, "Z", pos.x + 1, pos.y + 22, firstColor.get().getAsInt(),
+        drawString("Z", pos.x + 1, pos.y + 22, firstColor.get(),
                 shadow.get());
-        drawString(textRenderer, String.valueOf(df.format(z)), pos.x + 11, pos.y + 22,
-                secondColor.get().getAsInt(), shadow.get());
+        drawString(String.valueOf(df.format(z)), pos.x + 11, pos.y + 22,
+                secondColor.get(), shadow.get());
 
-        drawString(textRenderer, direction, pos.x + 60, pos.y + 12,
-                firstColor.get().getAsInt(), shadow.get());
+        drawString(direction, pos.x + 60, pos.y + 12,
+                firstColor.get(), shadow.get());
 
-        drawString(textRenderer, getXDir(dir), pos.x + 60, pos.y + 2,
-                secondColor.get().getAsInt(), shadow.get());
-        drawString(textRenderer, getZDir(dir), pos.x + 60, pos.y + 22,
-                secondColor.get().getAsInt(), shadow.get());
+        drawString(getXDir(dir), pos.x + 60, pos.y + 2,
+                secondColor.get(), shadow.get());
+        drawString(getZDir(dir), pos.x + 60, pos.y + 22,
+                secondColor.get(), shadow.get());
 
         GlStateManager.popMatrix();
     }
@@ -228,6 +227,7 @@ public class CoordsHud extends AbstractHudEntry {
     @Override
     public void addConfigOptions(List<OptionBase<?>> options) {
         super.addConfigOptions(options);
+        options.add(textAlignment);
         options.add(background);
         options.add(backgroundColor);
         options.add(outline);

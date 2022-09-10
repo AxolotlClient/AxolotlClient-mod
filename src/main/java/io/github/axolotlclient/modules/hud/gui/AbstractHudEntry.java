@@ -6,6 +6,7 @@ import io.github.axolotlclient.config.Color;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
+import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.Window;
@@ -29,6 +30,7 @@ public abstract class AbstractHudEntry extends DrawUtil {
     protected BooleanOption enabled = new BooleanOption("enabled",false);
     public DoubleOption scale = new DoubleOption("scale", 1, 0.1F, 5);
     protected final ColorOption textColor = new ColorOption("textColor", Color.WHITE);
+    protected EnumOption textAlignment = new EnumOption("textAlignment", new String[]{"center", "left", "right"}, "center");
     protected BooleanOption shadow = new BooleanOption("shadow",  getShadowDefault());
     protected BooleanOption background = new BooleanOption("background",  true);
     protected final ColorOption backgroundColor = new ColorOption("bgColor", Color.parse("#64000000"));
@@ -161,8 +163,9 @@ public abstract class AbstractHudEntry extends DrawUtil {
     }
 
     public DrawPosition getScaledPos(float scale) {
-        int scaledX = floatToInt( x.get().floatValue(), (int) new Window(client).getScaledWidth(), Math.round(width * scale));
-        int scaledY = floatToInt( y.get().floatValue(), (int) new Window(client).getScaledHeight(), Math.round(height * scale));
+        Window window = Util.getWindow();
+        int scaledX = floatToInt( x.get().floatValue(), (int) window.getScaledWidth(), Math.round(width * scale));
+        int scaledY = floatToInt( y.get().floatValue(), (int) window.getScaledHeight(), Math.round(height * scale));
         scaledPos.x = scaledX;
         scaledPos.y = scaledY;
         return scaledPos;
@@ -183,7 +186,7 @@ public abstract class AbstractHudEntry extends DrawUtil {
     }
 
     public OptionCategory getAllOptions() {
-        List<OptionBase<?>> options = new ArrayList<>(getOptions());
+        List<OptionBase<?>> options = getOptions();
         options.add(x);
         options.add(y);
         OptionCategory cat = new OptionCategory(getNameKey());
@@ -194,6 +197,20 @@ public abstract class AbstractHudEntry extends DrawUtil {
     public void addConfigOptions(List<OptionBase<?>> options) {
         options.add(enabled);
         options.add(scale);
+    }
+
+    protected void drawString(String s, int x, int y, Color color, boolean shadow){
+        switch (textAlignment.get()){
+            case "center":
+                drawCenteredString(MinecraftClient.getInstance().textRenderer, s, x+width/2, y, color.getAsInt(), shadow);
+                break;
+            case "left":
+                drawString(MinecraftClient.getInstance().textRenderer, s, x, y, color.getAsInt(), shadow);
+                break;
+            case "right":
+                drawString(MinecraftClient.getInstance().textRenderer, s, x+width - MinecraftClient.getInstance().textRenderer.getStringWidth(s), y, color.getAsInt(), shadow);
+                break;
+        }
     }
 
     public boolean isEnabled() {

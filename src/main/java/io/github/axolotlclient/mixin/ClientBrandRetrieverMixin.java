@@ -11,9 +11,6 @@ public abstract class ClientBrandRetrieverMixin {
 
     @Inject(method = "getClientModName", at = @At("HEAD"), cancellable = true)
     private static void returnClientBrand(CallbackInfoReturnable<String> cir){
-
         cir.setReturnValue("AxolotlClient");
-        cir.cancel();
-
     }
 }

@@ -71,7 +71,7 @@ public abstract class InGameHudMixin {
     public void setItemNamePos(Args args){
         HotbarHUD hud = (HotbarHUD) HudManager.getInstance().get(HotbarHUD.ID);
         if(hud.isEnabled()){
-            args.set(1, ((Integer) hud.getX()).floatValue() + (hud.width -
+            args.set(1, ((Integer) hud.getX()).floatValue() + (hud.width*hud.getScale() -
                     MinecraftClient.getInstance().textRenderer.getStringWidth(args.get(0)))/2);
             args.set(2, ((Integer) hud.getY()).floatValue() - 36 +
                     (!MinecraftClient.getInstance().interactionManager.hasStatusBars() ? 14 : 0));

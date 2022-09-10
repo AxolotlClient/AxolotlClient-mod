@@ -1,9 +1,10 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import io.github.axolotlclient.config.Color;
+import io.github.axolotlclient.config.options.BooleanOption;
 import io.github.axolotlclient.config.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
-import io.github.axolotlclient.config.Color;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.util.Identifier;
@@ -19,12 +20,14 @@ import java.util.List;
 public class ActionBarHud extends AbstractHudEntry {
 
     public static final Identifier ID = new Identifier("kronhud", "actionbarhud");
-
-    //public final IntegerOption timeShown = new IntegerOption("timeshown", 60, 40, 300);
+    public final BooleanOption customTextColor = new BooleanOption("customtextcolor", false);
 
     private String actionBar;
     private int color;
+    private final Color current = new Color(-1);
+    private final Color vanillaColor = new Color(-1);
     MinecraftClient client;
+    private String placeholder;
 
     public ActionBarHud() {
         super(115, 13);
@@ -35,30 +38,35 @@ public class ActionBarHud extends AbstractHudEntry {
 
     @Override
     public void render() {
-        if (new Color(color).getAlpha()==0){
+        if (vanillaColor.setData(color).getAlpha()<=0){
             this.actionBar = null;
         }
         if(this.actionBar != null) {
 
             scale();
-            if (shadow.get()){
-                client.textRenderer.drawWithShadow(actionBar, (float)getPos().x + Math.round((float) width /2) -  (float) client.textRenderer.getStringWidth(actionBar) /2, (float)getPos().y + 3, color);
-            } else {
-
-                client.textRenderer.draw(actionBar, getPos().x + Math.round(width /2F) - (client.textRenderer.getStringWidth(actionBar) /2), getPos().y + 3, color);
-            }
+            drawString(actionBar, getPos().x, getPos().y + 3, customTextColor.get() ? (textColor.get().getAlpha()==255 ?
+                    current.setData(
+                            textColor.get().getRed(),
+                            textColor.get().getGreen(),
+                            textColor.get().getBlue(),
+                            vanillaColor.getAlpha()):
+                    textColor.get()) :
+                    vanillaColor, shadow.get());
             GlStateManager.popMatrix();
         }
     }
 
     @Override
     public void renderPlaceholder() {
+        if(placeholder == null){
+            placeholder = I18n.translate("actionBarPlaceholder");
+        }
         renderPlaceholderBackground();
         scale();
-        client.textRenderer.draw(I18n.translate("actionBarPlaceholder"),
-                getPos().x + Math.round(width /2F) - client.textRenderer.getStringWidth(I18n.translate("actionBarPlaceholder")) /2,
+        drawString(placeholder,
+                getPos().x + Math.round(width /2F) - client.textRenderer.getStringWidth(placeholder) /2,
                 getPos().y + 3,
-                -1);
+                Color.WHITE, shadow.get());
         GlStateManager.popMatrix();
         hovered = false;
     }
@@ -77,5 +85,8 @@ public class ActionBarHud extends AbstractHudEntry {
     public void addConfigOptions(List<OptionBase<?>> options){
         super.addConfigOptions(options);
         options.add(shadow);
+        options.add(textAlignment);
+        options.add(customTextColor);
+        options.add(textColor);
     }
 }

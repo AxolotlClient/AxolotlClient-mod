@@ -118,9 +118,9 @@ public class DiscordRPC extends AbstractModule {
             activity.setDetails(Util.getGame());
         } else if (showActivity.get() && currentActivity != null){
             activity.setDetails(currentActivity.getDetails());
-        } else if (!showActivity.get() && currentActivity != null && currentActivity.getDetails().equals("")) {
+        } /*else if (!showActivity.get() && currentActivity != null && currentActivity.getDetails().equals("")) {
             currentActivity.setDetails("");
-        }
+        }*/
 
         activity.setState(state);
         activity.setType(ActivityType.PLAYING);
@@ -128,6 +128,8 @@ public class DiscordRPC extends AbstractModule {
         if (showTime.get()) {
             activity.timestamps().setStart(Instant.ofEpochMilli(time.toEpochMilli()));
         }
+
+        currentActivity.close();
 
         activity.assets().setLargeText("AxolotlClient " + MinecraftClient.getInstance().getGameVersion());
         activity.assets().setLargeImage("icon");

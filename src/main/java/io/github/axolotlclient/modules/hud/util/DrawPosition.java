@@ -22,6 +22,10 @@ public class DrawPosition {
         return this;
     }
 
+    public DrawPosition copy(){
+        return new DrawPosition(x, y);
+    }
+
     public DrawPosition divide(float scale) {
         x/=scale;
         y/=scale;

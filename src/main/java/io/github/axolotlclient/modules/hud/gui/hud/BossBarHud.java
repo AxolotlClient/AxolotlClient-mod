@@ -1,6 +1,5 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
-
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.config.options.BooleanOption;
 import io.github.axolotlclient.config.options.ColorOption;
@@ -23,7 +22,6 @@ public class BossBarHud extends AbstractHudEntry {
 
     public static final Identifier ID = new Identifier("kronhud", "bossbarhud");
     private static final Identifier BARS_TEXTURE = new Identifier("textures/gui/icons.png");
-    
     private final MinecraftClient client;
     private final ColorOption barColor = new ColorOption("barColor", "#FFFFFFFF");
     private final BooleanOption text = new BooleanOption("text", true);
@@ -69,17 +67,15 @@ public class BossBarHud extends AbstractHudEntry {
         renderPlaceholderBackground();
         scale();
         DrawPosition pos = getPos();
-        //outlineRect(getBounds(), Color.BLACK);
-
         client.getTextureManager().bindTexture(BARS_TEXTURE);
         GlStateManager.color4f(barColor.get().getRed(), barColor.get().getGreen(), barColor.get().getBlue(), barColor.get().getAlpha());
         drawTexture(pos.x+2, pos.y+12, 0, 74, 182, 5);
         drawTexture(pos.x+2, pos.y+12, 0, 79, 183, 5);
 
         GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        client.textRenderer.drawWithShadow("Boss Name",
-                (float)((pos.x+width/2)- client.textRenderer.getStringWidth("Boss Name") / 2),
-                (float)(pos.y +3), textColor.get().getAsInt());
+        drawString("Boss Name",
+                pos.x,
+                pos.y, textColor.get(), shadow.get());
         
         hovered = false;
         GlStateManager.popMatrix();
@@ -100,6 +96,7 @@ public class BossBarHud extends AbstractHudEntry {
         super.addConfigOptions(options);
         options.add(text);
         options.add(textColor);
+        options.add(textAlignment);
         options.add(shadow);
         options.add(bar);
         options.add(barColor);

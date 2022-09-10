@@ -22,9 +22,6 @@ public class CPSHud extends CleanHudEntry {
     private final BooleanOption fromKeybindings = new BooleanOption("cpskeybind", false);
     private final BooleanOption rmb = new BooleanOption("rightcps", false);
 
-    boolean rc;
-    boolean lc;
-
     public CPSHud() {
         super();
         Hooks.MOUSE_INPUT.register((window, button, action, mods) -> {

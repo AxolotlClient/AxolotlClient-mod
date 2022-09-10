@@ -58,9 +58,11 @@ public class ArrowHud extends AbstractHudEntry {
         return true;
     }
 
+    private final ItemStack arrow = new ItemStack(Items.ARROW);
+
     @Override
     public void tick() {
-        arrows = ItemUtil.getTotal(client, new ItemStack(Items.ARROW));
+        arrows = ItemUtil.getTotal(client, arrow);
 
     }
 

@@ -11,8 +11,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(TextRenderer.class)
@@ -47,7 +45,7 @@ public abstract class TextRendererMixin {
 
     @Inject(method = "method_950", at = @At("HEAD"), cancellable = true)
     public void gBreve(char c, boolean bl, CallbackInfoReturnable<Float> cir){
-        if(c=='Ğ'){
+        if(c=='Ğ' && !MinecraftClient.getInstance().options.forceUnicode){
             MinecraftClient.getInstance().getTextureManager().bindTexture(texture_g);
 
             if(!bl || shouldHaveShadow) {
@@ -69,7 +67,7 @@ public abstract class TextRendererMixin {
 
     @Inject(method = "method_949", at = @At(value = "HEAD"), cancellable = true)
     public void modifiedCharWidth(char c, CallbackInfoReturnable<Integer> cir){
-        if(c=='Ğ'){
+        if(c=='Ğ' && !MinecraftClient.getInstance().options.forceUnicode){
             cir.setReturnValue(7);
         }
     }

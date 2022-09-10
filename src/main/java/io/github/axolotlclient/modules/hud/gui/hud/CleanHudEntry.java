@@ -1,6 +1,7 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import io.github.axolotlclient.config.Color;
 import io.github.axolotlclient.config.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
@@ -32,10 +33,10 @@ public abstract class CleanHudEntry extends AbstractHudEntry {
             fillRect(getBounds(), backgroundColor.get());
         }
         if(outline.get()) outlineRect(getBounds(), outlineColor.get());
-        drawCenteredString(client.textRenderer, getValue(),
-                pos.x + (Math.round(width) / 2),
-                pos.y + (Math.round((float) height / 2)) - 4,
-                textColor.get().getAsInt(),
+        drawString(getValue(),
+                pos.x,
+                pos.y + (Math.round((float) height / 2) - 4),
+                textColor.get(),
                 shadow.get());
         GlStateManager.popMatrix();
     }
@@ -45,9 +46,9 @@ public abstract class CleanHudEntry extends AbstractHudEntry {
         renderPlaceholderBackground();
         scale();
         DrawPosition pos = getPos();
-        drawCenteredString(client.textRenderer, getPlaceholder(),
-                pos.x + (width / 2),
-                pos.y + (height / 2) - 4, -1, shadow.get());
+        drawString(getPlaceholder(),
+                pos.x,
+                pos.y + (Math.round((float) height / 2) - 4), Color.WHITE, shadow.get());
         GlStateManager.popMatrix();
         hovered = false;
     }
@@ -56,6 +57,7 @@ public abstract class CleanHudEntry extends AbstractHudEntry {
     public void addConfigOptions(List<OptionBase<?>> options) {
         super.addConfigOptions(options);
         options.add(textColor);
+        options.add(textAlignment);
         options.add(shadow);
         options.add(background);
         options.add(backgroundColor);

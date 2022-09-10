@@ -16,6 +16,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
+import org.jetbrains.annotations.ApiStatus;
 import org.lwjgl.opengl.GL11;
 
 import java.util.*;
@@ -31,6 +32,7 @@ public class Util {
     public static String lastgame;
     public static String game;
 
+    @ApiStatus.Internal
     public static Window window;
 
 
@@ -80,6 +82,13 @@ public class Util {
             window = new Window(MinecraftClient.getInstance());
         }
         return window.getHeight() - y * window.getHeight() / MinecraftClient.getInstance().height - 1;
+    }
+
+    public static Window getWindow(){
+        if(window==null){
+            window = new Window(MinecraftClient.getInstance());
+        }
+        return window;
     }
 
     public static void sendChatMessage(String msg){
