@@ -194,6 +194,8 @@ graphUsedColor=Graph Color (Used)
 showText=Show Text
 showAllocated=Show Allocated RAM
 allocated=Allocated
+playercounthud=PlayerCount HUD
+players=Player(s)
 
 toggleSprint=Allow Sprinting toggle
 toggleSneak=Allow Sneaking toggle

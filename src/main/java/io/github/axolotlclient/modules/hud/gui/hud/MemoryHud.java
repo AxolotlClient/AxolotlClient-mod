@@ -85,10 +85,10 @@ public class MemoryHud extends AbstractHudEntry {
             graph.setData(pos.x + 5, pos.y + 5, getBounds().width- 10, getBounds().height - 10);
 
             fill(graph.x, graph.y,
-                    (int) (graph.x + graph.width * (0.42)),
+                    (int) (graph.x + graph.width * (0.3)),
                     graph.y + graph.height,
                     graphUsedColor.get().getAsInt());
-            fill((int) (graph.x + graph.width * (0.42)),
+            fill((int) (graph.x + graph.width * (0.3)),
                     graph.y, graph.x + graph.width,
                     graph.y + graph.height,
                     graphFreeColor.get().getAsInt());
@@ -97,12 +97,12 @@ public class MemoryHud extends AbstractHudEntry {
         }
 
         if(showText.get()) {
-            drawString("420MiB/6900MiB",
+            drawString("300MiB/1024MiB",
                     pos.x,
                     pos.y + (Math.round((float) height / 2) - 4) - (showAllocated.get() ? 4 : 0),
                     Color.WHITE, shadow.get());
             if (showAllocated.get()) {
-                drawString(I18n.translate("allocated")+": 4200MiB",
+                drawString(I18n.translate("allocated")+": 976MiB",
                         pos.x,
                         pos.y + (Math.round((float) height / 2) - 4) + 4,
                         textColor.get(),
