@@ -1,6 +1,5 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
-import io.github.axolotlclient.config.options.Option;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
@@ -8,12 +7,11 @@ import net.minecraft.util.math.Vec3d;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
- * https://github.com/DarkKronicle/KronHUD
- * Licensed under GPL-3.0
+ * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ * @license GPL-3.0
  */
 
 public class SpeedHud extends CleanHudEntry {

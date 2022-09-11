@@ -10,10 +10,6 @@ import net.minecraft.text.Text;
 public class StringOptionWidget extends TextFieldWidget {
 
 	public final StringOption option;
-	/*public StringOptionWidget(int x, int y, int width, StringOption option) {
-		super(MinecraftClient.getInstance().textRenderer, x, y, width, 20, Text.of(option.get()));
-		this.option=option;
-	}*/
 
     public TextFieldWidget textField;
 

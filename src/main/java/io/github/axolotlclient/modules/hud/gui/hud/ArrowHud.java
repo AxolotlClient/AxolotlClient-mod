@@ -19,8 +19,8 @@ import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
- * https://github.com/DarkKronicle/KronHUD
- * Licensed under GPL-3.0
+ * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ * @license GPL-3.0
  */
 
 public class ArrowHud extends AbstractHudEntry {
@@ -62,10 +62,12 @@ public class ArrowHud extends AbstractHudEntry {
 		return true;
 	}
 
+	private final ItemStack arrow = new ItemStack(Items.ARROW);
+
 	@Override
 	public void tick() {
 		if (allArrowTypes.get()) {
-			arrows = ItemUtil.getTotal(client, new ItemStack(Items.ARROW)) + ItemUtil.getTotal(client, new ItemStack(Items.TIPPED_ARROW)) + ItemUtil.getTotal(client, new ItemStack(Items.SPECTRAL_ARROW));
+			arrows = ItemUtil.getTotal(client, arrow) + ItemUtil.getTotal(client, new ItemStack(Items.TIPPED_ARROW)) + ItemUtil.getTotal(client, new ItemStack(Items.SPECTRAL_ARROW));
 		} else {
 			arrows = ItemUtil.getTotal(client, currentArrow);
 		}

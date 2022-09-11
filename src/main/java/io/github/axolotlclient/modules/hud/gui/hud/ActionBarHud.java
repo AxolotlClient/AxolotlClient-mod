@@ -2,7 +2,6 @@ package io.github.axolotlclient.modules.hud.gui.hud;
 
 import io.github.axolotlclient.config.Color;
 import io.github.axolotlclient.config.options.BooleanOption;
-import io.github.axolotlclient.config.options.IntegerOption;
 import io.github.axolotlclient.config.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import net.minecraft.client.MinecraftClient;
@@ -14,22 +13,21 @@ import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
- * https://github.com/DarkKronicle/KronHUD
- * Licensed under GPL-3.0
+ * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ * @license GPL-3.0
  */
 
 public class ActionBarHud extends AbstractHudEntry {
 
     public static final Identifier ID = new Identifier("kronhud", "actionbarhud");
-
-    public final IntegerOption timeShown = new IntegerOption("timeshown", 60, 40, 300);
 	public final BooleanOption customTextColor = new BooleanOption("customtextcolor", false);
 
     private Text actionBar;
-	private int ticksShown;
     private int color;
+	private final Color current = new Color(-1);
+	private final Color vanillaColor = new Color(-1);
     MinecraftClient client;
-	private final String placeholder = "Action Bar";
+	private Text placeholder;
 
     public ActionBarHud() {
         super(115, 13);
@@ -40,35 +38,32 @@ public class ActionBarHud extends AbstractHudEntry {
 
 	@Override
 	public void render(MatrixStack matrices) {
-		if (ticksShown >= timeShown.get()){
+		if (vanillaColor.setData(color).getAlpha()<=0){
 			this.actionBar = null;
 		}
-		Color vanillaColor = new Color(color);
 		if(this.actionBar != null) {
 
-			matrices.push();
 			scale(matrices);
             drawString(matrices, actionBar.asOrderedText().toString(), getPos().x, getPos().y + 3, customTextColor.get() ? (textColor.get().getAlpha()==255 ?
-                new Color(
-                    textColor.get().getRed(),
-                    textColor.get().getGreen(),
-                    textColor.get().getBlue(),
-                    vanillaColor.getAlpha()):
-                textColor.get()) :
-                vanillaColor, shadow.get());
+					current.setData(
+							textColor.get().getRed(),
+                    	textColor.get().getGreen(),
+                    	textColor.get().getBlue(),
+                    	vanillaColor.getAlpha()):
+                	textColor.get()) :
+                	vanillaColor, shadow.get());
 			matrices.pop();
-			ticksShown++;
-		} else {
-			ticksShown = 0;
 		}
 	}
 
 	@Override
 	public void renderPlaceholder(MatrixStack matrices) {
-		matrices.push();
+		if(placeholder == null) {
+			placeholder = Text.translatable("actionBarPlaceholder");
+		}
 		renderPlaceholderBackground(matrices);
 		scale(matrices);
-		client.textRenderer.draw(matrices, placeholder,  (float)getPos().x + Math.round((float) width /2) - (float) client.textRenderer.getWidth(placeholder) /2, (float)getPos().y + 3, -1);
+		drawString(matrices, placeholder.getString(),  getPos().x + Math.round(width /2F) - client.textRenderer.getWidth(placeholder) /2, getPos().y + 3, Color.WHITE, shadow.get());
 		matrices.pop();
 		hovered = false;
 	}
@@ -88,5 +83,7 @@ public class ActionBarHud extends AbstractHudEntry {
         super.addConfigOptions(options);
         options.add(shadow);
         options.add(textAlignment);
+		options.add(customTextColor);
+		options.add(textColor);
     }
 }

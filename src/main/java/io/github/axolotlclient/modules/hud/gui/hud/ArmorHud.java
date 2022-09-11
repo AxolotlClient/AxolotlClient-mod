@@ -1,7 +1,6 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
 import io.github.axolotlclient.config.options.BooleanOption;
-import io.github.axolotlclient.config.options.Option;
 import io.github.axolotlclient.config.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
@@ -20,8 +19,8 @@ import java.util.Objects;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
- * https://github.com/DarkKronicle/KronHUD
- * Licensed under GPL-3.0
+ * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ * @license GPL-3.0
  */
 
 public class ArmorHud extends AbstractHudEntry {
@@ -86,16 +85,25 @@ public class ArmorHud extends AbstractHudEntry {
 			shadow.get());
 	}
 
+	ItemStack[] placeholders = new ItemStack[]{
+			new ItemStack(Items.IRON_HELMET),
+			new ItemStack(Items.IRON_CHESTPLATE),
+			new ItemStack(Items.IRON_LEGGINGS),
+			new ItemStack(Items.IRON_BOOTS),
+			new ItemStack(Items.IRON_SWORD)
+	};
+
 	@Override
 	public void renderPlaceholder(MatrixStack matrices) {
-		matrices.push();
 		renderPlaceholderBackground(matrices);
 		scale(matrices);
 		DrawPosition pos = getPos();
-		int lastY = 2 + (4 * 20);
-		ItemUtil.renderGuiItemModel(matrices, new ItemStack(Items.GRASS_BLOCK), pos.x + 2, pos.y + lastY);
-		ItemUtil.renderGuiItemOverlay(matrices, client.textRenderer, new ItemStack(Items.GRASS_BLOCK), pos.x + 2,
-			pos.y + lastY, "90", textColor.get().getAsInt(), shadow.get());
+		int lastY = 2;
+		for(ItemStack stack:placeholders) {
+			ItemUtil.renderGuiItemModel(matrices, stack, pos.x, pos.y + lastY);
+			ItemUtil.renderGuiItemOverlay(matrices, client.textRenderer, stack, pos.x, pos.y + lastY, stack.getCount()+"", textColor.get().getAsInt(), shadow.get());
+			lastY+=20;
+		}
 		hovered = false;
 		matrices.pop();
 	}

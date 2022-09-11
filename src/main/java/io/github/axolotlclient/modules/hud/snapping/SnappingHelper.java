@@ -13,8 +13,8 @@ import java.util.Optional;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
- * https://github.com/DarkKronicle/KronHUD
- * Licensed under GPL-3.0
+ * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ * @license GPL-3.0
  */
 
 public class SnappingHelper {
@@ -23,13 +23,11 @@ public class SnappingHelper {
     private final HashSet<Integer> y = new HashSet<>();
     private static final Color LINE_COLOR = Color.SELECTOR_BLUE;
     private Rectangle current;
-    private final MinecraftClient client;
     private final Window window;
 
     public SnappingHelper(List<Rectangle> rects, Rectangle current) {
         addAllRects(rects);
         this.current = current;
-        this.client = MinecraftClient.getInstance();
         this.window = MinecraftClient.getInstance().getWindow();
     }
 
@@ -58,11 +56,11 @@ public class SnappingHelper {
     public void renderSnaps(MatrixStack matrices) {
         Integer curx, cury;
         if ((curx = getRawXSnap()) != null) {
-            DrawUtil.fillRect(matrices, new Rectangle(curx, 0, 1, (int) window.getScaledHeight()),
+            DrawUtil.fillRect(matrices, new Rectangle(curx, 0, 1, window.getScaledHeight()),
                     LINE_COLOR);
         }
         if ((cury = getRawYSnap()) != null) {
-            DrawUtil.fillRect(matrices, new Rectangle(0, cury, (int) window.getScaledWidth(), 1),
+            DrawUtil.fillRect(matrices, new Rectangle(0, cury, window.getScaledWidth(), 1),
                     LINE_COLOR);
         }
         //renderAll();
@@ -71,11 +69,11 @@ public class SnappingHelper {
 
     public void renderAll(MatrixStack matrices) {
         for (Integer xval : x) {
-            DrawUtil.fillRect(matrices, new Rectangle(xval, 0, 1, (int) window.getScaledHeight()),
+            DrawUtil.fillRect(matrices, new Rectangle(xval, 0, 1, window.getScaledHeight()),
                     Color.WHITE);
         }
         for (Integer yval : y) {
-            DrawUtil.fillRect(matrices, new Rectangle(0, yval, (int) window.getScaledWidth(), 1), Color.WHITE);
+            DrawUtil.fillRect(matrices, new Rectangle(0, yval, window.getScaledWidth(), 1), Color.WHITE);
         }
     }
 
@@ -116,7 +114,7 @@ public class SnappingHelper {
     }
 
     public Integer getHalfYSnap() {
-        int height = (int) (window.getScaledHeight() / 2);
+        int height = window.getScaledHeight() / 2;
         int pos = current.y + Math.round((float) current.height / 2);
         if (height - distance <= pos && height + distance >= pos) {
             return height;
@@ -125,7 +123,7 @@ public class SnappingHelper {
     }
 
     public Integer getHalfXSnap() {
-        int width = (int) (window.getScaledWidth() / 2);
+        int width = window.getScaledWidth() / 2;
         int pos = current.x + Math.round((float) current.width / 2);
         if (width - distance <= pos && width + distance >= pos) {
             return width;

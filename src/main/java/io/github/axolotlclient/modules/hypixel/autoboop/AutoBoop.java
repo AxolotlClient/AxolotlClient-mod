@@ -15,11 +15,8 @@ public class AutoBoop implements AbstractHypixelMod {
 	protected OptionCategory cat = new OptionCategory("autoBoop");
 	protected BooleanOption enabled = new BooleanOption("enabled", "autoBoop", false);
 
-
-
 	@Override
 	public void init() {
-
 		cat.add(enabled);
 	}
 

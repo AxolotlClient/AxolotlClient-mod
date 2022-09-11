@@ -1,13 +1,10 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
-
 import com.mojang.blaze3d.systems.RenderSystem;
-import io.github.axolotlclient.config.Color;
 import io.github.axolotlclient.config.options.BooleanOption;
 import io.github.axolotlclient.config.options.ColorOption;
-import io.github.axolotlclient.config.options.Option;
 import io.github.axolotlclient.config.options.OptionBase;
-import io.github.axolotlclient.mixin.AccessorBossBarHud;
+import io.github.axolotlclient.mixin.BossBarHudAccessor;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import net.minecraft.client.MinecraftClient;
@@ -26,8 +23,8 @@ import java.util.UUID;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
- * https://github.com/DarkKronicle/KronHUD
- * Licensed under GPL-3.0
+ * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ * @license GPL-3.0
  */
 
 public class BossBarHud extends AbstractHudEntry {
@@ -54,7 +51,7 @@ public class BossBarHud extends AbstractHudEntry {
     }
 
 	public void setBossBars() {
-		bossBars = ((AccessorBossBarHud) client.inGameHud.getBossBarHud()).getBossBars();
+		bossBars = ((BossBarHudAccessor) client.inGameHud.getBossBarHud()).getBossBars();
 	}
 
 
@@ -81,11 +78,9 @@ public class BossBarHud extends AbstractHudEntry {
 
 	@Override
 	public void renderPlaceholder(MatrixStack matrices) {
-		matrices.push();
 		renderPlaceholderBackground(matrices);
 		scale(matrices);
 		DrawPosition pos = getPos();
-		outlineRect(matrices, getBounds(), Color.BLACK);
 		renderBossBar(matrices, pos.x, pos.y + 12, placeholder);
 		renderBossBar(matrices, pos.x, pos.y + 31, placeholder2);
 		hovered = false;

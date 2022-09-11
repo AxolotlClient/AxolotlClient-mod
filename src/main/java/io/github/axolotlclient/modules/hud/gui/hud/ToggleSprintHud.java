@@ -3,7 +3,6 @@ package io.github.axolotlclient.modules.hud.gui.hud;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.config.ConfigManager;
 import io.github.axolotlclient.config.options.BooleanOption;
-import io.github.axolotlclient.config.options.Option;
 import io.github.axolotlclient.config.options.OptionBase;
 import io.github.axolotlclient.config.options.StringOption;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;

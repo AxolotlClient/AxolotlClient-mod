@@ -2,9 +2,9 @@ package io.github.axolotlclient.modules.hypixel;
 
 /**
  * Port of
- * https://github.com/Plancke/hypixel-php/blob/c6d346c0366180bcd0a3f1b769f08500a31d283f/src/util/games/skywars/ExpCalculator.php
+ * <a href="https://github.com/Plancke/hypixel-php/blob/c6d346c0366180bcd0a3f1b769f08500a31d283f/src/util/games/skywars/ExpCalculator.php">Plancke's Exp calculator</a>
  * to Java from PHP
- * License: MIT
+ * @license MIT
  */
 
 public class ExpCalculator {

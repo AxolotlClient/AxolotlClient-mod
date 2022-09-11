@@ -1,57 +1,30 @@
 package io.github.axolotlclient.config.options;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonPrimitive;
 import io.github.axolotlclient.config.CommandResponse;
 import org.jetbrains.annotations.NotNull;
 
-public class FloatOption extends OptionBase<Float> {
+public class FloatOption extends NumericOption<Float> {
 
-    float min;
-    float max;
-    float def;
-    float option;
-
-    public FloatOption(String name, String tooltipLocation, Float def, Float min, Float max) {
-        super(name, tooltipLocation);
-        this.min=min;
-        this.max=max;
-        this.def=def;
+    public FloatOption(String name, Float def, Float min, Float max) {
+        super(name, def, min, max);
     }
 
-    public FloatOption(String name, Float min, Float max, Float def) {
-        this(name, null, def, min, max);
+    public FloatOption(String name, ChangedListener onChange, Float def, Float min, Float max) {
+        super(name, onChange, def, min, max);
     }
 
-    public Float get(){
-        return option;
+    public FloatOption(String name, String tooltipKeyPrefix, Float def, Float min, Float max) {
+        super(name, tooltipKeyPrefix, def, min, max);
     }
 
-    public void set(float set){
-        option=set;
-    }
-
-    public float getMin(){return min;}
-    public float getMax(){return max;}
-
-    @Override
-    public OptionType getType() {
-        return OptionType.FLOAT;
+    public FloatOption(String name, String tooltipKeyPrefix, ChangedListener onChange, Float def, Float min, Float max) {
+        super(name, tooltipKeyPrefix, onChange, def, min, max);
     }
 
     @Override
     public void setValueFromJsonElement(@NotNull JsonElement element) {
         option = element.getAsFloat();
-    }
-
-    @Override
-    public void setDefaults() {
-        option=def;
-    }
-
-    @Override
-    public JsonElement getJson() {
-        return new JsonPrimitive(option);
     }
 
     @Override

@@ -15,7 +15,7 @@ public class LevelHead implements AbstractHypixelMod {
     public BooleanOption enabled = new BooleanOption("enabled", false);
     public BooleanOption background = new BooleanOption("background", false);
     public ColorOption textColor = new ColorOption("textColor", Color.GOLD);
-    public EnumOption mode = new EnumOption("levelHeadMode", LevelHeadMode.values(), LevelHeadMode.NETWORK);
+    public EnumOption mode = new EnumOption("levelHeadMode", LevelHeadMode.values(), LevelHeadMode.NETWORK.toString());
 
     @Override
     public void init() {

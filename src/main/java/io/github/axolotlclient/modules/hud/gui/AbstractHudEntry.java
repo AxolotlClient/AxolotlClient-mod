@@ -21,8 +21,8 @@ import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
- * <a href="https://github.com/DarkKronicle/KronHUD">https://github.com/DarkKronicle/KronHUD</a>
- * Licensed under GPL-3.0
+ * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ * @license GPL-3.0
  */
 
 public abstract class AbstractHudEntry extends DrawUtil {
@@ -39,8 +39,11 @@ public abstract class AbstractHudEntry extends DrawUtil {
     protected final ColorOption backgroundColor = new ColorOption("bgColor", Color.parse("#64000000"));
     protected final BooleanOption outline = new BooleanOption("outline", false);
     protected final ColorOption outlineColor = new ColorOption("outlineColor", "#75000000");
-    private final DoubleOption x = new DoubleOption("x", getDefaultX(), 0, 1);
-    private final DoubleOption y = new DoubleOption("y", getDefaultY(), 0, 1);
+    private final DoubleOption x = new DoubleOption("x", getDefaultX(), -0.5, 1.5);
+    private final DoubleOption y = new DoubleOption("y", getDefaultY(), -0.5, 1.5);
+    private final DrawPosition scaledPos = new DrawPosition(0, 0);
+    private final Rectangle bounds = new Rectangle(0, 0, 0, 0);
+    private final Rectangle scaledBounds = new Rectangle(0, 0, 0, 0);
 
     private List<OptionBase<?>> options;
 
@@ -56,11 +59,17 @@ public abstract class AbstractHudEntry extends DrawUtil {
     public void init(){}
 
     public static int floatToInt(float percent, int max, int offset) {
-        return MathHelper.clamp(Math.round((max - offset) * percent), 0, max);
+        if(percent<0){
+            return -MathHelper.clamp(Math.round((max - offset) * -percent), -1, max);
+        }
+        return MathHelper.clamp(Math.round((max - offset) * percent), -1, max);
     }
 
     public static float intToFloat(int current, int max, int offset) {
-        return MathHelper.clamp((float) (current) / (max - offset), 0, 1);
+        if(current<0){
+            return -MathHelper.clamp((float) (-current) / (max - offset), 0, 2);
+        }
+        return MathHelper.clamp((float) (current) / (max - offset), -1, 2);
     }
 
     public void renderHud(MatrixStack matrices) {
@@ -78,8 +87,6 @@ public abstract class AbstractHudEntry extends DrawUtil {
             fillRect(matrices, getScaledBounds(), Color.DARK_GRAY);
         }
         outlineRect(matrices, getScaledBounds(), Color.BLACK);
-
-
     }
 
     public abstract Identifier getId();
@@ -103,7 +110,7 @@ public abstract class AbstractHudEntry extends DrawUtil {
     }
 
     public void setX(int x) {
-        this.x.set(intToFloat(x, MinecraftClient.getInstance().getWindow().getScaledWidth(),
+        this.x.set((double)intToFloat(x, MinecraftClient.getInstance().getWindow().getScaledWidth(),
                 Math.round(width * getScale())));
     }
 
@@ -112,7 +119,7 @@ public abstract class AbstractHudEntry extends DrawUtil {
     }
 
     public void setY(int y) {
-        this.y.set(intToFloat(y, MinecraftClient.getInstance().getWindow().getScaledHeight(),
+        this.y.set((double)intToFloat(y, MinecraftClient.getInstance().getWindow().getScaledHeight(),
                 Math.round(height * getScale())));
     }
 
@@ -129,8 +136,8 @@ public abstract class AbstractHudEntry extends DrawUtil {
     }
 
     public Rectangle getScaledBounds() {
-        return new Rectangle(getX(), getY(), Math.round(width * scale.get().floatValue()),
-                Math.round(height * scale.get().floatValue()));
+        return scaledBounds.setData(getX(), getY(), (int) Math.round(width *  scale.get()),
+                (int) Math.round(height * scale.get()));
     }
 
     /**
@@ -138,7 +145,7 @@ public abstract class AbstractHudEntry extends DrawUtil {
      * @return The bounds.
      */
     public Rectangle getBounds() {
-        return new Rectangle(getPos().x, getPos().y, width, height);
+        return bounds.setData(getPos().x, getPos().y, width, height);
     }
 
     public float getScale() {
@@ -159,9 +166,11 @@ public abstract class AbstractHudEntry extends DrawUtil {
     }
 
     public DrawPosition getScaledPos(float scale) {
-        int scaledX = floatToInt(x.get().floatValue(), MinecraftClient.getInstance().getWindow().getScaledWidth(), Math.round(width * scale));
-        int scaledY = floatToInt(y.get().floatValue(), MinecraftClient.getInstance().getWindow().getScaledHeight(), Math.round(height * scale));
-        return new DrawPosition(scaledX, scaledY);
+        int scaledX = floatToInt( x.get().floatValue(), MinecraftClient.getInstance().getWindow().getScaledWidth(), Math.round(width * scale));
+        int scaledY = floatToInt( y.get().floatValue(), MinecraftClient.getInstance().getWindow().getScaledHeight(), Math.round(height * scale));
+        scaledPos.x = scaledX;
+        scaledPos.y = scaledY;
+        return scaledPos;
     }
 
     public List<OptionBase<?>> getOptions() {
@@ -179,7 +188,7 @@ public abstract class AbstractHudEntry extends DrawUtil {
     }
 
     public OptionCategory getAllOptions() {
-        List<OptionBase<?>> options = new ArrayList<>(getOptions());
+        List<OptionBase<?>> options = getOptions();
         options.add(x);
         options.add(y);
         OptionCategory cat = new OptionCategory(getNameKey());
@@ -193,16 +202,13 @@ public abstract class AbstractHudEntry extends DrawUtil {
     }
 
     protected void drawString(MatrixStack matrices, String s, int x, int y, Color color, boolean shadow){
-        switch (textAlignment.get()){
-            case "center":
-                drawCenteredString(matrices, MinecraftClient.getInstance().textRenderer, s, x+width/2, y, color.getAsInt(), shadow);
-                break;
-            case "left":
-                drawString(matrices, MinecraftClient.getInstance().textRenderer, s, x, y, color.getAsInt(), shadow);
-                break;
-            case "right":
-                drawString(matrices, MinecraftClient.getInstance().textRenderer, s, x+width - MinecraftClient.getInstance().textRenderer.getWidth(s), y, color.getAsInt(), shadow);
-                break;
+        switch (textAlignment.get()) {
+            case "center" ->
+                    drawCenteredString(matrices, MinecraftClient.getInstance().textRenderer, s, x + width / 2, y, color.getAsInt(), shadow);
+            case "left" ->
+                    drawString(matrices, MinecraftClient.getInstance().textRenderer, s, x, y, color.getAsInt(), shadow);
+            case "right" ->
+                    drawString(matrices, MinecraftClient.getInstance().textRenderer, s, x + width - MinecraftClient.getInstance().textRenderer.getWidth(s), y, color.getAsInt(), shadow);
         }
     }
 

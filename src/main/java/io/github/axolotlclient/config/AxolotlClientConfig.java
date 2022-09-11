@@ -26,10 +26,6 @@ public class AxolotlClientConfig {
     public final BooleanOption lowFire = new BooleanOption("lowFire", false);
     public final BooleanOption lowShield = new BooleanOption("lowShield", false);
 
-    public final BooleanOption motionBlurEnabled = new BooleanOption("enabled", false);
-    public final FloatOption motionBlurStrength = new FloatOption("strength", 1F, 99F, 50F);
-    public final BooleanOption motionBlurInGuis = new BooleanOption("inGuis", false);
-
 	public final BooleanOption showOptionTooltips = new BooleanOption("showOptionTooltips", true);
 	public final BooleanOption showCategoryTooltips = new BooleanOption("showCategoryTooltips", false);
     public final BooleanOption quickToggles = new BooleanOption("quickToggles", false);
@@ -39,7 +35,8 @@ public class AxolotlClientConfig {
     public final BooleanOption enableCustomOutlines = new BooleanOption("enabled", false);
     public final ColorOption outlineColor = new ColorOption("color", Color.parse("#DD000000"));
     public final BooleanOption outlineChroma = new BooleanOption("chroma", false);
-    public final DoubleOption outlineWidth = new DoubleOption("outlineWidth", 1, 1, 10);
+    // If you find a reasonable (without rewriting  a lot) way to implement this let me know!
+    //public final DoubleOption outlineWidth = new DoubleOption("outlineWidth", 1, 1, 10);
 
     public final BooleanOption creditsBGM = new BooleanOption("creditsBGM", true);
 
@@ -52,7 +49,6 @@ public class AxolotlClientConfig {
     public final OptionCategory nametagOptions = new OptionCategory( "nametagOptions");
     public final OptionCategory rendering = new OptionCategory("rendering");
     public final OptionCategory outlines= new OptionCategory("blockOutlines");
-    public final OptionCategory motionBlur = new OptionCategory("motionBlur");
 	public final OptionCategory timeChanger = new OptionCategory("timeChanger");
     public final OptionCategory searchFilters = new OptionCategory("searchFilters");
 
@@ -112,11 +108,6 @@ public class AxolotlClientConfig {
         rendering.add(fullBright);
         rendering.add(lowFire);
         rendering.add(lowShield);
-
-        motionBlur.add(motionBlurEnabled);
-        motionBlur.add(motionBlurStrength);
-        motionBlur.add(motionBlurInGuis);
-        rendering.addSubCategory(motionBlur);
 
 		timeChanger.add(timeChangerEnabled);
 		timeChanger.add(customTime);

@@ -1,7 +1,5 @@
 package io.github.axolotlclient;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import io.github.axolotlclient.util.ThreadExecuter;
 import net.minecraft.client.MinecraftClient;
 import org.apache.http.HttpResponse;
@@ -13,10 +11,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.StringReader;
 import java.util.UUID;
 
 
@@ -105,7 +99,8 @@ public class NetworkHelper {
         }
     }
 
-    public static JsonElement getRequest(String site) {
+    // In case we ever implement more of HyCord's features...
+    /*public static JsonElement getRequest(String site) {
         try {
 
             CloseableHttpClient client = HttpClients.custom().disableAutomaticRetries().build();
@@ -149,6 +144,5 @@ public class NetworkHelper {
             e.printStackTrace();
         }
         return null;
-    }
-
+    }*/
 }

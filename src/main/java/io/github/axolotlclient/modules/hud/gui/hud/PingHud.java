@@ -3,7 +3,6 @@ package io.github.axolotlclient.modules.hud.gui.hud;
 import io.github.axolotlclient.config.options.IntegerOption;
 import io.github.axolotlclient.config.options.OptionBase;
 import io.github.axolotlclient.util.ThreadExecuter;
-import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.Address;
 import net.minecraft.client.network.AllowedAddressResolver;
@@ -24,8 +23,8 @@ import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
- * https://github.com/DarkKronicle/KronHUD
- * Licensed under GPL-3.0
+ * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ * @license GPL-3.0
  */
 
 public class PingHud extends CleanHudEntry {
@@ -58,15 +57,24 @@ public class PingHud extends CleanHudEntry {
         return true;
     }
 
-    private int second;
+    private void updatePing(){
+        if (MinecraftClient.getInstance().getCurrentServerEntry() != null) {
+            if (MinecraftClient.getInstance().getCurrentServerEntry().ping==1) {
+                getRealTimeServerPing(MinecraftClient.getInstance().getCurrentServerEntry());
+            } else {
+                currentServerPing = (int) MinecraftClient.getInstance().getCurrentServerEntry().ping;
+            }
+        } else if (MinecraftClient.getInstance().isIntegratedServerRunning()){
+            currentServerPing = 1;
+        }
+    }
 
+    private int second;
     @Override
     public void tick() {
-        if (second >= refreshDelay.get() * 20) {
-            if (MinecraftClient.getInstance().getCurrentServerEntry() != null) {
-                getRealTimeServerPing(MinecraftClient.getInstance().getCurrentServerEntry());
-            }
-            second = 0;
+        if(second>=refreshDelay.get()*20){
+            updatePing();
+            second=0;
         } else second++;
     }
 
@@ -79,8 +87,7 @@ public class PingHud extends CleanHudEntry {
     //Indicatia removed this feature...
     //We still need it :(
     private void getRealTimeServerPing(ServerInfo server) {
-        ThreadExecuter.submit(() ->
-        {
+        ThreadExecuter.submit(() -> {
             try {
                 var address = ServerAddress.parse(server.address);
                 var optional = AllowedAddressResolver.DEFAULT.resolve(address).map(Address::getInetSocketAddress);

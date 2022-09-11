@@ -38,16 +38,16 @@ public class ColorSelectionWidget extends ButtonWidget {
     protected BooleanWidget chromaWidget;
 
     protected IntegerOption alpha = new IntegerOption("alpha", 0, 0, 255);
-    protected OptionSliderWidget alphaSlider;
+    protected ColorSliderWidget alphaSlider;
 
     protected IntegerOption red = new IntegerOption("red", 0, 0, 255);
-    protected OptionSliderWidget redSlider;
+    protected ColorSliderWidget redSlider;
 
     protected IntegerOption green = new IntegerOption("green", 0, 0, 255);
-    protected OptionSliderWidget greenSlider;
+    protected ColorSliderWidget greenSlider;
 
     protected IntegerOption blue = new IntegerOption("blue", 0, 0, 255);
-    protected OptionSliderWidget blueSlider;
+    protected ColorSliderWidget blueSlider;
 
     protected boolean slidersVisible;
 
@@ -94,57 +94,13 @@ public class ColorSelectionWidget extends ButtonWidget {
             }
         };
 
-        alphaSlider = new OptionSliderWidget(pickerImage.x, pickerImage.y + pickerImage.height + 20, pickerImage.width, 20, alpha){
-
-            @Override
-            protected boolean canHover() {
-                return true;
-            }
-
-            @Override
-            public Text getMessage() {
-                return getOption().getTranslatedName().append(": ").append(super.getMessage());
-            }
-        };
+        alphaSlider = new ColorSliderWidget(pickerImage.x, pickerImage.y + pickerImage.height + 20, pickerImage.width, 20, alpha);
 
         if(slidersVisible) {
 
-            redSlider = new OptionSliderWidget(currentRect.x, currentRect.y + currentRect.height + 65, currentRect.width, 20, red) {
-
-                @Override
-                protected boolean canHover() {
-                    return true;
-                }
-
-                @Override
-                public Text getMessage() {
-                    return getOption().getTranslatedName().append(": ").append(super.getMessage());
-                }
-            };
-            greenSlider = new OptionSliderWidget(currentRect.x, currentRect.y + currentRect.height + 90, currentRect.width, 20, green) {
-
-                @Override
-                protected boolean canHover() {
-                    return true;
-                }
-
-                @Override
-                public Text getMessage() {
-                    return getOption().getTranslatedName().append(": ").append(super.getMessage());
-                }
-            };
-            blueSlider = new OptionSliderWidget(currentRect.x, currentRect.y + currentRect.height + 115, currentRect.width, 20, blue) {
-
-                @Override
-                protected boolean canHover() {
-                    return true;
-                }
-
-                @Override
-                public Text getMessage() {
-                    return getOption().getTranslatedName().append(": ").append(super.getMessage());
-                }
-            };
+            redSlider = new ColorSliderWidget(currentRect.x, currentRect.y + currentRect.height + 65, currentRect.width, 20, red);
+            greenSlider = new ColorSliderWidget(currentRect.x, currentRect.y + currentRect.height + 90, currentRect.width, 20, green);
+            blueSlider = new ColorSliderWidget(currentRect.x, currentRect.y + currentRect.height + 115, currentRect.width, 20, blue);
         }
 
         textInput = new TextFieldWidget(MinecraftClient.getInstance().textRenderer,
@@ -319,5 +275,22 @@ public class ColorSelectionWidget extends ButtonWidget {
             return  b;
         }
         return false;
+    }
+
+    private class ColorSliderWidget extends OptionSliderWidget<IntegerOption, Integer> {
+
+        public ColorSliderWidget(int x, int y, int width, int height, IntegerOption option) {
+            super(x, y, width, height, option);
+        }
+
+        @Override
+        protected boolean canHover() {
+            return true;
+        }
+
+        @Override
+        public Text getMessage() {
+            return getOption().getTranslatedName().append(": ").append(super.getMessage());
+        }
     }
 }

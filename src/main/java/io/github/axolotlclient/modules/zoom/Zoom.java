@@ -4,7 +4,6 @@ import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.config.options.BooleanOption;
 import io.github.axolotlclient.config.options.FloatOption;
-import io.github.axolotlclient.config.options.IntegerOption;
 import io.github.axolotlclient.config.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.util.Util;
@@ -12,8 +11,11 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBind;
 
+/**
+ * Based on
+ * <a href="https://github.com/LogicalGeekBoy/logical_zoom/blob/master/src/main/java/com/logicalgeekboy/logical_zoom/LogicalZoom.java">Logical Zoom</a>
+ */
 
-//Based on https://github.com/LogicalGeekBoy/logical_zoom/blob/master/src/main/java/com/logicalgeekboy/logical_zoom/LogicalZoom.java
 public class Zoom extends AbstractModule {
 
     private static final Zoom Instance = new Zoom();
@@ -28,12 +30,11 @@ public class Zoom extends AbstractModule {
 	private static float animatedFactor = 1;
 	private static double lastReturnedFov;
 
-	public static final FloatOption zoomDivisor = new FloatOption("zoomDivisor", 1F, 16F, 4F);
-	public static final FloatOption zoomSpeed = new FloatOption("zoomSpeed", 1F, 10F, 7.5F);
+	public static final FloatOption zoomDivisor = new FloatOption("zoomDivisor", 4F, 1F, 16F);
+	public static final FloatOption zoomSpeed = new FloatOption("zoomSpeed", 7.5F, 1F, 10F);
 	public static final BooleanOption zoomScrolling = new BooleanOption("zoomScrolling", false);
 	public static final BooleanOption decreaseSensitivity = new BooleanOption("decreaseSensitivity", true);
 	public static final BooleanOption smoothCamera = new BooleanOption("smoothCamera", false);
-	public static final IntegerOption zoomScrollStep = new IntegerOption("zoomScrollStep", 5, 1, 20);
 
 	public final OptionCategory zoom = new OptionCategory("zoom");
 
@@ -46,7 +47,6 @@ public class Zoom extends AbstractModule {
 		zoom.add(zoomDivisor);
 		zoom.add(zoomSpeed);
 		zoom.add(zoomScrolling);
-		zoom.add(zoomScrollStep);
 		zoom.add(decreaseSensitivity);
 		zoom.add(smoothCamera);
 
@@ -108,7 +108,7 @@ public class Zoom extends AbstractModule {
 
 	public static boolean scroll(double amount) {
 		if (active && zoomScrolling.get() && amount != 0) {
-			setDivisor(Math.max(1, divisor + (amount*zoomScrollStep.get() / Math.abs(amount))));
+			setDivisor(Math.max(1, divisor + (amount / Math.abs(amount))));
 			updateSensitivity();
 			return true;
 		}

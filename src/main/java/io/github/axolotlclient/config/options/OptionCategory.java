@@ -5,7 +5,6 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
 import org.quiltmc.qsl.command.api.client.ClientCommandManager;
 import org.quiltmc.qsl.command.api.client.ClientCommandRegistrationCallback;
 import org.quiltmc.qsl.command.api.client.QuiltClientCommandSource;
@@ -25,9 +24,9 @@ public class OptionCategory implements Tooltippable {
 	    this(key, true);
     }
 
-	public OptionCategory(String key, boolean createCommand){
-        this.name =key;
-        if(createCommand) {
+	public OptionCategory(String key, boolean registerCommand){
+        this.name=key;
+        if(registerCommand) {
             ClientCommandRegistrationCallback.EVENT.register((dispatcher, buildContext, environment) -> Util.registerCommand(buildCommand()));
         }
     }

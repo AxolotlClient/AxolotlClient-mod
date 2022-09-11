@@ -12,7 +12,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBind;
 import net.minecraft.client.option.Perspective;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.Identifier;
 
 public class Freelook extends AbstractModule {
 
@@ -26,7 +25,7 @@ public class Freelook extends AbstractModule {
 
     private final OptionCategory category = new OptionCategory("freelook");
     public final BooleanOption enabled = new BooleanOption("enabled", false);
-    private final EnumOption perspective = new EnumOption("perspective", Perspective.values(), Perspective.THIRD_PERSON_BACK);
+    private final EnumOption perspective = new EnumOption("perspective", Perspective.values(), Perspective.THIRD_PERSON_BACK.toString());
     private final BooleanOption invert = new BooleanOption("invert", false);
 
     private Perspective previousPerspective;

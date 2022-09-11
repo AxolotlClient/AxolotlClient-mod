@@ -13,7 +13,8 @@ import java.util.Objects;
 
 /**
  * This implementation of custom skies is based on the FabricSkyBoxes mod by AMereBagatelle
- * https://github.com/AMereBagatelle/FabricSkyBoxes
+ * <a href="https://github.com/AMereBagatelle/FabricSkyBoxes">Github Link.</a>
+ * @license MIT
  **/
 
 public abstract class SkyboxInstance {

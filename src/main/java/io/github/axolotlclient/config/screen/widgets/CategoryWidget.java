@@ -79,7 +79,6 @@ public class CategoryWidget extends ButtonWidget {
 	        playDownSound(MinecraftClient.getInstance().getSoundManager());
             enabledButton.option.toggle();
 			return false;
-            //enabledButton.updateMessage();
         } else {
             MinecraftClient.getInstance().setScreen(new OptionsScreenBuilder(MinecraftClient.getInstance().currentScreen, category));
         }

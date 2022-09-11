@@ -6,8 +6,6 @@ import net.minecraft.text.Text;
 
 public interface Option extends Tooltippable {
 
-    OptionType getType();
-
     String getName();
 
     default MutableText getTranslatedName(){

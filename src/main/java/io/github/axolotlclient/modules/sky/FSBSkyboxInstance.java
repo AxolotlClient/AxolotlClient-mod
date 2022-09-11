@@ -16,7 +16,8 @@ import net.minecraft.util.math.Vec3f;
 
 /**
  * This implementation of custom skies is based on the FabricSkyBoxes mod by AMereBagatelle
- * https://github.com/AMereBagatelle/FabricSkyBoxes
+ * <a href="https://github.com/AMereBagatelle/FabricSkyBoxes">Github Link.</a>
+ * @license MIT
  **/
 
 public class FSBSkyboxInstance extends SkyboxInstance{

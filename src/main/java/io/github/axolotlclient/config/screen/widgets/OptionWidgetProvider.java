@@ -1,14 +1,6 @@
 package io.github.axolotlclient.config.screen.widgets;
 
-import io.github.axolotlclient.config.options.BooleanOption;
-import io.github.axolotlclient.config.options.ColorOption;
-import io.github.axolotlclient.config.options.DoubleOption;
-import io.github.axolotlclient.config.options.EnumOption;
-import io.github.axolotlclient.config.options.FloatOption;
-import io.github.axolotlclient.config.options.IntegerOption;
-import io.github.axolotlclient.config.options.OptionCategory;
-import io.github.axolotlclient.config.options.StringOption;
-import net.minecraft.client.gui.widget.ClickableWidget;
+import io.github.axolotlclient.config.options.*;
 import net.minecraft.client.gui.widget.ClickableWidget;
 
 public class OptionWidgetProvider {
@@ -21,16 +13,8 @@ public class OptionWidgetProvider {
         return new StringOptionWidget(x, y, option);
     }
 
-    public static ClickableWidget getFloatWidget(int x, int y, FloatOption option){
-        return new OptionSliderWidget(x, y, option);
-    }
-
-    public static ClickableWidget getDoubleWidget(int x, int y, DoubleOption option){
-        return new OptionSliderWidget(x, y, option);
-    }
-
-    public static ClickableWidget getIntegerWidget(int x, int y, IntegerOption option){
-        return new OptionSliderWidget(x, y, option);
+    public static ClickableWidget getSliderWidget(int x, int y, NumericOption<?> option){
+        return new OptionSliderWidget<>(x, y, option);
     }
 
     public static ClickableWidget getColorWidget(int x, int y, ColorOption option){

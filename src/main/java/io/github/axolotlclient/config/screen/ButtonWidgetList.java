@@ -2,17 +2,7 @@ package io.github.axolotlclient.config.screen;
 
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.config.ConfigManager;
-import io.github.axolotlclient.config.options.BooleanOption;
-import io.github.axolotlclient.config.options.ColorOption;
-import io.github.axolotlclient.config.options.DoubleOption;
-import io.github.axolotlclient.config.options.EnumOption;
-import io.github.axolotlclient.config.options.FloatOption;
-import io.github.axolotlclient.config.options.IntegerOption;
-import io.github.axolotlclient.config.options.Option;
-import io.github.axolotlclient.config.options.OptionBase;
-import io.github.axolotlclient.config.options.OptionCategory;
-import io.github.axolotlclient.config.options.StringOption;
-import io.github.axolotlclient.config.options.Tooltippable;
+import io.github.axolotlclient.config.options.*;
 import io.github.axolotlclient.config.screen.widgets.BooleanWidget;
 import io.github.axolotlclient.config.screen.widgets.CategoryWidget;
 import io.github.axolotlclient.config.screen.widgets.ColorOptionWidget;
@@ -78,9 +68,7 @@ public class ButtonWidgetList extends AlwaysSelectedEntryListWidget<ButtonWidget
 
     private ClickableWidget createWidget(int x, Option option) {
         if (option != null) {
-            if (option instanceof FloatOption) return OptionWidgetProvider.getFloatWidget(x, 0, (FloatOption) option);
-            else if (option instanceof IntegerOption) return OptionWidgetProvider.getIntegerWidget(x, 0, (IntegerOption) option);
-            else if (option instanceof DoubleOption) return OptionWidgetProvider.getDoubleWidget(x, 0, (DoubleOption) option);
+            if (option instanceof NumericOption<?>) return OptionWidgetProvider.getSliderWidget(x, 0, (NumericOption<?>) option);
             else if (option instanceof BooleanOption) return OptionWidgetProvider.getBooleanWidget(x, 0, 35, 20, (BooleanOption) option);
             else if (option instanceof StringOption) return OptionWidgetProvider.getStringWidget(x, 0, (StringOption) option);
             else if (option instanceof ColorOption) return OptionWidgetProvider.getColorWidget(x, 0, (ColorOption) option);

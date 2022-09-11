@@ -15,19 +15,47 @@ import org.quiltmc.qsl.command.api.client.QuiltClientCommandSource;
 
 public abstract class OptionBase<T> implements Option {
 
+    protected T option;
+    protected final T def;
     public String name;
     public String tooltipKeyPrefix;
+    protected final ChangedListener changeCallback;
 
-    public OptionBase(String name){
-	    this.name=name;
+    public OptionBase(String name, T def){
+        this(name, null, ()->{}, def);
     }
 
-    public OptionBase(String name, String tooltipKeyPrefix){
-        this.name = name;
+    public OptionBase(String name, ChangedListener onChange, T def){
+        this(name, null, onChange, def);
+    }
+
+    public OptionBase(String name, String tooltipKeyPrefix, T def){
+        this(name, tooltipKeyPrefix, ()->{}, def);
+    }
+
+    public OptionBase(String name, String tooltipKeyPrefix, ChangedListener onChange, T def){
+        this.name=name;
+        this.def = def;
+        changeCallback = onChange;
         this.tooltipKeyPrefix = tooltipKeyPrefix;
     }
 
-    public abstract T get();
+    public T get(){
+        return option;
+    }
+
+    public void set(T value){
+        option = value;
+        changeCallback.onChanged();
+    }
+
+    public T getDefault(){
+        return def;
+    }
+
+    public void setDefaults(){
+        set(getDefault());
+    }
 
     @Override
     public @Nullable String getTooltipLocation() {
@@ -62,5 +90,9 @@ public abstract class OptionBase<T> implements Option {
             StringArgumentType.greedyString()).executes(ctx -> onCommandExec(StringArgumentType.getString(ctx, "value"))))
             .executes(ctx -> onCommandExec(""))
         );
+    }
+
+    public interface ChangedListener {
+        void onChanged();
     }
 }

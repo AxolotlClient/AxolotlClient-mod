@@ -18,8 +18,8 @@ import net.minecraft.client.MinecraftClient;
 import java.time.Instant;
 
 /**
- * This DiscordRPC module is derived from https://github.com/DeDiamondPro/HyCord.
- * License: GPL-3.0
+ * This DiscordRPC module is derived from <a href="https://github.com/DeDiamondPro/HyCord">HyCord</a>.
+ * @license GPL-3.0
  * @author DeDiamondPro
  */
 
@@ -54,7 +54,6 @@ public class DiscordRPC extends AbstractModule {
         if(OSUtil.getOS() == OSUtil.OperatingSystem.OTHER){
             enabled.setForceOff(true, DisableReason.CRASH);
         }
-
     }
 
     public void initRPC(){
@@ -126,6 +125,10 @@ public class DiscordRPC extends AbstractModule {
             activity.timestamps().setStart(Instant.ofEpochMilli(time.toEpochMilli()));
         }
 
+        if(currentActivity != null) {
+            currentActivity.close();
+        }
+
         activity.assets().setLargeText("AxolotlClient " + MinecraftClient.getInstance().getGameVersion());
         activity.assets().setLargeImage("icon");
         discordRPC.activityManager().updateActivity(activity);
@@ -146,7 +149,7 @@ public class DiscordRPC extends AbstractModule {
 
     public void updateRPC(){
 
-        if(discordRPC.isOpen()) {
+        if(discordRPC != null && discordRPC.isOpen()) {
             updateActivity();
         }
     }

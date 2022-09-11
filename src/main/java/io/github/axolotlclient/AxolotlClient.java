@@ -17,6 +17,7 @@ import io.github.axolotlclient.modules.rpc.DiscordRPC;
 import io.github.axolotlclient.modules.scrollableTooltips.ScrollableTooltips;
 import io.github.axolotlclient.modules.tnttime.TntTime;
 import io.github.axolotlclient.modules.zoom.Zoom;
+import io.github.axolotlclient.util.FeatureDisabler;
 import io.github.axolotlclient.util.UnsupportedMod;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
@@ -105,6 +106,8 @@ public class AxolotlClient implements ClientModInitializer {
 
 		ResourceLoader.registerBuiltinResourcePack(new Identifier("axolotlclient", "axolotlclient-ui"), container, ResourcePackActivationType.NORMAL);
 		ClientTickEvents.END.register(client -> tickClient());
+
+		FeatureDisabler.init();
 
 		LOGGER.info("AxolotlClient Initialized");
 	}

@@ -15,23 +15,19 @@ import net.minecraft.client.option.KeyBind;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
- * https://github.com/DarkKronicle/KronHUD
- * Licensed under GPL-3.0
+ * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ * @license GPL-3.0
  */
 
 
 public class HudManager extends AbstractModule {
 
-    private final Map<Identifier, AbstractHudEntry> entries = new HashMap<>();
+    private final Map<Identifier, AbstractHudEntry> entries = new LinkedHashMap<>();
 
     private final OptionCategory hudCategory = new OptionCategory("hud", false);
 
@@ -75,6 +71,8 @@ public class HudManager extends AbstractModule {
         add(new RealTimeHud());
         add(new ReachDisplayHud());
         add(new HotbarHUD());
+        add(new MemoryHud());
+        add(new PlayerCountHud());
 
         entries.forEach((identifier, abstractHudEntry) -> abstractHudEntry.init());
     }
@@ -82,7 +80,7 @@ public class HudManager extends AbstractModule {
     public void tick(){
         if(key.isPressed()) MinecraftClient.getInstance().setScreen(new HudEditScreen());
         INSTANCE.entries.forEach((identifier, abstractHudEntry) -> {
-            if(abstractHudEntry.tickable())abstractHudEntry.tick();
+            if(abstractHudEntry.isEnabled() && abstractHudEntry.tickable())abstractHudEntry.tick();
         });
     }
 

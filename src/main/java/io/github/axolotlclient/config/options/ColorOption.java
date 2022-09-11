@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class ColorOption extends OptionBase<Color> {
 
-    private final Color def;
     private Color value;
     private boolean chroma;
 
@@ -22,8 +21,7 @@ public class ColorOption extends OptionBase<Color> {
     }
 
     public ColorOption(String name, String tooltipLocation, Color def){
-        super(name, tooltipLocation);
-        this.def=def;
+        super(name, tooltipLocation, def);
     }
 
     public ColorOption(String name, Color def){
@@ -48,22 +46,12 @@ public class ColorOption extends OptionBase<Color> {
     }
 
     @Override
-    public OptionType getType() {
-        return OptionType.COLOR;
-    }
-
-    @Override
     public void setValueFromJsonElement(@NotNull JsonElement element) {
         try {
             chroma = element.getAsJsonObject().get("chroma").getAsBoolean();
             value = Color.parse(element.getAsJsonObject().get("color").getAsString());
         } catch (Exception ignored){
         }
-    }
-
-    @Override
-    public void setDefaults() {
-        value=def;
     }
 
     @Override
