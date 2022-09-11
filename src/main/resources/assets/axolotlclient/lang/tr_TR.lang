@@ -22,7 +22,6 @@ general=Genel
 general.title=Genel Ayarlar
 loadingBgColor=Yüklenme Ekranı Rengi
 loadingBgColor.tooltip=Yüklenme ekranın arkaplan rengi.
-
 nightMode=Gece Modu
 nightMode.tooltip=Mavi renkleri azaltır.
 quickToggles=Hızlı Ayarlama
