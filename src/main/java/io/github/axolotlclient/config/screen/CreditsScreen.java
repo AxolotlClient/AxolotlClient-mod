@@ -4,8 +4,8 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.config.Color;
 import io.github.axolotlclient.config.ConfigManager;
-import io.github.axolotlclient.mixin.AccessorSoundManager;
-import io.github.axolotlclient.mixin.AccessorSoundSystem;
+import io.github.axolotlclient.mixin.SoundManagerAccessor;
+import io.github.axolotlclient.mixin.SoundSystemAccessor;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import io.github.axolotlclient.util.Util;
@@ -53,7 +53,7 @@ public class CreditsScreen extends Screen {
     public void render(int mouseX, int mouseY, float tickDelta) {
 
         if(AxolotlClient.CONFIG.creditsBGM.get() && !client.getSoundManager().isPlaying(bgm)){
-            if(((AccessorSoundSystem) ((AccessorSoundManager) MinecraftClient.getInstance().getSoundManager()).getSoundSystem()).getField_8196().get(bgm) == null) {
+            if(((SoundSystemAccessor) ((SoundManagerAccessor) MinecraftClient.getInstance().getSoundManager()).getSoundSystem()).getField_8196().get(bgm) == null) {
                 MinecraftClient.getInstance().getSoundManager().play(bgm);
             }
         }
@@ -240,25 +240,25 @@ public class CreditsScreen extends Screen {
     }
 
     private void stopBGM(){
-        if(((AccessorSoundSystem) ((AccessorSoundManager) MinecraftClient.getInstance().
+        if(((SoundSystemAccessor) ((SoundManagerAccessor) MinecraftClient.getInstance().
                 getSoundManager()).getSoundSystem()).
                 getField_8196().get(bgm)!=null) {
-            ((SoundSystem) ((AccessorSoundManager) MinecraftClient.getInstance()
+            ((SoundSystem) ((SoundManagerAccessor) MinecraftClient.getInstance()
                     .getSoundManager())
                     .getSoundSystem()
                     .field_8193)
                     .stop(
-                            ((AccessorSoundSystem) ((AccessorSoundManager) MinecraftClient.getInstance()
+                            ((SoundSystemAccessor) ((SoundManagerAccessor) MinecraftClient.getInstance()
                             .getSoundManager())
                             .getSoundSystem())
                             .getField_8196()
                             .get(bgm));
-            ((SoundSystem) ((AccessorSoundManager) MinecraftClient.getInstance()
+            ((SoundSystem) ((SoundManagerAccessor) MinecraftClient.getInstance()
                     .getSoundManager())
                     .getSoundSystem()
                     .field_8193)
                     .removeSource(
-                            ((AccessorSoundSystem) ((AccessorSoundManager) MinecraftClient.getInstance()
+                            ((SoundSystemAccessor) ((SoundManagerAccessor) MinecraftClient.getInstance()
                             .getSoundManager())
                                     .getSoundSystem())
                                     .getField_8196()

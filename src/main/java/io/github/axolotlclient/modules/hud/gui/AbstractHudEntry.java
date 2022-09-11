@@ -107,7 +107,7 @@ public abstract class AbstractHudEntry extends DrawUtil {
     }
 
     public void setX(int x) {
-        this.x.set(intToFloat(x, (int)new Window(client).getScaledWidth(),
+        this.x.set((double) intToFloat(x, (int)new Window(client).getScaledWidth(),
                 Math.round(width * getScale())));
     }
 
@@ -116,7 +116,7 @@ public abstract class AbstractHudEntry extends DrawUtil {
     }
 
     public void setY(int y) {
-        this.y.set(intToFloat(y, (int) new Window(client).getScaledHeight(),
+        this.y.set((double) intToFloat(y, (int) new Window(client).getScaledHeight(),
                 Math.round(height * getScale())));
     }
 

@@ -13,16 +13,8 @@ public class OptionWidgetProvider {
         return new StringOptionWidget(0, x, y, option);
     }
 
-    public static ButtonWidget getFloatWidget(int x, int y, FloatOption option){
-        return new OptionSliderWidget(0, x, y, option);
-    }
-
-    public static ButtonWidget getDoubleWidget(int x, int y, DoubleOption option){
-        return new OptionSliderWidget(0, x, y, option);
-    }
-
-    public static ButtonWidget getIntegerWidget(int x, int y, IntegerOption option){
-        return new OptionSliderWidget(0, x, y, option);
+    public static ButtonWidget getSliderWidget(int x, int y, NumericOption<?> option){
+        return new OptionSliderWidget<>(0, x, y, option);
     }
 
     public static ButtonWidget getColorWidget(int x, int y, ColorOption option){

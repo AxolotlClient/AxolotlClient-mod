@@ -3,7 +3,7 @@ package io.github.axolotlclient.modules.particles;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.config.Color;
 import io.github.axolotlclient.config.options.*;
-import io.github.axolotlclient.mixin.AccessorParticle;
+import io.github.axolotlclient.mixin.ParticleAccessor;
 import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.particle.Particle;
@@ -69,7 +69,7 @@ public class Particles extends AbstractModule {
             if (((BooleanOption)options.get("customColor")).get()) {
                 Color color = ((ColorOption) options.get("color")).get();
                 particle.setColor(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F);
-                ((AccessorParticle) particle).setAlpha(color.getAlpha() / 255F);
+                ((ParticleAccessor) particle).setAlpha(color.getAlpha() / 255F);
             }
         }
     }

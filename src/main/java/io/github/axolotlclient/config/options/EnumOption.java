@@ -12,22 +12,18 @@ public class EnumOption extends OptionBase<String> {
 
     protected String[] values;
 
-    private final String def;
-
     public EnumOption(String name, Object[] e, String def) {
-        super(name);
+        super(name, def);
         List<String> l = new ArrayList<>();
         for(Object v:e){
             l.add(v.toString());
         }
         values = l.toArray(new String[0]);
-        this.def = def;
     }
 
     public EnumOption(String name, String[] e, String def) {
-        super(name);
+        super(name, def);
         values = e;
-        this.def = def;
     }
 
     @Override

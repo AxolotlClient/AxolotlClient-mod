@@ -23,8 +23,8 @@ public class Zoom extends AbstractModule {
     private static float animatedFactor = 1;
     private static float lastReturnedFov;
 
-    public static final FloatOption zoomDivisor = new FloatOption("zoomDivisor", 1F, 16F, 4F);
-    public static final FloatOption zoomSpeed = new FloatOption("zoomSpeed", 1F, 10F, 7.5F);
+    public static final FloatOption zoomDivisor = new FloatOption("zoomDivisor", 4F, 1F, 16F);
+    public static final FloatOption zoomSpeed = new FloatOption("zoomSpeed", 7.5F, 1F, 10F);
     public static final BooleanOption zoomScrolling = new BooleanOption("zoomScrolling", false);
     public static final BooleanOption decreaseSensitivity = new BooleanOption("decreaseSensitivity", true);
     public static final BooleanOption smoothCamera = new BooleanOption("smoothCamera", false);

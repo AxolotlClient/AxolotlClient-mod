@@ -38,16 +38,16 @@ public class ColorSelectionWidget extends ButtonWidget {
     protected BooleanWidget chromaWidget;
 
     protected IntegerOption alpha = new IntegerOption("alpha", 0, 0, 255);
-    protected OptionSliderWidget alphaSlider;
+    protected ColorSliderWidget alphaSlider;
 
     protected IntegerOption red = new IntegerOption("red", 0, 0, 255);
-    protected OptionSliderWidget redSlider;
+    protected ColorSliderWidget redSlider;
 
     protected IntegerOption green = new IntegerOption("green", 0, 0, 255);
-    protected OptionSliderWidget greenSlider;
+    protected ColorSliderWidget greenSlider;
 
     protected IntegerOption blue = new IntegerOption("blue", 0, 0, 255);
-    protected OptionSliderWidget blueSlider;
+    protected ColorSliderWidget blueSlider;
 
     protected boolean slidersVisible;
 
@@ -94,57 +94,12 @@ public class ColorSelectionWidget extends ButtonWidget {
             }
         };
 
-        alphaSlider = new OptionSliderWidget(0, pickerImage.x, pickerImage.y + pickerImage.height + 20, pickerImage.width, 20, alpha){
-
-            @Override
-            protected boolean canHover() {
-                return true;
-            }
-
-            @Override
-            protected @NotNull String getMessage() {
-                return getOption().getTranslatedName()+": " + super.getMessage();
-            }
-        };
+        alphaSlider = new ColorSliderWidget(0, pickerImage.x, pickerImage.y + pickerImage.height + 20, pickerImage.width, 20, alpha);
 
         if(slidersVisible) {
-
-            redSlider = new OptionSliderWidget(0, currentRect.x, currentRect.y + currentRect.height + 65, currentRect.width, 20, red) {
-
-                @Override
-                protected boolean canHover() {
-                    return true;
-                }
-
-                @Override
-                protected @NotNull String getMessage() {
-                    return getOption().getTranslatedName() + ": " + super.getMessage();
-                }
-            };
-            greenSlider = new OptionSliderWidget(0, currentRect.x, currentRect.y + currentRect.height + 90, currentRect.width, 20, green) {
-
-                @Override
-                protected boolean canHover() {
-                    return true;
-                }
-
-                @Override
-                protected @NotNull String getMessage() {
-                    return getOption().getTranslatedName() + ": " + super.getMessage();
-                }
-            };
-            blueSlider = new OptionSliderWidget(0, currentRect.x, currentRect.y + currentRect.height + 115, currentRect.width, 20, blue) {
-
-                @Override
-                protected boolean canHover() {
-                    return true;
-                }
-
-                @Override
-                protected @NotNull String getMessage() {
-                    return getOption().getTranslatedName() + ": " + super.getMessage();
-                }
-            };
+            redSlider = new ColorSliderWidget(0, currentRect.x, currentRect.y + currentRect.height + 65, currentRect.width, 20, red);
+            greenSlider = new ColorSliderWidget(0, currentRect.x, currentRect.y + currentRect.height + 90, currentRect.width, 20, green);
+            blueSlider = new ColorSliderWidget(0, currentRect.x, currentRect.y + currentRect.height + 115, currentRect.width, 20, blue);
         }
 
         textInput = new TextFieldWidget(0, MinecraftClient.getInstance().textRenderer,
@@ -301,6 +256,23 @@ public class ColorSelectionWidget extends ButtonWidget {
                 greenSlider.update();
                 blueSlider.update();
             }
+        }
+    }
+
+    private class ColorSliderWidget extends OptionSliderWidget<IntegerOption, Integer> {
+
+        public ColorSliderWidget(int id, int x, int y, int width, int height, IntegerOption option) {
+            super(id, x, y, width, height, option);
+        }
+
+        @Override
+        protected boolean canHover() {
+            return true;
+        }
+
+        @Override
+        protected @NotNull String getMessage() {
+            return getOption().getTranslatedName() + ": " + super.getMessage();
         }
     }
 }

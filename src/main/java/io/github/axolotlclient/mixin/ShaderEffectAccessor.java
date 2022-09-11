@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 import java.util.List;
 
 @Mixin(ShaderEffect.class)
-public interface AccessorShaderEffect {
+public interface ShaderEffectAccessor {
 
     @Accessor
     List<PostProcessShader> getPasses();

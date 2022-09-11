@@ -26,10 +26,6 @@ public class AxolotlClientConfig {
     public final IntegerOption chromaSpeed = new IntegerOption("chromaSpeed", 20, 10, 50);
     public final BooleanOption lowFire = new BooleanOption("lowFire", false);
 
-    public final BooleanOption motionBlurEnabled = new BooleanOption("enabled", false);
-    public final FloatOption motionBlurStrength = new FloatOption("strength", 1F, 99F, 50F);
-    public final BooleanOption motionBlurInGuis = new BooleanOption("inGuis", false);
-
     public final BooleanOption showOptionTooltips = new BooleanOption("showOptionTooltips", true);
     public final BooleanOption showCategoryTooltips = new BooleanOption("showCategoryTooltips", false);
     public final BooleanOption quickToggles = new BooleanOption("quickToggles", false);
@@ -54,7 +50,6 @@ public class AxolotlClientConfig {
     public final OptionCategory nametagOptions = new OptionCategory("nametagOptions");
     public final OptionCategory rendering = new OptionCategory("rendering");
     public final OptionCategory outlines= new OptionCategory("blockOutlines");
-    public final OptionCategory motionBlur = new OptionCategory("motionBlur");
     public final OptionCategory timeChanger = new OptionCategory("timeChanger");
     public final OptionCategory searchFilters = new OptionCategory("searchFilters");
 
@@ -114,11 +109,6 @@ public class AxolotlClientConfig {
                 fullBright,
                 lowFire
         );
-
-        motionBlur.add(motionBlurEnabled);
-        motionBlur.add(motionBlurStrength);
-        motionBlur.add(motionBlurInGuis);
-        rendering.addSubCategory(motionBlur);
 
         timeChanger.add(timeChangerEnabled);
         timeChanger.add(customTime);

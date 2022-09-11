@@ -12,28 +12,34 @@ import java.util.Locale;
 
 public class BooleanOption extends OptionBase<Boolean> {
 
-    private boolean option;
-    private final boolean Default;
     private boolean forceOff = false;
     private DisableReason disableReason;
 
-    public BooleanOption(String name, String tooltipLocation, boolean Default) {
-        super(name, tooltipLocation);
-        this.Default = Default;
+    public BooleanOption(String name, Boolean def) {
+        super(name, def);
     }
 
-    public BooleanOption(String name, boolean Default) {
-        this(name, null, Default);
+    public BooleanOption(String name, ChangedListener onChange, Boolean def) {
+        super(name, onChange, def);
     }
+
+    public BooleanOption(String name, String tooltipKeyPrefix, Boolean def) {
+        super(name, tooltipKeyPrefix, def);
+    }
+
+    public BooleanOption(String name, String tooltipKeyPrefix, ChangedListener onChange, Boolean def) {
+        super(name, tooltipKeyPrefix, onChange, def);
+    }
+
 
     public Boolean get(){
         if(getForceDisabled()) return false;
-        return option;
+        return super.get();
     }
 
-    public void set(boolean set){
+    public void set(Boolean set){
         if(!getForceDisabled()) {
-            option = set;
+            super.set(set);
         }
     }
 
@@ -54,13 +60,9 @@ public class BooleanOption extends OptionBase<Boolean> {
         return new JsonPrimitive(option);
     }
 
-    public void setDefaults(){
-        option=Default;
-    }
-
     public void toggle(){
         if(!getForceDisabled()) {
-            this.option = !option;
+            set(!get());
         }
     }
 

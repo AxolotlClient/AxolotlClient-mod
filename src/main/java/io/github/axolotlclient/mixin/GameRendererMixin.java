@@ -191,13 +191,13 @@ public abstract class GameRendererMixin {
 
     @Inject(method = "render", at = @At("TAIL"))
     public void motionBlur(float tickDelta, long nanoTime, CallbackInfo ci){
-        if((ci == null) == AxolotlClient.CONFIG.motionBlurInGuis.get()) {
+        if((ci == null) == MotionBlur.getInstance().inGuis.get()) {
             return;
         }
 
         this.client.profiler.push("Motion Blur");
 
-        if(AxolotlClient.CONFIG.motionBlurEnabled.get() && GLX.shadersSupported) {
+        if(MotionBlur.getInstance().enabled.get() && GLX.shadersSupported) {
             MotionBlur blur = MotionBlur.getInstance();
             blur.onUpdate();
             blur.shader.render(tickDelta);

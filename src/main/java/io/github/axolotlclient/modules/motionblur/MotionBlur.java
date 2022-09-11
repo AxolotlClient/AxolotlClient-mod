@@ -2,7 +2,10 @@ package io.github.axolotlclient.modules.motionblur;
 
 import com.google.gson.JsonSyntaxException;
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.mixin.AccessorShaderEffect;
+import io.github.axolotlclient.config.options.BooleanOption;
+import io.github.axolotlclient.config.options.FloatOption;
+import io.github.axolotlclient.config.options.OptionCategory;
+import io.github.axolotlclient.mixin.ShaderEffectAccessor;
 import io.github.axolotlclient.modules.AbstractModule;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.GlUniform;
@@ -21,6 +24,12 @@ public class MotionBlur extends AbstractModule {
 
     private final Identifier shaderLocation = new Identifier("minecraft:shaders/post/motion_blur.json");
 
+    public final BooleanOption enabled = new BooleanOption("enabled", false);
+    public final FloatOption strength = new FloatOption("strength", 50F, 1F, 99F);
+    public final BooleanOption inGuis = new BooleanOption("inGuis", false);
+
+    public final OptionCategory category = new OptionCategory("motionBlur");
+
     public ShaderEffect shader;
     private final MinecraftClient client = MinecraftClient.getInstance();
     private float currentBlur;
@@ -35,6 +44,10 @@ public class MotionBlur extends AbstractModule {
 
     @Override
     public void init() {
+        category.add(enabled, strength, inGuis);
+
+        AxolotlClient.CONFIG.rendering.addSubCategory(category);
+
         AxolotlClient.runtimeResources.put(shaderLocation, new MotionBlurShader());
     }
 
@@ -51,7 +64,7 @@ public class MotionBlur extends AbstractModule {
             }
         }
         if(currentBlur!=getBlur()){
-            ((AccessorShaderEffect)shader).getPasses().forEach(shader -> {
+            ((ShaderEffectAccessor)shader).getPasses().forEach(shader -> {
                 GlUniform blendFactor = shader.getProgram().getUniformByName("BlendFactor");
                 if(blendFactor!=null){
                     blendFactor.method_6976(getBlur());
@@ -65,7 +78,7 @@ public class MotionBlur extends AbstractModule {
     }
 
     private static float getBlur() {
-        return AxolotlClient.CONFIG.motionBlurStrength.get()/100F;
+        return MotionBlur.getInstance().strength.get()/100F;
     }
 
     public class MotionBlurShader implements Resource {

@@ -12,8 +12,6 @@ import java.util.List;
 
 public class ColorOption extends OptionBase<Color> {
 
-    private final Color def;
-    private Color value;
     private boolean chroma;
 
     public ColorOption(String name, String def){
@@ -25,8 +23,7 @@ public class ColorOption extends OptionBase<Color> {
     }
 
     public ColorOption(String name, String tooltipLocation, Color def){
-        super(name, tooltipLocation);
-        this.def=def;
+        super(name, tooltipLocation, def);
     }
 
     public ColorOption(String name, Color def){
@@ -34,15 +31,11 @@ public class ColorOption extends OptionBase<Color> {
     }
 
     public Color get(){
-        return chroma ? Color.getChroma().withAlpha(value.getAlpha()) : value;
-    }
-
-    public void set(Color set){
-        this.value=set;
+        return chroma ? Color.getChroma().withAlpha(super.get().getAlpha()) : super.get();
     }
 
     public void set(Color set, boolean chroma){
-        set(set);
+        super.set(set);
         this.chroma=chroma;
     }
 
@@ -59,20 +52,15 @@ public class ColorOption extends OptionBase<Color> {
     public void setValueFromJsonElement(@NotNull JsonElement element) {
         try {
             chroma = element.getAsJsonObject().get("chroma").getAsBoolean();
-            value = Color.parse(element.getAsJsonObject().get("color").getAsString());
+            set(Color.parse(element.getAsJsonObject().get("color").getAsString()));
         } catch (Exception ignored){
         }
     }
 
     @Override
-    public void setDefaults() {
-        value=def;
-    }
-
-    @Override
     public JsonElement getJson() {
         JsonObject object = new JsonObject();
-        object.add("color",new JsonPrimitive(value.toString()));
+        object.add("color",new JsonPrimitive(get().toString()));
         object.add("chroma", new JsonPrimitive(chroma));
         return object;
     }

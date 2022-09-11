@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 import java.util.Map;
 
 @Mixin(SoundSystem.class)
-public interface AccessorSoundSystem {
+public interface SoundSystemAccessor {
 
     @Accessor
     Map<SoundInstance, String> getField_8196();

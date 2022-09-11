@@ -14,8 +14,8 @@ import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Mixin(PlayerEntityRenderer.class)
-public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractClientPlayerEntity> {
-    public PlayerRendererMixin(EntityRenderDispatcher dispatcher, EntityModel model, float shadowSize) {
+public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<AbstractClientPlayerEntity> {
+    public PlayerEntityRendererMixin(EntityRenderDispatcher dispatcher, EntityModel model, float shadowSize) {
         super(dispatcher, model, shadowSize);
     }
 

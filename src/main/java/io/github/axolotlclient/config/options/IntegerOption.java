@@ -8,42 +8,28 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
 import java.util.List;
 
-public class IntegerOption extends OptionBase<Integer> {
+public class IntegerOption extends NumericOption<Integer> {
 
-    private int option;
-    private final int Default;
-    private final int min;
-    private final int max;
 
-    public IntegerOption(String name, int Default, int min, int max) {
-        this(name, null, Default, min, max);
+    public IntegerOption(String name, Integer def, Integer min, Integer max) {
+        super(name, def, min, max);
     }
 
-    public IntegerOption(String name, String tooltipLocation, int Default, int min, int max) {
-        super(name, tooltipLocation);
-        this.Default=Default;
-        this.min=min;
-        this.max=max;
+    public IntegerOption(String name, ChangedListener onChange, Integer def, Integer min, Integer max) {
+        super(name, onChange, def, min, max);
     }
 
-    public Integer get(){
-        return option;
+    public IntegerOption(String name, String tooltipKeyPrefix, Integer def, Integer min, Integer max) {
+        super(name, tooltipKeyPrefix, def, min, max);
     }
 
-    public void set(int set){
-        option=set;
+    public IntegerOption(String name, String tooltipKeyPrefix, ChangedListener onChange, Integer def, Integer min, Integer max) {
+        super(name, tooltipKeyPrefix, onChange, def, min, max);
     }
-
-    public int getMin(){return min;}
-    public int getMax(){return max;}
 
     @Override
     public OptionType getType() {
         return OptionType.INT;
-    }
-
-    public void setDefaults(){
-        option = Default;
     }
 
     @Override
@@ -72,6 +58,6 @@ public class IntegerOption extends OptionBase<Integer> {
 
     @Override
     public List<String> getCommandSuggestions() {
-        return Collections.singletonList(String.valueOf(Default));
+        return Collections.singletonList(String.valueOf(def));
     }
 }

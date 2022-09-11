@@ -8,34 +8,24 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
 import java.util.List;
 
-public class FloatOption extends OptionBase<Float> {
+public class FloatOption extends NumericOption<Float> {
 
-    float min;
-    float max;
-    float def;
-    float value;
 
-    public FloatOption(String name, String tooltipLocation, Float def, Float min, Float max) {
-        super(name, tooltipLocation);
-        this.min=min;
-        this.max=max;
-        this.def=def;
+    public FloatOption(String name, Float def, Float min, Float max) {
+        super(name, def, min, max);
     }
 
-    public FloatOption(String name, Float min, Float max, Float def) {
-        this(name, null, def, min, max);
+    public FloatOption(String name, ChangedListener onChange, Float def, Float min, Float max) {
+        super(name, onChange, def, min, max);
     }
 
-    public Float get(){
-        return value;
+    public FloatOption(String name, String tooltipKeyPrefix, Float def, Float min, Float max) {
+        super(name, tooltipKeyPrefix, def, min, max);
     }
 
-    public void set(float set){
-        value=set;
+    public FloatOption(String name, String tooltipKeyPrefix, ChangedListener onChange, Float def, Float min, Float max) {
+        super(name, tooltipKeyPrefix, onChange, def, min, max);
     }
-
-    public float getMin(){return min;}
-    public float getMax(){return max;}
 
     @Override
     public OptionType getType() {
@@ -44,17 +34,12 @@ public class FloatOption extends OptionBase<Float> {
 
     @Override
     public void setValueFromJsonElement(@NotNull JsonElement element) {
-        value = element.getAsFloat();
-    }
-
-    @Override
-    public void setDefaults() {
-        value=def;
+        option = element.getAsFloat();
     }
 
     @Override
     public JsonElement getJson() {
-        return new JsonPrimitive(value);
+        return new JsonPrimitive(option);
     }
 
     @Override

@@ -73,9 +73,7 @@ public class ButtonWidgetList extends EntryListWidget {
 
     private ButtonWidget createWidget(int x, Option option) {
         if (option != null) {
-            if (option instanceof FloatOption) return OptionWidgetProvider.getFloatWidget(x, 0, (FloatOption) option);
-            else if (option instanceof IntegerOption) return OptionWidgetProvider.getIntegerWidget(x, 0, (IntegerOption) option);
-            else if (option instanceof DoubleOption) return OptionWidgetProvider.getDoubleWidget(x, 0, (DoubleOption) option);
+            if (option instanceof NumericOption) return OptionWidgetProvider.getSliderWidget(x, 0, (NumericOption<?>) option);
             else if (option instanceof BooleanOption) return OptionWidgetProvider.getBooleanWidget(x, 0, 35, 20, (BooleanOption) option);
             else if (option instanceof StringOption) return OptionWidgetProvider.getStringWidget(x, 0, (StringOption) option);
             else if (option instanceof ColorOption) return OptionWidgetProvider.getColorWidget(x, 0, (ColorOption) option);

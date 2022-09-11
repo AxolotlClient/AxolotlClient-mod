@@ -10,77 +10,54 @@ import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
 
-public class OptionSliderWidget extends ButtonWidget {
+public class OptionSliderWidget<T extends NumericOption<N>, N extends Number> extends ButtonWidget {
     private final DecimalFormat format = new DecimalFormat("##.#");
     private final DecimalFormat intformat = new DecimalFormat("##");
 
     private double value;
     public boolean dragging;
-    private final OptionBase option;
-    private final double min;
-    private final double max;
+    private final T option;
+    private final N min;
+    private final N max;
 
-    public OptionSliderWidget(int id, int x, int y, FloatOption option) {
+    public OptionSliderWidget(int id, int x, int y, T option) {
         this(id, x, y, option, option.getMin(), option.getMax());
     }
 
-    public OptionSliderWidget(int id, int x, int y, FloatOption option, float min, float max) {
-        super(id, x, y, 150, 20, "");
-        this.option = option;
-        this.min = min;
-        this.max = max;
-        this.value = (option.get() - min) / (max - min);
-        this.message = this.getMessage();
-    }
-
-    public OptionSliderWidget(int id, int x, int y, IntegerOption option) {
-        this(id, x, y, option, option.getMin(), option.getMax());
-    }
-
-    public OptionSliderWidget(int id, int x, int y, int width, int height, IntegerOption option) {
+    public OptionSliderWidget(int id, int x, int y, int width, int height, T option) {
         this(id, x, y, width, height, option, option.getMin(), option.getMax());
     }
 
-    public OptionSliderWidget(int id, int x, int y, int width, int height, IntegerOption option, float min, float max) {
+    public OptionSliderWidget(int id, int x, int y, T option, N min, N max) {
+        this(id, x, y, 150, 20, option, min, max);
+    }
+
+    public OptionSliderWidget(int id, int x, int y, int width, int height, T option, N min, N max) {
         super(id, x, y, width, height, "");
         this.option = option;
         this.min = min;
         this.max = max;
-        this.value = (option.get() - min) / (max - min);
-        this.message = this.getMessage();
-    }
-
-    public OptionSliderWidget(int id, int x, int y, IntegerOption option, float min, float max) {
-        this(id, x, y, 150, 20, option, min, max);
-    }
-
-    public OptionSliderWidget(int id, int x, int y, DoubleOption option) {
-        this(id, x, y, option, option.getMin(), option.getMax());
-    }
-
-    public OptionSliderWidget(int id, int x, int y, DoubleOption option, double min, double max) {
-        super(id, x, y, 150, 20, "");
-        this.option = option;
-        this.min = min;
-        this.max = max;
-        this.value = (option.get() - min) / (max - min);
+        this.value = (option.get().doubleValue() - min.doubleValue()) / (max.doubleValue() - min.doubleValue());
         this.message = this.getMessage();
     }
 
     public void update(){
-        if (option instanceof FloatOption) value =  (((FloatOption) option).get() - min) / (max - min);
-        else if (option instanceof DoubleOption) value =  (((DoubleOption) option).get() - min) / (max - min);
-        else if (option instanceof IntegerOption) value =  (((IntegerOption) option).get() - min) / (max - min);
+        value = (option.get().doubleValue() - min.doubleValue()) / max.doubleValue() - min.doubleValue();
         this.message = this.getMessage();
     }
 
-    public float getSliderValue() {
-        format.applyLocalizedPattern("###.#");
-        return Float.parseFloat(format.format(this.min + (this.max - this.min) * this.value));
+    public Double getSliderValue() {
+        return Double.parseDouble(format.format(this.min.doubleValue() + (this.max.doubleValue() - this.min.doubleValue()) * this.value));
     }
     public int getSliderValueAsInt() {
         intformat.applyLocalizedPattern("##");
-        return Integer.parseInt(intformat.format(this.min + (this.max - this.min) * this.value));
+        return Integer.parseInt(intformat.format(this.min.doubleValue() + (this.max.doubleValue() - this.min.doubleValue()) * this.value));
+    }
+
+    public Double getValue(){
+        format.applyLocalizedPattern("###.##");
+        double value = this.min.doubleValue() + (this.max.doubleValue() - this.min.doubleValue()) * this.value;
+        return Double.parseDouble(format.format(value));
     }
 
     protected @NotNull String getMessage() {
@@ -91,6 +68,7 @@ public class OptionSliderWidget extends ButtonWidget {
         return 0;
     }
 
+    @SuppressWarnings("unchecked")
     protected void renderBg(MinecraftClient client, int mouseX, int mouseY) {
         if (this.visible) {
             if (this.dragging) {
@@ -104,7 +82,7 @@ public class OptionSliderWidget extends ButtonWidget {
                 }
 
                 if(option!=null) {
-                    if (option instanceof FloatOption) ((FloatOption) option).set(getSliderValue());
+                    if (option instanceof FloatOption) option.set((N) (Float) getSliderValue().floatValue());
                     else if (option instanceof DoubleOption) ((DoubleOption) option).set(getSliderValue());
                     else if (option instanceof IntegerOption) ((IntegerOption) option).set(getSliderValueAsInt());
                 }
@@ -128,13 +106,14 @@ public class OptionSliderWidget extends ButtonWidget {
         return true;
     }
 
+    @SuppressWarnings("unchecked")
     public boolean isMouseOver(MinecraftClient client, int mouseX, int mouseY) {
         if(canHover()) {
 
             if (super.isMouseOver(client, mouseX, mouseY) || dragging) {
                 this.value = (float) (mouseX - (this.x + 4)) / (float) (this.width - 8);
                 this.value = MathHelper.clamp(this.value, 0.0F, 1.0F);
-                if (option instanceof FloatOption) ((FloatOption) option).set(getSliderValue());
+                if (option instanceof FloatOption) option.set((N) (Float) getSliderValue().floatValue());
                 else if (option instanceof DoubleOption) ((DoubleOption) option).set(getSliderValue());
                 else if (option instanceof IntegerOption) ((IntegerOption) option).set(getSliderValueAsInt());
                 this.message = getMessage();
@@ -147,7 +126,7 @@ public class OptionSliderWidget extends ButtonWidget {
         return false;
     }
 
-    public OptionBase getOption(){
+    public NumericOption<N> getOption(){
         return option;
     }
 

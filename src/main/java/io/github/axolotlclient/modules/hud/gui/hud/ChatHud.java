@@ -2,7 +2,7 @@ package io.github.axolotlclient.modules.hud.gui.hud;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.config.options.*;
-import io.github.axolotlclient.mixin.AccessorChatHud;
+import io.github.axolotlclient.mixin.ChatHudAccessor;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
@@ -38,8 +38,8 @@ public class ChatHud extends AbstractHudEntry {
     @Override
     public void render(){
 
-        int scrolledLines = ((AccessorChatHud) client.inGameHud.getChatHud()).getScrolledLines();
-        List<ChatHudLine> visibleMessages = ((AccessorChatHud) client.inGameHud.getChatHud()).getVisibleMessages();
+        int scrolledLines = ((ChatHudAccessor) client.inGameHud.getChatHud()).getScrolledLines();
+        List<ChatHudLine> visibleMessages = ((ChatHudAccessor) client.inGameHud.getChatHud()).getVisibleMessages();
 
         if (this.client.options.chatVisibilityType != PlayerEntity.ChatVisibilityType.HIDDEN) {
 
@@ -88,7 +88,7 @@ public class ChatHud extends AbstractHudEntry {
                     int r = k * m + k;
                     int n = j * m + j;
                     int y = (pos.y+height) - scrolledLines * n / k;
-                    if(((AccessorChatHud) client.inGameHud.getChatHud()).getMessages().size()> getVisibleLineCount()) {
+                    if(((ChatHudAccessor) client.inGameHud.getChatHud()).getMessages().size()> getVisibleLineCount()) {
                         int height = n * n / r;
                         fillRect(new Rectangle(pos.x, y, 2, -height), scrollbarColor.get());
                     }
@@ -103,13 +103,13 @@ public class ChatHud extends AbstractHudEntry {
 
     public Text getTextAt(int x, int y){
 
-        List<ChatHudLine> visibleMessages = ((AccessorChatHud) client.inGameHud.getChatHud()).getVisibleMessages();
+        List<ChatHudLine> visibleMessages = ((ChatHudAccessor) client.inGameHud.getChatHud()).getVisibleMessages();
 
         int offsetOnHudX = x - getPos().x;
         int offsetOnHudY = - (y - (getPos().y +height));
 
 
-        int scrolledLines = ((AccessorChatHud) client.inGameHud.getChatHud()).getScrolledLines();
+        int scrolledLines = ((ChatHudAccessor) client.inGameHud.getChatHud()).getScrolledLines();
 
 
         if (offsetOnHudX >= 0 && offsetOnHudY >= 0) {
