@@ -24,8 +24,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
  * This implementation of custom skies is based on the FabricSkyBoxes mod by AMereBagatelle
- * https://github.com/AMereBagatelle/FabricSkyBoxes
+ * <a href="https://github.com/AMereBagatelle/FabricSkyBoxes">Github Link.</a>
+ * @license MIT
  **/
+
 @Mixin(WorldRenderer.class)
 public abstract class WorldRendererMixin {
 

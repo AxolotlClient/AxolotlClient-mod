@@ -19,11 +19,6 @@ public class StringOption extends OptionBase<String> {
     }
 
     @Override
-    public OptionType getType() {
-        return OptionType.STRING;
-    }
-
-    @Override
     public void setValueFromJsonElement(@NotNull JsonElement element) {
         this.option=element.getAsString();
     }

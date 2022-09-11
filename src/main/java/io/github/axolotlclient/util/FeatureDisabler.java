@@ -1,52 +1,43 @@
 package io.github.axolotlclient.util;
 
 import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.config.options.BooleanOption;
 import io.github.axolotlclient.config.options.DisableReason;
-import net.minecraft.client.MinecraftClient;
+import io.github.axolotlclient.modules.freelook.Freelook;
 import net.minecraft.client.network.ServerInfo;
 
+import java.util.HashMap;
 import java.util.Locale;
 
 public class FeatureDisabler {
 
-    private static final String[] fullbrightServers = new String[]{
-            "gommehd"
-    };
+    private static final HashMap<BooleanOption, String[]> disabledServers = new HashMap<>();
 
-    private static final String[] timeChangerServers = new String[]{
-            "gommehd"
-    };
+    public static void init(){
+        setServers(AxolotlClient.CONFIG.fullBright, "gommehd");
+        setServers(AxolotlClient.CONFIG.timeChangerEnabled, "gommehd");
+        setServers(Freelook.getInstance().enabled, "hypixel", "mineplex", "gommehd");
+    }
 
     public static void onServerJoin(ServerInfo info){
-        disableFullbright(info.address);
-        disableTimeChanger(info.address);
+        disabledServers.forEach((option, strings) -> disableOption(option, strings, info.address));
     }
 
-    private static void disableFullbright(String address){
+    private static void disableOption(BooleanOption option, String[] servers, String currentServer){
         boolean ban = false;
-        for(String s:fullbrightServers){
-            if (address.toLowerCase(Locale.ROOT).contains(s.toLowerCase(Locale.ROOT))) {
+        for(String s:servers){
+            if (currentServer.toLowerCase(Locale.ROOT).contains(s.toLowerCase(Locale.ROOT))) {
                 ban = true;
                 break;
             }
         }
 
-        if(AxolotlClient.CONFIG.fullBright.getForceDisabled() != ban) {
-            AxolotlClient.CONFIG.fullBright.setForceOff(ban, DisableReason.BAN_REASON);
+        if(option.getForceDisabled() != ban) {
+            option.setForceOff(ban, DisableReason.BAN_REASON);
         }
     }
 
-    private static void disableTimeChanger(String address){
-        boolean ban = false;
-        for(String s:timeChangerServers){
-            if (address.toLowerCase(Locale.ROOT).contains(s.toLowerCase(Locale.ROOT))) {
-                ban = true;
-                break;
-            }
-        }
-
-        if(AxolotlClient.CONFIG.timeChangerEnabled.getForceDisabled() != ban) {
-            AxolotlClient.CONFIG.timeChangerEnabled.setForceOff(ban, DisableReason.BAN_REASON);
-        }
+    private static void setServers(BooleanOption option, String... servers){
+        disabledServers.put(option, servers);
     }
 }

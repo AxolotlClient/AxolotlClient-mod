@@ -80,7 +80,7 @@ public abstract class OptionBase<T> implements Option {
 
     public abstract List<String> getCommandSuggestions();
 
-    interface ChangedListener {
+    public interface ChangedListener {
         void onChanged();
     }
 }

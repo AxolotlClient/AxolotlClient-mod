@@ -17,10 +17,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Based on Osmium by Intro-Dev
- * <a href="https://github.com/Intro-Dev/Osmium">https://github.com/Intro-Dev/Osmium</a>
- * License: CC0-1.0
+ * (<a href="https://github.com/Intro-Dev/Osmium">Github</a>)
+ * @license: CC0-1.0
  *
- * Provides a layer between the hypixel api and the client to obtain information with minimal api calls
+ * @implNote Provides a layer between the hypixel api and the client to obtain information with minimal api calls
  */
 public class HypixelAbstractionLayer {
 

@@ -22,7 +22,6 @@ public abstract class DebugHudMixin {
         if(hud.isEnabled() && hud.showInF3.get()){
             hud.render();
         }
-
     }
 
     @Redirect(method = "getLeftText", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/ClientBrandRetriever;getClientModName()Ljava/lang/String;"))

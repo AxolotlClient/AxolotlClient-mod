@@ -4,16 +4,12 @@ import io.github.axolotlclient.modules.particles.Particles;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.particle.ParticleType;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.List;
 
@@ -34,15 +30,6 @@ public abstract class ParticleManagerMixin {
             cachedType=null;
         }
     }
-
-    // IJ might say the parameters don't match the expected values... Do not edit! It works as-is as intended.
-    /*@Inject(method = "method_1296", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/particle/Particle;method_1283(Lnet/minecraft/client/render/BufferBuilder;Lnet/minecraft/entity/Entity;FFFFFF)V"), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
-    public void modifyVar(Entity entity, float f, CallbackInfo ci, float f1, float f2, float f3, float f4, float f5, int i1, int i2, Tessellator t, BufferBuilder b, int i3, Particle particle){
-
-        if(Particles.getInstance().particleMap.containsKey(particle)) {
-            Particles.getInstance().applyOptions(particle);
-        }
-    }*/
 
     @Redirect(method = "method_1296", at = @At(value = "INVOKE", target = "Ljava/util/List;get(I)Ljava/lang/Object;"))
     public <E> E applyOptions(List<E> instance, int i){

@@ -44,7 +44,6 @@ public abstract class ClientPlayerEntityMixin {
                     command.execute(args.length > 1? args:new String[]{""});
                     ci.cancel();
                 }
-
             });
         }
     }

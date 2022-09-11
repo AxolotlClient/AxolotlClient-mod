@@ -40,5 +40,4 @@ public abstract class TitleScreenMixin extends Screen {
             instance.drawWithShadow(textRenderer, s, x, y, color);
         }
     }
-
 }

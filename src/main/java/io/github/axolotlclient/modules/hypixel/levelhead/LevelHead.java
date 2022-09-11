@@ -1,12 +1,11 @@
 package io.github.axolotlclient.modules.hypixel.levelhead;
 
+import io.github.axolotlclient.config.Color;
 import io.github.axolotlclient.config.options.BooleanOption;
 import io.github.axolotlclient.config.options.ColorOption;
 import io.github.axolotlclient.config.options.EnumOption;
 import io.github.axolotlclient.config.options.OptionCategory;
-import io.github.axolotlclient.config.Color;
 import io.github.axolotlclient.modules.hypixel.AbstractHypixelMod;
-import net.minecraft.util.Identifier;
 
 public class LevelHead implements AbstractHypixelMod {
 

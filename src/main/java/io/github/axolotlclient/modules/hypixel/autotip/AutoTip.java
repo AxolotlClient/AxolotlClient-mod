@@ -4,7 +4,6 @@ import io.github.axolotlclient.config.options.BooleanOption;
 import io.github.axolotlclient.config.options.OptionCategory;
 import io.github.axolotlclient.modules.hypixel.AbstractHypixelMod;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.util.Identifier;
 
 public class AutoTip implements AbstractHypixelMod {
 

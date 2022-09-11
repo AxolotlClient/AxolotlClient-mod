@@ -44,11 +44,6 @@ public class ColorOption extends OptionBase<Color> {
     }
 
     @Override
-    public OptionType getType() {
-        return OptionType.COLOR;
-    }
-
-    @Override
     public void setValueFromJsonElement(@NotNull JsonElement element) {
         try {
             chroma = element.getAsJsonObject().get("chroma").getAsBoolean();

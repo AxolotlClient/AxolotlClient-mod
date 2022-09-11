@@ -12,7 +12,7 @@ import java.text.DecimalFormat;
 
 public class OptionSliderWidget<T extends NumericOption<N>, N extends Number> extends ButtonWidget {
     private final DecimalFormat format = new DecimalFormat("##.#");
-    private final DecimalFormat intformat = new DecimalFormat("##");
+    private final DecimalFormat intFormat = new DecimalFormat("##");
 
     private double value;
     public boolean dragging;
@@ -50,8 +50,8 @@ public class OptionSliderWidget<T extends NumericOption<N>, N extends Number> ex
         return Double.parseDouble(format.format(this.min.doubleValue() + (this.max.doubleValue() - this.min.doubleValue()) * this.value));
     }
     public int getSliderValueAsInt() {
-        intformat.applyLocalizedPattern("##");
-        return Integer.parseInt(intformat.format(this.min.doubleValue() + (this.max.doubleValue() - this.min.doubleValue()) * this.value));
+        intFormat.applyLocalizedPattern("##");
+        return Integer.parseInt(intFormat.format(this.min.doubleValue() + (this.max.doubleValue() - this.min.doubleValue()) * this.value));
     }
 
     public Double getValue(){

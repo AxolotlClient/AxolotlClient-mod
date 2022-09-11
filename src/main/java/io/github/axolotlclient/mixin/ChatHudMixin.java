@@ -73,7 +73,6 @@ public abstract class ChatHudMixin {
         if(length == hud.chatHistory.getMax()){
             return visibleMessages.size()+1;
         }
-
         return length;
     }
 }

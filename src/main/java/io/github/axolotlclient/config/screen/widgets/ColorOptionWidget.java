@@ -20,9 +20,10 @@ public class ColorOptionWidget extends ButtonWidget {
     public final TextFieldWidget textField;
     private final ButtonWidget openPicker;
 
-    // Pipette icon in KDE plasma icon theme 'BeautyLine' by Sajjad Abdollahzadeh <sajjad606@gmail.com>
-    // https://store.kde.org/p/1425426
-    // License: GPL-3
+    /** Pipette icon in KDE plasma icon theme 'BeautyLine' by Sajjad Abdollahzadeh <sajjad606@gmail.com>
+     * <a href="https://store.kde.org/p/1425426">KDE Store Link</a>
+     * @license: GPL-3
+     **/
     protected final Identifier pipette = new Identifier("axolotlclient","textures/gui/pipette.png");
 
     public ColorOptionWidget(int id, int x, int y, ColorOption option) {

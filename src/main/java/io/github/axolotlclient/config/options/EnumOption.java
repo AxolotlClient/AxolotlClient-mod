@@ -27,11 +27,6 @@ public class EnumOption extends OptionBase<String> {
     }
 
     @Override
-    public OptionType getType() {
-        return OptionType.ENUM;
-    }
-
-    @Override
     public void setValueFromJsonElement(JsonElement element) {
         for(int i=0; i<values.length;i++){
             String v = values[i];

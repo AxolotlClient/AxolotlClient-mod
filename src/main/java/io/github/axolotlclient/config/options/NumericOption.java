@@ -1,5 +1,9 @@
 package io.github.axolotlclient.config.options;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
+import io.github.axolotlclient.util.clientCommands.CommandResponse;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -42,5 +46,10 @@ public abstract class NumericOption<T extends Number> extends OptionBase<T>{
     @Override
     public List<String> getCommandSuggestions() {
         return Collections.singletonList(String.valueOf(def));
+    }
+
+    @Override
+    public JsonElement getJson() {
+        return new JsonPrimitive(option);
     }
 }

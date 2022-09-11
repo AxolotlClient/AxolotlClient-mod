@@ -16,13 +16,11 @@ public abstract class BiPedModelMixin {
         GlStateManager.pushMatrix();
 
         GlStateManager.enableCull();
-        //GlStateManager.enableRescaleNormal();
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         instance.render(scale);
         GlStateManager.disableBlend();
         GlStateManager.enableBlend();
-        //GlStateManager.disableRescaleNormal();
         GlStateManager.disableCull();
 
         GlStateManager.popMatrix();
@@ -33,13 +31,11 @@ public abstract class BiPedModelMixin {
         GlStateManager.pushMatrix();
 
         GlStateManager.enableCull();
-        //GlStateManager.enableRescaleNormal();
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         instance.render(scale);
         GlStateManager.disableBlend();
         GlStateManager.enableBlend();
-        //GlStateManager.disableRescaleNormal();
         GlStateManager.disableCull();
 
         GlStateManager.popMatrix();

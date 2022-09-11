@@ -50,7 +50,6 @@ public abstract class PlayerListHudMixin extends DrawableHelper {
 			DrawableHelper.drawTexture((int) x, (int) y, 0, 0,  8, 8, 8, 8);
 			args.set(1, x+10);
 		}
-
 	}
 
 	@ModifyArgs(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Ljava/lang/String;FFI)I", ordinal = 2))
@@ -62,6 +61,5 @@ public abstract class PlayerListHudMixin extends DrawableHelper {
 			DrawableHelper.drawTexture((int) x, (int) y, 0, 0,  8, 8, 8, 8);
 			args.set(1, x+10);
 		}
-
 	}
 }

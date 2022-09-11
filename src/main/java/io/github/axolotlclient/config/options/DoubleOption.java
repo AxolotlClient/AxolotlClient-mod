@@ -19,20 +19,10 @@ public class DoubleOption extends NumericOption<Double> {
         this(name, (String) null, Default, min, max);
     }
 
-    @Override
-    public OptionType getType() {
-        return OptionType.DOUBLE;
-    }
-
 
     @Override
     public void setValueFromJsonElement(@NotNull JsonElement element) {
         option = element.getAsDouble();
-    }
-
-    @Override
-    public JsonElement getJson() {
-        return new JsonPrimitive(option);
     }
 
     @Override
@@ -49,6 +39,4 @@ public class DoubleOption extends NumericOption<Double> {
         return new CommandResponse(true, getName() + " is currently set to '"+get()+"'.");
 
     }
-
-
 }

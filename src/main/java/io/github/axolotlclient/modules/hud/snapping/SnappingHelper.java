@@ -12,8 +12,8 @@ import java.util.Optional;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
- * https://github.com/DarkKronicle/KronHUD
- * Licensed under GPL-3.0
+ * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ * @license GPL-3.0
  */
 
 public class SnappingHelper {
@@ -22,14 +22,12 @@ public class SnappingHelper {
     private final HashSet<Integer> y = new HashSet<>();
     private static final Color LINE_COLOR = Color.SELECTOR_BLUE;
     private Rectangle current;
-    private final MinecraftClient client;
     private final Window window;
 
     public SnappingHelper(List<Rectangle> rects, Rectangle current) {
         addAllRects(rects);
         this.current = current;
-        this.client = MinecraftClient.getInstance();
-        this.window = new Window(client);
+        this.window = new Window(MinecraftClient.getInstance());
     }
 
     public static Optional<Integer> getNearby(int pos, HashSet<Integer> set, int distance) {

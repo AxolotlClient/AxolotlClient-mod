@@ -28,18 +28,8 @@ public class IntegerOption extends NumericOption<Integer> {
     }
 
     @Override
-    public OptionType getType() {
-        return OptionType.INT;
-    }
-
-    @Override
     public void setValueFromJsonElement(@NotNull JsonElement element) {
         option = element.getAsInt();
-    }
-
-    @Override
-    public JsonElement getJson() {
-        return new JsonPrimitive(option);
     }
 
     @Override
@@ -54,10 +44,5 @@ public class IntegerOption extends NumericOption<Integer> {
         }
 
         return new CommandResponse(true, getName() + " is currently set to '"+get()+"'.");
-    }
-
-    @Override
-    public List<String> getCommandSuggestions() {
-        return Collections.singletonList(String.valueOf(def));
     }
 }

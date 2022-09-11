@@ -18,8 +18,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 /**
- * This DiscordRPC module is derived from https://github.com/DeDiamondPro/HyCord.
- * License: GPL-3.0
+ * This DiscordRPC module is derived from <a href="https://github.com/DeDiamondPro/HyCord">HyCord</a>.
+ * @license: GPL-3.0
  * @author DeDiamondPro
  */
 

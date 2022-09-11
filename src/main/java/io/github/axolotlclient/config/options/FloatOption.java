@@ -28,18 +28,8 @@ public class FloatOption extends NumericOption<Float> {
     }
 
     @Override
-    public OptionType getType() {
-        return OptionType.FLOAT;
-    }
-
-    @Override
     public void setValueFromJsonElement(@NotNull JsonElement element) {
         option = element.getAsFloat();
-    }
-
-    @Override
-    public JsonElement getJson() {
-        return new JsonPrimitive(option);
     }
 
     @Override
@@ -55,10 +45,5 @@ public class FloatOption extends NumericOption<Float> {
 
         return new CommandResponse(true, getName() + " is currently set to '"+get()+"'.");
 
-    }
-
-    @Override
-    public List<String> getCommandSuggestions() {
-        return Collections.singletonList(String.valueOf(def));
     }
 }

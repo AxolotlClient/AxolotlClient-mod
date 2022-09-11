@@ -18,8 +18,8 @@ import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
- * <a href="https://github.com/DarkKronicle/KronHUD">https://github.com/DarkKronicle/KronHUD</a>
- * Licensed under GPL-3.0
+ * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ * @license GPL-3.0
  */
 
 public abstract class AbstractHudEntry extends DrawUtil {

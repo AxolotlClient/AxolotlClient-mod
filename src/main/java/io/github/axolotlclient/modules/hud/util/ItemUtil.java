@@ -14,8 +14,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
- * https://github.com/DarkKronicle/KronHUD
- * Licensed under GPL-3.0
+ * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ * @license GPL-3.0
  */
 
 public class ItemUtil {
@@ -65,7 +65,7 @@ public class ItemUtil {
      *
      * @param list1 one to be based off of
      * @param list2 one to compare to
-     * @return
+     * @return the item storage
      */
     public static List<ItemStorage> compare(List<ItemStorage> list1, List<ItemStorage> list2) {
         ArrayList<ItemStorage> list = new ArrayList<>();

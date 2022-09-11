@@ -44,11 +44,6 @@ public class BooleanOption extends OptionBase<Boolean> {
     }
 
     @Override
-    public OptionType getType() {
-        return OptionType.BOOLEAN;
-    }
-
-    @Override
     public void setValueFromJsonElement(@NotNull JsonElement element) {
         if(!getForceDisabled()) {
             option = element.getAsBoolean();

@@ -18,8 +18,8 @@ import net.minecraft.client.MinecraftClient;
 import java.time.Instant;
 
 /**
- * This DiscordRPC module is derived from https://github.com/DeDiamondPro/HyCord.
- * License: GPL-3.0
+ * This DiscordRPC module is derived from <a href="https://github.com/DeDiamondPro/HyCord">HyCord</a>.
+ * @license: GPL-3.0
  * @author DeDiamondPro
  */
 

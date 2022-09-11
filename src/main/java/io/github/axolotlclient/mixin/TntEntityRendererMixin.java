@@ -13,7 +13,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(TntEntityRenderer.class)
 public abstract class TntEntityRendererMixin extends EntityRenderer<TntEntity> {
 
-
     protected TntEntityRendererMixin(EntityRenderDispatcher dispatcher) {
         super(dispatcher);
     }

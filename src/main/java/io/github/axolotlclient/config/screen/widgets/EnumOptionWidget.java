@@ -2,7 +2,6 @@ package io.github.axolotlclient.config.screen.widgets;
 
 import io.github.axolotlclient.config.options.EnumOption;
 import io.github.axolotlclient.config.screen.OptionsScreenBuilder;
-import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.resource.language.I18n;

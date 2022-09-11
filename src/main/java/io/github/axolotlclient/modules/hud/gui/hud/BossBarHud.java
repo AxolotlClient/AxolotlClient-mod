@@ -14,8 +14,8 @@ import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
- * https://github.com/DarkKronicle/KronHUD
- * Licensed under GPL-3.0
+ * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ * @license GPL-3.0
  */
 
 public class BossBarHud extends AbstractHudEntry {
