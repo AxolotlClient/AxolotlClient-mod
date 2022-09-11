@@ -56,6 +56,7 @@
 	"lowFire.tooltip": "Eğer yanıyorsan ateş arayüzünün yüksekliğini azaltır",
 	"lowShield": "Düşük Kalkan",
 	"lowShield.tooltip": "Tutarken veya engellerken kalkan arayüzünün yüksekliğini azaltır.",
+	
 	"motionBlur": "Hareket Bulanıklığı",
 	"zoom": "Yakınlaştırma",
 	"timeChanger": "Zaman Değiştirici",
@@ -238,8 +239,8 @@
 	
 	"credits": "Katkıda Bulunanlar",
 	"creditsBGM": "Müzik",
-	"contributors": "Katılımcılar:",
-	"other_people": "Diğer Kişiler:",
+	"contributors": "Katılımcılar",
+	"other_people": "Diğer Kişiler",
 
 	"pickColor": "Renk Seç",
 	"currentColor": "Şimdiki",
