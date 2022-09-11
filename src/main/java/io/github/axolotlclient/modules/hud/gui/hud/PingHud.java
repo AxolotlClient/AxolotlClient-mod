@@ -2,6 +2,7 @@ package io.github.axolotlclient.modules.hud.gui.hud;
 
 import io.github.axolotlclient.config.options.IntegerOption;
 import io.github.axolotlclient.config.options.OptionBase;
+import io.github.axolotlclient.util.ThreadExecuter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.network.ClientConnection;
@@ -59,7 +60,7 @@ public class PingHud extends CleanHudEntry {
 
     private void updatePing(){
         if (MinecraftClient.getInstance().getCurrentServerEntry() != null) {
-            if (MinecraftClient.getInstance().getCurrentServerEntry().ping==-1) {
+            if (MinecraftClient.getInstance().getCurrentServerEntry().ping==1) {
                 getRealTimeServerPing(MinecraftClient.getInstance().getCurrentServerEntry());
             } else {
                 currentServerPing = (int) MinecraftClient.getInstance().getCurrentServerEntry().ping;
@@ -87,35 +88,37 @@ public class PingHud extends CleanHudEntry {
     //Indicatia removed this feature...
     //We still need it :(
     private void getRealTimeServerPing(ServerInfo server) {
-        try {
-            ServerAddress address = ServerAddress.parse(server.address);
-            final ClientConnection manager = ClientConnection.connect(InetAddress.getByName(address.getAddress()), address.getPort(), false);
+        ThreadExecuter.scheduleTask(() -> {
+            try {
+                ServerAddress address = ServerAddress.parse(server.address);
+                final ClientConnection manager = ClientConnection.connect(InetAddress.getByName(address.getAddress()), address.getPort(), false);
 
-            manager.setPacketListener(new ClientQueryPacketListener() {
-                @Override
-                public void onResponse(QueryResponseS2CPacket packet) {
-                    this.currentSystemTime = MinecraftClient.getTime();
-                    manager.send(new QueryPingC2SPacket(this.currentSystemTime));
-                }
+                manager.setPacketListener(new ClientQueryPacketListener() {
+                    @Override
+                    public void onResponse(QueryResponseS2CPacket packet) {
+                        this.currentSystemTime = MinecraftClient.getTime();
+                        manager.send(new QueryPingC2SPacket(this.currentSystemTime));
+                    }
 
-                @Override
-                public void onPong(QueryPongS2CPacket packet) {
-                    long time = this.currentSystemTime;
-                    long latency = MinecraftClient.getTime();
-                    currentServerPing = (int) (latency - time);
-                    manager.disconnect(new LiteralText(""));
-                }
+                    @Override
+                    public void onPong(QueryPongS2CPacket packet) {
+                        long time = this.currentSystemTime;
+                        long latency = MinecraftClient.getTime();
+                        currentServerPing = (int) (latency - time);
+                        manager.disconnect(new LiteralText(""));
+                    }
 
-                private long currentSystemTime = 0L;
+                    private long currentSystemTime = 0L;
 
-                @Override
-                public void onDisconnected(Text reason) {
+                    @Override
+                    public void onDisconnected(Text reason) {
 
-                }
-            });
-            manager.send(new HandshakeC2SPacket(47, address.getAddress(), address.getPort(), NetworkState.STATUS));
-            manager.send(new QueryRequestC2SPacket());
-        }
-        catch (Exception ignored){}
+                    }
+                });
+                manager.send(new HandshakeC2SPacket(47, address.getAddress(), address.getPort(), NetworkState.STATUS));
+                manager.send(new QueryRequestC2SPacket());
+            }
+            catch (Exception ignored){}
+        });
     }
 }

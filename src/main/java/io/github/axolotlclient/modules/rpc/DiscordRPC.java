@@ -19,7 +19,7 @@ import java.time.Instant;
 
 /**
  * This DiscordRPC module is derived from <a href="https://github.com/DeDiamondPro/HyCord">HyCord</a>.
- * @license: GPL-3.0
+ * @license GPL-3.0
  * @author DeDiamondPro
  */
 
@@ -129,7 +129,9 @@ public class DiscordRPC extends AbstractModule {
             activity.timestamps().setStart(Instant.ofEpochMilli(time.toEpochMilli()));
         }
 
-        currentActivity.close();
+        if(currentActivity != null) {
+            currentActivity.close();
+        }
 
         activity.assets().setLargeText("AxolotlClient " + MinecraftClient.getInstance().getGameVersion());
         activity.assets().setLargeImage("icon");
@@ -152,7 +154,7 @@ public class DiscordRPC extends AbstractModule {
 
     public void updateRPC(){
 
-        if(discordRPC.isOpen()) {
+        if(discordRPC != null && discordRPC.isOpen()) {
             updateActivity();
         }
     }

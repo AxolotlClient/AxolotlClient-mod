@@ -14,7 +14,7 @@ import java.util.List;
 
 public class IconHud extends AbstractHudEntry {
 
-    public Identifier ID = new Identifier("axolotlclient", "iconHud");
+    public Identifier ID = new Identifier("axolotlclient", "iconhud");
     private final ColorOption color = new ColorOption("color", new Color(255, 255, 255, 0));
 
     public IconHud() {
