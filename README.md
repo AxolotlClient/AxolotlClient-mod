@@ -1,4 +1,4 @@
-# Axolotlclient-Branding (1.8.9)
+# AxolotlClient-mod (1.8.9)
 
 A Complete (nearly) mod to have various features on legacyfabric 1.8.9
 
