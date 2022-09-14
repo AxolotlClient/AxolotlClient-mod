@@ -1,12 +1,14 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.axolotlclient.config.options.*;
+import io.github.axolotlclient.config.options.BooleanOption;
+import io.github.axolotlclient.config.options.ColorOption;
+import io.github.axolotlclient.config.options.IntegerOption;
+import io.github.axolotlclient.config.options.OptionBase;
 import io.github.axolotlclient.mixin.ChatHudAccessor;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
-import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.ChatHudLine;
 import net.minecraft.client.gui.screen.ChatScreen;
@@ -90,7 +92,7 @@ public class ChatHud extends AbstractHudEntry {
                     int y = (pos.y+height) - scrolledLines * n / k;
                     if(((ChatHudAccessor) client.inGameHud.getChatHud()).getMessages().size()> getVisibleLineCount()) {
                         int height = n * n / r;
-                        fillRect(new Rectangle(pos.x, y, 2, -height), scrollbarColor.get());
+                        fillRect(pos.x, y, 2, -height, scrollbarColor.get().getAsInt());
                     }
 
                 }

@@ -47,8 +47,8 @@ public class ArrowHud extends AbstractHudEntry {
             fillRect(getBounds(), backgroundColor.get());
         }
         if(outline.get()) outlineRect(getBounds(), outlineColor.get());
-        drawCenteredString(client.textRenderer, String.valueOf(arrows), new DrawPosition(pos.x + width / 2,
-                pos.y + height - 10), textColor.get(), shadow.get());
+        drawCenteredString(client.textRenderer, String.valueOf(arrows), pos.x + width / 2,
+                pos.y + height - 10, textColor.get().getAsInt(), shadow.get());
         ItemUtil.renderGuiItem(new ItemStack(Items.ARROW), pos.x + 2, pos.y + 2);
         GlStateManager.popMatrix();
     }
@@ -71,9 +71,9 @@ public class ArrowHud extends AbstractHudEntry {
         renderPlaceholderBackground();
         scale();
         DrawPosition pos = getPos();
-        drawCenteredString(client.textRenderer, "64", new DrawPosition(pos.x + width / 2,
-                pos.y + height - 10), textColor.get(), shadow.get());
-        ItemUtil.renderGuiItem(new ItemStack(Items.ARROW), pos.x + 2, pos.y + 2);
+        drawCenteredString(client.textRenderer, "64", pos.x + width / 2,
+                pos.y + height - 10, textColor.get().getAsInt(), shadow.get());
+        ItemUtil.renderGuiItem(arrow, pos.x + 2, pos.y + 2);
         hovered = false;
         GlStateManager.popMatrix();
     }

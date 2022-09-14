@@ -14,21 +14,21 @@ public abstract class OptionBase<T> implements Option {
     protected final T def;
     public String name;
     public String tooltipKeyPrefix;
-    protected final ChangedListener changeCallback;
+    protected final ChangedListener<T> changeCallback;
 
     public OptionBase(String name, T def){
-        this(name, null, ()->{}, def);
+        this(name, null, (newValue)->{}, def);
     }
 
-    public OptionBase(String name, ChangedListener onChange, T def){
+    public OptionBase(String name, ChangedListener<T> onChange, T def){
         this(name, null, onChange, def);
     }
 
     public OptionBase(String name, String tooltipKeyPrefix, T def){
-        this(name, tooltipKeyPrefix, ()->{}, def);
+        this(name, tooltipKeyPrefix, (value)->{}, def);
     }
 
-    public OptionBase(String name, String tooltipKeyPrefix, ChangedListener onChange, T def){
+    public OptionBase(String name, String tooltipKeyPrefix, ChangedListener<T> onChange, T def){
         this.name=name;
         this.def = def;
         changeCallback = onChange;
@@ -41,7 +41,7 @@ public abstract class OptionBase<T> implements Option {
 
     public void set(T value){
         option = value;
-        changeCallback.onChanged();
+        changeCallback.onChanged(option);
     }
 
     public T getDefault(){
@@ -80,7 +80,7 @@ public abstract class OptionBase<T> implements Option {
 
     public abstract List<String> getCommandSuggestions();
 
-    public interface ChangedListener {
-        void onChanged();
+    public interface ChangedListener<T> {
+        void onChanged(T value);
     }
 }

@@ -425,12 +425,14 @@ public class ButtonWidgetList extends EntryListWidget {
 
         private final Option option;
         protected int renderX;
+        private final int nameWidth;
 
         public OptionEntry(ButtonWidget left, Option option, int width) {
             super(left, null);
             this.option = option;
             if(left instanceof BooleanWidget) left.x = width / 2 + 5 + 57;
             else left.x = width / 2 + 5;
+            nameWidth = MinecraftClient.getInstance().textRenderer.getStringWidth(option.getTranslatedName());
         }
 
         @Override
@@ -445,7 +447,7 @@ public class ButtonWidgetList extends EntryListWidget {
 
         public void renderTooltips(int mouseX, int mouseY){
             if(AxolotlClient.CONFIG.showOptionTooltips.get() &&
-                    (mouseX>=renderX && mouseX<=left.x + left.getWidth() && mouseY>= left.y && mouseY<= left.y + 20)){
+                    (mouseX>=renderX && mouseX<=(renderX + nameWidth) && mouseY>= left.y && mouseY<= left.y + 20)){
                 renderTooltip(option, mouseX, mouseY);
             }
         }

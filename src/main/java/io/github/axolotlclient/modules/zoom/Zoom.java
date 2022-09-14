@@ -14,17 +14,18 @@ import net.minecraft.client.options.KeyBinding;
  * Based on
  * <a href="https://github.com/LogicalGeekBoy/logical_zoom/blob/master/src/main/java/com/logicalgeekboy/logical_zoom/LogicalZoom.java">Logical Zoom</a>
  */
+
 public class Zoom extends AbstractModule {
 
     public static boolean active;
     private static float originalSensitivity;
     private static boolean originalSmoothCamera;
     private static KeyBinding keyBinding;
-    private static float targetFactor = 1;
-    private static float divisor;
+    private static double targetFactor = 1;
+    private static double divisor;
     private static float lastAnimatedFactor = 1;
     private static float animatedFactor = 1;
-    private static float lastReturnedFov;
+    private static double lastReturnedFov;
 
     public static final FloatOption zoomDivisor = new FloatOption("zoomDivisor", 4F, 1F, 16F);
     public static final FloatOption zoomSpeed = new FloatOption("zoomSpeed", 7.5F, 1F, 10F);
@@ -58,8 +59,8 @@ public class Zoom extends AbstractModule {
         return keyBinding.isPressed();
     }
 
-    public static float getFov(float current, float tickDelta) {
-        float result = current
+    public static double getFov(float current, float tickDelta) {
+        double result = current
                 * (zoomSpeed.get() == 10 ? targetFactor : Util.lerp(lastAnimatedFactor, animatedFactor, tickDelta));
 
         if(lastReturnedFov != 0 && lastReturnedFov != result) {
@@ -83,7 +84,7 @@ public class Zoom extends AbstractModule {
 
     private static void updateSensitivity() {
         if(decreaseSensitivity.get()) {
-            MinecraftClient.getInstance().options.sensitivity = originalSensitivity / divisor;
+            MinecraftClient.getInstance().options.sensitivity = (float) (originalSensitivity / divisor);
         }
     }
 
@@ -100,9 +101,9 @@ public class Zoom extends AbstractModule {
         }
     }
 
-    public static boolean scroll(int amount) {
+    public static boolean scroll(double amount) {
         if(active && zoomScrolling.get() && amount != 0) {
-            setDivisor(Math.max(1, divisor + (amount / (float) Math.abs(amount))));
+            setDivisor(Math.max(1, divisor + (amount / Math.abs(amount))));
             updateSensitivity();
             return true;
         }
@@ -124,7 +125,7 @@ public class Zoom extends AbstractModule {
         return !keyHeld() && active;
     }
 
-    private static void setDivisor(float value) {
+    private static void setDivisor(double value) {
         divisor = value;
         targetFactor = 1F / value;
     }

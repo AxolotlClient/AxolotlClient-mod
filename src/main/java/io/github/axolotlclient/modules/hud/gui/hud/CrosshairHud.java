@@ -2,16 +2,18 @@ package io.github.axolotlclient.modules.hud.gui.hud;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.config.Color;
-import io.github.axolotlclient.config.options.*;
+import io.github.axolotlclient.config.options.BooleanOption;
+import io.github.axolotlclient.config.options.ColorOption;
+import io.github.axolotlclient.config.options.EnumOption;
+import io.github.axolotlclient.config.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
-import io.github.axolotlclient.modules.hud.util.Rectangle;
+import io.github.axolotlclient.util.Util;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.EnderChestBlock;
 import net.minecraft.block.HopperBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.util.Window;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -68,21 +70,21 @@ public class CrosshairHud extends AbstractHudEntry {
         DrawPosition pos = getPos().subtract(0, -1);
         if (Objects.equals(type.get(), CrosshairOption.DOT.toString())) {
 
-            fillRect(new Rectangle(pos.x + (width / 2) - 1, pos.y + (height / 2) - 2, 3, 3), color);
+            fillRect(pos.x + (width / 2) - 1, pos.y + (height / 2) - 2, 3, 3, color.getAsInt());
         } else if (Objects.equals(type.get(), CrosshairOption.CROSS.toString())) {
 
-            fillRect(new Rectangle(pos.x + (width / 2) - 5, pos.y + (height / 2) - 1, 6, 1), color);
-            fillRect(new Rectangle(pos.x + (width / 2) + 1, pos.y + (height / 2) - 1, 5, 1), color);
-            fillRect(new Rectangle(pos.x + (width / 2), pos.y + (height / 2) - 6, 1, 6), color);
-            fillRect(new Rectangle(pos.x + (width / 2), pos.y + (height / 2), 1, 5), color);
+            fillRect(pos.x + (width / 2) - 5, pos.y + (height / 2) - 1, 6, 1, color.getAsInt());
+            fillRect(pos.x + (width / 2) + 1, pos.y + (height / 2) - 1, 5, 1, color.getAsInt());
+            fillRect(pos.x + (width / 2), pos.y + (height / 2) - 6, 1, 6, color.getAsInt());
+            fillRect(pos.x + (width / 2), pos.y + (height / 2), 1, 5, color.getAsInt());
         } else if (Objects.equals(type.get(), CrosshairOption.TEXTURE.toString())) {
 
             MinecraftClient.getInstance().getTextureManager().bindTexture(DrawableHelper.GUI_ICONS_TEXTURE);
 
             // Draw crosshair
             //GlStateManager.color4f((float) color.getRed() / 255, (float) color.getGreen() / 255, (float) color.getBlue() / 255, 1F);
-            client.inGameHud.drawTexture((int) (((new Window(client).getScaledWidth() / getScale()) - 14) / 2),
-                    (int) (((new Window(client).getScaledHeight() / getScale()) - 14) / 2), 0, 0, 16, 16);
+            client.inGameHud.drawTexture((int) (((Util.getWindow().getScaledWidth() / getScale()) - 14) / 2),
+                    (int) (((Util.getWindow().getScaledHeight() / getScale()) - 14) / 2), 0, 0, 16, 16);
 
 
         }

@@ -18,9 +18,13 @@ public abstract class ParticleManagerMixin {
 
     private ParticleType cachedType;
 
-    @Inject(method = "method_9701", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/particle/ParticleManager;method_1295(Lnet/minecraft/client/particle/Particle;)V"))
+    @Inject(method = "method_9701", at = @At(value = "HEAD"), cancellable = true)
     public void afterCreation(int i, double d, double e, double f, double g, double h, double j, int[] is, CallbackInfoReturnable<Particle> cir){
         cachedType = ParticleType.getById(i);
+
+        if(!Particles.getInstance().getShowParticle(cachedType)){
+            cir.setReturnValue(null);
+        }
     }
 
     @Inject(method = "method_1295", at = @At(value = "HEAD"))

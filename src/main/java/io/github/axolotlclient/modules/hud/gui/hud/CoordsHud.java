@@ -26,10 +26,22 @@ public class CoordsHud extends AbstractHudEntry {
 
     private final ColorOption firstColor = new ColorOption("firsttextcolor", Color.SELECTOR_BLUE);
     private final ColorOption secondColor = new ColorOption("secondtextcolor", "#FFFFFFFF");
-    private final IntegerOption decimalPlaces = new IntegerOption("decimalplaces", 0, 0, 15);
+    private final IntegerOption decimalPlaces = new IntegerOption("decimalplaces", value -> {
+        StringBuilder format = new StringBuilder("#");
+        if (value > 0) {
+            format.append(".");
+            for (int i = 0; i < value; i++) {
+                format.append("0");
+            }
+        }
+        df = new DecimalFormat(format.toString());
+    }, 0, 0, 15);
+
+    private DecimalFormat df = new DecimalFormat("#");
 
     public CoordsHud() {
         super(79, 31);
+        df.setRoundingMode(RoundingMode.CEILING);
     }
 
     public static String getZDir(int dir) {
@@ -107,15 +119,6 @@ public class CoordsHud extends AbstractHudEntry {
             fillRect(getBounds(), backgroundColor.get());
         }
         if(outline.get()) outlineRect(getBounds(), outlineColor.get());
-        StringBuilder format = new StringBuilder("#");
-        if (decimalPlaces.get() > 0) {
-            format.append(".");
-            for (int i = 0; i < decimalPlaces.get(); i++) {
-                format.append("0");
-            }
-        }
-        DecimalFormat df = new DecimalFormat(format.toString());
-        df.setRoundingMode(RoundingMode.CEILING);
         double x = client.player.getPos().x;
         double y = client.player.getPos().y;
         double z = client.player.getPos().z;
@@ -153,16 +156,6 @@ public class CoordsHud extends AbstractHudEntry {
         renderPlaceholderBackground();
         scale();
         DrawPosition pos = getPos();
-        StringBuilder format = new StringBuilder("#");
-        if (decimalPlaces.get() > 0) {
-            format.append(".");
-            for (int i = 0; i < decimalPlaces.get(); i++) {
-                format.append("#");
-            }
-        }
-
-        DecimalFormat df = new DecimalFormat(format.toString());
-        df.setRoundingMode(RoundingMode.FLOOR);
         double x = 109.2325;
         double y = 180.8981;
         double z = -5098.32698;

@@ -161,7 +161,7 @@ public abstract class GameRendererMixin {
             returnValue = f;
         }
 
-        returnValue = Zoom.getFov(returnValue, tickDelta);
+        returnValue = (float) Zoom.getFov(returnValue, tickDelta);
 
         cir.setReturnValue(returnValue);
     }

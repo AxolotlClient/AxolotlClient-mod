@@ -29,7 +29,7 @@ public class ItemUpdateHud extends AbstractHudEntry {
     private ArrayList<ItemUtil.TimedItemStorage> removed;
     private ArrayList<ItemUtil.TimedItemStorage> added;
 
-    private IntegerOption timeout = new IntegerOption("timeout", 6, 1, 60);
+    private final IntegerOption timeout = new IntegerOption("timeout", 6, 1, 60);
 
     public ItemUpdateHud() {
         super(200, 11 * 6 - 2);

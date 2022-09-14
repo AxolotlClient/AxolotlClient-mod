@@ -14,9 +14,11 @@ import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
 import io.github.axolotlclient.modules.motionblur.MotionBlur;
 import io.github.axolotlclient.modules.particles.Particles;
 import io.github.axolotlclient.modules.rpc.DiscordRPC;
+import io.github.axolotlclient.modules.screenshotUtils.ScreenshotUtils;
 import io.github.axolotlclient.modules.scrollableTooltips.ScrollableTooltips;
 import io.github.axolotlclient.modules.tnttime.TntTime;
 import io.github.axolotlclient.modules.zoom.Zoom;
+import io.github.axolotlclient.util.FeatureDisabler;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
@@ -74,8 +76,9 @@ public class AxolotlClient implements ClientModInitializer {
         FabricLoader.getInstance().getModContainer("axolotlclient").ifPresent(modContainer -> {
             Optional<Path> optional = modContainer.findPath("resourcepacks/AxolotlClientUI.zip");
             optional.ifPresent(path -> MinecraftClient.getInstance().getResourcePackLoader().method_10366(path.toFile()));
-
         });
+
+        FeatureDisabler.init();
 
         LOGGER.info("AxolotlClient Initialized");
     }
@@ -90,6 +93,7 @@ public class AxolotlClient implements ClientModInitializer {
         modules.add(Freelook.getInstance());
         modules.add(TntTime.getInstance());
         modules.add(Particles.getInstance());
+        modules.add(ScreenshotUtils.getInstance());
     }
 
     public static boolean isUsingClient(UUID uuid){

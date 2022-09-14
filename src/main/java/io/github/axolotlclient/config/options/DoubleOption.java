@@ -8,10 +8,10 @@ import org.jetbrains.annotations.NotNull;
 public class DoubleOption extends NumericOption<Double> {
 
     public DoubleOption(String name, String tooltipLocation, double Default, double min, double max) {
-        super(name, tooltipLocation, ()->{}, Default, min, max);
+        super(name, tooltipLocation, (value)->{}, Default, min, max);
     }
 
-    public DoubleOption(String name, ChangedListener onChange, double Default, double min, double max) {
+    public DoubleOption(String name, ChangedListener<Double> onChange, double Default, double min, double max) {
         super(name, onChange, Default, min, max);
     }
 

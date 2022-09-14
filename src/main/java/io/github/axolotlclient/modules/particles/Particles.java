@@ -41,6 +41,7 @@ public class Particles extends AbstractModule {
             HashMap<String, OptionBase<?>> optionsByKey = new LinkedHashMap<>();
 
             populateMap(optionsByKey,
+                    new BooleanOption("showParticle", true),
                     new IntegerOption("count", 1, 1, 20),
                     new BooleanOption("customColor", false),
                     new ColorOption("color", "particles", new Color(-1)));
@@ -85,6 +86,10 @@ public class Particles extends AbstractModule {
 
     public boolean getAlwaysOn(ParticleType type){
         return enabled.get() && ((BooleanOption)Particles.getInstance().particleOptions.get(type).get("alwaysCrit")).get();
+    }
+
+    public boolean getShowParticle(ParticleType type){
+        return enabled.get() && ((BooleanOption)Particles.getInstance().particleOptions.get(type).get("showParticle")).get();
     }
 
     protected static class AlphabeticalComparator implements Comparator<ParticleType> {
