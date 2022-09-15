@@ -47,7 +47,7 @@ public class Particles extends AbstractModule {
     private void addParticleOptions(){
         for(ParticleType<?> type : Registry.PARTICLE_TYPE.stream().sorted(new AlphabeticalComparator()).toList()){
             if(Registry.PARTICLE_TYPE.getId(type) != null) {
-                OptionCategory category = new OptionCategory(Arrays.stream(Registry.PARTICLE_TYPE.getId(type).getPath().split("_")).map(StringUtils::capitalize).collect(Collectors.joining(" ")));
+                OptionCategory category = new OptionCategory(Arrays.stream(Registry.PARTICLE_TYPE.getId(type).getPath().split("_")).map(StringUtils::capitalize).collect(Collectors.joining(" ")), false);
                 HashMap<String, OptionBase<?>> optionsByKey = new LinkedHashMap<>();
 
                 if(type == ParticleTypes.CRIT || type == ParticleTypes.ENCHANTED_HIT){

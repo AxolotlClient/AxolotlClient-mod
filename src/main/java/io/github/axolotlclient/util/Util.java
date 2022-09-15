@@ -197,7 +197,6 @@ public class Util {
     private final static TreeMap<Integer, String> map = new TreeMap<>();
 
     static {
-
         map.put(1000, "M");
         map.put(900, "CM");
         map.put(500, "D");
@@ -211,16 +210,23 @@ public class Util {
         map.put(5, "V");
         map.put(4, "IV");
         map.put(1, "I");
-
     }
 
     // https://stackoverflow.com/questions/12967896/converting-integers-to-roman-numerals-java
     public static String toRoman(int number) {
-        int l =  map.floorKey(number);
-        if ( number == l ) {
-            return map.get(number);
+        try {
+            if (number<0){
+                return toRoman(Math.abs(number));
+            }
+
+            int l = map.floorKey(number);
+            if (number == l) {
+                return map.get(number);
+            }
+            return map.get(l) + toRoman(number - l);
+        } catch (Exception e) {
+            return String.valueOf(number);
         }
-        return map.get(l) + toRoman(number-l);
     }
 
 }

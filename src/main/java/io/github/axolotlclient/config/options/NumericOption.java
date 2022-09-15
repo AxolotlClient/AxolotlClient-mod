@@ -13,7 +13,7 @@ public abstract class NumericOption<T extends Number> extends OptionBase<T>{
         this.max = max;
     }
 
-    public NumericOption(String name, ChangedListener onChange, T def, T min, T max) {
+    public NumericOption(String name, ChangedListener<T> onChange, T def, T min, T max) {
         super(name, onChange, def);
         this.min = min;
         this.max = max;
@@ -25,7 +25,7 @@ public abstract class NumericOption<T extends Number> extends OptionBase<T>{
         this.max = max;
     }
 
-    public NumericOption(String name, String tooltipKeyPrefix, ChangedListener onChange, T def, T min, T max) {
+    public NumericOption(String name, String tooltipKeyPrefix, ChangedListener<T> onChange, T def, T min, T max) {
         super(name, tooltipKeyPrefix, onChange, def);
         this.min = min;
         this.max = max;

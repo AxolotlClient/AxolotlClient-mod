@@ -57,9 +57,7 @@ public class PotionsHud extends AbstractHudEntry {
 				DrawableHelper.drawSprite(matrices, pos.x, pos.y + 1 + lastY, 0, 18, 18, sprite);
 
                 MutableText text = type.getName().copy();
-                if (effect.getAmplifier() != 2) {
-                    text.append(" ").append(Util.toRoman(effect.getAmplifier()));
-                }
+                    text.append(" ").append(Util.toRoman(effect.getAmplifier() + 1));
 
                 drawTextWithShadow(matrices, client.textRenderer, text, pos.x + 20, pos.y + 4 + lastY, textColor.get().getAsInt());
 				drawString(matrices, client.textRenderer, StatusEffectUtil.durationToString(effect, 1),

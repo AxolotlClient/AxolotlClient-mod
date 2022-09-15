@@ -403,15 +403,15 @@ public class ButtonWidgetList extends AlwaysSelectedEntryListWidget<ButtonWidget
     public class OptionEntry extends Pair {
 
         private final Option option;
-		protected int width;
         protected int renderX;
+        private final int nameWidth;
 
         public OptionEntry(ClickableWidget left, Option option, int width) {
             super(left, null);
             this.option = option;
             if(left instanceof BooleanWidget) left.x = width / 2 + 5 + 57;
             else left.x = width / 2 + 5;
-			this.width=width;
+            nameWidth = MinecraftClient.getInstance().textRenderer.getWidth(option.getTranslatedName());
         }
 
 	    @Override
@@ -427,7 +427,7 @@ public class ButtonWidgetList extends AlwaysSelectedEntryListWidget<ButtonWidget
         @Override
         public void renderTooltips(MatrixStack matrices, int mouseX, int mouseY) {
 		    if(AxolotlClient.CONFIG.showOptionTooltips.get() &&
-			    mouseX>=renderX && mouseX<=left.x + left.getWidth() && mouseY>= left.y && mouseY<= left.y + 20){
+			    mouseX>=renderX && mouseX<=(renderX + nameWidth) && mouseY>= left.y && mouseY<= left.y + left.getHeight()){
 			    renderTooltip(matrices, option, mouseX, mouseY);
 		    }
 

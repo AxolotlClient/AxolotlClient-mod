@@ -10,7 +10,7 @@ public class IntegerOption extends NumericOption<Integer> {
         super(name, def, min, max);
     }
 
-    public IntegerOption(String name, ChangedListener onChange, Integer def, Integer min, Integer max) {
+    public IntegerOption(String name, ChangedListener<Integer> onChange, Integer def, Integer min, Integer max) {
         super(name, onChange, def, min, max);
     }
 
@@ -18,7 +18,7 @@ public class IntegerOption extends NumericOption<Integer> {
         super(name, tooltipKeyPrefix, def, min, max);
     }
 
-    public IntegerOption(String name, String tooltipKeyPrefix, ChangedListener onChange, Integer def, Integer min, Integer max) {
+    public IntegerOption(String name, String tooltipKeyPrefix, ChangedListener<Integer> onChange, Integer def, Integer min, Integer max) {
         super(name, tooltipKeyPrefix, onChange, def, min, max);
     }
 

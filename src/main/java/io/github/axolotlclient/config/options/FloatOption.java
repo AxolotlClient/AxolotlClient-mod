@@ -10,7 +10,7 @@ public class FloatOption extends NumericOption<Float> {
         super(name, def, min, max);
     }
 
-    public FloatOption(String name, ChangedListener onChange, Float def, Float min, Float max) {
+    public FloatOption(String name, ChangedListener<Float> onChange, Float def, Float min, Float max) {
         super(name, onChange, def, min, max);
     }
 
@@ -18,7 +18,7 @@ public class FloatOption extends NumericOption<Float> {
         super(name, tooltipKeyPrefix, def, min, max);
     }
 
-    public FloatOption(String name, String tooltipKeyPrefix, ChangedListener onChange, Float def, Float min, Float max) {
+    public FloatOption(String name, String tooltipKeyPrefix, ChangedListener<Float> onChange, Float def, Float min, Float max) {
         super(name, tooltipKeyPrefix, onChange, def, min, max);
     }
 
