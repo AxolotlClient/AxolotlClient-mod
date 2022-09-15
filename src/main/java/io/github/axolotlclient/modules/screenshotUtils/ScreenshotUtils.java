@@ -48,7 +48,6 @@ public class ScreenshotUtils extends AbstractModule {
         return new TranslatableText("copyAction")
                 .setStyle(new Style()
                         .setFormatting(Formatting.BLUE)
-                        .setUnderline(true)
                         .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableText("copy_image")))
                         .setClickEvent(new CustomClickEvent(()->{
                             FileTransferable selection = new FileTransferable(file);
@@ -58,7 +57,6 @@ public class ScreenshotUtils extends AbstractModule {
                 .append(
                         new TranslatableText("deleteAction").setStyle(new Style()
                                 .setFormatting(Formatting.RED)
-                                .setUnderline(true)
                                 .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableText("delete_image")))
                                 .setClickEvent(new CustomClickEvent(()-> {
                                     try {

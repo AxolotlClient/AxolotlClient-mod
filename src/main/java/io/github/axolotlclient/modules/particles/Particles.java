@@ -89,7 +89,7 @@ public class Particles extends AbstractModule {
     }
 
     public boolean getShowParticle(ParticleType type){
-        return enabled.get() && ((BooleanOption)Particles.getInstance().particleOptions.get(type).get("showParticle")).get();
+        return enabled.get() ? ((BooleanOption)Particles.getInstance().particleOptions.get(type).get("showParticle")).get() : true;
     }
 
     protected static class AlphabeticalComparator implements Comparator<ParticleType> {

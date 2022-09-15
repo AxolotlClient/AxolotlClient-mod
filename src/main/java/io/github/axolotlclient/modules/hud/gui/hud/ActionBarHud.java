@@ -64,7 +64,7 @@ public class ActionBarHud extends AbstractHudEntry {
         renderPlaceholderBackground();
         scale();
         drawString(placeholder,
-                getPos().x + Math.round(width /2F) - client.textRenderer.getStringWidth(placeholder) /2,
+                getPos().x,
                 getPos().y + 3,
                 Color.WHITE, shadow.get());
         GlStateManager.popMatrix();
