@@ -28,6 +28,13 @@
 	"showOptionTooltips.tooltip": "Seçeneklerde ipuçları gösterme ayarı.",
 	"showCategoryTooltips": "Kategori İpuçlarını Göster",
 	"showCategoryTooltips.tooltip": "Menüdeki kategorilerin ipucularını gösterme seçeneği.",
+	"screenshotUtils": "Ekran Görüntüsü Araçları",
+	"copyAction": "[Kopyala]",
+	"copy_image": "Bu Ekran Görüntüsünü kopyala",
+	"headless_exception": "Ekran Görüntüsü kopyalanamadı çünkü nasıl oluyorsa JVM başlıksız modunda çalışıyor.\n Lütfen bunu düzeltin.",
+	"deleteAction": "[Sil]",
+	"delete_action": "Ekran Görüntüsünü Sil",
+	"screenshot_deleted": "<name> adlı Ekran Görüntüsü başarıyla silindi",
 
 	"rendering": "İşleme",
 	"rendering.tooltip": "İşleme Seçenekleri",
