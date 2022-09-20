@@ -1,10 +1,9 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.config.ConfigManager;
-import io.github.axolotlclient.config.options.BooleanOption;
-import io.github.axolotlclient.config.options.OptionBase;
-import io.github.axolotlclient.config.options.StringOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
+import io.github.axolotlclient.AxolotlclientConfig.options.StringOption;
 import net.legacyfabric.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.options.KeyBinding;
@@ -113,12 +112,12 @@ public class ToggleSprintHud extends CleanHudEntry {
     public void tick() {
         if(sprintToggle.isPressed() != sprintWasPressed && sprintToggle.isPressed()){
             sprintToggled.toggle();
-            ConfigManager.save();
+            AxolotlClient.configManager.save();
             sprintWasPressed=sprintToggle.isPressed();
         } else  if(!sprintToggle.isPressed())sprintWasPressed=false;
         if(sneakToggle.isPressed() != sneakWasPressed && sneakToggle.isPressed()){
             sneakToggled.toggle();
-            ConfigManager.save();
+            AxolotlClient.configManager.save();
             sneakWasPressed=sneakToggle.isPressed();
         } else if(!sneakToggle.isPressed())sneakWasPressed = false;
     }

@@ -2,10 +2,9 @@ package io.github.axolotlclient.modules.hud;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.config.ConfigManager;
-import io.github.axolotlclient.config.options.BooleanOption;
-import io.github.axolotlclient.config.options.OptionCategory;
-import io.github.axolotlclient.config.screen.OptionsScreenBuilder;
+import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
+import io.github.axolotlclient.AxolotlclientConfig.screen.OptionsScreenBuilder;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.snapping.SnappingHelper;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
@@ -88,7 +87,7 @@ public class HudEditScreen extends Screen {
                 super.mouseClicked(mouseX, mouseY, button);
             }
         } else if (button == 1) {
-            entry.ifPresent(abstractHudEntry -> client.openScreen(new OptionsScreenBuilder(this, abstractHudEntry.getOptionsAsCategory())));
+            entry.ifPresent(abstractHudEntry -> client.openScreen(new OptionsScreenBuilder(this, abstractHudEntry.getOptionsAsCategory(), AxolotlClient.modid)));
         }
     }
 
@@ -97,7 +96,7 @@ public class HudEditScreen extends Screen {
         current = null;
         snap = null;
         mouseDown = false;
-        ConfigManager.save();
+        AxolotlClient.configManager.save();
     }
 
     @Override
@@ -134,11 +133,11 @@ public class HudEditScreen extends Screen {
     protected void buttonClicked(ButtonWidget button) {
         if(button.id==1){
             snapping.toggle();
-            ConfigManager.save();
+            AxolotlClient.configManager.save();
 
             button.message = I18n.translate("hud.snapping") + ": "+I18n.translate(snapping.get()?"options.on":"options.off");
         } else if(button.id==3) {
-            client.openScreen(new OptionsScreenBuilder(this, new OptionCategory("config", false).addSubCategories(AxolotlClient.CONFIG.getCategories())));
+            client.openScreen(new OptionsScreenBuilder(this, new OptionCategory("config", false).addSubCategories(AxolotlClient.CONFIG.getCategories()), AxolotlClient.modid));
         } else if(button.id==0) {
             client.openScreen(parent);
         } else if(button.id==2) {

@@ -1,9 +1,9 @@
 package io.github.axolotlclient.modules.zoom;
 
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.config.options.BooleanOption;
-import io.github.axolotlclient.config.options.FloatOption;
-import io.github.axolotlclient.config.options.OptionCategory;
+import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.FloatOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.util.Util;
 import net.legacyfabric.fabric.api.client.keybinding.v1.KeyBindingHelper;

@@ -1,8 +1,8 @@
 package io.github.axolotlclient.util;
 
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.config.options.BooleanOption;
-import io.github.axolotlclient.config.options.DisableReason;
+import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.DisableReason;
 import io.github.axolotlclient.modules.freelook.Freelook;
 import net.minecraft.client.network.ServerInfo;
 

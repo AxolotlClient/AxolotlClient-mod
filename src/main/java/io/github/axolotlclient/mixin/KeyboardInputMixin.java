@@ -18,7 +18,7 @@ public abstract class KeyboardInputMixin {
      * @param instance The sneak key
      * @return boolean whether the player should be sneaking or not
      */
-    @Redirect(method = "method_1302", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/options/KeyBinding;isPressed()Z", ordinal = 5))
+    @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/options/KeyBinding;isPressed()Z", ordinal = 5))
     public boolean toggleSneak(KeyBinding instance){
         ToggleSprintHud hud = (ToggleSprintHud) HudManager.getInstance().get(ToggleSprintHud.ID);
         return hud.isEnabled() && hud.sneakToggled.get() && MinecraftClient.getInstance().currentScreen==null ||

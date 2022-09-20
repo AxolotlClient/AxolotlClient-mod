@@ -1,8 +1,8 @@
 package io.github.axolotlclient.modules.particles;
 
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.config.Color;
-import io.github.axolotlclient.config.options.*;
+import io.github.axolotlclient.AxolotlclientConfig.Color;
+import io.github.axolotlclient.AxolotlclientConfig.options.*;
 import io.github.axolotlclient.mixin.ParticleAccessor;
 import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.util.Util;

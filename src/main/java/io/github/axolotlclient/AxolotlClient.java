@@ -1,11 +1,15 @@
 package io.github.axolotlclient;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import io.github.axolotlclient.AxolotlclientConfig.ConfigManager;
+import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
 import io.github.axolotlclient.config.AxolotlClientConfig;
-import io.github.axolotlclient.config.Color;
-import io.github.axolotlclient.config.ConfigManager;
-import io.github.axolotlclient.config.options.BooleanOption;
-import io.github.axolotlclient.config.options.OptionCategory;
+import io.github.axolotlclient.config.AxolotlClientConfigManager;
+import io.github.axolotlclient.AxolotlclientConfig.Color;
+import io.github.axolotlclient.AxolotlclientConfig.ConfigManager;
+import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.modules.freelook.Freelook;
 import io.github.axolotlclient.modules.hud.HudManager;
@@ -38,8 +42,10 @@ import java.util.*;
 public class AxolotlClient implements ClientModInitializer {
 
     public static Logger LOGGER = LogManager.getLogger("AxolotlClient");
+    public static String modid = "AxolotlClient";
 
     public static AxolotlClientConfig CONFIG;
+    public static ConfigManager configManager;
     public static String onlinePlayers = "";
     public static String otherPlayers = "";
 
@@ -59,6 +65,7 @@ public class AxolotlClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         CONFIG = new AxolotlClientConfig();
+        io.github.axolotlclient.AxolotlclientConfig.AxolotlClientConfigManager.registerConfig(modid, CONFIG, configManager = new AxolotlClientConfigManager());
         config.add(someNiceBackground);
         config.add(CONFIG.rotateWorld);
 
@@ -69,7 +76,7 @@ public class AxolotlClient implements ClientModInitializer {
         CONFIG.config.addAll(CONFIG.getCategories());
         CONFIG.config.add(config);
 
-        ConfigManager.load();
+        configManager.load();
 
         modules.forEach(AbstractModule::lateInit);
 
@@ -79,6 +86,8 @@ public class AxolotlClient implements ClientModInitializer {
         });
 
         FeatureDisabler.init();
+
+
 
         LOGGER.info("AxolotlClient Initialized");
     }

@@ -2,7 +2,7 @@ package io.github.axolotlclient.modules.sky;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.config.Color;
+import io.github.axolotlclient.AxolotlclientConfig.Color;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gui.DrawableHelper;
@@ -65,7 +65,7 @@ public class SkyLoadingScreen {
         }
         GlStateManager.disableLighting();
         GlStateManager.disableFog();
-        framebuffer.endWrite();
+        framebuffer.clear();
         framebuffer.draw(window.getWidth() * i, window.getHeight() * i);
         GlStateManager.enableAlphaTest();
         GlStateManager.alphaFunc(516, 0.1F);

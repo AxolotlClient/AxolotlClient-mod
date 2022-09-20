@@ -1,12 +1,16 @@
 package io.github.axolotlclient.config;
 
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.config.options.*;
+import io.github.axolotlclient.AxolotlclientConfig.Color;
+import io.github.axolotlclient.AxolotlclientConfig.ConfigHolder;
+import io.github.axolotlclient.AxolotlclientConfig.options.*;
+import io.github.axolotlclient.config.screen.CreditsScreen;
+import net.minecraft.client.MinecraftClient;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AxolotlClientConfig {
+public class AxolotlClientConfig extends ConfigHolder {
 
     public final BooleanOption showOwnNametag = new BooleanOption("showOwnNametag", false);
     public final BooleanOption useShadows = new BooleanOption("useShadows", false);
@@ -39,6 +43,9 @@ public class AxolotlClientConfig {
     public final ColorOption outlineColor = new ColorOption("color", Color.parse("#DD000000"));
     public final IntegerOption outlineWidth = new IntegerOption("outlineWidth", 1, 1, 10);
 
+    public final GenericOption openCredits = new GenericOption("Credits", "Open Credits", (mouseX, mouseY)->
+        MinecraftClient.getInstance().openScreen(new CreditsScreen(MinecraftClient.getInstance().currentScreen))
+    );
     public final BooleanOption creditsBGM = new BooleanOption("creditsBGM", true);
 
     public final BooleanOption searchForOptions = new BooleanOption("searchForOptions", false);
@@ -97,6 +104,7 @@ public class AxolotlClientConfig {
         general.add(showOptionTooltips);
         general.add(showCategoryTooltips);
         general.add(rawMouseInput);
+        general.add(openCredits);
 
         searchFilters.add(searchIgnoreCase, searchForOptions, searchSort, searchSortOrder);
         general.addSubCategory(searchFilters);

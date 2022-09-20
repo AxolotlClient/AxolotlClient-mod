@@ -1,6 +1,6 @@
 package io.github.axolotlclient.modules.hud.util;
 
-import io.github.axolotlclient.config.Color;
+import io.github.axolotlclient.AxolotlclientConfig.Color;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 

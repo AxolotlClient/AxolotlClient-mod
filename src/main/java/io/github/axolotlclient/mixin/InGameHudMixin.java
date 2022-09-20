@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 @Mixin(InGameHud.class)
 public abstract class InGameHudMixin {
 
-    @Shadow protected abstract boolean method_9429();
+    @Shadow protected abstract boolean showCrosshair();
 
     @Inject(method = "renderScoreboardObjective", at = @At("HEAD"), cancellable = true)
     public void customScoreBoard(ScoreboardObjective objective, Window window, CallbackInfo ci){
@@ -30,7 +30,7 @@ public abstract class InGameHudMixin {
         }
     }
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;method_9429()Z"))
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;showCrosshair()Z"))
     public boolean noCrosshair(InGameHud instance){
         CrosshairHud hud = (CrosshairHud) HudManager.getInstance().get(CrosshairHud.ID);
         if(hud.isEnabled()) {
@@ -38,7 +38,7 @@ public abstract class InGameHudMixin {
             GlStateManager.enableAlphaTest();
             return false;
         }
-        return method_9429();
+        return showCrosshair();
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Ljava/lang/String;III)I", ordinal = 0))

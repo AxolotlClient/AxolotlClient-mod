@@ -91,7 +91,7 @@ public abstract class MinecraftClientMixin {
                 AxolotlClient.CONFIG.loadingScreenColor.get().getBlue(), AxolotlClient.CONFIG.loadingScreenColor.get().getAlpha());
     }
 
-    @Redirect(method = "method_9382", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/BufferBuilder;color(IIII)Lnet/minecraft/client/render/BufferBuilder;"))
+    @Redirect(method = "drawLogo", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/BufferBuilder;color(IIII)Lnet/minecraft/client/render/BufferBuilder;"))
     public BufferBuilder loadingScreenBg(BufferBuilder instance, int red, int green, int blue, int alpha){
 
         return instance.color(AxolotlClient.CONFIG.loadingScreenColor.get().getRed(),
@@ -105,7 +105,7 @@ public abstract class MinecraftClientMixin {
         return "1.8.9";
     }
 
-    @Inject(method = "startGame", at = @At("HEAD"))
+    @Inject(method = "startIntegratedServer", at = @At("HEAD"))
     public void startup(String worldFileName, String worldName, LevelInfo levelInfo, CallbackInfo ci){
         DiscordRPC.setWorld(worldFileName);
     }
@@ -139,12 +139,12 @@ public abstract class MinecraftClientMixin {
         }
     }
 
-    @Inject(method = "connect(Lnet/minecraft/client/world/ClientWorld;Ljava/lang/String;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;method_1236(Lnet/minecraft/entity/player/PlayerEntity;)V"))
+    @Inject(method = "connect(Lnet/minecraft/client/world/ClientWorld;Ljava/lang/String;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;flipPlayer(Lnet/minecraft/entity/player/PlayerEntity;)V"))
     public void login(ClientWorld world, String loadingMessage, CallbackInfo ci){
         NetworkHelper.setOnline();
     }
 
-    @Inject(method = "method_2923", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/LoadingScreenRenderer;<init>(Lnet/minecraft/client/MinecraftClient;)V"))
+    @Inject(method = "onResolutionChanged", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/LoadingScreenRenderer;<init>(Lnet/minecraft/client/MinecraftClient;)V"))
     public void onResize(int i, int j, CallbackInfo ci){
         Util.window = new Window(MinecraftClient.getInstance());
     }

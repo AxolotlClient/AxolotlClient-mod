@@ -2,9 +2,9 @@ package io.github.axolotlclient.util;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import io.github.axolotlclient.AxolotlclientConfig.util.clientCommands.ClientCommands;
+import io.github.axolotlclient.AxolotlclientConfig.util.clientCommands.Command;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
-import io.github.axolotlclient.util.clientCommands.ClientCommands;
-import io.github.axolotlclient.util.clientCommands.Command;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.texture.Texture;
 import net.minecraft.client.util.Window;

@@ -35,17 +35,17 @@ public abstract class WorldRendererMixin {
 
     @Shadow @Final private static Identifier MOON_PHASES;
 
-    @Shadow private boolean field_10817;
-
     @Shadow private VertexBuffer starsBuffer;
-
-    @Shadow private int field_1923;
 
     @Shadow private ClientWorld world;
 
     @Shadow @Final private MinecraftClient client;
 
-    @Inject(method = "method_9891",
+    @Shadow private boolean vbo;
+
+    @Shadow private int starsList;
+
+    @Inject(method = "renderSky",
             at=@At(value = "INVOKE",
                     target = "Lcom/mojang/blaze3d/platform/GlStateManager;disableTexture()V", ordinal = 0),
             cancellable = true)
@@ -152,7 +152,7 @@ public abstract class WorldRendererMixin {
             float z = this.world.method_3707(f) * n;
             if (z > 0.0F) {
                 GlStateManager.color4f(z, z, z, z);
-                if (this.field_10817) {
+                if (this.vbo) {
                     this.starsBuffer.bind();
                     GL11.glEnableClientState(32884);
                     GL11.glVertexPointer(3, 5126, 12, 0L);
@@ -160,7 +160,7 @@ public abstract class WorldRendererMixin {
                     this.starsBuffer.unbind();
                     GL11.glDisableClientState(32884);
                 } else {
-                    GlStateManager.callList(this.field_1923);
+                    GlStateManager.callList(this.starsList);
                 }
             }
 
@@ -179,18 +179,18 @@ public abstract class WorldRendererMixin {
         }
     }
 
-    @Inject(method = "method_9924", at = @At("TAIL"))
+    @Inject(method = "postDrawBlockDamage", at = @At("TAIL"))
     public void decurse(CallbackInfo ci){
         if(AxolotlClient.CONFIG.rotateWorld.get())GlStateManager.popMatrix();
     }
 
-    @Redirect(method = "method_9910", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/dimension/Dimension;getCloudHeight()F"))
+    @Redirect(method = "renderClouds", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/dimension/Dimension;getCloudHeight()F"))
     public float getCloudHeight(Dimension instance){
         return AxolotlClient.CONFIG.cloudHeight.get();
     }
 
 
-    @ModifyArg(method = "method_1380", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/GL11;glLineWidth(F)V"), remap = false)
+    @ModifyArg(method = "drawBlockOutline", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/GL11;glLineWidth(F)V"), remap = false)
     public float OutlineWidth(float width){
         if(AxolotlClient.CONFIG.enableCustomOutlines.get() && AxolotlClient.CONFIG.outlineWidth.get()>1){
             return 1.0F+ AxolotlClient.CONFIG.outlineWidth.get();
@@ -198,7 +198,7 @@ public abstract class WorldRendererMixin {
         return width;
     }
 
-    @Inject(method = "method_1380", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;color4f(FFFF)V", shift = At.Shift.AFTER))
+    @Inject(method = "drawBlockOutline", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;color4f(FFFF)V", shift = At.Shift.AFTER))
     public void customOutlineColor(PlayerEntity playerEntity, BlockHitResult blockHitResult, int i, float f, CallbackInfo ci){
         if(AxolotlClient.CONFIG.enableCustomOutlines.get()){
             GlStateManager.clearColor();

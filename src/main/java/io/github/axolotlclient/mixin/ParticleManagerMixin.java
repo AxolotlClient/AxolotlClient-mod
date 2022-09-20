@@ -18,7 +18,7 @@ public abstract class ParticleManagerMixin {
 
     private ParticleType cachedType;
 
-    @Inject(method = "method_9701", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(method = "addParticle(IDDDDDD[I)Lnet/minecraft/client/particle/Particle;", at = @At(value = "HEAD"), cancellable = true)
     public void afterCreation(int i, double d, double e, double f, double g, double h, double j, int[] is, CallbackInfoReturnable<Particle> cir){
         cachedType = ParticleType.getById(i);
 
@@ -27,7 +27,7 @@ public abstract class ParticleManagerMixin {
         }
     }
 
-    @Inject(method = "method_1295", at = @At(value = "HEAD"))
+    @Inject(method = "addParticle(Lnet/minecraft/client/particle/Particle;)V", at = @At(value = "HEAD"))
     public void afterCreation(Particle particle, CallbackInfo ci){
         if(cachedType!=null){
             Particles.getInstance().particleMap.put(particle, cachedType);
@@ -35,7 +35,7 @@ public abstract class ParticleManagerMixin {
         }
     }
 
-    @Redirect(method = "method_1296", at = @At(value = "INVOKE", target = "Ljava/util/List;get(I)Ljava/lang/Object;"))
+    @Redirect(method = "renderParticles", at = @At(value = "INVOKE", target = "Ljava/util/List;get(I)Ljava/lang/Object;"))
     public <E> E applyOptions(List<E> instance, int i){
         E particle = instance.get(i);
         if(Particles.getInstance().particleMap.containsKey((Particle) particle)) {
