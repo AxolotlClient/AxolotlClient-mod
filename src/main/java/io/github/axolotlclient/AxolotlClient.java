@@ -1,16 +1,14 @@
 package io.github.axolotlclient;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import io.github.axolotlclient.AxolotlclientConfig.Color;
 import io.github.axolotlclient.AxolotlclientConfig.ConfigManager;
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
 import io.github.axolotlclient.config.AxolotlClientConfig;
 import io.github.axolotlclient.config.AxolotlClientConfigManager;
-import io.github.axolotlclient.AxolotlclientConfig.Color;
-import io.github.axolotlclient.AxolotlclientConfig.ConfigManager;
-import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
+import io.github.axolotlclient.modules.ModuleLoader;
 import io.github.axolotlclient.modules.freelook.Freelook;
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hypixel.HypixelMods;
@@ -70,6 +68,7 @@ public class AxolotlClient implements ClientModInitializer {
         config.add(CONFIG.rotateWorld);
 
         getModules();
+        addExternalModules();
         CONFIG.init();
         modules.forEach(AbstractModule::init);
 
@@ -92,7 +91,7 @@ public class AxolotlClient implements ClientModInitializer {
         LOGGER.info("AxolotlClient Initialized");
     }
 
-    public static void getModules(){
+    private static void getModules(){
         modules.add(Zoom.getInstance());
         modules.add(HudManager.getInstance());
         modules.add(HypixelMods.getInstance());
@@ -103,6 +102,10 @@ public class AxolotlClient implements ClientModInitializer {
         modules.add(TntTime.getInstance());
         modules.add(Particles.getInstance());
         modules.add(ScreenshotUtils.getInstance());
+    }
+
+    private static void addExternalModules(){
+        modules.addAll(ModuleLoader.loadExternalModules());
     }
 
     public static boolean isUsingClient(UUID uuid){

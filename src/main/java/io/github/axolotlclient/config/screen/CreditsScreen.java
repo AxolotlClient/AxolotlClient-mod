@@ -3,7 +3,6 @@ package io.github.axolotlclient.config.screen;
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlclientConfig.Color;
-import io.github.axolotlclient.AxolotlclientConfig.AxolotlClientConfigManager;
 import io.github.axolotlclient.mixin.SoundManagerAccessor;
 import io.github.axolotlclient.mixin.SoundSystemAccessor;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
@@ -36,6 +35,8 @@ import java.util.List;
 public class CreditsScreen extends Screen {
 
     private final Screen parent;
+
+    public static final HashMap<String, String[]> externalModuleCredits = new HashMap<>();
 
     private final List<Credit> credits = new ArrayList<>();
 
@@ -239,6 +240,13 @@ public class CreditsScreen extends Screen {
         credits.add(new Credit("DarkKronicle", "Author of KronHUD, the best HUD mod!"));
         credits.add(new Credit("AMereBagatelle", "Author of the excellent FabricSkyBoxes Mod"));
 
+        if(!externalModuleCredits.isEmpty()){
+            credits.add(new SpacerTitle("- - - - - - "+I18n.translate("external_modules")+" - - - - - -"));
+            externalModuleCredits.forEach((s, s2) -> {
+                credits.add(new Credit(s, s2));
+            });
+        }
+
     }
 
     private void stopBGM(){
@@ -353,6 +361,12 @@ public class CreditsScreen extends Screen {
             int startY=y+50;
             for(String t:credit.things){
 
+
+                while (t.contains("\n")){
+                    startY+=12;
+                    t=t.replace("\n", "");
+                }
+
                 if(t.startsWith("http")){
                     effects.put(t, new ClickEvent(ClickEvent.Action.OPEN_URL, t));
                     lines.put(startY, Formatting.UNDERLINE + t);
@@ -383,9 +397,9 @@ public class CreditsScreen extends Screen {
 
         public void mouseClicked(int mouseX, int mouseY){
             lines.forEach((integer, s) -> {
-                if((mouseY>=integer && mouseY<integer+12) &&
-                        mouseX >= width/2-MinecraftClient.getInstance().textRenderer.getStringWidth(s)/2 &&
-                        mouseX<= width/2+ MinecraftClient.getInstance().textRenderer.getStringWidth(s)/2){
+                if((mouseY>=integer && mouseY<integer+11) &&
+                        mouseX >= x+width/2-MinecraftClient.getInstance().textRenderer.getStringWidth(s)/2 &&
+                        mouseX<= x+width/2+ MinecraftClient.getInstance().textRenderer.getStringWidth(s)/2){
                     handleTextClick(new LiteralText(s).setStyle(new Style().setClickEvent(effects.get(Formatting.strip(s)))));
                 }
             });

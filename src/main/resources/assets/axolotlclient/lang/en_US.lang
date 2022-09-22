@@ -256,6 +256,7 @@ credits=Credits
 creditsBGM=BGM
 contributors=Contributors
 other_people=Other People
+external_modules=External Modules
 
 pickColor=Pick Color
 currentColor=Current
