@@ -29,7 +29,7 @@ public abstract class TextRendererMixin {
 
     private boolean shouldHaveShadow;
 
-    @Inject(method = "drawLayer*", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Ljava/lang/String;Z)V"))
+    @Inject(method = "drawLayer(Ljava/lang/String;FFIZ)I", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Ljava/lang/String;Z)V"))
     public void getData(String text, float x, float y, int color, boolean shadow, CallbackInfoReturnable<Integer> cir){
         if(text!=null) {
             shouldHaveShadow = shadow;
