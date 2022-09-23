@@ -29,7 +29,7 @@ public class DiscordRPC extends AbstractModule {
 
     public OptionCategory category = new OptionCategory("rpc");
 
-    public BooleanOption enabled = new BooleanOption("enabled", true);
+    public BooleanOption enabled = new BooleanOption("enabled", false);
     public BooleanOption showActivity = new BooleanOption("showActivity", true);
 
     public BooleanOption showTime = new BooleanOption("showTime", true);
