@@ -68,6 +68,7 @@ shiftHorizontalScroll=Scroll Horizontal (if key pressed)
 shiftHorizontalScroll.tooltip=Allow scrolling horizontally if the specific key <br>is pressed. <br>The key is changeable in the Controls Menu.
 scrollAmount=Scroll Amount
 scrollAmount.tooltip=On scrolling, move the tooltip around this amount.
+inverse=Inverse
 tnttime=TntTime
 particles=Particles
 particles.color.tooltip=The color of the particle. <br>Needs "Custom Color" enabled.
