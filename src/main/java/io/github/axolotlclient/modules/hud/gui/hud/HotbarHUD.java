@@ -1,6 +1,7 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.ItemUtil;
@@ -8,6 +9,8 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
+
+import java.util.List;
 
 public class HotbarHUD extends AbstractHudEntry {
 
@@ -81,5 +84,10 @@ public class HotbarHUD extends AbstractHudEntry {
     @Override
     public boolean movable() {
         return true;
+    }
+
+    @Override
+    public void addConfigOptions(List<OptionBase<?>> options) {
+        options.add(enabled);
     }
 }

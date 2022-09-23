@@ -19,7 +19,7 @@ import java.util.zip.ZipInputStream;
 
 /**
  * This DiscordRPC module is derived from <a href="https://github.com/DeDiamondPro/HyCord">HyCord</a>.
- * @license: GPL-3.0
+ * @license GPL-3.0
  * @author DeDiamondPro
  */
 
@@ -134,11 +134,16 @@ public class GameSdkDownloader {
     private static void loadNative(File sdk, File jni) {
         AxolotlClient.LOGGER.info("Loading GameSDK");
 
-        if (OSUtil.getOS() == OSUtil.OperatingSystem.WINDOWS) {
-            System.load(sdk.getAbsolutePath());
-        }
+        try {
+            if (OSUtil.getOS() == OSUtil.OperatingSystem.WINDOWS) {
+                System.load(sdk.getAbsolutePath());
+            }
 
-        System.load(jni.getAbsolutePath());
-        Core.initDiscordNative(sdk.getAbsolutePath());
+            System.load(jni.getAbsolutePath());
+            Core.initDiscordNative(sdk.getAbsolutePath());
+        } catch (Throwable e) {
+            AxolotlClient.LOGGER.warn("Discord RPC failed to load");
+            DiscordRPC.getInstance().enabled.set(false);
+        }
     }
 }

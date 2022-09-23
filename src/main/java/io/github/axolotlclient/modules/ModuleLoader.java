@@ -24,10 +24,11 @@ public class ModuleLoader {
                     if(!data.getAuthors().isEmpty()) {
                         authorsNContributors.add("Author(s):");
                         data.getAuthors().forEach(p -> authorsNContributors.add(p.getName()));
+                        authorsNContributors.add("");
                     }
 
                     if(!data.getContributors().isEmpty()) {
-                        authorsNContributors.add("\nContributor(s):");
+                        authorsNContributors.add("Contributor(s):");
                         data.getContributors().forEach(p -> authorsNContributors.add(p.getName()));
                     }
                     CreditsScreen.externalModuleCredits.put(modName, authorsNContributors.toArray(new String[0]));
