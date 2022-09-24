@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Collection;
 import java.util.List;
 
 @Mixin(ParticleManager.class)
@@ -30,17 +31,32 @@ public abstract class ParticleManagerMixin {
     @Inject(method = "addParticle(Lnet/minecraft/client/particle/Particle;)V", at = @At(value = "HEAD"))
     public void afterCreation(Particle particle, CallbackInfo ci){
         if(cachedType!=null){
-            if(!Particles.getInstance().particleMap.containsKey(particle.getClass())) {
-                Particles.getInstance().particleMap.put(particle.getClass(), cachedType);
-            }
+            Particles.getInstance().particleMap.put(particle, cachedType);
             cachedType=null;
         }
+    }
+
+    @Inject(method = "addParticle(Lnet/minecraft/client/particle/Particle;)V", at = @At(value = "INVOKE", target = "Ljava/util/List;remove(I)Ljava/lang/Object;"))
+    public void removeParticlesWhenTooMany(Particle particle, CallbackInfo ci){
+        Particles.getInstance().particleMap.remove(particle);
+    }
+
+    @Redirect(method = "updateLayer(Ljava/util/List;)V", at = @At(value = "INVOKE", target = "Ljava/util/List;removeAll(Ljava/util/Collection;)Z"))
+    public boolean removeParticlesWhenRemoved(List<Particle> instance, Collection<Particle> objects){
+        objects.forEach(particle -> Particles.getInstance().particleMap.remove(particle));
+
+        return instance.removeAll(objects);
+    }
+
+    @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Ljava/util/List;removeAll(Ljava/util/Collection;)Z"))
+    public boolean removeEmitterParticlesWhenRemoved(List<Particle> instance, Collection<Particle> objects){
+        return removeParticlesWhenRemoved(instance, objects);
     }
 
     @Redirect(method = "renderParticles", at = @At(value = "INVOKE", target = "Ljava/util/List;get(I)Ljava/lang/Object;"))
     public <E> E applyOptions(List<E> instance, int i){
         E particle = instance.get(i);
-        if(Particles.getInstance().particleMap.containsKey(((Particle) particle).getClass())) {
+        if(Particles.getInstance().particleMap.containsKey(((Particle) particle))) {
             Particles.getInstance().applyOptions((Particle) particle);
         }
         return particle;

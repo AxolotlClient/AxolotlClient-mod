@@ -18,7 +18,7 @@ public class Particles extends AbstractModule {
     private static final Particles Instance = new Particles();
 
     public final HashMap<ParticleType, HashMap<String, OptionBase<?>>> particleOptions = new HashMap<>();
-    public final HashMap<Class<? extends Particle>, ParticleType> particleMap = new HashMap<Class<? extends Particle>, ParticleType>();
+    public final HashMap<Particle, ParticleType> particleMap = new HashMap<>();
 
     private final OptionCategory cat = new OptionCategory("particles");
     private final BooleanOption enabled = new BooleanOption("enabled", false);
@@ -64,8 +64,8 @@ public class Particles extends AbstractModule {
     }
 
     public void applyOptions(Particle particle){
-        if(enabled.get() && particleMap.containsKey(particle.getClass())) {
-            HashMap<String, OptionBase<?>> options = particleOptions.get(particleMap.get(particle.getClass()));
+        if(enabled.get() && particleMap.containsKey(particle)) {
+            HashMap<String, OptionBase<?>> options = particleOptions.get(particleMap.get(particle));
 
             if (((BooleanOption)options.get("customColor")).get()) {
                 Color color = ((ColorOption) options.get("color")).get();
