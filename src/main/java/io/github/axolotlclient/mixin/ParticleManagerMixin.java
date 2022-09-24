@@ -30,7 +30,9 @@ public abstract class ParticleManagerMixin {
     @Inject(method = "addParticle(Lnet/minecraft/client/particle/Particle;)V", at = @At(value = "HEAD"))
     public void afterCreation(Particle particle, CallbackInfo ci){
         if(cachedType!=null){
-            Particles.getInstance().particleMap.put(particle, cachedType);
+            if(!Particles.getInstance().particleMap.containsKey(particle.getClass())) {
+                Particles.getInstance().particleMap.put(particle.getClass(), cachedType);
+            }
             cachedType=null;
         }
     }
@@ -38,7 +40,7 @@ public abstract class ParticleManagerMixin {
     @Redirect(method = "renderParticles", at = @At(value = "INVOKE", target = "Ljava/util/List;get(I)Ljava/lang/Object;"))
     public <E> E applyOptions(List<E> instance, int i){
         E particle = instance.get(i);
-        if(Particles.getInstance().particleMap.containsKey((Particle) particle)) {
+        if(Particles.getInstance().particleMap.containsKey(((Particle) particle).getClass())) {
             Particles.getInstance().applyOptions((Particle) particle);
         }
         return particle;

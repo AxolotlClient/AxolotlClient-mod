@@ -25,7 +25,7 @@ public class NetworkHelper {
             return true;
         } else if (AxolotlClient.otherPlayers.contains(uuid.toString())){
             return false;
-        }else {
+        } else {
             ThreadExecuter.scheduleTask(() -> getUser(uuid));
             return AxolotlClient.onlinePlayers.contains(uuid.toString());
         }
