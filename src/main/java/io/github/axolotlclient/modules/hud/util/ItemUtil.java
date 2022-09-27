@@ -24,12 +24,12 @@ public class ItemUtil {
 
     public static void renderGuiItem(ItemStack itemStack, int x, int y){
         ItemRenderer renderer = MinecraftClient.getInstance().getItemRenderer();
-        GlStateManager.enableLighting();
+        //GlStateManager.enableLighting();
         DiffuseLighting.enable();
         renderer.renderInGuiWithOverrides(itemStack, x+2, y);
         renderer.renderGuiItemOverlay(client.textRenderer, itemStack, x+2, y, null);
         DiffuseLighting.disable();
-        GlStateManager.disableLighting();
+        //GlStateManager.disableLighting();
     }
 
     public static int getTotal(MinecraftClient client, ItemStack stack) {

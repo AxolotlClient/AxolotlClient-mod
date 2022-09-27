@@ -44,7 +44,7 @@ public class Particles extends AbstractModule {
                     new BooleanOption("showParticle", true),
                     new IntegerOption("count", 1, 1, 20),
                     new BooleanOption("customColor", false),
-                    new ColorOption("color", "particles", new Color(-1)));
+                    new ColorOption("color", "particles", Color.WHITE));
 
             if(type == ParticleType.CRIT || type == ParticleType.CRIT_MAGIC){
                 populateMap(optionsByKey, new BooleanOption("alwaysCrit", false));

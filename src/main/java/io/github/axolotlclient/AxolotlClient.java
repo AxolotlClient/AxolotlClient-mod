@@ -1,7 +1,6 @@
 package io.github.axolotlclient;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.axolotlclient.AxolotlclientConfig.Color;
 import io.github.axolotlclient.AxolotlclientConfig.ConfigManager;
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
@@ -23,6 +22,7 @@ import io.github.axolotlclient.modules.zoom.Zoom;
 import io.github.axolotlclient.util.FeatureDisabler;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
+import net.legacyfabric.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.entity.Entity;
@@ -44,8 +44,7 @@ public class AxolotlClient implements ClientModInitializer {
 
     public static AxolotlClientConfig CONFIG;
     public static ConfigManager configManager;
-    public static String onlinePlayers = "";
-    public static String otherPlayers = "";
+    public static HashMap<UUID, Boolean> playerCache = new HashMap<>();
 
     public static List<ResourcePack> packs = new ArrayList<>();
     public static HashMap<Identifier, Resource> runtimeResources = new HashMap<>();
@@ -84,9 +83,9 @@ public class AxolotlClient implements ClientModInitializer {
             optional.ifPresent(path -> MinecraftClient.getInstance().getResourcePackLoader().method_10366(path.toFile()));
         });
 
+        ClientTickEvents.END_CLIENT_TICK.register(client -> tickClient());
+
         FeatureDisabler.init();
-
-
 
         LOGGER.info("AxolotlClient Initialized");
     }
@@ -121,12 +120,12 @@ public class AxolotlClient implements ClientModInitializer {
     public static void tickClient(){
         modules.forEach(AbstractModule::tick);
 
-        Color.tickChroma();
-
         if (tickTime >=6000){
 
             //System.out.println("Cleared Cache of Other Players!");
-            otherPlayers = "";
+            if(playerCache.values().size()>500){
+                playerCache.clear();
+            }
             tickTime = 0;
         }
         tickTime++;

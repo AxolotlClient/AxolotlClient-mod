@@ -116,11 +116,6 @@ public abstract class MinecraftClientMixin {
         DiscordRPC.shutdown();
     }
 
-    @Inject(method = "tick", at = @At("HEAD"))
-    public void tickClient(CallbackInfo ci){
-        AxolotlClient.tickClient();
-    }
-
 
     @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lorg/lwjgl/input/Mouse;getEventDWheel()I"), remap = false)
     public int onScroll() {

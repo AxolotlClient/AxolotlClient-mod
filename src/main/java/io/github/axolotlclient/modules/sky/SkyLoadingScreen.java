@@ -75,7 +75,6 @@ public class SkyLoadingScreen {
 
     public void update(ResourcePack pack){
         currentPack = pack.getName();
-        Color.tickChroma();
         render();
     }
 
@@ -87,7 +86,6 @@ public class SkyLoadingScreen {
 
     public void finish(){
         loadingFinished=true;
-        Color.tickChroma();
         render();
         AxolotlClient.initalized=true;
     }

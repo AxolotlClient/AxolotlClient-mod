@@ -53,11 +53,11 @@ dependencies {
 		exclude group: "org.apache.httpcomponents", module: "httpclient"
 	})
 
-	//modImplementation files("libs/legacy-modmenu-1.1.1-dev.jar") // Uncomment if you want modmenu in the dev env
+	modImplementation files("libs/legacy-modmenu-1.1.1-dev.jar") // Uncomment if you want modmenu in the dev env
 
 	implementation('org.apache.logging.log4j:log4j-core:2.18.0')
 
-	modImplementation include('com.github.AxolotlClient:AxolotlClient-config:d3a8fa4')
+	modImplementation include('com.github.AxolotlClient:AxolotlClient-config:57f7b70')
 
 }
 

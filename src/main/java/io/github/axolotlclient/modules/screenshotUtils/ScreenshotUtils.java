@@ -106,8 +106,6 @@ public class ScreenshotUtils extends AbstractModule {
         public void doAction(){
             action.doAction();
         }
-
-
     }
 
     interface OnActionCall {
