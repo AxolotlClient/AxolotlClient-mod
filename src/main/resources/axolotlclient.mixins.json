@@ -52,7 +52,6 @@
 		"ScreenMixin",
 		"ScreenshotRecorderMixin",
 		"ShaderEffectAccessor",
-		"SharedConstantsMixin",
 		"SplashOverlayMixin",
 		"TitleScreenMixin",
 		"TntEntityRendererMixin",
