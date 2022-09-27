@@ -1,6 +1,7 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.ItemUtil;
@@ -13,6 +14,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Identifier;
+
+import java.util.List;
 
 public class HotbarHUD extends AbstractHudEntry {
 
@@ -27,7 +30,7 @@ public class HotbarHUD extends AbstractHudEntry {
     public void render(MatrixStack matrices) {
         PlayerEntity playerEntity = MinecraftClient.getInstance().cameraEntity instanceof PlayerEntity ? (PlayerEntity) MinecraftClient.getInstance().cameraEntity : null;
         if (playerEntity != null) {
-            scale(matrices);
+            //scale(matrices);
             DrawPosition pos = getPos();
 
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
@@ -114,5 +117,10 @@ public class HotbarHUD extends AbstractHudEntry {
     @Override
     public boolean movable() {
         return true;
+    }
+
+    @Override
+    public void addConfigOptions(List<OptionBase<?>> options) {
+        options.add(enabled);
     }
 }

@@ -7,7 +7,7 @@ import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.Tessellator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormats;
-import io.github.axolotlclient.config.Color;
+import io.github.axolotlclient.AxolotlclientConfig.Color;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -155,7 +155,9 @@ public class ItemUtil {
         boolean bl = !model.isSideLit();
         if (bl) {
             DiffuseLighting.setupFlatGuiLighting();
-        }
+        } else {
+			DiffuseLighting.setupInventoryEntityLighting();
+		}
 
         client.getItemRenderer().renderItem(stack, ModelTransformation.Mode.GUI, false, matrices, immediate, 15728880,
             OverlayTexture.DEFAULT_UV, model);

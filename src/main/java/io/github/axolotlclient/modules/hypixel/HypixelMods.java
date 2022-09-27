@@ -1,9 +1,9 @@
 package io.github.axolotlclient.modules.hypixel;
 
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.config.options.EnumOption;
-import io.github.axolotlclient.config.options.OptionCategory;
-import io.github.axolotlclient.config.options.StringOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.EnumOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
+import io.github.axolotlclient.AxolotlclientConfig.options.StringOption;
 import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.modules.hypixel.autoboop.AutoBoop;
 import io.github.axolotlclient.modules.hypixel.autogg.AutoGG;

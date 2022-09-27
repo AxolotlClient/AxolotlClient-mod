@@ -1,12 +1,12 @@
 package io.github.axolotlclient.modules.particles;
 
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.config.Color;
-import io.github.axolotlclient.config.options.BooleanOption;
-import io.github.axolotlclient.config.options.ColorOption;
-import io.github.axolotlclient.config.options.IntegerOption;
-import io.github.axolotlclient.config.options.OptionBase;
-import io.github.axolotlclient.config.options.OptionCategory;
+import io.github.axolotlclient.AxolotlclientConfig.Color;
+import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.ColorOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.IntegerOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
+import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
 import io.github.axolotlclient.mixin.ParticleAccessor;
 import io.github.axolotlclient.modules.AbstractModule;
 import net.minecraft.client.particle.Particle;
@@ -57,7 +57,7 @@ public class Particles extends AbstractModule {
                 populateMap(optionsByKey,
                     new IntegerOption("count", 1, 1, 20),
                     new BooleanOption("customColor", false),
-                    new ColorOption("color", "particles", new Color(-1)));
+                    new ColorOption("color", "particles", Color.WHITE));
 
                 category.add(optionsByKey.values());
                 particleOptions.put(type, optionsByKey);

@@ -47,12 +47,6 @@ public class Util {
         return end - start;
     }
 
-    public static void registerCommand(LiteralArgumentBuilder<QuiltClientCommandSource> builder){
-        if(ClientCommandManager.getDispatcher() != null) {
-            ClientCommandManager.getDispatcher().register(builder);
-        }
-    }
-
 	public static String getGame(){
 
 		List<String> sidebar = getSidebar();
@@ -114,27 +108,6 @@ public class Util {
 
     public static double calculateDistance(double x1, double x2, double y1, double y2, double z1, double z2) {
         return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2) + Math.pow(z2 - z1, 2));
-    }
-
-    public static DrawPosition toGlCoords(int x, int y){
-        return toGlCoords(new DrawPosition(x, y));
-    }
-
-    public static DrawPosition toGlCoords(DrawPosition pos){
-        double scale = MinecraftClient.getInstance().getWindow().getScaleFactor();
-        return new DrawPosition((int) (pos.x * scale),
-            (int) (MinecraftClient.getInstance().getWindow().getFramebufferHeight() - pos.y * scale - scale));
-    }
-
-    public static DrawPosition toMCCoords(int x, int y){
-        return toMCCoords(new DrawPosition(x, y));
-    }
-
-    public static DrawPosition toMCCoords(DrawPosition pos){
-        Window window = MinecraftClient.getInstance().getWindow();
-        int x = pos.x * window.getWidth() / window.getFramebufferWidth();
-        int y = window.getHeight() - pos.y * window.getHeight() / window.getFramebufferHeight() - 1;
-        return new DrawPosition(x, y);
     }
 
 	// I suppose this is something introduced with the chat cryptography features in 1.19

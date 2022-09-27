@@ -1,6 +1,6 @@
 package io.github.axolotlclient.mixin;
 
-import io.github.axolotlclient.config.screen.OptionsScreenBuilder;
+import io.github.axolotlclient.AxolotlclientConfig.screen.OptionsScreenBuilder;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
 import org.spongepowered.asm.mixin.Mixin;

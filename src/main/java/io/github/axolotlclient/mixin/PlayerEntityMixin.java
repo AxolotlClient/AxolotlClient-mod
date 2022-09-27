@@ -1,6 +1,6 @@
 package io.github.axolotlclient.mixin;
 
-import io.github.axolotlclient.config.options.BooleanOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hud.gui.hud.ReachDisplayHud;
 import io.github.axolotlclient.modules.particles.Particles;

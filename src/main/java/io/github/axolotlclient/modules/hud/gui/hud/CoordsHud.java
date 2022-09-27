@@ -1,9 +1,9 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
-import io.github.axolotlclient.config.Color;
-import io.github.axolotlclient.config.options.ColorOption;
-import io.github.axolotlclient.config.options.IntegerOption;
-import io.github.axolotlclient.config.options.OptionBase;
+import io.github.axolotlclient.AxolotlclientConfig.Color;
+import io.github.axolotlclient.AxolotlclientConfig.options.ColorOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.IntegerOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import net.minecraft.client.font.TextRenderer;

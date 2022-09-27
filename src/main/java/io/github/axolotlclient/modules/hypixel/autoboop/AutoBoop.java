@@ -1,7 +1,7 @@
 package io.github.axolotlclient.modules.hypixel.autoboop;
 
-import io.github.axolotlclient.config.options.BooleanOption;
-import io.github.axolotlclient.config.options.OptionCategory;
+import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.hypixel.AbstractHypixelMod;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.text.Text;

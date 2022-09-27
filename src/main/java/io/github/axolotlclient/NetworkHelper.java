@@ -21,14 +21,12 @@ public class NetworkHelper {
 
     public static boolean getOnline(UUID uuid){
 
-        if (AxolotlClient.onlinePlayers.contains(uuid.toString())){
-            return true;
-        } else if (AxolotlClient.otherPlayers.contains(uuid.toString())){
-            return false;
-        }else {
-            ThreadExecuter.scheduleTask(() -> getUser(uuid));
-            return AxolotlClient.onlinePlayers.contains(uuid.toString());
+        if (!AxolotlClient.playerCache.containsKey(uuid)) {
+            Runnable runnable = () -> getUser(uuid);
+            ThreadExecuter.scheduleTask(runnable);
+            ThreadExecuter.removeTask(runnable);
         }
+        return AxolotlClient.playerCache.get(uuid);
     }
 
     public static void getUser(UUID uuid){
@@ -39,16 +37,14 @@ public class NetworkHelper {
             String body = EntityUtils.toString(response.getEntity());
             client.close();
             if (body.contains("true")){
-                AxolotlClient.onlinePlayers  = AxolotlClient.onlinePlayers + " " + uuid;
+                AxolotlClient.playerCache.put(uuid, true);
             } else {
-                AxolotlClient.otherPlayers = AxolotlClient.otherPlayers + " " + uuid;
+                AxolotlClient.playerCache.put(uuid, false);
             }
 
         } catch (Exception ignored){
-            AxolotlClient.otherPlayers = AxolotlClient.otherPlayers + " " + uuid;
+            AxolotlClient.playerCache.put(uuid, false);
         }
-
-
     }
 
     public static void setOnline() {

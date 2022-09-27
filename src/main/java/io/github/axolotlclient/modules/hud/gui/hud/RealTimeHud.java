@@ -1,7 +1,7 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
-import io.github.axolotlclient.config.options.BooleanOption;
-import io.github.axolotlclient.config.options.OptionBase;
+import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
 import net.minecraft.util.Identifier;
 
 import java.text.SimpleDateFormat;

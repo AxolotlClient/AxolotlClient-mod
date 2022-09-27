@@ -8,14 +8,20 @@ import net.minecraft.client.render.Camera;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleType;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Collection;
+import java.util.Queue;
+
 @Mixin(ParticleManager.class)
-public class ParticleManagerMixin {
+public abstract class ParticleManagerMixin {
+
+    @Shadow protected abstract void tickParticle(Particle particle);
 
     private ParticleType<?> cachedType;
 
@@ -30,6 +36,21 @@ public class ParticleManagerMixin {
             Particles.getInstance().particleMap.put(particle, cachedType);
             cachedType=null;
         }
+    }
+
+    @Redirect(method = "tickParticles", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/particle/ParticleManager;tickParticle(Lnet/minecraft/client/particle/Particle;)V"))
+    public void removeParticlesWhenRemoved(ParticleManager instance, Particle particle){
+        if(!particle.isAlive()) {
+            Particles.getInstance().particleMap.remove(particle);
+        }
+        tickParticle(particle);
+    }
+
+    @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Ljava/util/Queue;removeAll(Ljava/util/Collection;)Z"))
+    public boolean removeEmitterParticlesWhenRemoved(Queue<Particle> instance, Collection<Particle> collection){
+        collection.forEach(particle -> Particles.getInstance().particleMap.remove(particle));
+
+        return instance.removeAll(collection);
     }
 
     // @Redirect because we need a reference of the particle, which is a local var.

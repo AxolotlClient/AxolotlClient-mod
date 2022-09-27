@@ -1,13 +1,9 @@
 package io.github.axolotlclient.config;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.config.options.Option;
-import io.github.axolotlclient.config.options.OptionCategory;
+import io.github.axolotlclient.AxolotlclientConfig.options.Option;
+import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
 import org.quiltmc.loader.api.QuiltLoader;
 
 import java.io.FileReader;
@@ -17,11 +13,11 @@ import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 
-public class ConfigManager{
+public class ConfigManager implements io.github.axolotlclient.AxolotlclientConfig.ConfigManager {
     private static final List<OptionCategory> categories = AxolotlClient.CONFIG.config;
     private static final Path confPath = QuiltLoader.getConfigDir().resolve("AxolotlClient.json");
 
-    public static void save(){
+    public void save(){
         try{
             saveFile();
         } catch (IOException e) {
@@ -29,7 +25,7 @@ public class ConfigManager{
         }
     }
 
-    private static void saveFile() throws IOException {
+    private void saveFile() throws IOException {
 
         JsonObject config = new JsonObject();
         for(OptionCategory category : categories) {
@@ -44,7 +40,7 @@ public class ConfigManager{
         Files.write(confPath, Collections.singleton(gson.toJson(config)));
     }
 
-    private static JsonObject getConfig(JsonObject object, OptionCategory category){
+    public JsonObject getConfig(JsonObject object, OptionCategory category){
         for (Option option : category.getOptions()) {
 
             object.add(option.getName(), option.getJson());
@@ -59,7 +55,7 @@ public class ConfigManager{
         return object;
     }
 
-    public static void load() {
+    public void load() {
 
         loadDefaults();
 
@@ -77,7 +73,7 @@ public class ConfigManager{
         }
     }
 
-    private static void setOptions(JsonObject config, OptionCategory category){
+    public void setOptions(JsonObject config, OptionCategory category){
         for (Option option : category.getOptions()) {
             if (config.has(option.getName())) {
                 JsonElement part = config.get(option.getName());
@@ -96,11 +92,11 @@ public class ConfigManager{
         }
     }
 
-    private static void loadDefaults(){
-        AxolotlClient.CONFIG.config.forEach(ConfigManager::setOptionDefaults);
+    public void loadDefaults(){
+        AxolotlClient.CONFIG.config.forEach(this::setOptionDefaults);
     }
 
-    private static void setOptionDefaults(OptionCategory category){
+    public void setOptionDefaults(OptionCategory category){
         category.getOptions().forEach(Option::setDefaults);
         if(!category.getSubCategories().isEmpty()){
             for (OptionCategory sub: category.getSubCategories()) {

@@ -73,6 +73,7 @@
 	"scrollableTooltips": "Scrollable Tooltips",
 	"shiftHorizontalScroll": "Scroll Horizontally (Shift)",
 	"scrollAmount": "Scroll Amount",
+	"inverse": "Inverse",
 	"tnttime": "TntTime",
 	"particles": "Particles",
 	"customColor": "Custom Color",
