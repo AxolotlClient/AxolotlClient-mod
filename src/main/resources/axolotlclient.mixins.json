@@ -32,6 +32,7 @@
 		"KeyBindMixin",
 		"KeyboardInputMixin",
 		"LightmapManagerMixin",
+		"LivingEntityMixin",
 		"LivingEntityRendererMixin",
 		"MinecraftClientAccessor",
 		"MinecraftClientGameMixin",
