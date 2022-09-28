@@ -70,6 +70,7 @@ public class HudManager extends AbstractModule {
         add(new HotbarHUD());
         add(new MemoryHud());
         add(new PlayerCountHud());
+        add(new ComboCounterHud());
 
         entries.forEach((identifier, abstractHudEntry) -> abstractHudEntry.init());
     }

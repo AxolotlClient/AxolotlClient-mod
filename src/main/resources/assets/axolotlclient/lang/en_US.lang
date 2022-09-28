@@ -217,6 +217,10 @@ toggleSprint=Allow Sprinting toggle
 toggleSneak=Allow Sneaking toggle
 sneakToggled=Sneaking currently toggled
 sprintToggled=Sprinting currently toggled
+combocounterhud=ComboCounter HUD
+combocounter.no_hits=No Hits
+combocounter.one_hit=1 Hit
+combocounter.hits=%s Hits
 
 hud.snapping=Snapping
 hud.clientOptions=Client Options
