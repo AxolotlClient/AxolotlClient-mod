@@ -19,7 +19,6 @@ public abstract class HandledScreenMixin {
 
     @Inject(method = "drawMouseoverTooltip", at = @At("HEAD"))
     public void resetScrollOnChange(MatrixStack matrices, int x, int y, CallbackInfo ci){
-
         if(ScrollableTooltips.getInstance().enabled.get() && cachedSlot != focusedSlot){
             cachedSlot = focusedSlot;
             ScrollableTooltips.getInstance().resetScroll();

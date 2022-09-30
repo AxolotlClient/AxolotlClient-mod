@@ -19,7 +19,7 @@ public class DrawUtil extends DrawableHelper{
                 color.getAsInt());
     }
 
-    private static void fillRect(MatrixStack matrices, int x, int y, int width, int height, int color) {
+    public static void fillRect(MatrixStack matrices, int x, int y, int width, int height, int color) {
         DrawableHelper.fill(matrices, x, y, x + width, y + height, color);
     }
 
@@ -27,7 +27,7 @@ public class DrawUtil extends DrawableHelper{
         outlineRect(matrices, rectangle.x, rectangle.y, rectangle.width, rectangle.height, color.getAsInt());
     }
 
-    private static void outlineRect(MatrixStack matrices, int x, int y, int width, int height, int color) {
+    public static void outlineRect(MatrixStack matrices, int x, int y, int width, int height, int color) {
         fillRect(matrices, x, y, 1, height-1, color);
         fillRect(matrices, x + width - 1, y + 1, 1, height-1, color);
         fillRect(matrices, x+1, y, width-1, 1, color);
