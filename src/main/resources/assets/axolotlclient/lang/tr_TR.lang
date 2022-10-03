@@ -37,7 +37,7 @@ copyAction=[Kopyala]
 copy_image=Bu Ekran Görüntüsünü kopyala
 deleteAction=[Sil]
 delete_image=Bu Ekran Görüntüsünü Sil
-screenshot_deleted=<name> Ekran Görüntüsü başarıyla silindi!
+screenshot_deleted=<name> adlı Ekran Görüntüsü başarıyla silindi!
 
 rendering=İşleme Ayarları
 customSky=Özel Gökyüzü
