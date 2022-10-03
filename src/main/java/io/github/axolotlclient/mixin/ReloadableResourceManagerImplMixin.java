@@ -23,8 +23,8 @@ public abstract class ReloadableResourceManagerImplMixin {
     @Inject(method = "reload", at=@At("TAIL"))
     public void loadSkies(List<ResourcePack> resourcePacks, CallbackInfo ci){
         HypixelAbstractionLayer.clearPlayerData();
-        if(AxolotlClient.initalized)SkyResourceManager.reload(resourcePacks);
-        else{SkyResourceManager.packs=resourcePacks;}
+        /*if(AxolotlClient.initalized)SkyResourceManager.reload(resourcePacks);
+        else{SkyResourceManager.packs=resourcePacks;}*/
 
         AxolotlClient.packs=resourcePacks;
 

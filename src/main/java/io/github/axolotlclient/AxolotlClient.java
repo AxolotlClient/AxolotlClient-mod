@@ -17,6 +17,7 @@ import io.github.axolotlclient.modules.particles.Particles;
 import io.github.axolotlclient.modules.rpc.DiscordRPC;
 import io.github.axolotlclient.modules.screenshotUtils.ScreenshotUtils;
 import io.github.axolotlclient.modules.scrollableTooltips.ScrollableTooltips;
+import io.github.axolotlclient.modules.sky.SkyResourceManager;
 import io.github.axolotlclient.modules.tnttime.TntTime;
 import io.github.axolotlclient.modules.zoom.Zoom;
 import io.github.axolotlclient.util.FeatureDisabler;
@@ -62,7 +63,6 @@ public class AxolotlClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         CONFIG = new AxolotlClientConfig();
-        io.github.axolotlclient.AxolotlclientConfig.AxolotlClientConfigManager.registerConfig(modid, CONFIG, configManager = new AxolotlClientConfigManager());
         config.add(someNiceBackground);
         config.add(CONFIG.rotateWorld);
 
@@ -74,7 +74,7 @@ public class AxolotlClient implements ClientModInitializer {
         CONFIG.config.addAll(CONFIG.getCategories());
         CONFIG.config.add(config);
 
-        configManager.load();
+        io.github.axolotlclient.AxolotlclientConfig.AxolotlClientConfigManager.registerConfig(modid, CONFIG, configManager = new AxolotlClientConfigManager());
 
         modules.forEach(AbstractModule::lateInit);
 
@@ -91,6 +91,7 @@ public class AxolotlClient implements ClientModInitializer {
     }
 
     private static void getModules(){
+        modules.add(new SkyResourceManager());
         modules.add(Zoom.getInstance());
         modules.add(HudManager.getInstance());
         modules.add(HypixelMods.getInstance());

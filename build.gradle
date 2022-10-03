@@ -55,8 +55,9 @@ dependencies {
 
 	// modImplementation files("libs/legacy-modmenu-1.1.1-dev.jar") // Uncomment if you want modmenu in the dev env
 
-	implementation('org.apache.logging.log4j:log4j-core:2.18.0')
+	implementation('org.apache.logging.log4j:log4j-core:2.19.0')
 
+	modImplementation include("com.github.moehreag:search-in-resources:1.0.1")
 	modImplementation include('com.github.AxolotlClient:AxolotlClient-config:57f7b70')
 
 }
@@ -66,8 +67,8 @@ if (System.getProperty("os.name").toLowerCase().contains("mac")) {
 	configurations.all {
 		resolutionStrategy {
 			dependencySubstitution {
-				substitute module('org.lwjgl.lwjgl:lwjgl_util:2.9.2-nightly-201408222') with module('org.lwjgl.lwjgl:lwjgl_util:2.9.4-nightly-20150209')
-				substitute module('org.lwjgl.lwjgl:lwjgl:2.9.2-nightly-201408222') with module('org.lwjgl.lwjgl:lwjgl:2.9.4-nightly-20150209')
+				substitute module('org.lwjgl.lwjgl:lwjgl_util:2.9.2-nightly-201408222') using module('org.lwjgl.lwjgl:lwjgl_util:2.9.4-nightly-20150209')
+				substitute module('org.lwjgl.lwjgl:lwjgl:2.9.2-nightly-201408222') using module('org.lwjgl.lwjgl:lwjgl:2.9.4-nightly-20150209')
 			}
 			force 'org.lwjgl.lwjgl:lwjgl-platform:2.9.4-nightly-20150209'
 		}
@@ -78,7 +79,7 @@ if (System.getProperty("os.name").toLowerCase().contains("mac")) {
 configurations.all {
 	resolutionStrategy {
 		dependencySubstitution {
-			substitute module('io.netty:netty-all:4.0.23.Final') with module('io.netty:netty-all:4.0.25.Final')
+			substitute module('io.netty:netty-all:4.0.23.Final') using module('io.netty:netty-all:4.0.25.Final')
 		}
 		force 'io.netty:netty-all:4.0.25.Final'
 	}

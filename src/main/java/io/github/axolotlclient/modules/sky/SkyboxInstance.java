@@ -197,4 +197,10 @@ public abstract class SkyboxInstance {
     }
 
     public abstract void renderSkybox();
+
+    public void remove() {
+        for(Identifier id: textures){
+            MinecraftClient.getInstance().getTextureManager().close(id);
+        }
+    }
 }

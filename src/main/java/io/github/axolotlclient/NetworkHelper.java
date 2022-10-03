@@ -26,7 +26,7 @@ public class NetworkHelper {
             ThreadExecuter.scheduleTask(runnable);
             ThreadExecuter.removeTask(runnable);
         }
-        return AxolotlClient.playerCache.get(uuid);
+        return AxolotlClient.playerCache.get(uuid) != null ? AxolotlClient.playerCache.get(uuid) : false;
     }
 
     public static void getUser(UUID uuid){

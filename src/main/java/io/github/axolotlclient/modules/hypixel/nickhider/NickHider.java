@@ -33,9 +33,9 @@ public class NickHider implements AbstractHypixelMod {
     }
 
     public Text editMessage(Text message){
-        String msg = message.asFormattedString();
 
         if(hideOwnName.get() || hideOtherNames.get()) {
+            String msg = message.asFormattedString();
             String playerName = MinecraftClient.getInstance().player.getGameProfile().getName();
             if (hideOwnName.get() && msg.contains(playerName)) {
                 msg = msg.replaceAll(playerName, hiddenNameSelf.get());

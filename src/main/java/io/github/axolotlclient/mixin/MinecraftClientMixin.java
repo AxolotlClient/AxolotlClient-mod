@@ -65,7 +65,7 @@ public abstract class MinecraftClientMixin {
 
     @Inject(method = "initializeGame", at = @At(value = "INVOKE", target = "Lnet/minecraft/advancement/Achievement;setStatFormatter(Lnet/minecraft/stat/StatFormatter;)Lnet/minecraft/advancement/Achievement;"))
     public void loadSkiesOnStartup(CallbackInfo ci){
-        SkyResourceManager.onStartup();
+        //SkyResourceManager.onStartup();
         try {
             this.loadLogo(this.textureManager);
         } catch (Exception ignored){}

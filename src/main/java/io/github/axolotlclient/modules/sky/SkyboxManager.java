@@ -29,6 +29,7 @@ public class SkyboxManager {
     }
 
     public void clearSkyboxes() {
+        skyboxes.forEach(SkyboxInstance::remove);
         skyboxes.clear();
         active_skies.clear();
     }
