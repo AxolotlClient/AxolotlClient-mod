@@ -8,9 +8,11 @@ import de.jcm.discordgamesdk.activity.ActivityType;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.DisableReason;
+import io.github.axolotlclient.AxolotlclientConfig.options.EnumOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.modules.rpc.gameSdk.GameSdkDownloader;
+import io.github.axolotlclient.util.Logger;
 import io.github.axolotlclient.util.OSUtil;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
@@ -29,9 +31,15 @@ public class DiscordRPC extends AbstractModule {
 
     public OptionCategory category = new OptionCategory("rpc");
 
-    public BooleanOption enabled = new BooleanOption("enabled", false);
+    public BooleanOption enabled = new BooleanOption("enabled", value -> {
+        if(value){
+            initRPC();
+        } else {
+            shutdown();
+        }
+    },false);
     public BooleanOption showActivity = new BooleanOption("showActivity", true);
-
+    public EnumOption showServerNameMode = new EnumOption("showServerNameMode", new String[]{"showIp", "showName", "off"}, "off");
     public BooleanOption showTime = new BooleanOption("showTime", true);
 
     public static Activity currentActivity;
@@ -48,7 +56,7 @@ public class DiscordRPC extends AbstractModule {
     @Override
     public void init() {
 
-        category.add(enabled, showTime, showActivity);
+        category.add(enabled, showTime, showActivity, showServerNameMode);
 
         AxolotlClient.CONFIG.addCategory(category);
 
@@ -57,6 +65,7 @@ public class DiscordRPC extends AbstractModule {
         }
     }
 
+    @SuppressWarnings("BusyWait")
     public void initRPC(){
         if(enabled.get()) {
             GameSdkDownloader.downloadSdk();
@@ -94,10 +103,10 @@ public class DiscordRPC extends AbstractModule {
                 callBacks.setName("Discord RPC Thread");
                 callBacks.setDaemon(true);
                 callBacks.start();
-                AxolotlClient.LOGGER.info("Started RPC Core");
+                Logger.info("Started RPC Core");
             } catch (Exception e) {
                 if(!e.getMessage().contains("INTERNAL_ERROR")) {
-                    AxolotlClient.LOGGER.error("An error occured: ");
+                    Logger.error("An error occured: ");
                     e.printStackTrace();
                 } else {
                     enabled.set(false);
@@ -110,17 +119,29 @@ public class DiscordRPC extends AbstractModule {
 
         Activity activity = new Activity();
 
-        String state = MinecraftClient.getInstance().world == null ?
-                "In the menu" : (MinecraftClient.getInstance().getCurrentServerEntry() == null ?
-                "Singleplayer" : MinecraftClient.getInstance().getCurrentServerEntry().address);
+        String state;
+        switch (showServerNameMode.get()) {
+            case "showIp":
+                state = MinecraftClient.getInstance().world == null ?
+                        "In the menu" : (MinecraftClient.getInstance().getCurrentServerEntry() == null ?
+                        "Singleplayer" : MinecraftClient.getInstance().getCurrentServerEntry().address);
+                break;
+            case "showName":
+                state = MinecraftClient.getInstance().world == null ?
+                        "In the menu" : (MinecraftClient.getInstance().getCurrentServerEntry() == null ?
+                        "Singleplayer" : MinecraftClient.getInstance().getCurrentServerEntry().name);
+                break;
+            case "off":
+            default:
+                state = "";
+                break;
+        }
 
         if (showActivity.get() && MinecraftClient.getInstance().getCurrentServerEntry() != null) {
             activity.setDetails(Util.getGame());
         } else if (showActivity.get() && currentActivity != null){
             activity.setDetails(currentActivity.getDetails());
-        } /*else if (!showActivity.get() && currentActivity != null && currentActivity.getDetails().equals("")) {
-            currentActivity.setDetails("");
-        }*/
+        }
 
         activity.setState(state);
         activity.setType(ActivityType.PLAYING);

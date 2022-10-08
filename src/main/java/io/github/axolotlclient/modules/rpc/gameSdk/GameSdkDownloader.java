@@ -4,6 +4,7 @@ import de.jcm.discordgamesdk.Core;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlclientConfig.options.DisableReason;
 import io.github.axolotlclient.modules.rpc.DiscordRPC;
+import io.github.axolotlclient.util.Logger;
 import io.github.axolotlclient.util.OSUtil;
 
 import java.io.File;
@@ -27,7 +28,7 @@ public class GameSdkDownloader {
 
     public static void downloadSdk() {
         File target = new File("config/game-sdk");
-        AxolotlClient.LOGGER.info("Downloading SDK!");
+        Logger.info("Downloading SDK!");
         try {
             if (!target.exists() && !target.mkdir()) {
                 throw new IllegalStateException("Could not create game-sdk folder");
@@ -64,7 +65,7 @@ public class GameSdkDownloader {
             }
 
             if (!sdk.exists() || !jni.exists()) {
-                AxolotlClient.LOGGER.error("Could not download GameSDK, no copy is available. RPC will be disabled.");
+                Logger.error("Could not download GameSDK, no copy is available. RPC will be disabled.");
                 DiscordRPC.getInstance().enabled.setForceOff(true, DisableReason.CRASH);
                 return;
             }
@@ -122,17 +123,17 @@ public class GameSdkDownloader {
         if(in!=null) {
             Files.copy(in, jni.toPath(), StandardCopyOption.REPLACE_EXISTING);
         } else if(!retriedExtractingJni) {
-            AxolotlClient.LOGGER.warn("Extracting JNI failed, retrying!");
+            Logger.warn("Extracting JNI failed, retrying!");
             retriedExtractingJni=true;
             extractJni(jni);
         } else {
-            AxolotlClient.LOGGER.error("Extracting Jni failed, restart your game to try again.");
+            Logger.error("Extracting Jni failed, restart your game to try again.");
             DiscordRPC.getInstance().enabled.setForceOff(true, DisableReason.CRASH);
         }
     }
 
     private static void loadNative(File sdk, File jni) {
-        AxolotlClient.LOGGER.info("Loading GameSDK");
+        Logger.info("Loading GameSDK");
 
         try {
             if (OSUtil.getOS() == OSUtil.OperatingSystem.WINDOWS) {
@@ -142,7 +143,7 @@ public class GameSdkDownloader {
             System.load(jni.getAbsolutePath());
             Core.initDiscordNative(sdk.getAbsolutePath());
         } catch (Throwable e) {
-            AxolotlClient.LOGGER.warn("Discord RPC failed to load");
+            Logger.warn("Discord RPC failed to load");
             DiscordRPC.getInstance().enabled.set(false);
         }
     }

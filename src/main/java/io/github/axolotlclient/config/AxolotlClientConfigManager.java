@@ -5,6 +5,7 @@ import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlclientConfig.ConfigManager;
 import io.github.axolotlclient.AxolotlclientConfig.options.Option;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
+import io.github.axolotlclient.util.Logger;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.FileReader;
@@ -22,7 +23,7 @@ public class AxolotlClientConfigManager implements ConfigManager {
         try{
             saveFile();
         } catch (IOException e) {
-            AxolotlClient.LOGGER.error("Failed to save config!");
+            Logger.error("Failed to save config!");
         }
     }
 
@@ -69,7 +70,7 @@ public class AxolotlClientConfigManager implements ConfigManager {
                 }
             }
         } catch (Exception e){
-            AxolotlClient.LOGGER.error("Failed to load config! Using default values... \nError: ");
+            Logger.error("Failed to load config! Using default values... \nError: ");
             e.printStackTrace();
         }
     }

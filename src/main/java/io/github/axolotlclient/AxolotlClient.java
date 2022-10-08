@@ -21,6 +21,7 @@ import io.github.axolotlclient.modules.sky.SkyResourceManager;
 import io.github.axolotlclient.modules.tnttime.TntTime;
 import io.github.axolotlclient.modules.zoom.Zoom;
 import io.github.axolotlclient.util.FeatureDisabler;
+import io.github.axolotlclient.util.Logger;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.legacyfabric.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -31,8 +32,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourcePack;
 import net.minecraft.util.Identifier;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -40,7 +39,6 @@ import java.util.*;
 
 public class AxolotlClient implements ClientModInitializer {
 
-    public static Logger LOGGER = LogManager.getLogger("AxolotlClient");
     public static String modid = "AxolotlClient";
 
     public static AxolotlClientConfig CONFIG;
@@ -75,6 +73,7 @@ public class AxolotlClient implements ClientModInitializer {
         CONFIG.config.add(config);
 
         io.github.axolotlclient.AxolotlclientConfig.AxolotlClientConfigManager.registerConfig(modid, CONFIG, configManager = new AxolotlClientConfigManager());
+        configManager.load();
 
         modules.forEach(AbstractModule::lateInit);
 
@@ -87,11 +86,19 @@ public class AxolotlClient implements ClientModInitializer {
 
         FeatureDisabler.init();
 
-        LOGGER.info("AxolotlClient Initialized");
+        if(FabricLoader.getInstance().isDevelopmentEnvironment()){
+            CONFIG.debugLogOutput.set(true);
+        }
+
+        if(CONFIG.debugLogOutput.get()){
+            Logger.debug("Debug Output enabled, Logs will be quite verbose!");
+        }
+
+        Logger.info("AxolotlClient Initialized");
     }
 
     private static void getModules(){
-        modules.add(new SkyResourceManager());
+        modules.add(SkyResourceManager.getInstance());
         modules.add(Zoom.getInstance());
         modules.add(HudManager.getInstance());
         modules.add(HypixelMods.getInstance());
@@ -116,7 +123,6 @@ public class AxolotlClient implements ClientModInitializer {
             return NetworkHelper.getOnline(uuid);
         }
     }
-
 
     public static void tickClient(){
         modules.forEach(AbstractModule::tick);

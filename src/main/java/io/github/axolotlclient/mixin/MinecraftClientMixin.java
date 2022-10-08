@@ -18,6 +18,7 @@ import net.minecraft.client.util.Window;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.player.ClientPlayerEntity;
 import net.minecraft.world.level.LevelInfo;
+import org.apache.logging.log4j.Logger;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -42,6 +43,9 @@ public abstract class MinecraftClientMixin {
     @Shadow protected abstract void loadLogo(TextureManager textureManager) throws LWJGLException;
 
     @Shadow private TextureManager textureManager;
+
+    @Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;info(Ljava/lang/String;)V", ordinal = 1), remap = false)
+    public void noSessionIDLeak(Logger instance, String s){}
 
     /**
      * @author TheKodeToad & Sk1erLLC (initially created this fix).

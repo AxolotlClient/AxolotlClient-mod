@@ -5,11 +5,10 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.AbstractModule;
+import io.github.axolotlclient.util.Logger;
 import io.github.moehreag.searchInResources.SearchableResourceManager;
 import net.legacyfabric.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.legacyfabric.fabric.api.resource.ResourceManagerHelper;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.texture.TextureManager;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
@@ -28,61 +27,52 @@ import java.util.stream.Collectors;
 
 public class SkyResourceManager extends AbstractModule implements IdentifiableResourceReloadListener {
 
-    static Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private static final SkyResourceManager Instance = new SkyResourceManager();
 
-    public static void loadSky(String json){
-        JsonObject object = gson.fromJson(json, JsonObject.class);
-        SkyboxManager.getInstance().addSkybox(new FSBSkyboxInstance(object));
+    public static SkyResourceManager getInstance(){
+        return Instance;
     }
 
-    private void loadMCPSky(String loader, Resource resource){
+    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+    private void loadMCPSky(String loader, Identifier id, Resource resource){
         BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8));
+
+        JsonObject object = new JsonObject();
         String string;
+        String[] option;
         try {
-            String source = "";
-            int startFadeIn = 0;
-            int endFadeIn = 0;
-            int startFadeOut= 0;
-            int endFadeOut = 0;
-            String blend="alpha";
+
             while ((string = reader.readLine()) != null) {
                 try {
 
-                    String[] option = string.split("=");
+                    if(string.startsWith("#")){
+                        continue;
+                    }
+                    option = string.split("=");
                     if (option[0].equals("source")) {
                         if(option[1].startsWith("assets")){
-                            source = option[1].replace("./", "").replace("assets/minecraft/", "");
+                            option[1] = option[1].replace("./", "").replace("assets/minecraft/", "");
                         } else {
-                            source = loader + "/sky/world0/" + option[1].replace("./", "");
+                            if(id.getPath().contains("world")) {
+                                option[1] = loader + "/sky/world" + id.getPath().split("world")[1].split("/")[0] + "/" + option[1].replace("./", "");
+                            }
                         }
                     }
-                    if (option[0].equals("startFadeIn"))
-                        startFadeIn = Integer.parseInt(option[1].replace(":", "").replace("\\", ""));
-                    if (option[0].equals("endFadeIn"))
-                        endFadeIn = Integer.parseInt(option[1].replace(":", "").replace("\\", ""));
-                    if (option[0].equals("startFadeOut"))
-                        startFadeOut = Integer.parseInt(option[1].replace(":", "").replace("\\", ""));
-                    if (option[0].equals("endFadeOut"))
-                        endFadeOut = Integer.parseInt(option[1].replace(":", "").replace("\\", ""));
-                    if (option[0].equals("blend")) blend = option[1];
+                    if (option[0].equals("startFadeIn") || option[0].equals("endFadeIn") || option[0].equals("startFadeOut") || option[0].equals("endFadeOut")) {
+                        option[1] = option[1].replace(":", "").replace("\\", "");
+                    }
 
+                    object.addProperty(option[0], option[1]);
 
-                } catch (Exception ignored) {
-                }
+                } catch (Exception ignored) {}
             }
-            String text = "{" +
-                    "\"source\":\"" + source + "\", " +
-                    "\"startFadeIn\":" + startFadeIn / 2 + ", " +
-                    "\"endFadeIn\":" + endFadeIn / 2 + ", " +
-                    "\"startFadeOut\":" + startFadeOut / 2 + ", " +
-                    "\"endFadeOut\":" + endFadeOut / 2 + ", " +
-                    "\"blend\":\"" + blend + "\"" +
-                    "}";
-            JsonObject object = gson.fromJson(text, JsonObject.class);
-            if (!source.contains("sunflare")) SkyboxManager.getInstance().addSkybox(new MCPSkyboxInstance(object));
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+
+            if (!object.get("source").getAsString().contains("sunflare"))
+                SkyboxManager.getInstance().addSkybox(new MCPSkyboxInstance(object));
+
+
+        } catch (Exception ignored){}
     }
 
     @Override
@@ -93,19 +83,22 @@ public class SkyResourceManager extends AbstractModule implements IdentifiableRe
     @Override
     public void reload(ResourceManager resourceManager) {
         SkyboxManager.getInstance().clearSkyboxes();
-        for (Map.Entry<Identifier, Resource> entry : ((SearchableResourceManager)resourceManager).findResources("sky", identifier -> identifier.getPath().endsWith(".json")).entrySet()){
-            loadSky(new BufferedReader(
-                    new InputStreamReader(entry.getValue().getInputStream(), StandardCharsets.UTF_8))
-                    .lines()
-                    .collect(Collectors.joining("\n")));
+        for (Map.Entry<Identifier, Resource> entry : ((SearchableResourceManager)resourceManager).findResources("fabricskyboxes","sky", identifier -> identifier.getPath().endsWith(".json")).entrySet()){
+            Logger.debug("Loaded sky: "+entry.getKey());
+            SkyboxManager.getInstance().addSkybox(new FSBSkyboxInstance(gson.fromJson(new BufferedReader(new InputStreamReader(
+                    entry.getValue().getInputStream(),
+                            StandardCharsets.UTF_8)).lines().collect(Collectors.joining("\n")),
+                    JsonObject.class)));
         }
 
-        for (Map.Entry<Identifier, Resource> entry : ((SearchableResourceManager)resourceManager).findResources("optifine/sky", identifier -> identifier.getPath().endsWith(".properties")).entrySet()){
-            loadMCPSky("optifine", entry.getValue());
+        for (Map.Entry<Identifier, Resource> entry : ((SearchableResourceManager) resourceManager).findResources("minecraft", "optifine/sky", identifier -> identifier.getPath().endsWith(".properties")).entrySet()) {
+            Logger.debug("Loaded sky: " + entry.getKey());
+            loadMCPSky("optifine", entry.getKey(), entry.getValue());
         }
 
-        for (Map.Entry<Identifier, Resource> entry : ((SearchableResourceManager)resourceManager).findResources("mcpatcher/sky", identifier -> identifier.getPath().endsWith(".properties")).entrySet()) {
-            loadMCPSky("mcpatcher", entry.getValue());
+        for (Map.Entry<Identifier, Resource> entry : ((SearchableResourceManager) resourceManager).findResources("minecraft", "mcpatcher/sky", identifier -> identifier.getPath().endsWith(".properties")).entrySet()) {
+            Logger.debug("Loaded sky: " + entry.getKey());
+            loadMCPSky("mcpatcher", entry.getKey(), entry.getValue());
         }
 
         AxolotlClient.initalized = true;

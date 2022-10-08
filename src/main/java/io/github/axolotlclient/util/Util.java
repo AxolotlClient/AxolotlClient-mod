@@ -22,27 +22,15 @@ import org.lwjgl.opengl.GL11;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static java.util.Collections.nCopies;
-
 
 public class Util {
 
     public static Color GlColor = new Color();
-    private static Map<Identifier, Texture> textures;
     public static String lastgame;
     public static String game;
 
     @ApiStatus.Internal
     public static Window window;
-
-
-    public static Map<Identifier, Texture> getTextures(){
-        return textures;
-    }
-
-    public static void setTextures(Map<Identifier, Texture> textures){
-        Util.textures =textures;
-    }
 
     /**
      * Gets the amount of ticks in between start and end, on a 24000 tick system.
@@ -223,10 +211,14 @@ public class Util {
         return start + ((end - start) * percent);
     }
 
+    public static float easeInOutSine(float start, float end, float percent){
+        return (float) (start + (-(Math.cos(Math.PI * percent) - end) / 2));
+    }
+
     // https://stackoverflow.com/questions/12967896/converting-integers-to-roman-numerals-java
     public static String toRoman(int number) {
         if(number>0) {
-            return String.join("", nCopies(number, "I"))
+            return String.join("", Collections.nCopies(number, "I"))
                     .replace("IIIII", "V")
                     .replace("IIII", "IV")
                     .replace("VV", "X")

@@ -2,6 +2,7 @@ package io.github.axolotlclient.modules;
 
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.config.screen.CreditsScreen;
+import io.github.axolotlclient.util.Logger;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 
@@ -34,7 +35,7 @@ public class ModuleLoader {
                     CreditsScreen.externalModuleCredits.put(modName, authorsNContributors.toArray(new String[0]));
                 }
             } catch (Exception e){
-                AxolotlClient.LOGGER.warn("Skipping module: "+entrypoint.getProvider().getMetadata().getName() + " because of error:");
+                Logger.warn("Skipping module: "+entrypoint.getProvider().getMetadata().getName() + " because of error:");
                 e.printStackTrace();
             }
         });

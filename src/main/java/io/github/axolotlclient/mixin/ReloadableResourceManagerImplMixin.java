@@ -4,7 +4,7 @@ import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hud.gui.hud.PackDisplayHud;
 import io.github.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
-import io.github.axolotlclient.modules.sky.SkyResourceManager;
+import io.github.axolotlclient.modules.sky.SkyboxManager;
 import net.minecraft.resource.ReloadableResourceManagerImpl;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourcePack;
@@ -20,12 +20,21 @@ import java.util.List;
 @Mixin(ReloadableResourceManagerImpl.class)
 public abstract class ReloadableResourceManagerImplMixin {
 
+    /*@Inject(method = "reload", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;info(Ljava/lang/String;)V", shift = At.Shift.AFTER), remap = false)
+    public void stopRenderingSkies(List<ResourcePack> resourcePacks, CallbackInfo ci){
+        SkyboxManager.getInstance().clearSkyboxes();
+    }*/
+
+    /*@Inject(method = "clear", at = @At("TAIL"))
+    public void startReload(CallbackInfo ci){
+        SkyboxManager.getInstance().clearSkyboxes();
+    }*/
+
     @Inject(method = "reload", at=@At("TAIL"))
-    public void loadSkies(List<ResourcePack> resourcePacks, CallbackInfo ci){
+    public void onReload(List<ResourcePack> resourcePacks, CallbackInfo ci){
         HypixelAbstractionLayer.clearPlayerData();
         /*if(AxolotlClient.initalized)SkyResourceManager.reload(resourcePacks);
         else{SkyResourceManager.packs=resourcePacks;}*/
-
         AxolotlClient.packs=resourcePacks;
 
         PackDisplayHud hud = (PackDisplayHud) HudManager.getInstance().get(PackDisplayHud.ID);

@@ -40,6 +40,7 @@ public class AxolotlClientConfig extends ConfigHolder {
     public final ColorOption outlineColor = new ColorOption("color", Color.parse("#DD000000"));
     public final IntegerOption outlineWidth = new IntegerOption("outlineWidth", 1, 1, 10);
 
+    public final BooleanOption debugLogOutput = new BooleanOption("debugLogOutput", false);
     public final GenericOption openCredits = new GenericOption("Credits", "Open Credits", (mouseX, mouseY)->
         MinecraftClient.getInstance().openScreen(new CreditsScreen(MinecraftClient.getInstance().currentScreen))
     );
@@ -97,6 +98,7 @@ public class AxolotlClientConfig extends ConfigHolder {
         general.add(AxolotlClientConfigConfig.showCategoryTooltips);
         general.add(rawMouseInput);
         general.add(openCredits);
+        general.add(debugLogOutput);
 
         searchFilters.add(AxolotlClientConfigConfig.searchIgnoreCase,
                 AxolotlClientConfigConfig.searchForOptions,

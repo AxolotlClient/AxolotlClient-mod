@@ -67,7 +67,6 @@ public class Zoom extends AbstractModule {
             MinecraftClient.getInstance().worldRenderer.scheduleTerrainUpdate();
         }
         lastReturnedFov = result;
-
         return result;
     }
 
