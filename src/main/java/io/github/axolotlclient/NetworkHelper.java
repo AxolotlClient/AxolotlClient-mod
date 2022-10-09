@@ -12,6 +12,8 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class NetworkHelper {
@@ -19,19 +21,26 @@ public class NetworkHelper {
     private static boolean loggedIn;
     private static UUID uuid;
 
+    private static final AtomicInteger concurrentCalls = new AtomicInteger(0);
+    private static final int maxCalls = 3;
+
     public static boolean getOnline(UUID uuid){
 
         if (!AxolotlClient.playerCache.containsKey(uuid)) {
-            Runnable runnable = () -> getUser(uuid);
-            ThreadExecuter.scheduleTask(runnable);
-            ThreadExecuter.removeTask(runnable);
+            if(concurrentCalls.get() <= maxCalls) {
+                concurrentCalls.incrementAndGet();
+                Runnable runnable = () -> getUser(uuid);
+                ThreadExecuter.scheduleTask(runnable);
+                ThreadExecuter.removeTask(runnable);
+                ThreadExecuter.scheduleTask(concurrentCalls::decrementAndGet, 1, TimeUnit.MINUTES);
+            }
         }
-        return AxolotlClient.playerCache.get(uuid);
+        return AxolotlClient.playerCache.get(uuid) != null ? AxolotlClient.playerCache.get(uuid): false;
     }
 
     public static void getUser(UUID uuid){
         try{
-            CloseableHttpClient client = HttpClients.custom().disableAutomaticRetries().build();
+            CloseableHttpClient client = HttpClients.createMinimal();
             HttpGet get = new HttpGet("https://moehreag.duckdns.org/axolotlclient-api/?uuid="+uuid.toString());
             HttpResponse response= client.execute(get);
             String body = EntityUtils.toString(response.getEntity());

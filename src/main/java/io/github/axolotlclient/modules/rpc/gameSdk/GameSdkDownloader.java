@@ -141,9 +141,10 @@ public class GameSdkDownloader {
             }
 
             System.load(jni.getAbsolutePath());
-            Core.initDiscordNative(sdk.getAbsolutePath());
+            Core.init(sdk);
         } catch (Throwable e) {
-            AxolotlClient.LOGGER.warn("Discord RPC failed to load");
+            AxolotlClient.LOGGER.warn("Discord RPC failed to load: ");
+            e.printStackTrace();
             DiscordRPC.getInstance().enabled.set(false);
         }
     }

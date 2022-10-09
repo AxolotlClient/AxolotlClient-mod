@@ -56,6 +56,7 @@ public class ConfigManager implements io.github.axolotlclient.AxolotlclientConfi
     }
 
     public void load() {
+        System.out.println("Loading config!");
 
         loadDefaults();
 

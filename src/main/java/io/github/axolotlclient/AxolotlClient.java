@@ -93,7 +93,6 @@ public class AxolotlClient implements ClientModInitializer {
 		}
 
 		CONFIG = new AxolotlClientConfig();
-		io.github.axolotlclient.AxolotlclientConfig.AxolotlClientConfigManager.registerConfig(modid, CONFIG, configManager = new ConfigManager());
 		config.add(someNiceBackground);
 
 		getModules();
@@ -104,7 +103,7 @@ public class AxolotlClient implements ClientModInitializer {
 		CONFIG.config.addAll(CONFIG.getCategories());
 		CONFIG.config.add(config);
 
-		configManager.load();
+		io.github.axolotlclient.AxolotlclientConfig.AxolotlClientConfigManager.registerConfig(modid, CONFIG, configManager = new ConfigManager());
 
 		modules.forEach(AbstractModule::lateInit);
 
@@ -141,7 +140,6 @@ public class AxolotlClient implements ClientModInitializer {
 			return NetworkHelper.getOnline(uuid);
 		}
 	}
-
 
 	public static void tickClient(){
 

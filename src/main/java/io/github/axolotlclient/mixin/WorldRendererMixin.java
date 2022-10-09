@@ -11,11 +11,7 @@ import com.mojang.blaze3d.vertex.VertexFormats;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.sky.SkyboxManager;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.BackgroundRenderer;
-import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.render.ShaderProgram;
-import net.minecraft.client.render.WorldRenderer;
+import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.Identifier;
@@ -57,10 +53,9 @@ public abstract class WorldRendererMixin {
 
 	@Shadow @Nullable private VertexBuffer lightSkyBuffer;
 
-	@Inject(method = "renderSky", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;disableTexture()V", ordinal = 0), cancellable = true)
+	@Inject(method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/math/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;getSkyColor(Lnet/minecraft/util/math/Vec3d;F)Lnet/minecraft/util/math/Vec3d;"), cancellable = true)
 	public void renderCustomSky(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Camera preStep, boolean bl, Runnable runnable, CallbackInfo ci){
 		if(AxolotlClient.CONFIG.customSky.get() && SkyboxManager.getInstance().hasSkyBoxes() && !QuiltLoader.isModLoaded("fabricskyboxes")) {
-			RenderSystem.disableTexture();
 			Vec3d vec3d = this.world.getSkyColor(this.client.gameRenderer.getCamera().getPos(), tickDelta);
 			float f = (float) vec3d.x;
 			float g = (float) vec3d.y;

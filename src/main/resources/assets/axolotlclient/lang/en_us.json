@@ -15,6 +15,7 @@
 	"searchSortOrder": "Sort Order",
 	"ASCENDING": "Ascending",
 	"DESCENDING": "Descending",
+	"showQuickToggles": "Show Quick Toggles",
 
 	"general": "General",
 	"general.tooltip": "General Options",
