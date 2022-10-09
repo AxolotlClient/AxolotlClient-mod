@@ -7,6 +7,7 @@ import io.github.axolotlclient.AxolotlclientConfig.options.Option;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
+import io.github.axolotlclient.util.Logger;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.texture.NativeImageBackedTexture;
@@ -100,7 +101,7 @@ public class PackDisplayHud extends AbstractHudEntry {
 	            this.texture = new NativeImageBackedTexture(
 					NativeImage.read(stream)).getGlId();
             } catch (Exception e){
-                AxolotlClient.LOGGER.warn("Pack "+pack.getName()+" somehow threw an error! Please investigate... Does it have an icon?");
+                Logger.warn("Pack "+pack.getName()+" somehow threw an error! Please investigate... Does it have an icon?");
 				//e.printStackTrace();
             }
         }

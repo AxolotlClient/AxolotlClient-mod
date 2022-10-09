@@ -4,6 +4,7 @@ import com.google.gson.*;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlclientConfig.options.Option;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
+import io.github.axolotlclient.util.Logger;
 import org.quiltmc.loader.api.QuiltLoader;
 
 import java.io.FileReader;
@@ -21,7 +22,7 @@ public class ConfigManager implements io.github.axolotlclient.AxolotlclientConfi
         try{
             saveFile();
         } catch (IOException e) {
-            AxolotlClient.LOGGER.error("Failed to save config!");
+            Logger.error("Failed to save config!");
         }
     }
 
@@ -56,8 +57,6 @@ public class ConfigManager implements io.github.axolotlclient.AxolotlclientConfi
     }
 
     public void load() {
-        System.out.println("Loading config!");
-
         loadDefaults();
 
         try {
@@ -69,7 +68,7 @@ public class ConfigManager implements io.github.axolotlclient.AxolotlclientConfi
                 }
             }
         } catch (Exception e){
-            AxolotlClient.LOGGER.error("Failed to load config! Using default values... \nError: ");
+            Logger.error("Failed to load config! Using default values... \nError: ");
             e.printStackTrace();
         }
     }

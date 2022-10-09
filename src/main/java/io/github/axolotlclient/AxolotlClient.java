@@ -19,6 +19,7 @@ import io.github.axolotlclient.modules.scrollableTooltips.ScrollableTooltips;
 import io.github.axolotlclient.modules.tnttime.TntTime;
 import io.github.axolotlclient.modules.zoom.Zoom;
 import io.github.axolotlclient.util.FeatureDisabler;
+import io.github.axolotlclient.util.Logger;
 import io.github.axolotlclient.util.UnsupportedMod;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
@@ -38,8 +39,6 @@ import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
 import org.quiltmc.qsl.lifecycle.api.client.event.ClientTickEvents;
 import org.quiltmc.qsl.resource.loader.api.ResourceLoader;
 import org.quiltmc.qsl.resource.loader.api.ResourcePackActivationType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,8 +47,6 @@ import java.util.UUID;
 
 
 public class AxolotlClient implements ClientModInitializer {
-
-	public static Logger LOGGER = LoggerFactory.getLogger("AxolotlClient");
 	public static String modid = "AxolotlClient";
 
 	public static AxolotlClientConfig CONFIG;
@@ -112,7 +109,9 @@ public class AxolotlClient implements ClientModInitializer {
 
 		FeatureDisabler.init();
 
-		LOGGER.info("AxolotlClient Initialized");
+		Logger.debug("Debug Output activated, Logs will be more verbose!");
+
+		Logger.info("AxolotlClient Initialized");
 	}
 
 	public static void getModules(){

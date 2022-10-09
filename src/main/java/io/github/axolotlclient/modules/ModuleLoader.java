@@ -2,6 +2,7 @@ package io.github.axolotlclient.modules;
 
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.config.screen.CreditsScreen;
+import io.github.axolotlclient.util.Logger;
 import org.quiltmc.loader.api.ModContributor;
 import org.quiltmc.loader.api.ModMetadata;
 import org.quiltmc.loader.api.QuiltLoader;
@@ -38,7 +39,7 @@ public class ModuleLoader {
                     CreditsScreen.externalModuleCredits.put(modName, authorsNContributors.toArray(new String[0]));
                 }
             } catch (Exception e){
-                AxolotlClient.LOGGER.warn("Skipping module: "+entrypoint.getProvider().metadata().name() + " because of error:");
+                Logger.warn("Skipping module: "+entrypoint.getProvider().metadata().name() + " because of error:");
                 e.printStackTrace();
             }
         });

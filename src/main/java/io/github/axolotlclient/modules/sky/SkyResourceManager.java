@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.util.Logger;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.resource.pack.ResourcePack;
 import net.minecraft.util.Identifier;
@@ -38,7 +39,7 @@ public class SkyResourceManager{
                                 new InputStreamReader(stream, StandardCharsets.UTF_8))
                                 .lines()
                                 .collect(Collectors.joining("\n"));
-	                    AxolotlClient.LOGGER.info("Loading FSB sky in pack "+pack.getName()+" !");
+                        Logger.info("Loading FSB sky in pack "+pack.getName()+" !");
                         loadSky(text);
                     } catch (IOException e) {
                         break;
@@ -66,7 +67,7 @@ public class SkyResourceManager{
 
     public static void loadMCPSky(ResourcePack pack, String loader){
         int i = 1;
-        AxolotlClient.LOGGER.info("Loading MCP/OF skies in pack "+pack.getName()+" !");
+        Logger.info("Loading MCP/OF skies in pack "+pack.getName()+" !");
         while (true) {
             try {
                 String source = "";

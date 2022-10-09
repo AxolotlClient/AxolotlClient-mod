@@ -3,6 +3,7 @@ package io.github.axolotlclient.modules.sky;
 import com.google.gson.JsonObject;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.util.Logger;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
@@ -121,7 +122,7 @@ public abstract class SkyboxInstance {
 				case "replace":
 					return 8;
 				default:
-					AxolotlClient.LOGGER.warn("Unknown blend: " + str);
+					Logger.warn("Unknown blend: " + str);
 					return 1;
 			}
 		}

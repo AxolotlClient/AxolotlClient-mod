@@ -16,6 +16,7 @@
 	"ASCENDING": "Ascending",
 	"DESCENDING": "Descending",
 	"showQuickToggles": "Show Quick Toggles",
+	"debugLogOutput": "Debug Log Output",
 
 	"general": "General",
 	"general.tooltip": "General Options",
