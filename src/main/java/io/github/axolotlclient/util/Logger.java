@@ -10,18 +10,18 @@ public class Logger {
     private static final String prefix = QuiltLoader.isDevelopmentEnvironment() ? "" : "(AxolotlClient)";
 
     public static void info(String msg, Object... args){
-        LOGGER.info(prefix, msg, args);
+        LOGGER.info(prefix + msg, args);
     }
 
     public static void warn(String msg, Object... args){
-        LOGGER.warn(prefix, msg, args);
+        LOGGER.warn(prefix + msg, args);
     }
     public static void error(String msg, Object... args){
-        LOGGER.error(prefix, msg, args);
+        LOGGER.error(prefix + msg, args);
     }
     public static void debug(String msg, Object... args){
         if(AxolotlClient.CONFIG.debugLogOutput.get()) {
-            LOGGER.debug(prefix, msg, args);
+            LOGGER.debug(prefix + msg, args);
         }
     }
 }
