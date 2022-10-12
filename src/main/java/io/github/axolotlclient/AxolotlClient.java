@@ -86,10 +86,6 @@ public class AxolotlClient implements ClientModInitializer {
 
         FeatureDisabler.init();
 
-        if(FabricLoader.getInstance().isDevelopmentEnvironment()){
-            CONFIG.debugLogOutput.set(true);
-        }
-
         if(CONFIG.debugLogOutput.get()){
             Logger.debug("Debug Output enabled, Logs will be quite verbose!");
         }

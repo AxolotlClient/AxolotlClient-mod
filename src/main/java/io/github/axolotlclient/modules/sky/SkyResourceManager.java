@@ -46,38 +46,38 @@ public class SkyResourceManager extends AbstractModule implements IdentifiableRe
             while ((string = reader.readLine()) != null) {
                 try {
 
-                    if(string.startsWith("#")){
-                        continue;
-                    }
-                    option = string.split("=");
-                    if (option[0].equals("source")) {
-                        if(option[1].startsWith("assets")){
-                            option[1] = option[1].replace("./", "").replace("assets/minecraft/", "");
-                        } else {
-                            if(id.getPath().contains("world")) {
-                                option[1] = loader + "/sky/world" + id.getPath().split("world")[1].split("/")[0] + "/" + option[1].replace("./", "");
+                    if(!string.startsWith("#")) {
+                        option = string.split("=");
+                        if (option[0].equals("source")) {
+                            if(option[1].contains(":")){
+                                option[1] = option[1].split(":")[1];
+                            } else {
+                                if (option[1].startsWith("assets")) {
+                                    option[1] = option[1].replace("./", "").replace("assets/minecraft/", "");
+                                }
+                                if (id.getPath().contains("world")) {
+                                    option[1] = loader + "/sky/world" + id.getPath().split("world")[1].split("/")[0] + "/" + option[1].replace("./", "");
+                                }
                             }
                         }
-                    }
-                    if (option[0].equals("startFadeIn") || option[0].equals("endFadeIn") || option[0].equals("startFadeOut") || option[0].equals("endFadeOut")) {
-                        option[1] = option[1].replace(":", "").replace("\\", "");
-                    }
+                        if (option[0].equals("startFadeIn") || option[0].equals("endFadeIn") || option[0].equals("startFadeOut") || option[0].equals("endFadeOut")) {
+                            option[1] = option[1].replace(":", "").replace("\\", "");
+                        }
 
-                    object.addProperty(option[0], option[1]);
+                        object.addProperty(option[0], option[1]);
+                    }
 
                 } catch (Exception ignored) {}
             }
 
-            if (!object.get("source").getAsString().contains("sunflare"))
-                SkyboxManager.getInstance().addSkybox(new MCPSkyboxInstance(object));
-
+            SkyboxManager.getInstance().addSkybox(new MCPSkyboxInstance(object));
 
         } catch (Exception ignored){}
     }
 
     @Override
     public net.legacyfabric.fabric.api.util.Identifier getFabricId() {
-        return new net.legacyfabric.fabric.api.util.Identifier(AxolotlClient.modid);
+        return new net.legacyfabric.fabric.api.util.Identifier("axolotlclient", "custom_skies");
     }
 
     @Override

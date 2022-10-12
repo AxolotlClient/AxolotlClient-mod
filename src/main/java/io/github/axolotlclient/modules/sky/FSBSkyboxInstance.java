@@ -1,13 +1,14 @@
 package io.github.axolotlclient.modules.sky;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.blaze3d.platform.GlStateManager;
+import io.github.axolotlclient.util.Logger;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.util.Identifier;
-import org.lwjgl.opengl.GL11;
 
 /**
  * This implementation of custom skies is based on the FabricSkyBoxes mod by AMereBagatelle
@@ -31,15 +32,49 @@ public class FSBSkyboxInstance extends SkyboxInstance{
         this.fade[1] = props.get("fade").getAsJsonObject().get("endFadeIn").getAsInt();
         this.fade[2] = props.get("fade").getAsJsonObject().get("startFadeOut").getAsInt();
         this.fade[3] = props.get("fade").getAsJsonObject().get("endFadeOut").getAsInt();
+        try {
+            JsonObject rotation = props.get("rotation").getAsJsonObject();
+            this.rotate = props.get("shouldRotate").getAsBoolean();
+            this.rotationSpeed = rotation.get("rotationSpeed").getAsFloat();
+            JsonArray axis = rotation.get("axis").getAsJsonArray();
+            for(int i=0;i<axis.size();i++){
+                this.rotationAxis[i] = axis.get(i).getAsFloat();
+            }
+            JsonArray staticRotation = rotation.get("static").getAsJsonArray();
+            for(int i=0;i<staticRotation.size();i++){
+                this.rotationStatic[i] = staticRotation.get(i).getAsFloat();
+            }
+        } catch (Exception ignored){}
 
         try {
-            this.blendMode = parseBlend(props.get("blend").getAsJsonObject().get("type").getAsString());
+            JsonObject jsonBlend = json.get("blend").getAsJsonObject();
+            this.blendMode = parseBlend(jsonBlend.get("type").getAsString());
+        } catch (Exception ignored){
+            try {
+                Logger.debug(textures+": Using manual blend!");
+                JsonObject blend = json.get("blend").getAsJsonObject();
+                this.blendEquation = blend.get("equation").getAsInt();
+                this.blendDstFactor = blend.get("dfactor").getAsInt();
+                this.blendSrcFactor = blend.get("sfactor").getAsInt();
+                this.manualBlend = true;
+            } catch (Exception e){
+                Logger.debug(textures +": Manual Blend failed, using fallback blend!", e);
+                manualBlend = false;
+                blendMode = 8;
+            }
+        }
+
+        try {
+            JsonObject decorations = json.get("decorations").getAsJsonObject();
+            this.showMoon = decorations.get("showMoon").getAsBoolean();
+            this.showSun = decorations.get("showSun").getAsBoolean();
+            this.showStars = decorations.get("showStars").getAsBoolean();
         } catch (Exception ignored){}
     }
 
     public void renderSkybox(){
-        this.alpha = getAlpha();
-        this.distance=MinecraftClient.getInstance().options.viewDistance;
+
+        GlStateManager.color3f(1, 1, 1);
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
@@ -68,10 +103,10 @@ public class FSBSkyboxInstance extends SkyboxInstance{
                 GlStateManager.rotatef(90, 0, 1, 0);
             }
             bufferBuilder.begin(7, VertexFormats.POSITION_TEXTURE_COLOR);
-            bufferBuilder.vertex(-distance*16, -distance*16, -distance*16).texture(0.0, 0.0).color(1F, 1F, 1F, alpha).next();
-            bufferBuilder.vertex(-distance*16, -distance*16, distance*16).texture(0.0, 1.0).color(1F, 1F, 1F, alpha).next();
-            bufferBuilder.vertex(distance*16, -distance*16, distance*16).texture(1.0, 1.0).color(1F, 1F, 1F, alpha).next();
-            bufferBuilder.vertex(distance*16, -distance*16, -distance*16).texture(1.0, 0.0).color(1F, 1F, 1F, alpha).next();
+            bufferBuilder.vertex(-100, -100, -100).texture(0.0, 0.0).color(1F, 1F, 1F, alpha).next();
+            bufferBuilder.vertex(-100, -100, 100).texture(0.0, 1.0).color(1F, 1F, 1F, alpha).next();
+            bufferBuilder.vertex(100, -100, 100).texture(1.0, 1.0).color(1F, 1F, 1F, alpha).next();
+            bufferBuilder.vertex(100, -100, -100).texture(1.0, 0.0).color(1F, 1F, 1F, alpha).next();
             tessellator.draw();
             GlStateManager.popMatrix();
         }
