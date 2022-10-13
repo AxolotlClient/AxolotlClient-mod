@@ -5,9 +5,5 @@ pluginManagement {
 			url = 'https://maven.fabricmc.net/'
 		}
 		gradlePluginPortal()
- 		maven {
-			name = 'Jitpack'
-			url = 'https://jitpack.io'
-		}
 	}
 }

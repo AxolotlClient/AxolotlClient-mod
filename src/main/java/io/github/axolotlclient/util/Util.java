@@ -2,11 +2,8 @@ package io.github.axolotlclient.util;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import io.github.axolotlclient.AxolotlclientConfig.util.clientCommands.ClientCommands;
-import io.github.axolotlclient.AxolotlclientConfig.util.clientCommands.Command;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.texture.Texture;
 import net.minecraft.client.util.Window;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardObjective;
@@ -14,7 +11,6 @@ import net.minecraft.scoreboard.ScoreboardPlayerScore;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.ApiStatus;
 import org.lwjgl.opengl.GL11;
@@ -85,16 +81,6 @@ public class Util {
 
     public static void sendChatMessage(Text msg){
         MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(msg);
-    }
-
-    public static void registerCommand(String command, Command.CommandSuggestionCallback suggestions, Command.CommandExecutionCallback onExecution){
-        ClientCommands.getInstance().registerCommand(command, suggestions, onExecution);
-    }
-
-    public static String[] copyArrayWithoutFirstEntry(String[] strings) {
-        String[] strings2 = new String[strings.length - 1];
-        System.arraycopy(strings, 1, strings2, 0, strings.length - 1);
-        return strings2;
     }
 
     public static String splitAtCapitalLetters(String string){

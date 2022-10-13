@@ -160,6 +160,7 @@ public abstract class SkyboxInstance {
             GlStateManager.enableBlend();
             GlStateManager.blendFunc(blendSrcFactor, blendDstFactor);
             GL14.glBlendEquation(blendEquation);
+            GlStateManager.enableTexture();
             return;
         }
 

@@ -10,7 +10,7 @@ import io.github.axolotlclient.modules.motionblur.MotionBlur;
 import io.github.axolotlclient.modules.sky.SkyboxManager;
 import io.github.axolotlclient.modules.zoom.Zoom;
 import net.minecraft.block.Block;
-import net.minecraft.block.Material;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.MouseInput;
 import net.minecraft.client.options.GameOptions;
@@ -115,7 +115,7 @@ public abstract class GameRendererMixin {
                 if (entity instanceof LivingEntity && ((LivingEntity) entity).hasStatusEffect(StatusEffect.WATER_BREATHING)) {
                     GlStateManager.fogDensity(0.01F);
                 } else {
-                    GlStateManager.fogDensity(0.1F - (float) EnchantmentHelper.method_8449(entity) * 0.03F);
+                    GlStateManager.fogDensity(0.1F - (float) EnchantmentHelper.getRespiration(entity) * 0.03F);
                 }
             } else if (block.getMaterial() == Material.LAVA) {
                 GlStateManager.fogMode(2048);
