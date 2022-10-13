@@ -24,7 +24,6 @@ public class AxolotlClientConfig extends ConfigHolder {
     public final BooleanOption timeChangerEnabled = new BooleanOption("enabled", false);
     public final IntegerOption customTime = new IntegerOption("time", 0, 0, 24000);
     public final BooleanOption customSky = new BooleanOption("customSky", true);
-    public final BooleanOption showSunMoon = new BooleanOption("showSunMoon", true);
     public final IntegerOption cloudHeight = new IntegerOption("cloudHeight", 128, 100, 512);
     public final BooleanOption dynamicFOV = new BooleanOption("dynamicFov", true);
     public final BooleanOption fullBright = new BooleanOption("fullBright", false);
@@ -33,8 +32,6 @@ public class AxolotlClientConfig extends ConfigHolder {
     public final ColorOption loadingScreenColor = new ColorOption("loadingBgColor", new Color(-1));
     public final BooleanOption nightMode = new BooleanOption("nightMode", false);
     public final BooleanOption rawMouseInput = new BooleanOption("rawMouseInput", false);
-
-    public final BooleanOption rotateWorld = new BooleanOption("rotateWorld", false);
 
     public final BooleanOption enableCustomOutlines = new BooleanOption("enabled", false);
     public final ColorOption outlineColor = new ColorOption("color", Color.parse("#DD000000"));
@@ -107,7 +104,6 @@ public class AxolotlClientConfig extends ConfigHolder {
         general.addSubCategory(searchFilters);
 
         rendering.add(customSky,
-                showSunMoon,
                 cloudHeight,
                 AxolotlClientConfigConfig.chromaSpeed,
                 dynamicFOV,

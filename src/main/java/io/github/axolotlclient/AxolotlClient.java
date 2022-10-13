@@ -30,7 +30,6 @@ import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.resource.Resource;
-import net.minecraft.resource.ResourcePack;
 import net.minecraft.util.Identifier;
 
 import java.nio.file.Path;
@@ -45,10 +44,7 @@ public class AxolotlClient implements ClientModInitializer {
     public static ConfigManager configManager;
     public static HashMap<UUID, Boolean> playerCache = new HashMap<>();
 
-    public static List<ResourcePack> packs = new ArrayList<>();
     public static HashMap<Identifier, Resource> runtimeResources = new HashMap<>();
-
-    public static boolean initalized = false;
 
     public static final Identifier badgeIcon = new Identifier("axolotlclient", "textures/badge.png");
 
@@ -62,7 +58,6 @@ public class AxolotlClient implements ClientModInitializer {
     public void onInitializeClient() {
         CONFIG = new AxolotlClientConfig();
         config.add(someNiceBackground);
-        config.add(CONFIG.rotateWorld);
 
         getModules();
         addExternalModules();

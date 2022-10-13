@@ -1,7 +1,5 @@
 package io.github.axolotlclient.util;
 
-import io.github.axolotlclient.AxolotlClient;
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;

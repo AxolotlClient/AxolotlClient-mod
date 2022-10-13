@@ -3,7 +3,6 @@ package io.github.axolotlclient.modules.sky;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.util.Logger;
 import io.github.moehreag.searchInResources.SearchableResourceManager;
@@ -100,8 +99,6 @@ public class SkyResourceManager extends AbstractModule implements IdentifiableRe
             Logger.debug("Loaded sky: " + entry.getKey());
             loadMCPSky("mcpatcher", entry.getKey(), entry.getValue());
         }
-
-        AxolotlClient.initalized = true;
     }
 
     @Override

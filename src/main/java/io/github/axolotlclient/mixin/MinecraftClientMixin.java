@@ -5,7 +5,6 @@ import io.github.axolotlclient.NetworkHelper;
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hud.gui.hud.CPSHud;
 import io.github.axolotlclient.modules.rpc.DiscordRPC;
-import io.github.axolotlclient.modules.sky.SkyResourceManager;
 import io.github.axolotlclient.modules.zoom.Zoom;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
@@ -19,7 +18,6 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.player.ClientPlayerEntity;
 import net.minecraft.world.level.LevelInfo;
 import org.apache.logging.log4j.Logger;
-import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -40,7 +38,9 @@ public abstract class MinecraftClientMixin {
 
     @Shadow public ClientPlayerEntity player;
 
-    @Shadow protected abstract void loadLogo(TextureManager textureManager) throws LWJGLException;
+    protected MinecraftClientMixin(TextureManager textureManager) {
+        this.textureManager = textureManager;
+    }
 
     @Shadow private TextureManager textureManager;
 
@@ -62,17 +62,6 @@ public abstract class MinecraftClientMixin {
     @Inject(method = "setPixelFormat", at = @At("TAIL"))
     public void setWindowTitle(CallbackInfo ci){
         Display.setTitle("AxolotlClient "+ this.gameVersion);
-    }
-
-    @Redirect(method = "initializeGame", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;loadLogo(Lnet/minecraft/client/texture/TextureManager;)V"))
-    public void noLogo(MinecraftClient instance, TextureManager textureManager){}
-
-    @Inject(method = "initializeGame", at = @At(value = "INVOKE", target = "Lnet/minecraft/advancement/Achievement;setStatFormatter(Lnet/minecraft/stat/StatFormatter;)Lnet/minecraft/advancement/Achievement;"))
-    public void loadSkiesOnStartup(CallbackInfo ci){
-        //SkyResourceManager.onStartup();
-        try {
-            this.loadLogo(this.textureManager);
-        } catch (Exception ignored){}
     }
 
     @Redirect(method = "handleKeyInput", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/options/KeyBinding;getCode()I", ordinal = 5))

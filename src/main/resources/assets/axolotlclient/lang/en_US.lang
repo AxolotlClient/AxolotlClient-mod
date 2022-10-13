@@ -38,10 +38,10 @@ copy_image=Copy this Screenshot
 deleteAction=[Delete]
 delete_image=Delete this Screenshot
 screenshot_deleted=Screenshot <name> has been successfully deleted!
+debugLogOutput=Debug Log Output
 
 rendering=Rendering Options
 customSky=Custom Skies
-showSunMoon=Custom Sky Sun & Moon
 cloudHeight=Cloud Height
 zoomDivisor=FOV Divisor
 zoomSpeed=Animation Speed
@@ -249,6 +249,10 @@ showActivity=Show Activity
 showActivity.tooltip=Whether to show your current In-Game Activity.
 showTime=Show Time
 showTime.tooltip=Whether to show a timestamp.
+showServerNameMode=Description Mode
+showIp=Show Server IP
+showName=Show Server Name
+off=Disabled
 
 freelook=Freelook
 perspective=Perspective
