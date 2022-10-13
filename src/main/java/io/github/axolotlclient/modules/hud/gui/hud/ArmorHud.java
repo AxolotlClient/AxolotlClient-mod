@@ -69,13 +69,13 @@ public class ArmorHud extends AbstractHudEntry {
 					});
 			}
 		}
-		ItemUtil.renderGuiItemModel(matrices, stack, x, y);
+		ItemUtil.renderGuiItemModel(getScale(), stack, x, y);
 		ItemUtil.renderGuiItemOverlay(matrices, client.textRenderer, stack, x, y, null, textColor.get().getAsInt(),
 			shadow.get());
 	}
 
 	public void renderMainItem(MatrixStack matrices, ItemStack stack, int x, int y) {
-		ItemUtil.renderGuiItemModel(matrices, stack, x, y);
+		ItemUtil.renderGuiItemModel(getScale(), stack, x, y);
 		String total = String.valueOf(ItemUtil.getTotal(client, stack));
 		if (total.equals("1")) {
 			total = null;
@@ -100,7 +100,7 @@ public class ArmorHud extends AbstractHudEntry {
 		DrawPosition pos = getPos();
 		int lastY = 2;
 		for(ItemStack stack:placeholders) {
-			ItemUtil.renderGuiItemModel(matrices, stack, pos.x, pos.y + lastY);
+			ItemUtil.renderGuiItemModel(getScale(), stack, pos.x, pos.y + lastY);
 			ItemUtil.renderGuiItemOverlay(matrices, client.textRenderer, stack, pos.x, pos.y + lastY, stack.getCount()+"", textColor.get().getAsInt(), shadow.get());
 			lastY+=20;
 		}

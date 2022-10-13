@@ -53,7 +53,7 @@ public class ArrowHud extends AbstractHudEntry {
 		if(outline.get()) outlineRect(matrices, getBounds(), outlineColor.get());
 		drawCenteredString(matrices, client.textRenderer, String.valueOf(arrows), new DrawPosition(pos.x + width / 2,
 			pos.y + height - 10), textColor.get(), shadow.get());
-		ItemUtil.renderGuiItemModel(matrices, currentArrow, pos.x + 2, pos.y + 2);
+		ItemUtil.renderGuiItemModel(getScale(), currentArrow, pos.x + 2, pos.y + 2);
 		matrices.pop();
 	}
 
@@ -89,7 +89,7 @@ public class ArrowHud extends AbstractHudEntry {
 		DrawPosition pos = getPos();
 		drawCenteredString(matrices, client.textRenderer, "64", new DrawPosition(pos.x + width / 2,
 			pos.y + height - 10), textColor.get(), shadow.get());
-		ItemUtil.renderGuiItemModel(matrices, new ItemStack(Items.ARROW), pos.x + 2, pos.y + 2);
+		ItemUtil.renderGuiItemModel(getScale(), new ItemStack(Items.ARROW), pos.x + 2, pos.y + 2);
 		hovered = false;
 		matrices.pop();
 	}

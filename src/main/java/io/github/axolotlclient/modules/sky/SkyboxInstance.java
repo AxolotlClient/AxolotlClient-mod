@@ -225,7 +225,7 @@ public abstract class SkyboxInstance {
 			matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(rotationAxis[1]));
 			matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(rotationAxis[2]));
 			matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-90.0F));
-			matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(MinecraftClient.getInstance().world.getSkyAngle(delta) * 360F * -rotationSpeed));
+			matrices.multiply(Vec3f.NEGATIVE_X.getDegreesQuaternion(MinecraftClient.getInstance().world.getSkyAngle(delta) * 360F * rotationSpeed));
 			matrices.multiply(Vec3f.NEGATIVE_Z.getDegreesQuaternion(rotationAxis[0]));
 			matrices.multiply(Vec3f.NEGATIVE_Y.getDegreesQuaternion(rotationAxis[1]));
 			matrices.multiply(Vec3f.NEGATIVE_X.getDegreesQuaternion(rotationAxis[2]));

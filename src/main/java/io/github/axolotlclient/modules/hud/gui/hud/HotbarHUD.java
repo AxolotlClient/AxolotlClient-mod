@@ -58,18 +58,18 @@ public class HotbarHUD extends AbstractHudEntry {
                 int k = pos.x + n * 20 + 3;
                 int l = pos.y+3;
                 MinecraftClient.getInstance().getItemRenderer().renderGuiItemIcon(playerEntity.getInventory().main.get(n), k, l);
-                ItemUtil.renderGuiItemModel(matrices, playerEntity.getInventory().main.get(n), k, l);
+                ItemUtil.renderGuiItemModel(getScale(), playerEntity.getInventory().main.get(n), k, l);
                 ItemUtil.renderGuiItemOverlay(matrices, client.textRenderer, playerEntity.getInventory().main.get(n), k, l, null, -1,
                     true);
             }
 
             if (!itemStack.isEmpty()) {
                 if (arm == Arm.LEFT) {
-                    ItemUtil.renderGuiItemModel(matrices, itemStack, pos.x - 26, pos.y + 3);
+                    ItemUtil.renderGuiItemModel(getScale(), itemStack, pos.x - 26, pos.y + 3);
                     ItemUtil.renderGuiItemOverlay(matrices, client.textRenderer, itemStack, pos.x - 26, pos.y + 3, null, -1,
                         true);
                 } else {
-                    ItemUtil.renderGuiItemModel(matrices, itemStack, pos.x + width + 10, pos.y + 3);
+                    ItemUtil.renderGuiItemModel(getScale(), itemStack, pos.x + width + 10, pos.y + 3);
                     ItemUtil.renderGuiItemOverlay(matrices, client.textRenderer, itemStack, pos.x + width + 10, pos.y + 3, null, -1,
                         true);
                 }
@@ -93,7 +93,7 @@ public class HotbarHUD extends AbstractHudEntry {
             }
 
             RenderSystem.disableBlend();
-            matrices.pop();
+            //matrices.pop();
         }
     }
 
