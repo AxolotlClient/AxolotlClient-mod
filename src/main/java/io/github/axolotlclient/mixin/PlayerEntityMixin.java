@@ -2,7 +2,6 @@ package io.github.axolotlclient.mixin;
 
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.modules.hud.HudManager;
-import io.github.axolotlclient.modules.hud.gui.hud.ComboCounterHud;
 import io.github.axolotlclient.modules.hud.gui.hud.ReachDisplayHud;
 import io.github.axolotlclient.modules.particles.Particles;
 import io.github.axolotlclient.util.Util;
@@ -29,7 +28,10 @@ public abstract class PlayerEntityMixin extends Entity {
         if((Object)this == MinecraftClient.getInstance().player || entity.equals(MinecraftClient.getInstance().player)){
             ReachDisplayHud reachDisplayHud = (ReachDisplayHud) HudManager.getInstance().get(ReachDisplayHud.ID);
             if(reachDisplayHud != null && reachDisplayHud.isEnabled()){
-                reachDisplayHud.updateDistance(Util.calculateDistance(super.getPos(), entity.getPos()));
+                double d = Util.calculateDistance(super.getPos(), entity.getPos());
+                if(d<=MinecraftClient.getInstance().interactionManager.getReachDistance()) {
+                    reachDisplayHud.updateDistance(d);
+                }
             }
         }
     }
