@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 public class Logger {
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger("AxolotlClient");
 
-    private static final String prefix = QuiltLoader.isDevelopmentEnvironment() ? "" : "(AxolotlClient)";
+    private static final String prefix = QuiltLoader.isDevelopmentEnvironment() ? "" : "(AxolotlClient) ";
 
     public static void info(String msg, Object... args){
         LOGGER.info(prefix + msg, args);
@@ -21,7 +21,7 @@ public class Logger {
     }
     public static void debug(String msg, Object... args){
         if(AxolotlClient.CONFIG.debugLogOutput.get()) {
-            LOGGER.debug(prefix + msg, args);
+            LOGGER.info(prefix +"[DEBUG] "+ msg, args);
         }
     }
 }

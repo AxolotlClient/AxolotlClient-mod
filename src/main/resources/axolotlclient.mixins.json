@@ -26,6 +26,7 @@
 		"GameMenuScreenMixin",
 		"GameRendererMixin",
 		"HandledScreenMixin",
+		"IdentifierMixin",
 		"InGameHudMixin",
 		"InGameOverlayRendererMixin",
 		"KeyBindMixin",
@@ -56,6 +57,7 @@
 		"TitleScreenMixin",
 		"TntEntityRendererMixin",
 		"WorldListWidgetEntryMixin",
+		"WorldRendererAccessor",
 		"WorldRendererMixin"
 	],
 	"server": [],

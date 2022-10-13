@@ -26,13 +26,15 @@ public class PackDisplayHud extends AbstractHudEntry {
 
     public final List<packWidget> widgets = new ArrayList<>();
 
+    private final List<ResourcePack> packs = new ArrayList<>();
+
     public PackDisplayHud() {
         super(200, 50);
     }
 
     @Override
     public void init() {
-        AxolotlClient.packs.forEach(pack -> {
+        packs.forEach(pack -> {
             try {
                 if(!pack.getName().equalsIgnoreCase("Default") )//&& pack.getIcon()!=null)
                     widgets.add(new packWidget(pack));
@@ -49,6 +51,12 @@ public class PackDisplayHud extends AbstractHudEntry {
 		width=w.get();
 
 		height=(widgets.size()-1)*18 + 18;
+    }
+
+    public void setPacks(List<ResourcePack> packs){
+        widgets.clear();
+        this.packs.addAll(packs);
+        init();
     }
 
     @Override

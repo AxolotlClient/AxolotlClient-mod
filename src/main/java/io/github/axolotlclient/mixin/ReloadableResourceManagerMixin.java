@@ -25,22 +25,13 @@ import java.util.concurrent.Executor;
 @Mixin(ReloadableResourceManager.class)
 public abstract class ReloadableResourceManagerMixin {
 
-	@Inject(method = "reload", at = @At("HEAD"))
-	public void reloadStart(Executor prepareExecutor, Executor applyExecutor, CompletableFuture<Unit> initialStage, List<ResourcePack> packs, CallbackInfoReturnable<ResourceReload> cir){
-		SkyboxManager.getInstance().clearSkyboxes();
-	}
-
     @Inject(method = "reload", at=@At("TAIL"))
-    public void loadSkies(Executor prepareExecutor, Executor applyExecutor, CompletableFuture<Unit> initialStage, List<ResourcePack> resourcePacks, CallbackInfoReturnable<ResourceReload> cir){
+    public void reload(Executor prepareExecutor, Executor applyExecutor, CompletableFuture<Unit> initialStage, List<ResourcePack> resourcePacks, CallbackInfoReturnable<ResourceReload> cir){
         HypixelAbstractionLayer.clearPlayerData();
-	    SkyResourceManager.reload(resourcePacks);
-
-	    AxolotlClient.packs=resourcePacks;
 
         PackDisplayHud hud = (PackDisplayHud) HudManager.getInstance().get(PackDisplayHud.ID);
         if(hud.isEnabled()){
-            hud.widgets.clear();
-			hud.init();
+			hud.setPacks(resourcePacks);
         }
 
 

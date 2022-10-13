@@ -16,6 +16,7 @@ import io.github.axolotlclient.modules.particles.Particles;
 import io.github.axolotlclient.modules.rpc.DiscordRPC;
 import io.github.axolotlclient.modules.screenshotUtils.ScreenshotUtils;
 import io.github.axolotlclient.modules.scrollableTooltips.ScrollableTooltips;
+import io.github.axolotlclient.modules.sky.SkyResourceManager;
 import io.github.axolotlclient.modules.tnttime.TntTime;
 import io.github.axolotlclient.modules.zoom.Zoom;
 import io.github.axolotlclient.util.FeatureDisabler;
@@ -52,8 +53,7 @@ public class AxolotlClient implements ClientModInitializer {
 	public static AxolotlClientConfig CONFIG;
 	public static io.github.axolotlclient.AxolotlclientConfig.ConfigManager configManager;
 	public static HashMap<UUID, Boolean> playerCache = new HashMap<>();
-
-	public static List<ResourcePack> packs = new ArrayList<>();
+	
 	public static HashMap<Identifier, Resource> runtimeResources = new HashMap<>();
 
 	public static final Identifier badgeIcon = new Identifier("axolotlclient", "textures/badge.png");
@@ -115,6 +115,7 @@ public class AxolotlClient implements ClientModInitializer {
 	}
 
 	public static void getModules(){
+		modules.add(SkyResourceManager.getInstance());
 		modules.add(Zoom.getInstance());
 		modules.add(HudManager.getInstance());
 		modules.add(HypixelMods.getInstance());

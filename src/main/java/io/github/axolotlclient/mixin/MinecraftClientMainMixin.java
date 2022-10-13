@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Main.class)
-public class MinecraftClientMainMixin {
+public abstract class MinecraftClientMainMixin {
 
     @Redirect(method = "<clinit>", at = @At(value = "INVOKE", target = "Ljava/lang/System;setProperty(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;"))
     private static String noHeadless(String key, String value){

@@ -7,7 +7,6 @@ import io.github.axolotlclient.AxolotlclientConfig.ConfigHolder;
 import io.github.axolotlclient.AxolotlclientConfig.options.*;
 import io.github.axolotlclient.config.screen.CreditsScreen;
 import net.minecraft.client.MinecraftClient;
-import org.quiltmc.loader.api.QuiltLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +42,7 @@ public class AxolotlClientConfig extends ConfigHolder {
     public final GenericOption openCredits = new GenericOption("Credits", "Open Credits", (mouseX, mouseY)->
             MinecraftClient.getInstance().setScreen(new CreditsScreen(MinecraftClient.getInstance().currentScreen))
     );
-    public final BooleanOption debugLogOutput = new BooleanOption("debugLogOutput", QuiltLoader.isDevelopmentEnvironment());
+    public final BooleanOption debugLogOutput = new BooleanOption("debugLogOutput", false);
     public final BooleanOption creditsBGM = new BooleanOption("creditsBGM", true);
 
     public final OptionCategory general = new OptionCategory("general");
