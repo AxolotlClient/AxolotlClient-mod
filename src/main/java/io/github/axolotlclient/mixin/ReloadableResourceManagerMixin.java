@@ -4,8 +4,6 @@ import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hud.gui.hud.PackDisplayHud;
 import io.github.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
-import io.github.axolotlclient.modules.sky.SkyResourceManager;
-import io.github.axolotlclient.modules.sky.SkyboxManager;
 import net.minecraft.resource.ReloadableResourceManager;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceReload;
@@ -33,8 +31,6 @@ public abstract class ReloadableResourceManagerMixin {
         if(hud.isEnabled()){
 			hud.setPacks(resourcePacks);
         }
-
-
     }
 
     @Inject(method = "getResource", at = @At("HEAD"), cancellable = true)

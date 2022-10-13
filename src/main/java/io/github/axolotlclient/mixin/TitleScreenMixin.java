@@ -72,7 +72,7 @@ public abstract class TitleScreenMixin extends Screen{
                 UnsupportedMod.UnsupportedReason reason = AxolotlClient.badmod.reason()[i];
                 if(i>0 && i < AxolotlClient.badmod.reason().length - 1){
                     description.append(", to ");
-                } else if (i > 0 && i < AxolotlClient.badmod.reason().length){
+                } else if (i > 0){
                     description.append(" and to ");
                 }
                 description.append(reason);

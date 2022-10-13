@@ -218,9 +218,7 @@ public abstract class SkyboxInstance {
 		matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(rotationStatic[1]));
 		matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(rotationStatic[2]));
 		if(rotate) {
-			//GlStateManager.rotatef(0, rotationAxis[0], rotationAxis[1], rotationAxis[2]);
 			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, brightness);
-			//GlStateManager.rotatef(-90.0F, 0.0F, 1.0F, 0.0F);
 			matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(rotationAxis[0]));
 			matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(rotationAxis[1]));
 			matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(rotationAxis[2]));

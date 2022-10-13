@@ -8,6 +8,7 @@ import de.jcm.discordgamesdk.activity.ActivityType;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.DisableReason;
+import io.github.axolotlclient.AxolotlclientConfig.options.EnumOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.modules.rpc.gameSdk.GameSdkDownloader;
@@ -30,9 +31,15 @@ public class DiscordRPC extends AbstractModule {
 
     public OptionCategory category = new OptionCategory("rpc");
 
-    public BooleanOption enabled = new BooleanOption("enabled", true);
+    public BooleanOption enabled = new BooleanOption("enabled", value -> {
+        if(value){
+            initRPC();
+        } else {
+            shutdown();
+        }
+    },false);
     public BooleanOption showActivity = new BooleanOption("showActivity", true);
-
+    public EnumOption showServerNameMode = new EnumOption("showServerNameMode", new String[]{"showIp", "showName", "off"}, "off");
     public BooleanOption showTime = new BooleanOption("showTime", true);
 
     public static Activity currentActivity;
@@ -48,7 +55,7 @@ public class DiscordRPC extends AbstractModule {
 
     public void init() {
 
-        category.add(enabled, showTime, showActivity);
+        category.add(enabled, showTime, showActivity, showServerNameMode);
 
         AxolotlClient.CONFIG.addCategory(category);
 
@@ -97,7 +104,7 @@ public class DiscordRPC extends AbstractModule {
                 Logger.info("Started RPC Core");
             } catch (Exception e) {
                 if(!e.getMessage().contains("INTERNAL_ERROR")) {
-                    Logger.error("An error occured: ");
+                    Logger.error("An error occurred: ");
                     e.printStackTrace();
                 } else {
                     enabled.set(false);
@@ -110,16 +117,20 @@ public class DiscordRPC extends AbstractModule {
 
         Activity activity = new Activity();
 
-        String state = MinecraftClient.getInstance().world == null ?
-                "In the menu" : (MinecraftClient.getInstance().getCurrentServerEntry() == null ?
-                "Singleplayer" : MinecraftClient.getInstance().getCurrentServerEntry().address);
+        String state = switch (showServerNameMode.get()) {
+            case "showIp" -> MinecraftClient.getInstance().world == null ?
+                    "In the menu" : (MinecraftClient.getInstance().getCurrentServerEntry() == null ?
+                    "Singleplayer" : MinecraftClient.getInstance().getCurrentServerEntry().address);
+            case "showName" -> MinecraftClient.getInstance().world == null ?
+                    "In the menu" : (MinecraftClient.getInstance().getCurrentServerEntry() == null ?
+                    "Singleplayer" : MinecraftClient.getInstance().getCurrentServerEntry().name);
+            default -> "";
+        };
 
         if (showActivity.get() && MinecraftClient.getInstance().getCurrentServerEntry() != null) {
             activity.setDetails(Util.getGame());
-        } else if (showActivity.get() && currentActivity!=null && MinecraftClient.getInstance().world != null){
+        } else if (showActivity.get() && currentActivity != null){
             activity.setDetails(currentActivity.getDetails());
-        } else if (!showActivity.get() && currentActivity != null && currentActivity.getDetails().equals("")) {
-            currentActivity.setDetails("");
         }
 
         activity.setState(state);

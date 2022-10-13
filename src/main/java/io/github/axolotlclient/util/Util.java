@@ -3,8 +3,6 @@ package io.github.axolotlclient.util;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.glfw.Window;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.ChatPreview;
@@ -17,16 +15,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
-import org.quiltmc.qsl.command.api.client.ClientCommandManager;
-import org.quiltmc.qsl.command.api.client.QuiltClientCommandSource;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Util {

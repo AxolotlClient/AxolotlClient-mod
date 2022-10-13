@@ -1,6 +1,5 @@
 package io.github.axolotlclient.modules;
 
-import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.config.screen.CreditsScreen;
 import io.github.axolotlclient.util.Logger;
 import org.quiltmc.loader.api.ModContributor;
