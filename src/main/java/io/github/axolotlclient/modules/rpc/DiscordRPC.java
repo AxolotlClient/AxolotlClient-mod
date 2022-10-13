@@ -106,7 +106,7 @@ public class DiscordRPC extends AbstractModule {
                 Logger.info("Started RPC Core");
             } catch (Exception e) {
                 if(!e.getMessage().contains("INTERNAL_ERROR")) {
-                    Logger.error("An error occured: ");
+                    Logger.error("An error occurred: ");
                     e.printStackTrace();
                 } else {
                     enabled.set(false);

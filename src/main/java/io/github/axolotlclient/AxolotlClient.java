@@ -68,7 +68,6 @@ public class AxolotlClient implements ClientModInitializer {
         CONFIG.config.add(config);
 
         io.github.axolotlclient.AxolotlclientConfig.AxolotlClientConfigManager.registerConfig(modid, CONFIG, configManager = new AxolotlClientConfigManager());
-        configManager.load();
 
         modules.forEach(AbstractModule::lateInit);
 
@@ -107,6 +106,10 @@ public class AxolotlClient implements ClientModInitializer {
     }
 
     public static boolean isUsingClient(UUID uuid){
+        if(uuid==null){
+            return false;
+        }
+
         assert MinecraftClient.getInstance().player != null;
         if (uuid == MinecraftClient.getInstance().player.getUuid()){
             return true;
