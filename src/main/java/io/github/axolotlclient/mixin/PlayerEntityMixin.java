@@ -26,7 +26,10 @@ public abstract class PlayerEntityMixin extends Entity {
         if((Object)this == MinecraftClient.getInstance().player || entity.equals(MinecraftClient.getInstance().player)){
             ReachDisplayHud hud = (ReachDisplayHud) HudManager.getInstance().get(ReachDisplayHud.ID);
             if(hud != null && hud.isEnabled()){
-                hud.updateDistance(Util.calculateDistance(super.getPos(), entity.getPos()));
+                double d = Util.calculateDistance(super.getPos(), entity.getPos());
+                if(d<=MinecraftClient.getInstance().interactionManager.getReachDistance()) {
+                    hud.updateDistance(d);
+                }
             }
         }
     }

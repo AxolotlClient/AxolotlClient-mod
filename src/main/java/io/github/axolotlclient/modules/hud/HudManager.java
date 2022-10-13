@@ -67,6 +67,7 @@ public class HudManager extends AbstractModule {
         add(new ItemUpdateHud());
         add(new PackDisplayHud());
         add(new RealTimeHud());
+        add(new ReachDisplayHud());
         add(new HotbarHUD());
         add(new MemoryHud());
         add(new PlayerCountHud());

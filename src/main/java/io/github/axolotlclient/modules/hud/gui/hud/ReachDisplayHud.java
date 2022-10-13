@@ -10,6 +10,7 @@ import java.text.DecimalFormat;
 import java.time.Instant;
 import java.util.List;
 
+// TODO fix calculation of distance
 public class ReachDisplayHud extends CleanHudEntry {
 
     public static Identifier ID = new Identifier("axolotlclient", "reachdisplayhud");
