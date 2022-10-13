@@ -41,7 +41,7 @@ import java.util.Objects;
 public class CrosshairHud extends AbstractHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "crosshairhud");
 
-    private final EnumOption type = new EnumOption("type", CrosshairOption.values(), CrosshairOption.TEXTURE.toString());
+    private final EnumOption type = new EnumOption("crosshair_type", CrosshairOption.values(), CrosshairOption.TEXTURE.toString());
     private final BooleanOption showInF5 = new BooleanOption("showInF5", false);
     public final BooleanOption showInF3 = new BooleanOption("showInF3", false);
     private final ColorOption defaultColor = new ColorOption("defaultcolor",  "#FFFFFFFF");
