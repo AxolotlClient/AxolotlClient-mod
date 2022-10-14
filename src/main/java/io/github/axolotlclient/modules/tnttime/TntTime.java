@@ -21,7 +21,7 @@ public class TntTime extends AbstractModule {
 
     private final OptionCategory category = new OptionCategory("tnttime");
     public final BooleanOption enabled = new BooleanOption("enabled", false);
-    private final IntegerOption decimalPlaces = new IntegerOption("decimalPlaces", 2, 0, 6);
+    private final IntegerOption decimalPlaces = new IntegerOption("decimalplaces", 2, 0, 6);
 
     public static TntTime getInstance() {
         return Instance;

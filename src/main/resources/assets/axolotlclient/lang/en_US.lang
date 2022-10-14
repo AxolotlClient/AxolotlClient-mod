@@ -177,6 +177,7 @@ dynamic=Dynamic
 itemupdatehud=Item Update HUD
 packdisplayhud=Pack Display HUD
 realtimehud=Real Time HUD
+format=Format
 showSeconds=Show Seconds
 timeout=Timeout
 text=Text
