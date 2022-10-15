@@ -33,7 +33,7 @@ dependencies {
 	modImplementation "org.quiltmc:quilt-loader:${project.loader_version}"
 	modImplementation "org.quiltmc.quilted-fabric-api:quilted-fabric-api:${quilted_fabric_api_version}"
 
-	include(modImplementation "com.github.AxolotlClient:AxolotlClient-config:0115152")
+	include(modImplementation "com.github.AxolotlClient:AxolotlClient-config:016b0d8")
 
 	modImplementation "com.terraformersmc:modmenu:4.0.5"
 
