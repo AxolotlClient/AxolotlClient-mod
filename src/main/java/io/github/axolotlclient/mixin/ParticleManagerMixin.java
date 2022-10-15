@@ -25,9 +25,14 @@ public abstract class ParticleManagerMixin {
 
     private ParticleType<?> cachedType;
 
-    @Inject(method = "addParticle(Lnet/minecraft/particle/ParticleEffect;DDDDDD)Lnet/minecraft/client/particle/Particle;", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/particle/ParticleManager;addParticle(Lnet/minecraft/client/particle/Particle;)V"))
+    @Inject(method = "addParticle(Lnet/minecraft/particle/ParticleEffect;DDDDDD)Lnet/minecraft/client/particle/Particle;", at = @At(value = "HEAD"), cancellable = true)
     public void afterCreation(ParticleEffect parameters, double x, double y, double z, double velocityX, double velocityY, double velocityZ, CallbackInfoReturnable<Particle> cir){
         cachedType = parameters.getType();
+
+        if(!Particles.getInstance().getShowParticle(cachedType)){
+            cir.setReturnValue(null);
+            cir.cancel();
+        }
     }
 
     @Inject(method = "addParticle(Lnet/minecraft/client/particle/Particle;)V", at = @At(value = "HEAD"))

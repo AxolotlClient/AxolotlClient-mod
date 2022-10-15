@@ -38,10 +38,10 @@ public abstract class PlayerEntityMixin extends Entity {
 
     @Inject(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;onAttacking(Lnet/minecraft/entity/Entity;)V"))
     public void alwaysCrit(Entity entity, CallbackInfo ci){
-        if(((BooleanOption) Particles.getInstance().particleOptions.get(ParticleTypes.CRIT).get("alwaysCrit")).get()) {
+        if(Particles.getInstance().getAlwaysOn(ParticleTypes.CRIT)) {
             MinecraftClient.getInstance().player.addCritParticles(entity);
         }
-        if(((BooleanOption)Particles.getInstance().particleOptions.get(ParticleTypes.ENCHANTED_HIT).get("alwaysCrit")).get()) {
+        if(Particles.getInstance().getAlwaysOn(ParticleTypes.ENCHANTED_HIT)) {
             MinecraftClient.getInstance().player.addEnchantedHitParticles(entity);
         }
     }
