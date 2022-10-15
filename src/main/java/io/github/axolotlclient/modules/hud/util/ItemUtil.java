@@ -24,22 +24,22 @@ public class ItemUtil {
 
     public static void renderGuiItem(ItemStack itemStack, int x, int y){
         ItemRenderer renderer = MinecraftClient.getInstance().getItemRenderer();
-        GlStateManager.enableLighting();
+        //GlStateManager.enableLighting();
         DiffuseLighting.enable();
         renderer.renderInGuiWithOverrides(itemStack, x+2, y);
         renderer.renderGuiItemOverlay(client.textRenderer, itemStack, x+2, y, null);
         DiffuseLighting.disable();
-        GlStateManager.disableLighting();
+        //GlStateManager.disableLighting();
     }
 
     public static int getTotal(MinecraftClient client, ItemStack stack) {
         List<ItemStack> item = ItemUtil.getItems(client);
-        if (item == null || item.isEmpty()) {
+        if (item == null) {
             return 0;
         }
         AtomicInteger count= new AtomicInteger();
         item.forEach(itemStack -> {
-            if (itemStack !=null && !itemStack.isEmpty() && itemStack.getItem() == stack.getItem()){
+            if (itemStack != null && itemStack.getItem() == stack.getItem()){
                 count.addAndGet(itemStack.count);
             }
         });
@@ -117,13 +117,13 @@ public class ItemUtil {
     }
 
     private static boolean isEqual(ItemStack stack, ItemStack compare){
-        return !stack.isEmpty() && !compare.isEmpty() && stack.getItem() == compare.getItem();
+        return stack != null && compare != null && stack.getItem() == compare.getItem();
     }
 
     public static List<ItemStorage> storageFromItem(List<ItemStack> items) {
         ArrayList<ItemStorage> storage = new ArrayList<>();
         for (ItemStack item : items) {
-            if (item ==null || item.isEmpty()) {
+            if (item ==null) {
                 continue;
             }
             Optional<ItemStorage> s = getItemFromItem(item, storage);
@@ -182,7 +182,7 @@ public class ItemUtil {
     public static void renderGuiItemOverlay(TextRenderer renderer, ItemStack stack, int x, int y,
                                             String countLabel, int textColor, boolean shadow) {
         MinecraftClient client = MinecraftClient.getInstance();
-        if (stack.isEmpty()) {
+        if (stack == null) {
             return;
         }
 

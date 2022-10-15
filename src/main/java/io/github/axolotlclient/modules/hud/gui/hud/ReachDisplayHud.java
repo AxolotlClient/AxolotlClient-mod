@@ -1,7 +1,7 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
-import io.github.axolotlclient.config.options.IntegerOption;
-import io.github.axolotlclient.config.options.OptionBase;
+import io.github.axolotlclient.AxolotlclientConfig.options.IntegerOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.util.Identifier;
 
@@ -10,6 +10,7 @@ import java.text.DecimalFormat;
 import java.time.Instant;
 import java.util.List;
 
+// TODO fix calculation of distance
 public class ReachDisplayHud extends CleanHudEntry {
 
     public static Identifier ID = new Identifier("axolotlclient", "reachdisplayhud");

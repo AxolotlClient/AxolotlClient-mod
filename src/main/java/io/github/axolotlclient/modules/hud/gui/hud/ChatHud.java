@@ -1,10 +1,10 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.axolotlclient.config.options.BooleanOption;
-import io.github.axolotlclient.config.options.ColorOption;
-import io.github.axolotlclient.config.options.IntegerOption;
-import io.github.axolotlclient.config.options.OptionBase;
+import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.ColorOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.IntegerOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
 import io.github.axolotlclient.mixin.ChatHudAccessor;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
@@ -54,7 +54,7 @@ public class ChatHud extends AbstractHudEntry {
             float f = this.client.options.chatOpacity * 0.9F + 0.1F;
             if (k > 0) {
 
-                float g = getChatScale();
+                float g = getScale();
                 int l = MathHelper.ceil((float)getWidth() / g);
                 GlStateManager.pushMatrix();
 
@@ -85,7 +85,7 @@ public class ChatHud extends AbstractHudEntry {
                 }
 
                 if (isChatFocused()) {
-                    int m = this.client.textRenderer.fontHeight;
+                    int m = getFontHeight();
                     GlStateManager.translatef(-3.0F, 0.0F, 0.0F);
                     int r = k * m + k;
                     int n = j * m + j;
@@ -107,17 +107,15 @@ public class ChatHud extends AbstractHudEntry {
 
         List<ChatHudLine> visibleMessages = ((ChatHudAccessor) client.inGameHud.getChatHud()).getVisibleMessages();
 
-        int offsetOnHudX = x - getPos().x;
-        int offsetOnHudY = - (y - (getPos().y +height));
-
+        int offsetOnHudX = MathHelper.floor(x/getScale() - getPos().x);
+        int offsetOnHudY = MathHelper.floor(- (y/getScale() - (getPos().y +height)));
 
         int scrolledLines = ((ChatHudAccessor) client.inGameHud.getChatHud()).getScrolledLines();
 
-
         if (offsetOnHudX >= 0 && offsetOnHudY >= 0) {
             int l = Math.min(this.getVisibleLineCount(), visibleMessages.size());
-            if (offsetOnHudX <= MathHelper.floor((float)this.getWidth() / this.getChatScale()) && offsetOnHudY < (this.client.textRenderer.fontHeight + lineSpacing.get()) * l + l) {
-                int m = offsetOnHudY / (this.client.textRenderer.fontHeight + lineSpacing.get()) + scrolledLines;
+            if (offsetOnHudX <= MathHelper.floor((float)this.getWidth() / this.getScale()) && offsetOnHudY < (getFontHeight() + lineSpacing.get()) * l + l)  {
+                int m = offsetOnHudY / (getFontHeight() + lineSpacing.get()) + scrolledLines;
                 if (m >= 0 && m < visibleMessages.size()) {
                     ChatHudLine chatHudLine = visibleMessages.get(m);
                     int n = 0;
@@ -165,7 +163,7 @@ public class ChatHud extends AbstractHudEntry {
         DrawPosition pos = getPos();
         if(MinecraftClient.getInstance().player!=null) {
             client.textRenderer.drawWithShadow(
-                    "<" + MinecraftClient.getInstance().player.method_6344().asFormattedString() + "> OOh! There's my Chat now!",
+                    "<" + MinecraftClient.getInstance().player.getName().asFormattedString() + "> OOh! There's my Chat now!",
                     pos.x + 1, pos.y + height - 9, -1
             );
         } else {
@@ -211,10 +209,6 @@ public class ChatHud extends AbstractHudEntry {
         return getHeight(this.isChatFocused() ? this.client.options.chatHeightFocused : this.client.options.chatHeightUnfocused);
     }
 
-    public float getChatScale() {
-        return this.client.options.chatScale;
-    }
-
     public static int getWidth(float chatWidth) {
         int i = 320;
         int j = 40;
@@ -227,7 +221,11 @@ public class ChatHud extends AbstractHudEntry {
         return MathHelper.floor(chatHeight * (float)(i - j) + (float)j);
     }
 
+    protected int getFontHeight(){
+        return MathHelper.floor(MinecraftClient.getInstance().textRenderer.fontHeight);
+    }
+
     public int getVisibleLineCount() {
-        return this.getHeight() / 9;// (9+lineSpacing.get());
+        return this.getHeight() / 9;
     }
 }

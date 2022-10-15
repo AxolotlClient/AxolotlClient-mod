@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(PlayerEntityModel.class)
 public abstract class PlayerEntityModelMixin {
 
-    @Inject(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/render/entity/model/PlayerEntityModel;field_1493:Z"))
+    @Inject(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/render/entity/model/PlayerEntityModel;child:Z"))
     public void translucencyStart(Entity entity, float f, float g, float h, float i, float j, float scale, CallbackInfo ci){
         startTranslucency();
     }

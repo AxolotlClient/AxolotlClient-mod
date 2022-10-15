@@ -10,18 +10,17 @@ import io.github.axolotlclient.modules.motionblur.MotionBlur;
 import io.github.axolotlclient.modules.sky.SkyboxManager;
 import io.github.axolotlclient.modules.zoom.Zoom;
 import net.minecraft.block.Block;
-import net.minecraft.block.Material;
-import net.minecraft.class_321;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.MouseInput;
 import net.minecraft.client.options.GameOptions;
+import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.player.ClientPlayerEntity;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 import org.objectweb.asm.Opcodes;
@@ -88,7 +87,7 @@ public abstract class GameRendererMixin {
             GL11.glFog(2918, this.updateFogColorBuffer(this.fogRed, this.fogGreen, this.fogBlue, 1.0F));
             GL11.glNormal3f(0.0F, -1.0F, 0.0F);
             GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-            Block block = class_321.method_9371(this.client.world, entity, tickDelta);
+            Block block = Camera.getSubmergedBlock(this.client.world, entity, tickDelta);
             if (entity instanceof LivingEntity && ((LivingEntity) entity).hasStatusEffect(StatusEffect.BLINDNESS)) {
                 float f = 5.0F;
                 int j = ((LivingEntity) entity).getEffectInstance(StatusEffect.BLINDNESS).getDuration();
@@ -116,7 +115,7 @@ public abstract class GameRendererMixin {
                 if (entity instanceof LivingEntity && ((LivingEntity) entity).hasStatusEffect(StatusEffect.WATER_BREATHING)) {
                     GlStateManager.fogDensity(0.01F);
                 } else {
-                    GlStateManager.fogDensity(0.1F - (float) EnchantmentHelper.method_8449(entity) * 0.03F);
+                    GlStateManager.fogDensity(0.1F - (float) EnchantmentHelper.getRespiration(entity) * 0.03F);
                 }
             } else if (block.getMaterial() == Material.LAVA) {
                 GlStateManager.fogMode(2048);
@@ -154,7 +153,7 @@ public abstract class GameRendererMixin {
                 f /= (1.0F - 500.0F / (g + 500.0F)) * 2.0F + 1.0F;
             }
 
-            Block block = class_321.method_9371(this.client.world, entity, tickDelta);
+            Block block = Camera.getSubmergedBlock(this.client.world, entity, tickDelta);
             if (block.getMaterial() == Material.WATER) {
                 f = f * 60.0F / 70.0F;
             }

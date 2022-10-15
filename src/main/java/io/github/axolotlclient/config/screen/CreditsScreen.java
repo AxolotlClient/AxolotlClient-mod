@@ -2,8 +2,7 @@ package io.github.axolotlclient.config.screen;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.config.Color;
-import io.github.axolotlclient.config.ConfigManager;
+import io.github.axolotlclient.AxolotlclientConfig.Color;
 import io.github.axolotlclient.mixin.SoundManagerAccessor;
 import io.github.axolotlclient.mixin.SoundSystemAccessor;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
@@ -36,6 +35,8 @@ import java.util.List;
 public class CreditsScreen extends Screen {
 
     private final Screen parent;
+
+    public static final HashMap<String, String[]> externalModuleCredits = new HashMap<>();
 
     private final List<Credit> credits = new ArrayList<>();
 
@@ -93,7 +94,7 @@ public class CreditsScreen extends Screen {
             }
         } else if(button.id==1){
             AxolotlClient.CONFIG.creditsBGM.toggle();
-            ConfigManager.save();
+            AxolotlClient.configManager.save();
             stopBGM();
             button.message = I18n.translate("creditsBGM") + ": " + I18n.translate(AxolotlClient.CONFIG.creditsBGM.get() ? "options.on" : "options.off");
         }
@@ -239,6 +240,13 @@ public class CreditsScreen extends Screen {
         credits.add(new Credit("DarkKronicle", "Author of KronHUD, the best HUD mod!"));
         credits.add(new Credit("AMereBagatelle", "Author of the excellent FabricSkyBoxes Mod"));
 
+        if(!externalModuleCredits.isEmpty()){
+            credits.add(new SpacerTitle("- - - - - - "+I18n.translate("external_modules")+" - - - - - -"));
+            externalModuleCredits.forEach((s, s2) -> {
+                credits.add(new Credit(s, s2));
+            });
+        }
+
     }
 
     private void stopBGM(){
@@ -303,13 +311,13 @@ public class CreditsScreen extends Screen {
         @Override
         public void render(int index, int x, int y, int rowWidth, int rowHeight, int mouseX, int mouseY, boolean hovered) {
             if(hovered) {
-                drawVerticalLine(x - 100, y, y + 20, io.github.axolotlclient.config.Color.ERROR.getAsInt());
-                drawVerticalLine(x + 100, y, y + 20, io.github.axolotlclient.config.Color.ERROR.getAsInt());
-                drawHorizontalLine(x - 100, x + 100, y + 20, io.github.axolotlclient.config.Color.ERROR.getAsInt());
-                drawHorizontalLine(x - 100, x + 100, y, io.github.axolotlclient.config.Color.ERROR.getAsInt());
+                drawVerticalLine(x - 100, y, y + 20, io.github.axolotlclient.AxolotlclientConfig.Color.ERROR.getAsInt());
+                drawVerticalLine(x + 100, y, y + 20, io.github.axolotlclient.AxolotlclientConfig.Color.ERROR.getAsInt());
+                drawHorizontalLine(x - 100, x + 100, y + 20, io.github.axolotlclient.AxolotlclientConfig.Color.ERROR.getAsInt());
+                drawHorizontalLine(x - 100, x + 100, y, io.github.axolotlclient.AxolotlclientConfig.Color.ERROR.getAsInt());
             }
             this.hovered=hovered;
-            drawCenteredString(MinecraftClient.getInstance().textRenderer, name, x, y + 5, hovered ? io.github.axolotlclient.config.Color.SELECTOR_RED.getAsInt() : -1);
+            drawCenteredString(MinecraftClient.getInstance().textRenderer, name, x, y + 5, hovered ? io.github.axolotlclient.AxolotlclientConfig.Color.SELECTOR_RED.getAsInt() : -1);
         }
 
         @Override
@@ -353,6 +361,12 @@ public class CreditsScreen extends Screen {
             int startY=y+50;
             for(String t:credit.things){
 
+
+                while (t.contains("\n")){
+                    startY+=12;
+                    t=t.replace("\n", "");
+                }
+
                 if(t.startsWith("http")){
                     effects.put(t, new ClickEvent(ClickEvent.Action.OPEN_URL, t));
                     lines.put(startY, Formatting.UNDERLINE + t);
@@ -364,8 +378,8 @@ public class CreditsScreen extends Screen {
         }
 
         public void render() {
-            DrawUtil.fillRect(new io.github.axolotlclient.modules.hud.util.Rectangle(x, y, width, height), io.github.axolotlclient.config.Color.DARK_GRAY.withAlpha(127));
-            DrawUtil.outlineRect(new Rectangle(x, y, width, height), io.github.axolotlclient.config.Color.BLACK);
+            DrawUtil.fillRect(new io.github.axolotlclient.modules.hud.util.Rectangle(x, y, width, height), io.github.axolotlclient.AxolotlclientConfig.Color.DARK_GRAY.withAlpha(127));
+            DrawUtil.outlineRect(new Rectangle(x, y, width, height), io.github.axolotlclient.AxolotlclientConfig.Color.BLACK);
 
             drawCenteredString(MinecraftClient.getInstance().textRenderer, credit.name, window.getWidth()/2, y+7, -16784327);
 
@@ -373,7 +387,7 @@ public class CreditsScreen extends Screen {
             lines.forEach((integer, s) ->
                     drawCenteredString(MinecraftClient.getInstance().textRenderer,
                             s, x+width/2, integer,
-                            io.github.axolotlclient.config.Color.SELECTOR_GREEN.getAsInt())
+                            io.github.axolotlclient.AxolotlclientConfig.Color.SELECTOR_GREEN.getAsInt())
             );
         }
 
@@ -383,9 +397,9 @@ public class CreditsScreen extends Screen {
 
         public void mouseClicked(int mouseX, int mouseY){
             lines.forEach((integer, s) -> {
-                if((mouseY>=integer && mouseY<integer+12) &&
-                        mouseX >= width/2-MinecraftClient.getInstance().textRenderer.getStringWidth(s)/2 &&
-                        mouseX<= width/2+ MinecraftClient.getInstance().textRenderer.getStringWidth(s)/2){
+                if((mouseY>=integer && mouseY<integer+11) &&
+                        mouseX >= x+width/2-MinecraftClient.getInstance().textRenderer.getStringWidth(s)/2 &&
+                        mouseX<= x+width/2+ MinecraftClient.getInstance().textRenderer.getStringWidth(s)/2){
                     handleTextClick(new LiteralText(s).setStyle(new Style().setClickEvent(effects.get(Formatting.strip(s)))));
                 }
             });

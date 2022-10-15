@@ -2,10 +2,18 @@ package io.github.axolotlclient.modules.sky;
 
 import com.google.gson.JsonObject;
 import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.mixin.WorldRendererAccessor;
+import io.github.axolotlclient.util.Logger;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexBuffer;
+import net.minecraft.client.render.VertexFormats;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL14;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -15,6 +23,8 @@ import java.util.Objects;
  * <a href="https://github.com/AMereBagatelle/FabricSkyBoxes">Github Link.</a>
  * @license MIT
  **/
+
+// TODO fix rotation & blending issues with shooting stars, implement more missing features like worlds, weather, biomes...
 
 public abstract class SkyboxInstance {
 
@@ -26,16 +36,33 @@ public abstract class SkyboxInstance {
     protected int blendMode = 1;
 
     // ! These are the options variables.  Do not mess with these.
+    protected boolean alwaysOn;
     protected float maxAlpha = 1f;
-    int distance;
+    protected boolean manualBlend = false;
+    protected int blendSrcFactor = 1;
+    protected int blendDstFactor = 1;
+    protected int blendEquation;
+    protected boolean rotate = false;
+    protected float rotationSpeed = 1F;
+    protected float[] rotationStatic = new float[]{0, 0, 0};
+    protected float[] rotationAxis = new float[]{0, 0, 0};
+
+    protected boolean showSun = true;
+    protected boolean showMoon = true;
+    protected boolean showStars = true;
+
+    protected final Identifier MOON_PHASES = new Identifier("textures/environment/moon_phases.png");
+    protected final Identifier SUN = new Identifier("textures/environment/sun.png");
 
     public SkyboxInstance(JsonObject json){
         this.object=json;
     }
 
-
-
     public float getAlpha(){
+
+        if(alwaysOn) {
+            return 1F;
+        }
 
         int currentTime = (int) Objects.requireNonNull(MinecraftClient.getInstance().world).getTimeOfDay() % 24000; // modulo so that it's bound to 24000
         int durationIn = Util.getTicksBetween(fade[0], fade[1]);
@@ -92,9 +119,7 @@ public abstract class SkyboxInstance {
             maxPossibleAlpha = 0f; // default not showing
         }
 
-        maxPossibleAlpha *= maxAlpha;
-
-        return  maxPossibleAlpha;
+        return alpha = MathHelper.clamp(maxPossibleAlpha * maxAlpha, 0, 1);
     }
 
     protected int parseBlend(String str){
@@ -122,7 +147,7 @@ public abstract class SkyboxInstance {
                 case "replace":
                     return 8;
                 default:
-                    AxolotlClient.LOGGER.warn("Unknown blend: " + str);
+                    Logger.warn("Unknown blend: " + str);
                     return 1;
             }
         }
@@ -130,9 +155,16 @@ public abstract class SkyboxInstance {
 
     protected void setupBlend(float brightness){
         GlStateManager.disableAlphaTest();
+        GlStateManager.disableBlend();
+        if(manualBlend){
+            GlStateManager.enableBlend();
+            GlStateManager.blendFunc(blendSrcFactor, blendDstFactor);
+            GL14.glBlendEquation(blendEquation);
+            GlStateManager.enableTexture();
+            return;
+        }
 
-        switch (blendMode)
-        {
+        switch (blendMode) {
             case 0:
 
                 GlStateManager.enableBlend();
@@ -177,6 +209,7 @@ public abstract class SkyboxInstance {
 
             case 8:
                 GlStateManager.disableBlend();
+                break;
         }
         GlStateManager.color4f(1.0F, 1.0F, 1.0F, brightness);
 
@@ -186,14 +219,109 @@ public abstract class SkyboxInstance {
     protected void clearBlend(float brightness){
         GlStateManager.disableAlphaTest();
         GlStateManager.enableBlend();
-        GlStateManager.blendFunc(770, 1);
+        GlStateManager.blendFunc(0, 1);
         GlStateManager.color4f(1.0F, 1.0F, 1.0F, brightness);
     }
+    
+    protected void setupRotate(float delta, float brightness){
+        GlStateManager.rotatef(0, rotationStatic[0], rotationStatic[1], rotationStatic[2]);
+        if(rotate) {
+            GlStateManager.rotatef(0, rotationAxis[0], rotationAxis[1], rotationAxis[2]);
+            GlStateManager.color4f(1.0F, 1.0F, 1.0F, brightness);
+            //GlStateManager.rotatef(-90.0F, 0.0F, 1.0F, 0.0F);
+            GlStateManager.rotatef(MinecraftClient.getInstance().world.getSkyAngle(delta) * rotationSpeed, 0.0F, 1.0F, 0.0F);
+            GlStateManager.rotatef(0, -rotationAxis[0], -rotationAxis[1], -rotationAxis[2]);
+        }
+    }
 
-    public void render(float brightness){
+    protected void clearRotate(){
+        GlStateManager.rotatef(0, -rotationStatic[0], -rotationStatic[1], -rotationStatic[2]);
+    }
+
+    public void render(float delta, float brightness){
+        GlStateManager.disableAlphaTest();
+        GlStateManager.enableBlend();
+        GlStateManager.pushMatrix();
+
         setupBlend(brightness);
+        setupRotate(delta, brightness);
         renderSkybox();
+        renderDecorations(delta, brightness);
         clearBlend(brightness);
+        clearRotate();
+
+        GlStateManager.popMatrix();
+        GlStateManager.enableAlphaTest();
+        GlStateManager.disableBlend();
+    }
+
+    protected void renderDecorations(float delta, float brightness){
+        GlStateManager.enableTexture();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFuncSeparate(770, 1, 1, 0);
+        GlStateManager.pushMatrix();
+        GlStateManager.color4f(1.0F, 1.0F, 1.0F, brightness);
+        GlStateManager.rotatef(-90.0F, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotatef(MinecraftClient.getInstance().world.getSkyAngle(delta) * 360.0F, 1.0F, 0.0F, 0.0F);
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferBuilder = tessellator.getBuffer();
+
+        if(showSun) {
+            float o = 30.0F;
+            MinecraftClient.getInstance().getTextureManager().bindTexture(SUN);
+            bufferBuilder.begin(GL11.GL_QUADS, VertexFormats.POSITION_TEXTURE);
+            bufferBuilder.vertex((-o), 100.0, (-o)).texture(0.0, 0.0).next();
+            bufferBuilder.vertex(o, 100.0, (-o)).texture(1.0, 0.0).next();
+            bufferBuilder.vertex(o, 100.0, o).texture(1.0, 1.0).next();
+            bufferBuilder.vertex(-o, 100.0, o).texture(0.0, 1.0).next();
+            tessellator.draw();
+        }
+        if(showMoon){
+            float o = 20.0F;
+            MinecraftClient.getInstance().getTextureManager().bindTexture(MOON_PHASES);
+            int x = MinecraftClient.getInstance().world.getMoonPhase();
+            int t = x % 4;
+            int u = x / 4 % 2;
+            float s = (float) (t) / 4.0F;
+            float v = (float) (u) / 2.0F;
+            float w = (float) (t + 1) / 4.0F;
+            float y = (float) (u + 1) / 2.0F;
+            bufferBuilder.begin(7, VertexFormats.POSITION_TEXTURE);
+            bufferBuilder.vertex((-o), -100.0, o).texture(w, y).next();
+            bufferBuilder.vertex(o, -100.0, o).texture(s, y).next();
+            bufferBuilder.vertex(o, -100.0, (-o)).texture(s, v).next();
+            bufferBuilder.vertex((-o), -100.0, (-o)).texture(w, v).next();
+            tessellator.draw();
+        }
+        if(showStars) {
+            GlStateManager.disableTexture();
+            float z = MinecraftClient.getInstance().world.method_3707(delta) * brightness;
+            if (z > 0.0F) {
+                GlStateManager.color4f(z, z, z, z);
+                if (((WorldRendererAccessor) MinecraftClient.getInstance().worldRenderer).getVbo()) {
+                    VertexBuffer starsBuffer = ((WorldRendererAccessor) MinecraftClient.getInstance().worldRenderer).getStarsBuffer();
+                    starsBuffer.bind();
+                    GL11.glEnableClientState(32884);
+                    GL11.glVertexPointer(3, 5126, 12, 0L);
+                    starsBuffer.draw(7);
+                    starsBuffer.unbind();
+                    GL11.glDisableClientState(32884);
+                } else {
+                    GlStateManager.callList(((WorldRendererAccessor) MinecraftClient.getInstance().worldRenderer).getStarsList());
+                }
+            }
+        }
+        GlStateManager.disableBlend();
+        GlStateManager.enableAlphaTest();
+        GlStateManager.popMatrix();
+        GlStateManager.enableTexture();
+    }
+
+    public void remove(){
+        for(Identifier id:textures){
+            MinecraftClient.getInstance().getTextureManager().close(id);
+        }
     }
 
     public abstract void renderSkybox();

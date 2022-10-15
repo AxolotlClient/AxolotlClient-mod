@@ -1,6 +1,6 @@
 package io.github.axolotlclient.modules.hud.snapping;
 
-import io.github.axolotlclient.config.Color;
+import io.github.axolotlclient.AxolotlclientConfig.Color;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;

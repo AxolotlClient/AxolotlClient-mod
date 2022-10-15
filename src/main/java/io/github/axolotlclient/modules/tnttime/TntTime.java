@@ -1,9 +1,9 @@
 package io.github.axolotlclient.modules.tnttime;
 
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.config.options.BooleanOption;
-import io.github.axolotlclient.config.options.IntegerOption;
-import io.github.axolotlclient.config.options.OptionCategory;
+import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.IntegerOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Style;
@@ -21,7 +21,7 @@ public class TntTime extends AbstractModule {
 
     private final OptionCategory category = new OptionCategory("tnttime");
     public final BooleanOption enabled = new BooleanOption("enabled", false);
-    private final IntegerOption decimalPlaces = new IntegerOption("decimalPlaces", 2, 0, 6);
+    private final IntegerOption decimalPlaces = new IntegerOption("decimalplaces", 2, 0, 6);
 
     public static TntTime getInstance() {
         return Instance;

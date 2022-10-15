@@ -1,12 +1,17 @@
 package io.github.axolotlclient.config;
 
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.config.options.*;
+import io.github.axolotlclient.AxolotlclientConfig.AxolotlClientConfigConfig;
+import io.github.axolotlclient.AxolotlclientConfig.Color;
+import io.github.axolotlclient.AxolotlclientConfig.ConfigHolder;
+import io.github.axolotlclient.AxolotlclientConfig.options.*;
+import io.github.axolotlclient.config.screen.CreditsScreen;
+import net.minecraft.client.MinecraftClient;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AxolotlClientConfig {
+public class AxolotlClientConfig extends ConfigHolder {
 
     public final BooleanOption showOwnNametag = new BooleanOption("showOwnNametag", false);
     public final BooleanOption useShadows = new BooleanOption("useShadows", false);
@@ -19,32 +24,24 @@ public class AxolotlClientConfig {
     public final BooleanOption timeChangerEnabled = new BooleanOption("enabled", false);
     public final IntegerOption customTime = new IntegerOption("time", 0, 0, 24000);
     public final BooleanOption customSky = new BooleanOption("customSky", true);
-    public final BooleanOption showSunMoon = new BooleanOption("showSunMoon", true);
     public final IntegerOption cloudHeight = new IntegerOption("cloudHeight", 128, 100, 512);
     public final BooleanOption dynamicFOV = new BooleanOption("dynamicFov", true);
     public final BooleanOption fullBright = new BooleanOption("fullBright", false);
-    public final IntegerOption chromaSpeed = new IntegerOption("chromaSpeed", 20, 10, 50);
     public final BooleanOption lowFire = new BooleanOption("lowFire", false);
 
-    public final BooleanOption showOptionTooltips = new BooleanOption("showOptionTooltips", true);
-    public final BooleanOption showCategoryTooltips = new BooleanOption("showCategoryTooltips", false);
-    public final BooleanOption quickToggles = new BooleanOption("quickToggles", false);
     public final ColorOption loadingScreenColor = new ColorOption("loadingBgColor", new Color(-1));
     public final BooleanOption nightMode = new BooleanOption("nightMode", false);
     public final BooleanOption rawMouseInput = new BooleanOption("rawMouseInput", false);
-
-    public final BooleanOption rotateWorld = new BooleanOption("rotateWorld", false);
 
     public final BooleanOption enableCustomOutlines = new BooleanOption("enabled", false);
     public final ColorOption outlineColor = new ColorOption("color", Color.parse("#DD000000"));
     public final IntegerOption outlineWidth = new IntegerOption("outlineWidth", 1, 1, 10);
 
+    public final BooleanOption debugLogOutput = new BooleanOption("debugLogOutput", false);
+    public final GenericOption openCredits = new GenericOption("Credits", "Open Credits", (mouseX, mouseY)->
+        MinecraftClient.getInstance().openScreen(new CreditsScreen(MinecraftClient.getInstance().currentScreen))
+    );
     public final BooleanOption creditsBGM = new BooleanOption("creditsBGM", true);
-
-    public final BooleanOption searchForOptions = new BooleanOption("searchForOptions", false);
-    public final BooleanOption searchIgnoreCase = new BooleanOption("searchIgnoreCase", true);
-    public final BooleanOption searchSort = new BooleanOption("searchSort", true);
-    public final EnumOption searchSortOrder = new EnumOption("searchSortOrder", new String[]{"ASCENDING", "DESCENDING"}, "ASCENDING");
 
     public final OptionCategory general = new OptionCategory("general");
     public final OptionCategory nametagOptions = new OptionCategory("nametagOptions");
@@ -93,18 +90,22 @@ public class AxolotlClientConfig {
 
         general.add(loadingScreenColor);
         general.add(nightMode);
-        general.add(quickToggles);
-        general.add(showOptionTooltips);
-        general.add(showCategoryTooltips);
+        general.add(AxolotlClientConfigConfig.showQuickToggles);
+        general.add(AxolotlClientConfigConfig.showOptionTooltips);
+        general.add(AxolotlClientConfigConfig.showCategoryTooltips);
         general.add(rawMouseInput);
+        general.add(openCredits);
+        general.add(debugLogOutput);
 
-        searchFilters.add(searchIgnoreCase, searchForOptions, searchSort, searchSortOrder);
+        searchFilters.add(AxolotlClientConfigConfig.searchIgnoreCase,
+                AxolotlClientConfigConfig.searchForOptions,
+                AxolotlClientConfigConfig.searchSort,
+                AxolotlClientConfigConfig.searchSortOrder);
         general.addSubCategory(searchFilters);
 
         rendering.add(customSky,
-                showSunMoon,
                 cloudHeight,
-                chromaSpeed,
+                AxolotlClientConfigConfig.chromaSpeed,
                 dynamicFOV,
                 fullBright,
                 lowFire

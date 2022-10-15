@@ -2,10 +2,11 @@ package io.github.axolotlclient.modules.hud.gui.hud;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.config.options.OptionBase;
+import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
+import io.github.axolotlclient.util.Logger;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.resource.ResourcePack;
@@ -21,13 +22,15 @@ public class PackDisplayHud extends AbstractHudEntry {
 
     public final List<packWidget> widgets = new ArrayList<>();
 
+    private final List<ResourcePack> packs = new ArrayList<>();
+
     public PackDisplayHud() {
         super(200, 50);
     }
 
     @Override
     public void init() {
-        AxolotlClient.packs.forEach(pack -> {
+        packs.forEach(pack -> {
             try {
                 if(!pack.getName().equalsIgnoreCase("Default") && pack.getIcon()!=null)
                     widgets.add(new packWidget(pack));
@@ -44,6 +47,12 @@ public class PackDisplayHud extends AbstractHudEntry {
         width=w.get();
 
         height=(widgets.size()-1)*18+18;
+    }
+
+    public void setPacks(List<ResourcePack> packs){
+        widgets.clear();
+        this.packs.addAll(packs);
+        init();
     }
 
     @Override
@@ -93,7 +102,7 @@ public class PackDisplayHud extends AbstractHudEntry {
             try {
                 this.texture = new NativeImageBackedTexture(pack.getIcon()).getGlId();
             } catch (Exception e){
-                AxolotlClient.LOGGER.warn("Pack "+pack.getName()+" somehow threw an error! Please investigate...");
+                Logger.warn("Pack "+pack.getName()+" somehow threw an error! Please investigate...");
             }
         }
 

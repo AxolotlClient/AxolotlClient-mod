@@ -1,9 +1,9 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.axolotlclient.config.Color;
-import io.github.axolotlclient.config.options.IntegerOption;
-import io.github.axolotlclient.config.options.OptionBase;
+import io.github.axolotlclient.AxolotlclientConfig.Color;
+import io.github.axolotlclient.AxolotlclientConfig.options.IntegerOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.ItemUtil;
@@ -64,7 +64,7 @@ public class ItemUpdateHud extends AbstractHudEntry {
             timedAdded.add(stack.timed());
         }
         for (ItemUtil.TimedItemStorage stack : timedAdded) {
-            if (stack.stack.isEmpty()) {
+            if (stack.stack == null) {
                 continue;
             }
             Optional<ItemUtil.TimedItemStorage> item = ItemUtil.getTimedItemFromItem(stack.stack, this.added);
@@ -81,7 +81,7 @@ public class ItemUpdateHud extends AbstractHudEntry {
         List<ItemUtil.ItemStorage> removed = ItemUtil.compare(oldItems, ItemUtil.storageFromItem(ItemUtil.getItems(client)));
         List<ItemUtil.TimedItemStorage> timed = ItemUtil.untimedToTimed(removed);
         for (ItemUtil.TimedItemStorage stack : timed) {
-            if (stack.stack.isEmpty()) {
+            if (stack.stack == null) {
                 continue;
             }
             Optional<ItemUtil.TimedItemStorage> item = ItemUtil.getTimedItemFromItem(stack.stack, this.removed);
@@ -110,7 +110,7 @@ public class ItemUpdateHud extends AbstractHudEntry {
                     Formatting.WHITE + item.times +
                     Formatting.DARK_GRAY + "] " +
                     Formatting.RESET+
-                    item.stack.getName();
+                    item.stack.getCustomName();
             if (shadow.get()) {
                 client.textRenderer.drawWithShadow(message, pos.x, pos.y + lastY,
                         Color.SELECTOR_GREEN.getAsInt());
@@ -131,7 +131,7 @@ public class ItemUpdateHud extends AbstractHudEntry {
                     Formatting.WHITE + item.times +
                     Formatting.DARK_GRAY + "] " +
                     Formatting.RESET+
-                    item.stack.getName();
+                    item.stack.getCustomName();
             if (shadow.get()) {
                 client.textRenderer.drawWithShadow(message, pos.x, pos.y + lastY,
                         Color.SELECTOR_RED.getAsInt());
@@ -155,7 +155,7 @@ public class ItemUpdateHud extends AbstractHudEntry {
                 Formatting.WHITE + 2 +
                 Formatting.DARK_GRAY + "] " +
                 Formatting.RESET+
-                new ItemStack(Blocks.DIRT).getName();
+                new ItemStack(Blocks.DIRT).getCustomName();
         if (shadow.get()) {
             client.textRenderer.drawWithShadow(addM, pos.x+1, pos.y+1,
                     Color.SELECTOR_GREEN.getAsInt());
@@ -168,7 +168,7 @@ public class ItemUpdateHud extends AbstractHudEntry {
                 Formatting.WHITE + 4 +
                 Formatting.DARK_GRAY + "] " +
                 Formatting.RESET+
-                new ItemStack(Blocks.GRASS).getName();
+                new ItemStack(Blocks.GRASS).getCustomName();
         if (shadow.get()) {
             client.textRenderer.drawWithShadow(removeM, pos.x+1, pos.y+1 + client.textRenderer.fontHeight + 2,
                     Color.SELECTOR_RED.getAsInt());

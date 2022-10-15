@@ -1,8 +1,8 @@
 package io.github.axolotlclient.modules.particles;
 
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.config.Color;
-import io.github.axolotlclient.config.options.*;
+import io.github.axolotlclient.AxolotlclientConfig.Color;
+import io.github.axolotlclient.AxolotlclientConfig.options.*;
 import io.github.axolotlclient.mixin.ParticleAccessor;
 import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.util.Util;
@@ -44,7 +44,7 @@ public class Particles extends AbstractModule {
                     new BooleanOption("showParticle", true),
                     new IntegerOption("count", 1, 1, 20),
                     new BooleanOption("customColor", false),
-                    new ColorOption("color", "particles", new Color(-1)));
+                    new ColorOption("color", "particles", Color.WHITE));
 
             if(type == ParticleType.CRIT || type == ParticleType.CRIT_MAGIC){
                 populateMap(optionsByKey, new BooleanOption("alwaysCrit", false));

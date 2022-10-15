@@ -23,7 +23,7 @@ public abstract class EntityRendererMixin<T extends Entity> {
 
     @Inject(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Ljava/lang/String;III)I"))
     public void addBadges(T entity, String string, double d, double e, double f, int i, CallbackInfo ci){
-        if(entity instanceof AbstractClientPlayerEntity && string.contains(entity.method_6344().asFormattedString()))
+        if(entity instanceof AbstractClientPlayerEntity && string.contains(entity.getName().asFormattedString()))
             AxolotlClient.addBadge(entity);
     }
 
@@ -38,7 +38,7 @@ public abstract class EntityRendererMixin<T extends Entity> {
         if(entity instanceof AbstractClientPlayerEntity){
             if(MinecraftClient.getInstance().getCurrentServerEntry() != null &&
                     MinecraftClient.getInstance().getCurrentServerEntry().address.contains("hypixel.net")){
-                if(HypixelAbstractionLayer.hasValidAPIKey() && LevelHead.getInstance().enabled.get() && string.contains(entity.method_6344().asFormattedString())){
+                if(HypixelAbstractionLayer.hasValidAPIKey() && LevelHead.getInstance().enabled.get() && string.contains(entity.getName().asFormattedString())){
                     TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
                     String text = "Level: "+ HypixelAbstractionLayer.getPlayerLevel(String.valueOf(entity.getUuid()));
 

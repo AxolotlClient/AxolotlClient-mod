@@ -1,8 +1,8 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.axolotlclient.config.options.BooleanOption;
-import io.github.axolotlclient.config.options.OptionBase;
+import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.ItemUtil;
@@ -35,7 +35,7 @@ public class ArrowHud extends AbstractHudEntry {
         if (dynamic.get()) {
             ClientPlayerEntity player = MinecraftClient.getInstance().player;
             if(player.getMainHandStack()==null)return;
-            if (    !player.getMainHandStack().isEmpty() &&
+            if (    player.getMainHandStack() != null &&
                     !(player.getMainHandStack().getItem() instanceof BowItem)) {
                 return;
             }

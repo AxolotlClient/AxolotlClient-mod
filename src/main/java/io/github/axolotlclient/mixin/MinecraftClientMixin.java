@@ -5,7 +5,6 @@ import io.github.axolotlclient.NetworkHelper;
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hud.gui.hud.CPSHud;
 import io.github.axolotlclient.modules.rpc.DiscordRPC;
-import io.github.axolotlclient.modules.sky.SkyResourceManager;
 import io.github.axolotlclient.modules.zoom.Zoom;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
@@ -18,7 +17,7 @@ import net.minecraft.client.util.Window;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.player.ClientPlayerEntity;
 import net.minecraft.world.level.LevelInfo;
-import org.lwjgl.LWJGLException;
+import org.apache.logging.log4j.Logger;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -39,9 +38,14 @@ public abstract class MinecraftClientMixin {
 
     @Shadow public ClientPlayerEntity player;
 
-    @Shadow protected abstract void loadLogo(TextureManager textureManager) throws LWJGLException;
+    protected MinecraftClientMixin(TextureManager textureManager) {
+        this.textureManager = textureManager;
+    }
 
     @Shadow private TextureManager textureManager;
+
+    @Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;info(Ljava/lang/String;)V", ordinal = 1), remap = false)
+    public void noSessionIDLeak(Logger instance, String s){}
 
     /**
      * @author TheKodeToad & Sk1erLLC (initially created this fix).
@@ -58,17 +62,6 @@ public abstract class MinecraftClientMixin {
     @Inject(method = "setPixelFormat", at = @At("TAIL"))
     public void setWindowTitle(CallbackInfo ci){
         Display.setTitle("AxolotlClient "+ this.gameVersion);
-    }
-
-    @Redirect(method = "initializeGame", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;loadLogo(Lnet/minecraft/client/texture/TextureManager;)V"))
-    public void noLogo(MinecraftClient instance, TextureManager textureManager){}
-
-    @Inject(method = "initializeGame", at = @At(value = "INVOKE", target = "Lnet/minecraft/advancement/Achievement;setStatFormatter(Lnet/minecraft/stat/StatFormatter;)Lnet/minecraft/advancement/Achievement;"))
-    public void loadSkiesOnStartup(CallbackInfo ci){
-        SkyResourceManager.onStartup();
-        try {
-            this.loadLogo(this.textureManager);
-        } catch (Exception ignored){}
     }
 
     @Redirect(method = "handleKeyInput", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/options/KeyBinding;getCode()I", ordinal = 5))
@@ -91,7 +84,7 @@ public abstract class MinecraftClientMixin {
                 AxolotlClient.CONFIG.loadingScreenColor.get().getBlue(), AxolotlClient.CONFIG.loadingScreenColor.get().getAlpha());
     }
 
-    @Redirect(method = "method_9382", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/BufferBuilder;color(IIII)Lnet/minecraft/client/render/BufferBuilder;"))
+    @Redirect(method = "drawLogo", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/BufferBuilder;color(IIII)Lnet/minecraft/client/render/BufferBuilder;"))
     public BufferBuilder loadingScreenBg(BufferBuilder instance, int red, int green, int blue, int alpha){
 
         return instance.color(AxolotlClient.CONFIG.loadingScreenColor.get().getRed(),
@@ -105,7 +98,7 @@ public abstract class MinecraftClientMixin {
         return "1.8.9";
     }
 
-    @Inject(method = "startGame", at = @At("HEAD"))
+    @Inject(method = "startIntegratedServer", at = @At("HEAD"))
     public void startup(String worldFileName, String worldName, LevelInfo levelInfo, CallbackInfo ci){
         DiscordRPC.setWorld(worldFileName);
     }
@@ -114,11 +107,6 @@ public abstract class MinecraftClientMixin {
     public void stop(CallbackInfo ci){
         NetworkHelper.setOffline();
         DiscordRPC.shutdown();
-    }
-
-    @Inject(method = "tick", at = @At("HEAD"))
-    public void tickClient(CallbackInfo ci){
-        AxolotlClient.tickClient();
     }
 
 
@@ -139,12 +127,12 @@ public abstract class MinecraftClientMixin {
         }
     }
 
-    @Inject(method = "connect(Lnet/minecraft/client/world/ClientWorld;Ljava/lang/String;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;method_1236(Lnet/minecraft/entity/player/PlayerEntity;)V"))
+    @Inject(method = "connect(Lnet/minecraft/client/world/ClientWorld;Ljava/lang/String;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;flipPlayer(Lnet/minecraft/entity/player/PlayerEntity;)V"))
     public void login(ClientWorld world, String loadingMessage, CallbackInfo ci){
         NetworkHelper.setOnline();
     }
 
-    @Inject(method = "method_2923", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/LoadingScreenRenderer;<init>(Lnet/minecraft/client/MinecraftClient;)V"))
+    @Inject(method = "onResolutionChanged", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/LoadingScreenRenderer;<init>(Lnet/minecraft/client/MinecraftClient;)V"))
     public void onResize(int i, int j, CallbackInfo ci){
         Util.window = new Window(MinecraftClient.getInstance());
     }

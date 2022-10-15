@@ -37,7 +37,7 @@ public abstract class ChatHudMixin {
 
     @ModifyArg(method = "addMessage(Lnet/minecraft/text/Text;I)V", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;info(Ljava/lang/String;)V"), remap = false)
     public String noNamesInLogIfHidden(String message){
-        return editChat(new LiteralText(message)).getString();
+        return editChat(new LiteralText(message)).asFormattedString();
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;fill(IIIII)V", ordinal = 0))

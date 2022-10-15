@@ -2,8 +2,9 @@ package io.github.axolotlclient.modules.rpc.gameSdk;
 
 import de.jcm.discordgamesdk.Core;
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.config.options.DisableReason;
+import io.github.axolotlclient.AxolotlclientConfig.options.DisableReason;
 import io.github.axolotlclient.modules.rpc.DiscordRPC;
+import io.github.axolotlclient.util.Logger;
 import io.github.axolotlclient.util.OSUtil;
 
 import java.io.File;
@@ -19,7 +20,7 @@ import java.util.zip.ZipInputStream;
 
 /**
  * This DiscordRPC module is derived from <a href="https://github.com/DeDiamondPro/HyCord">HyCord</a>.
- * @license: GPL-3.0
+ * @license GPL-3.0
  * @author DeDiamondPro
  */
 
@@ -27,7 +28,7 @@ public class GameSdkDownloader {
 
     public static void downloadSdk() {
         File target = new File("config/game-sdk");
-        AxolotlClient.LOGGER.info("Downloading SDK!");
+        Logger.info("Downloading SDK!");
         try {
             if (!target.exists() && !target.mkdir()) {
                 throw new IllegalStateException("Could not create game-sdk folder");
@@ -64,7 +65,7 @@ public class GameSdkDownloader {
             }
 
             if (!sdk.exists() || !jni.exists()) {
-                AxolotlClient.LOGGER.error("Could not download GameSDK, no copy is available. RPC will be disabled.");
+                Logger.error("Could not download GameSDK, no copy is available. RPC will be disabled.");
                 DiscordRPC.getInstance().enabled.setForceOff(true, DisableReason.CRASH);
                 return;
             }
@@ -122,23 +123,28 @@ public class GameSdkDownloader {
         if(in!=null) {
             Files.copy(in, jni.toPath(), StandardCopyOption.REPLACE_EXISTING);
         } else if(!retriedExtractingJni) {
-            AxolotlClient.LOGGER.warn("Extracting JNI failed, retrying!");
+            Logger.warn("Extracting JNI failed, retrying!");
             retriedExtractingJni=true;
             extractJni(jni);
         } else {
-            AxolotlClient.LOGGER.error("Extracting Jni failed, restart your game to try again.");
+            Logger.error("Extracting Jni failed, restart your game to try again.");
             DiscordRPC.getInstance().enabled.setForceOff(true, DisableReason.CRASH);
         }
     }
 
     private static void loadNative(File sdk, File jni) {
-        AxolotlClient.LOGGER.info("Loading GameSDK");
+        Logger.info("Loading GameSDK");
 
-        if (OSUtil.getOS() == OSUtil.OperatingSystem.WINDOWS) {
-            System.load(sdk.getAbsolutePath());
+        try {
+            if (OSUtil.getOS() == OSUtil.OperatingSystem.WINDOWS) {
+                System.load(sdk.getAbsolutePath());
+            }
+
+            System.load(jni.getAbsolutePath());
+            Core.initDiscordNative(sdk.getAbsolutePath());
+        } catch (Throwable e) {
+            Logger.warn("Discord RPC failed to load");
+            DiscordRPC.getInstance().enabled.set(false);
         }
-
-        System.load(jni.getAbsolutePath());
-        Core.initDiscordNative(sdk.getAbsolutePath());
     }
 }

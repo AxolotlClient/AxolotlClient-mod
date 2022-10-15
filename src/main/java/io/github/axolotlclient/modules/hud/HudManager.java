@@ -1,11 +1,10 @@
 package io.github.axolotlclient.modules.hud;
 
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.config.options.OptionCategory;
+import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.gui.hud.*;
-import io.github.axolotlclient.config.Color;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.legacyfabric.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.legacyfabric.fabric.api.client.rendering.v1.HudRenderCallback;
@@ -41,8 +40,6 @@ public class HudManager extends AbstractModule {
     @Override
     public void init(){
 
-        Color.setupChroma();
-
         KeyBindingHelper.registerKeyBinding(key);
 
         AxolotlClient.config.add(HudEditScreen.snapping);
@@ -70,9 +67,11 @@ public class HudManager extends AbstractModule {
         add(new ItemUpdateHud());
         add(new PackDisplayHud());
         add(new RealTimeHud());
+        add(new ReachDisplayHud());
         add(new HotbarHUD());
         add(new MemoryHud());
         add(new PlayerCountHud());
+        add(new ComboCounterHud());
 
         entries.forEach((identifier, abstractHudEntry) -> abstractHudEntry.init());
     }

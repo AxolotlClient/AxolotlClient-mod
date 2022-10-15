@@ -1,7 +1,5 @@
 package io.github.axolotlclient.util;
 
-import io.github.axolotlclient.AxolotlClient;
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -66,7 +64,7 @@ public class OSUtil {
                 process.getErrorStream().close();
                 process.getOutputStream().close();
             } catch (IOException | PrivilegedActionException var3) {
-                AxolotlClient.LOGGER.error("Couldn't open url '{}'", url, var3);
+                Logger.error("Couldn't open url '{}'", url, var3);
             }
 
         }
@@ -75,7 +73,7 @@ public class OSUtil {
             try {
                 this.open(uri.toURL());
             } catch (MalformedURLException var3) {
-                AxolotlClient.LOGGER.error("Couldn't open uri '{}'", uri, var3);
+                Logger.error("Couldn't open uri '{}'", uri, var3);
             }
 
         }

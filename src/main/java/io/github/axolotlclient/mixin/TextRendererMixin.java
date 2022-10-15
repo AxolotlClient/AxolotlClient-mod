@@ -18,56 +18,49 @@ public abstract class TextRendererMixin {
 
     // Pain at its finest
 
-    private final Identifier texture_g = new Identifier("axolotlclient", "textures/font/g_breve_capital.png");
-
-    @Shadow private float field_1149;
-
-    @Shadow private float field_1150;
-
+    @Shadow private float red;
+    @Shadow private float green;
+    @Shadow private float blue;
+    @Shadow private float alpha;
+    @Shadow private float x;
+    @Shadow private float y;
     @Shadow public int fontHeight;
-
-    @Shadow private float field_1156;
-
-    @Shadow private float field_1155;
-
-    @Shadow private float field_1154;
-
-    @Shadow private float field_1153;
+    private final Identifier texture_g = new Identifier("axolotlclient", "textures/font/g_breve_capital.png");
 
     private boolean shouldHaveShadow;
 
-    @Inject(method = "drawLayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;method_959(Ljava/lang/String;Z)V"))
+    @Inject(method = "drawLayer(Ljava/lang/String;FFIZ)I", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Ljava/lang/String;Z)V"))
     public void getData(String text, float x, float y, int color, boolean shadow, CallbackInfoReturnable<Integer> cir){
         if(text!=null) {
             shouldHaveShadow = shadow;
         }
     }
 
-    @Inject(method = "method_950", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "drawLayerUnicode", at = @At("HEAD"), cancellable = true)
     public void gBreve(char c, boolean bl, CallbackInfoReturnable<Float> cir){
-        if(c=='Ğ' && !MinecraftClient.getInstance().options.forceUnicode){
+        if(c=='Ğ' && !MinecraftClient.getInstance().options.forcesUnicodeFont){
             MinecraftClient.getInstance().getTextureManager().bindTexture(texture_g);
 
             if(!bl || shouldHaveShadow) {
-                GlStateManager.color4f(this.field_1153 / 4, this.field_1154 / 4, this.field_1155 / 4, this.field_1156);
-                drawTexture(this.field_1149 + 1,
-                        this.field_1150 - this.fontHeight + 7
+                GlStateManager.color4f(this.red / 4, this.green / 4, this.blue / 4, this.alpha);
+                drawTexture(this.x + 1,
+                        this.y - this.fontHeight + 7
                 );
             }
 
-            GlStateManager.color4f(this.field_1153, this.field_1154, this.field_1155, this.field_1156);
-            drawTexture(this.field_1149,
-                    this.field_1150 - this.fontHeight + 6
+            GlStateManager.color4f(this.red, this.green, this.blue, this.alpha);
+            drawTexture(this.x,
+                    this.y - this.fontHeight + 6
             );
 
-            GlStateManager.color4f(this.field_1153, this.field_1154, this.field_1155, this.field_1156);
+            GlStateManager.color4f(this.red, this.green, this.blue, this.alpha);
             cir.setReturnValue(7.0F);
         }
     }
 
-    @Inject(method = "method_949", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(method = "getCharWidth", at = @At(value = "HEAD"), cancellable = true)
     public void modifiedCharWidth(char c, CallbackInfoReturnable<Integer> cir){
-        if(c=='Ğ' && !MinecraftClient.getInstance().options.forceUnicode){
+        if(c=='Ğ' && !MinecraftClient.getInstance().options.forcesUnicodeFont){
             cir.setReturnValue(7);
         }
     }
