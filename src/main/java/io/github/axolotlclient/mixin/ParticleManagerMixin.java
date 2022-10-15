@@ -25,6 +25,7 @@ public abstract class ParticleManagerMixin {
 
         if(!Particles.getInstance().getShowParticle(cachedType)){
             cir.setReturnValue(null);
+            cir.cancel();
         }
     }
 
