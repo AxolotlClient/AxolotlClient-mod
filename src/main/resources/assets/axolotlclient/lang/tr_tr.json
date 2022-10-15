@@ -78,6 +78,7 @@
 	"inverse": "Ters",
 	"tnttime": "TNTSüresi",
 	"particles": "Parçacıklar",
+	"showParticle": "Parçacığı Göster",
 	"customColor": "Özel Renk",
 	"customColor.tooltip": "Bu parçacık için kullanılıcak özel renk seçeneği.",
 	"particles.color.tooltip": "Bu Parçacığın rengi. <br>\"Özel Renk\" 'ın etkin olması gerekiyor.",
@@ -180,7 +181,7 @@
 	"itemupdatehud": "Eşya Durumu Arayüzü",
 	"packdisplayhud": "Paket Bilgisi Arayüzü",
 	"realtimehud": "Gerçek Zaman Arayüzü",
-	"showSeconds": "Saniyeleri Göster",
+	"format": "Format",
 	"timeout": "Zaman Aşımı",
 	"text": "Yazı",
 	"bar": "Can Barı",
@@ -245,7 +246,10 @@
 	"outline": "Anahat",
 	"outlineColor": "Anahat Rengi",
 	"shadow": "Gölge",
-
+	"center": "Orta",
+	"left": "Sol",
+	"right": "Sağ",
+	
 	"rpc": "Discord RPC",
 	"showActivity": "Aktiviteyi Göster",
 	"showActivity.tooltip": "Şimdiki Oyun-İçi aktiviteni gösterme seçeneği.",
@@ -267,6 +271,7 @@
 	"creditsBGM": "Müzik",
 	"contributors": "Katılımcılar",
 	"other_people": "Diğer Kişiler",
+	"external_modules": "Harici Modüller",
 
 	"pickColor": "Renk Seç",
 	"currentColor": "Şimdiki",
