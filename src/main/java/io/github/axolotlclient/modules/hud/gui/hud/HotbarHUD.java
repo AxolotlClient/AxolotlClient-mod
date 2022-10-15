@@ -120,6 +120,11 @@ public class HotbarHUD extends AbstractHudEntry {
     }
 
     @Override
+    public boolean overridesF3() {
+        return true;
+    }
+
+    @Override
     public void addConfigOptions(List<OptionBase<?>> options) {
         options.add(enabled);
     }

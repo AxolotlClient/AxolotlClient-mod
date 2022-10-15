@@ -105,9 +105,8 @@ public class BossBarHud extends AbstractHudEntry {
 		}
 		if (text.get()) {
 			Text text = bossBar.getName();
-			float textX = x + ((float) width / 2) - ((float) client.textRenderer.getWidth(text) / 2);
 			float textY = y - 9;
-			drawString(matrices, text.getString(), (int) textX, (int) textY, textColor.get(), shadow.get());
+			drawString(matrices, text.getString(),  x, (int) textY, textColor.get(), shadow.get());
 		}
 	}
 

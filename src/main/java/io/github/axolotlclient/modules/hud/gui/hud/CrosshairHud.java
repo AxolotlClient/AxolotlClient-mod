@@ -76,7 +76,7 @@ public class CrosshairHud extends AbstractHudEntry {
 		if (Objects.equals(type.get(), CrosshairOption.DOT.toString())) {
             if(color==defaultColor.get()) {
                 RenderSystem.enableBlend();
-                RenderSystem.blendFuncSeparate(GlStateManager.class_4535.ONE_MINUS_DST_COLOR, GlStateManager.class_4534.ONE_MINUS_SRC_COLOR, GlStateManager.class_4535.ONE, GlStateManager.class_4534.ZERO);
+                RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.ONE_MINUS_DST_COLOR, GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
             }
 			fillRect(matrices, new Rectangle(pos.x + (width / 2) - 2, pos.y + (height / 2) - 2, 3, 3), color);
             if(color==defaultColor.get()) {
@@ -86,7 +86,7 @@ public class CrosshairHud extends AbstractHudEntry {
 		} else if (Objects.equals(type.get(), CrosshairOption.CROSS.toString())) {
             if(color==defaultColor.get()) {
                 RenderSystem.enableBlend();
-                RenderSystem.blendFuncSeparate(GlStateManager.class_4535.ONE_MINUS_DST_COLOR, GlStateManager.class_4534.ONE_MINUS_SRC_COLOR, GlStateManager.class_4535.ONE, GlStateManager.class_4534.ZERO);
+                RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.ONE_MINUS_DST_COLOR, GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
             }
 			fillRect(matrices, new Rectangle(pos.x + (width / 2) - 6, pos.y + (height / 2) - 1, 6, 1), color);
 			fillRect(matrices, new Rectangle(pos.x + (width / 2), pos.y + (height / 2) - 1, 5, 1), color);
@@ -111,7 +111,7 @@ public class CrosshairHud extends AbstractHudEntry {
 		} else if (Objects.equals(type.get(), CrosshairOption.TEXTURE.toString())) {
             if(color==defaultColor.get()) {
                 RenderSystem.enableBlend();
-                RenderSystem.blendFuncSeparate(GlStateManager.class_4535.ONE_MINUS_DST_COLOR, GlStateManager.class_4534.ONE_MINUS_SRC_COLOR, GlStateManager.class_4535.ONE, GlStateManager.class_4534.ZERO);
+                RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.ONE_MINUS_DST_COLOR, GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
             }
 			RenderSystem.setShaderTexture(0, DrawableHelper.GUI_ICONS_TEXTURE);
 
@@ -153,9 +153,9 @@ public class CrosshairHud extends AbstractHudEntry {
 		if (this.client.options.getAttackIndicator().get() == AttackIndicator.CROSSHAIR) {
 			float progress = this.client.player.getAttackCooldownProgress(0.0F);
 			if (progress != 1.0F) {
-				fill(matrices.peek().getPosition(), pos.x + (width / 2F) - 6, pos.y + (height / 2F) + 9, 11, 1,
+				fill(matrices.peek().getModel(), pos.x + (width / 2F) - 6, pos.y + (height / 2F) + 9, 11, 1,
 					attackIndicatorBackgroundColor.get().getAsInt());
-				fill(matrices.peek().getPosition(), pos.x + (width / 2F) - 6, pos.y + (height / 2F) + 9,
+				fill(matrices.peek().getModel(), pos.x + (width / 2F) - 6, pos.y + (height / 2F) + 9,
 					progress * 11, 1, attackIndicatorForegroundColor.get().getAsInt());
 			}
 		}

@@ -22,7 +22,7 @@ public class ActionBarHud extends AbstractHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "actionbarhud");
 	public final BooleanOption customTextColor = new BooleanOption("customtextcolor", false);
 
-    private Text actionBar;
+    public Text actionBar;
     private int color;
 	private final Color current = new Color(-1);
 	private final Color vanillaColor = new Color(-1);
@@ -38,13 +38,14 @@ public class ActionBarHud extends AbstractHudEntry {
 
 	@Override
 	public void render(MatrixStack matrices) {
-		if (vanillaColor.setData(color).getAlpha()<=0){
+		vanillaColor.setData(color);
+		if (vanillaColor.getAlpha()<=0){
 			this.actionBar = null;
 		}
 		if(this.actionBar != null) {
 
 			scale(matrices);
-            drawString(matrices, actionBar.asOrderedText().toString(), getPos().x, getPos().y + 3, customTextColor.get() ? (textColor.get().getAlpha()==255 ?
+            drawString(matrices, actionBar.getString(), getPos().x, getPos().y + 3, customTextColor.get() ? (textColor.get().getAlpha()==255 ?
 					current.setData(
 							textColor.get().getRed(),
                     	textColor.get().getGreen(),
@@ -63,7 +64,7 @@ public class ActionBarHud extends AbstractHudEntry {
 		}
 		renderPlaceholderBackground(matrices);
 		scale(matrices);
-		drawString(matrices, placeholder.getString(),  getPos().x + Math.round(width /2F) - client.textRenderer.getWidth(placeholder) /2, getPos().y + 3, Color.WHITE, shadow.get());
+		drawString(matrices, placeholder.getString(),  getPos().x, getPos().y + 3, Color.WHITE, shadow.get());
 		matrices.pop();
 		hovered = false;
 	}
@@ -78,7 +79,12 @@ public class ActionBarHud extends AbstractHudEntry {
         return true;
     }
 
-    @Override
+	@Override
+	public boolean overridesF3() {
+		return true;
+	}
+
+	@Override
     public void addConfigOptions(List<OptionBase<?>> options){
         super.addConfigOptions(options);
         options.add(shadow);

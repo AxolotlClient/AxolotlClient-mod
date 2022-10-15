@@ -106,7 +106,7 @@ public class MCPSkyboxInstance extends SkyboxInstance {
                     u=0;
                 }
 
-	            Matrix4f matrix4f = matrices.peek().getPosition();
+	            Matrix4f matrix4f = matrices.peek().getModel();
                 bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
                 bufferBuilder.vertex(matrix4f, -100, -100, -100).uv(u, v).color(1F, 1F, 1F, alpha).next();
                 bufferBuilder.vertex(matrix4f, -100, -100, 100).uv(u, v+0.5F).color(1F, 1F, 1F, alpha).next();

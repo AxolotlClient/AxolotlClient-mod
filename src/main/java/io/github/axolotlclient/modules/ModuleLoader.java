@@ -23,7 +23,7 @@ public class ModuleLoader {
                     ModMetadata data = entrypoint.getProvider().metadata();
                     List<String> authorsNContributors = new ArrayList<>();
 
-                    List<String> authors = data.contributors().stream().filter(contributor -> contributor.role().equals("Author") || contributor.role().equals("Owner")).map(ModContributor::name).collect(Collectors.toList());
+                    List<String> authors = data.contributors().stream().filter(contributor -> contributor.roles().contains("Author") || contributor.roles().contains("Owner")).map(ModContributor::name).collect(Collectors.toList());
 
                     List<String> contributors = data.contributors().stream().map(ModContributor::name).filter(name -> !authors.contains(name)).toList();
                     if (authors.isEmpty()) {

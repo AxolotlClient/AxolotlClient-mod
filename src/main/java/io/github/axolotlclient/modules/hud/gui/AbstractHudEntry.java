@@ -232,6 +232,10 @@ public abstract class AbstractHudEntry extends DrawUtil {
         return (mouseX >= getX() && mouseY >= getY() && mouseX < getX() + this.width && mouseY < getY() + this.height) || hovered;
     }
 
+    public boolean overridesF3(){
+        return false;
+    }
+
     public void setHovered(boolean value) {
         hovered=value;
     }

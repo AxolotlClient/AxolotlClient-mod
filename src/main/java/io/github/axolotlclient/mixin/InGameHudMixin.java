@@ -9,6 +9,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Text;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,6 +25,10 @@ public abstract class InGameHudMixin {
 	@Shadow private int scaledHeight;
 
 	@Shadow private int scaledWidth;
+
+	@Shadow private @Nullable Text overlayMessage;
+
+	@Shadow private int overlayRemaining;
 
 	@Inject(method = "renderStatusEffectOverlay", at = @At("HEAD"), cancellable = true)
 	public void renderStatusEffect(MatrixStack matrices, CallbackInfo ci) {
@@ -49,11 +54,21 @@ public abstract class InGameHudMixin {
 		}
 	}
 
+	@Inject(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/InGameHud;overlayMessage:Lnet/minecraft/text/Text;", ordinal = 0))
+	public void clearActionBar(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
+		ActionBarHud hud = (ActionBarHud) HudManager.getInstance().get(ActionBarHud.ID);
+		if (hud != null && hud.isEnabled()) {
+			if (overlayMessage == null || overlayRemaining<=0 && hud.actionBar != null) {
+				hud.setActionBar(null, 0);
+			}
+		}
+	}
+
 	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/Text;FFI)I", ordinal = 0))
 	public int getActionBar(TextRenderer instance, MatrixStack matrices, Text message, float x, float y, int color){
 		ActionBarHud hud = (ActionBarHud) HudManager.getInstance().get(ActionBarHud.ID);
 		if (hud != null && hud.isEnabled()){
-			hud.setActionBar(message, color);// give us selves the correct values
+			hud.setActionBar(message, color);// give ourselves the correct values
 			return 0; // Doesn't matter since return value is not used
 		} else {
 			return instance.draw(matrices, message, x, y, color);

@@ -141,7 +141,7 @@ public class ItemUtil {
 		MinecraftClient.getInstance().getTextureManager().getTexture(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).setFilter(false, false);
 		RenderSystem.setShaderTexture(0, PlayerScreenHandler.BLOCK_ATLAS_TEXTURE);
 		RenderSystem.enableBlend();
-		RenderSystem.blendFunc(GlStateManager.class_4535.SRC_ALPHA, GlStateManager.class_4534.ONE_MINUS_SRC_ALPHA);
+		RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		MatrixStack matrixStack = RenderSystem.getModelViewStack();
 		matrixStack.push();

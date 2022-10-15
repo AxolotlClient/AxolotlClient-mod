@@ -253,14 +253,14 @@ public abstract class SkyboxInstance {
 	protected void renderDecorations(MatrixStack matrices, Matrix4f projectionMatrix, float delta, Runnable runnable){
 		WorldRendererAccessor worldRendererAccessor = (WorldRendererAccessor)MinecraftClient.getInstance().worldRenderer;
 		RenderSystem.enableTexture();
-		RenderSystem.blendFuncSeparate(GlStateManager.class_4535.SRC_ALPHA, GlStateManager.class_4534.ONE, GlStateManager.class_4535.ONE, GlStateManager.class_4534.ZERO);
+		RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 
 		matrices.push();
 		float i = 1.0F - MinecraftClient.getInstance().world.getRainGradient(delta);
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, i);
 		matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-90.0F));
 		matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(MinecraftClient.getInstance().world.getSkyAngle(delta) * 360.0F));
-		Matrix4f matrix4f2 = matrices.peek().getPosition();
+		Matrix4f matrix4f2 = matrices.peek().getModel();
 		float k = 30.0F;
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 
@@ -300,7 +300,7 @@ public abstract class SkyboxInstance {
 				RenderSystem.setShaderColor(u, u, u, u);
 				BackgroundRenderer.clearFog();
 				worldRendererAccessor.getStarsBuffer().bind();
-				worldRendererAccessor.getStarsBuffer().setShader(matrices.peek().getPosition(), projectionMatrix, GameRenderer.getPositionShader());
+				worldRendererAccessor.getStarsBuffer().setShader(matrices.peek().getModel(), projectionMatrix, GameRenderer.getPositionShader());
 				VertexBuffer.unbind();
 				runnable.run();
 			}
