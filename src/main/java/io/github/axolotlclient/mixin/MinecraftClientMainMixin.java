@@ -3,14 +3,13 @@ package io.github.axolotlclient.mixin;
 import net.minecraft.client.main.Main;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(Main.class)
-public class MinecraftClientMainMixin {
+public abstract class MinecraftClientMainMixin {
 
-    @Inject(method = "main([Ljava/lang/String;Z)V", at = @At("HEAD"))
-    private static void whyHeadless(String[] args, boolean bl, CallbackInfo ci){
-        System.setProperty("java.awt.headless", "false");
+    @Redirect(method = "<clinit>", at = @At(value = "INVOKE", target = "Ljava/lang/System;setProperty(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;"))
+    private static String noHeadless(String key, String value){
+        return "";
     }
 }

@@ -1,9 +1,10 @@
 package io.github.axolotlclient.modules.screenshotUtils;
 
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.config.options.BooleanOption;
-import io.github.axolotlclient.config.options.OptionCategory;
+import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
+import io.github.axolotlclient.util.Logger;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.text.*;
@@ -66,7 +67,7 @@ public class ScreenshotUtils extends AbstractModule {
                                         Files.delete(file.toPath());
                                         Util.sendChatMessage(Text.literal(I18n.translate("screenshot_deleted").replace("<name>", file.getName())));
                                     } catch (Exception e){
-                                        AxolotlClient.LOGGER.warn("Couldn't delete Screenshot "+file.getName());
+                                        Logger.warn("Couldn't delete Screenshot "+file.getName());
                                     }
                                 })))
                 );
@@ -109,8 +110,6 @@ public class ScreenshotUtils extends AbstractModule {
         public void doAction(){
             action.doAction();
         }
-
-
     }
 
     interface OnActionCall {

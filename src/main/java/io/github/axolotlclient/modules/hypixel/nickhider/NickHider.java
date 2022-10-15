@@ -1,8 +1,8 @@
 package io.github.axolotlclient.modules.hypixel.nickhider;
 
-import io.github.axolotlclient.config.options.BooleanOption;
-import io.github.axolotlclient.config.options.OptionCategory;
-import io.github.axolotlclient.config.options.StringOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
+import io.github.axolotlclient.AxolotlclientConfig.options.StringOption;
 import io.github.axolotlclient.modules.hypixel.AbstractHypixelMod;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
@@ -37,7 +37,7 @@ public class NickHider implements AbstractHypixelMod {
     }
 
     public Text editMessage(Text message){
-        if(NickHider.Instance.hideOwnName.get() || NickHider.Instance.hideOtherNames.get()) {
+        if(hideOwnName.get() || hideOtherNames.get()) {
             String msg = message.getString();
 
             String playerName = MinecraftClient.getInstance().player.getName().getString();

@@ -10,6 +10,7 @@ import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
@@ -19,6 +20,10 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Mixin(InGameHud.class)
 public abstract class InGameHudMixin {
+
+	@Shadow private int scaledHeight;
+
+	@Shadow private int scaledWidth;
 
 	@Inject(method = "renderStatusEffectOverlay", at = @At("HEAD"), cancellable = true)
 	public void renderStatusEffect(MatrixStack matrices, CallbackInfo ci) {
@@ -73,4 +78,58 @@ public abstract class InGameHudMixin {
                 (!MinecraftClient.getInstance().interactionManager.hasStatusBars() ? 14 : 0));
         }
     }
+
+	@ModifyArgs(method = "renderMountJumpBar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V"))
+	public void moveHorseHealth(Args args){
+		HotbarHUD hud = (HotbarHUD) HudManager.getInstance().get(HotbarHUD.ID);
+		if(hud.isEnabled()){
+			args.set(1, hud.getX());
+			args.set(2, hud.getY() - 7);
+		}
+	}
+
+	@ModifyArgs(method = "renderExperienceBar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V"))
+	public void moveXPBar(Args args){
+		HotbarHUD hud = (HotbarHUD) HudManager.getInstance().get(HotbarHUD.ID);
+		if(hud.isEnabled()){
+			args.set(1, hud.getX());
+			args.set(2, hud.getY()-7);
+		}
+	}
+
+	@Redirect(method = "renderExperienceBar", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/InGameHud;scaledHeight:I"))
+	public int moveXPBarHeight(InGameHud instance){
+		HotbarHUD hud = (HotbarHUD) HudManager.getInstance().get(HotbarHUD.ID);
+		if(hud.isEnabled()){
+			return hud.getY()+22;
+		}
+		return scaledHeight;
+	}
+
+	@Redirect(method = "renderExperienceBar", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/InGameHud;scaledWidth:I"))
+	public int moveXPBarWidth(InGameHud instance){
+		HotbarHUD hud = (HotbarHUD) HudManager.getInstance().get(HotbarHUD.ID);
+		if(hud.isEnabled()){
+			return hud.getX()*2+hud.width;
+		}
+		return scaledWidth;
+	}
+
+	@Redirect(method = "renderStatusBars", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/InGameHud;scaledHeight:I"))
+	public int moveStatusBarsHeight(InGameHud instance){
+		HotbarHUD hud = (HotbarHUD) HudManager.getInstance().get(HotbarHUD.ID);
+		if(hud.isEnabled()){
+			return hud.getY()+22;
+		}
+		return scaledHeight;
+	}
+
+	@Redirect(method = "renderStatusBars", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/InGameHud;scaledWidth:I"))
+	public int moveStatusBarsWidth(InGameHud instance){
+		HotbarHUD hud = (HotbarHUD) HudManager.getInstance().get(HotbarHUD.ID);
+		if(hud.isEnabled()){
+			return hud.getX()*2+hud.width;
+		}
+		return scaledWidth;
+	}
 }

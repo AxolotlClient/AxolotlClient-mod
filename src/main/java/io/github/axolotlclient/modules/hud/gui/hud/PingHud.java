@@ -1,7 +1,7 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
-import io.github.axolotlclient.config.options.IntegerOption;
-import io.github.axolotlclient.config.options.OptionBase;
+import io.github.axolotlclient.AxolotlclientConfig.options.IntegerOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
 import io.github.axolotlclient.util.ThreadExecuter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.Address;
@@ -87,7 +87,7 @@ public class PingHud extends CleanHudEntry {
     //Indicatia removed this feature...
     //We still need it :(
     private void getRealTimeServerPing(ServerInfo server) {
-        ThreadExecuter.submit(() -> {
+        ThreadExecuter.scheduleTask(() -> {
             try {
                 var address = ServerAddress.parse(server.address);
                 var optional = AllowedAddressResolver.DEFAULT.resolve(address).map(Address::getInetSocketAddress);

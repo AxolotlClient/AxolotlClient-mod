@@ -1,12 +1,12 @@
 package io.github.axolotlclient.modules.particles;
 
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.config.Color;
-import io.github.axolotlclient.config.options.BooleanOption;
-import io.github.axolotlclient.config.options.ColorOption;
-import io.github.axolotlclient.config.options.IntegerOption;
-import io.github.axolotlclient.config.options.OptionBase;
-import io.github.axolotlclient.config.options.OptionCategory;
+import io.github.axolotlclient.AxolotlclientConfig.Color;
+import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.ColorOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.IntegerOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
+import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
 import io.github.axolotlclient.mixin.ParticleAccessor;
 import io.github.axolotlclient.modules.AbstractModule;
 import net.minecraft.client.particle.Particle;
@@ -50,14 +50,15 @@ public class Particles extends AbstractModule {
                 OptionCategory category = new OptionCategory(Arrays.stream(Registry.PARTICLE_TYPE.getId(type).getPath().split("_")).map(StringUtils::capitalize).collect(Collectors.joining(" ")), false);
                 HashMap<String, OptionBase<?>> optionsByKey = new LinkedHashMap<>();
 
+                populateMap(optionsByKey,
+                        new BooleanOption("showParticle", true),
+                        new IntegerOption("count", 1, 1, 20),
+                        new BooleanOption("customColor", false),
+                        new ColorOption("color", "particles", Color.WHITE));
+
                 if(type == ParticleTypes.CRIT || type == ParticleTypes.ENCHANTED_HIT){
                     populateMap(optionsByKey, new BooleanOption("alwaysCrit", false));
                 }
-
-                populateMap(optionsByKey,
-                    new IntegerOption("count", 1, 1, 20),
-                    new BooleanOption("customColor", false),
-                    new ColorOption("color", "particles", new Color(-1)));
 
                 category.add(optionsByKey.values());
                 particleOptions.put(type, optionsByKey);
@@ -92,6 +93,14 @@ public class Particles extends AbstractModule {
             return ((IntegerOption) options.get("count")).get();
         }
         return 1;
+    }
+
+    public boolean getAlwaysOn(ParticleType<?> type){
+        return enabled.get() && ((BooleanOption)Particles.getInstance().particleOptions.get(type).get("alwaysCrit")).get();
+    }
+
+    public boolean getShowParticle(ParticleType<?> type){
+        return enabled.get() ? ((BooleanOption)Particles.getInstance().particleOptions.get(type).get("showParticle")).get() : true;
     }
 
     protected static class AlphabeticalComparator implements Comparator<ParticleType<?>> {

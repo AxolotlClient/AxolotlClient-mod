@@ -1,6 +1,7 @@
 package io.github.axolotlclient.modules.sky;
 
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.math.Matrix4f;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -24,9 +25,13 @@ public class SkyboxManager {
 
     private static final SkyboxManager INSTANCE = new SkyboxManager();
 
-    public void renderSkyboxes(MatrixStack matrices, float brightness){
+    public void renderSkyboxes(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Runnable runnable){
         this.skyboxes.stream().filter(this.renderPredicate).forEach(this.active_skies::add);
-        this.active_skies.forEach(skyboxInstance -> {if(skyboxInstance!=null)skyboxInstance.render(matrices, brightness);});
+        this.active_skies.sort((skybox1, skybox2) -> skybox1.alpha >= skybox2.alpha ? 0 : 1);
+        this.active_skies.forEach(skyboxInstance -> {
+
+            skyboxInstance.render(matrices, projectionMatrix, tickDelta, runnable);
+        });
         this.active_skies.removeIf((skybox) -> skybox.getAlpha() <= MINIMUM_ALPHA);
     }
 

@@ -1,12 +1,12 @@
 package io.github.axolotlclient.modules.sky;
 
 import com.google.gson.JsonObject;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.Tessellator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormats;
+import io.github.axolotlclient.util.Util;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Matrix4f;
@@ -17,13 +17,40 @@ public class MCPSkyboxInstance extends SkyboxInstance {
     public MCPSkyboxInstance(JsonObject json){
         super(json);
         this.textures[0] = new Identifier(json.get("source").getAsString());
-        this.fade[0] = json.get("startFadeIn").getAsInt();
-        this.fade[1] = json.get("endFadeIn").getAsInt();
-        this.fade[2] = json.get("startFadeOut").getAsInt();
-        this.fade[3] = json.get("endFadeOut").getAsInt();
-	    try {
-			this.blendMode=parseBlend(json.get("blend").getAsString());
-        } catch (Exception ignored){}
+        try {
+            this.fade[0] = convertToTicks(json.get("startFadeIn").getAsInt());
+            this.fade[1] = convertToTicks(json.get("endFadeIn").getAsInt());
+            this.fade[3] = convertToTicks(json.get("endFadeOut").getAsInt());
+        } catch (NullPointerException e){
+            this.alwaysOn = true;
+        }
+        try {
+            this.fade[2] = convertToTicks(json.get("startFadeOut").getAsInt());
+        } catch (Exception ignored){
+            this.fade[2] = Util.getTicksBetween(Util.getTicksBetween(fade[0], fade[1]), fade[3]);
+        }
+        try {
+            this.rotate = json.get("rotate").getAsBoolean();
+            if (rotate) {
+                this.rotationSpeed = json.get("speed").getAsFloat();
+            }
+        } catch (Exception e){
+            this.rotate = false;
+        }
+        try {
+            String[] axis = json.get("axis").getAsString().split(" ");
+            for (int i = 0; i < axis.length; i++) {
+                this.rotationStatic[i] = Float.parseFloat(axis[i]);
+            }
+        } catch (Exception ignored){
+        }
+
+        try {
+            this.blendMode=parseBlend(json.get("blend").getAsString());
+        } catch (Exception ignored){
+        }
+        showMoon = true;
+        showSun = true;
     }
 
     @Override
@@ -31,9 +58,7 @@ public class MCPSkyboxInstance extends SkyboxInstance {
         this.alpha=getAlpha();
 
 	    RenderSystem.setShaderColor(1,1,1,1);
-		//RenderSystem.enableTexture();
-        RenderSystem.enableBlend();
-        RenderSystem.blendFunc(GlStateManager.class_4535.SRC_ALPHA, GlStateManager.class_4534.ONE_MINUS_SRC_ALPHA);
+		RenderSystem.enableTexture();
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBufferBuilder();
@@ -87,11 +112,22 @@ public class MCPSkyboxInstance extends SkyboxInstance {
                 bufferBuilder.vertex(matrix4f, -100, -100, 100).uv(u, v+0.5F).color(1F, 1F, 1F, alpha).next();
                 bufferBuilder.vertex(matrix4f, 100, -100, 100).uv(u+1/3F, v+0.5F).color(1F, 1F, 1F, alpha).next();
                 bufferBuilder.vertex(matrix4f, 100, -100, -100).uv(u+1/3F, v).color(1F, 1F, 1F, alpha).next();
-
                 tessellator.draw();
+
                 matrices.pop();
             }
         }
-        RenderSystem.disableBlend();
+    }
+
+    protected int convertToTicks(int hourFormat){
+        hourFormat*=10;
+        hourFormat-=6000;
+        if(hourFormat < 0){
+            hourFormat+=24000;
+        }
+        if(hourFormat>=24000){
+            hourFormat-=24000;
+        }
+        return hourFormat;
     }
 }

@@ -1,6 +1,7 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.ItemUtil;
@@ -13,6 +14,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Identifier;
+
+import java.util.List;
 
 public class HotbarHUD extends AbstractHudEntry {
 
@@ -27,7 +30,7 @@ public class HotbarHUD extends AbstractHudEntry {
     public void render(MatrixStack matrices) {
         PlayerEntity playerEntity = MinecraftClient.getInstance().cameraEntity instanceof PlayerEntity ? (PlayerEntity) MinecraftClient.getInstance().cameraEntity : null;
         if (playerEntity != null) {
-            scale(matrices);
+            //scale(matrices);
             DrawPosition pos = getPos();
 
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
@@ -55,18 +58,18 @@ public class HotbarHUD extends AbstractHudEntry {
                 int k = pos.x + n * 20 + 3;
                 int l = pos.y+3;
                 MinecraftClient.getInstance().getItemRenderer().renderGuiItemIcon(playerEntity.getInventory().main.get(n), k, l);
-                ItemUtil.renderGuiItemModel(matrices, playerEntity.getInventory().main.get(n), k, l);
+                ItemUtil.renderGuiItemModel(getScale(), playerEntity.getInventory().main.get(n), k, l);
                 ItemUtil.renderGuiItemOverlay(matrices, client.textRenderer, playerEntity.getInventory().main.get(n), k, l, null, -1,
                     true);
             }
 
             if (!itemStack.isEmpty()) {
                 if (arm == Arm.LEFT) {
-                    ItemUtil.renderGuiItemModel(matrices, itemStack, pos.x - 26, pos.y + 3);
+                    ItemUtil.renderGuiItemModel(getScale(), itemStack, pos.x - 26, pos.y + 3);
                     ItemUtil.renderGuiItemOverlay(matrices, client.textRenderer, itemStack, pos.x - 26, pos.y + 3, null, -1,
                         true);
                 } else {
-                    ItemUtil.renderGuiItemModel(matrices, itemStack, pos.x + width + 10, pos.y + 3);
+                    ItemUtil.renderGuiItemModel(getScale(), itemStack, pos.x + width + 10, pos.y + 3);
                     ItemUtil.renderGuiItemOverlay(matrices, client.textRenderer, itemStack, pos.x + width + 10, pos.y + 3, null, -1,
                         true);
                 }
@@ -90,7 +93,7 @@ public class HotbarHUD extends AbstractHudEntry {
             }
 
             RenderSystem.disableBlend();
-            matrices.pop();
+            //matrices.pop();
         }
     }
 
@@ -114,5 +117,10 @@ public class HotbarHUD extends AbstractHudEntry {
     @Override
     public boolean movable() {
         return true;
+    }
+
+    @Override
+    public void addConfigOptions(List<OptionBase<?>> options) {
+        options.add(enabled);
     }
 }

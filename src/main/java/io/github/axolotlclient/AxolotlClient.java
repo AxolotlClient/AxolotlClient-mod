@@ -1,12 +1,12 @@
 package io.github.axolotlclient;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
 import io.github.axolotlclient.config.AxolotlClientConfig;
-import io.github.axolotlclient.config.Color;
 import io.github.axolotlclient.config.ConfigManager;
-import io.github.axolotlclient.config.options.BooleanOption;
-import io.github.axolotlclient.config.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
+import io.github.axolotlclient.modules.ModuleLoader;
 import io.github.axolotlclient.modules.freelook.Freelook;
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hypixel.HypixelMods;
@@ -16,9 +16,11 @@ import io.github.axolotlclient.modules.particles.Particles;
 import io.github.axolotlclient.modules.rpc.DiscordRPC;
 import io.github.axolotlclient.modules.screenshotUtils.ScreenshotUtils;
 import io.github.axolotlclient.modules.scrollableTooltips.ScrollableTooltips;
+import io.github.axolotlclient.modules.sky.SkyResourceManager;
 import io.github.axolotlclient.modules.tnttime.TntTime;
 import io.github.axolotlclient.modules.zoom.Zoom;
 import io.github.axolotlclient.util.FeatureDisabler;
+import io.github.axolotlclient.util.Logger;
 import io.github.axolotlclient.util.UnsupportedMod;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
@@ -27,7 +29,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.resource.Resource;
-import net.minecraft.resource.pack.ResourcePack;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -38,8 +39,6 @@ import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
 import org.quiltmc.qsl.lifecycle.api.client.event.ClientTickEvents;
 import org.quiltmc.qsl.resource.loader.api.ResourceLoader;
 import org.quiltmc.qsl.resource.loader.api.ResourcePackActivationType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,14 +47,12 @@ import java.util.UUID;
 
 
 public class AxolotlClient implements ClientModInitializer {
-
-	public static Logger LOGGER = LoggerFactory.getLogger("AxolotlClient");
+	public static String modid = "AxolotlClient";
 
 	public static AxolotlClientConfig CONFIG;
-	public static String onlinePlayers = "";
-	public static String otherPlayers = "";
-
-	public static List<ResourcePack> packs = new ArrayList<>();
+	public static io.github.axolotlclient.AxolotlclientConfig.ConfigManager configManager;
+	public static HashMap<UUID, Boolean> playerCache = new HashMap<>();
+	
 	public static HashMap<Identifier, Resource> runtimeResources = new HashMap<>();
 
 	public static final Identifier badgeIcon = new Identifier("axolotlclient", "textures/badge.png");
@@ -95,13 +92,14 @@ public class AxolotlClient implements ClientModInitializer {
 		config.add(someNiceBackground);
 
 		getModules();
+		addExternalModules();
 		CONFIG.init();
 		modules.forEach(AbstractModule::init);
 
 		CONFIG.config.addAll(CONFIG.getCategories());
 		CONFIG.config.add(config);
 
-		ConfigManager.load();
+		io.github.axolotlclient.AxolotlclientConfig.AxolotlClientConfigManager.registerConfig(modid, CONFIG, configManager = new ConfigManager());
 
 		modules.forEach(AbstractModule::lateInit);
 
@@ -110,10 +108,13 @@ public class AxolotlClient implements ClientModInitializer {
 
 		FeatureDisabler.init();
 
-		LOGGER.info("AxolotlClient Initialized");
+		Logger.debug("Debug Output activated, Logs will be more verbose!");
+
+		Logger.info("AxolotlClient Initialized");
 	}
 
 	public static void getModules(){
+		modules.add(SkyResourceManager.getInstance());
 		modules.add(Zoom.getInstance());
 		modules.add(HudManager.getInstance());
 		modules.add(HypixelMods.getInstance());
@@ -126,6 +127,10 @@ public class AxolotlClient implements ClientModInitializer {
 		modules.add(ScreenshotUtils.getInstance());
 	}
 
+	private static void addExternalModules(){
+		modules.addAll(ModuleLoader.loadExternalModules());
+	}
+
 	public static boolean isUsingClient(UUID uuid){
 		assert MinecraftClient.getInstance().player != null;
 		if (uuid == MinecraftClient.getInstance().player.getUuid()){
@@ -135,16 +140,16 @@ public class AxolotlClient implements ClientModInitializer {
 		}
 	}
 
-
 	public static void tickClient(){
 
         modules.forEach(AbstractModule::tick);
-		Color.tickChroma();
 
 		if (tickTime >=6000){
 
 			//System.out.println("Cleared Cache of Other Players!");
-			otherPlayers = "";
+			if(playerCache.values().size()>500){
+				playerCache.clear();
+			}
 			tickTime = 0;
 		}
 		tickTime++;

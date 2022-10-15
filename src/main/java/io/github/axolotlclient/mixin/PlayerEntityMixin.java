@@ -1,6 +1,6 @@
 package io.github.axolotlclient.mixin;
 
-import io.github.axolotlclient.config.options.BooleanOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hud.gui.hud.ReachDisplayHud;
 import io.github.axolotlclient.modules.particles.Particles;
@@ -26,19 +26,22 @@ public abstract class PlayerEntityMixin extends Entity {
     @Inject(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getAttributeValue(Lnet/minecraft/entity/attribute/EntityAttribute;)D"))
     public void getReach(Entity entity, CallbackInfo ci){
         if((Object)this == MinecraftClient.getInstance().player || entity.equals(MinecraftClient.getInstance().player)){
-            ReachDisplayHud hud = (ReachDisplayHud) HudManager.getInstance().get(ReachDisplayHud.ID);
-            if(hud != null && hud.isEnabled()){
-                hud.updateDistance(Util.calculateDistance(super.getPos(), entity.getPos()));
+            ReachDisplayHud reachDisplayHud = (ReachDisplayHud) HudManager.getInstance().get(ReachDisplayHud.ID);
+            if(reachDisplayHud != null && reachDisplayHud.isEnabled()){
+                double d = Util.calculateDistance(super.getPos(), entity.getPos());
+                if(d<=MinecraftClient.getInstance().interactionManager.getReachDistance()) {
+                    reachDisplayHud.updateDistance(d);
+                }
             }
         }
     }
 
     @Inject(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;onAttacking(Lnet/minecraft/entity/Entity;)V"))
     public void alwaysCrit(Entity entity, CallbackInfo ci){
-        if(((BooleanOption) Particles.getInstance().particleOptions.get(ParticleTypes.CRIT).get("alwaysCrit")).get()) {
+        if(Particles.getInstance().getAlwaysOn(ParticleTypes.CRIT)) {
             MinecraftClient.getInstance().player.addCritParticles(entity);
         }
-        if(((BooleanOption)Particles.getInstance().particleOptions.get(ParticleTypes.ENCHANTED_HIT).get("alwaysCrit")).get()) {
+        if(Particles.getInstance().getAlwaysOn(ParticleTypes.ENCHANTED_HIT)) {
             MinecraftClient.getInstance().player.addEnchantedHitParticles(entity);
         }
     }

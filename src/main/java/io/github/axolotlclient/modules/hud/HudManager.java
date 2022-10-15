@@ -2,8 +2,7 @@ package io.github.axolotlclient.modules.hud;
 
 import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.config.Color;
-import io.github.axolotlclient.config.options.OptionCategory;
+import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.gui.hud.*;
@@ -42,8 +41,6 @@ public class HudManager extends AbstractModule {
 
     public void init(){
 
-        Color.setupChroma();
-
         KeyBindingHelper.registerKeyBinding(key);
 
         AxolotlClient.CONFIG.addCategory(hudCategory);
@@ -73,6 +70,7 @@ public class HudManager extends AbstractModule {
         add(new HotbarHUD());
         add(new MemoryHud());
         add(new PlayerCountHud());
+        add(new ComboCounterHud());
 
         entries.forEach((identifier, abstractHudEntry) -> abstractHudEntry.init());
     }

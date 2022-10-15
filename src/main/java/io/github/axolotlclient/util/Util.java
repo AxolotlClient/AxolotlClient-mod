@@ -3,8 +3,6 @@ package io.github.axolotlclient.util;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.glfw.Window;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.ChatPreview;
@@ -17,16 +15,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
-import org.quiltmc.qsl.command.api.client.ClientCommandManager;
-import org.quiltmc.qsl.command.api.client.QuiltClientCommandSource;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Util {
@@ -45,12 +35,6 @@ public class Util {
     public static int getTicksBetween(int start, int end) {
         if (end < start) end += 24000;
         return end - start;
-    }
-
-    public static void registerCommand(LiteralArgumentBuilder<QuiltClientCommandSource> builder){
-        if(ClientCommandManager.getDispatcher() != null) {
-            ClientCommandManager.getDispatcher().register(builder);
-        }
     }
 
 	public static String getGame(){
@@ -114,27 +98,6 @@ public class Util {
 
     public static double calculateDistance(double x1, double x2, double y1, double y2, double z1, double z2) {
         return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2) + Math.pow(z2 - z1, 2));
-    }
-
-    public static DrawPosition toGlCoords(int x, int y){
-        return toGlCoords(new DrawPosition(x, y));
-    }
-
-    public static DrawPosition toGlCoords(DrawPosition pos){
-        double scale = MinecraftClient.getInstance().getWindow().getScaleFactor();
-        return new DrawPosition((int) (pos.x * scale),
-            (int) (MinecraftClient.getInstance().getWindow().getFramebufferHeight() - pos.y * scale - scale));
-    }
-
-    public static DrawPosition toMCCoords(int x, int y){
-        return toMCCoords(new DrawPosition(x, y));
-    }
-
-    public static DrawPosition toMCCoords(DrawPosition pos){
-        Window window = MinecraftClient.getInstance().getWindow();
-        int x = pos.x * window.getWidth() / window.getFramebufferWidth();
-        int y = window.getHeight() - pos.y * window.getHeight() / window.getFramebufferHeight() - 1;
-        return new DrawPosition(x, y);
     }
 
 	// I suppose this is something introduced with the chat cryptography features in 1.19

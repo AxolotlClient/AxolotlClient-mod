@@ -3,11 +3,12 @@ package io.github.axolotlclient.modules.motionblur;
 import com.google.gson.JsonSyntaxException;
 import com.mojang.blaze3d.shader.GlUniform;
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.config.options.BooleanOption;
-import io.github.axolotlclient.config.options.FloatOption;
-import io.github.axolotlclient.config.options.OptionCategory;
+import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.FloatOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
 import io.github.axolotlclient.mixin.ShaderEffectAccessor;
 import io.github.axolotlclient.modules.AbstractModule;
+import io.github.axolotlclient.util.Logger;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.resource.Resource;
@@ -61,7 +62,7 @@ public class MotionBlur extends AbstractModule {
                         shaderLocation);
                 shader.setupDimensions(MinecraftClient.getInstance().getWindow().getWidth(), MinecraftClient.getInstance().getWindow().getHeight());
             } catch (JsonSyntaxException | IOException e) {
-                AxolotlClient.LOGGER.error("Could not load motion blur", e);
+                Logger.error("Could not load motion blur", e);
             }
         }
         if(currentBlur!=getBlur() && shader != null){

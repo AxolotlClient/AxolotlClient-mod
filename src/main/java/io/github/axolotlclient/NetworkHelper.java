@@ -1,5 +1,6 @@
 package io.github.axolotlclient;
 
+import io.github.axolotlclient.util.Logger;
 import io.github.axolotlclient.util.ThreadExecuter;
 import net.minecraft.client.MinecraftClient;
 import org.apache.http.HttpResponse;
@@ -12,6 +13,8 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class NetworkHelper {
@@ -19,36 +22,39 @@ public class NetworkHelper {
     private static boolean loggedIn;
     private static UUID uuid;
 
+    private static final AtomicInteger concurrentCalls = new AtomicInteger(0);
+    private static final int maxCalls = 3;
+
     public static boolean getOnline(UUID uuid){
 
-        if (AxolotlClient.onlinePlayers.contains(uuid.toString())){
-            return true;
-        } else if (AxolotlClient.otherPlayers.contains(uuid.toString())){
-            return false;
-        }else {
-            ThreadExecuter.scheduleTask(() -> getUser(uuid));
-            return AxolotlClient.onlinePlayers.contains(uuid.toString());
+        if (!AxolotlClient.playerCache.containsKey(uuid)) {
+            if(concurrentCalls.get() <= maxCalls) {
+                concurrentCalls.incrementAndGet();
+                Runnable runnable = () -> getUser(uuid);
+                ThreadExecuter.scheduleTask(runnable);
+                ThreadExecuter.removeTask(runnable);
+                ThreadExecuter.scheduleTask(concurrentCalls::decrementAndGet, 1, TimeUnit.MINUTES);
+            }
         }
+        return AxolotlClient.playerCache.get(uuid) != null ? AxolotlClient.playerCache.get(uuid): false;
     }
 
     public static void getUser(UUID uuid){
         try{
-            CloseableHttpClient client = HttpClients.custom().disableAutomaticRetries().build();
+            CloseableHttpClient client = HttpClients.createMinimal();
             HttpGet get = new HttpGet("https://moehreag.duckdns.org/axolotlclient-api/?uuid="+uuid.toString());
             HttpResponse response= client.execute(get);
             String body = EntityUtils.toString(response.getEntity());
             client.close();
             if (body.contains("true")){
-                AxolotlClient.onlinePlayers  = AxolotlClient.onlinePlayers + " " + uuid;
+                AxolotlClient.playerCache.put(uuid, true);
             } else {
-                AxolotlClient.otherPlayers = AxolotlClient.otherPlayers + " " + uuid;
+                AxolotlClient.playerCache.put(uuid, false);
             }
 
         } catch (Exception ignored){
-            AxolotlClient.otherPlayers = AxolotlClient.otherPlayers + " " + uuid;
+            AxolotlClient.playerCache.put(uuid, false);
         }
-
-
     }
 
     public static void setOnline() {
@@ -64,13 +70,13 @@ public class NetworkHelper {
             HttpResponse response = client.execute(post);
             String body = EntityUtils.toString(response.getEntity());
             if(body.contains("Success!")){
-                AxolotlClient.LOGGER.info("Sucessfully logged in at AxolotlClient!");
+                Logger.info("Sucessfully logged in at AxolotlClient!");
                 loggedIn=true;
             }
             client.close();
         } catch (Exception e) {
             e.printStackTrace();
-            AxolotlClient.LOGGER.error("Error while logging in!");
+            Logger.error("Error while logging in!");
         }
     }
 
@@ -78,7 +84,7 @@ public class NetworkHelper {
 
         if(loggedIn) {
             try {
-                AxolotlClient.LOGGER.info("Logging off..");
+                Logger.info("Logging off..");
                 CloseableHttpClient client = HttpClients.createDefault();
                 HttpDelete delete = new HttpDelete("https://moehreag.duckdns.org/axolotlclient-api/?uuid=" + uuid.toString());
                 delete.setHeader("Accept", "application/json");
@@ -86,7 +92,7 @@ public class NetworkHelper {
                 HttpResponse response = client.execute(delete);
                 String body = EntityUtils.toString(response.getEntity());
                 if (body.contains("Success!")) {
-                    AxolotlClient.LOGGER.info("Successfully logged off!");
+                    Logger.info("Successfully logged off!");
                 } else {
                     throw new Exception("Error while logging off: " + body);
                 }
@@ -94,7 +100,7 @@ public class NetworkHelper {
 
             } catch (Exception ex) {
                 ex.printStackTrace();
-                AxolotlClient.LOGGER.error("Error while logging off!");
+                Logger.error("Error while logging off!");
             }
         }
     }
@@ -109,7 +115,7 @@ public class NetworkHelper {
 
             int status = response.getStatusLine().getStatusCode();
             if (status != 200) {
-                AxolotlClient.LOGGER.warn("API request failed, status code " + status);
+                Logger.warn("API request failed, status code " + status);
                 return null;
             }
 

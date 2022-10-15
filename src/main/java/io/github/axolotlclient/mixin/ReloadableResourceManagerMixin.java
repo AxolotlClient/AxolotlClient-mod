@@ -4,8 +4,6 @@ import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hud.gui.hud.PackDisplayHud;
 import io.github.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
-import io.github.axolotlclient.modules.sky.SkyResourceManager;
-import io.github.axolotlclient.modules.sky.SkyboxManager;
 import net.minecraft.resource.ReloadableResourceManager;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceReload;
@@ -25,25 +23,14 @@ import java.util.concurrent.Executor;
 @Mixin(ReloadableResourceManager.class)
 public abstract class ReloadableResourceManagerMixin {
 
-	@Inject(method = "reload", at = @At("HEAD"))
-	public void reloadStart(Executor prepareExecutor, Executor applyExecutor, CompletableFuture<Unit> initialStage, List<ResourcePack> packs, CallbackInfoReturnable<ResourceReload> cir){
-		SkyboxManager.getInstance().clearSkyboxes();
-	}
-
     @Inject(method = "reload", at=@At("TAIL"))
-    public void loadSkies(Executor prepareExecutor, Executor applyExecutor, CompletableFuture<Unit> initialStage, List<ResourcePack> resourcePacks, CallbackInfoReturnable<ResourceReload> cir){
+    public void reload(Executor prepareExecutor, Executor applyExecutor, CompletableFuture<Unit> initialStage, List<ResourcePack> resourcePacks, CallbackInfoReturnable<ResourceReload> cir){
         HypixelAbstractionLayer.clearPlayerData();
-	    SkyResourceManager.reload(resourcePacks);
-
-	    AxolotlClient.packs=resourcePacks;
 
         PackDisplayHud hud = (PackDisplayHud) HudManager.getInstance().get(PackDisplayHud.ID);
         if(hud.isEnabled()){
-            hud.widgets.clear();
-			hud.init();
+			hud.setPacks(resourcePacks);
         }
-
-
     }
 
     @Inject(method = "getResource", at = @At("HEAD"), cancellable = true)
