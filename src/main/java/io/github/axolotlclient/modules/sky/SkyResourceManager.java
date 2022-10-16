@@ -92,13 +92,13 @@ public class SkyResourceManager extends AbstractModule implements SimpleSynchron
             }
         }
 
-        for(Map.Entry<Identifier, Resource> entry: manager.findResources("mcpatcher", identifier -> identifier.getPath().endsWith(".properties")).entrySet()){
+        for(Map.Entry<Identifier, Resource> entry: manager.findResources("mcpatcher/sky", identifier -> identifier.getPath().endsWith(".properties")).entrySet()){
             Logger.debug("Loading MCP sky from " + entry.getKey());
             SkyboxManager.getInstance().addSkybox(new MCPSkyboxInstance(loadMCPSky("mcpatcher", entry.getKey(), entry.getValue())));
             Logger.debug("Loaded MCP sky from "+entry.getKey());
         }
 
-        for(Map.Entry<Identifier, Resource> entry: manager.findResources("optifine", identifier -> identifier.getPath().endsWith(".properties")).entrySet()){
+        for(Map.Entry<Identifier, Resource> entry: manager.findResources("optifine/sky", identifier -> identifier.getPath().endsWith(".properties")).entrySet()){
             Logger.debug("Loading OF sky from " + entry.getKey());
             SkyboxManager.getInstance().addSkybox(new MCPSkyboxInstance(loadMCPSky("optifine", entry.getKey(), entry.getValue())));
             Logger.debug("Loaded OF sky from "+entry.getKey());
