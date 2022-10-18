@@ -370,10 +370,6 @@ public class CreditsScreen extends Screen {
                 }
             });
         }
-
-        public String[] getThings(){
-            return credit.things;
-        }
     }
 
     private class SpacerTitle extends Credit {
