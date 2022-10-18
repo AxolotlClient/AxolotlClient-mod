@@ -8,7 +8,6 @@ import io.github.axolotlclient.modules.hud.util.DrawUtil;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.AbstractParentElement;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.Screen;
@@ -32,7 +31,6 @@ import org.lwjgl.opengl.GL11;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CreditsScreen extends Screen {
 
@@ -192,14 +190,6 @@ public class CreditsScreen extends Screen {
     }
 
     @Override
-    public boolean changeFocus(boolean lookForwards) {
-        /*if(creditOverlay != null){
-            setFocused(creditOverlay);
-        }*/
-        return super.changeFocus(lookForwards);
-    }
-
-    @Override
     public List<? extends Element> children() {
         if(CreditsScreen.this.creditOverlay != null){
             List<? extends Element> l = new ArrayList<>(super.children());
@@ -228,6 +218,15 @@ public class CreditsScreen extends Screen {
         @Override
         public void appendNarrations(NarrationMessageBuilder builder) {
             builder.put(NarrationPart.TITLE, "credits");
+            super.appendNarrations(builder);
+            if(creditOverlay != null){
+                builder.put(NarrationPart.TITLE, creditOverlay.credit.name);
+                StringBuilder cs = new StringBuilder();
+                for(String s:creditOverlay.credit.things){
+                    cs.append(s).append(". ");
+                }
+                builder.put(NarrationPart.HINT, cs.toString());
+            }
         }
 
         @Override
@@ -258,11 +257,12 @@ public class CreditsScreen extends Screen {
 
         private boolean hovered;
 
-        private final ButtonWidget c = new ButtonWidget(-2, -2, 1, 1, Text.empty(), buttonWidget -> creditOverlay = new Overlay(this));
+        private final ButtonWidget c;
 
         public Credit(String name, String... things){
             this.name=name;
             this.things=things;
+            c = new ButtonWidget(-2, -2, 1, 1, Text.of(name), buttonWidget -> creditOverlay = new Overlay(this));
         }
 
         @Override
@@ -369,6 +369,10 @@ public class CreditsScreen extends Screen {
                     handleTextClick(Style.EMPTY.withClickEvent(effects.get(Formatting.strip(s))));
                 }
             });
+        }
+
+        public String[] getThings(){
+            return credit.things;
         }
     }
 
