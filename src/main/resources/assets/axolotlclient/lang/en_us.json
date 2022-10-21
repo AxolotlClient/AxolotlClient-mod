@@ -216,6 +216,7 @@
 	"sprintToggled": "Sprinting currently toggled",
 	"hotbarhud": "Hotbar HUD",
 	"memoryhud": "Memory HUD",
+	"allocated": "Allocated",
 	"showGraph": "Show Graph",
 	"graphUsedColor": "Graph Color (used)",
 	"graphFreeColor": "Graph Color (free)",
