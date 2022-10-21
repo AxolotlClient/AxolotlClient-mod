@@ -33,7 +33,7 @@ if(AxolotlClient.someNiceBackground.get())!
 Sleep friendly!
 Licensed under LGPL-3!
 On modrinth.com
-Works with PolyMC!
+Works with Prismlauncher!
 Chroma colors supported!
 Commit change-able!
 Can show activity!

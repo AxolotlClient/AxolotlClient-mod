@@ -5,31 +5,12 @@ language.code=en_US
 config=AxolotlClient Options
 title_short=Client Options
 
-sky_loading_text=Loading Skies out of
-resource_loading_finished=Loading finished! Starting Minecraft...
-
-searchOptions=Search all Options
-search=Search
-searchFilters=Search Filters
-searchIgnoreCase=Ignore Case
-searchForOptions=Inlude options in search
-searchSort=Sort results
-searchSortOrder=Sort Order
-ASCENDING=Ascending
-DESCENDING=Descending
-
 general=General
 general.tooltip=General Options
 loadingBgColor=Loading Screen Color
 loadingBgColor.tooltip=The Background Color of the loading Screen.
 nightMode=Night Mode
 nightMode.tooltip=Reduces blue colors.
-quickToggles=Quick Toggles
-quickToggles.tooltip=Whether to show small switches on categories <br>containing an 'enabled' option.
-showOptionTooltips=Show Option Tooltips
-showOptionTooltips.tooltip=Whether to show Tooltips on Options in the menu.
-showCategoryTooltips=Show Category Tooltips
-showCategoryTooltips.tooltip=Whether to show Tooltips on Categories in the menu.
 rawMouseInput=Raw Mouse Input
 rawMouseInput.tooltip=Tries to remove the calculations done to the mouse position when changed.
 screenshotUtils=Screenshot Utils
@@ -234,7 +215,6 @@ center=Center
 left=Left
 right=Right
 color=Color
-chroma=Chroma
 chromaSpeed=Chroma Speed
 heldtextcolor=Text Color when held
 bgColor=Background Color
@@ -267,13 +247,6 @@ creditsBGM=BGM
 contributors=Contributors
 other_people=Other People
 external_modules=External Modules
-
-pickColor=Pick Color
-currentColor=Current
-alpha=Alpha
-red=Red
-green=Green
-blue=Blue
 
 disableReason.crash.tooltip=This option has been disabled <br>because it would crash your game.
 disableReason.ban_reason.tooltip=This option is disabled <br>because it is known to be bannable on your current server.

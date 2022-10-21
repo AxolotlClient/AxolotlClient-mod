@@ -17,6 +17,10 @@ repositories {
 		url 'https://repo.hypixel.net/repository/Hypixel/'
 	}
 
+	maven {
+		url "https://moehreag.duckdns.org/maven/releases"
+	}
+	
 	maven { url 'https://jitpack.io' }
 	mavenCentral()
 }
@@ -58,7 +62,7 @@ dependencies {
 	implementation('org.apache.logging.log4j:log4j-core:2.19.0')
 
 	modImplementation include("com.github.moehreag:search-in-resources:1.0.2")
-	modImplementation include('com.github.AxolotlClient:AxolotlClient-config:9453a14')
+	modImplementation include('io.github.axolotlclient:AxolotlClient-config:1.0.8+1.8.9')
 }
 
 // More hacks that make mac os work
@@ -121,9 +125,14 @@ publishing {
 		}
 	}
 
-	// select the repositories you want to publish to
 	repositories {
-		// uncomment to publish to the local maven
-		// mavenLocal()
+		maven {
+			name = "owlMaven"
+			url = "https://moehreag.duckdns.org/maven/releases"
+			credentials(PasswordCredentials)
+			authentication {
+				basic(BasicAuthentication)
+			}
+		}
 	}
 }
