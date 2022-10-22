@@ -31,7 +31,7 @@ public class PingHud extends CleanHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "pinghud");
     private int currentServerPing;
 
-    private final IntegerOption refreshDelay = new IntegerOption("refreshTime", 4, 1, 15);
+    private final IntegerOption refreshDelay = new IntegerOption("axolotlclient.refreshTime", 4, 1, 15);
 
     public PingHud() {
         super();

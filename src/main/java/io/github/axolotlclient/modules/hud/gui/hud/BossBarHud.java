@@ -23,9 +23,9 @@ public class BossBarHud extends AbstractHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "bossbarhud");
     private static final Identifier BARS_TEXTURE = new Identifier("textures/gui/icons.png");
     private final MinecraftClient client;
-    private final ColorOption barColor = new ColorOption("barColor", "#FFFFFFFF");
-    private final BooleanOption text = new BooleanOption("text", true);
-    private final BooleanOption bar = new BooleanOption("bar", true);
+    private final ColorOption barColor = new ColorOption("axolotlclient.barColor", "#FFFFFFFF");
+    private final BooleanOption text = new BooleanOption("axolotlclient.text", true);
+    private final BooleanOption bar = new BooleanOption("axolotlclient.bar", true);
     // TODO custom colour
 
     public BossBarHud() {

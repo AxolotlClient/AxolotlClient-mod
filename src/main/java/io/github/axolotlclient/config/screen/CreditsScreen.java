@@ -74,7 +74,7 @@ public class CreditsScreen extends Screen {
         super.render(mouseX, mouseY, tickDelta);
         GlStateManager.disableAlphaTest();
 
-        drawCenteredString(this.textRenderer, I18n.translate("credits"), width/2, 20, -1);
+        drawCenteredString(this.textRenderer, I18n.translate("axolotlclient.credits"), width/2, 20, -1);
 
         if(creditOverlay!=null){
             creditOverlay.render();
@@ -96,7 +96,7 @@ public class CreditsScreen extends Screen {
             AxolotlClient.CONFIG.creditsBGM.toggle();
             AxolotlClient.configManager.save();
             stopBGM();
-            button.message = I18n.translate("creditsBGM") + ": " + I18n.translate(AxolotlClient.CONFIG.creditsBGM.get() ? "options.on" : "options.off");
+            button.message = I18n.translate("axolotlclient.creditsBGM") + ": " + I18n.translate(AxolotlClient.CONFIG.creditsBGM.get() ? "options.on" : "options.off");
         }
     }
 
@@ -134,10 +134,10 @@ public class CreditsScreen extends Screen {
     public void init() {
         this.buttons.add(new ButtonWidget(
                 0, width/2 -75, height - 50 + 22, 150, 20,
-                I18n.translate("back")));
+                I18n.translate("axolotlclient.back")));
 
         this.buttons.add(new ButtonWidget(1, 6, this.height-26, 100, 20,
-                I18n.translate("creditsBGM")+ ": "+I18n.translate(AxolotlClient.CONFIG.creditsBGM.get()?"options.on":"options.off")
+                I18n.translate("axolotlclient.creditsBGM")+ ": "+I18n.translate(AxolotlClient.CONFIG.creditsBGM.get()?"options.on":"options.off")
         ));
 
         credits.clear();
@@ -226,7 +226,7 @@ public class CreditsScreen extends Screen {
 
     private void initCredits(){
 
-        credits.add(new SpacerTitle("- - - - - - "+I18n.translate("contributors")+" - - - - - -"));
+        credits.add(new SpacerTitle("- - - - - - "+I18n.translate("axolotlclient.contributors")+" - - - - - -"));
 
         credits.add(new Credit("moehreag", "Author, Programming", "https://github.com/moehreag"));
         credits.add(new Credit("YakisikliBaran", "Turkish Translation"));
@@ -235,13 +235,13 @@ public class CreditsScreen extends Screen {
         credits.add(new Credit("CornetPanique86", "French Translation"));
         credits.add(new Credit("kuchenag", "Logo/Icon Creator"));
 
-        credits.add(new SpacerTitle("- - - - - - "+I18n.translate("other_people")+" - - - - - -"));
+        credits.add(new SpacerTitle("- - - - - - "+I18n.translate("axolotlclient.other_people")+" - - - - - -"));
 
         credits.add(new Credit("DarkKronicle", "Author of KronHUD, the best HUD mod!"));
         credits.add(new Credit("AMereBagatelle", "Author of the excellent FabricSkyBoxes Mod"));
 
         if(!externalModuleCredits.isEmpty()){
-            credits.add(new SpacerTitle("- - - - - - "+I18n.translate("external_modules")+" - - - - - -"));
+            credits.add(new SpacerTitle("- - - - - - "+I18n.translate("axolotlclient.external_modules")+" - - - - - -"));
             externalModuleCredits.forEach((s, s2) -> {
                 credits.add(new Credit(s, s2));
             });

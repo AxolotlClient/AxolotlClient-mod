@@ -15,8 +15,8 @@ public class ReachDisplayHud extends CleanHudEntry {
 
     public static Identifier ID = new Identifier("axolotlclient", "reachdisplayhud");
 
-    public IntegerOption time = new IntegerOption("timeout", 2, 1, 20);
-    public IntegerOption decimalPlaces = new IntegerOption("decimalplaces", 2, 0, 10);
+    public IntegerOption time = new IntegerOption("axolotlclient.timeout", 2, 1, 20);
+    public IntegerOption decimalPlaces = new IntegerOption("axolotlclient.decimalplaces", 2, 0, 10);
 
     public ReachDisplayHud(){
         super(100, 13);
@@ -32,7 +32,7 @@ public class ReachDisplayHud extends CleanHudEntry {
 
     @Override
     public String getValue() {
-        return currentDist +" "+ I18n.translate("blocks");
+        return currentDist +" "+ I18n.translate("axolotlclient.blocks");
     }
 
     @Override
@@ -73,6 +73,6 @@ public class ReachDisplayHud extends CleanHudEntry {
 
     @Override
     public String getPlaceholder() {
-        return "25 "+ I18n.translate("blocks");
+        return "25 "+ I18n.translate("axolotlclient.blocks");
     }
 }

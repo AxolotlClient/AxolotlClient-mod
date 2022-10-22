@@ -77,6 +77,11 @@ public class HotbarHUD extends AbstractHudEntry {
     }
 
     @Override
+    public boolean overridesF3() {
+        return true;
+    }
+
+    @Override
     public Identifier getId() {
         return ID;
     }

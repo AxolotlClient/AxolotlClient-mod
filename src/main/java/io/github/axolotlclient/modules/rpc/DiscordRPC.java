@@ -29,18 +29,18 @@ public class DiscordRPC extends AbstractModule {
 
     private static DiscordRPC Instance;
 
-    public OptionCategory category = new OptionCategory("rpc");
+    public OptionCategory category = new OptionCategory("axolotlclient.rpc");
 
-    public BooleanOption enabled = new BooleanOption("enabled", value -> {
+    public BooleanOption enabled = new BooleanOption("axolotlclient.enabled", value -> {
         if(value){
             initRPC();
         } else {
             shutdown();
         }
     },false);
-    public BooleanOption showActivity = new BooleanOption("showActivity", true);
-    public EnumOption showServerNameMode = new EnumOption("showServerNameMode", new String[]{"showIp", "showName", "off"}, "off");
-    public BooleanOption showTime = new BooleanOption("showTime", true);
+    public BooleanOption showActivity = new BooleanOption("axolotlclient.showActivity", true);
+    public EnumOption showServerNameMode = new EnumOption("axolotlclient.showServerNameMode", new String[]{"showIp", "showName", "off"}, "off");
+    public BooleanOption showTime = new BooleanOption("axolotlclient.showTime", true);
 
     public static Activity currentActivity;
     public static Core discordRPC;

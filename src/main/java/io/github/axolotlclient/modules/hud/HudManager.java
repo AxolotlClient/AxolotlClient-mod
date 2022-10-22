@@ -26,12 +26,12 @@ public class HudManager extends AbstractModule {
 
     private final Map<Identifier, AbstractHudEntry> entries = new LinkedHashMap<>();
 
-    private final OptionCategory hudCategory = new OptionCategory("hud");
+    private final OptionCategory hudCategory = new OptionCategory("axolotlclient.hud");
 
     private final MinecraftClient client = MinecraftClient.getInstance();
     private static final HudManager INSTANCE = new HudManager();
 
-    static KeyBinding key = new KeyBinding("key.openHud", 54, "category.axolotlclient");
+    static KeyBinding key = new KeyBinding("axolotlclient.key.openHud", 54, "category.axolotlclient");
 
     public static HudManager getInstance(){
         return INSTANCE;
@@ -113,9 +113,11 @@ public class HudManager extends AbstractModule {
         if (!(client.currentScreen instanceof HudEditScreen) && !client.options.debugEnabled) {
             for (AbstractHudEntry hud : getEntries()) {
                 if (hud.isEnabled()) {
-                    client.profiler.push(hud.getName());
-                    hud.renderHud();
-                    client.profiler.pop();
+                    if(!client.options.debugEnabled || hud.overridesF3()) {
+                        client.profiler.push(hud.getName());
+                        hud.renderHud();
+                        client.profiler.pop();
+                    }
                 }
             }
         }

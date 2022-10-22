@@ -11,7 +11,7 @@ import java.util.List;
 public class RealTimeHud extends CleanHudEntry{
 
     private final Date date = new Date();
-    private final StringOption dateFormat = new StringOption("format", "HH:mm");
+    private final StringOption dateFormat = new StringOption("axolotlclient.format", "HH:mm");
     private SimpleDateFormat format = new SimpleDateFormat("HH:mm");
 
     private int second = 0;

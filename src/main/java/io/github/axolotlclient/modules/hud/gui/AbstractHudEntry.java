@@ -27,15 +27,15 @@ public abstract class AbstractHudEntry extends DrawUtil {
     public int width;
     public int height;
 
-    protected BooleanOption enabled = new BooleanOption("enabled",false);
-    public DoubleOption scale = new DoubleOption("scale", 1, 0.1F, 5);
-    protected final ColorOption textColor = new ColorOption("textColor", Color.WHITE);
-    protected EnumOption textAlignment = new EnumOption("textAlignment", new String[]{"center", "left", "right"}, "center");
-    protected BooleanOption shadow = new BooleanOption("shadow",  getShadowDefault());
-    protected BooleanOption background = new BooleanOption("background",  true);
-    protected final ColorOption backgroundColor = new ColorOption("bgColor", Color.parse("#64000000"));
-    protected final BooleanOption outline = new BooleanOption("outline", false);
-    protected final ColorOption outlineColor = new ColorOption("outlineColor", "#75000000");
+    protected BooleanOption enabled = new BooleanOption("axolotlclient.enabled",false);
+    public DoubleOption scale = new DoubleOption("axolotlclient.scale", 1, 0.1F, 5);
+    protected final ColorOption textColor = new ColorOption("axolotlclient.textColor", Color.WHITE);
+    protected EnumOption textAlignment = new EnumOption("axolotlclient.textAlignment", new String[]{"center", "left", "right"}, "center");
+    protected BooleanOption shadow = new BooleanOption("axolotlclient.shadow",  getShadowDefault());
+    protected BooleanOption background = new BooleanOption("axolotlclient.background",  true);
+    protected final ColorOption backgroundColor = new ColorOption("axolotlclient.bgColor", Color.parse("#64000000"));
+    protected final BooleanOption outline = new BooleanOption("axolotlclient.outline", false);
+    protected final ColorOption outlineColor = new ColorOption("axolotlclient.outlineColor", "#75000000");
     private final DoubleOption x = new DoubleOption("x", getDefaultX(), -0.5, 1.5);
     private final DoubleOption y = new DoubleOption("y", getDefaultY(), -0.5, 1.5);
     private final DrawPosition scaledPos = new DrawPosition(0, 0);
@@ -235,5 +235,9 @@ public abstract class AbstractHudEntry extends DrawUtil {
 
     public void setHovered(boolean value) {
         hovered=value;
+    }
+
+    public boolean overridesF3(){
+        return false;
     }
 }

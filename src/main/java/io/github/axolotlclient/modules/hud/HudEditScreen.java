@@ -25,7 +25,7 @@ import java.util.Optional;
 
 public class HudEditScreen extends Screen {
 
-    public static final BooleanOption snapping = new BooleanOption("snapping", true);
+    public static final BooleanOption snapping = new BooleanOption("axolotlclient.snapping", true);
     private AbstractHudEntry current;
     private DrawPosition offset = null;
     private final HudManager manager;
@@ -135,9 +135,9 @@ public class HudEditScreen extends Screen {
             snapping.toggle();
             AxolotlClient.configManager.save();
 
-            button.message = I18n.translate("hud.snapping") + ": "+I18n.translate(snapping.get()?"options.on":"options.off");
+            button.message = I18n.translate("axolotlclient.hud.snapping") + ": "+I18n.translate(snapping.get()?"options.on":"options.off");
         } else if(button.id==3) {
-            client.openScreen(new OptionsScreenBuilder(this, new OptionCategory("config", false).addSubCategories(AxolotlClient.CONFIG.getCategories()), AxolotlClient.modid));
+            client.openScreen(new OptionsScreenBuilder(this, new OptionCategory("axolotlclient.config", false).addSubCategories(AxolotlClient.CONFIG.getCategories()), AxolotlClient.modid));
         } else if(button.id==0) {
             client.openScreen(parent);
         } else if(button.id==2) {
@@ -152,21 +152,21 @@ public class HudEditScreen extends Screen {
                 width / 2 - 50,
                 height/2+ 12,
                 100, 20,
-                I18n.translate("hud.snapping") + ": "+I18n.translate(snapping.get()?"options.on":"options.off")
+                I18n.translate("axolotlclient.hud.snapping") + ": "+I18n.translate(snapping.get()?"options.on":"options.off")
         ));
 
         this.buttons.add(new ButtonWidget(3,
                 width / 2 - 75,
                 height/2-10,
                 150, 20,
-                I18n.translate("hud.clientOptions")
+                I18n.translate("axolotlclient.hud.clientOptions")
         ));
         if(parent!=null)this.buttons.add(new ButtonWidget(
                 0, width/2 -75, height - 50 + 22, 150, 20,
-                I18n.translate("back")));
+                I18n.translate("axolotlclient.back")));
         else this.buttons.add(new ButtonWidget(
                 2, width/2 -75, height - 50 + 22, 150, 20,
-                I18n.translate("close")));
+                I18n.translate("axolotlclient.close")));
 
     }
 

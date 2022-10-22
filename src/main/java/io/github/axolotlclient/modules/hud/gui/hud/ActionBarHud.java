@@ -20,7 +20,7 @@ import java.util.List;
 public class ActionBarHud extends AbstractHudEntry {
 
     public static final Identifier ID = new Identifier("kronhud", "actionbarhud");
-    public final BooleanOption customTextColor = new BooleanOption("customtextcolor", false);
+    public final BooleanOption customTextColor = new BooleanOption("axolotlclient.customtextcolor", false);
 
     private String actionBar;
     private int color;
@@ -59,7 +59,7 @@ public class ActionBarHud extends AbstractHudEntry {
     @Override
     public void renderPlaceholder() {
         if(placeholder == null){
-            placeholder = I18n.translate("actionBarPlaceholder");
+            placeholder = I18n.translate("axolotlclient.actionBarPlaceholder");
         }
         renderPlaceholderBackground();
         scale();

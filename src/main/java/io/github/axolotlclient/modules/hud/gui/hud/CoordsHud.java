@@ -24,9 +24,9 @@ public class CoordsHud extends AbstractHudEntry {
 
     public static final Identifier ID = new Identifier("kronhud", "coordshud");
 
-    private final ColorOption firstColor = new ColorOption("firsttextcolor", Color.SELECTOR_BLUE);
-    private final ColorOption secondColor = new ColorOption("secondtextcolor", "#FFFFFFFF");
-    private final IntegerOption decimalPlaces = new IntegerOption("decimalplaces", value -> {
+    private final ColorOption firstColor = new ColorOption("axolotlclient.firsttextcolor", Color.SELECTOR_BLUE);
+    private final ColorOption secondColor = new ColorOption("axolotlclient.secondtextcolor", "#FFFFFFFF");
+    private final IntegerOption decimalPlaces = new IntegerOption("axolotlclient.decimalplaces", value -> {
         StringBuilder format = new StringBuilder("#");
         if (value > 0) {
             format.append(".");

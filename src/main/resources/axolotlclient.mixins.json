@@ -22,6 +22,7 @@
     "GlStateManagerMixin",
     "HandledScreenMixin",
     "HeldItemRendererMixin",
+    "I18nMixin",
     "InGameHudMixin",
     "KeyBindingMixin",
     "KeyboardInputMixin",

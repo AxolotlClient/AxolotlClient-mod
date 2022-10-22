@@ -19,9 +19,9 @@ public class TntTime extends AbstractModule {
     private DecimalFormat format = new DecimalFormat("##");
     private int decimals;
 
-    private final OptionCategory category = new OptionCategory("tnttime");
-    public final BooleanOption enabled = new BooleanOption("enabled", false);
-    private final IntegerOption decimalPlaces = new IntegerOption("decimalplaces", 2, 0, 6);
+    private final OptionCategory category = new OptionCategory("axolotlclient.tnttime");
+    public final BooleanOption enabled = new BooleanOption("axolotlclient.enabled", false);
+    private final IntegerOption decimalPlaces = new IntegerOption("axolotlclient.decimalplaces", 2, 0, 6);
 
     public static TntTime getInstance() {
         return Instance;

@@ -13,41 +13,41 @@ import java.util.List;
 
 public class AxolotlClientConfig extends ConfigHolder {
 
-    public final BooleanOption showOwnNametag = new BooleanOption("showOwnNametag", false);
-    public final BooleanOption useShadows = new BooleanOption("useShadows", false);
-    public final BooleanOption nametagBackground = new BooleanOption("nametagBackground", true);
+    public final BooleanOption showOwnNametag = new BooleanOption("axolotlclient.showOwnNametag", false);
+    public final BooleanOption useShadows = new BooleanOption("axolotlclient.useShadows", false);
+    public final BooleanOption nametagBackground = new BooleanOption("axolotlclient.nametagBackground", true);
 
-    public final BooleanOption showBadges = new BooleanOption("showBadges", true);
-    public final BooleanOption customBadge = new BooleanOption("customBadge", false);
-    public final StringOption badgeText = new StringOption("badgeText", "");
+    public final BooleanOption showBadges = new BooleanOption("axolotlclient.showBadges", true);
+    public final BooleanOption customBadge = new BooleanOption("axolotlclient.customBadge", false);
+    public final StringOption badgeText = new StringOption("axolotlclient.badgeText", "");
 
-    public final BooleanOption timeChangerEnabled = new BooleanOption("enabled", false);
-    public final IntegerOption customTime = new IntegerOption("time", 0, 0, 24000);
-    public final BooleanOption customSky = new BooleanOption("customSky", true);
-    public final IntegerOption cloudHeight = new IntegerOption("cloudHeight", 128, 100, 512);
-    public final BooleanOption dynamicFOV = new BooleanOption("dynamicFov", true);
-    public final BooleanOption fullBright = new BooleanOption("fullBright", false);
-    public final BooleanOption lowFire = new BooleanOption("lowFire", false);
+    public final BooleanOption timeChangerEnabled = new BooleanOption("axolotlclient.enabled", false);
+    public final IntegerOption customTime = new IntegerOption("axolotlclient.time", 0, 0, 24000);
+    public final BooleanOption customSky = new BooleanOption("axolotlclient.customSky", true);
+    public final IntegerOption cloudHeight = new IntegerOption("axolotlclient.cloudHeight", 128, 100, 512);
+    public final BooleanOption dynamicFOV = new BooleanOption("axolotlclient.dynamicFov", true);
+    public final BooleanOption fullBright = new BooleanOption("axolotlclient.fullBright", false);
+    public final BooleanOption lowFire = new BooleanOption("axolotlclient.lowFire", false);
 
-    public final ColorOption loadingScreenColor = new ColorOption("loadingBgColor", new Color(-1));
-    public final BooleanOption nightMode = new BooleanOption("nightMode", false);
-    public final BooleanOption rawMouseInput = new BooleanOption("rawMouseInput", false);
+    public final ColorOption loadingScreenColor = new ColorOption("axolotlclient.loadingBgColor", new Color(-1));
+    public final BooleanOption nightMode = new BooleanOption("axolotlclient.nightMode", false);
+    public final BooleanOption rawMouseInput = new BooleanOption("axolotlclient.rawMouseInput", false);
 
-    public final BooleanOption enableCustomOutlines = new BooleanOption("enabled", false);
-    public final ColorOption outlineColor = new ColorOption("color", Color.parse("#DD000000"));
-    public final IntegerOption outlineWidth = new IntegerOption("outlineWidth", 1, 1, 10);
+    public final BooleanOption enableCustomOutlines = new BooleanOption("axolotlclient.enabled", false);
+    public final ColorOption outlineColor = new ColorOption("axolotlclient.color", Color.parse("#DD000000"));
+    public final IntegerOption outlineWidth = new IntegerOption("axolotlclient.outlineWidth", 1, 1, 10);
 
-    public final BooleanOption debugLogOutput = new BooleanOption("debugLogOutput", false);
+    public final BooleanOption debugLogOutput = new BooleanOption("axolotlclient.debugLogOutput", false);
     public final GenericOption openCredits = new GenericOption("Credits", "Open Credits", (mouseX, mouseY)->
         MinecraftClient.getInstance().openScreen(new CreditsScreen(MinecraftClient.getInstance().currentScreen))
     );
-    public final BooleanOption creditsBGM = new BooleanOption("creditsBGM", true);
+    public final BooleanOption creditsBGM = new BooleanOption("axolotlclient.creditsBGM", true);
 
-    public final OptionCategory general = new OptionCategory("general");
-    public final OptionCategory nametagOptions = new OptionCategory("nametagOptions");
-    public final OptionCategory rendering = new OptionCategory("rendering");
-    public final OptionCategory outlines= new OptionCategory("blockOutlines");
-    public final OptionCategory timeChanger = new OptionCategory("timeChanger");
+    public final OptionCategory general = new OptionCategory("axolotlclient.general");
+    public final OptionCategory nametagOptions = new OptionCategory("axolotlclient.nametagOptions");
+    public final OptionCategory rendering = new OptionCategory("axolotlclient.rendering");
+    public final OptionCategory outlines= new OptionCategory("axolotlclient.blockOutlines");
+    public final OptionCategory timeChanger = new OptionCategory("axolotlclient.timeChanger");
     public final OptionCategory searchFilters = new OptionCategory("searchFilters");
 
     private final List<Option> options = new ArrayList<>();

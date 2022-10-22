@@ -9,9 +9,9 @@ public class AutoTip implements AbstractHypixelMod {
 
     public static AutoTip INSTANCE = new AutoTip();
 
-    private final OptionCategory category = new OptionCategory("autotip");
+    private final OptionCategory category = new OptionCategory("axolotlclient.autotip");
 
-    private final BooleanOption enabled = new BooleanOption("enabled", false);
+    private final BooleanOption enabled = new BooleanOption("axolotlclient.enabled", false);
     private long lastTime;
     private boolean init = false;
 

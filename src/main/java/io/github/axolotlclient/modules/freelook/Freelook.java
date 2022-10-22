@@ -21,10 +21,10 @@ public class Freelook extends AbstractModule {
     private float yaw, pitch;
     private boolean active;
 
-    private final OptionCategory category = new OptionCategory("freelook");
-    public final BooleanOption enabled = new BooleanOption("enabled", false);
-    private final EnumOption perspective = new EnumOption("perspective", Perspective.values(), Perspective.THIRD_PERSON_BACK.toString());
-    private final BooleanOption invert = new BooleanOption("invert", false);
+    private final OptionCategory category = new OptionCategory("axolotlclient.freelook");
+    public final BooleanOption enabled = new BooleanOption("axolotlclient.enabled", false);
+    private final EnumOption perspective = new EnumOption("axolotlclient.perspective", Perspective.values(), Perspective.THIRD_PERSON_BACK.toString());
+    private final BooleanOption invert = new BooleanOption("axolotlclient.invert", false);
 
     private int previousPerspective;
 

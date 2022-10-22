@@ -48,8 +48,8 @@ public class AxolotlClient implements ClientModInitializer {
 
     public static final Identifier badgeIcon = new Identifier("axolotlclient", "textures/badge.png");
 
-    public static final OptionCategory config = new OptionCategory("storedOptions");
-    public static final BooleanOption someNiceBackground = new BooleanOption("defNoSecret", false);
+    public static final OptionCategory config = new OptionCategory("axolotlclient.storedOptions");
+    public static final BooleanOption someNiceBackground = new BooleanOption("axolotlclient.defNoSecret", false);
     public static final List<AbstractModule> modules = new ArrayList<>();
 
     public static Integer tickTime = 0;

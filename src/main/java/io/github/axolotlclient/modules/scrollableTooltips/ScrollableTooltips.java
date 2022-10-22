@@ -16,16 +16,16 @@ public class ScrollableTooltips extends AbstractModule {
     public int tooltipOffsetX;
     public int tooltipOffsetY;
 
-    protected KeyBinding key = new KeyBinding("key.scrollHorizontally", Keyboard.KEY_LSHIFT, "category.axolotlclient");
+    protected KeyBinding key = new KeyBinding("axolotlclient.key.scrollHorizontally", Keyboard.KEY_LSHIFT, "category.axolotlclient");
 
     private static final ScrollableTooltips instance = new ScrollableTooltips();
 
-    private final OptionCategory category = new OptionCategory("scrollableTooltips");
+    private final OptionCategory category = new OptionCategory("axolotlclient.scrollableTooltips");
 
-    public final BooleanOption enabled = new BooleanOption("enabled", false);
-    public final BooleanOption enableShiftHorizontalScroll = new BooleanOption("shiftHorizontalScroll", true);
-    protected final IntegerOption scrollAmount = new IntegerOption("scrollAmount", 5, 1, 20);
-    protected final BooleanOption inverse = new BooleanOption("inverse", false);
+    public final BooleanOption enabled = new BooleanOption("axolotlclient.enabled", false);
+    public final BooleanOption enableShiftHorizontalScroll = new BooleanOption("axolotlclient.shiftHorizontalScroll", true);
+    protected final IntegerOption scrollAmount = new IntegerOption("axolotlclient.scrollAmount", 5, 1, 20);
+    protected final BooleanOption inverse = new BooleanOption("axolotlclient.inverse", false);
 
     public static ScrollableTooltips getInstance() {
         return instance;

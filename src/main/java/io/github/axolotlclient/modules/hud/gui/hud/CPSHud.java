@@ -19,8 +19,8 @@ import java.util.List;
 public class CPSHud extends CleanHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "cpshud");
 
-    private final BooleanOption fromKeybindings = new BooleanOption("cpskeybind", false);
-    private final BooleanOption rmb = new BooleanOption("rightcps", false);
+    private final BooleanOption fromKeybindings = new BooleanOption("axolotlclient.cpskeybind", false);
+    private final BooleanOption rmb = new BooleanOption("axolotlclient.rightcps", false);
 
     public CPSHud() {
         super();

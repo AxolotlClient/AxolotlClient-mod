@@ -31,12 +31,12 @@ import java.util.Objects;
 public class CrosshairHud extends AbstractHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "crosshairhud");
 
-    private final EnumOption type = new EnumOption("crosshair_type", CrosshairOption.values(), CrosshairOption.TEXTURE.toString());
-    private final BooleanOption showInF5 = new BooleanOption("showInF5", false);
-    public final BooleanOption showInF3 = new BooleanOption("showInF3", false);
-    private final ColorOption defaultColor = new ColorOption("defaultcolor",  "#FFFFFFFF");
-    private final ColorOption entityColor = new ColorOption("entitycolor", Color.SELECTOR_RED);
-    private final ColorOption containerColor = new ColorOption("blockcolor", Color.SELECTOR_BLUE);
+    private final EnumOption type = new EnumOption("axolotlclient.crosshair_type", CrosshairOption.values(), CrosshairOption.TEXTURE.toString());
+    private final BooleanOption showInF5 = new BooleanOption("axolotlclient.showInF5", false);
+    public final BooleanOption showInF3 = new BooleanOption("axolotlclient.showInF3", false);
+    private final ColorOption defaultColor = new ColorOption("axolotlclient.defaultcolor",  "#FFFFFFFF");
+    private final ColorOption entityColor = new ColorOption("axolotlclient.entitycolor", Color.SELECTOR_RED);
+    private final ColorOption containerColor = new ColorOption("axolotlclient.blockcolor", Color.SELECTOR_BLUE);
 
     public CrosshairHud() {
         super(17, 17);

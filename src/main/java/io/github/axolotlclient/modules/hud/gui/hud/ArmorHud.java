@@ -23,7 +23,7 @@ import java.util.List;
 public class ArmorHud extends AbstractHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "armorhud");
 
-    protected BooleanOption showProtLvl = new BooleanOption("showProtectionLevel", false);
+    protected BooleanOption showProtLvl = new BooleanOption("axolotlclient.showProtectionLevel", false);
 
     public ArmorHud() {
         super(20, 100);

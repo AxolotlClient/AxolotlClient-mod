@@ -18,10 +18,10 @@ public class HypixelMods extends AbstractModule {
 
     public static final HypixelMods INSTANCE = new HypixelMods();
 
-    public StringOption hypixel_api_key = new StringOption("hypixel_api_key", "");
-    public EnumOption cacheMode = new EnumOption("cache_mode", HypixelApiCacheMode.values(), HypixelApiCacheMode.ON_CLIENT_DISCONNECT.toString());
+    public StringOption hypixel_api_key = new StringOption("axolotlclient.hypixel_api_key", "");
+    public EnumOption cacheMode = new EnumOption("axolotlclient.cache_mode", HypixelApiCacheMode.values(), HypixelApiCacheMode.ON_CLIENT_DISCONNECT.toString());
 
-    private final OptionCategory category = new OptionCategory("hypixel-mods");
+    private final OptionCategory category = new OptionCategory("axolotlclient.hypixel-mods");
     private final List<AbstractHypixelMod> subModules = new ArrayList<>();
 
     @Override

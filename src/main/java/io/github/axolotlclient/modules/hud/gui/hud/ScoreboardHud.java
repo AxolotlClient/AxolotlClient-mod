@@ -33,10 +33,10 @@ import java.util.stream.Collectors;
 public class ScoreboardHud extends AbstractHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "scoreboardhud");
 
-    private final ColorOption backgroundColor = new ColorOption("backgroundcolor", Color.parse("#4C000000"));
-    private final ColorOption topColor = new ColorOption("topbackgroundcolor", Color.parse("#66000000"));
-    private final BooleanOption scores = new BooleanOption("scores", true);
-    private final ColorOption scoreColor = new ColorOption("scorecolor", Color.parse("#FFFF5555"));
+    private final ColorOption backgroundColor = new ColorOption("axolotlclient.backgroundcolor", Color.parse("#4C000000"));
+    private final ColorOption topColor = new ColorOption("axolotlclient.topbackgroundcolor", Color.parse("#66000000"));
+    private final BooleanOption scores = new BooleanOption("axolotlclient.scores", true);
+    private final ColorOption scoreColor = new ColorOption("axolotlclient.scorecolor", Color.parse("#FFFF5555"));
     
     private final MinecraftClient client = MinecraftClient.getInstance();
     private final Rectangle inside = new Rectangle(0, 0, 0, 0);

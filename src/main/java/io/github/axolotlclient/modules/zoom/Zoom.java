@@ -27,13 +27,13 @@ public class Zoom extends AbstractModule {
     private static float animatedFactor = 1;
     private static double lastReturnedFov;
 
-    public static final FloatOption zoomDivisor = new FloatOption("zoomDivisor", 4F, 1F, 16F);
-    public static final FloatOption zoomSpeed = new FloatOption("zoomSpeed", 7.5F, 1F, 10F);
-    public static final BooleanOption zoomScrolling = new BooleanOption("zoomScrolling", false);
-    public static final BooleanOption decreaseSensitivity = new BooleanOption("decreaseSensitivity", true);
-    public static final BooleanOption smoothCamera = new BooleanOption("smoothCamera", false);
+    public static final FloatOption zoomDivisor = new FloatOption("axolotlclient.zoomDivisor", 4F, 1F, 16F);
+    public static final FloatOption zoomSpeed = new FloatOption("axolotlclient.zoomSpeed", 7.5F, 1F, 10F);
+    public static final BooleanOption zoomScrolling = new BooleanOption("axolotlclient.zoomScrolling", false);
+    public static final BooleanOption decreaseSensitivity = new BooleanOption("axolotlclient.decreaseSensitivity", true);
+    public static final BooleanOption smoothCamera = new BooleanOption("axolotlclient.smoothCamera", false);
 
-    public final OptionCategory zoom = new OptionCategory("zoom");
+    public final OptionCategory zoom = new OptionCategory("axolotlclient.zoom");
 
     private static final Zoom Instance = new Zoom();
     public static Zoom getInstance() {
@@ -50,7 +50,7 @@ public class Zoom extends AbstractModule {
 
         AxolotlClient.CONFIG.rendering.addSubCategory(zoom);
 
-        keyBinding = new KeyBinding("key.zoom", 46, "category.axolotlclient");
+        keyBinding = new KeyBinding("axolotlclient.key.zoom", 46, "category.axolotlclient");
         KeyBindingHelper.registerKeyBinding(keyBinding);
         active = false;
     }

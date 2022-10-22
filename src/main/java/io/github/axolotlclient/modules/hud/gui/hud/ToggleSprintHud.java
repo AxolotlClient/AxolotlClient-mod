@@ -21,17 +21,17 @@ import java.util.Random;
 public class ToggleSprintHud extends CleanHudEntry {
 
     public static final Identifier ID = new Identifier("togglesprint");
-    private final BooleanOption toggleSprint = new BooleanOption("toggleSprint", false);
-    private final BooleanOption toggleSneak = new BooleanOption("toggleSneak", false);
-    private final BooleanOption randomPlaceholder = new BooleanOption("randomPlaceholder", false);
-    private final StringOption placeholder = new StringOption("placeholder", "");
+    private final BooleanOption toggleSprint = new BooleanOption("axolotlclient.toggleSprint", false);
+    private final BooleanOption toggleSneak = new BooleanOption("axolotlclient.toggleSneak", false);
+    private final BooleanOption randomPlaceholder = new BooleanOption("axolotlclient.randomPlaceholder", false);
+    private final StringOption placeholder = new StringOption("axolotlclient.placeholder", "");
 
-    KeyBinding sprintToggle = new KeyBinding("key.toggleSprint", 23, "category.axolotlclient");
-    KeyBinding sneakToggle = new KeyBinding("key.toggleSneak", 37, "category.axolotlclient");
+    KeyBinding sprintToggle = new KeyBinding("axolotlclient.key.toggleSprint", 23, "category.axolotlclient");
+    KeyBinding sneakToggle = new KeyBinding("axolotlclient.key.toggleSneak", 37, "category.axolotlclient");
 
-    public BooleanOption sprintToggled = new BooleanOption("sprintToggled", false);
+    public BooleanOption sprintToggled = new BooleanOption("axolotlclient.sprintToggled", false);
     private boolean sprintWasPressed = false;
-    public BooleanOption sneakToggled = new BooleanOption("sneakToggled", false);
+    public BooleanOption sneakToggled = new BooleanOption("axolotlclient.sneakToggled", false);
     private boolean sneakWasPressed = false;
 
     private final List<String> texts = new ArrayList<>();
@@ -50,7 +50,7 @@ public class ToggleSprintHud extends CleanHudEntry {
     private void loadRandomPlaceholder(){
         try {
             BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(MinecraftClient.getInstance().getResourceManager().getResource(new Identifier("axolotlclient", "texts/splashes.txt")).getInputStream(), Charsets.UTF_8)
+                    new InputStreamReader(MinecraftClient.getInstance().getResourceManager().getResource(new Identifier("texts/splashes.txt")).getInputStream(), Charsets.UTF_8)
             );
             String string;
             while((string = bufferedReader.readLine()) != null) {
@@ -91,14 +91,14 @@ public class ToggleSprintHud extends CleanHudEntry {
     @Override
     public String getValue(){
 
-        if(client.options.keySneak.isPressed())return I18n.translate("sneaking_pressed");
-        if(client.options.keySprint.isPressed())return I18n.translate("sprinting_pressed");
+        if(client.options.keySneak.isPressed())return I18n.translate("axolotlclient.sneaking_pressed");
+        if(client.options.keySprint.isPressed())return I18n.translate("axolotlclient.sprinting_pressed");
 
         if(toggleSneak.get() && sneakToggled.get()){
-            return I18n.translate("sneaking_toggled");
+            return I18n.translate("axolotlclient.sneaking_toggled");
         }
         if(toggleSprint.get() && sprintToggled.get()){
-             return I18n.translate("sprinting_toggled");
+             return I18n.translate("axolotlclient.sprinting_toggled");
         }
         return getPlaceholder();
     }

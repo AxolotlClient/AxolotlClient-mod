@@ -28,15 +28,15 @@ import java.util.Optional;
 public class KeystrokeHud extends AbstractHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "keystrokehud");
 
-    private final ColorOption pressedTextColor = new ColorOption("heldtextcolor", Color.parse("#FF000000"));
+    private final ColorOption pressedTextColor = new ColorOption("axolotlclient.heldtextcolor", Color.parse("#FF000000"));
     private final ColorOption pressedBackgroundColor = new ColorOption( "heldbackgroundcolor", Color.parse("#64FFFFFF"));
-    private final BooleanOption showW = new BooleanOption("showW", true);
-    private final BooleanOption showA = new BooleanOption("showA", true);
-    private final BooleanOption showS = new BooleanOption("showS", true);
-    private final BooleanOption showD = new BooleanOption("showD", true);
-    private final BooleanOption showSpace = new BooleanOption("showSpace", true);
-    private final BooleanOption showLMB = new BooleanOption("showLMB", true);
-    private final BooleanOption showRMB = new BooleanOption("showRMB", true);
+    private final BooleanOption showW = new BooleanOption("axolotlclient.showW", true);
+    private final BooleanOption showA = new BooleanOption("axolotlclient.showA", true);
+    private final BooleanOption showS = new BooleanOption("axolotlclient.showS", true);
+    private final BooleanOption showD = new BooleanOption("axolotlclient.showD", true);
+    private final BooleanOption showSpace = new BooleanOption("axolotlclient.showSpace", true);
+    private final BooleanOption showLMB = new BooleanOption("axolotlclient.showLMB", true);
+    private final BooleanOption showRMB = new BooleanOption("axolotlclient.showRMB", true);
 
     private Keystroke w;
     private Keystroke a;

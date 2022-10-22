@@ -18,11 +18,11 @@ public class PlayerCountHud extends CleanHudEntry {
 
     @Override
     public String getValue() {
-        return MinecraftClient.getInstance().world.playerEntities.size() + " "+ I18n.translate("players");
+        return MinecraftClient.getInstance().world.playerEntities.size() + " "+ I18n.translate("axolotlclient.players");
     }
 
     @Override
     public String getPlaceholder() {
-        return 3.141592 + " " + I18n.translate("players");
+        return 3.141592 + " " + I18n.translate("axolotlclient.players");
     }
 }

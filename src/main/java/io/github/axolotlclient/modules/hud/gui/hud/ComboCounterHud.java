@@ -19,16 +19,16 @@ public class ComboCounterHud extends CleanHudEntry {
     @Override
     public String getValue() {
         if(count == 0){
-            return I18n.translate("combocounter.no_hits");
+            return I18n.translate("axolotlclient.combocounter.no_hits");
         } else if (count == 1) {
-            return I18n.translate("combocounter.one_hit");
+            return I18n.translate("axolotlclient.combocounter.one_hit");
         }
-        return I18n.translate("combocounter.hits", count);
+        return I18n.translate("axolotlclient.combocounter.hits", count);
     }
 
     @Override
     public String getPlaceholder() {
-        return I18n.translate("combocounter.no_hits");
+        return I18n.translate("axolotlclient.combocounter.no_hits");
     }
 
     @Override

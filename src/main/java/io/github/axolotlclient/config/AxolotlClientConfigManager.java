@@ -33,7 +33,7 @@ public class AxolotlClientConfigManager implements ConfigManager {
         for(OptionCategory category : categories) {
             JsonObject object = new JsonObject();
 
-            config.add(category.getName(), this.getConfig(object, category));
+            config.add(stripTranslationPrefix(category.getName()), this.getConfig(object, category));
 
         }
 
@@ -45,13 +45,13 @@ public class AxolotlClientConfigManager implements ConfigManager {
     public JsonObject getConfig(JsonObject object, OptionCategory category){
         for (Option option : category.getOptions()) {
 
-            object.add(option.getName(), option.getJson());
+            object.add(stripTranslationPrefix(option.getName()), option.getJson());
         }
 
         if(!category.getSubCategories().isEmpty()){
             for(OptionCategory sub:category.getSubCategories()){
                 JsonObject subOption = new JsonObject();
-                object.add(sub.getName(), getConfig(subOption, sub));
+                object.add(stripTranslationPrefix(sub.getName()), getConfig(subOption, sub));
             }
         }
         return object;
@@ -65,8 +65,8 @@ public class AxolotlClientConfigManager implements ConfigManager {
             JsonObject config = new JsonParser().parse(new FileReader(confPath.toString())).getAsJsonObject();
 
             for(OptionCategory category:categories) {
-                if(config.has(category.getName())) {
-                    setOptions(config.get(category.getName()).getAsJsonObject(), category);
+                if(config.has(stripTranslationPrefix(category.getName()))) {
+                    setOptions(config.get(stripTranslationPrefix(category.getName())).getAsJsonObject(), category);
                 }
             }
         } catch (Exception e){
@@ -77,15 +77,15 @@ public class AxolotlClientConfigManager implements ConfigManager {
 
     public void setOptions(JsonObject config, OptionCategory category){
         for (Option option : category.getOptions()) {
-            if (config.has(option.getName())) {
-                JsonElement part = config.get(option.getName());
+            if (config.has(stripTranslationPrefix(option.getName()))) {
+                JsonElement part = config.get(stripTranslationPrefix(option.getName()));
                 option.setValueFromJsonElement(part);
             }
         }
         if(!category.getSubCategories().isEmpty()){
             for (OptionCategory sub: category.getSubCategories()) {
-                if (config.has(sub.getName())) {
-                    JsonObject subCat = config.get(sub.getName()).getAsJsonObject();
+                if (config.has(stripTranslationPrefix(sub.getName()))) {
+                    JsonObject subCat = config.get(stripTranslationPrefix(sub.getName())).getAsJsonObject();
                     setOptions(subCat, sub);
                 }
             }
@@ -103,5 +103,9 @@ public class AxolotlClientConfigManager implements ConfigManager {
                 setOptionDefaults(sub);
             }
         }
+    }
+
+    private static String stripTranslationPrefix(String name){
+        return name.startsWith("axolotlclient.")? name.substring(14) : name;
     }
 }

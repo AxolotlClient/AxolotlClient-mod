@@ -18,12 +18,12 @@ public class MemoryHud extends AbstractHudEntry {
     public static final Identifier ID = new Identifier("axolotlclient", "memoryhud");
 
     private final Rectangle graph = new Rectangle(0, 0, 0, 0);
-    private final ColorOption graphUsedColor = new ColorOption("graphUsedColor", Color.SELECTOR_RED.withAlpha(255));
-    private final ColorOption graphFreeColor = new ColorOption("graphFreeColor", Color.SELECTOR_GREEN.withAlpha(255));
+    private final ColorOption graphUsedColor = new ColorOption("axolotlclient.graphUsedColor", Color.SELECTOR_RED.withAlpha(255));
+    private final ColorOption graphFreeColor = new ColorOption("axolotlclient.graphFreeColor", Color.SELECTOR_GREEN.withAlpha(255));
 
-    private final BooleanOption showGraph = new BooleanOption("showGraph", true);
-    private final BooleanOption showText = new BooleanOption("showText", false);
-    private final BooleanOption showAllocated = new BooleanOption("showAllocated", false);
+    private final BooleanOption showGraph = new BooleanOption("axolotlclient.showGraph", true);
+    private final BooleanOption showText = new BooleanOption("axolotlclient.showText", false);
+    private final BooleanOption showAllocated = new BooleanOption("axolotlclient.showAllocated", false);
 
     public MemoryHud() {
         super(150, 27);
@@ -102,7 +102,7 @@ public class MemoryHud extends AbstractHudEntry {
                     pos.y + (Math.round((float) height / 2) - 4) - (showAllocated.get() ? 4 : 0),
                     Color.WHITE, shadow.get());
             if (showAllocated.get()) {
-                drawString(I18n.translate("allocated")+": 976MiB",
+                drawString(I18n.translate("axolotlclient.allocated")+": 976MiB",
                         pos.x,
                         pos.y + (Math.round((float) height / 2) - 4) + 4,
                         textColor.get(),
@@ -131,7 +131,7 @@ public class MemoryHud extends AbstractHudEntry {
     private String getAllocationLine(){
         long total = Runtime.getRuntime().totalMemory();
 
-        return I18n.translate("allocated")+": "+toMiB(total);
+        return I18n.translate("axolotlclient.allocated")+": "+toMiB(total);
     }
 
     private float getUsage(){

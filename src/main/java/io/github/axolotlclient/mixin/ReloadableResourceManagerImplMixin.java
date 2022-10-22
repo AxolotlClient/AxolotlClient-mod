@@ -4,6 +4,7 @@ import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hud.gui.hud.PackDisplayHud;
 import io.github.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
+import io.github.axolotlclient.util.translation.TranslationProvider;
 import net.minecraft.resource.ReloadableResourceManagerImpl;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourcePack;
@@ -27,6 +28,8 @@ public abstract class ReloadableResourceManagerImplMixin {
         if(hud != null && hud.isEnabled()){
             hud.setPacks(resourcePacks);
         }
+
+        TranslationProvider.load();
     }
 
     @Inject(method = "getResource", at = @At("HEAD"), cancellable = true)

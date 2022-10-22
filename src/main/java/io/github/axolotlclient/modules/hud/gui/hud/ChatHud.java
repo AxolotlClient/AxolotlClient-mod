@@ -24,12 +24,12 @@ import java.util.List;
 public class ChatHud extends AbstractHudEntry {
 
     public static Identifier ID = new Identifier("axolotlclient", "chathud");
-    public BooleanOption background = new BooleanOption("background", "chathud", true);
-    public ColorOption bgColor = new ColorOption("bgColor", "#40000000");
+    public BooleanOption background = new BooleanOption("axolotlclient.background", "chathud", true);
+    public ColorOption bgColor = new ColorOption("axolotlclient.bgColor", "#40000000");
 
-    public IntegerOption chatHistory = new IntegerOption("chatHistoryLength", 100, 10, 5000);
-    public ColorOption scrollbarColor = new ColorOption("scrollbarColor", "#70CCCCCC");
-    public IntegerOption lineSpacing = new IntegerOption("lineSpacing", 0, 0, 10);
+    public IntegerOption chatHistory = new IntegerOption("axolotlclient.chatHistoryLength", 100, 10, 5000);
+    public ColorOption scrollbarColor = new ColorOption("axolotlclient.scrollbarColor", "#70CCCCCC");
+    public IntegerOption lineSpacing = new IntegerOption("axolotlclient.lineSpacing", 0, 0, 10);
 
     public int ticks;
 
@@ -227,5 +227,10 @@ public class ChatHud extends AbstractHudEntry {
 
     public int getVisibleLineCount() {
         return this.getHeight() / 9;
+    }
+
+    @Override
+    public boolean overridesF3(){
+        return true;
     }
 }

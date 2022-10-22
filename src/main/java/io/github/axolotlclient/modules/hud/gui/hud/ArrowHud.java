@@ -24,7 +24,7 @@ import java.util.List;
 public class ArrowHud extends AbstractHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "arrowhud");
     private int arrows = 0;
-    private final BooleanOption dynamic = new BooleanOption("dynamic", false);
+    private final BooleanOption dynamic = new BooleanOption("axolotlclient.dynamic", false);
 
     public ArrowHud() {
         super(20, 30);
