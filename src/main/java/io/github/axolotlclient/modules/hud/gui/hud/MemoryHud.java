@@ -4,7 +4,7 @@ import io.github.axolotlclient.AxolotlclientConfig.Color;
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.ColorOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
-import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
+import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.resource.language.I18n;
@@ -13,7 +13,7 @@ import net.minecraft.util.Identifier;
 
 import java.util.List;
 
-public class MemoryHud extends AbstractHudEntry {
+public class MemoryHud extends TextHudEntry {
 
     public static final Identifier ID = new Identifier("axolotlclient", "memoryhud");
 
@@ -26,18 +26,13 @@ public class MemoryHud extends AbstractHudEntry {
     private final BooleanOption showAllocated = new BooleanOption("showAllocated", false);
 
     public MemoryHud() {
-        super(150, 27);
+        super(150, 27, true);
     }
 
     @Override
-    public void render(MatrixStack matrices) {
+    public void renderComponent(MatrixStack matrices, float delta) {
 
-        scale(matrices);
         DrawPosition pos = getPos();
-        if (background.get()) {
-            fillRect(matrices, getBounds(), backgroundColor.get());
-        }
-        if(outline.get()) outlineRect(matrices, getBounds(), outlineColor.get());
 
         if(showGraph.get()){
             graph.setData(pos.x + 5, pos.y + 5, getBounds().width- 10, getBounds().height - 10);
@@ -58,7 +53,7 @@ public class MemoryHud extends AbstractHudEntry {
             drawString(matrices, getMemoryLine(),
                     pos.x,
                     pos.y + (Math.round((float) height / 2) - 4) - (showAllocated.get() ? 4 : 0),
-                    textColor.get(),
+                    textColor.get().getAsInt(),
                     shadow.get()
             );
 
@@ -66,7 +61,7 @@ public class MemoryHud extends AbstractHudEntry {
                 drawString(matrices, getAllocationLine(),
                         pos.x,
                         pos.y + (Math.round((float) height / 2) - 4) + 4,
-                        textColor.get(),
+                        textColor.get().getAsInt(),
                         shadow.get()
                 );
             }
@@ -76,9 +71,8 @@ public class MemoryHud extends AbstractHudEntry {
     }
 
     @Override
-    public void renderPlaceholder(MatrixStack matrices) {
-        renderPlaceholderBackground(matrices);
-        scale(matrices);
+    public void renderPlaceholderComponent(MatrixStack matrices, float delta) {
+
         DrawPosition pos = getPos();
 
         if(showGraph.get()){
@@ -143,20 +137,14 @@ public class MemoryHud extends AbstractHudEntry {
     }
 
     @Override
-    public void addConfigOptions(List<OptionBase<?>> options) {
-        super.addConfigOptions(options);
-        options.add(textColor);
-        options.add(textAlignment);
-        options.add(shadow);
-        options.add(background);
-        options.add(backgroundColor);
-        options.add(outline);
-        options.add(outlineColor);
+    public List<OptionBase<?>> getConfigurationOptions() {
+        List<OptionBase<?>> options = super.getConfigurationOptions();
         options.add(showGraph);
         options.add(graphUsedColor);
         options.add(graphFreeColor);
         options.add(showText);
         options.add(showAllocated);
+        return options;
     }
 
     @Override

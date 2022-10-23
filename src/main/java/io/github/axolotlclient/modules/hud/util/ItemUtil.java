@@ -180,7 +180,7 @@ public class ItemUtil {
 			String string = countLabel == null ? String.valueOf(stack.getCount()) :
 					countLabel;
 			matrices.translate(0.0, 0.0, client.getItemRenderer().zOffset + 200.0F);
-			DrawUtil.drawString(matrices, renderer, string, (x + 19 - 2 - renderer.getWidth(string)),
+			DrawUtil.drawString(matrices, string, (x + 19 - 2 - renderer.getWidth(string)),
 					(y + 6 + 3),
 					textColor, shadow);
 		}

@@ -1,9 +1,11 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
-import io.github.axolotlclient.AxolotlClient;
+
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
 import io.github.axolotlclient.AxolotlclientConfig.options.StringOption;
+import io.github.axolotlclient.modules.hud.gui.entry.SimpleTextHudEntry;
+import lombok.Getter;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBind;
@@ -19,27 +21,29 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
-public class ToggleSprintHud extends CleanHudEntry {
+public class ToggleSprintHud extends SimpleTextHudEntry {
 
-    public static final Identifier ID = new Identifier("togglesprint");
-    private final BooleanOption toggleSprint = new BooleanOption("toggleSprint", false);
-    private final BooleanOption toggleSneak = new BooleanOption("toggleSneak", false);
-    private final BooleanOption randomPlaceholder = new BooleanOption("randomPlaceholder", false);
-    private final StringOption placeholder = new StringOption("placeholder", "");
+    public static final Identifier ID = new Identifier("kronhud", "togglesprint");
+    private final BooleanOption toggleSprint = new BooleanOption("toggleSprint", ID.getPath(), false);
+    private final BooleanOption toggleSneak = new BooleanOption("toggleSneak", ID.getPath(), false);
+    private final BooleanOption randomPlaceholder = new BooleanOption("randomPlaceholder", ID.getPath(), false);
+    private final StringOption placeholder = new StringOption("placeholder", ID.getPath(), "No keys pressed");
 
-    KeyBind sprintToggle = new KeyBind("key.toggleSprint", GLFW.GLFW_KEY_K, "category.axolotlclient");
-    KeyBind sneakToggle = new KeyBind("key.toggleSneak", GLFW.GLFW_KEY_I, "category.axolotlclient");
+    private final KeyBind sprintToggle = new KeyBind("keys.kronhud.toggleSprint", GLFW.GLFW_KEY_K, "keys.category.kronhud.keys");
+    private final KeyBind sneakToggle = new KeyBind("keys.kronhud.toggleSneak", GLFW.GLFW_KEY_I, "keys.category.kronhud.keys");
 
-    public BooleanOption sprintToggled = new BooleanOption("sprintToggled", false);
+    @Getter
+    private final BooleanOption sprintToggled = new BooleanOption("sprintToggled", ID.getPath(), false);
     private boolean sprintWasPressed = false;
-    public BooleanOption sneakToggled = new BooleanOption("sneakToggled", false);
+    @Getter
+    private final BooleanOption sneakToggled = new BooleanOption("sneakToggled", ID.getPath(), false);
     private boolean sneakWasPressed = false;
 
     private final List<String> texts = new ArrayList<>();
     private String text = "";
 
-    public ToggleSprintHud(){
-        super(100, 20);
+    public ToggleSprintHud() {
+        super(100, 20, false);
     }
 
     @Override
@@ -48,13 +52,16 @@ public class ToggleSprintHud extends CleanHudEntry {
         KeyBindingHelper.registerKeyBinding(sneakToggle);
     }
 
-    private void loadRandomPlaceholder(){
+    private void loadRandomPlaceholder() {
         try {
             BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(MinecraftClient.getInstance().getResourceManager().getResourceOrThrow(new Identifier("axolotlclient", "texts/splashes.txt")).open(), StandardCharsets.UTF_8)
+                    new InputStreamReader(MinecraftClient.getInstance()
+                                                         .getResourceManager()
+                                                         .getResourceOrThrow(new Identifier("texts/splashes.txt"))
+                                                         .open(), StandardCharsets.UTF_8)
             );
             String string;
-            while((string = bufferedReader.readLine()) != null) {
+            while ((string = bufferedReader.readLine()) != null) {
                 string = string.trim();
                 if (!string.isEmpty()) {
                     texts.add(string);
@@ -62,13 +69,13 @@ public class ToggleSprintHud extends CleanHudEntry {
             }
 
             text = texts.get(new Random().nextInt(texts.size()));
-        } catch (Exception e){
+        } catch (Exception e) {
             text = "";
         }
     }
 
-    private String getRandomPlaceholder(){
-        if(Objects.equals(text, "")){
+    private String getRandomPlaceholder() {
+        if (Objects.equals(text, "")) {
             loadRandomPlaceholder();
         }
         return text;
@@ -90,16 +97,20 @@ public class ToggleSprintHud extends CleanHudEntry {
     }
 
     @Override
-    public String getValue(){
+    public String getValue() {
 
-        if(client.options.sneakKey.isPressed())return I18n.translate("sneaking_pressed");
-        if(client.options.sprintKey.isPressed())return I18n.translate("sprinting_pressed");
-
-        if(toggleSneak.get() && sneakToggled.get()){
-            return I18n.translate("sneaking_toggled");
+        if (client.options.sneakKey.isPressed()) {
+            return I18n.translate("texts.kronhud.togglesprint.sneaking_pressed");
         }
-        if(toggleSprint.get() && sprintToggled.get()){
-             return I18n.translate("sprinting_toggled");
+        if (client.options.sprintKey.isPressed()) {
+            return I18n.translate("texts.kronhud.togglesprint.sprinting_pressed");
+        }
+
+        if (toggleSneak.get() && sneakToggled.get()) {
+            return I18n.translate("texts.kronhud.togglesprint.sneaking_toggled");
+        }
+        if (toggleSprint.get() && sprintToggled.get()) {
+            return I18n.translate("texts.kronhud.togglesprint.sprinting_toggled");
         }
         return getPlaceholder();
     }
@@ -111,29 +122,36 @@ public class ToggleSprintHud extends CleanHudEntry {
 
     @Override
     public void tick() {
-        if(sprintToggle.isPressed() != sprintWasPressed && sprintToggle.isPressed()){
+        if (sprintToggle.isPressed() != sprintWasPressed && sprintToggle.isPressed() && toggleSprint.get()) {
             sprintToggled.toggle();
-            AxolotlClient.configManager.save();
-            sprintWasPressed=sprintToggle.isPressed();
-        } else  if(!sprintToggle.isPressed())sprintWasPressed=false;
-        if(sneakToggle.isPressed() != sneakWasPressed && sneakToggle.isPressed()){
+            sprintWasPressed = sprintToggle.isPressed();
+        } else if (!sprintToggle.isPressed()) {
+            sprintWasPressed = false;
+        }
+        if (sneakToggle.isPressed() != sneakWasPressed && sneakToggle.isPressed() && toggleSneak.get()) {
             sneakToggled.toggle();
-            AxolotlClient.configManager.save();
-            sneakWasPressed=sneakToggle.isPressed();
-        } else if(!sneakToggle.isPressed())sneakWasPressed = false;
+            sneakWasPressed = sneakToggle.isPressed();
+        } else if (!sneakToggle.isPressed()) {
+            sneakWasPressed = false;
+        }
     }
 
     @Override
-    public void addConfigOptions(List<OptionBase<?>> options) {
-        super.addConfigOptions(options);
+    public List<OptionBase<?>> getConfigurationOptions() {
+        List<OptionBase<?>> options = super.getConfigurationOptions();
         options.add(toggleSprint);
         options.add(toggleSneak);
         options.add(randomPlaceholder);
         options.add(placeholder);
-
-        AxolotlClient.config.add(sprintToggled);
-        AxolotlClient.config.add(sneakToggled);
+        return options;
     }
 
+    @Override
+    public List<OptionBase<?>> getSaveOptions() {
+        List<OptionBase<?>> options = super.getSaveOptions();
+        options.add(sprintToggled);
+        options.add(sneakToggled);
+        return options;
+    }
 
 }

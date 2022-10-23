@@ -4,6 +4,7 @@ import com.mojang.blaze3d.glfw.Window;
 import io.github.axolotlclient.AxolotlclientConfig.Color;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
+import lombok.Setter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
 
@@ -22,6 +23,7 @@ public class SnappingHelper {
     private final HashSet<Integer> x = new HashSet<>();
     private final HashSet<Integer> y = new HashSet<>();
     private static final Color LINE_COLOR = Color.SELECTOR_BLUE;
+    @Setter
     private Rectangle current;
     private final Window window;
 
@@ -141,9 +143,5 @@ public class SnappingHelper {
             return ySnap;
         }
         return null;
-    }
-
-    public void setCurrent(Rectangle current) {
-        this.current=current;
     }
 }

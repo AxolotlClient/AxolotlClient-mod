@@ -1,6 +1,7 @@
 package io.github.axolotlclient.modules.hud.util;
 
 import io.github.axolotlclient.AxolotlclientConfig.Color;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
@@ -19,6 +20,10 @@ public class DrawUtil extends DrawableHelper{
                 color.getAsInt());
     }
 
+    public static void fillRect(MatrixStack matrices, int x, int y, int width, int height, Color color) {
+        fillRect(matrices, x, y, x + width, y + height, color.getAsInt());
+    }
+
     public static void fillRect(MatrixStack matrices, int x, int y, int width, int height, int color) {
         DrawableHelper.fill(matrices, x, y, x + width, y + height, color);
     }
@@ -35,34 +40,45 @@ public class DrawUtil extends DrawableHelper{
     }
 
 
-    public static void drawCenteredString(MatrixStack matrices, TextRenderer renderer,
-                                          String text, DrawPosition position,
-                                          Color color, boolean shadow) {
-        drawCenteredString(matrices, renderer, text, position, color.getAsInt(), shadow);
+    public static void drawCenteredString(
+            MatrixStack matrices, TextRenderer renderer,
+            String text, int x, int y,
+            Color color, boolean shadow
+    ) {
+        drawCenteredString(matrices, renderer, text, x, y, color.getAsInt(), shadow);
     }
 
 
-    public static void drawCenteredString(MatrixStack matrices, TextRenderer renderer,
-                                          String text, DrawPosition position,
-                                          int color, boolean shadow) {
-        drawString(matrices, renderer, text, position.x - renderer.getWidth(text) / 2,
-                position.y,
-                color, shadow);
+    public static void drawCenteredString(
+            MatrixStack matrices, TextRenderer renderer,
+            String text, int x, int y,
+            int color, boolean shadow
+    ) {
+        drawString(matrices, text, (float) (x - renderer.getWidth(text) / 2),
+                (float) y,
+                color, shadow
+        );
     }
 
-    public static void drawCenteredString(MatrixStack matrices, TextRenderer renderer, String text, int x, int y, int color, boolean shadow){
-        drawString(matrices, renderer, text, x - renderer.getWidth(text) / 2,
-            y,
-            color, shadow);
+    public static void drawString(MatrixStack matrices, String text, float x, float y, Color color, boolean shadow){
+        drawString(matrices, text, x, y, color.getAsInt(), shadow);
     }
 
-    public static void drawString(MatrixStack matrices, TextRenderer renderer, String text, int x, int y,
-                                  int color, boolean shadow) {
-        if(shadow) {
-            renderer.drawWithShadow(matrices, text, x, y, color);
-        }
-        else {
-            renderer.draw(matrices, text, x, y, color);
+    public static void drawString(
+            MatrixStack matrices, TextRenderer textRenderer, String text, float x, float y,
+            int color, boolean shadow
+    ) {
+        drawString(matrices, text, x, y, color, shadow);
+    }
+
+    public static void drawString(
+            MatrixStack matrices, String text, float x, float y,
+            int color, boolean shadow
+    ) {
+        if (shadow) {
+            MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, text, x, y, color);
+        } else {
+            MinecraftClient.getInstance().textRenderer.draw(matrices, text, x, y, color);
         }
     }
 

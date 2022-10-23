@@ -2,241 +2,240 @@ package io.github.axolotlclient.modules.hud.gui;
 
 import io.github.axolotlclient.AxolotlclientConfig.Color;
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.ColorOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.DoubleOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.EnumOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
+import io.github.axolotlclient.modules.hud.gui.component.HudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * This implementation of Hud modules is based on KronHUD.
- * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
- * @license GPL-3.0
- */
+public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
 
-public abstract class AbstractHudEntry extends DrawUtil {
+    protected final BooleanOption enabled = new BooleanOption("axolotlclient.enabled", value -> onBoundsUpdate(), false);
+    protected final DoubleOption scale = new DoubleOption("axolotlclient.scale", 1, 0, 5);
+    private final DoubleOption x;
+    private final DoubleOption y;
 
-    public int width;
-    public int height;
+    private Rectangle trueBounds = null;
+    private Rectangle renderBounds = null;
+    private DrawPosition truePosition = null;
+    private DrawPosition renderPosition = new DrawPosition(0, 0);
 
-    protected BooleanOption enabled = new BooleanOption("enabled",false);
-    public DoubleOption scale = new DoubleOption("scale", 1, 0.1F, 5);
-    protected final ColorOption textColor = new ColorOption("textColor", Color.WHITE);
-    protected EnumOption textAlignment = new EnumOption("textAlignment", new String[]{"center", "left", "right"}, "center");
-    protected BooleanOption shadow = new BooleanOption("shadow",  getShadowDefault());
-    protected BooleanOption background = new BooleanOption("background",  true);
-    protected final ColorOption backgroundColor = new ColorOption("bgColor", Color.parse("#64000000"));
-    protected final BooleanOption outline = new BooleanOption("outline", false);
-    protected final ColorOption outlineColor = new ColorOption("outlineColor", "#75000000");
-    private final DoubleOption x = new DoubleOption("x", getDefaultX(), -0.5, 1.5);
-    private final DoubleOption y = new DoubleOption("y", getDefaultY(), -0.5, 1.5);
-    private final DrawPosition scaledPos = new DrawPosition(0, 0);
-    private final Rectangle bounds = new Rectangle(0, 0, 0, 0);
-    private final Rectangle scaledBounds = new Rectangle(0, 0, 0, 0);
+    @Setter
+    @Getter
+    protected int width;
+    @Setter @Getter
+    protected int height;
 
-    private List<OptionBase<?>> options;
-
+    @Setter
     protected boolean hovered = false;
     protected MinecraftClient client = MinecraftClient.getInstance();
 
-
     public AbstractHudEntry(int width, int height) {
+        x = new DoubleOption("x", value -> onBoundsUpdate(), getDefaultX(), 0, 1);
+        y = new DoubleOption("y", getDefaultY(), 0, 1);
         this.width = width;
         this.height = height;
     }
 
-    public void init(){}
-
     public static int floatToInt(float percent, int max, int offset) {
-        if(percent<0){
-            return -MathHelper.clamp(Math.round((max - offset) * -percent), -1, max);
-        }
-        return MathHelper.clamp(Math.round((max - offset) * percent), -1, max);
+        return MathHelper.clamp(Math.round((max - offset) * percent), 0, max);
     }
 
     public static float intToFloat(int current, int max, int offset) {
-        if(current<0){
-            return -MathHelper.clamp((float) (-current) / (max - offset), 0, 2);
-        }
-        return MathHelper.clamp((float) (current) / (max - offset), -1, 2);
+        return MathHelper.clamp((float) (current) / (max - offset), 0, 1);
     }
 
-    public void renderHud(MatrixStack matrices) {
-        render(matrices);
-    }
-
-    public abstract void render(MatrixStack matrices);
-
-    public abstract void renderPlaceholder(MatrixStack matrices);
+    public void init() {}
 
     public void renderPlaceholderBackground(MatrixStack matrices) {
         if (hovered) {
-            fillRect(matrices, getScaledBounds(), Color.SELECTOR_BLUE);
+            fillRect(matrices, getTrueBounds(), Color.SELECTOR_BLUE.withAlpha(100));
         } else {
-            fillRect(matrices, getScaledBounds(), Color.DARK_GRAY);
+            fillRect(matrices, getTrueBounds(), Color.WHITE.withAlpha(50));
         }
-        outlineRect(matrices, getScaledBounds(), Color.BLACK);
+        outlineRect(matrices, getTrueBounds(), Color.BLACK);
     }
 
-    public abstract Identifier getId();
-
-    public abstract boolean movable();
-
-    public boolean tickable() {
-        return false;
-    }
-
-    public void tick() {
-    }
-
-    public void setXY(int x, int y) {
-        setX(x);
-        setY(y);
-    }
-
-    public int getX() {
-        return getScaledPos().x;
+    public int getRawX() {
+        return getPos().x;
     }
 
     public void setX(int x) {
-        this.x.set((double)intToFloat(x, MinecraftClient.getInstance().getWindow().getScaledWidth(),
-                Math.round(width * getScale())));
+        this.x.set((double) intToFloat(x, client.getWindow().getScaledWidth(),
+                0
+        ));
     }
 
-    public int getY() {
-       return getScaledPos().y;
+    public int getRawY() {
+        return getPos().y();
     }
 
     public void setY(int y) {
-        this.y.set((double)intToFloat(y, MinecraftClient.getInstance().getWindow().getScaledHeight(),
-                Math.round(height * getScale())));
+        this.y.set((double) intToFloat(y, client.getWindow().getScaledHeight(),
+                0
+        ));
     }
 
-    protected double getDefaultX() {
-        return 0;
-    }
-
-    protected float getDefaultY() {
-        return 0;
-    }
-
-    protected boolean getShadowDefault() {
-        return true;
-    }
-
-    public Rectangle getScaledBounds() {
-        return scaledBounds.setData(getX(), getY(), (int) Math.round(width *  scale.get()),
-                (int) Math.round(height * scale.get()));
+    public Rectangle getTrueBounds() {
+        return trueBounds;
     }
 
     /**
      * Gets the hud's bounds when the matrix has already been scaled.
+     *
      * @return The bounds.
      */
     public Rectangle getBounds() {
-        return bounds.setData(getPos().x, getPos().y, width, height);
+        return renderBounds;
     }
 
+    @Override
     public float getScale() {
         return scale.get().floatValue();
     }
 
     public void scale(MatrixStack matrices) {
-        matrices.push();
-        matrices.scale(getScale(), getScale(), 1F);
+        float scale = getScale();
+        matrices.scale(scale, scale, 1);
     }
 
+    @Override
     public DrawPosition getPos() {
-        return getScaledPos().divide(getScale());
+        return renderPosition;
     }
 
-    public DrawPosition getScaledPos() {
-        return getScaledPos(getScale());
+    @Override
+    public DrawPosition getTruePos() {
+        return truePosition;
     }
 
-    public DrawPosition getScaledPos(float scale) {
-        int scaledX = floatToInt( x.get().floatValue(), MinecraftClient.getInstance().getWindow().getScaledWidth(), Math.round(width * scale));
-        int scaledY = floatToInt( y.get().floatValue(), MinecraftClient.getInstance().getWindow().getScaledHeight(), Math.round(height * scale));
-        scaledPos.x = scaledX;
-        scaledPos.y = scaledY;
-        return scaledPos;
+    @Override
+    public void onBoundsUpdate() {
+        setBounds();
     }
 
-    public List<OptionBase<?>> getOptions() {
-        if (options == null) {
-            options = new ArrayList<>();
-            addConfigOptions(options);
+    public void setBounds() {
+        setBounds(getScale());
+    }
+
+    @Override
+    public int getRawTrueX() {
+        return truePosition.x();
+    }
+
+    @Override
+    public int getRawTrueY() {
+        return truePosition.y();
+    }
+
+    @Override
+    public int getTrueWidth() {
+        if (trueBounds == null) {
+            return HudEntry.super.getTrueWidth();
         }
+        return trueBounds.width();
+    }
+
+    @Override
+    public int getTrueHeight() {
+        if (trueBounds == null) {
+            return HudEntry.super.getTrueHeight();
+        }
+        return trueBounds.height();
+    }
+
+    public void setBounds(float scale) {
+        if (client.getWindow() == null) {
+            truePosition = new DrawPosition(0, 0);
+            renderPosition = new DrawPosition(0, 0);
+            renderBounds = new Rectangle(0, 0, 1, 1);
+            trueBounds = new Rectangle(0, 0, 1, 1);
+            return;
+        }
+        int scaledX = floatToInt(x.get().floatValue(), client.getWindow().getScaledWidth(), 0) - offsetTrueWidth();
+        int scaledY = floatToInt(y.get().floatValue(), client.getWindow().getScaledHeight(), 0) - offsetTrueHeight();
+        if (scaledX < 0) {
+            scaledX = 0;
+        }
+        if (scaledY < 0) {
+            scaledY = 0;
+        }
+        int trueWidth = (int) (getWidth() * getScale());
+        if (trueWidth < client.getWindow().getScaledWidth() && scaledX + trueWidth > client.getWindow().getScaledWidth()) {
+            scaledX = client.getWindow().getScaledWidth() - trueWidth;
+        }
+        int trueHeight = (int) (getHeight() * getScale());
+        if (trueHeight < client.getWindow().getScaledHeight() && scaledY + trueHeight > client.getWindow().getScaledHeight()) {
+            scaledY = client.getWindow().getScaledHeight() - trueHeight;
+        }
+        truePosition = new DrawPosition(scaledX, scaledY);
+        renderPosition = truePosition.divide(getScale());
+        renderBounds = new Rectangle(renderPosition.x(), renderPosition.y(), getWidth(), getHeight());
+        trueBounds = new Rectangle(scaledX, scaledY, (int) (getWidth() * getScale()), (int) (getHeight() * getScale()));
+    }
+
+    /*@Override
+    public Tab toTab() {
+        // Need to cast KronConfig to Option
+        return Tab.ofOptions(getId(), getNameKey(), getConfigurationOptions().stream().map((o -> (Option<?>) o)).collect(Collectors.toList()));
+    }*/
+
+    /**
+     * Returns a list of options that should be shown in configuration screens
+     *
+     * @return List of options
+     */
+    @Override
+    public List<OptionBase<?>> getConfigurationOptions() {
+        List<OptionBase<?>> options = new ArrayList<>();
+        options.add(enabled);
+        options.add(scale);
+        return options;
+    }
+
+    /**
+     * Returns a list of options that should be saved. By default, this includes {@link #getConfigurationOptions()}
+     *
+     * @return
+     */
+    @Override
+    public List<OptionBase<?>> getSaveOptions() {
+        List<OptionBase<?>> options = getConfigurationOptions();
+        options.add(x);
+        options.add(y);
         return options;
     }
 
     public OptionCategory getOptionsAsCategory(){
         OptionCategory cat = new OptionCategory(getNameKey(), false);
-        cat.add(getOptions());
+        cat.add(getConfigurationOptions());
         return cat;
     }
-
     public OptionCategory getAllOptions() {
-        List<OptionBase<?>> options = getOptions();
-        options.add(x);
-        options.add(y);
+        List<OptionBase<?>> options = getSaveOptions();
         OptionCategory cat = new OptionCategory(getNameKey());
         cat.add(options);
         return cat;
     }
 
-    public void addConfigOptions(List<OptionBase<?>> options) {
-        options.add(enabled);
-        options.add(scale);
-    }
-
-    protected void drawString(MatrixStack matrices, String s, int x, int y, Color color, boolean shadow){
-        switch (textAlignment.get()) {
-            case "center" ->
-                    drawCenteredString(matrices, MinecraftClient.getInstance().textRenderer, s, x + width / 2, y, color.getAsInt(), shadow);
-            case "left" ->
-                    drawString(matrices, MinecraftClient.getInstance().textRenderer, s, x, y, color.getAsInt(), shadow);
-            case "right" ->
-                    drawString(matrices, MinecraftClient.getInstance().textRenderer, s, x + width - MinecraftClient.getInstance().textRenderer.getWidth(s), y, color.getAsInt(), shadow);
-        }
-    }
-
+    @Override
     public boolean isEnabled() {
         return enabled.get();
     }
 
-    public String getNameKey() {
-        return getId().getPath();
+    @Override
+    public void setEnabled(boolean value) {
+        enabled.set(value);
     }
 
-    public String getName() {
-        return I18n.translate(getNameKey());
-    }
-
-    public void toggle() {
-        enabled.toggle();
-    }
-
-    public boolean isHovered(int mouseX, int mouseY){
-        return (mouseX >= getX() && mouseY >= getY() && mouseX < getX() + this.width && mouseY < getY() + this.height) || hovered;
-    }
-
-    public boolean overridesF3(){
-        return false;
-    }
-
-    public void setHovered(boolean value) {
-        hovered=value;
-    }
 }

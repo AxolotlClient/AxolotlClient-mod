@@ -5,13 +5,16 @@ import io.github.axolotlclient.AxolotlclientConfig.Color;
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.ColorOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
-import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
+import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
+import io.github.axolotlclient.modules.hud.util.DrawUtil;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
+import io.github.axolotlclient.util.Hooks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBind;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.glfw.GLFW;
 
@@ -19,114 +22,135 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * This implementation of Hud modules is based on KronHUD.
- * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
- * @license GPL-3.0
- */
-
-public class KeystrokeHud extends AbstractHudEntry {
+public class KeystrokeHud extends TextHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "keystrokehud");
 
-	public KeystrokeHud() {
-		super(53, 61);
-	}
-
-    private final ColorOption pressedTextColor = new ColorOption("heldtextcolor", Color.parse("#FF000000"));
-    private final ColorOption pressedBackgroundColor = new ColorOption( "heldbackgroundcolor", Color.parse("#64FFFFFF"));
-    private final BooleanOption showW = new BooleanOption("showW", true);
-    private final BooleanOption showA = new BooleanOption("showA", true);
-    private final BooleanOption showS = new BooleanOption("showS", true);
-    private final BooleanOption showD = new BooleanOption("showD", true);
-    private final BooleanOption showSpace = new BooleanOption("showSpace", true);
-    private final BooleanOption showLMB = new BooleanOption("showLMB", true);
-    private final BooleanOption showRMB = new BooleanOption("showRMB", true);
-
-    private Keystroke w;
-    private Keystroke a;
-    private Keystroke s;
-    private Keystroke d;
-    private Keystroke lmb;
-    private Keystroke rmb;
-    private Keystroke space;
-
+    private final ColorOption pressedTextColor = new ColorOption("heldtextcolor", new Color(0xFF000000));
+    private final ColorOption pressedBackgroundColor = new ColorOption("heldbackgroundcolor", 0x64FFFFFF);
+    private final ColorOption pressedOutlineColor = new ColorOption("heldoutlinecolor",Color.BLACK);
+    private final BooleanOption mouseMovement = new BooleanOption("mousemovement", this::onMouseMovementOption, false);
     private ArrayList<Keystroke> keystrokes;
-    private static final MinecraftClient client = MinecraftClient.getInstance();
+    private final MinecraftClient client;
 
-	public static Optional<String> getMouseKeyBindName(KeyBind keyBinding) {
-		if (keyBinding.getKeyTranslationKey().equalsIgnoreCase(InputUtil.Type.MOUSE.createFromKeyCode(GLFW.GLFW_MOUSE_BUTTON_1).getTranslationKey())) {
-			return Optional.of("LMB");
-		} else if (keyBinding.getKeyTranslationKey().equalsIgnoreCase(InputUtil.Type.MOUSE.createFromKeyCode(GLFW.GLFW_MOUSE_BUTTON_2).getTranslationKey())) {
-			return Optional.of("RMB");
-		} else if (keyBinding.getKeyTranslationKey().equalsIgnoreCase(InputUtil.Type.MOUSE.createFromKeyCode(GLFW.GLFW_MOUSE_BUTTON_3).getTranslationKey())) {
-			return Optional.of("MMB");
-		}
-		return Optional.empty();
-	}
+    private float mouseX = 0;
+    private float mouseY = 0;
+    private float lastMouseX = 0;
+    private float lastMouseY = 0;
+
+    public KeystrokeHud() {
+        super(53, 61, true);
+        this.client = MinecraftClient.getInstance();
+        Hooks.KEYBIND_CHANGE.register(key -> setKeystrokes());
+        Hooks.PLAYER_DIRECTION_CHANGE.register(this::onPlayerDirectionChange);
+    }
+
+    public static Optional<String> getMouseKeyBindName(KeyBind keyBinding) {
+        if (keyBinding.getKeyTranslationKey()
+                      .equalsIgnoreCase(InputUtil.Type.MOUSE.createFromKeyCode(GLFW.GLFW_MOUSE_BUTTON_1).getTranslationKey())) {
+            return Optional.of("LMB");
+        } else if (keyBinding.getKeyTranslationKey()
+                             .equalsIgnoreCase(InputUtil.Type.MOUSE.createFromKeyCode(GLFW.GLFW_MOUSE_BUTTON_2).getTranslationKey())) {
+            return Optional.of("RMB");
+        } else if (keyBinding.getKeyTranslationKey()
+                             .equalsIgnoreCase(InputUtil.Type.MOUSE.createFromKeyCode(GLFW.GLFW_MOUSE_BUTTON_3).getTranslationKey())) {
+            return Optional.of("MMB");
+        }
+        return Optional.empty();
+    }
 
     public void setKeystrokes() {
+        if (client.getWindow() == null) {
+            keystrokes = null;
+            return;
+            // Wait until render is called
+        }
         keystrokes = new ArrayList<>();
         DrawPosition pos = getPos();
         // LMB
-        if(showLMB.get()) {
-            lmb = createFromKey(new Rectangle(0, 36, 26, 17), pos, client.options.attackKey);
-            keystrokes.add(lmb);
-        }
+        keystrokes.add(createFromKey(new Rectangle(0, 36, 26, 17), pos, client.options.attackKey));
         // RMB
-        if(showRMB.get()) {
-            rmb = createFromKey(new Rectangle(27, 36, 26, 17), pos, client.options.useKey);
-            keystrokes.add(rmb);
-        }
+        keystrokes.add(createFromKey(new Rectangle(27, 36, 26, 17), pos, client.options.useKey));
         // W
-        if(showW.get()) {
-            w = createFromKey(new Rectangle(18, 0, 17, 17), pos, client.options.forwardKey);
-            keystrokes.add(w);
-        }
+        keystrokes.add(createFromKey(new Rectangle(18, 0, 17, 17), pos, client.options.forwardKey));
         // A
-        if(showA.get()) {
-            a = createFromKey(new Rectangle(0, 18, 17, 17), pos, client.options.leftKey);
-            keystrokes.add(a);
-        }
+        keystrokes.add(createFromKey(new Rectangle(0, 18, 17, 17), pos, client.options.leftKey));
         // S
-        if(showS.get()) {
-            s = createFromKey(new Rectangle(18, 18, 17, 17), pos, client.options.backKey);
-            keystrokes.add(s);
-        }
+        keystrokes.add(createFromKey(new Rectangle(18, 18, 17, 17), pos, client.options.backKey));
         // D
-        if(showD.get()) {
-            d = createFromKey(new Rectangle(36, 18, 17, 17), pos, client.options.rightKey);
-            keystrokes.add(d);
-        }
+        keystrokes.add(createFromKey(new Rectangle(36, 18, 17, 17), pos, client.options.rightKey));
 
         // Space
-        if(showSpace.get()) {
-            space = new Keystroke(new Rectangle(0, 54, 53, 7), pos, client.options.jumpKey, (matrixStack, stroke) -> {
-                Rectangle bounds = stroke.bounds;
-                Rectangle spaceBounds = new Rectangle(bounds.x + stroke.offset.x + 4,
-                        bounds.y + stroke.offset.y + 2,
-                        bounds.width - 8, 1);
-                fillRect(matrixStack, spaceBounds, stroke.getFGColor());
-                if (shadow.get()) {
-                    fillRect(matrixStack, spaceBounds.offset(1, 1),
-                            new Color((stroke.getFGColor().getAsInt() & 16579836) >> 2 | stroke.getFGColor().getAsInt() & -16777216));
-                }
-            });
-            keystrokes.add(space);
-        }
+        keystrokes.add(new Keystroke(new Rectangle(0, 54, 53, 7), pos, client.options.jumpKey, (stroke, matrices) -> {
+            Rectangle bounds = stroke.bounds;
+            Rectangle spaceBounds = new Rectangle(bounds.x() + stroke.offset.x() + 4,
+                    bounds.y() + stroke.offset.y() + 2,
+                    bounds.width() - 8, 1
+            );
+            fillRect(matrices, spaceBounds, stroke.getFGColor());
+            if (shadow.get()) {
+                fillRect(matrices, spaceBounds.offset(1, 1),
+                        new Color((stroke.getFGColor().getAsInt() & 16579836) >> 2 | stroke.getFGColor().getAsInt() & -16777216)
+                );
+            }
+        }));
         KeyBind.unpressAll();
-        KeyBind.updateBoundKeys();
+        KeyBind.updatePressedStates();
     }
 
     @Override
-    public void render(MatrixStack matrixStack) {
-        scale(matrixStack);
+    public void render(MatrixStack matrices, float delta) {
+        matrices.push();
+        scale(matrices);
+        renderComponent(matrices, delta);
+        matrices.pop();
+    }
+
+    @Override
+    public void renderComponent(MatrixStack matrices, float delta) {
         if (keystrokes == null) {
             setKeystrokes();
         }
         for (Keystroke stroke : keystrokes) {
-            stroke.render(matrixStack);
+            stroke.render(matrices);
         }
-        matrixStack.pop();
+        if (mouseMovement.get()) {
+            int spaceY = 62 + getRawY();
+            int spaceX = getRawX();
+            if (background.get()) {
+                DrawUtil.fillRect(matrices, spaceX, spaceY, width, 35, backgroundColor.get().getAsInt());
+            }
+            if (outline.get()) {
+                DrawUtil.outlineRect(matrices, spaceX, spaceY, width, 35, outlineColor.get().getAsInt());
+            }
+
+            float calculatedMouseX = (lastMouseX + ((mouseX - lastMouseX) * delta)) - 5;
+            float calculatedMouseY = (lastMouseY + ((mouseY - lastMouseY) * delta)) - 5;
+
+            DrawUtil.fillRect(matrices, spaceX + (width / 2) - 1, spaceY + 17, 1, 1, Color.WHITE.getAsInt());
+
+            matrices.translate(calculatedMouseX, calculatedMouseY, 0); // Woah KodeToad, good use of translate
+
+            DrawUtil.outlineRect(
+                    matrices,
+                    spaceX + (width / 2) - 1,
+                    spaceY + 17,
+                    11,
+                    11,
+                    Color.WHITE.getAsInt()
+            );
+        }
+    }
+
+    public void onPlayerDirectionChange(float prevPitch, float prevYaw, float pitch, float yaw) {
+        // Implementation credit goes to TheKodeToad
+        // This project has the author's approval to use this
+        // https://github.com/Sol-Client/Client/blob/main/game/src/main/java/io/github/solclient/client/mod/impl/hud/keystrokes/KeystrokesMod.java
+        mouseX += (yaw - prevYaw) / 7F;
+        mouseY += (pitch - prevPitch) / 7F;
+        // 0, 0 will be the center of the HUD element
+        float halfWidth = getWidth() / 2f;
+        mouseX = MathHelper.clamp(mouseX, -halfWidth + 4, halfWidth - 4);
+        mouseY = MathHelper.clamp(mouseY, -13, 13);
     }
 
     @Override
@@ -143,39 +167,10 @@ public class KeystrokeHud extends AbstractHudEntry {
         for (Keystroke stroke : keystrokes) {
             stroke.offset = pos;
         }
-
-        if(keystrokes.contains(lmb) && !showLMB.get()){
-            keystrokes.remove(lmb);
-        }
-        if(keystrokes.contains(rmb) && !showRMB.get()){
-            keystrokes.remove(rmb);
-        }
-        if(keystrokes.contains(w) && !showW.get()){
-            keystrokes.remove(w);
-        }
-        if(keystrokes.contains(a) && !showA.get()){
-            keystrokes.remove(a);
-        }
-        if(keystrokes.contains(s) && !showS.get()){
-            keystrokes.remove(s);
-        }
-        if(keystrokes.contains(d) && !showD.get()){
-            keystrokes.remove(d);
-        }
-        if(keystrokes.contains(space) && !showSpace.get()){
-            keystrokes.remove(space);
-        }
-
-        if(!keystrokes.contains(lmb) && showLMB.get() ||
-                !keystrokes.contains(rmb) && showRMB.get() ||
-                !keystrokes.contains(w) && showW.get() ||
-                !keystrokes.contains(a) && showA.get() ||
-                !keystrokes.contains(s) && showS.get() ||
-                !keystrokes.contains(d) && showD.get() ||
-                !keystrokes.contains(space) && showSpace.get()){
-            setKeystrokes();
-        }
-
+        lastMouseX = mouseX;
+        lastMouseY = mouseY;
+        mouseX *= .75f;
+        mouseY *= .75f;
     }
 
     @Override
@@ -184,17 +179,8 @@ public class KeystrokeHud extends AbstractHudEntry {
     }
 
     @Override
-    public void renderPlaceholder(MatrixStack matrixStack) {
-        renderPlaceholderBackground(matrixStack);
-        scale(matrixStack);
-        if (keystrokes == null) {
-            setKeystrokes();
-        }
-        for (Keystroke stroke : keystrokes) {
-            stroke.render(matrixStack);
-        }
-        matrixStack.pop();
-        hovered = false;
+    public void renderPlaceholderComponent(MatrixStack matrices, float delta) {
+        renderComponent(matrices, delta);
     }
 
     public Keystroke createFromKey(Rectangle bounds, DrawPosition offset, KeyBind key) {
@@ -206,17 +192,17 @@ public class KeystrokeHud extends AbstractHudEntry {
     }
 
     public Keystroke createFromString(Rectangle bounds, DrawPosition offset, KeyBind key, String word) {
-        return new Keystroke(bounds, offset, key, (matrixStack, stroke) -> {
+        return new Keystroke(bounds, offset, key, (stroke, matrices) -> {
             Rectangle strokeBounds = stroke.bounds;
-            float x = (strokeBounds.x + stroke.offset.x + ((float) strokeBounds.width / 2)) -
-                    ((float) client.textRenderer.getWidth(word) / 2 -1);
-            float y = strokeBounds.y + stroke.offset.y + ((float) strokeBounds.height / 2) - 4;
+            float x = (strokeBounds.x() + stroke.offset.x() + ((float) strokeBounds.width() / 2)) -
+                    ((float) client.textRenderer.getWidth(word) / 2);
+            float y = strokeBounds.y() + stroke.offset.y() + ((float) strokeBounds.height() / 2) - 4;
 
-            drawString(matrixStack, client.textRenderer, word, (int) x, (int) y, stroke.getFGColor().getAsInt(), shadow.get());
+            drawString(matrices, word, (int) x, (int) y, stroke.getFGColor().getAsInt(), shadow.get());
         });
     }
 
-	@Override
+    @Override
     public Identifier getId() {
         return ID;
     }
@@ -227,8 +213,12 @@ public class KeystrokeHud extends AbstractHudEntry {
     }
 
     @Override
-    public void addConfigOptions(List<OptionBase<?>> options) {
-        super.addConfigOptions(options);
+    public List<OptionBase<?>> getConfigurationOptions() {
+        // We want a specific order since this is a more complicated entry
+        List<OptionBase<?>> options = new ArrayList<>();
+        options.add(enabled);
+        options.add(scale);
+        options.add(mouseMovement);
         options.add(textColor);
         options.add(pressedTextColor);
         options.add(shadow);
@@ -237,23 +227,27 @@ public class KeystrokeHud extends AbstractHudEntry {
         options.add(pressedBackgroundColor);
         options.add(outline);
         options.add(outlineColor);
-        options.add(showLMB);
-        options.add(showRMB);
-        options.add(showSpace);
-        options.add(showW);
-        options.add(showA);
-        options.add(showS);
-        options.add(showD);
+        options.add(pressedOutlineColor);
+        return options;
+    }
+
+    public void onMouseMovementOption(boolean value) {
+        int baseHeight = 61;
+        if (value) {
+            baseHeight += 36;
+        }
+        height = baseHeight;
+        onBoundsUpdate();
     }
 
     public class Keystroke {
-        public final KeyBind key;
-        public final KeystrokeRenderer render;
-        public Rectangle bounds;
-        public DrawPosition offset;
+        protected final KeyBind key;
+        protected final KeystrokeRenderer render;
+        protected Rectangle bounds;
+        protected DrawPosition offset;
         private float start = -1;
         private final int animTime = 100;
-        private boolean wasPressed = true;
+        private boolean wasPressed = false;
 
         public Keystroke(Rectangle bounds, DrawPosition offset, KeyBind key, KeystrokeRenderer render) {
             this.bounds = bounds;
@@ -262,62 +256,67 @@ public class KeystrokeHud extends AbstractHudEntry {
             this.render = render;
         }
 
-        public void setPos(int x, int y) {
-            bounds = new Rectangle(x, y, bounds.width, bounds.height);
-        }
-
-        public void setDimensions(int width, int height) {
-            bounds = new Rectangle(bounds.x, bounds.y, width, height);
-        }
-
-        public void setBounds(int x, int y, int width, int height) {
-            bounds = new Rectangle(x, y, width, height);
-        }
-
-        public void renderStroke(MatrixStack matrixStack) {
+        public void renderStroke(MatrixStack matrices) {
             if (key.isPressed() != wasPressed) {
-                start = System.nanoTime() / 1000000F;
-
+                start = Util.getMeasuringTimeMs();
             }
+            Rectangle rect = bounds.offset(offset);
             if (background.get()) {
-                fillRect(matrixStack, bounds.offset(offset),
-                        getColor());
+                fillRect(matrices, rect, getColor());
             }
-            if(outline.get()) outlineRect(matrixStack, bounds.offset(offset), outlineColor.get());
-            if ((System.nanoTime() / 1000000F - start) / animTime >= 1) {
+            if (outline.get()) {
+                outlineRect(matrices, rect, getOutlineColor());
+            }
+            if ((Util.getMeasuringTimeMs() - start) / animTime >= 1) {
                 start = -1;
             }
             wasPressed = key.isPressed();
         }
 
         private float getPercentPressed() {
-            return start == -1 ? 1 : MathHelper.clamp((System.nanoTime() / 1000000F - start) / animTime, 0, 1);
+            return start == -1 ? 1 : MathHelper.clamp((Util.getMeasuringTimeMs() - start) / animTime, 0, 1);
         }
 
         public Color getColor() {
+
             return key.isPressed() ? Color.blend(backgroundColor.get(), pressedBackgroundColor.get(),
                     getPercentPressed()) :
-                    Color.blend(pressedBackgroundColor.get(),
-                    backgroundColor.get(),
-                    getPercentPressed());
+                   Color.blend(
+                           pressedBackgroundColor.get(),
+                           backgroundColor.get(),
+                           getPercentPressed()
+                   );
+        }
+
+        public Color getOutlineColor() {
+            return key.isPressed() ? Color.blend(outlineColor.get(), pressedOutlineColor.get(),
+                    getPercentPressed()
+            ) :
+                   Color.blend(
+                           pressedOutlineColor.get(),
+                           outlineColor.get(),
+                           getPercentPressed()
+                   );
         }
 
         public Color getFGColor() {
             return key.isPressed() ? Color.blend(textColor.get(), pressedTextColor.get(), getPercentPressed()) :
-                    Color.blend(pressedTextColor.get(),
-                            textColor.get(),
-                            getPercentPressed());
+                   Color.blend(
+                           pressedTextColor.get(),
+                           textColor.get(),
+                           getPercentPressed()
+                   );
         }
 
-        public void render(MatrixStack matrixStack) {
-            renderStroke(matrixStack);
-            render.render(matrixStack, this);
+        public void render(MatrixStack matrices) {
+            renderStroke(matrices);
+            render.render(this, matrices);
         }
 
     }
 
     public interface KeystrokeRenderer {
-        void render(MatrixStack matrixStack, Keystroke stroke);
+        void render(Keystroke stroke, MatrixStack matrices);
     }
 
 }

@@ -2,10 +2,9 @@ package io.github.axolotlclient.modules.hud.gui.hud;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.texture.NativeImage;
-import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.AxolotlclientConfig.options.Option;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
+import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.util.Logger;
 import net.minecraft.client.MinecraftClient;
@@ -20,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class PackDisplayHud extends AbstractHudEntry {
+public class PackDisplayHud extends TextHudEntry {
 
     public static Identifier ID = new Identifier("axolotlclient","packdisplayhud");
 
@@ -29,7 +28,7 @@ public class PackDisplayHud extends AbstractHudEntry {
     private final List<ResourcePack> packs = new ArrayList<>();
 
     public PackDisplayHud() {
-        super(200, 50);
+        super(200, 50, true);
     }
 
     @Override
@@ -60,7 +59,7 @@ public class PackDisplayHud extends AbstractHudEntry {
     }
 
     @Override
-    public void render(MatrixStack matrices) {
+    public void renderComponent(MatrixStack matrices, float f) {
         scale(matrices);
         DrawPosition pos = getPos();
 
@@ -82,7 +81,7 @@ public class PackDisplayHud extends AbstractHudEntry {
     }
 
     @Override
-    public void renderPlaceholder(MatrixStack matrices) {
+    public void renderPlaceholderComponent(MatrixStack matrices, float f) {
         renderPlaceholderBackground(matrices);
 		hovered=false;
     }
@@ -118,20 +117,8 @@ public class PackDisplayHud extends AbstractHudEntry {
             RenderSystem.setShaderColor(1, 1, 1, 1F);
             RenderSystem.setShaderTexture(0, texture);
             DrawableHelper.drawTexture(matrices, x, y, 0, 0, 16, 16, 16, 16);
-            drawString(matrices, MinecraftClient.getInstance().textRenderer, name, x + 18, y + 6, textColor.get().getAsInt(), shadow.get());
+            drawString(matrices, name, x + 18, y + 6, textColor.get().getAsInt(), shadow.get());
         }
 
-    }
-
-    @Override
-    public void addConfigOptions(List<OptionBase<?>> options) {
-        super.addConfigOptions(options);
-
-        options.add(background);
-        options.add(backgroundColor);
-        options.add(outline);
-        options.add(outlineColor);
-        options.add(shadow);
-        options.add(textColor);
     }
 }

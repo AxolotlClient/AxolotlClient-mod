@@ -1,7 +1,8 @@
-package io.github.axolotlclient.modules.hud.gui.hud;
+package io.github.axolotlclient.modules.hud.gui.hud.simple;
 
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
+import io.github.axolotlclient.modules.hud.gui.entry.SimpleTextHudEntry;
 import io.github.axolotlclient.util.Hooks;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
@@ -9,17 +10,11 @@ import net.minecraft.util.Util;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * This implementation of Hud modules is based on KronHUD.
- * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
- * @license GPL-3.0
- */
-
-public class CPSHud extends CleanHudEntry {
+public class CPSHud extends SimpleTextHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "cpshud");
 
-    private final BooleanOption fromKeybindings = new BooleanOption("cpskeybind", false);
-    private final BooleanOption rmb = new BooleanOption("rightcps", false);
+    private final BooleanOption fromKeybindings = new BooleanOption("cpskeybind", ID.getPath(), false);
+    private final BooleanOption rmb = new BooleanOption("rightcps", ID.getPath(), false);
 
     public CPSHud() {
         super();
@@ -78,20 +73,21 @@ public class CPSHud extends CleanHudEntry {
     }
 
     @Override
-    public void addConfigOptions(List<OptionBase<?>> options) {
-        super.addConfigOptions(options);
+    public List<OptionBase<?>> getConfigurationOptions() {
+        List<OptionBase<?>> options = super.getConfigurationOptions();
         options.add(fromKeybindings);
         options.add(rmb);
+        return options;
     }
 
     public static class ClickList {
 
         public static ClickList LEFT = new ClickList();
         public static ClickList RIGHT = new ClickList();
-        private final List<Long> clicks;
+        private List<Long> clicks;
 
         public ClickList() {
-            clicks = new ArrayList<>();
+            clicks = new ArrayList<Long>();
         }
 
         public void update() {

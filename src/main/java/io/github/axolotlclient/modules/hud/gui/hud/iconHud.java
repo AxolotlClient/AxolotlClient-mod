@@ -2,13 +2,10 @@ package io.github.axolotlclient.modules.hud.gui.hud;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
-
-import java.util.List;
 
 public class iconHud extends AbstractHudEntry {
 
@@ -19,7 +16,7 @@ public class iconHud extends AbstractHudEntry {
     }
 
     @Override
-    public void render(MatrixStack matrices) {
+    public void render(MatrixStack matrices, float delta) {
         scale(matrices);
         DrawPosition pos = getPos();
 
@@ -31,8 +28,9 @@ public class iconHud extends AbstractHudEntry {
     }
 
     @Override
-    public void renderPlaceholder(MatrixStack matrices) {
-        render(matrices);
+    public void renderPlaceholder(MatrixStack matrices, float delta) {
+        renderPlaceholderBackground(matrices);
+        render(matrices, delta);
         hovered = false;
     }
 
@@ -44,10 +42,5 @@ public class iconHud extends AbstractHudEntry {
     @Override
     public boolean movable() {
         return true;
-    }
-
-    @Override
-    public void addConfigOptions(List<OptionBase<?>> options) {
-        super.addConfigOptions(options);
     }
 }

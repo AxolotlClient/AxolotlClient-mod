@@ -1,8 +1,8 @@
 package io.github.axolotlclient.mixin;
 
-import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.modules.hud.HudManager;
-import io.github.axolotlclient.modules.hud.gui.hud.ReachDisplayHud;
+import io.github.axolotlclient.modules.hud.gui.hud.simple.ComboHud;
+import io.github.axolotlclient.modules.hud.gui.hud.simple.ReachHud;
 import io.github.axolotlclient.modules.particles.Particles;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
@@ -25,14 +25,14 @@ public abstract class PlayerEntityMixin extends Entity {
 
     @Inject(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getAttributeValue(Lnet/minecraft/entity/attribute/EntityAttribute;)D"))
     public void getReach(Entity entity, CallbackInfo ci){
-        if((Object)this == MinecraftClient.getInstance().player || entity.equals(MinecraftClient.getInstance().player)){
-            ReachDisplayHud reachDisplayHud = (ReachDisplayHud) HudManager.getInstance().get(ReachDisplayHud.ID);
+        if((Object) this == MinecraftClient.getInstance().player || entity.equals(MinecraftClient.getInstance().player)){
+            ReachHud reachDisplayHud = (ReachHud) HudManager.getInstance().get(ReachHud.ID);
             if(reachDisplayHud != null && reachDisplayHud.isEnabled()){
-                double d = Util.calculateDistance(super.getPos(), entity.getPos());
-                if(d<=MinecraftClient.getInstance().interactionManager.getReachDistance()) {
-                    reachDisplayHud.updateDistance(d);
-                }
+                reachDisplayHud.updateDistance(this, entity);
             }
+
+            ComboHud comboHud = (ComboHud) HudManager.getInstance().get(ComboHud.ID);
+            comboHud.onEntityAttack(entity);
         }
     }
 

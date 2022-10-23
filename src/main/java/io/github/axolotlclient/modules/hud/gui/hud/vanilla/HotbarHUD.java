@@ -1,4 +1,4 @@
-package io.github.axolotlclient.modules.hud.gui.hud;
+package io.github.axolotlclient.modules.hud.gui.hud.vanilla;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Identifier;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HotbarHUD extends AbstractHudEntry {
@@ -27,7 +28,7 @@ public class HotbarHUD extends AbstractHudEntry {
     }
 
     @Override
-    public void render(MatrixStack matrices) {
+    public void render(MatrixStack matrices, float delta) {
         PlayerEntity playerEntity = MinecraftClient.getInstance().cameraEntity instanceof PlayerEntity ? (PlayerEntity) MinecraftClient.getInstance().cameraEntity : null;
         if (playerEntity != null) {
             //scale(matrices);
@@ -98,7 +99,7 @@ public class HotbarHUD extends AbstractHudEntry {
     }
 
     @Override
-    public void renderPlaceholder(MatrixStack matrices) {
+    public void renderPlaceholder(MatrixStack matrices, float delta) {
         renderPlaceholderBackground(matrices);
         scale(matrices);
         DrawPosition pos = getPos();
@@ -125,7 +126,9 @@ public class HotbarHUD extends AbstractHudEntry {
     }
 
     @Override
-    public void addConfigOptions(List<OptionBase<?>> options) {
-        options.add(enabled);
+    public List<OptionBase<?>> getConfigurationOptions() {
+        List<OptionBase<?>> list = new ArrayList<>();
+        list.add(enabled);
+        return list;
     }
 }

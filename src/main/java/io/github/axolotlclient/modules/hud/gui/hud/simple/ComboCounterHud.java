@@ -1,12 +1,13 @@
-package io.github.axolotlclient.modules.hud.gui.hud;
+package io.github.axolotlclient.modules.hud.gui.hud.simple;
 
+import io.github.axolotlclient.modules.hud.gui.entry.SimpleTextHudEntry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 
-public class ComboCounterHud extends CleanHudEntry {
+public class ComboCounterHud extends SimpleTextHudEntry {
     public static Identifier ID = new Identifier("combocounterhud");
 
     private int count;
