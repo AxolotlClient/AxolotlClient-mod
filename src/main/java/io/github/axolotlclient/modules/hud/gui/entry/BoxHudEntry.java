@@ -14,7 +14,7 @@ public abstract class BoxHudEntry extends AbstractHudEntry {
     private final boolean backgroundAllowed;
 
     protected BooleanOption background = new BooleanOption("background", true);
-    protected ColorOption backgroundColor = new ColorOption("backgroundcolor", 0x64000000);
+    protected ColorOption backgroundColor = new ColorOption("bgcolor", 0x64000000);
 
     protected BooleanOption outline = new BooleanOption("outline", false);
     protected ColorOption outlineColor = new ColorOption("outlinecolor", Color.WHITE);

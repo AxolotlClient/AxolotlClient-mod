@@ -98,26 +98,27 @@ public class HudEditScreen extends Screen {
 		return super.mouseReleased(mouseX, mouseY, button);
     }
 
-	@Override
-	public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+    @Override
+    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
         if (current != null) {
-            current.setX((int) (mouseX - offset.x));
-            current.setY((int) (mouseY - offset.y));
+            current.setX((int) mouseX - offset.x() + current.offsetTrueWidth());
+            current.setY((int) mouseY - offset.y() + current.offsetTrueHeight());
             if (snap != null) {
                 Integer snapX, snapY;
                 snap.setCurrent(current.getTrueBounds());
                 if ((snapX = snap.getCurrentXSnap()) != null) {
-                    current.setX(snapX);
+                    current.setX(snapX + current.offsetTrueWidth());
                 }
                 if ((snapY = snap.getCurrentYSnap()) != null) {
-                    current.setY(snapY);
+                    current.setY(snapY + current.offsetTrueHeight());
                 }
             }
             if (current.tickable()) {
                 current.tick();
             }
+            return true;
         }
-		return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+        return false;
     }
 
     private void updateSnapState() {
@@ -158,12 +159,4 @@ public class HudEditScreen extends Screen {
                 Text.translatable("close"), buttonWidget -> MinecraftClient.getInstance().setScreen(null)));
 
     }
-
-    @Override
-    public void tick() {
-        if(current!=null && current.tickable()) {
-            current.tick();
-        }
-    }
-
 }
