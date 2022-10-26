@@ -8,6 +8,7 @@ import io.github.axolotlclient.modules.hud.gui.component.DynamicallyPositionable
 import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
 import io.github.axolotlclient.modules.hud.gui.layout.AnchorPoint;
 import io.github.axolotlclient.modules.hud.gui.layout.CardinalOrder;
+import io.github.axolotlclient.modules.hud.util.DefaultOptions;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.texture.Sprite;
@@ -27,7 +28,7 @@ public class PotionsHud extends TextHudEntry implements DynamicallyPositionable 
 
     private final EnumOption anchor = new EnumOption("anchor", AnchorPoint.values(), AnchorPoint.TOP_LEFT.toString());
 
-    private final EnumOption order = new EnumOption("cardinalDirection", CardinalOrder.values(), CardinalOrder.TOP_DOWN.toString());
+    private final EnumOption order = DefaultOptions.getCardinalOrder(CardinalOrder.TOP_DOWN);
 
     private final BooleanOption iconsOnly = new BooleanOption("iconsonly", ID.getPath(), false);
 

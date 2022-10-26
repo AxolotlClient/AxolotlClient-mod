@@ -9,6 +9,7 @@ import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
 import io.github.axolotlclient.modules.hud.gui.layout.AnchorPoint;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
+import io.github.axolotlclient.modules.hud.util.RenderUtil;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.scoreboard.*;
 import net.minecraft.text.MutableText;
@@ -155,18 +156,18 @@ public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionab
 
             if (background.get() && backgroundColor.get().getAsInt() > 0) {
                 if (num == scoresSize) {
-                    DrawUtil.fillRect(
+                    RenderUtil.drawRectangle(
                             matrices,
                             textOffset, relativeY - 1, maxWidth, 10, backgroundColor.get().getAsInt()
                     );
                 } else if (num == 1) {
-                    DrawUtil.fillRect(
+                    RenderUtil.drawRectangle(
                             matrices,
                             textOffset,
                            relativeY, maxWidth, 10, backgroundColor.get()
                     );
                 } else {
-                    DrawUtil.fillRect(
+                    RenderUtil.drawRectangle(
                             matrices,
                             textOffset, relativeY, maxWidth, 9, backgroundColor.get()
                     );
@@ -186,7 +187,7 @@ public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionab
             if (num == scoresSize) {
                 // Draw the title
                 if (background.get()) {
-                    DrawUtil.fillRect(matrices, textOffset, relativeY - 10 - topPadding.get() * 2 - 1, maxWidth, 10 + topPadding.get() * 2, topColor.get());
+                    RenderUtil.drawRectangle(matrices, textOffset, relativeY - 10 - topPadding.get() * 2 - 1, maxWidth, 10 + topPadding.get() * 2, topColor.get());
                 }
                 float title = (float) (renderX + (maxWidth - displayNameWidth) / 2);
                 if (shadow.get()) {
@@ -199,7 +200,7 @@ public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionab
         }
 
         if (outline.get() && outlineColor.get().getAlpha() > 0) {
-            DrawUtil.fillRect(matrices, textOffset, bounds.y(), maxWidth, fullHeight + 2, outlineColor.get());
+            RenderUtil.drawOutline(matrices, textOffset, bounds.y(), maxWidth, fullHeight + 2, outlineColor.get());
         }
     }
 

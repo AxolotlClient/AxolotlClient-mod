@@ -68,8 +68,7 @@ public class ArmorHud extends TextHudEntry {
 
     @Override
     public List<OptionBase<?>> getConfigurationOptions() {
-        List<OptionBase<?>> options = super.getConfigurationOptions();
-        return options;
+        return super.getConfigurationOptions();
     }
 
 }

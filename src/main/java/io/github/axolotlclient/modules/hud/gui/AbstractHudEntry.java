@@ -5,6 +5,7 @@ import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.DoubleOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
+import io.github.axolotlclient.modules.hud.util.DefaultOptions;
 import io.github.axolotlclient.modules.hud.gui.component.HudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
@@ -20,15 +21,15 @@ import java.util.List;
 
 public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
 
-    protected final BooleanOption enabled = new BooleanOption("axolotlclient.enabled", value -> onBoundsUpdate(), false);
-    protected final DoubleOption scale = new DoubleOption("axolotlclient.scale", 1, 0, 5);
-    private final DoubleOption x;
-    private final DoubleOption y;
+    protected final BooleanOption enabled = DefaultOptions.getEnabled();
+    protected final DoubleOption scale = DefaultOptions.getScale(this);
+    private final DoubleOption x = DefaultOptions.getX(getDefaultX(), this);
+    private final DoubleOption y = DefaultOptions.getY(getDefaultY(), this);
 
     private Rectangle trueBounds = null;
     private Rectangle renderBounds = null;
     private DrawPosition truePosition = null;
-    private DrawPosition renderPosition = new DrawPosition(0, 0);
+    private DrawPosition renderPosition ;// = new DrawPosition(0, 0);
 
     @Setter
     @Getter
@@ -41,8 +42,6 @@ public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
     protected MinecraftClient client = MinecraftClient.getInstance();
 
     public AbstractHudEntry(int width, int height) {
-        x = new DoubleOption("x", value -> onBoundsUpdate(), getDefaultX(), 0, 1);
-        y = new DoubleOption("y", getDefaultY(), 0, 1);
         this.width = width;
         this.height = height;
     }

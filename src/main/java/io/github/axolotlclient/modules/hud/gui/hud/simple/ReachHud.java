@@ -87,9 +87,10 @@ public class ReachHud extends SimpleTextHudEntry {
     public void updateDistance(Entity attacking, Entity receiving) {
         double distance = getAttackDistance(attacking, receiving);
         if (distance < 0) {
+            distance*=-1;
             // This should not happen...
             currentDist = "NaN";
-            return;
+            //return;
         }
 
         StringBuilder format = new StringBuilder("0");

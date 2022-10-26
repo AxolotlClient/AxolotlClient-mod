@@ -3,8 +3,6 @@ package io.github.axolotlclient.modules.hud.gui.layout;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.util.List;
-
 @AllArgsConstructor
 public enum AnchorPoint {
     TOP_LEFT("topleft", -1, 1),

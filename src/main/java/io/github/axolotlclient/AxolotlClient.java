@@ -1,10 +1,10 @@
 package io.github.axolotlclient;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import io.github.axolotlclient.AxolotlclientConfig.DefaultConfigManager;
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
 import io.github.axolotlclient.config.AxolotlClientConfig;
-import io.github.axolotlclient.config.ConfigManager;
 import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.modules.ModuleLoader;
 import io.github.axolotlclient.modules.freelook.Freelook;
@@ -96,10 +96,10 @@ public class AxolotlClient implements ClientModInitializer {
 		CONFIG.init();
 		modules.forEach(AbstractModule::init);
 
-		CONFIG.config.addAll(CONFIG.getCategories());
-		CONFIG.config.add(config);
+		CONFIG.getConfig().addAll(CONFIG.getCategories());
+		CONFIG.getConfig().add(config);
 
-		io.github.axolotlclient.AxolotlclientConfig.AxolotlClientConfigManager.registerConfig(modid, CONFIG, configManager = new ConfigManager());
+		io.github.axolotlclient.AxolotlclientConfig.AxolotlClientConfigManager.registerConfig(modid, CONFIG, configManager = new DefaultConfigManager(modid, QuiltLoader.getConfigDir().resolve("AxolotlClient.json"), CONFIG.getConfig()));
 
 		modules.forEach(AbstractModule::lateInit);
 

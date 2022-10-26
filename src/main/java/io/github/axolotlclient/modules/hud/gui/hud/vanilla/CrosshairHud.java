@@ -12,6 +12,7 @@ import io.github.axolotlclient.modules.hud.gui.layout.AnchorPoint;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
+import io.github.axolotlclient.modules.hud.util.RenderUtil;
 import lombok.AllArgsConstructor;
 import net.minecraft.block.AbstractChestBlock;
 import net.minecraft.client.gui.DrawableHelper;
@@ -126,11 +127,11 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
         if (indicator == AttackIndicator.CROSSHAIR) {
             float progress = this.client.player.getAttackCooldownProgress(0.0F);
             if (progress != 1.0F) {
-                DrawUtil.fillRect(
+                RenderUtil.drawRectangle(
                         matrices, getRawX() + (getWidth() / 2) - 6, getRawY() + (getHeight() / 2) + 9, 11, 1,
                         attackIndicatorBackgroundColor.get()
                 );
-                DrawUtil.fillRect(
+                RenderUtil.drawRectangle(
                         matrices, getRawX() + (getWidth() / 2) - 6, getRawY() + (getHeight() / 2) + 9,
                         (int) (progress * 11), 1, attackIndicatorForegroundColor.get()
                 );

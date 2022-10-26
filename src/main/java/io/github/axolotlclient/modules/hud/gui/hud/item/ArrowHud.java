@@ -19,8 +19,8 @@ public class ArrowHud extends TextHudEntry {
 
     public static final Identifier ID = new Identifier("kronhud", "arrowhud");
     private int arrows = 0;
-    private final BooleanOption dynamic = new BooleanOption("dynamic", ID.getPath(), false);
-    private final BooleanOption allArrowTypes = new BooleanOption("allArrowTypes", ID.getPath(), false);
+    private final BooleanOption dynamic = new BooleanOption("dynamic", false);
+    private final BooleanOption allArrowTypes = new BooleanOption("allArrowTypes", false);
     private ItemStack currentArrow = new ItemStack(Items.ARROW);
 
     public ArrowHud() {

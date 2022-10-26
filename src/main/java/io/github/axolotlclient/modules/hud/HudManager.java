@@ -138,7 +138,7 @@ public class HudManager extends AbstractModule {
         client.getProfiler().push("Hud Modules");
         if (!(client.currentScreen instanceof HudEditScreen)) {
             for (HudEntry hud : getEntries()) {
-                if (hud.isEnabled() && (!client.options.debugEnabled || hud.overridesF3() || true)) {
+                if (hud.isEnabled() && (!client.options.debugEnabled || hud.overridesF3())) {
                     client.getProfiler().push(hud.getName());
                     hud.render(matrices, delta);
                     client.getProfiler().pop();

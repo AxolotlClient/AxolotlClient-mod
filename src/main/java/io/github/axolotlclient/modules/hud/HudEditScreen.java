@@ -26,19 +26,22 @@ import java.util.Optional;
 
 public class HudEditScreen extends Screen {
 
-    private final BooleanOption snapping = new BooleanOption("snapping", true);
+    private static final BooleanOption snapping = new BooleanOption("snapping", true);
+    private static final OptionCategory hudEditScreenCategory = new OptionCategory("hudEditScreen");
     private HudEntry current;
     private DrawPosition offset = null;
-    private final HudManager manager;
     private boolean mouseDown;
     private SnappingHelper snap;
     private final Screen parent;
 
+    static {
+        hudEditScreenCategory.add(snapping);
+        AxolotlClient.config.addSubCategory(hudEditScreenCategory);
+    }
+
     public HudEditScreen(Screen parent){
 	    super(Text.empty());
-	    snapping.setDefaults();
         updateSnapState();
-        manager = HudManager.getInstance();
         mouseDown = false;
         this.parent=parent;
     }
@@ -54,32 +57,30 @@ public class HudEditScreen extends Screen {
 			renderBackgroundTexture(0);
 		}
 
-        //GlStateManager.enableAlphaTest();
 		super.render(matrices, mouseX, mouseY, delta);
 
-        manager.renderPlaceholder(matrices, delta);
+        Optional<HudEntry> entry = HudManager.getInstance().getEntryXY(mouseX, mouseY);
+        entry.ifPresent(abstractHudEntry -> abstractHudEntry.setHovered(true));
+        HudManager.getInstance().renderPlaceholder(matrices, delta);
         if (mouseDown && snap != null) {
             snap.renderSnaps(matrices);
         }
-
-        Optional<HudEntry> entry = manager.getEntryXY(mouseX, mouseY);
-        entry.ifPresent(abstractHudEntry -> abstractHudEntry.setHovered(true));
-
     }
 
+    @Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
-		Optional<HudEntry> entry = HudManager.getInstance().getEntryXY((int) Math.round(mouseX), (int) Math.round(mouseY));
-		if (button == 0) {
-			mouseDown = true;
-			if (entry.isPresent()) {
-				current = entry.get();
-				offset = new DrawPosition((int) Math.round(mouseX - current.getX()), (int) Math.round(mouseY - current.getY()));
-				updateSnapState();
-				return true;
-			} else {
-				current = null;
-                return super.mouseClicked(mouseX, mouseY, button);
-			}
+        super.mouseClicked(mouseX, mouseY, button);
+        Optional<HudEntry> entry = HudManager.getInstance().getEntryXY((int) Math.round(mouseX), (int) Math.round(mouseY));
+        if (button == 0) {
+            mouseDown = true;
+            if (entry.isPresent()) {
+                current = entry.get();
+                offset = new DrawPosition((int) Math.round(mouseX - current.getTruePos().x()), (int) Math.round(mouseY - current.getTruePos().y()));
+                updateSnapState();
+                return true;
+            } else {
+                current = null;
+            }
 		} else if (button == 1) {
 			entry.ifPresent(abstractHudEntry -> MinecraftClient.getInstance().setScreen(new OptionsScreenBuilder(this, abstractHudEntry.getOptionsAsCategory(), AxolotlClient.modid)));
 		}
@@ -121,7 +122,7 @@ public class HudEditScreen extends Screen {
 
     private void updateSnapState() {
         if (snapping.get() && current != null) {
-            List<Rectangle> bounds = manager.getAllBounds();
+            List<Rectangle> bounds = HudManager.getInstance().getAllBounds();
             bounds.remove(current.getTrueBounds());
             snap = new SnappingHelper(bounds, current.getTrueBounds());
         } else if (snap != null) {

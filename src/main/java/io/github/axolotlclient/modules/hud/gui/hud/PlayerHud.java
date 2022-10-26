@@ -151,10 +151,6 @@ public class PlayerHud extends BoxHudEntry {
         List<OptionBase<?>> options = super.getConfigurationOptions();
         options.add(dynamicRotation);
         options.add(rotation);
-        options.add(background);
-        options.add(backgroundColor);
-        options.add(outline);
-        options.add(outlineColor);
         return options;
     }
 }

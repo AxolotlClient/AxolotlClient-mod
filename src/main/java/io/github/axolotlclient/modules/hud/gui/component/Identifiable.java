@@ -21,16 +21,7 @@ public interface Identifiable {
      * @return The display name key
      */
     default String getNameKey() {
-        return "hud." + getId().getNamespace() + "." + getId().getPath();
-    }
-
-    /**
-     * Gets the info key to render on hover
-     *
-     * @return Info key
-     */
-    default String getInfoKey() {
-        return "hud." + getId().getNamespace() + "." + getId().getPath() + ".info";
+        return getId().getPath();
     }
 
     /**

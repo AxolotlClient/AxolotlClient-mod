@@ -9,6 +9,7 @@ import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.component.DynamicallyPositionable;
 import io.github.axolotlclient.modules.hud.gui.layout.AnchorPoint;
 import io.github.axolotlclient.modules.hud.gui.layout.Justification;
+import io.github.axolotlclient.modules.hud.util.DefaultOptions;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import net.minecraft.client.util.math.MatrixStack;
 
@@ -17,7 +18,7 @@ import java.util.List;
 public abstract class SimpleTextHudEntry extends TextHudEntry implements DynamicallyPositionable {
 
     protected final EnumOption justification = new EnumOption("justification", Justification.values(), Justification.CENTER.toString());
-    protected final EnumOption anchor = new EnumOption("anchor", AnchorPoint.values(), AnchorPoint.TOP_MIDDLE.toString());
+    protected final EnumOption anchor = DefaultOptions.getAnchorPoint();
 
     private final IntegerOption minWidth;
 
@@ -36,7 +37,7 @@ public abstract class SimpleTextHudEntry extends TextHudEntry implements Dynamic
 
     @Override
     public void renderComponent(MatrixStack matrices, float delta) {
-        //RenderSystem.enableBlend();
+        RenderSystem.enableBlend();
         RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         RenderSystem.disableTexture();
         DrawPosition pos = getPos();

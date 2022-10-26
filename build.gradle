@@ -1,6 +1,5 @@
 plugins {
 	id 'maven-publish'
-	id 'io.github.juuxel.loom-quiltflower' version '1.7.+' // For loom 0.8-0.9, 0.11+
 	id 'org.quiltmc.loom' version '1.0.+'
 	id "io.freefair.lombok" version "6.5.1"
 }
@@ -38,7 +37,7 @@ dependencies {
 	modImplementation "org.quiltmc:quilt-loader:${project.loader_version}"
 	modImplementation "org.quiltmc.quilted-fabric-api:quilted-fabric-api:${quilted_fabric_api_version}"
 
-	include(modImplementation "io.github.axolotlclient:AxolotlClient-config:1.0.9-beta.2+1.19.2")
+	include(modImplementation "io.github.axolotlclient:AxolotlClient-config:1.0.9-beta.8+1.19.2")
 
 	modImplementation "com.terraformersmc:modmenu:4.0.5"
 

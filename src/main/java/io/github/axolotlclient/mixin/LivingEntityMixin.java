@@ -1,10 +1,7 @@
 package io.github.axolotlclient.mixin;
 
 import io.github.axolotlclient.modules.hud.HudManager;
-import io.github.axolotlclient.modules.hud.gui.hud.simple.ComboCounterHud;
 import io.github.axolotlclient.modules.hud.gui.hud.simple.ComboHud;
-import io.github.axolotlclient.modules.hud.gui.hud.simple.ReachHud;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -32,21 +29,6 @@ public abstract class LivingEntityMixin extends Entity {
         if(source.getAttacker() instanceof PlayerEntity){
             ComboHud comboHud = (ComboHud) HudManager.getInstance().get(ComboHud.ID);
             comboHud.onEntityDamage(this);
-        }
-    }
-
-    @Inject(method = "damage", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;lastDamageTime:J"))
-    public void onDamageEntity(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir){
-        ComboCounterHud comboCounterHud = (ComboCounterHud) HudManager.getInstance().get(ComboCounterHud.ID);
-        if(comboCounterHud != null && comboCounterHud.isEnabled()){
-            comboCounterHud.onEntityDamaged((LivingEntity)(Object)this);
-        }
-
-        if(((LivingEntity)(Object)this) instanceof PlayerEntity && source.getAttacker() instanceof PlayerEntity){
-            if (((PlayerEntity)(Object)(this)).getId() == MinecraftClient.getInstance().player.getId()){
-                ReachHud reachDisplayHud = (ReachHud) HudManager.getInstance().get(ReachHud.ID);
-                reachDisplayHud.updateDistance((PlayerEntity)(Object) this, source.getAttacker());
-            }
         }
     }
 }

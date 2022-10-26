@@ -4,10 +4,10 @@ import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hud.gui.hud.simple.ComboHud;
 import io.github.axolotlclient.modules.hud.gui.hud.simple.ReachHud;
 import io.github.axolotlclient.modules.particles.Particles;
-import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.world.World;
@@ -44,5 +44,16 @@ public abstract class PlayerEntityMixin extends Entity {
         if(Particles.getInstance().getAlwaysOn(ParticleTypes.ENCHANTED_HIT)) {
             MinecraftClient.getInstance().player.addEnchantedHitParticles(entity);
         }
+    }
+
+    @Override
+    public boolean damage(DamageSource source, float amount) {
+        if(source.getAttacker() != null && getUuid() == MinecraftClient.getInstance().player.getUuid()){
+            ReachHud reachDisplayHud = (ReachHud) HudManager.getInstance().get(ReachHud.ID);
+            if(reachDisplayHud != null && reachDisplayHud.isEnabled()){
+                reachDisplayHud.updateDistance(source.getAttacker(), this);
+            }
+        }
+        return super.damage(source, amount);
     }
 }
