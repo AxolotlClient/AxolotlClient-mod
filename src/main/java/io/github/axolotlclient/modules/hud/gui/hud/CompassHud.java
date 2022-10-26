@@ -29,7 +29,7 @@ public class CompassHud extends TextHudEntry implements DynamicallyPositionable 
     private final ColorOption minorIndicatorColor = new ColorOption("minorindicator", new Color(0xCCFFFFFF));
     private final ColorOption cardinalColor = new ColorOption("cardinalcolor", Color.WHITE);
     private final ColorOption semiCardinalColor = new ColorOption("semicardinalcolor", new Color(0xFFAAAAAA));
-    private final BooleanOption invert = new BooleanOption("invert", false);
+    private final BooleanOption invert = new BooleanOption("invert_direction", false);
     private final BooleanOption showDegrees = new BooleanOption("showdegrees", true);
 
     private void updateWidth(int newWidth){

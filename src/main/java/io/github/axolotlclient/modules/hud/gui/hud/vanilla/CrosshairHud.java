@@ -33,7 +33,7 @@ import java.util.List;
 public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositionable {
     public static final Identifier ID = new Identifier("kronhud", "crosshairhud");
 
-    private final EnumOption type = new EnumOption("type", Crosshair.values(), Crosshair.CROSS.toString());
+    private final EnumOption type = new EnumOption("crosshair_type", Crosshair.values(), Crosshair.CROSS.toString());
     private final BooleanOption showInF5 = new BooleanOption("showInF5", false);
     private final ColorOption defaultColor = new ColorOption("defaultcolor", Color.WHITE);
     private final ColorOption entityColor = new ColorOption("entitycolor", Color.SELECTOR_RED);

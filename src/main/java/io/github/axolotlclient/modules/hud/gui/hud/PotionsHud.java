@@ -26,7 +26,7 @@ public class PotionsHud extends TextHudEntry implements DynamicallyPositionable 
 
     public static final Identifier ID = new Identifier("kronhud", "potionshud");
 
-    private final EnumOption anchor = new EnumOption("anchor", AnchorPoint.values(), AnchorPoint.TOP_LEFT.toString());
+    private final EnumOption anchor = DefaultOptions.getAnchorPoint();
 
     private final EnumOption order = DefaultOptions.getCardinalOrder(CardinalOrder.TOP_DOWN);
 
