@@ -3,7 +3,6 @@ package io.github.axolotlclient.modules.freelook;
 import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.DisableReason;
 import io.github.axolotlclient.AxolotlclientConfig.options.EnumOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
@@ -43,12 +42,6 @@ public class Freelook extends AbstractModule {
 
     @Override
     public void tick() {
-
-        if(isForbidden()){
-            enabled.setForceOff(true, DisableReason.BAN_REASON);
-        } else if (!isForbidden() && enabled.getForceDisabled()){
-            enabled.setForceOff(false, null);
-        }
 
         if(!enabled.get()) return;
 
@@ -116,19 +109,4 @@ public class Freelook extends AbstractModule {
     private void setPerspective(Perspective perspective){
         MinecraftClient.getInstance().options.setPerspective(perspective);
     }
-
-    private boolean isForbidden(){
-        for(String a: disallowed_servers){
-            if(MinecraftClient.getInstance().getCurrentServerEntry() != null &&
-                MinecraftClient.getInstance().getCurrentServerEntry().address.contains(a)){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private static final String[] disallowed_servers = new String[]{
-        "hypixel", "mineplex", "gommehd"
-    };
-
 }

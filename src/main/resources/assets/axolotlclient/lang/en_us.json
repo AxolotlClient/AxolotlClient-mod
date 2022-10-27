@@ -235,9 +235,13 @@
 	"hud.clientOptions": "Client Options",
 
 	"enabled": "Enabled",
+	"enabled.tooltip": "Whether this module is enabled or not.",
 	"scale": "Scale",
+	"scale.tooltip": "The scale of this element.",
 	"textcolor": "Text Color",
+	"textcolor.tooltip": "The color used for text inside this element",
 	"color": "Color",
+	"color.tooltip": "The color used for this element",
 	"textChroma": "Text Chroma",
 	"chromaSpeed": "Chroma Speed",
 	"heldtextcolor": "Text Color (when held)",

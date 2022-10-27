@@ -163,6 +163,7 @@ public class AxolotlClient implements ClientModInitializer {
                 RenderSystem.enableDepthTest();
 				RenderSystem.setShaderTexture(0, AxolotlClient.badgeIcon);
 
+				assert MinecraftClient.getInstance().player != null;
 				int x = -(MinecraftClient.getInstance().textRenderer.getWidth(
 						entity.getUuid() == MinecraftClient.getInstance().player.getUuid()?
 						(NickHider.Instance.hideOwnName.get() ? NickHider.Instance.hiddenNameSelf.get(): Team.decorateName(entity.getScoreboardTeam(), entity.getName()).getString()):

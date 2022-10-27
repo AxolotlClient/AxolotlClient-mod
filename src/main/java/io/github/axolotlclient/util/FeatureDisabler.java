@@ -23,6 +23,12 @@ public class FeatureDisabler {
         disabledServers.forEach((option, strings) -> disableOption(option, strings, info.address));
     }
 
+    public static void clear(){
+        disabledServers.forEach((option, strings) -> {
+            option.setForceOff(false, DisableReason.BAN_REASON);
+        });
+    }
+
     private static void disableOption(BooleanOption option, String[] servers, String currentServer){
         boolean ban = false;
         for(String s:servers){

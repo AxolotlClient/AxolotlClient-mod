@@ -1,7 +1,6 @@
 package io.github.axolotlclient.util;
 
 import com.mojang.blaze3d.platform.InputUtil;
-import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.client.option.KeyBind;
 import org.quiltmc.qsl.base.api.event.Event;
 
@@ -43,7 +42,7 @@ public class Hooks {
         }
     }));
 
-    public static final net.fabricmc.fabric.api.event.Event<PlayerDirectionCallback> PLAYER_DIRECTION_CHANGE = EventFactory.createArrayBacked(PlayerDirectionCallback.class, listeners -> (
+    public static final Event<PlayerDirectionCallback> PLAYER_DIRECTION_CHANGE = Event.create(PlayerDirectionCallback.class, listeners -> (
             (prevPitch, prevYaw, pitch, yaw) -> {
                 for (PlayerDirectionCallback listener : listeners) {
                     listener.onChange(prevPitch, prevYaw, pitch, yaw);

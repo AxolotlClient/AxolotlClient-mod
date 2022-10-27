@@ -20,6 +20,7 @@ public abstract class MultiplayerScreenMixin {
         if(Objects.equals(HypixelMods.getInstance().cacheMode.get(), HypixelMods.HypixelCacheMode.ON_CLIENT_DISCONNECT.toString())){
             HypixelAbstractionLayer.clearPlayerData();
         }
+        FeatureDisabler.clear();
     }
 
     @Inject(method = "connect(Lnet/minecraft/client/network/ServerInfo;)V", at = @At("HEAD"))
