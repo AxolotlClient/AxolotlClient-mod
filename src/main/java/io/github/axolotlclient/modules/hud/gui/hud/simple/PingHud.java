@@ -1,7 +1,9 @@
-package io.github.axolotlclient.modules.hud.gui.hud;
+package io.github.axolotlclient.modules.hud.gui.hud.simple;
 
 import io.github.axolotlclient.AxolotlclientConfig.options.IntegerOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
+import io.github.axolotlclient.modules.hud.gui.entry.SimpleTextHudEntry;
+import io.github.axolotlclient.util.Logger;
 import io.github.axolotlclient.util.ThreadExecuter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ServerInfo;
@@ -21,21 +23,16 @@ import net.minecraft.util.Identifier;
 import java.net.InetAddress;
 import java.util.List;
 
-/**
- * This implementation of Hud modules is based on KronHUD.
- * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
- * @license GPL-3.0
- */
 
-public class PingHud extends CleanHudEntry {
+public class PingHud extends SimpleTextHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "pinghud");
+
     private int currentServerPing;
 
-    private final IntegerOption refreshDelay = new IntegerOption("axolotlclient.refreshTime", 4, 1, 15);
+    private final IntegerOption refreshDelay = new IntegerOption("refreshTime", 4, 1, 15);
 
     public PingHud() {
         super();
-        updatePing();
     }
 
     @Override
@@ -60,7 +57,12 @@ public class PingHud extends CleanHudEntry {
 
     private void updatePing(){
         if (MinecraftClient.getInstance().getCurrentServerEntry() != null) {
-            if (MinecraftClient.getInstance().getCurrentServerEntry().ping==1) {
+            Logger.debug("Refreshing server ping, using "+
+                    (MinecraftClient.getInstance().getCurrentServerEntry().ping == 1 ||
+                    MinecraftClient.getInstance().getCurrentServerEntry().ping == -1?
+                            "Pinger" : "ServerInfo"));
+            if (MinecraftClient.getInstance().getCurrentServerEntry().ping==1 ||
+                    MinecraftClient.getInstance().getCurrentServerEntry().ping == -1) {
                 getRealTimeServerPing(MinecraftClient.getInstance().getCurrentServerEntry());
             } else {
                 currentServerPing = (int) MinecraftClient.getInstance().getCurrentServerEntry().ping;
@@ -73,16 +75,17 @@ public class PingHud extends CleanHudEntry {
     private int second;
     @Override
     public void tick() {
-        if(second>=refreshDelay.get()*20){
+        if(second>=refreshDelay.get()*40){
             updatePing();
             second=0;
         } else second++;
     }
 
     @Override
-    public void addConfigOptions(List<OptionBase<?>> options) {
-        super.addConfigOptions(options);
+    public List<OptionBase<?>> getConfigurationOptions() {
+        List<OptionBase<?>> options = super.getConfigurationOptions();
         options.add(refreshDelay);
+        return options;
     }
 
     //Indicatia removed this feature...

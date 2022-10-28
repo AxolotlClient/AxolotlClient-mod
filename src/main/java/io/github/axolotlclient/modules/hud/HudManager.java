@@ -4,13 +4,19 @@ import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
+import io.github.axolotlclient.modules.hud.gui.component.HudEntry;
 import io.github.axolotlclient.modules.hud.gui.hud.*;
+import io.github.axolotlclient.modules.hud.gui.hud.item.*;
+import io.github.axolotlclient.modules.hud.gui.hud.simple.*;
+import io.github.axolotlclient.modules.hud.gui.hud.vanilla.*;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
+import net.legacyfabric.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.legacyfabric.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.legacyfabric.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.options.KeyBinding;
 import net.minecraft.util.Identifier;
+import org.lwjgl.input.Keyboard;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -24,28 +30,36 @@ import java.util.stream.Collectors;
 
 public class HudManager extends AbstractModule {
 
-    private final Map<Identifier, AbstractHudEntry> entries = new LinkedHashMap<>();
+    private final OptionCategory hudCategory = new OptionCategory("hud", false);
 
-    private final OptionCategory hudCategory = new OptionCategory("axolotlclient.hud");
+    private final static HudManager INSTANCE = new HudManager();
 
-    private final MinecraftClient client = MinecraftClient.getInstance();
-    private static final HudManager INSTANCE = new HudManager();
-
-    static KeyBinding key = new KeyBinding("axolotlclient.key.openHud", 54, "category.axolotlclient");
-
-    public static HudManager getInstance(){
+    public static HudManager getInstance() {
         return INSTANCE;
     }
 
-    @Override
+    private final Map<Identifier, HudEntry> entries;
+
+    private HudManager() {
+        this.entries = new LinkedHashMap<>();
+        ClientTickEvents.END_CLIENT_TICK.register(minecraftClient -> {
+            for (HudEntry entry : getEntries()) {
+                if (entry.tickable() && entry.isEnabled()) {
+                    entry.tick();
+                }
+            }
+        });
+    }
+
+    static KeyBinding key = new KeyBinding("key.openHud", Keyboard.KEY_RSHIFT, "category.axolotlclient");
+
     public void init(){
 
         KeyBindingHelper.registerKeyBinding(key);
 
-        AxolotlClient.config.add(HudEditScreen.snapping);
         AxolotlClient.CONFIG.addCategory(hudCategory);
 
-        HudRenderCallback.EVENT.register((client, tickDelta)->render());
+        HudRenderCallback.EVENT.register(this::render);
 
         add(new PingHud());
         add(new FPSHud());
@@ -55,33 +69,40 @@ public class HudManager extends AbstractModule {
         add(new KeystrokeHud());
         add(new ToggleSprintHud());
         add(new IPHud());
-        add(new IconHud());
+        add(new iconHud());
         add(new SpeedHud());
         add(new ScoreboardHud());
         add(new CrosshairHud());
         add(new CoordsHud());
         add(new ActionBarHud());
         add(new BossBarHud());
-        add(new ChatHud());
         add(new ArrowHud());
         add(new ItemUpdateHud());
         add(new PackDisplayHud());
-        add(new RealTimeHud());
-        add(new ReachDisplayHud());
+        add(new IRLTimeHud());
+        add(new ReachHud());
         add(new HotbarHUD());
         add(new MemoryHud());
         add(new PlayerCountHud());
-        add(new ComboCounterHud());
+        add(new CompassHud());
+        add(new TPSHud());
+        add(new ComboHud());
+        add(new PlayerHud());
+        add(new ChatHud());
 
-        entries.forEach((identifier, abstractHudEntry) -> abstractHudEntry.init());
+        entries.values().forEach(HudEntry::init);
+        refreshAllBounds();
     }
 
-    @Override
+    public void refreshAllBounds() {
+        for (HudEntry entry : getEntries()) {
+            entry.onBoundsUpdate();
+        }
+    }
+
     public void tick(){
         if(key.isPressed()) MinecraftClient.getInstance().openScreen(new HudEditScreen());
-        entries.values().forEach(abstractHudEntry -> {
-            if(abstractHudEntry.tickable() && abstractHudEntry.isEnabled())abstractHudEntry.tick();
-        });
+        entries.values().stream().filter(hudEntry -> hudEntry.isEnabled() && hudEntry.tickable()).forEach(HudEntry::tick);
     }
 
     public HudManager add(AbstractHudEntry entry) {
@@ -90,62 +111,60 @@ public class HudManager extends AbstractModule {
         return this;
     }
 
-    public List<AbstractHudEntry> getEntries() {
+    public List<HudEntry> getEntries() {
         if (entries.size() > 0) {
             return new ArrayList<>(entries.values());
         }
         return new ArrayList<>();
     }
 
-    public List<AbstractHudEntry> getMovableEntries() {
+    public List<HudEntry> getMoveableEntries() {
         if (entries.size() > 0) {
             return entries.values().stream().filter((entry) -> entry.isEnabled() && entry.movable()).collect(Collectors.toList());
         }
         return new ArrayList<>();
     }
 
-    public AbstractHudEntry get(Identifier identifier) {
+    public HudEntry get(Identifier identifier) {
         return entries.get(identifier);
     }
 
-    public void render() {
+    public void render(MinecraftClient client, float delta) {
         client.profiler.push("Hud Modules");
-        if (!(client.currentScreen instanceof HudEditScreen) && !client.options.debugEnabled) {
-            for (AbstractHudEntry hud : getEntries()) {
-                if (hud.isEnabled()) {
-                    if(!client.options.debugEnabled || hud.overridesF3()) {
-                        client.profiler.push(hud.getName());
-                        hud.renderHud();
-                        client.profiler.pop();
-                    }
+        if (!(client.currentScreen instanceof HudEditScreen)) {
+            for (HudEntry hud : getEntries()) {
+                if (hud.isEnabled() && (!client.options.debugEnabled || hud.overridesF3())) {
+                    client.profiler.push(hud.getName());
+                    hud.render(delta);
+                    client.profiler.pop();
                 }
             }
         }
         client.profiler.pop();
     }
 
-    public Optional<AbstractHudEntry> getEntryXY(int x, int y) {
-        for (AbstractHudEntry entry : getMovableEntries()) {
-            Rectangle bounds = entry.getScaledBounds();
-            if (bounds.x <= x && bounds.x + bounds.width >= x && bounds.y <= y && bounds.y + bounds.height >= y) {
+    public Optional<HudEntry> getEntryXY(int x, int y) {
+        for (HudEntry entry : getMoveableEntries()) {
+            Rectangle bounds = entry.getTrueBounds();
+            if (bounds.x() <= x && bounds.x() + bounds.width() >= x && bounds.y() <= y && bounds.y() + bounds.height() >= y) {
                 return Optional.of(entry);
             }
         }
         return Optional.empty();
     }
 
-    public void renderPlaceholder() {
-        for (AbstractHudEntry hud : getEntries()) {
+    public void renderPlaceholder(float delta) {
+        for (HudEntry hud : getEntries()) {
             if (hud.isEnabled()) {
-                hud.renderPlaceholder();
+                hud.renderPlaceholder(delta);
             }
         }
     }
 
     public List<Rectangle> getAllBounds() {
         ArrayList<Rectangle> bounds = new ArrayList<>();
-        for (AbstractHudEntry entry : getMovableEntries()) {
-            bounds.add(entry.getScaledBounds());
+        for (HudEntry entry : getMoveableEntries()) {
+            bounds.add(entry.getTrueBounds());
         }
         return bounds;
     }

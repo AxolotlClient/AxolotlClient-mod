@@ -1,4 +1,4 @@
-package io.github.axolotlclient.modules.hud.gui.hud;
+package io.github.axolotlclient.modules.hud.gui.hud.vanilla;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlclientConfig.Color;
@@ -7,8 +7,11 @@ import io.github.axolotlclient.AxolotlclientConfig.options.ColorOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.EnumOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
+import io.github.axolotlclient.modules.hud.gui.component.DynamicallyPositionable;
+import io.github.axolotlclient.modules.hud.gui.layout.AnchorPoint;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.util.Util;
+import lombok.AllArgsConstructor;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.EnderChestBlock;
 import net.minecraft.block.HopperBlock;
@@ -20,41 +23,34 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.List;
-import java.util.Objects;
 
-/**
- * This implementation of Hud modules is based on KronHUD.
- * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
- * @license GPL-3.0
- */
-
-public class CrosshairHud extends AbstractHudEntry {
+public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositionable {
     public static final Identifier ID = new Identifier("kronhud", "crosshairhud");
 
-    private final EnumOption type = new EnumOption("axolotlclient.crosshair_type", CrosshairOption.values(), CrosshairOption.TEXTURE.toString());
-    private final BooleanOption showInF5 = new BooleanOption("axolotlclient.showInF5", false);
-    public final BooleanOption showInF3 = new BooleanOption("axolotlclient.showInF3", false);
-    private final ColorOption defaultColor = new ColorOption("axolotlclient.defaultcolor",  "#FFFFFFFF");
-    private final ColorOption entityColor = new ColorOption("axolotlclient.entitycolor", Color.SELECTOR_RED);
-    private final ColorOption containerColor = new ColorOption("axolotlclient.blockcolor", Color.SELECTOR_BLUE);
+    private final EnumOption type = new EnumOption("crosshair_type", Crosshair.values(), Crosshair.CROSS.toString());
+    private final BooleanOption showInF5 = new BooleanOption("showInF5", false);
+    private final ColorOption defaultColor = new ColorOption("defaultcolor", Color.WHITE);
+    private final ColorOption entityColor = new ColorOption("entitycolor", Color.SELECTOR_RED);
+    private final ColorOption containerColor = new ColorOption("blockcolor",Color.SELECTOR_BLUE);
+    private final ColorOption attackIndicatorBackgroundColor = new ColorOption("attackindicatorbg", new Color(0xFF141414));
+    private final ColorOption attackIndicatorForegroundColor = new ColorOption("attackindicatorfg", Color.WHITE);
 
     public CrosshairHud() {
-        super(17, 17);
+        super(15, 15);
     }
 
     @Override
-    protected double getDefaultX() {
+    public double getDefaultX() {
         return 0.5;
     }
 
-    //Direction is not available since it's implemented completely different and I couldn't get it to work...
     @Override
-    protected float getDefaultY() {
+    public double getDefaultY() {
         return 0.5F;
     }
 
     @Override
-    public void render() {
+    public void render(float delta) {
         if (!(client.options.perspective == 0) && !showInF5.get()) return;
 
         GlStateManager.enableAlphaTest();
@@ -68,16 +64,16 @@ public class CrosshairHud extends AbstractHudEntry {
         }
 
         DrawPosition pos = getPos().subtract(0, -1);
-        if (Objects.equals(type.get(), CrosshairOption.DOT.toString())) {
+        if (type.get().equals(Crosshair.DOT.toString())) {
 
             fillRect(pos.x + (width / 2) - 1, pos.y + (height / 2) - 2, 3, 3, color.getAsInt());
-        } else if (Objects.equals(type.get(), CrosshairOption.CROSS.toString())) {
+        } else if (type.get().equals(Crosshair.CROSS.toString())) {
 
             fillRect(pos.x + (width / 2) - 5, pos.y + (height / 2) - 1, 6, 1, color.getAsInt());
             fillRect(pos.x + (width / 2) + 1, pos.y + (height / 2) - 1, 5, 1, color.getAsInt());
             fillRect(pos.x + (width / 2), pos.y + (height / 2) - 6, 1, 6, color.getAsInt());
             fillRect(pos.x + (width / 2), pos.y + (height / 2), 1, 5, color.getAsInt());
-        } else if (Objects.equals(type.get(), CrosshairOption.TEXTURE.toString())) {
+        } else if (type.get().equals(Crosshair.TEXTURE.toString())) {
 
             MinecraftClient.getInstance().getTextureManager().bindTexture(DrawableHelper.GUI_ICONS_TEXTURE);
 
@@ -87,7 +83,7 @@ public class CrosshairHud extends AbstractHudEntry {
                     (int) (((Util.getWindow().getScaledHeight() / getScale()) - 14) / 2), 0, 0, 16, 16);
 
 
-        }
+        } else if (type.get().equals(Crosshair.DIRECTION.toString()))
         GlStateManager.blendFuncSeparate(770, 771, 1, 0);
         GlStateManager.disableBlend();
         GlStateManager.popMatrix();
@@ -113,8 +109,9 @@ public class CrosshairHud extends AbstractHudEntry {
         }
         return defaultColor.get();
     }
+
     @Override
-    public void renderPlaceholder() {
+    public void renderPlaceholder(float delta) {
         // Shouldn't need this...
     }
 
@@ -129,20 +126,31 @@ public class CrosshairHud extends AbstractHudEntry {
     }
 
     @Override
-    public void addConfigOptions(List<OptionBase<?>> options) {
-        super.addConfigOptions(options);
+    public List<OptionBase<?>> getConfigurationOptions() {
+        List<OptionBase<?>> options = super.getConfigurationOptions();
         options.add(type);
         options.add(showInF5);
-        options.add(showInF3);
         options.add(defaultColor);
         options.add(entityColor);
         options.add(containerColor);
+        options.add(attackIndicatorBackgroundColor);
+        options.add(attackIndicatorForegroundColor);
+        return options;
     }
 
-    public enum CrosshairOption{
-        CROSS,
-        DOT,
-        TEXTURE
+    @Override
+    public AnchorPoint getAnchor() {
+        return AnchorPoint.MIDDLE_MIDDLE;
+    }
+
+    @AllArgsConstructor
+    public enum Crosshair {
+        CROSS("cross"),
+        DOT("dot"),
+        DIRECTION("direction"),
+        TEXTURE("texture");
+
+        private final String value;
     }
 
 }

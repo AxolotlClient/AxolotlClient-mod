@@ -1,16 +1,25 @@
 package io.github.axolotlclient.util;
 
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.Window;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.decoration.ItemFrameEntity;
+import net.minecraft.entity.predicate.EntityPredicate;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.ScoreboardPlayerScore;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.ApiStatus;
 import org.lwjgl.opengl.GL11;
@@ -70,7 +79,11 @@ public class Util {
 
     public static Window getWindow(){
         if(window==null){
-            window = new Window(MinecraftClient.getInstance());
+            try {
+                window = new Window(MinecraftClient.getInstance());
+            } catch (Exception e){
+                return null;
+            }
         }
         return window;
     }
@@ -132,6 +145,59 @@ public class Util {
 
     public static double calculateDistance(double x1, double x2, double y1, double y2, double z1, double z2) {
         return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2) + Math.pow(z2 - z1, 2));
+    }
+
+    public static BlockHitResult raycast(Entity entity, Vec3d vec3d, Vec3d vec3d3, Box box, Predicate<Entity> predicate, double d){
+        Entity targetedEntity = null;
+        Vec3d vec3d4 = null;
+        float f = 1.0F;
+        List<Entity> list = MinecraftClient.getInstance()
+                .world
+                .getEntitiesIn(
+                        entity,
+                        box,
+                        predicate);
+        double g = d;
+
+        for(int j = 0; j < list.size(); ++j) {
+            Entity entity2 = list.get(j);
+            float h = entity2.getTargetingMargin();
+            Box box2 = entity2.getBoundingBox().expand(h, h, h);
+            BlockHitResult blockHitResult = box2.method_585(vec3d, vec3d3);
+            if (box2.contains(vec3d)) {
+                if (g >= 0.0) {
+                    targetedEntity = entity2;
+                    vec3d4 = blockHitResult == null ? vec3d : blockHitResult.pos;
+                    g = 0.0;
+                }
+            } else if (blockHitResult != null) {
+                double k = vec3d.distanceTo(blockHitResult.pos);
+                if (k < g || g == 0.0) {
+                    if (entity2 == entity.vehicle) {
+                        if (g == 0.0) {
+                            targetedEntity = entity2;
+                            vec3d4 = blockHitResult.pos;
+                        }
+                    } else {
+                        targetedEntity = entity2;
+                        vec3d4 = blockHitResult.pos;
+                        g = k;
+                    }
+                    return blockHitResult;
+                }
+            }
+        }
+        return null;
+
+
+        /*if (this.targetedEntity != null && bl && vec3d.distanceTo(vec3d4) > 3.0) {
+            this.targetedEntity = null;
+            this.client.result = new BlockHitResult(BlockHitResult.Type.MISS, vec3d4, null, new BlockPos(vec3d4));
+        }
+
+        if (this.targetedEntity != null && (g < e || this.client.result == null)) {
+            return new BlockHitResult(targetedEntity, vec3d4);
+        }*/
     }
 
     public static List<String> getSidebar() {

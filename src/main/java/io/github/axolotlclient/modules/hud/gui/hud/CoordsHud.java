@@ -1,11 +1,10 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.axolotlclient.AxolotlclientConfig.options.ColorOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.IntegerOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
-import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.AxolotlclientConfig.Color;
+import io.github.axolotlclient.AxolotlclientConfig.options.*;
+import io.github.axolotlclient.modules.hud.gui.component.DynamicallyPositionable;
+import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
+import io.github.axolotlclient.modules.hud.gui.layout.AnchorPoint;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.util.Identifier;
@@ -14,83 +13,60 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.List;
 
-/**
- * This implementation of Hud modules is based on KronHUD.
- * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
- * @license GPL-3.0
- */
-
-public class CoordsHud extends AbstractHudEntry {
+public class CoordsHud extends TextHudEntry implements DynamicallyPositionable {
 
     public static final Identifier ID = new Identifier("kronhud", "coordshud");
 
-    private final ColorOption firstColor = new ColorOption("axolotlclient.firsttextcolor", Color.SELECTOR_BLUE);
-    private final ColorOption secondColor = new ColorOption("axolotlclient.secondtextcolor", "#FFFFFFFF");
-    private final IntegerOption decimalPlaces = new IntegerOption("axolotlclient.decimalplaces", value -> {
-        StringBuilder format = new StringBuilder("#");
-        if (value > 0) {
-            format.append(".");
-            for (int i = 0; i < value; i++) {
-                format.append("0");
-            }
-        }
-        df = new DecimalFormat(format.toString());
-    }, 0, 0, 15);
+    private final ColorOption secondColor = new ColorOption("secondtextcolor", Color.WHITE);
+    private final ColorOption firstColor = new ColorOption("firsttextcolor", Color.SELECTOR_BLUE);
+    private final IntegerOption decimalPlaces = new IntegerOption("decimalplaces", ID.getPath(), 0, 0, 15);
+    private final BooleanOption minimal = new BooleanOption("minimal", false);
 
-    private DecimalFormat df = new DecimalFormat("#");
+    private final EnumOption anchor = new EnumOption("anchor", AnchorPoint.values(), AnchorPoint.TOP_MIDDLE.toString());
 
     public CoordsHud() {
-        super(79, 31);
-        df.setRoundingMode(RoundingMode.CEILING);
+        super(79, 31, true);
     }
 
     public static String getZDir(int dir) {
         switch (dir) {
-            case 5:
-                return "++";
+            case 5: return "++";
             case 4:
             case 6:
                 return "+";
             case 8:
             case 2:
-                return "-";
-            case 1:
-                return "--";
+                return"-";
+            case 1: return "--";
+            default: return "";
         }
-        return "";
     }
 
     public static String getXDir(int dir) {
         switch (dir) {
-            case 3:
-                return "++";
+            case 3: return "++";
             case 2:
             case 4:
                 return "+";
             case 6:
             case 8:
                 return "-";
-            case 7:
-                return "--";
+            case 7: return "--";
+            default: return"";
         }
-        return "";
     }
 
     /**
      * Get direction. 1 = North, 2 North East, 3 East, 4 South East...
      *
-     * @param yaw The current rotation
-     * @return better format
+     * @param yaw
+     * @return
      */
     public static int getDirection(double yaw) {
-        yaw = yaw % 360;
-        int plzdontcrash = 0;
-        while (yaw < 0) {
-            if (plzdontcrash > 10) {
-                return 0;
-            }
-            yaw = yaw + 360;
-            plzdontcrash++;
+        yaw %= 360;
+
+        if (yaw < 0) {
+            yaw += 360;
         }
         int[] directions = {0, 23, 68, 113, 158, 203, 248, 293, 338, 360};
         for (int i = 0; i < directions.length; i++) {
@@ -112,50 +88,154 @@ public class CoordsHud extends AbstractHudEntry {
     }
 
     @Override
-    public void render() {
-        scale();
+    public void renderComponent(float delta) {
         DrawPosition pos = getPos();
-        if (background.get()) {
-            fillRect(getBounds(), backgroundColor.get());
+        StringBuilder format = new StringBuilder("0");
+        if (decimalPlaces.get() > 0) {
+            format.append(".");
+            for (int i = 0; i < decimalPlaces.get(); i++) {
+                format.append("0");
+            }
         }
-        if(outline.get()) outlineRect(getBounds(), outlineColor.get());
-        double x = client.player.getPos().x;
-        double y = client.player.getPos().y;
-        double z = client.player.getPos().z;
-        double yaw = client.player.getHeadRotation() + 180;
+        DecimalFormat df = new DecimalFormat(format.toString());
+        df.setRoundingMode(RoundingMode.CEILING);
+        double x = client.player.x;
+        double y = client.player.y;
+        double z = client.player.z;
+        double yaw = client.player.yaw + 180;
         int dir = getDirection(yaw);
         String direction = getWordedDirection(dir);
-        drawString("X", pos.x + 1, pos.y + 2, firstColor.get(),
-                shadow.get());
-        drawString(String.valueOf(df.format(x)), pos.x + 11, pos.y + 2,
-                secondColor.get(), shadow.get());
+        TextRenderer textRenderer = client.textRenderer;
+        if (minimal.get()) {
+            int currPos = pos.x() + 1;
+            String separator = ", ";
+            drawString(
+                    textRenderer, "XYZ: ",
+                    currPos, pos.y() + 2,
+                    firstColor.get().getAsInt(), shadow.get()
+            );
+            currPos += textRenderer.getStringWidth("XYZ: ");
+            drawString(
+                    textRenderer, String.valueOf(df.format(x)),
+                    currPos, pos.y() + 2,
+                    secondColor.get().getAsInt(), shadow.get()
+            );
+            currPos += textRenderer.getStringWidth(String.valueOf(df.format(x)));
+            drawString(
+                    textRenderer, separator,
+                    currPos, pos.y() + 2,
+                    firstColor.get().getAsInt(), shadow.get()
+            );
+            currPos += textRenderer.getStringWidth(separator);
+            drawString(
+                    textRenderer, String.valueOf(df.format(y)),
+                    currPos, pos.y() + 2,
+                    secondColor.get().getAsInt(), shadow.get()
+            );
+            currPos += textRenderer.getStringWidth(String.valueOf(df.format(y)));
+            drawString(
+                    textRenderer, separator,
+                    currPos, pos.y() + 2,
+                    firstColor.get().getAsInt(), shadow.get()
+            );
+            currPos += textRenderer.getStringWidth(separator);
+            drawString(
+                    textRenderer, String.valueOf(df.format(z)),
+                    currPos, pos.y() + 2,
+                    secondColor.get().getAsInt(), shadow.get()
+            );
+            currPos += textRenderer.getStringWidth(String.valueOf(df.format(z)));
+            int width = currPos - pos.x() + 2;
+            boolean changed = false;
+            if (getWidth() != width) {
+                setWidth(width);
+                changed = true;
+            }
+            if (getHeight() != 11) {
+                setHeight(11);
+                changed = true;
+            }
+            if (changed) {
+                onBoundsUpdate();
+            }
+        } else {
+            drawString(
+                    textRenderer, "X",
+                    pos.x() + 1, pos.y() + 2,
+                    firstColor.get().getAsInt(), shadow.get()
+            );
+            drawString(
+                    textRenderer, String.valueOf(df.format(x)),
+                    pos.x() + 11, pos.y() + 2,
+                    secondColor.get().getAsInt(), shadow.get()
+            );
 
-        drawString("Y", pos.x + 1, pos.y + 12, firstColor.get(),
-                shadow.get());
-        drawString(String.valueOf(df.format(y)), pos.x + 11, pos.y + 12,
-                secondColor.get(), shadow.get());
+            drawString(
+                    textRenderer, "Y",
+                    pos.x() + 1, pos.y() + 12,
+                    firstColor.get().getAsInt(), shadow.get()
+            );
+            drawString(
+                    textRenderer, String.valueOf(df.format(y)),
+                    pos.x() + 11, pos.y() + 12,
+                    secondColor.get().getAsInt(), shadow.get()
+            );
 
-        drawString("Z", pos.x + 1, pos.y + 22, firstColor.get(),
-                shadow.get());
-        drawString(String.valueOf(df.format(z)), pos.x + 11, pos.y + 22,
-                secondColor.get(), shadow.get());
+            drawString(
+                    textRenderer, "Z",
+                    pos.x() + 1, pos.y() + 22,
+                    firstColor.get().getAsInt(), shadow.get()
+            );
 
-        drawString(direction, pos.x + 60, pos.y + 12,
-                firstColor.get(), shadow.get());
+            drawString(
+                    textRenderer, String.valueOf(df.format(z)), pos.x() + 11, pos.y() + 22, secondColor.get().getAsInt(),
+                    shadow.get()
+            );
 
-        drawString(getXDir(dir), pos.x + 60, pos.y + 2,
-                secondColor.get(), shadow.get());
-        drawString(getZDir(dir), pos.x + 60, pos.y + 22,
-                secondColor.get(), shadow.get());
+            drawString(
+                    textRenderer, direction,
+                    pos.x() + 60, pos.y() + 12,
+                    firstColor.get().getAsInt(), shadow.get()
+            );
 
-        GlStateManager.popMatrix();
+            drawString(
+                    textRenderer, getXDir(dir),
+                    pos.x() + 60, pos.y() + 2,
+                    secondColor.get().getAsInt(), shadow.get()
+            );
+            drawString(textRenderer,
+                    getZDir(dir),
+                    pos.x() + 60, pos.y() + 22,
+                    secondColor.get().getAsInt(), shadow.get()
+            );
+            boolean changed = false;
+            if (getWidth() != 79) {
+                setWidth(79);
+                changed = true;
+            }
+            if (getHeight() != 31) {
+                setHeight(31);
+                changed = true;
+            }
+            if (changed) {
+                onBoundsUpdate();
+            }
+        }
     }
 
     @Override
-    public void renderPlaceholder() {
-        renderPlaceholderBackground();
-        scale();
+    public void renderPlaceholderComponent(float delta) {
         DrawPosition pos = getPos();
+        StringBuilder format = new StringBuilder("0");
+        if (decimalPlaces.get() > 0) {
+            format.append(".");
+            for (int i = 0; i < decimalPlaces.get(); i++) {
+                format.append("#");
+            }
+        }
+
+        DecimalFormat df = new DecimalFormat(format.toString());
+        df.setRoundingMode(RoundingMode.FLOOR);
         double x = 109.2325;
         double y = 180.8981;
         double z = -5098.32698;
@@ -163,81 +243,81 @@ public class CoordsHud extends AbstractHudEntry {
         int dir = getDirection(yaw);
         String direction = getWordedDirection(dir);
         TextRenderer textRenderer = client.textRenderer;
-        textRenderer.drawWithShadow("X", pos.x + 1, pos.y + 2, firstColor.get().getAsInt());
-        textRenderer.drawWithShadow(String.valueOf(df.format(x)), pos.x + 11, pos.y + 2,
-                secondColor.get().getAsInt());
-        textRenderer.drawWithShadow("Y", pos.x + 1, pos.y + 12, firstColor.get().getAsInt());
-        textRenderer.drawWithShadow(String.valueOf(df.format(y)), pos.x + 11, pos.y + 12,
-                secondColor.get().getAsInt());
-        textRenderer.drawWithShadow("Z", pos.x + 1, pos.y + 22, firstColor.get().getAsInt());
-        textRenderer.drawWithShadow(String.valueOf(df.format(z)), pos.x + 11, pos.y + 22,
-                secondColor.get().getAsInt());
-        textRenderer.drawWithShadow(direction, pos.x + 60, pos.y + 12,
-                firstColor.get().getAsInt());
-        textRenderer.drawWithShadow(getXDir(dir), pos.x + 60, pos.y + 2,
-                secondColor.get().getAsInt());
-        textRenderer.drawWithShadow(getZDir(dir), pos.x + 60, pos.y + 22,
-                secondColor.get().getAsInt());
+        if (minimal.get()) {
+            int currPos = pos.x() + 1;
+            String separator = ", ";
 
-        GlStateManager.popMatrix();
-        hovered = false;
+            textRenderer.draw("XYZ: ", currPos, pos.y() + 2, firstColor.get().getAsInt());
+            currPos += textRenderer.getStringWidth("XYZ: ");
+            textRenderer.draw(String.valueOf(df.format(x)), currPos, pos.y() + 2, secondColor.get().getAsInt(), shadow.get());
+            currPos += textRenderer.getStringWidth(String.valueOf(df.format(x)));
+            textRenderer.draw(separator, currPos, pos.y() + 2, firstColor.get().getAsInt(), shadow.get());
+            currPos += textRenderer.getStringWidth(separator);
+            textRenderer.draw(String.valueOf(df.format(y)), currPos, pos.y() + 2, secondColor.get().getAsInt(), shadow.get());
+            currPos += textRenderer.getStringWidth(String.valueOf(df.format(y)));
+            textRenderer.draw(separator, currPos, pos.y() + 2, firstColor.get().getAsInt(), shadow.get() );
+            currPos += textRenderer.getStringWidth(separator);
+            textRenderer.draw(String.valueOf(df.format(z)), currPos, pos.y() + 2, secondColor.get().getAsInt(), shadow.get());
+            currPos += textRenderer.getStringWidth(String.valueOf(df.format(z)));
+
+            int width = currPos - pos.x() + 2;
+            boolean changed = false;
+            if (getWidth() != width) {
+                setWidth(width);
+                changed = true;
+            }
+            if (getHeight() != 11) {
+                setHeight(11);
+                changed = true;
+            }
+            if (changed) {
+                onBoundsUpdate();
+            }
+        } else {
+            textRenderer.drawWithShadow("X", pos.x() + 1, pos.y() + 2, firstColor.get().getAsInt());
+            textRenderer.drawWithShadow(String.valueOf(df.format(x)), pos.x() + 11, pos.y() + 2, secondColor.get().getAsInt());
+            textRenderer.drawWithShadow("Y", pos.x() + 1, pos.y() + 12, firstColor.get().getAsInt());
+            textRenderer.drawWithShadow(String.valueOf(df.format(y)), pos.x() + 11, pos.y() + 12, secondColor.get().getAsInt());
+            textRenderer.drawWithShadow("Z", pos.x() + 1, pos.y() + 22, firstColor.get().getAsInt());
+            textRenderer.drawWithShadow(String.valueOf(df.format(z)), pos.x() + 11, pos.y() + 22, secondColor.get().getAsInt());
+            textRenderer.drawWithShadow(direction, pos.x() + 60, pos.y() + 12, firstColor.get().getAsInt());
+            textRenderer.drawWithShadow(getXDir(dir), pos.x() + 60, pos.y() + 2, secondColor.get().getAsInt());
+            textRenderer.drawWithShadow(getZDir(dir), pos.x() + 60, pos.y() + 22, secondColor.get().getAsInt());
+        }
     }
 
     public String getWordedDirection(int dir) {
-        String direction = "";
         switch (dir) {
-            case 1:
-                direction = "N";
-                break;
-            case 2:
-                direction = "NE";
-                break;
-            case 3:
-                direction = "E";
-                break;
-            case 4:
-                direction = "SE";
-                break;
-            case 5:
-                direction = "S";
-                break;
-            case 6:
-                direction = "SW";
-                break;
-            case 7:
-                direction = "W";
-                break;
-            case 8:
-                direction = "NW";
-                break;
-            case 0:
-                direction = "?";
-                break;
+            case 1: return  "N";
+            case 2: return "NE";
+            case 3: return "E";
+            case 4: return "SE";
+            case 5: return "S";
+            case 6: return "SW";
+            case 7: return "W";
+            case 8: return "NW";
+            case 0: return "?";
+            default: return "";
         }
-        return direction;
     }
 
     @Override
-    public void addConfigOptions(List<OptionBase<?>> options) {
-        super.addConfigOptions(options);
-        options.add(textAlignment);
-        options.add(background);
-        options.add(backgroundColor);
-        options.add(outline);
-        options.add(outlineColor);
+    public List<OptionBase<?>> getConfigurationOptions() {
+        List<OptionBase<?>> options = super.getConfigurationOptions();
         options.add(firstColor);
         options.add(secondColor);
         options.add(decimalPlaces);
-    }
-
-    @Override
-    public boolean movable() {
-        return true;
+        options.add(minimal);
+        return options;
     }
 
     @Override
     public Identifier getId() {
         return ID;
+    }
+
+    public AnchorPoint getAnchor() {
+        return AnchorPoint.valueOf(anchor.get());
     }
 
 }

@@ -3,7 +3,8 @@ package io.github.axolotlclient.modules.hud.snapping;
 import io.github.axolotlclient.AxolotlclientConfig.Color;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
-import net.minecraft.client.MinecraftClient;
+import io.github.axolotlclient.util.Util;
+import lombok.Setter;
 import net.minecraft.client.util.Window;
 
 import java.util.HashSet;
@@ -21,13 +22,14 @@ public class SnappingHelper {
     private final HashSet<Integer> x = new HashSet<>();
     private final HashSet<Integer> y = new HashSet<>();
     private static final Color LINE_COLOR = Color.SELECTOR_BLUE;
+    @Setter
     private Rectangle current;
     private final Window window;
 
     public SnappingHelper(List<Rectangle> rects, Rectangle current) {
         addAllRects(rects);
         this.current = current;
-        this.window = new Window(MinecraftClient.getInstance());
+        this.window = Util.getWindow();
     }
 
     public static Optional<Integer> getNearby(int pos, HashSet<Integer> set, int distance) {
@@ -59,7 +61,7 @@ public class SnappingHelper {
                     LINE_COLOR);
         }
         if ((cury = getRawYSnap()) != null) {
-            DrawUtil.fillRect(new Rectangle(0, cury, (int) window.getScaledWidth(), 1),
+            DrawUtil.fillRect(new Rectangle(0, cury, (int)window.getScaledWidth(), 1),
                     LINE_COLOR);
         }
         //renderAll();
@@ -113,7 +115,7 @@ public class SnappingHelper {
     }
 
     public Integer getHalfYSnap() {
-        int height = (int) (window.getScaledHeight() / 2);
+        int height = (int) window.getScaledHeight() / 2;
         int pos = current.y + Math.round((float) current.height / 2);
         if (height - distance <= pos && height + distance >= pos) {
             return height;
@@ -122,7 +124,7 @@ public class SnappingHelper {
     }
 
     public Integer getHalfXSnap() {
-        int width = (int) (window.getScaledWidth() / 2);
+        int width = (int) window.getScaledWidth() / 2;
         int pos = current.x + Math.round((float) current.width / 2);
         if (width - distance <= pos && width + distance >= pos) {
             return width;
@@ -140,9 +142,5 @@ public class SnappingHelper {
             return ySnap;
         }
         return null;
-    }
-
-    public void setCurrent(Rectangle current) {
-        this.current=current;
     }
 }

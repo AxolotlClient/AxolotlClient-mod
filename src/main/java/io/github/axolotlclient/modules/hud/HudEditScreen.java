@@ -1,14 +1,14 @@
 package io.github.axolotlclient.modules.hud;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
 import io.github.axolotlclient.AxolotlclientConfig.screen.OptionsScreenBuilder;
-import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
+import io.github.axolotlclient.modules.hud.gui.component.HudEntry;
 import io.github.axolotlclient.modules.hud.snapping.SnappingHelper;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.resource.language.I18n;
@@ -25,92 +25,89 @@ import java.util.Optional;
 
 public class HudEditScreen extends Screen {
 
-    public static final BooleanOption snapping = new BooleanOption("axolotlclient.snapping", true);
-    private AbstractHudEntry current;
+    private static final BooleanOption snapping = new BooleanOption("snapping", true);
+    private static final OptionCategory hudEditScreenCategory = new OptionCategory("hudEditScreen");
+    private HudEntry current;
     private DrawPosition offset = null;
-    private final HudManager manager;
     private boolean mouseDown;
     private SnappingHelper snap;
     private final Screen parent;
 
-    public boolean pause;
-
-    public HudEditScreen(Screen parent){
-        this(parent, false);
+    static {
+        hudEditScreenCategory.add(snapping);
+        AxolotlClient.config.addSubCategory(hudEditScreenCategory);
     }
 
-    public HudEditScreen(Screen parent, boolean pause){
+    public HudEditScreen(Screen parent){
+	    super();
         updateSnapState();
-        manager = HudManager.getInstance();
         mouseDown = false;
         this.parent=parent;
-        this.pause=pause;
     }
 
     public HudEditScreen(){
         this(null);
     }
 
+	@Override
+	public void render(int mouseX, int mouseY, float delta) {
+        if(MinecraftClient.getInstance().world!=null)fillGradient(0,0, width, height, new Color(0xB0100E0E, true).hashCode(), new Color(0x46212020, true).hashCode());
+        else {
+            renderDirtBackground(0);
+		}
 
-    @Override
-    public void render(int mouseX, int mouseY, float tickDelta) {
-        if(this.client.world!=null)fillGradient(0,0, width, height, new Color(0xB0100E0E, true).hashCode(), new Color(0x46212020, true).hashCode());
-        else {renderDirtBackground(0);}
+		super.render(mouseX, mouseY, delta);
 
-        GlStateManager.enableAlphaTest();
-        for(ButtonWidget button:buttons){
-            button.render(client, mouseX, mouseY);
-        }
-        GlStateManager.disableAlphaTest();
-        manager.renderPlaceholder();
+        Optional<HudEntry> entry = HudManager.getInstance().getEntryXY(mouseX, mouseY);
+        entry.ifPresent(abstractHudEntry -> abstractHudEntry.setHovered(true));
+        HudManager.getInstance().renderPlaceholder(delta);
         if (mouseDown && snap != null) {
             snap.renderSnaps();
         }
-
-        Optional<AbstractHudEntry> entry = manager.getEntryXY(mouseX, mouseY);
-        entry.ifPresent(abstractHudEntry -> abstractHudEntry.setHovered(true));
-
     }
 
     @Override
-    protected void mouseClicked(int mouseX, int mouseY, int button) {
-
-        Optional<AbstractHudEntry> entry = manager.getEntryXY(Math.round(mouseX), Math.round(mouseY));
+	public void mouseClicked(int mouseX, int mouseY, int button) {
+        super.mouseClicked(mouseX, mouseY, button);
+        Optional<HudEntry> entry = HudManager.getInstance().getEntryXY((int) Math.round(mouseX), (int) Math.round(mouseY));
         if (button == 0) {
             mouseDown = true;
             if (entry.isPresent()) {
                 current = entry.get();
-                offset = new DrawPosition(Math.round(mouseX - current.getX()), Math.round(mouseY - current.getY()));
+                offset = new DrawPosition((int) Math.round(mouseX - current.getTruePos().x()), (int) Math.round(mouseY - current.getTruePos().y()));
                 updateSnapState();
             } else {
                 current = null;
-                super.mouseClicked(mouseX, mouseY, button);
             }
-        } else if (button == 1) {
-            entry.ifPresent(abstractHudEntry -> client.openScreen(new OptionsScreenBuilder(this, abstractHudEntry.getOptionsAsCategory(), AxolotlClient.modid)));
-        }
-    }
+		} else if (button == 1) {
+			entry.ifPresent(abstractHudEntry -> MinecraftClient.getInstance().openScreen(new OptionsScreenBuilder(this, abstractHudEntry.getOptionsAsCategory(), AxolotlClient.modid)));
+		}
+	}
 
-    @Override
-    protected void mouseReleased(int mouseX, int mouseY, int button) {
+	@Override
+	public void mouseReleased(int mouseX, int mouseY, int button) {
+        if(current!=null){
+            AxolotlClient.configManager.save();
+        }
         current = null;
         snap = null;
         mouseDown = false;
-        AxolotlClient.configManager.save();
+		super.mouseReleased(mouseX, mouseY, button);
     }
 
     @Override
-    protected void mouseDragged(int mouseX, int mouseY, int button, long l) {
+    protected void mouseDragged(int mouseX, int mouseY, int button, long mouseLastClicked) {
         if (current != null) {
-            current.setXY(mouseX - offset.x, mouseY - offset.y);
+            current.setX((mouseX - offset.x()) + current.offsetTrueWidth());
+            current.setY(mouseY - offset.y() + current.offsetTrueHeight());
             if (snap != null) {
                 Integer snapX, snapY;
-                snap.setCurrent(current.getScaledBounds());
+                snap.setCurrent(current.getTrueBounds());
                 if ((snapX = snap.getCurrentXSnap()) != null) {
-                    current.setX(snapX);
+                    current.setX(snapX + current.offsetTrueWidth());
                 }
                 if ((snapY = snap.getCurrentYSnap()) != null) {
-                    current.setY(snapY);
+                    current.setY(snapY + current.offsetTrueHeight());
                 }
             }
             if (current.tickable()) {
@@ -121,66 +118,54 @@ public class HudEditScreen extends Screen {
 
     private void updateSnapState() {
         if (snapping.get() && current != null) {
-            List<Rectangle> bounds = manager.getAllBounds();
-            bounds.remove(current.getScaledBounds());
-            snap = new SnappingHelper(bounds, current.getScaledBounds());
+            List<Rectangle> bounds = HudManager.getInstance().getAllBounds();
+            bounds.remove(current.getTrueBounds());
+            snap = new SnappingHelper(bounds, current.getTrueBounds());
         } else if (snap != null) {
             snap = null;
         }
     }
 
     @Override
-    protected void buttonClicked(ButtonWidget button) {
-        if(button.id==1){
-            snapping.toggle();
-            AxolotlClient.configManager.save();
-
-            button.message = I18n.translate("axolotlclient.hud.snapping") + ": "+I18n.translate(snapping.get()?"options.on":"options.off");
-        } else if(button.id==3) {
-            client.openScreen(new OptionsScreenBuilder(this, new OptionCategory("axolotlclient.config", false).addSubCategories(AxolotlClient.CONFIG.getCategories()), AxolotlClient.modid));
-        } else if(button.id==0) {
-            client.openScreen(parent);
-        } else if(button.id==2) {
-            client.closeScreen();
-        }
-    }
-
-    @Override
     public void init() {
-        // Actually using vanilla widgets here. Who would have thought that?
-        this.buttons.add(new ButtonWidget(1,
-                width / 2 - 50,
-                height/2+ 12,
-                100, 20,
-                I18n.translate("axolotlclient.hud.snapping") + ": "+I18n.translate(snapping.get()?"options.on":"options.off")
-        ));
+	    this.buttons.add(new ButtonWidget(3, width / 2 - 50,
+		    height/2+ 12,
+		    100, 20,
+                        I18n.translate("hud.snapping")+": " + I18n.translate(snapping.get()?"options.on":"options.off")));
 
-        this.buttons.add(new ButtonWidget(3,
-                width / 2 - 75,
-                height/2-10,
-                150, 20,
-                I18n.translate("axolotlclient.hud.clientOptions")
-        ));
-        if(parent!=null)this.buttons.add(new ButtonWidget(
-                0, width/2 -75, height - 50 + 22, 150, 20,
-                I18n.translate("axolotlclient.back")));
-        else this.buttons.add(new ButtonWidget(
-                2, width/2 -75, height - 50 + 22, 150, 20,
-                I18n.translate("axolotlclient.close")));
+		this.buttons.add(new ButtonWidget(1, width / 2 - 75,
+			height/2-10,
+			150, 20,
+			I18n.translate("hud.clientOptions")));
+
+        if(parent!=null)buttons.add(new ButtonWidget(0,
+                width/2 -75, height - 50 + 22, 150, 20,
+                I18n.translate("back")));
+        else buttons.add(new ButtonWidget(2,
+                width/2 -75, height - 50 + 22, 150, 20,
+                I18n.translate("close")));
 
     }
 
     @Override
-    public void tick() {
-        if(current!=null && current.tickable()) {
-            current.tick();
+    protected void buttonClicked(ButtonWidget button) {
+        switch (button.id){
+            case 3:
+                snapping.toggle();
+                button.message = I18n.translate("hud.snapping")+": " + I18n.translate(snapping.get()?"options.on":"options.off");
+                AxolotlClient.configManager.save();
+                break;
+            case 1:
+                MinecraftClient.getInstance().openScreen(
+                        new OptionsScreenBuilder(this, new OptionCategory("config", false)
+                                .addSubCategories(AxolotlClient.CONFIG.getCategories()), AxolotlClient.modid));
+                break;
+            case 0:
+                MinecraftClient.getInstance().openScreen(parent);
+                break;
+            case 2:
+                MinecraftClient.getInstance().openScreen(null);
+                break;
         }
     }
-
-    @Override
-    public boolean shouldPauseGame() {
-        return false;
-    }
-
-
 }

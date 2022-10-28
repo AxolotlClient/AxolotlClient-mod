@@ -15,9 +15,12 @@ import io.github.axolotlclient.modules.rpc.gameSdk.GameSdkDownloader;
 import io.github.axolotlclient.util.Logger;
 import io.github.axolotlclient.util.OSUtil;
 import io.github.axolotlclient.util.Util;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.client.MinecraftClient;
 
 import java.time.Instant;
+import java.util.Optional;
 
 /**
  * This DiscordRPC module is derived from <a href="https://github.com/DeDiamondPro/HyCord">HyCord</a>.
@@ -45,6 +48,7 @@ public class DiscordRPC extends AbstractModule {
     public static Activity currentActivity;
     public static Core discordRPC;
     Instant time = Instant.now();
+    private static String modVersion;
 
     private static boolean running;
 
@@ -63,6 +67,9 @@ public class DiscordRPC extends AbstractModule {
         if(OSUtil.getOS()== OSUtil.OperatingSystem.OTHER){
             enabled.setForceOff(true, DisableReason.CRASH);
         }
+
+        Optional<ModContainer> container = FabricLoader.getInstance().getModContainer("axolotlclient");
+        container.ifPresent(modContainer -> modVersion = modContainer.getMetadata().getVersion().getFriendlyString());
     }
 
     @SuppressWarnings("BusyWait")
@@ -109,6 +116,7 @@ public class DiscordRPC extends AbstractModule {
                     Logger.error("An error occurred: ");
                     e.printStackTrace();
                 } else {
+                    Logger.debug("Error starting RPC: ", e);
                     enabled.set(false);
                 }
             }
@@ -154,7 +162,7 @@ public class DiscordRPC extends AbstractModule {
             currentActivity.close();
         }
 
-        activity.assets().setLargeText("AxolotlClient " + MinecraftClient.getInstance().getGameVersion());
+        activity.assets().setLargeText("AxolotlClient " + modVersion);
         activity.assets().setLargeImage("icon");
         discordRPC.activityManager().updateActivity(activity);
         currentActivity = activity;

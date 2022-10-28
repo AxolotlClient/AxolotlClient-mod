@@ -1,13 +1,11 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
-import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
+import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
-import io.github.axolotlclient.modules.hud.util.Rectangle;
 import io.github.axolotlclient.util.Logger;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.resource.ResourcePack;
 import net.minecraft.util.Identifier;
@@ -16,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class PackDisplayHud extends AbstractHudEntry {
+public class PackDisplayHud extends TextHudEntry {
 
     public static Identifier ID = new Identifier("axolotlclient","packdisplayhud");
 
@@ -25,28 +23,28 @@ public class PackDisplayHud extends AbstractHudEntry {
     private final List<ResourcePack> packs = new ArrayList<>();
 
     public PackDisplayHud() {
-        super(200, 50);
+        super(200, 50, true);
     }
 
     @Override
     public void init() {
         packs.forEach(pack -> {
             try {
-                if(!pack.getName().equalsIgnoreCase("Default") && pack.getIcon()!=null)
+                if(!pack.getName().equalsIgnoreCase("Default") )//&& pack.getIcon()!=null)
                     widgets.add(new packWidget(pack));
             } catch (Exception ignored) {
             }
         });
 
-        AtomicInteger w = new AtomicInteger(20);
-        widgets.forEach(packWidget -> {
-            int textW = MinecraftClient.getInstance().textRenderer.getStringWidth(packWidget.name)+20;
-            if(textW>w.get())
-                w.set(textW);
-        });
-        width=w.get();
+	    AtomicInteger w = new AtomicInteger(20);
+		widgets.forEach(packWidget -> {
+			int textW = MinecraftClient.getInstance().textRenderer.getStringWidth(packWidget.name)+20;
+			if(textW>w.get())
+				w.set(textW);
+		});
+		width=w.get();
 
-        height=(widgets.size()-1)*18+18;
+		height=(widgets.size()-1)*18 + 18;
     }
 
     public void setPacks(List<ResourcePack> packs){
@@ -56,14 +54,14 @@ public class PackDisplayHud extends AbstractHudEntry {
     }
 
     @Override
-    public void render() {
+    public void renderComponent(float f) {
         scale();
         DrawPosition pos = getPos();
 
         if(widgets.isEmpty())init();
 
         if(background.get()){
-            fillRect(new Rectangle(pos.x, pos.y, width, widgets.size()*18), backgroundColor.get());
+            fillRect(getBounds(), backgroundColor.get());
         }
 
         if(outline.get()) outlineRect(getBounds(), outlineColor.get());
@@ -73,14 +71,12 @@ public class PackDisplayHud extends AbstractHudEntry {
             widgets.get(i).render(pos.x+1, y);
             y+=18;
         }
-
-        GlStateManager.popMatrix();
     }
 
     @Override
-    public void renderPlaceholder() {
+    public void renderPlaceholderComponent(float f) {
         renderPlaceholderBackground();
-        hovered=false;
+		hovered=false;
     }
 
     @Override
@@ -93,37 +89,26 @@ public class PackDisplayHud extends AbstractHudEntry {
         return true;
     }
 
-    private class packWidget{
+    private class packWidget {
         private int texture;
-        private final String name;
+        public final String name;
 
         public packWidget(ResourcePack pack){
             this.name=pack.getName();
             try {
                 this.texture = new NativeImageBackedTexture(pack.getIcon()).getGlId();
             } catch (Exception e){
-                Logger.warn("Pack "+pack.getName()+" somehow threw an error! Please investigate...");
+                Logger.warn("Pack "+pack.getName()+" somehow threw an error! Please investigate... Does it have an icon?");
+				//e.printStackTrace();
             }
         }
 
         public void render(int x, int y) {
-            GlStateManager.color3f(textColor.get().getRed(), textColor.get().getGreen(), textColor.get().getBlue());
+            GlStateManager.color4f(1, 1, 1, 1F);
             GlStateManager.bindTexture(texture);
-            drawTexture(x, y, 0, 0, 16, 16, 16, 16);
-            drawString(MinecraftClient.getInstance().textRenderer, name, x + 18, y + 6, textColor.get().getAsInt(), shadow.get());
+            DrawableHelper.drawTexture(x, y, 0, 0, 16, 16, 16, 16);
+            drawString(name, x + 18, y + 6, textColor.get().getAsInt(), shadow.get());
         }
 
-    }
-
-    @Override
-    public void addConfigOptions(List<OptionBase<?>> options) {
-        super.addConfigOptions(options);
-
-        options.add(background);
-        options.add(backgroundColor);
-        options.add(outline);
-        options.add(outlineColor);
-        options.add(shadow);
-        options.add(textColor);
     }
 }

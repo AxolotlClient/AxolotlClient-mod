@@ -2,7 +2,7 @@ package io.github.axolotlclient.mixin;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.modules.hud.HudManager;
-import io.github.axolotlclient.modules.hud.gui.hud.*;
+import io.github.axolotlclient.modules.hud.gui.hud.vanilla.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.hud.InGameHud;
@@ -71,7 +71,7 @@ public abstract class InGameHudMixin {
     public void setItemNamePos(Args args){
         HotbarHUD hud = (HotbarHUD) HudManager.getInstance().get(HotbarHUD.ID);
         if(hud.isEnabled()){
-            args.set(1, ((Integer) hud.getX()).floatValue() + (hud.width*hud.getScale() -
+            args.set(1, ((Integer) hud.getX()).floatValue() + (hud.getWidth() *hud.getScale() -
                     MinecraftClient.getInstance().textRenderer.getStringWidth(args.get(0)))/2);
             args.set(2, ((Integer) hud.getY()).floatValue() - 36 +
                     (!MinecraftClient.getInstance().interactionManager.hasStatusBars() ? 14 : 0));
@@ -109,7 +109,7 @@ public abstract class InGameHudMixin {
     public int moveXPBarWidth(Window instance){
         HotbarHUD hud = (HotbarHUD) HudManager.getInstance().get(HotbarHUD.ID);
         if(hud.isEnabled()){
-            return hud.getX()*2+hud.width;
+            return hud.getX()*2+ hud.getWidth();
         }
         return instance.getWidth();
     }
@@ -127,7 +127,7 @@ public abstract class InGameHudMixin {
     public int moveStatusBarsWidth(Window instance){
         HotbarHUD hud = (HotbarHUD) HudManager.getInstance().get(HotbarHUD.ID);
         if(hud.isEnabled()){
-            return hud.getX()*2+hud.width;
+            return hud.getX()*2+ hud.getWidth();
         }
         return instance.getWidth();
     }

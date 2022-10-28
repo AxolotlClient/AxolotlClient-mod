@@ -5,7 +5,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.freelook.Freelook;
 import io.github.axolotlclient.modules.hud.HudManager;
-import io.github.axolotlclient.modules.hud.gui.hud.CrosshairHud;
+import io.github.axolotlclient.modules.hud.gui.hud.vanilla.CrosshairHud;
 import io.github.axolotlclient.modules.motionblur.MotionBlur;
 import io.github.axolotlclient.modules.sky.SkyboxManager;
 import io.github.axolotlclient.modules.zoom.Zoom;
@@ -175,8 +175,8 @@ public abstract class GameRendererMixin {
     public void customCrosshairF3(float tickDelta, CallbackInfo ci){
         CrosshairHud hud = (CrosshairHud) HudManager.getInstance().get(CrosshairHud.ID);
         if(hud.isEnabled() && this.client.options.debugEnabled
-                && !this.client.options.hudHidden
-                && hud.showInF3.get()) {
+                && !this.client.options.hudHidden) {
+                //&& hud.showInF3.get()) {
             ci.cancel();
         }
 

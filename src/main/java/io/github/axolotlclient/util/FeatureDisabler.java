@@ -16,11 +16,15 @@ public class FeatureDisabler {
     public static void init(){
         setServers(AxolotlClient.CONFIG.fullBright, "gommehd");
         setServers(AxolotlClient.CONFIG.timeChangerEnabled, "gommehd");
-        setServers(Freelook.getInstance().enabled, "hypixel", "mineplex", "gommehd");
+        setServers(Freelook.getInstance().enabled, "hypixel", "mineplex", "gommehd", "nucleoid");
     }
 
     public static void onServerJoin(ServerInfo info){
         disabledServers.forEach((option, strings) -> disableOption(option, strings, info.address));
+    }
+
+    public static void clear(){
+        disabledServers.keySet().forEach(option -> option.setForceOff(false, DisableReason.BAN_REASON));
     }
 
     private static void disableOption(BooleanOption option, String[] servers, String currentServer){

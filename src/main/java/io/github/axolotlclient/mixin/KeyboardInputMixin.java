@@ -21,7 +21,7 @@ public abstract class KeyboardInputMixin {
     @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/options/KeyBinding;isPressed()Z", ordinal = 5))
     public boolean toggleSneak(KeyBinding instance){
         ToggleSprintHud hud = (ToggleSprintHud) HudManager.getInstance().get(ToggleSprintHud.ID);
-        return hud.isEnabled() && hud.sneakToggled.get() && MinecraftClient.getInstance().currentScreen==null ||
+        return hud.isEnabled() && hud.getSneakToggled().get() && MinecraftClient.getInstance().currentScreen==null ||
                 instance.isPressed();
     }
 }

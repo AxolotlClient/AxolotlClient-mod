@@ -1,7 +1,7 @@
 package io.github.axolotlclient.mixin;
 
 import io.github.axolotlclient.modules.hud.HudManager;
-import io.github.axolotlclient.modules.hud.gui.hud.ComboCounterHud;
+import io.github.axolotlclient.modules.hud.gui.hud.simple.ComboHud;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,9 +14,9 @@ public abstract class LivingEntityMixin {
 
     @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;sendEntityStatus(Lnet/minecraft/entity/Entity;B)V"))
     public void onDamageEntity(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir){
-        ComboCounterHud comboCounterHud = (ComboCounterHud) HudManager.getInstance().get(ComboCounterHud.ID);
+        ComboHud comboCounterHud = (ComboHud) HudManager.getInstance().get(ComboHud.ID);
         if(comboCounterHud != null && comboCounterHud.isEnabled()){
-            comboCounterHud.onEntityDamaged((LivingEntity)(Object)this);
+            comboCounterHud.onEntityAttack((LivingEntity)(Object)this);
         }
     }
 }

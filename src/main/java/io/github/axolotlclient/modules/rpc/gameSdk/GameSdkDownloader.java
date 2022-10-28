@@ -1,7 +1,6 @@
 package io.github.axolotlclient.modules.rpc.gameSdk;
 
 import de.jcm.discordgamesdk.Core;
-import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlclientConfig.options.DisableReason;
 import io.github.axolotlclient.modules.rpc.DiscordRPC;
 import io.github.axolotlclient.util.Logger;

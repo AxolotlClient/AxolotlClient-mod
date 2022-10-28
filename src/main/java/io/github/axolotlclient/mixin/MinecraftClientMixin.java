@@ -3,9 +3,10 @@ package io.github.axolotlclient.mixin;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.NetworkHelper;
 import io.github.axolotlclient.modules.hud.HudManager;
-import io.github.axolotlclient.modules.hud.gui.hud.CPSHud;
+import io.github.axolotlclient.modules.hud.gui.hud.simple.CPSHud;
 import io.github.axolotlclient.modules.rpc.DiscordRPC;
 import io.github.axolotlclient.modules.zoom.Zoom;
+import io.github.axolotlclient.util.Hooks;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
@@ -121,10 +122,7 @@ public abstract class MinecraftClientMixin {
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getTime()J", ordinal = 0))
     public void onMouseButton(CallbackInfo ci){
-        CPSHud cpshud = (CPSHud) HudManager.getInstance().get(CPSHud.ID);
-        if(cpshud.isEnabled()){
-            cpshud.click();
-        }
+        Hooks.MOUSE_INPUT.invoker().onMouseButton(Mouse.getEventButton());
     }
 
     @Inject(method = "connect(Lnet/minecraft/client/world/ClientWorld;Ljava/lang/String;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;flipPlayer(Lnet/minecraft/entity/player/PlayerEntity;)V"))
