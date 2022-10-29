@@ -66,8 +66,6 @@ public class MemoryHud extends TextHudEntry {
                 );
             }
         }
-
-        matrices.pop();
     }
 
     @Override
@@ -109,8 +107,6 @@ public class MemoryHud extends TextHudEntry {
                     pos.x,
                     pos.y + (Math.round((float) height / 2) - 4), Color.WHITE, shadow.get());
         }
-        matrices.pop();
-        hovered = false;
     }
 
     private String getMemoryLine() {

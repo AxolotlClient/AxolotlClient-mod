@@ -51,8 +51,6 @@ public class Hooks {
     ));
 
     public interface PlayerDirectionCallback {
-
         void onChange(float prevPitch, float prevYaw, float pitch, float yaw);
-
     }
 }

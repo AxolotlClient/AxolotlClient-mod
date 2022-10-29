@@ -15,6 +15,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends Entity {
@@ -46,14 +47,13 @@ public abstract class PlayerEntityMixin extends Entity {
         }
     }
 
-    @Override
-    public boolean damage(DamageSource source, float amount) {
+    @Inject(method = "damage", at = @At("HEAD"))
+    public void damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         if(source.getAttacker() != null && getUuid() == MinecraftClient.getInstance().player.getUuid()){
             ReachHud reachDisplayHud = (ReachHud) HudManager.getInstance().get(ReachHud.ID);
             if(reachDisplayHud != null && reachDisplayHud.isEnabled()){
                 reachDisplayHud.updateDistance(source.getAttacker(), this);
             }
         }
-        return super.damage(source, amount);
     }
 }

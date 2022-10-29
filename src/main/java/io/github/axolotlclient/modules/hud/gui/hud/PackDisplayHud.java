@@ -2,8 +2,6 @@ package io.github.axolotlclient.modules.hud.gui.hud;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.texture.NativeImage;
-import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
-import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.util.Logger;
@@ -76,14 +74,11 @@ public class PackDisplayHud extends TextHudEntry {
             widgets.get(i).render(matrices, pos.x+1, y);
             y+=18;
         }
-
-        matrices.pop();
     }
 
     @Override
     public void renderPlaceholderComponent(MatrixStack matrices, float f) {
-        renderPlaceholderBackground(matrices);
-		hovered=false;
+
     }
 
     @Override

@@ -1,6 +1,7 @@
 package io.github.axolotlclient.modules.hud.gui.component;
 
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
+import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
 
 import java.util.List;
 
@@ -22,6 +23,5 @@ public interface Configurable {
         return getConfigurationOptions();
     }
 
-    //Tab toTab();
-
+    OptionCategory getOptionsAsCategory();
 }
