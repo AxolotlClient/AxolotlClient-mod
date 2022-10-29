@@ -17,12 +17,12 @@ public class CoordsHud extends TextHudEntry implements DynamicallyPositionable {
 
     public static final Identifier ID = new Identifier("kronhud", "coordshud");
 
-    private final ColorOption secondColor = new ColorOption("secondtextcolor", Color.WHITE);
-    private final ColorOption firstColor = new ColorOption("firsttextcolor", Color.SELECTOR_BLUE);
-    private final IntegerOption decimalPlaces = new IntegerOption("decimalplaces", ID.getPath(), 0, 0, 15);
-    private final BooleanOption minimal = new BooleanOption("minimal", false);
+    private final ColorOption secondColor = new ColorOption("axolotlclient.secondtextcolor", Color.WHITE);
+    private final ColorOption firstColor = new ColorOption("axolotlclient.firsttextcolor", Color.SELECTOR_BLUE);
+    private final IntegerOption decimalPlaces = new IntegerOption("axolotlclient.decimalplaces", ID.getPath(), 0, 0, 15);
+    private final BooleanOption minimal = new BooleanOption("axolotlclient.minimal", false);
 
-    private final EnumOption anchor = new EnumOption("anchor", AnchorPoint.values(), AnchorPoint.TOP_MIDDLE.toString());
+    private final EnumOption anchor = new EnumOption("axolotlclient.anchor", AnchorPoint.values(), AnchorPoint.TOP_MIDDLE.toString());
 
     public CoordsHud() {
         super(79, 31, true);

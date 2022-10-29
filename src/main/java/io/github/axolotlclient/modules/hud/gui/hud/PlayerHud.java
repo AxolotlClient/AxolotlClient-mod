@@ -17,8 +17,8 @@ public class PlayerHud extends BoxHudEntry {
 
     public static final Identifier ID = new Identifier("kronhud", "playerhud");
 
-    private final DoubleOption rotation = new DoubleOption("rotation", 0, 0, 360);
-    private final BooleanOption dynamicRotation = new BooleanOption("dynamicrotation", true);
+    private final DoubleOption rotation = new DoubleOption("axolotlclient.rotation", 0, 0, 360);
+    private final BooleanOption dynamicRotation = new BooleanOption("axolotlclient.dynamicrotation", true);
 
     private float lastYawOffset = 0;
     private float yawOffset = 0;

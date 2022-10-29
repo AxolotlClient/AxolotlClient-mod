@@ -31,6 +31,7 @@
     "KeyboardInputMixin",
     "LivingEntityMixin",
     "LivingEntityRendererMixin",
+    "MinecraftClientAccessor",
     "MinecraftClientMixin",
     "MultiplayerScreenMixin",
     "ParticleAccessor",

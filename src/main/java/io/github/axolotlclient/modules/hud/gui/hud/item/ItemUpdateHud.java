@@ -23,7 +23,7 @@ public class ItemUpdateHud extends TextHudEntry {
     private ArrayList<ItemUtil.TimedItemStorage> removed;
     private ArrayList<ItemUtil.TimedItemStorage> added;
 
-    private final IntegerOption timeout = new IntegerOption("timeout", ID.getPath(), 6, 1, 60);
+    private final IntegerOption timeout = new IntegerOption("axolotlclient.timeout", ID.getPath(), 6, 1, 60);
 
     public ItemUpdateHud() {
         super(200, 11 * 6 - 2, true);

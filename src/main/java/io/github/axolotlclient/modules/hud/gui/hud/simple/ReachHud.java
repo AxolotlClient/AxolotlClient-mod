@@ -3,8 +3,8 @@ package io.github.axolotlclient.modules.hud.gui.hud.simple;
 import com.google.common.util.concurrent.AtomicDouble;
 import io.github.axolotlclient.AxolotlclientConfig.options.IntegerOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
+import io.github.axolotlclient.mixin.MinecraftClientAccessor;
 import io.github.axolotlclient.modules.hud.gui.entry.SimpleTextHudEntry;
-import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
@@ -20,7 +20,7 @@ import java.util.List;
 public class ReachHud extends SimpleTextHudEntry {
 
     public static final Identifier ID = new Identifier("kronhud", "reachhud");
-    private final IntegerOption decimalPlaces = new IntegerOption("decimalplaces", ID.getPath(), 0, 0, 15);
+    private final IntegerOption decimalPlaces = new IntegerOption("axolotlclient.decimalplaces", 0, 0, 15);
 
     private String currentDist;
     private long lastTime = 0;
@@ -75,7 +75,7 @@ public class ReachHud extends SimpleTextHudEntry {
         Box box = attacking.getBoundingBox().stretch(rotation.x*d, rotation.y*d, rotation.z*d).expand(1.0, 1.0, 1.0);
 
 
-        BlockHitResult result = MinecraftClient.getInstance().result; //Util.raycast(attacking, camera, possibleHits, box, entity -> entity.getEntityId() == receiving.getEntityId(), d);
+        BlockHitResult result = attacking.rayTrace(d, ((MinecraftClientAccessor)MinecraftClient.getInstance()).getTicker().tickDelta); //Util.raycast(attacking, camera, possibleHits, box, entity -> entity.getEntityId() == receiving.getEntityId(), d);
         if (result == null || result.entity == null) {
             // This should not happen...
             return -1;

@@ -15,10 +15,10 @@ public class PlayerCountHud extends SimpleTextHudEntry {
 
     @Override
     public String getValue() {
-        return client.world.playerEntities.size() + " "+ I18n.translate("players");
+        return client.world.playerEntities.size() + " "+ I18n.translate("axolotlclient.players");
     }
     @Override
     public String getPlaceholder() {
-        return 3.141592 + " " + I18n.translate("players");
+        return 3.141592 + " " + I18n.translate("axolotlclient.players");
     }
 }

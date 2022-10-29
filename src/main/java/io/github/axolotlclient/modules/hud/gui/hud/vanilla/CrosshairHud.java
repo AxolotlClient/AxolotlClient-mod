@@ -27,13 +27,13 @@ import java.util.List;
 public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositionable {
     public static final Identifier ID = new Identifier("kronhud", "crosshairhud");
 
-    private final EnumOption type = new EnumOption("crosshair_type", Crosshair.values(), Crosshair.CROSS.toString());
-    private final BooleanOption showInF5 = new BooleanOption("showInF5", false);
-    private final ColorOption defaultColor = new ColorOption("defaultcolor", Color.WHITE);
-    private final ColorOption entityColor = new ColorOption("entitycolor", Color.SELECTOR_RED);
-    private final ColorOption containerColor = new ColorOption("blockcolor",Color.SELECTOR_BLUE);
-    private final ColorOption attackIndicatorBackgroundColor = new ColorOption("attackindicatorbg", new Color(0xFF141414));
-    private final ColorOption attackIndicatorForegroundColor = new ColorOption("attackindicatorfg", Color.WHITE);
+    private final EnumOption type = new EnumOption("axolotlclient.crosshair_type", Crosshair.values(), Crosshair.CROSS.toString());
+    private final BooleanOption showInF5 = new BooleanOption("axolotlclient.showInF5", false);
+    private final ColorOption defaultColor = new ColorOption("axolotlclient.defaultcolor", Color.WHITE);
+    private final ColorOption entityColor = new ColorOption("axolotlclient.entitycolor", Color.SELECTOR_RED);
+    private final ColorOption containerColor = new ColorOption("axolotlclient.blockcolor",Color.SELECTOR_BLUE);
+    private final ColorOption attackIndicatorBackgroundColor = new ColorOption("axolotlclient.attackindicatorbg", new Color(0xFF141414));
+    private final ColorOption attackIndicatorForegroundColor = new ColorOption("axolotlclient.attackindicatorfg", Color.WHITE);
 
     public CrosshairHud() {
         super(15, 15);

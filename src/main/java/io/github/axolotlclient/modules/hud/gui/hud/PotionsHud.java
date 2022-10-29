@@ -25,7 +25,7 @@ public class PotionsHud extends TextHudEntry implements DynamicallyPositionable 
 
     private final EnumOption order = DefaultOptions.getCardinalOrder(CardinalOrder.TOP_DOWN);
 
-    private final BooleanOption iconsOnly = new BooleanOption("iconsonly", ID.getPath(), false);
+    private final BooleanOption iconsOnly = new BooleanOption("axolotlclient.iconsonly", false);
     protected static final Identifier INVENTORY_TEXTURE = new Identifier("textures/gui/container/inventory.png");
 
     public PotionsHud() {
@@ -101,7 +101,7 @@ public class PotionsHud extends TextHudEntry implements DynamicallyPositionable 
         GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.client.getTextureManager().bindTexture(INVENTORY_TEXTURE);
         int m = type.method_2444();
-        this.drawTexture(getPos().x + 4, y + 6, m % 8 * 18, 198 + m / 8 * 18, 18, 18);
+        this.drawTexture(x, y, m % 8 * 18, 198 + m / 8 * 18, 18, 18);
         if (!iconsOnly.get()) {
             drawString(StatusEffect.method_2436(effect), x + 19, y + 5,
                     textColor.get().getAsInt(), shadow.get()

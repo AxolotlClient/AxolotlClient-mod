@@ -16,7 +16,7 @@ import java.util.List;
 
 public abstract class SimpleTextHudEntry extends TextHudEntry implements DynamicallyPositionable {
 
-    protected final EnumOption justification = new EnumOption("justification", Justification.values(), Justification.CENTER.toString());
+    protected final EnumOption justification = new EnumOption("axolotlclient.justification", Justification.values(), Justification.CENTER.toString());
     protected final EnumOption anchor = DefaultOptions.getAnchorPoint();
 
     private final IntegerOption minWidth;

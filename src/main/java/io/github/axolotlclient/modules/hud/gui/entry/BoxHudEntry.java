@@ -13,11 +13,11 @@ public abstract class BoxHudEntry extends AbstractHudEntry {
 
     private final boolean backgroundAllowed;
 
-    protected BooleanOption background = new BooleanOption("background", true);
-    protected ColorOption backgroundColor = new ColorOption("bgcolor", 0x64000000);
+    protected BooleanOption background = new BooleanOption("axolotlclient.background", true);
+    protected ColorOption backgroundColor = new ColorOption("axolotlclient.bgcolor", 0x64000000);
 
-    protected BooleanOption outline = new BooleanOption("outline", false);
-    protected ColorOption outlineColor = new ColorOption("outlinecolor", Color.WHITE);
+    protected BooleanOption outline = new BooleanOption("axolotlclient.outline", false);
+    protected ColorOption outlineColor = new ColorOption("axolotlclient.outlinecolor", Color.WHITE);
 
     public BoxHudEntry(int width, int height, boolean backgroundAllowed) {
         super(width, height);
@@ -66,6 +66,7 @@ public abstract class BoxHudEntry extends AbstractHudEntry {
         renderPlaceholderBackground();
         outlineRect(getTrueBounds(), Color.BLACK);
         scale();
+        GlStateManager.enableTexture();
         renderPlaceholderComponent(delta);
         GlStateManager.popMatrix();
         hovered = false;

@@ -1,5 +1,6 @@
 package io.github.axolotlclient.modules.hud;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
@@ -57,6 +58,7 @@ public class HudEditScreen extends Screen {
 		}
 
 		super.render(mouseX, mouseY, delta);
+        GlStateManager.enableTexture();
 
         Optional<HudEntry> entry = HudManager.getInstance().getEntryXY(mouseX, mouseY);
         entry.ifPresent(abstractHudEntry -> abstractHudEntry.setHovered(true));

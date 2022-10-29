@@ -3,7 +3,6 @@ package io.github.axolotlclient.modules.hud.gui.hud.simple;
 import io.github.axolotlclient.AxolotlclientConfig.options.IntegerOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.entry.SimpleTextHudEntry;
-import io.github.axolotlclient.util.Logger;
 import io.github.axolotlclient.util.ThreadExecuter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ServerInfo;
@@ -29,7 +28,7 @@ public class PingHud extends SimpleTextHudEntry {
 
     private int currentServerPing;
 
-    private final IntegerOption refreshDelay = new IntegerOption("refreshTime", 4, 1, 15);
+    private final IntegerOption refreshDelay = new IntegerOption("axolotlclient.refreshTime", 4, 1, 15);
 
     public PingHud() {
         super();
@@ -57,10 +56,6 @@ public class PingHud extends SimpleTextHudEntry {
 
     private void updatePing(){
         if (MinecraftClient.getInstance().getCurrentServerEntry() != null) {
-            Logger.debug("Refreshing server ping, using "+
-                    (MinecraftClient.getInstance().getCurrentServerEntry().ping == 1 ||
-                    MinecraftClient.getInstance().getCurrentServerEntry().ping == -1?
-                            "Pinger" : "ServerInfo"));
             if (MinecraftClient.getInstance().getCurrentServerEntry().ping==1 ||
                     MinecraftClient.getInstance().getCurrentServerEntry().ping == -1) {
                 getRealTimeServerPing(MinecraftClient.getInstance().getCurrentServerEntry());

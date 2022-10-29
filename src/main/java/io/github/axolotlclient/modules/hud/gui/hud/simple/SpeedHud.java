@@ -15,7 +15,7 @@ public class SpeedHud extends SimpleTextHudEntry {
 
     public static final Identifier ID = new Identifier("kronhud", "speedhud");
     private final static NumberFormat FORMATTER = new DecimalFormat("#0.00");
-    private final BooleanOption horizontal = new BooleanOption("horizontal", ID.getPath(), true);
+    private final BooleanOption horizontal = new BooleanOption("axolotlclient.horizontal", ID.getPath(), true);
 
     @Override
     public Identifier getId() {

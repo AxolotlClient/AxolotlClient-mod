@@ -18,7 +18,7 @@ public class IRLTimeHud extends SimpleTextHudEntry {
     private DateTimeFormatter formatter = null;
     private boolean error = false;
 
-    private final StringOption format = new StringOption("dateformat", this::updateDateTimeFormatter, "HH:mm:ss");
+    private final StringOption format = new StringOption("axolotlclient.dateformat", this::updateDateTimeFormatter, "HH:mm:ss");
 
     @Override
     public Identifier getId() {

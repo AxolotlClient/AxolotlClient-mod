@@ -122,7 +122,9 @@ public class RenderUtil {
         GlStateManager.disableTexture();
         GlStateManager.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
         //GlStateManager.setShader(shaderSupplier);
-        shaderSupplier.get().render(((MinecraftClientAccessor)MinecraftClient.getInstance()).getTicker().tickDelta);
+        if(shaderSupplier.get() != null) {
+            shaderSupplier.get().render(((MinecraftClientAccessor) MinecraftClient.getInstance()).getTicker().tickDelta);
+        }
         bufferBuilder.begin(GL11.GL_QUADS, VertexFormats.POSITION_COLOR);
         bufferBuilder.vertex(x1, y2, 0.0f).color(r, g, b, a).next();
         bufferBuilder.vertex(x2, y2, 0.0f).color(r, g, b, a).next();

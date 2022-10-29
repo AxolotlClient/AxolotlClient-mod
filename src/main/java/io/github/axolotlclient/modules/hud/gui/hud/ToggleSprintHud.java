@@ -24,19 +24,19 @@ import java.util.Random;
 public class ToggleSprintHud extends SimpleTextHudEntry {
 
     public static final Identifier ID = new Identifier("kronhud", "togglesprint");
-    private final BooleanOption toggleSprint = new BooleanOption("toggleSprint", ID.getPath(), false);
-    private final BooleanOption toggleSneak = new BooleanOption("toggleSneak", ID.getPath(), false);
-    private final BooleanOption randomPlaceholder = new BooleanOption("randomPlaceholder", ID.getPath(), false);
-    private final StringOption placeholder = new StringOption("placeholder", ID.getPath(), "No keys pressed");
+    private final BooleanOption toggleSprint = new BooleanOption("axolotlclient.toggleSprint", false);
+    private final BooleanOption toggleSneak = new BooleanOption("axolotlclient.toggleSneak", false);
+    private final BooleanOption randomPlaceholder = new BooleanOption("axolotlclient.randomPlaceholder", false);
+    private final StringOption placeholder = new StringOption("axolotlclient.placeholder", "No keys pressed");
 
     private final KeyBinding sprintToggle = new KeyBinding("keys.kronhud.toggleSprint", Keyboard.KEY_K, "keys.category.kronhud.keys");
     private final KeyBinding sneakToggle = new KeyBinding("keys.kronhud.toggleSneak", Keyboard.KEY_I, "keys.category.kronhud.keys");
 
     @Getter
-    private final BooleanOption sprintToggled = new BooleanOption("sprintToggled", ID.getPath(), false);
+    private final BooleanOption sprintToggled = new BooleanOption("axolotlclient.sprintToggled", false);
     private boolean sprintWasPressed = false;
     @Getter
-    private final BooleanOption sneakToggled = new BooleanOption("sneakToggled", ID.getPath(), false);
+    private final BooleanOption sneakToggled = new BooleanOption("axolotlclient.sneakToggled", false);
     private boolean sneakWasPressed = false;
 
     private final List<String> texts = new ArrayList<>();
@@ -100,17 +100,17 @@ public class ToggleSprintHud extends SimpleTextHudEntry {
     public String getValue() {
 
         if (client.options.keySneak.isPressed()) {
-            return I18n.translate("texts.kronhud.togglesprint.sneaking_pressed");
+            return I18n.translate("axolotlclient.sneaking_pressed");
         }
         if (client.options.keySprint.isPressed()) {
-            return I18n.translate("texts.kronhud.togglesprint.sprinting_pressed");
+            return I18n.translate("axolotlclient.sprinting_pressed");
         }
 
         if (toggleSneak.get() && sneakToggled.get()) {
-            return I18n.translate("texts.kronhud.togglesprint.sneaking_toggled");
+            return I18n.translate("axolotlclient.sneaking_toggled");
         }
         if (toggleSprint.get() && sprintToggled.get()) {
-            return I18n.translate("texts.kronhud.togglesprint.sprinting_toggled");
+            return I18n.translate("axolotlclient.sprinting_toggled");
         }
         return getPlaceholder();
     }

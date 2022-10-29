@@ -39,12 +39,12 @@ public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionab
 
     public static final ScoreboardObjective placeholder = new ScoreboardObjective(placeholderScoreboard, "Scoreboard", ScoreboardCriterion.DUMMY);
 
-    private final ColorOption backgroundColor = new ColorOption("backgroundcolor", 0x4C000000);
-    private final ColorOption topColor = new ColorOption("topbackgroundcolor", 0x66000000);
-    private final IntegerOption topPadding = new IntegerOption("toppadding", ID.getPath(), 0, 0, 4);
-    private final BooleanOption scores = new BooleanOption("scores", true);
-    private final ColorOption scoreColor = new ColorOption("scorecolor", 0xFFFF5555);
-    private final EnumOption anchor = new EnumOption("anchor", AnchorPoint.values(), AnchorPoint.MIDDLE_RIGHT.toString());
+    private final ColorOption backgroundColor = new ColorOption("axolotlclient.backgroundcolor", 0x4C000000);
+    private final ColorOption topColor = new ColorOption("axolotlclient.topbackgroundcolor", 0x66000000);
+    private final IntegerOption topPadding = new IntegerOption("axolotlclient.toppadding", ID.getPath(), 0, 0, 4);
+    private final BooleanOption scores = new BooleanOption("axolotlclient.scores", true);
+    private final ColorOption scoreColor = new ColorOption("axolotlclient.scorecolor", 0xFFFF5555);
+    private final EnumOption anchor = new EnumOption("axolotlclient.anchor", AnchorPoint.values(), AnchorPoint.MIDDLE_RIGHT.toString());
 
     public ScoreboardHud() {
         super(200, 146, true);

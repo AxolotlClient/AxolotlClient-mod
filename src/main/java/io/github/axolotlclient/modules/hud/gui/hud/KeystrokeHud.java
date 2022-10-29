@@ -24,10 +24,10 @@ import java.util.Optional;
 public class KeystrokeHud extends TextHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "keystrokehud");
 
-    private final ColorOption pressedTextColor = new ColorOption("heldtextcolor", new Color(0xFF000000));
-    private final ColorOption pressedBackgroundColor = new ColorOption("heldbackgroundcolor", 0x64FFFFFF);
-    private final ColorOption pressedOutlineColor = new ColorOption("heldoutlinecolor",Color.BLACK);
-    private final BooleanOption mouseMovement = new BooleanOption("mousemovement", this::onMouseMovementOption, false);
+    private final ColorOption pressedTextColor = new ColorOption("axolotlclient.heldtextcolor", new Color(0xFF000000));
+    private final ColorOption pressedBackgroundColor = new ColorOption("axolotlclient.heldbackgroundcolor", 0x64FFFFFF);
+    private final ColorOption pressedOutlineColor = new ColorOption("axolotlclient.heldoutlinecolor",Color.BLACK);
+    private final BooleanOption mouseMovement = new BooleanOption("axolotlclient.mousemovement", this::onMouseMovementOption, false);
     private ArrayList<Keystroke> keystrokes;
     private static final MinecraftClient client = MinecraftClient.getInstance();
 
@@ -276,7 +276,7 @@ public class KeystrokeHud extends TextHudEntry {
 
         public Color getColor() {
 
-            return key.isPressed() ? Color.blend(backgroundColor.get(), pressedBackgroundColor.get(),
+            return key.wasPressed() ? Color.blend(backgroundColor.get(), pressedBackgroundColor.get(),
                     getPercentPressed()) :
                    Color.blend(
                            pressedBackgroundColor.get(),
@@ -286,7 +286,7 @@ public class KeystrokeHud extends TextHudEntry {
         }
 
         public Color getOutlineColor() {
-            return key.isPressed() ? Color.blend(outlineColor.get(), pressedOutlineColor.get(),
+            return key.wasPressed() ? Color.blend(outlineColor.get(), pressedOutlineColor.get(),
                     getPercentPressed()
             ) :
                    Color.blend(
@@ -297,7 +297,7 @@ public class KeystrokeHud extends TextHudEntry {
         }
 
         public Color getFGColor() {
-            return key.isPressed() ? Color.blend(textColor.get(), pressedTextColor.get(), getPercentPressed()) :
+            return key.wasPressed() ? Color.blend(textColor.get(), pressedTextColor.get(), getPercentPressed()) :
                    Color.blend(
                            pressedTextColor.get(),
                            textColor.get(),

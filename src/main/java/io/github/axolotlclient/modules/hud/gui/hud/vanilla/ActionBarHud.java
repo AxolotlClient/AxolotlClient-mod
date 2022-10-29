@@ -14,8 +14,8 @@ public class ActionBarHud extends TextHudEntry {
 
     public static final Identifier ID = new Identifier("kronhud", "actionbarhud");
 
-    public IntegerOption timeShown = new IntegerOption("timeshown", ID.getPath(), 60, 40, 300);
-    public BooleanOption customTextColor = new BooleanOption("customtextcolor", ID.getPath(), false);
+    public IntegerOption timeShown = new IntegerOption("axolotlclient.timeshown", ID.getPath(), 60, 40, 300);
+    public BooleanOption customTextColor = new BooleanOption("axolotlclient.customtextcolor", ID.getPath(), false);
 
     @Getter
     private String actionBar;

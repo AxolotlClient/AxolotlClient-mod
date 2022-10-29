@@ -1,16 +1,11 @@
 package io.github.axolotlclient.util;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.Window;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.decoration.ItemFrameEntity;
-import net.minecraft.entity.predicate.EntityPredicate;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.ScoreboardPlayerScore;
@@ -25,6 +20,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.lwjgl.opengl.GL11;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 
@@ -156,7 +152,7 @@ public class Util {
                 .getEntitiesIn(
                         entity,
                         box,
-                        predicate);
+                        predicate::test);
         double g = d;
 
         for(int j = 0; j < list.size(); ++j) {
@@ -183,21 +179,19 @@ public class Util {
                         vec3d4 = blockHitResult.pos;
                         g = k;
                     }
-                    return blockHitResult;
                 }
             }
         }
-        return null;
 
 
-        /*if (this.targetedEntity != null && bl && vec3d.distanceTo(vec3d4) > 3.0) {
-            this.targetedEntity = null;
-            this.client.result = new BlockHitResult(BlockHitResult.Type.MISS, vec3d4, null, new BlockPos(vec3d4));
+        if (targetedEntity != null && vec3d.distanceTo(vec3d4) > 3.0) {
+            return new BlockHitResult(BlockHitResult.Type.MISS, vec3d4, null, new BlockPos(vec3d4));
         }
 
-        if (this.targetedEntity != null && (g < e || this.client.result == null)) {
+        if (targetedEntity != null && (g < d)) {
             return new BlockHitResult(targetedEntity, vec3d4);
-        }*/
+        }
+        return null;
     }
 
     public static List<String> getSidebar() {

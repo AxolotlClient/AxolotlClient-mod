@@ -22,14 +22,14 @@ public class CompassHud extends TextHudEntry implements DynamicallyPositionable 
 
     private final IntegerOption widthOption = new IntegerOption("width", this::updateWidth, width, 100, 800);
 
-    private final ColorOption lookingBox = new ColorOption("lookingbox", new Color(0x80000000));
-    private final ColorOption degreesColor = new ColorOption("degreescolor",  new Color(-1));
-    private final ColorOption majorIndicatorColor = new ColorOption("majorindicator", new Color(-1));
-    private final ColorOption minorIndicatorColor = new ColorOption("minorindicator", new Color(0xCCFFFFFF));
-    private final ColorOption cardinalColor = new ColorOption("cardinalcolor", Color.WHITE);
-    private final ColorOption semiCardinalColor = new ColorOption("semicardinalcolor", new Color(0xFFAAAAAA));
-    private final BooleanOption invert = new BooleanOption("invert_direction", false);
-    private final BooleanOption showDegrees = new BooleanOption("showdegrees", true);
+    private final ColorOption lookingBox = new ColorOption("axolotlclient.lookingbox", new Color(0x80000000));
+    private final ColorOption degreesColor = new ColorOption("axolotlclient.degreescolor",  new Color(-1));
+    private final ColorOption majorIndicatorColor = new ColorOption("axolotlclient.majorindicator", new Color(-1));
+    private final ColorOption minorIndicatorColor = new ColorOption("axolotlclient.minorindicator", new Color(0xCCFFFFFF));
+    private final ColorOption cardinalColor = new ColorOption("axolotlclient.cardinalcolor", Color.WHITE);
+    private final ColorOption semiCardinalColor = new ColorOption("axolotlclient.semicardinalcolor", new Color(0xFFAAAAAA));
+    private final BooleanOption invert = new BooleanOption("axolotlclient.invert_direction", false);
+    private final BooleanOption showDegrees = new BooleanOption("axolotlclient.showdegrees", true);
 
     private void updateWidth(int newWidth){
         setWidth(newWidth);

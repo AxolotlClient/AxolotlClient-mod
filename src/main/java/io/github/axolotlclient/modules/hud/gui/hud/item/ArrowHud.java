@@ -17,9 +17,8 @@ public class ArrowHud extends TextHudEntry {
 
     public static final Identifier ID = new Identifier("kronhud", "arrowhud");
     private int arrows = 0;
-    private final BooleanOption dynamic = new BooleanOption("dynamic", false);
-    private final BooleanOption allArrowTypes = new BooleanOption("allArrowTypes", false);
-    private ItemStack currentArrow = new ItemStack(Items.ARROW);
+    private final BooleanOption dynamic = new BooleanOption("axolotlclient.dynamic", false);
+    private final ItemStack currentArrow = new ItemStack(Items.ARROW);
 
     public ArrowHud() {
         super(20, 30, true);
@@ -66,7 +65,6 @@ public class ArrowHud extends TextHudEntry {
     public List<OptionBase<?>> getConfigurationOptions() {
         List<OptionBase<?>> options = super.getConfigurationOptions();
         options.add(dynamic);
-        options.add(allArrowTypes);
         return options;
     }
 
