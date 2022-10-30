@@ -184,12 +184,6 @@ public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
         trueBounds = new Rectangle(scaledX, scaledY, (int) (getWidth() * getScale()), (int) (getHeight() * getScale()));
     }
 
-    /*@Override
-    public Tab toTab() {
-        // Need to cast KronConfig to Option
-        return Tab.ofOptions(getId(), getNameKey(), getConfigurationOptions().stream().map((o -> (Option<?>) o)).collect(Collectors.toList()));
-    }*/
-
     /**
      * Returns a list of options that should be shown in configuration screens
      *

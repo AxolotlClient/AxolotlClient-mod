@@ -51,15 +51,13 @@ public class HudManager extends AbstractModule {
         });
     }
 
-    static KeyBinding key = new KeyBinding("key.openHud", Keyboard.KEY_RSHIFT, "category.axolotlclient");
+    static KeyBinding key = new KeyBinding("key.openHud", Keyboard.KEY_RSHIFT, "axolotlclient.category.axolotlclient");
 
     public void init(){
 
         KeyBindingHelper.registerKeyBinding(key);
 
         AxolotlClient.CONFIG.addCategory(hudCategory);
-
-        HudRenderCallback.EVENT.register(this::render);
 
         add(new PingHud());
         add(new FPSHud());

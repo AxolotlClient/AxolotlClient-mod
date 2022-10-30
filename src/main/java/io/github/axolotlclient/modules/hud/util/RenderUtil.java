@@ -133,7 +133,6 @@ public class RenderUtil {
         Tessellator.getInstance().draw();
         GlStateManager.enableTexture();
         GlStateManager.disableBlend();
-        GlStateManager.color3f(1, 1, 1);
     }
 
     public int colorPreRender(Color color){

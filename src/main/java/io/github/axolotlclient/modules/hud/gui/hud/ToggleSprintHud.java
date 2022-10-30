@@ -29,8 +29,8 @@ public class ToggleSprintHud extends SimpleTextHudEntry {
     private final BooleanOption randomPlaceholder = new BooleanOption("axolotlclient.randomPlaceholder", false);
     private final StringOption placeholder = new StringOption("axolotlclient.placeholder", "No keys pressed");
 
-    private final KeyBinding sprintToggle = new KeyBinding("key.toggleSprint", Keyboard.KEY_K, "category.axolotlclient");
-    private final KeyBinding sneakToggle = new KeyBinding("key.toggleSneak", Keyboard.KEY_I, "category.axolotlclient");
+    private final KeyBinding sprintToggle = new KeyBinding("key.toggleSprint", Keyboard.KEY_K, "axolotlclient.category.axolotlclient");
+    private final KeyBinding sneakToggle = new KeyBinding("key.toggleSneak", Keyboard.KEY_I, "axolotlclient.category.axolotlclient");
 
     @Getter
     private final BooleanOption sprintToggled = new BooleanOption("axolotlclient.sprintToggled", false);

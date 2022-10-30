@@ -35,6 +35,7 @@ public class BossBarHud extends TextHudEntry implements DynamicallyPositionable 
 
     @Override
     public void renderComponent(float delta) {
+        GlStateManager.enableAlphaTest();
         DrawPosition pos = getPos();
         if (BossBar.name != null && BossBar.framesToLive > 0) {
             client.getTextureManager().bindTexture(BARS_TEXTURE);

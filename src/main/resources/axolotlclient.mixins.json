@@ -20,7 +20,6 @@
     "EntityRenderDispatcherMixin",
     "EntityRendererMixin",
     "GameMenuScreenMixin",
-    "GameRendererAccessor",
     "GameRendererMixin",
     "GlStateManagerMixin",
     "HandledScreenMixin",

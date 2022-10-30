@@ -47,15 +47,15 @@ public class CompassHud extends TextHudEntry implements DynamicallyPositionable 
 
     @Override
     public void renderComponent(float delta) {
-        renderCompass(delta);
+        renderCompass();
     }
 
     @Override
     public void renderPlaceholderComponent(float delta) {
-        renderCompass(delta);
+        renderCompass();
     }
 
-    public void renderCompass(float delta) {
+    public void renderCompass() {
         // N = 0
         // E = 90
         // S = 180
@@ -109,10 +109,11 @@ public class CompassHud extends TextHudEntry implements DynamicallyPositionable 
             }
 
             float targetOpacity = 1 - Math.abs((halfWidth - trueDist)) / halfWidth;
+            //System.out.println(targetOpacity);
             GlStateManager.color4f(1, 1, 1, targetOpacity);
             if (indicator == Indicator.CARDINAL) {
                 // We have to call .color() here so that transparency stays
-                RenderUtil.drawRectangle(innerX, y, 1, 9, majorIndicatorColor.get().getAsInt());
+                RenderUtil.drawRectangle(innerX, y, 1, 9, majorIndicatorColor.get().withAlpha((int) (majorIndicatorColor.get().getAlpha() * targetOpacity)).getAsInt());
                 Color color = cardinalColor.get();
                 color = color.withAlpha((int) (color.getAlpha() * targetOpacity));
                 if (color.getAlpha() > 0) {
@@ -129,7 +130,7 @@ public class CompassHud extends TextHudEntry implements DynamicallyPositionable 
                 }
             } else {
                 // We have to call .color() here so that transparency stays
-                RenderUtil.drawRectangle(innerX, y, 1, 5, minorIndicatorColor.get().getAsInt());
+                RenderUtil.drawRectangle(innerX, y, 1, 5, minorIndicatorColor.get().withAlpha((int) (minorIndicatorColor.get().getAlpha() * targetOpacity)).getAsInt());
             }
         }
         GlStateManager.color4f(1, 1, 1, 1);

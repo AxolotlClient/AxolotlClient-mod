@@ -75,18 +75,18 @@ public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionab
 
         ScoreboardObjective scoreboardObjective2 = scoreboardObjective != null ? scoreboardObjective : scoreboard.getObjectiveForSlot(1);
         if (scoreboardObjective2 != null) {
-            this.renderScoreboardSidebar(scoreboardObjective2);
+            this.renderScoreboardSidebar(scoreboardObjective2, false);
         }
     }
 
     @Override
     public void renderPlaceholderComponent(float delta) {
-        renderScoreboardSidebar(placeholder);
+        renderScoreboardSidebar(placeholder, true);
     }
 
     // Abusing this could break some stuff/could allow for unfair advantages. The goal is not to do this, so it won't
     // show any more information than it would have in vanilla.
-    private void renderScoreboardSidebar(ScoreboardObjective objective) {
+    private void renderScoreboardSidebar(ScoreboardObjective objective, boolean placeholder) {
         Scoreboard scoreboard = objective.getScoreboard();
         Collection<ScoreboardPlayerScore> scores = scoreboard.getAllPlayerScores(objective);
         List<ScoreboardPlayerScore> filteredScores = scores.stream().filter((testScore) ->
@@ -153,7 +153,7 @@ public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionab
             String score = String.valueOf(scoreboardPlayerScore2.getScore());
             int relativeY = scoreY - num * 9 + topPadding.get() * 2;
 
-            if (background.get() && backgroundColor.get().getAlpha() > 0) {
+            if (background.get() && backgroundColor.get().getAlpha() > 0 && !placeholder) {
                 if (num == scoresSize) {
                     RenderUtil.drawRectangle(
                             textOffset, relativeY - 1, maxWidth, 10, backgroundColor.get().getAsInt()
@@ -182,7 +182,7 @@ public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionab
             }
             if (num == scoresSize) {
                 // Draw the title
-                if (background.get()) {
+                if (background.get() && !placeholder) {
                     RenderUtil.drawRectangle(textOffset, relativeY - 10 - topPadding.get() * 2 - 1, maxWidth, 10 + topPadding.get() * 2, topColor.get());
                 }
                 float title = (renderX + (maxWidth - displayNameWidth) / 2F);
@@ -194,7 +194,7 @@ public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionab
             }
         }
 
-        if (outline.get() && outlineColor.get().getAlpha() > 0) {
+        if (outline.get() && outlineColor.get().getAlpha() > 0 && !placeholder) {
             RenderUtil.drawOutline(textOffset, bounds.y(), maxWidth, fullHeight + 1, outlineColor.get());
         }
     }

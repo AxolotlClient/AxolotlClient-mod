@@ -27,7 +27,7 @@ public class ChatHud extends TextHudEntry {
 
     public static Identifier ID = new Identifier("axolotlclient", "chathud");
     public BooleanOption background = new BooleanOption("axolotlclient.background", "chathud", true);
-    public ColorOption bgColor = new ColorOption("axolotlclient.bgColor", "#40000000");
+    public ColorOption bgColor = new ColorOption("axolotlclient.bgcolor", "#40000000");
 
     public IntegerOption chatHistory = new IntegerOption("axolotlclient.chatHistoryLength", 100, 10, 5000);
     public ColorOption scrollbarColor = new ColorOption("axolotlclient.scrollbarColor", "#70CCCCCC");

@@ -64,7 +64,7 @@ dependencies {
 	implementation('org.apache.logging.log4j:log4j-core:2.19.0')
 
 	modImplementation include("com.github.moehreag:search-in-resources:1.0.2")
-	modImplementation include('io.github.axolotlclient:AxolotlClient-config:1.0.9-beta.8-1+1.8.9')
+	modImplementation include('io.github.axolotlclient:AxolotlClient-config:1.0.9+1.8.9')
 }
 
 // More hacks that make mac os work

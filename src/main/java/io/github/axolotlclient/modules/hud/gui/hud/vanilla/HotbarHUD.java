@@ -10,6 +10,7 @@ import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HotbarHUD extends TextHudEntry {
@@ -30,11 +31,15 @@ public class HotbarHUD extends TextHudEntry {
 
     @Override
     public void renderComponent(float delta) {
+        PlayerEntity playerEntity = (PlayerEntity)this.client.getCameraEntity();
+        if(playerEntity == null || playerEntity.inventory == null || playerEntity.inventory.main == null) {
+            return;
+        }
         DrawPosition pos = getPos();
         GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.enableBlend();
         this.client.getTextureManager().bindTexture(WIDGETS_TEXTURE);
-        PlayerEntity playerEntity = (PlayerEntity)this.client.getCameraEntity();
+
         float f = this.zOffset;
         this.zOffset = -90.0F;
         this.drawTexture(pos.x, pos.y, 0, 0, 182, 22);
@@ -47,8 +52,10 @@ public class HotbarHUD extends TextHudEntry {
         for(int j = 0; j < 9; ++j) {
             int k = pos.x + j * 20 + 1;
             int l = pos.y+3;
-            ItemUtil.renderGuiItemModel(getScale(), playerEntity.inventory.main[j], k, l);
-            ItemUtil.renderGuiItemOverlay(MinecraftClient.getInstance().textRenderer, playerEntity.inventory.main[j], k, l, ""+playerEntity.inventory.main[j].count, textColor.get().getAsInt(), shadow.get());
+            if(playerEntity.inventory.main[j] != null) {
+                ItemUtil.renderGuiItemModel(getScale(), playerEntity.inventory.main[j], k, l);
+                ItemUtil.renderGuiItemOverlay(MinecraftClient.getInstance().textRenderer, playerEntity.inventory.main[j], k, l, "" + playerEntity.inventory.main[j].count, textColor.get().getAsInt(), shadow.get());
+            }
         }
 
         DiffuseLighting.disable();
@@ -79,8 +86,9 @@ public class HotbarHUD extends TextHudEntry {
 
     @Override
     public List<OptionBase<?>> getConfigurationOptions() {
-        List<OptionBase<?>> list = super.getConfigurationOptions();
+        List<OptionBase<?>> list = new ArrayList<>();
         list.add(enabled);
+        list.add(shadow);
         return list;
     }
 }

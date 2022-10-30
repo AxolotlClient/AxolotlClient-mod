@@ -11,7 +11,6 @@ import io.github.axolotlclient.modules.hud.gui.component.DynamicallyPositionable
 import io.github.axolotlclient.modules.hud.gui.layout.AnchorPoint;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.util.Util;
-import lombok.AllArgsConstructor;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.EnderChestBlock;
 import net.minecraft.block.HopperBlock;
@@ -32,8 +31,6 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
     private final ColorOption defaultColor = new ColorOption("axolotlclient.defaultcolor", Color.WHITE);
     private final ColorOption entityColor = new ColorOption("axolotlclient.entitycolor", Color.SELECTOR_RED);
     private final ColorOption containerColor = new ColorOption("axolotlclient.blockcolor",Color.SELECTOR_BLUE);
-    private final ColorOption attackIndicatorBackgroundColor = new ColorOption("axolotlclient.attackindicatorbg", new Color(0xFF141414));
-    private final ColorOption attackIndicatorForegroundColor = new ColorOption("axolotlclient.attackindicatorfg", Color.WHITE);
 
     public CrosshairHud() {
         super(15, 15);
@@ -56,6 +53,7 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
         GlStateManager.enableAlphaTest();
         scale();
 
+        GlStateManager.pushMatrix();
         Color color = getColor();
         GlStateManager.color4f((float) color.getRed() / 255, (float) color.getGreen() / 255, (float) color.getBlue() / 255, 1F);
         if(color==defaultColor.get()) {
@@ -83,7 +81,8 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
                     (int) (((Util.getWindow().getScaledHeight() / getScale()) - 14) / 2), 0, 0, 16, 16);
 
 
-        } else if (type.get().equals(Crosshair.DIRECTION.toString()))
+        }
+        GlStateManager.color4f(1, 1, 1, 1);
         GlStateManager.blendFuncSeparate(770, 771, 1, 0);
         GlStateManager.disableBlend();
         GlStateManager.popMatrix();
@@ -133,8 +132,6 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
         options.add(defaultColor);
         options.add(entityColor);
         options.add(containerColor);
-        options.add(attackIndicatorBackgroundColor);
-        options.add(attackIndicatorForegroundColor);
         return options;
     }
 
@@ -143,14 +140,9 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
         return AnchorPoint.MIDDLE_MIDDLE;
     }
 
-    @AllArgsConstructor
     public enum Crosshair {
-        CROSS("cross"),
-        DOT("dot"),
-        DIRECTION("direction"),
-        TEXTURE("texture");
-
-        private final String value;
+        CROSS,
+        DOT,
+        TEXTURE
     }
-
 }

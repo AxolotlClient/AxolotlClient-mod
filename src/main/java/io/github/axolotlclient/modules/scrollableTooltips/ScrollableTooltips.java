@@ -16,7 +16,7 @@ public class ScrollableTooltips extends AbstractModule {
     public int tooltipOffsetX;
     public int tooltipOffsetY;
 
-    protected KeyBinding key = new KeyBinding("axolotlclient.key.scrollHorizontally", Keyboard.KEY_LSHIFT, "category.axolotlclient");
+    protected KeyBinding key = new KeyBinding("axolotlclient.key.scrollHorizontally", Keyboard.KEY_LSHIFT, "axolotlclient.category.axolotlclient");
 
     private static final ScrollableTooltips instance = new ScrollableTooltips();
 

@@ -50,7 +50,7 @@ public class Zoom extends AbstractModule {
 
         AxolotlClient.CONFIG.rendering.addSubCategory(zoom);
 
-        keyBinding = new KeyBinding("axolotlclient.key.zoom", 46, "category.axolotlclient");
+        keyBinding = new KeyBinding("axolotlclient.key.zoom", 46, "axolotlclient.category.axolotlclient");
         KeyBindingHelper.registerKeyBinding(keyBinding);
         active = false;
     }

@@ -22,6 +22,11 @@ public abstract class InGameHudMixin {
 
     @Shadow protected abstract boolean showCrosshair();
 
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;getScoreboard()Lnet/minecraft/scoreboard/Scoreboard;"))
+    private void onHudRender(float tickDelta, CallbackInfo ci){
+        HudManager.getInstance().render(MinecraftClient.getInstance(), tickDelta);
+    }
+
     @Inject(method = "renderScoreboardObjective", at = @At("HEAD"), cancellable = true)
     public void customScoreBoard(ScoreboardObjective objective, Window window, CallbackInfo ci){
         ScoreboardHud hud = (ScoreboardHud) HudManager.getInstance().get(ScoreboardHud.ID);
