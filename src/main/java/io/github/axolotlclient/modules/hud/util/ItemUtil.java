@@ -4,6 +4,7 @@ import com.mojang.blaze3d.lighting.DiffuseLighting;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlclientConfig.Color;
+import lombok.experimental.UtilityClass;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -27,6 +28,7 @@ import java.util.Optional;
  * @license GPL-3.0
  */
 
+@UtilityClass
 public class ItemUtil {
 
 	public static List<ItemStorage> storageFromItem(List<ItemStack> items) {
@@ -134,38 +136,41 @@ public class ItemUtil {
 		return list;
 	}
 
-	// Minecraft has decided to not use matrixstack's in their itemrender class. So this is implementing itemRenderer stuff with matrices.
-
-	public static void renderGuiItemModel(float scale, ItemStack stack, int x, int y) {
-		BakedModel model = MinecraftClient.getInstance().getItemRenderer().getHeldItemModel(stack, null, null, 0);
-		MinecraftClient.getInstance().getTextureManager().getTexture(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).setFilter(false, false);
+	public void renderGuiItemModel(float scale, ItemStack stack, float x, float y) {
+		MinecraftClient client = MinecraftClient.getInstance();
+		BakedModel model = client.getItemRenderer().getHeldItemModel(stack, null, null, (int) (x * y));
+		client.getTextureManager().getTexture(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).setFilter(false, false);
 		RenderSystem.setShaderTexture(0, PlayerScreenHandler.BLOCK_ATLAS_TEXTURE);
 		RenderSystem.enableBlend();
 		RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-		MatrixStack matrixStack = RenderSystem.getModelViewStack();
-		matrixStack.push();
-		matrixStack.translate((double)x, (double)y, (double)(100.0F + MinecraftClient.getInstance().getItemRenderer().zOffset));
-		matrixStack.translate(8.0, 8.0, 0.0);
-		matrixStack.scale(1.0F, -1.0F, 1.0F);
-		matrixStack.scale(16.0F, 16.0F, 16.0F);
-		matrixStack.scale(scale, scale, 1);
+		MatrixStack modelStack = RenderSystem.getModelViewStack();
+		modelStack.push();
+		modelStack.scale(scale, scale, 0);
+		modelStack.translate(x, y, (100.0F + client.getItemRenderer().zOffset));
+		modelStack.translate(8.0D, 8.0D, 0.0D);
+		modelStack.scale(1.0F, -1.0F, 1.0F);
+		modelStack.scale(16.0F, 16.0F, 16.0F);
+
 		RenderSystem.applyModelViewMatrix();
-		MatrixStack matrixStack2 = new MatrixStack();
+		MatrixStack nextStack = new MatrixStack();
+
 		VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
 		boolean bl = !model.isSideLit();
 		if (bl) {
 			DiffuseLighting.setupFlatGuiLighting();
 		}
 
-		MinecraftClient.getInstance().getItemRenderer().renderItem(stack, ModelTransformation.Mode.GUI, false, matrixStack2, immediate, 15728880, OverlayTexture.DEFAULT_UV, model);
+		client.getItemRenderer().renderItem(
+				stack, ModelTransformation.Mode.GUI, false, nextStack, immediate, 15728880, OverlayTexture.DEFAULT_UV, model
+		);
 		immediate.draw();
 		RenderSystem.enableDepthTest();
 		if (bl) {
 			DiffuseLighting.setup3DGuiLighting();
 		}
 
-		matrixStack.pop();
+		modelStack.pop();
 		RenderSystem.applyModelViewMatrix();
 	}
 
