@@ -34,6 +34,11 @@ public abstract class InGameHudMixin {
 
 	@Shadow private int overlayRemaining;
 
+	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;getScoreboard()Lnet/minecraft/scoreboard/Scoreboard;"))
+	private void onHudRender(MatrixStack matrices, float tickDelta, CallbackInfo ci){
+		HudManager.getInstance().render(matrices, tickDelta);
+	}
+
 	@Inject(method = "renderStatusEffectOverlay", at = @At("HEAD"), cancellable = true)
 	public void renderStatusEffect(MatrixStack matrices, CallbackInfo ci) {
 		PotionsHud hud = (PotionsHud) HudManager.getInstance().get(PotionsHud.ID);

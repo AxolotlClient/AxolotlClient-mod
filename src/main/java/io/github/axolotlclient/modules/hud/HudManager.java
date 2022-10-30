@@ -64,8 +64,6 @@ public class HudManager extends AbstractModule {
 
         AxolotlClient.CONFIG.addCategory(hudCategory);
 
-        HudRenderCallback.EVENT.register(this::render);
-
         add(new PingHud());
         add(new FPSHud());
         add(new CPSHud());
