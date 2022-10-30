@@ -23,7 +23,7 @@ public class Hooks {
     }));
 
     public interface ChangeBind {
-        void setBoundKey(KeyBinding boundKey);
+        void setBoundKey(int boundKey);
     }
 
     public static final Event<ChangeBind> KEYBIND_CHANGE = EventFactory.createArrayBacked(ChangeBind.class, listeners -> ((key) -> {

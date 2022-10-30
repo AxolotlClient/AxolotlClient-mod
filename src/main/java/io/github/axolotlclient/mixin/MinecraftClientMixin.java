@@ -122,7 +122,9 @@ public abstract class MinecraftClientMixin {
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getTime()J", ordinal = 0))
     public void onMouseButton(CallbackInfo ci){
-        Hooks.MOUSE_INPUT.invoker().onMouseButton(Mouse.getEventButton());
+        if (Mouse.getEventButtonState()) {
+            Hooks.MOUSE_INPUT.invoker().onMouseButton(Mouse.getEventButton());
+        }
     }
 
     @Inject(method = "connect(Lnet/minecraft/client/world/ClientWorld;Ljava/lang/String;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;flipPlayer(Lnet/minecraft/entity/player/PlayerEntity;)V"))

@@ -14,8 +14,8 @@ import java.util.List;
 public class CPSHud extends SimpleTextHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "cpshud");
 
-    private final BooleanOption fromKeybindings = new BooleanOption("axolotlclient.cpskeybind", ID.getPath(), false);
-    private final BooleanOption rmb = new BooleanOption("axolotlclient.rightcps", ID.getPath(), false);
+    private final BooleanOption fromKeybindings = new BooleanOption("axolotlclient.cpskeybind", false);
+    private final BooleanOption rmb = new BooleanOption("axolotlclient.rightcps", false);
 
     public CPSHud() {
         super();

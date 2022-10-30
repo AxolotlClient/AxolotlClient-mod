@@ -1,10 +1,15 @@
 package io.github.axolotlclient.modules.hud.util;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import lombok.experimental.UtilityClass;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.DiffuseLighting;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexFormats;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Formatting;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,6 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @license GPL-3.0
  */
 
+@UtilityClass
 public class ItemUtil {
 
 	public static int getTotal(MinecraftClient client, ItemStack stack) {
@@ -27,7 +33,7 @@ public class ItemUtil {
 		}
 		AtomicInteger count = new AtomicInteger();
 		item.forEach(itemStack -> {
-			if (itemStack != null && itemStack.getItem() == stack.getItem()){
+			if (itemStack != null && stack != null && itemStack.getItem() == stack.getItem()){
 				count.addAndGet(itemStack.count);
 			}
 		});
@@ -130,7 +136,7 @@ public class ItemUtil {
 
 		DiffuseLighting.enable();
 		GlStateManager.pushMatrix();
-		MinecraftClient.getInstance().getItemRenderer().renderInGuiWithOverrides(stack, x+2, y);
+		MinecraftClient.getInstance().getItemRenderer().renderInGuiWithOverrides(stack, x, y);
 		GlStateManager.popMatrix();
 	}
 
@@ -139,9 +145,53 @@ public class ItemUtil {
 		DiffuseLighting.enable();
 		GlStateManager.pushMatrix();
 		GlStateManager.color4f(textColor >> 24 & 0xff, textColor >> 16 & 0xff, textColor >> 8 & 0xff , textColor & 0xff);
-		MinecraftClient.getInstance().getItemRenderer().renderGuiItemOverlay(renderer, stack, x+2, y, null);
+		if (stack != null) {
+			if (stack.count != 1 || countLabel != null) {
+				String string = countLabel == null ? String.valueOf(stack.count) : countLabel;
+				if (countLabel == null && stack.count < 1) {
+					string = Formatting.RED + String.valueOf(stack.count);
+				}
+
+				GlStateManager.disableLighting();
+				GlStateManager.disableDepthTest();
+				GlStateManager.disableBlend();
+				renderer.draw(string, (float)(x + 19 - 2 - renderer.getStringWidth(string)), (float)(y + 6 + 3), 16777215, shadow);
+				GlStateManager.enableLighting();
+				GlStateManager.enableDepthTest();
+			}
+
+			if (stack.isDamaged()) {
+				int i = (int)Math.round(13.0 - (double)stack.getDamage() * 13.0 / (double)stack.getMaxDamage());
+				int j = (int)Math.round(255.0 - (double)stack.getDamage() * 255.0 / (double)stack.getMaxDamage());
+				GlStateManager.disableLighting();
+				GlStateManager.disableDepthTest();
+				GlStateManager.disableTexture();
+				GlStateManager.disableAlphaTest();
+				GlStateManager.disableBlend();
+				Tessellator tessellator = Tessellator.getInstance();
+				BufferBuilder bufferBuilder = tessellator.getBuffer();
+				renderGuiQuad(bufferBuilder, x + 2, y + 13, 13, 2, 0, 0, 0, 255);
+				renderGuiQuad(bufferBuilder, x + 2, y + 13, 12, 1, (255 - j) / 4, 64, 0, 255);
+				renderGuiQuad(bufferBuilder, x + 2, y + 13, i, 1, 255 - j, j, 0, 255);
+				GlStateManager.enableBlend();
+				GlStateManager.enableAlphaTest();
+				GlStateManager.enableTexture();
+				GlStateManager.enableLighting();
+				GlStateManager.enableDepthTest();
+			}
+
+		}
 		GlStateManager.popMatrix();
 
+	}
+
+	private static void renderGuiQuad(BufferBuilder buffer, int x, int y, int width, int height, int red, int green, int blue, int alpha) {
+		buffer.begin(7, VertexFormats.POSITION_COLOR);
+		buffer.vertex((double)(x + 0), (double)(y + 0), 0.0).color(red, green, blue, alpha).next();
+		buffer.vertex((double)(x + 0), (double)(y + height), 0.0).color(red, green, blue, alpha).next();
+		buffer.vertex((double)(x + width), (double)(y + height), 0.0).color(red, green, blue, alpha).next();
+		buffer.vertex((double)(x + width), (double)(y + 0), 0.0).color(red, green, blue, alpha).next();
+		Tessellator.getInstance().draw();
 	}
 
 	public static class ItemStorage {
