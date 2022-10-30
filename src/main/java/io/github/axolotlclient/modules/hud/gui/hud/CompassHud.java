@@ -67,8 +67,6 @@ public class CompassHud extends TextHudEntry implements DynamicallyPositionable 
         float degrees = (client.player.yaw + 180) % 360;
         if (degrees < -180) {
             degrees += 360;
-        } else if (degrees > 180){
-            degrees-=360;
         }
         float start = degrees - 150 + 360;
 //        float end = degrees + 150 + 360;

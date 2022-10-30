@@ -20,7 +20,7 @@ public class DefaultOptions {
     }
 
     public static DoubleOption getScale(HudEntry entry) {
-        return new DoubleOption("axolotlclient.scale", value -> entry.onBoundsUpdate(), 1, 0, 5);
+        return new DoubleOption("axolotlclient.scale", value -> entry.onBoundsUpdate(), 1, 0, 2);
     }
 
     public static BooleanOption getEnabled() {

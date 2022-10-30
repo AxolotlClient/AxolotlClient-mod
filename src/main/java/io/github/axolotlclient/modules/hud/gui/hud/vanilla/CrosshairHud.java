@@ -51,9 +51,9 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
         if (!(client.options.perspective == 0) && !showInF5.get()) return;
 
         GlStateManager.enableAlphaTest();
-        scale();
 
         GlStateManager.pushMatrix();
+        scale();
         Color color = getColor();
         GlStateManager.color4f((float) color.getRed() / 255, (float) color.getGreen() / 255, (float) color.getBlue() / 255, 1F);
         if(color==defaultColor.get()) {
