@@ -1,5 +1,6 @@
 package io.github.axolotlclient.modules.hud.gui.hud.vanilla;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlclientConfig.Color;
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
@@ -10,7 +11,6 @@ import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.gui.component.DynamicallyPositionable;
 import io.github.axolotlclient.modules.hud.gui.layout.AnchorPoint;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
-import io.github.axolotlclient.modules.hud.util.DrawUtil;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import io.github.axolotlclient.modules.hud.util.RenderUtil;
 import lombok.AllArgsConstructor;
@@ -52,7 +52,7 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
 
     @Override
     public double getDefaultY() {
-        return 0.5F;
+        return 0.5;
     }
 
     @Override
@@ -67,6 +67,19 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
         Color color = getColor();
         AttackIndicator indicator = this.client.options.getAttackIndicator().get();
 
+        RenderSystem.enableBlend();
+
+        if(color == defaultColor.get() && !type.get().equals(Crosshair.DIRECTION.toString())){
+            RenderSystem.blendFuncSeparate(
+                    GlStateManager.SourceFactor.ONE_MINUS_DST_COLOR,
+                    GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR,
+                    GlStateManager.SourceFactor.ONE,
+                    GlStateManager.DestFactor.ZERO
+            );
+        } else {
+            RenderSystem.disableBlend();
+        }
+
         if (type.get().equals(Crosshair.DOT.toString())) {
             fillRect(matrices, new Rectangle(pos.x() + (getWidth() / 2) - 2, pos.y() + (getHeight() / 2) - 2, 3, 3), color);
         } else if (type.get().equals(Crosshair.CROSS.toString())) {
@@ -78,10 +91,10 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
             Camera camera = this.client.gameRenderer.getCamera();
             MatrixStack matrixStack = RenderSystem.getModelViewStack();
             matrixStack.push();
-            matrixStack.translate(getRawX() + ((float) getWidth() / 2), getRawY() + ((float) getHeight() / 2), 0);
+            matrixStack.translate(client.getWindow().getScaledWidth()/2F, client.getWindow().getScaledHeight()/2F, 0);
             matrixStack.multiply(Vec3f.NEGATIVE_X.getDegreesQuaternion(camera.getPitch()));
             matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(camera.getYaw()));
-            matrixStack.scale(-getScale(), -getScale(), getScale());
+            matrixStack.scale(-getScale(), -getScale(), -getScale());
             RenderSystem.applyModelViewMatrix();
             RenderSystem.renderCrosshair(10);
             matrixStack.pop();
@@ -137,12 +150,13 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
                 );
             }
         }
+        RenderSystem.disableBlend();
         matrices.pop();
     }
 
     public Color getColor() {
         HitResult hit = client.crosshairTarget;
-        if (hit.getType() == null) {
+        if (hit == null || hit.getType() == null) {
             return defaultColor.get();
         } else if (hit.getType() == HitResult.Type.ENTITY) {
             return entityColor.get();
