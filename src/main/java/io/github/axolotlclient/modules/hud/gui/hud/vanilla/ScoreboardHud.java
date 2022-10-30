@@ -7,12 +7,15 @@ import io.github.axolotlclient.AxolotlclientConfig.options.*;
 import io.github.axolotlclient.modules.hud.gui.component.DynamicallyPositionable;
 import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
 import io.github.axolotlclient.modules.hud.gui.layout.AnchorPoint;
+import io.github.axolotlclient.modules.hud.util.DefaultOptions;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import io.github.axolotlclient.modules.hud.util.RenderUtil;
+import io.github.axolotlclient.util.Util;
 import net.minecraft.scoreboard.*;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -21,10 +24,9 @@ import java.util.stream.Collectors;
 public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionable {
 
     public static final Identifier ID = new Identifier("kronhud", "scoreboardhud");
-    private static final Scoreboard placeholderScoreboard = new Scoreboard();
-
-    static {
-        ScoreboardObjective objective = placeholderScoreboard.method_4884("placeholder", ScoreboardCriterion.DUMMY);
+    private final ScoreboardObjective placeholder = Util.make(() -> {
+        Scoreboard placeholderScoreboard = new Scoreboard();
+        ScoreboardObjective objective = placeholderScoreboard.method_4884("Scoreboard", ScoreboardCriterion.DUMMY);
         ScoreboardPlayerScore dark = placeholderScoreboard.getPlayerScore("DarkKronicle", objective);
         dark.setScore(8780);
 
@@ -35,19 +37,20 @@ public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionab
         kode.setScore(2948);
 
         placeholderScoreboard.setObjectiveSlot(1, objective);
-    }
 
-    public static final ScoreboardObjective placeholder = new ScoreboardObjective(placeholderScoreboard, "Scoreboard", ScoreboardCriterion.DUMMY);
+        return objective;
+    });
 
     private final ColorOption backgroundColor = new ColorOption("axolotlclient.backgroundcolor", 0x4C000000);
     private final ColorOption topColor = new ColorOption("axolotlclient.topbackgroundcolor", 0x66000000);
-    private final IntegerOption topPadding = new IntegerOption("axolotlclient.toppadding", ID.getPath(), 0, 0, 4);
+    private final IntegerOption topPadding = new IntegerOption("axolotlclient.toppadding", 0, 0, 4);
     private final BooleanOption scores = new BooleanOption("axolotlclient.scores", true);
     private final ColorOption scoreColor = new ColorOption("axolotlclient.scorecolor", 0xFFFF5555);
-    private final EnumOption anchor = new EnumOption("axolotlclient.anchor", AnchorPoint.values(), AnchorPoint.MIDDLE_RIGHT.toString());
+    private final EnumOption anchor = DefaultOptions.getAnchorPoint(AnchorPoint.MIDDLE_RIGHT);
 
     public ScoreboardHud() {
         super(200, 146, true);
+
     }
 
     @Override
@@ -107,7 +110,7 @@ public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionab
         for (
                 Iterator<ScoreboardPlayerScore> scoresIterator = scores.iterator();
                 scoresIterator.hasNext();
-                maxWidth = Math.max(maxWidth, client.textRenderer.getStringWidth(formattedText) + spacerWidth + client.textRenderer.getStringWidth(Integer.toString(scoreboardPlayerScore.getScore())))
+                maxWidth = Math.max(maxWidth, client.textRenderer.getStringWidth(formattedText) + (this.scores.get() ? spacerWidth + client.textRenderer.getStringWidth(Integer.toString(scoreboardPlayerScore.getScore())): 0))
         ) {
             scoreboardPlayerScore = scoresIterator.next();
             Team team = scoreboard.getPlayerTeam(scoreboardPlayerScore.getPlayerName());
@@ -150,7 +153,7 @@ public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionab
             String score = String.valueOf(scoreboardPlayerScore2.getScore());
             int relativeY = scoreY - num * 9 + topPadding.get() * 2;
 
-            if (background.get() && backgroundColor.get().getAsInt() > 0) {
+            if (background.get() && backgroundColor.get().getAlpha() > 0) {
                 if (num == scoresSize) {
                     RenderUtil.drawRectangle(
                             textOffset, relativeY - 1, maxWidth, 10, backgroundColor.get().getAsInt()
@@ -185,21 +188,28 @@ public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionab
                 float title = (renderX + (maxWidth - displayNameWidth) / 2F);
                 if (shadow.get()) {
                     client.textRenderer.drawWithShadow(text, title, (float) (relativeY - 9) - topPadding.get(), -1);
-                }
-                else {
+                } else {
                     client.textRenderer.draw(text, (int) title, (relativeY - 9), -1);
                 }
             }
         }
 
         if (outline.get() && outlineColor.get().getAlpha() > 0) {
-            RenderUtil.drawOutline(textOffset, bounds.y(), maxWidth, fullHeight + 2, outlineColor.get());
+            RenderUtil.drawOutline(textOffset, bounds.y(), maxWidth, fullHeight + 1, outlineColor.get());
         }
     }
 
     @Override
     public List<OptionBase<?>> getConfigurationOptions() {
-        List<OptionBase<?>> options = super.getConfigurationOptions();;
+        List<OptionBase<?>> options = new ArrayList<>();
+        options.add(enabled);
+        options.add(scale);
+        options.add(textColor);
+        options.add(shadow);
+        options.add(background);
+        options.add(backgroundColor);
+        options.add(outline);
+        options.add(outlineColor);
         options.add(topColor);
         options.add(scores);
         options.add(scoreColor);

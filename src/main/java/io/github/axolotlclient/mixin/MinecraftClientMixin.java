@@ -133,5 +133,6 @@ public abstract class MinecraftClientMixin {
     @Inject(method = "onResolutionChanged", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/LoadingScreenRenderer;<init>(Lnet/minecraft/client/MinecraftClient;)V"))
     public void onResize(int i, int j, CallbackInfo ci){
         Util.window = new Window(MinecraftClient.getInstance());
+        HudManager.getInstance().refreshAllBounds();
     }
 }

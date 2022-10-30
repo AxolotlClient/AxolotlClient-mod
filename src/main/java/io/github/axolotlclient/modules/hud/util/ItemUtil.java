@@ -138,7 +138,7 @@ public class ItemUtil {
 									 String countLabel, int textColor, boolean shadow) {
 		DiffuseLighting.enable();
 		GlStateManager.pushMatrix();
-		GlStateManager.color4f(textColor << 24 & 0xff, textColor << 16 & 0xff, textColor << 8 & 0xff , textColor & 0xff);
+		GlStateManager.color4f(textColor >> 24 & 0xff, textColor >> 16 & 0xff, textColor >> 8 & 0xff , textColor & 0xff);
 		MinecraftClient.getInstance().getItemRenderer().renderGuiItemOverlay(renderer, stack, x+2, y, null);
 		GlStateManager.popMatrix();
 

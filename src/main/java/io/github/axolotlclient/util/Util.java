@@ -20,7 +20,9 @@ import org.jetbrains.annotations.ApiStatus;
 import org.lwjgl.opengl.GL11;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 
@@ -155,8 +157,7 @@ public class Util {
                         predicate::test);
         double g = d;
 
-        for(int j = 0; j < list.size(); ++j) {
-            Entity entity2 = list.get(j);
+        for (Entity entity2 : list) {
             float h = entity2.getTargetingMargin();
             Box box2 = entity2.getBoundingBox().expand(h, h, h);
             BlockHitResult blockHitResult = box2.method_585(vec3d, vec3d3);
@@ -192,6 +193,15 @@ public class Util {
             return new BlockHitResult(targetedEntity, vec3d4);
         }
         return null;
+    }
+
+    public static <T> T make(Supplier<T> factory) {
+        return (T)factory.get();
+    }
+
+    public static <T> T make(T object, Consumer<T> initializer) {
+        initializer.accept(object);
+        return object;
     }
 
     public static List<String> getSidebar() {

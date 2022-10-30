@@ -95,14 +95,8 @@ public class BossBarHud extends TextHudEntry implements DynamicallyPositionable 
             if(bar.get()) {
                 MinecraftClient.getInstance().getTextureManager().bindTexture(BARS_TEXTURE);
                 GlStateManager.color4f(barColor.getRed(), barColor.getGreen(), barColor.getBlue(), barColor.getAlpha());
-                //drawTexture(x+2, y, 0, 74, 182, 5);
-                //drawTexture(x+2, y, 0, 79, 183, 5);
-                int l = (int) (65 * (float) (width + 1));
-                this.drawTexture(x, y, 0, 74, width, 5);
-                this.drawTexture(x, y, 0, 74, width, 5);
-                if (l > 0) {
-                    this.drawTexture(x, y, 0, 79, l, 5);
-                }
+                this.drawTexture(x+1, y, 0, 79, width, 5);
+
             }
 
             GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);

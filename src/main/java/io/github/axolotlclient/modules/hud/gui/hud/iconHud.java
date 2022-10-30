@@ -1,5 +1,6 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.hud.gui.entry.BoxHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
@@ -16,17 +17,26 @@ public class iconHud extends BoxHudEntry {
 
     @Override
     public void renderComponent(float delta) {
-        DrawPosition pos = getPos();
-
+        GlStateManager.color4f(1, 1, 1,1);
         MinecraftClient.getInstance().getTextureManager().bindTexture(AxolotlClient.badgeIcon);
 
-        drawTexture(pos.x, pos.y, 0, 0, width, height, width, height);
+        drawTexture(getX(), getY(), 0, 0, width, height, width, height);
 
     }
 
     @Override
+    public void renderPlaceholder(float delta) {
+        GlStateManager.pushMatrix();
+        scale();
+        GlStateManager.color4f(1, 1, 1,1);
+        renderComponent(delta);
+        GlStateManager.popMatrix();
+        hovered = false;
+    }
+
+    @Override
     public void renderPlaceholderComponent(float delta) {
-        render(delta);
+
     }
 
     @Override

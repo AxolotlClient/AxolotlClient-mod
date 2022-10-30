@@ -91,7 +91,7 @@ public class RenderUtil {
         float r = (float)(colorInt >> 16 & 0xFF) / 255.0f;
         float g = (float)(colorInt >> 8 & 0xFF) / 255.0f;
         float b = (float)(colorInt & 0xFF) / 255.0f;
-        bufferBuilder.begin(GL11.GL_QUADS, VertexFormats.POSITION_COLOR);
+        bufferBuilder.begin(7, VertexFormats.POSITION_COLOR);
         bufferBuilder.vertex(x1, y2, 0.0f).color(r, g, b, a).next();
         bufferBuilder.vertex(x2, y2, 0.0f).color(r, g, b, a).next();
         bufferBuilder.vertex(x2, y1, 0.0f).color(r, g, b, a).next();
@@ -133,12 +133,13 @@ public class RenderUtil {
         Tessellator.getInstance().draw();
         GlStateManager.enableTexture();
         GlStateManager.disableBlend();
+        GlStateManager.color3f(1, 1, 1);
     }
 
     public int colorPreRender(Color color){
         GlStateManager.color4f(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f);
         GlStateManager.enableBlend();
-        GlStateManager.enableTexture();
+        GlStateManager.disableTexture();
         GlStateManager.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
         //RenderSystem.setShader(getShader());
 
@@ -148,5 +149,6 @@ public class RenderUtil {
     public void colorPostRender(Color color){
         GlStateManager.enableTexture();
         GlStateManager.disableBlend();
+        GlStateManager.color4f(1, 1, 1, 1);
     }
 }

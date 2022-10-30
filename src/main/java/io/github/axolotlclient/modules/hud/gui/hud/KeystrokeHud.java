@@ -254,7 +254,7 @@ public class KeystrokeHud extends TextHudEntry {
         }
 
         public void renderStroke() {
-            if (key.isPressed() != wasPressed) {
+            if (key.isPressed() == wasPressed) {
                 start = MinecraftClient.getTime();
             }
             Rectangle rect = bounds.offset(offset);
@@ -276,7 +276,7 @@ public class KeystrokeHud extends TextHudEntry {
 
         public Color getColor() {
 
-            return key.wasPressed() ? Color.blend(backgroundColor.get(), pressedBackgroundColor.get(),
+            return !key.isPressed() ? Color.blend(backgroundColor.get(), pressedBackgroundColor.get(),
                     getPercentPressed()) :
                    Color.blend(
                            pressedBackgroundColor.get(),
@@ -286,7 +286,7 @@ public class KeystrokeHud extends TextHudEntry {
         }
 
         public Color getOutlineColor() {
-            return key.wasPressed() ? Color.blend(outlineColor.get(), pressedOutlineColor.get(),
+            return !key.isPressed() ? Color.blend(outlineColor.get(), pressedOutlineColor.get(),
                     getPercentPressed()
             ) :
                    Color.blend(
@@ -297,7 +297,7 @@ public class KeystrokeHud extends TextHudEntry {
         }
 
         public Color getFGColor() {
-            return key.wasPressed() ? Color.blend(textColor.get(), pressedTextColor.get(), getPercentPressed()) :
+            return !key.isPressed() ? Color.blend(textColor.get(), pressedTextColor.get(), getPercentPressed()) :
                    Color.blend(
                            pressedTextColor.get(),
                            textColor.get(),
