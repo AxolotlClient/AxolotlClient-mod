@@ -50,7 +50,7 @@ public class ScreenshotUtils extends AbstractModule {
                 .setStyle(new Style()
                         .setFormatting(Formatting.BLUE)
                         .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(I18n.translate("axolotlclient.copy_image"))))
-                        .setClickEvent(new CustomClickEvent(()->{
+                        .setClickEvent(new CustomClickEvent(() -> {
                             FileTransferable selection = new FileTransferable(file);
                             Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
                         })))
@@ -59,18 +59,18 @@ public class ScreenshotUtils extends AbstractModule {
                         new LiteralText(I18n.translate("axolotlclient.deleteAction")).setStyle(new Style()
                                 .setFormatting(Formatting.RED)
                                 .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(I18n.translate("axolotlclient.delete_image"))))
-                                .setClickEvent(new CustomClickEvent(()-> {
+                                .setClickEvent(new CustomClickEvent(() -> {
                                     try {
                                         Files.delete(file.toPath());
                                         Util.sendChatMessage(new LiteralText(I18n.translate("axolotlclient.screenshot_deleted").replace("<name>", file.getName())));
-                                    } catch (Exception e){
-                                        Logger.warn("Couldn't delete Screenshot "+file.getName());
+                                    } catch (Exception e) {
+                                        Logger.warn("Couldn't delete Screenshot " + file.getName());
                                     }
                                 })))
                 );
     }
 
-    class FileTransferable implements Transferable {
+    protected static class FileTransferable implements Transferable {
         private final File file;
 
         public FileTransferable(File file) {
@@ -95,7 +95,7 @@ public class ScreenshotUtils extends AbstractModule {
         }
     }
 
-    public class CustomClickEvent extends ClickEvent {
+    public static class CustomClickEvent extends ClickEvent {
 
         private final OnActionCall action;
 

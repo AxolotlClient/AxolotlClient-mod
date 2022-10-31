@@ -14,7 +14,7 @@
     "copy_image": "Copy this Screenshot",
     "deleteAction": "[Delete]",
     "delete_image": "Delete this Screenshot",
-    "screenshot_deleted": "Screenshot <name> has been successfully deleted!",
+    "screenshot_deleted": "Screenshot <name> has been deleted successfully!",
     "debugLogOutput": "Debug Log Output",
     "rendering": "Rendering Options",
     "customSky": "Custom Skies",
