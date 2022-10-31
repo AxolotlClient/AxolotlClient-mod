@@ -15,8 +15,8 @@
 	"copy_image": "Copy Image",
 	"headless_exception": "Could not Copy Image because the jvm is somehow running in headless mode.\n Please fix this.",
 	"deleteAction": "[Delete]",
-	"delete_action": "Delete Image",
-	"screenshot_deleted": "Screenshot <name> has been successfully deleted",
+	"delete_image": "Delete Image",
+	"screenshot_deleted": "Screenshot <name> has been deleted successfully!",
 
 	"rendering": "Rendering",
 	"rendering.tooltip": "Rendering Options",
