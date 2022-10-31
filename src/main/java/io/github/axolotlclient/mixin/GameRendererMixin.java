@@ -9,6 +9,7 @@ import io.github.axolotlclient.modules.hud.gui.hud.vanilla.CrosshairHud;
 import io.github.axolotlclient.modules.motionblur.MotionBlur;
 import io.github.axolotlclient.modules.sky.SkyboxManager;
 import io.github.axolotlclient.modules.zoom.Zoom;
+import io.github.axolotlclient.util.Util;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.MinecraftClient;
@@ -16,6 +17,7 @@ import net.minecraft.client.MouseInput;
 import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.util.Window;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -232,5 +234,11 @@ public abstract class GameRendererMixin {
     @Redirect(method = "transformCamera", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;prevPitch:F"))
     public float freelook$prevPitch(Entity entity) {
         return Freelook.getInstance().pitch(entity.prevPitch);
+    }
+
+    @Inject(method = "onResized", at = @At(value = "TAIL"))
+    public void onResize(int i, int j, CallbackInfo ci){
+        Util.window = new Window(MinecraftClient.getInstance());
+        HudManager.getInstance().refreshAllBounds();
     }
 }

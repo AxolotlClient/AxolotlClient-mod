@@ -138,6 +138,7 @@ public class ItemUtil {
 		GlStateManager.pushMatrix();
 		MinecraftClient.getInstance().getItemRenderer().renderInGuiWithOverrides(stack, x, y);
 		GlStateManager.popMatrix();
+		DiffuseLighting.disable();
 	}
 
 	public static void renderGuiItemOverlay(TextRenderer renderer, ItemStack stack, int x, int y,
@@ -181,6 +182,8 @@ public class ItemUtil {
 			}
 
 		}
+
+		DiffuseLighting.disable();
 		GlStateManager.popMatrix();
 
 	}
