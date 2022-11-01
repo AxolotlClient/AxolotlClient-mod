@@ -7,6 +7,7 @@ import io.github.axolotlclient.AxolotlclientConfig.options.DoubleOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.entry.BoxHudEntry;
 import io.github.axolotlclient.util.Hooks;
+import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
@@ -35,6 +36,9 @@ public class PlayerHud extends BoxHudEntry {
     private float yawOffset = 0;
     private float lastYOffset = 0;
     private float yOffset = 0;
+
+    @Getter
+    private static boolean currentlyRendering;
 
     public PlayerHud() {
         super(62, 94, true);
@@ -90,8 +94,10 @@ public class PlayerHud extends BoxHudEntry {
 
         VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
 
+        currentlyRendering = true;
         renderer.render(client.player, 0, 0, 0, 0, delta, nextStack, immediate, 15728880);
         immediate.draw();
+        currentlyRendering = false;
         renderer.setRenderShadows(true);
         matrixStack.pop();
 
