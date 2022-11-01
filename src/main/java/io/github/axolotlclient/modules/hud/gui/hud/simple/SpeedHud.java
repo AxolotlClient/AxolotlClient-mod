@@ -12,6 +12,12 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.List;
 
+/**
+ * This implementation of Hud modules is based on KronHUD.
+ * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ * @license GPL-3.0
+ */
+
 public class SpeedHud extends SimpleTextHudEntry {
 
     public static final Identifier ID = new Identifier("kronhud", "speedhud");

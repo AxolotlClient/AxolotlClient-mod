@@ -188,6 +188,8 @@
 	"timeshown": "Time shown",
 	"allArrowTypes": "All Arrow Types",
 	"dateformat": "Date Format",
+	"applyBlend": "Apply Blending",
+	"overrideF3": "Show on Debug HUD",
 
 	"togglesprint": "ToggleModifiers",
 	"randomPlaceholder": "Random Placeholder",

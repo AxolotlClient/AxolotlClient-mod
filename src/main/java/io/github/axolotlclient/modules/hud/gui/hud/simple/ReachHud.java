@@ -14,8 +14,13 @@ import net.minecraft.util.math.Vec3d;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.time.Instant;
 import java.util.List;
+
+/**
+ * This implementation of Hud modules is based on KronHUD.
+ * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ * @license GPL-3.0
+ */
 
 // https://github.com/AxolotlClient/AxolotlClient-mod/blob/4ae2678bfe9e0908be1a7a34e61e689c8005ae0a/src/main/java/io/github/axolotlclient/modules/hud/gui/hud/ReachDisplayHud.java
 public class ReachHud extends SimpleTextHudEntry {

@@ -19,6 +19,12 @@ import net.minecraft.util.math.MathHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This implementation of Hud modules is based on KronHUD.
+ * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ * @license GPL-3.0
+ */
+
 public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
 
     protected final BooleanOption enabled = DefaultOptions.getEnabled();
@@ -29,7 +35,7 @@ public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
     private Rectangle trueBounds = null;
     private Rectangle renderBounds = null;
     private DrawPosition truePosition = null;
-    private DrawPosition renderPosition ;// = new DrawPosition(0, 0);
+    private DrawPosition renderPosition;
 
     @Setter
     @Getter

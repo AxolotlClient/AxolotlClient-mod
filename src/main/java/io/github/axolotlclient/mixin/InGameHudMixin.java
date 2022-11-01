@@ -1,5 +1,6 @@
 package io.github.axolotlclient.mixin;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hud.gui.hud.*;
 import io.github.axolotlclient.modules.hud.gui.hud.vanilla.ActionBarHud;
@@ -34,9 +35,11 @@ public abstract class InGameHudMixin {
 
 	@Shadow private int overlayRemaining;
 
-	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;getScoreboard()Lnet/minecraft/scoreboard/Scoreboard;"))
+	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderCrosshair(Lnet/minecraft/client/util/math/MatrixStack;)V"))
 	private void onHudRender(MatrixStack matrices, float tickDelta, CallbackInfo ci){
+		RenderSystem.disableBlend();
 		HudManager.getInstance().render(matrices, tickDelta);
+		RenderSystem.enableBlend();
 	}
 
 	@Inject(method = "renderStatusEffectOverlay", at = @At("HEAD"), cancellable = true)
@@ -51,6 +54,9 @@ public abstract class InGameHudMixin {
 	public void renderCrosshair(MatrixStack matrices, CallbackInfo ci) {
 		CrosshairHud hud = (CrosshairHud) HudManager.getInstance().get(CrosshairHud.ID);
 		if (hud != null && hud.isEnabled()) {
+			if(MinecraftClient.getInstance().options.debugEnabled && !hud.overridesF3()){
+				return;
+			}
 			ci.cancel();
 		}
 	}

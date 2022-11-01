@@ -30,6 +30,12 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
+/**
+ * This implementation of Hud modules is based on KronHUD.
+ * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ * @license GPL-3.0
+ */
+
 public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositionable {
     public static final Identifier ID = new Identifier("kronhud", "crosshairhud");
 
@@ -40,6 +46,8 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
     private final ColorOption containerColor = new ColorOption("blockcolor",Color.SELECTOR_BLUE);
     private final ColorOption attackIndicatorBackgroundColor = new ColorOption("attackindicatorbg", new Color(0xFF141414));
     private final ColorOption attackIndicatorForegroundColor = new ColorOption("attackindicatorfg", Color.WHITE);
+    private final BooleanOption applyBlend = new BooleanOption("applyBlend", true);
+    private final BooleanOption overrideF3 = new BooleanOption("overrideF3", false);
 
     public CrosshairHud() {
         super(15, 15);
@@ -69,7 +77,8 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
 
         RenderSystem.enableBlend();
 
-        if(color == defaultColor.get() && !type.get().equals(Crosshair.DIRECTION.toString())){
+        // Need to not enable blend while the debug HUD is open because it does weird stuff. Why? no idea.
+        if(color == defaultColor.get() && !type.get().equals(Crosshair.DIRECTION.toString()) && applyBlend.get() && !client.options.debugEnabled){
             RenderSystem.blendFuncSeparate(
                     GlStateManager.SourceFactor.ONE_MINUS_DST_COLOR,
                     GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR,
@@ -193,12 +202,19 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
         List<OptionBase<?>> options = super.getConfigurationOptions();
         options.add(type);
         options.add(showInF5);
+        options.add(overrideF3);
+        options.add(applyBlend);
         options.add(defaultColor);
         options.add(entityColor);
         options.add(containerColor);
         options.add(attackIndicatorBackgroundColor);
         options.add(attackIndicatorForegroundColor);
         return options;
+    }
+
+    @Override
+    public boolean overridesF3() {
+        return overrideF3.get();
     }
 
     @Override
