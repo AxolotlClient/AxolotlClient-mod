@@ -15,8 +15,8 @@
 	"copy_image": "Bu Ekran Görüntüsünü kopyala",
 	"headless_exception": "Ekran Görüntüsü kopyalanamadı çünkü nasıl oluyorsa JVM başlıksız modunda çalışıyor.\n Lütfen bunu düzeltin.",
 	"deleteAction": "[Sil]",
-	"delete_action": "Ekran Görüntüsünü Sil",
-	"screenshot_deleted": "<name> adlı Ekran Görüntüsü başarıyla silindi",
+	"delete_image": "Ekran Görüntüsünü Sil",
+	"screenshot_deleted": "<name> adlı Ekran Görüntüsü başarıyla silindi!",
 
 	"rendering": "İşleme",
 	"rendering.tooltip": "İşleme Seçenekleri",
