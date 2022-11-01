@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.util.Logger;
+import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.texture.NativeImageBackedTexture;
@@ -18,8 +19,8 @@ public class PackDisplayHud extends TextHudEntry {
 
     public static Identifier ID = new Identifier("axolotlclient","packdisplayhud");
 
-    public final List<packWidget> widgets = new ArrayList<>();
-
+    private final List<PackWidget> widgets = new ArrayList<>();
+    private PackWidget placeholder;
     private final List<ResourcePack> packs = new ArrayList<>();
 
     public PackDisplayHud() {
@@ -30,32 +31,37 @@ public class PackDisplayHud extends TextHudEntry {
     public void init() {
         packs.forEach(pack -> {
             try {
-                if(!pack.getName().equalsIgnoreCase("Default") )//&& pack.getIcon()!=null)
-                    widgets.add(new packWidget(pack));
+                if(pack.getIcon() != null) {
+                    if(packs.size()==1){
+                        widgets.add(new PackWidget(pack));
+                    } else if (!pack.getName().equalsIgnoreCase("Default")){
+                        widgets.add(new PackWidget(pack));
+                    }
+                }
             } catch (Exception ignored) {
             }
         });
 
 	    AtomicInteger w = new AtomicInteger(20);
 		widgets.forEach(packWidget -> {
-			int textW = MinecraftClient.getInstance().textRenderer.getStringWidth(packWidget.name)+20;
+			int textW = MinecraftClient.getInstance().textRenderer.getStringWidth(packWidget.getName())+20;
 			if(textW>w.get())
 				w.set(textW);
 		});
-		width=w.get();
+		setWidth(w.get());
 
-		height=(widgets.size()-1)*18 + 18;
+		setHeight(widgets.size()*18);
+        onBoundsUpdate();
     }
 
     public void setPacks(List<ResourcePack> packs){
         widgets.clear();
+        this.packs.clear();
         this.packs.addAll(packs);
-        init();
     }
 
     @Override
     public void renderComponent(float f) {
-        scale();
         DrawPosition pos = getPos();
 
         if(widgets.isEmpty())init();
@@ -71,12 +77,30 @@ public class PackDisplayHud extends TextHudEntry {
             widgets.get(i).render(pos.x+1, y);
             y+=18;
         }
+        if(y - pos.y+1 != getHeight()){
+            setHeight(y- pos.y-1);
+            onBoundsUpdate();
+        }
     }
 
     @Override
-    public void renderPlaceholderComponent(float f) {
-        renderPlaceholderBackground();
-		hovered=false;
+    public void renderPlaceholderComponent(float delta) {
+        boolean updateBounds = false;
+        if(getHeight()<18){
+            setHeight(18);
+            updateBounds = true;
+        }
+        if(getWidth()<56){
+            setWidth(56);
+            updateBounds = true;
+        }
+        if(updateBounds){
+            onBoundsUpdate();
+        }
+        if(placeholder == null){
+            placeholder = new PackWidget(MinecraftClient.getInstance().getResourcePackLoader().defaultResourcePack);
+        }
+        placeholder.render(getPos().x+1, getPos().y+1);
     }
 
     @Override
@@ -89,17 +113,17 @@ public class PackDisplayHud extends TextHudEntry {
         return true;
     }
 
-    private class packWidget {
+    private class PackWidget {
         private int texture;
-        public final String name;
+        @Getter
+        private final String name;
 
-        public packWidget(ResourcePack pack){
+        public PackWidget(ResourcePack pack){
             this.name=pack.getName();
             try {
                 this.texture = new NativeImageBackedTexture(pack.getIcon()).getGlId();
             } catch (Exception e){
                 Logger.warn("Pack "+pack.getName()+" somehow threw an error! Please investigate... Does it have an icon?");
-				//e.printStackTrace();
             }
         }
 
@@ -109,6 +133,5 @@ public class PackDisplayHud extends TextHudEntry {
             DrawableHelper.drawTexture(x, y, 0, 0, 16, 16, 16, 16);
             drawString(name, x + 18, y + 6, textColor.get().getAsInt(), shadow.get());
         }
-
     }
 }
