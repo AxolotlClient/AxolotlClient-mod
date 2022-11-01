@@ -7,6 +7,7 @@ import io.github.axolotlclient.AxolotlclientConfig.options.DoubleOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.entry.BoxHudEntry;
 import io.github.axolotlclient.util.Hooks;
+import lombok.Getter;
 import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.util.Identifier;
@@ -31,6 +32,9 @@ public class PlayerHud extends BoxHudEntry {
     private float lastYOffset = 0;
     private float yOffset = 0;
 
+    @Getter
+    private static boolean currentlyRendering = false;
+
     public PlayerHud() {
         super(62, 94, true);
         Hooks.PLAYER_DIRECTION_CHANGE.register(this::onPlayerDirectionChange);
@@ -50,34 +54,27 @@ public class PlayerHud extends BoxHudEntry {
         if (client.player == null) {
             return;
         }
-        //SurvivalInventoryScreen.renderEntity(getPos().x, getPos().y, height, getPos().x, getPos().y, client.player);
 
         float lerpY = (lastYOffset + ((yOffset - lastYOffset) * delta));
 
-        //MatrixStack matrixStack = RenderSystem.getModelViewStack();
         GlStateManager.color4f(1, 1, 1, 1);
         GlStateManager.enableColorMaterial();
         GlStateManager.pushMatrix();
         GlStateManager.translated(x, y - lerpY, 1050);
         GlStateManager.scalef(1, 1, -1);
 
-        //RenderSystem.applyModelViewMatrix();
-        //MatrixStack nextStack = new MatrixStack();
-        //GlStateManager.pushMatrix();
         GlStateManager.translatef(0, 0, 1000);
         float scale = getScale() * 40;
         GlStateManager.scalef(scale, scale, scale);
 
-        //Quaternion quaternion = Vec3f.POSITIVE_Z.getDegreesQuaternion(180.0F);
 
         GlStateManager.rotatef(180, 0, 0, 1);
-        //nextStack.multiply(quaternion);
+
         // Rotate to whatever is wanted. Also make sure to offset the yaw
         float deltaYaw = client.player.yaw;
         if (dynamicRotation.get()) {
             deltaYaw -= (lastYawOffset + ((yawOffset - lastYawOffset) * delta));
         }
-        //nextStack.multiply(new Quaternion(new Vec3f(0, 1, 0), deltaYaw - 180 + rotation.get().floatValue(), true));
 
         // Save these to set them back later
         float pastYaw = client.player.yaw;
@@ -86,18 +83,24 @@ public class PlayerHud extends BoxHudEntry {
         float pastPrevHeadYaw = client.player.prevHeadYaw;
         float pastPrevYaw = client.player.prevYaw;
 
+        client.player.headYaw = client.player.yaw;
+        client.player.prevHeadYaw = client.player.yaw;
+
         GlStateManager.rotatef(deltaYaw - 180 + rotation.get().floatValue(), 0, 1, 0);
         DiffuseLighting.enableNormally();
         EntityRenderDispatcher renderer = client.getEntityRenderManager();
         renderer.setYaw(180);
+        renderer.pitch = 0;
         renderer.setRenderShadows(false);
 
 
         //VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
 
-        renderer.render(client.player, 0.0, 0.0, 0.0, 0.0F, 1.0F);
+        currentlyRendering = true;
+        renderer.render(client.player, 0.0, 0.0, 0.0, 0, delta);
+        currentlyRendering = false;
         //renderer.render(client.player, 0, 0, 0, delta, 15728880);
-        //immediate.draw();
+
         renderer.setRenderShadows(true);
         GlStateManager.popMatrix();
 
