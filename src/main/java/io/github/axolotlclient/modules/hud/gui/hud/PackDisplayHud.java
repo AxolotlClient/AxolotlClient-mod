@@ -25,7 +25,7 @@ public class PackDisplayHud extends TextHudEntry {
     private PackWidget placeholder;
     private final List<ResourcePack> packs = new ArrayList<>();
 
-    private final BooleanOption iconsOnly = new BooleanOption("iconsonly", false);
+    private final BooleanOption iconsOnly = new BooleanOption("axolotlclient.iconsonly", false);
 
     public PackDisplayHud() {
         super(200, 50, true);
