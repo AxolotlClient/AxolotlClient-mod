@@ -203,6 +203,8 @@
     "toppadding": "Üst Hizalama",
     "iconsonly": "Sadece Simgeler",
     "horizontal": "Sadece Yatay",
+    "applyBlend": "Kaynaştır",
+    "overrideF3": "Hata Ayıklama Arayünde Göster",
     
     "enabled": "Etkinle\u015ftirilmi\u015f",
     "enabled.tooltip": "Bu modülün etkin olup olmadığı.",
