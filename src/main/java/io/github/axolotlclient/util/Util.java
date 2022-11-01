@@ -184,15 +184,13 @@ public class Util {
             }
         }
 
-
-        if (targetedEntity != null && vec3d.distanceTo(vec3d4) > 3.0) {
-            return new BlockHitResult(BlockHitResult.Type.MISS, vec3d4, null, new BlockPos(vec3d4));
-        }
-
         if (targetedEntity != null && (g < d)) {
             return new BlockHitResult(targetedEntity, vec3d4);
         }
-        return null;
+        if(vec3d4 != null) {
+            return new BlockHitResult(BlockHitResult.Type.MISS, vec3d4, null, new BlockPos(vec3d4));
+        }
+        return new BlockHitResult(BlockHitResult.Type.MISS, new Vec3d(0, 0, 0), null, null);
     }
 
     public static <T> T make(Supplier<T> factory) {

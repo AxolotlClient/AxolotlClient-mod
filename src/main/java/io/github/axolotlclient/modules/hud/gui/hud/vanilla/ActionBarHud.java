@@ -10,12 +10,18 @@ import net.minecraft.util.Identifier;
 
 import java.util.List;
 
+/**
+ * This implementation of Hud modules is based on KronHUD.
+ * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ * @license GPL-3.0
+ */
+
 public class ActionBarHud extends TextHudEntry {
 
     public static final Identifier ID = new Identifier("kronhud", "actionbarhud");
 
-    public IntegerOption timeShown = new IntegerOption("axolotlclient.timeshown", ID.getPath(), 60, 40, 300);
-    public BooleanOption customTextColor = new BooleanOption("axolotlclient.customtextcolor", ID.getPath(), false);
+    public IntegerOption timeShown = new IntegerOption("axolotlclient.timeshown", 60, 40, 300);
+    public BooleanOption customTextColor = new BooleanOption("axolotlclient.customtextcolor", false);
 
     @Getter
     private String actionBar;

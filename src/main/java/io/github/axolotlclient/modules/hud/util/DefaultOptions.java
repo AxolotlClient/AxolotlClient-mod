@@ -8,6 +8,12 @@ import io.github.axolotlclient.modules.hud.gui.layout.AnchorPoint;
 import io.github.axolotlclient.modules.hud.gui.layout.CardinalOrder;
 import lombok.experimental.UtilityClass;
 
+/**
+ * This implementation of Hud modules is based on KronHUD.
+ * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ * @license GPL-3.0
+ */
+
 @UtilityClass
 public class DefaultOptions {
 

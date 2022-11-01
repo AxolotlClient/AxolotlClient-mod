@@ -21,6 +21,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
+/**
+ * This implementation of Hud modules is based on KronHUD.
+ * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ * @license GPL-3.0
+ */
+
 public class ToggleSprintHud extends SimpleTextHudEntry {
 
     public static final Identifier ID = new Identifier("kronhud", "togglesprint");

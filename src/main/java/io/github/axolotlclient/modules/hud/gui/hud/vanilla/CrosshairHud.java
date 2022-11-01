@@ -23,11 +23,19 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
+/**
+ * This implementation of Hud modules is based on KronHUD.
+ * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ * @license GPL-3.0
+ */
+
 public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositionable {
     public static final Identifier ID = new Identifier("kronhud", "crosshairhud");
 
     private final EnumOption type = new EnumOption("axolotlclient.crosshair_type", Crosshair.values(), Crosshair.CROSS.toString());
     private final BooleanOption showInF5 = new BooleanOption("axolotlclient.showInF5", false);
+    private final BooleanOption applyBlend = new BooleanOption("applyBlend", true);
+    private final BooleanOption overrideF3 = new BooleanOption("axolotlclient.overrideF3", false);
     private final ColorOption defaultColor = new ColorOption("axolotlclient.defaultcolor", Color.WHITE);
     private final ColorOption entityColor = new ColorOption("axolotlclient.entitycolor", Color.SELECTOR_RED);
     private final ColorOption containerColor = new ColorOption("axolotlclient.blockcolor",Color.SELECTOR_BLUE);
@@ -56,7 +64,7 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
         scale();
         Color color = getColor();
         GlStateManager.color4f((float) color.getRed() / 255, (float) color.getGreen() / 255, (float) color.getBlue() / 255, 1F);
-        if(color==defaultColor.get()) {
+        if(color==defaultColor.get() && applyBlend.get()) {
             GlStateManager.enableBlend();
             GlStateManager.blendFuncSeparate(775, 769, 1, 0);
         }
@@ -129,10 +137,17 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
         List<OptionBase<?>> options = super.getConfigurationOptions();
         options.add(type);
         options.add(showInF5);
+        options.add(overrideF3);
+        options.add(applyBlend);
         options.add(defaultColor);
         options.add(entityColor);
         options.add(containerColor);
         return options;
+    }
+
+    @Override
+    public boolean overridesF3() {
+        return overrideF3.get();
     }
 
     @Override

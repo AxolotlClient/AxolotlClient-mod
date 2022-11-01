@@ -16,6 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * This implementation of Hud modules is based on KronHUD.
+ * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ * @license GPL-3.0
+ */
+
 public class ItemUpdateHud extends TextHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "itemupdatehud");
 
@@ -23,7 +29,7 @@ public class ItemUpdateHud extends TextHudEntry {
     private ArrayList<ItemUtil.TimedItemStorage> removed;
     private ArrayList<ItemUtil.TimedItemStorage> added;
 
-    private final IntegerOption timeout = new IntegerOption("axolotlclient.timeout", ID.getPath(), 6, 1, 60);
+    private final IntegerOption timeout = new IntegerOption("axolotlclient.timeout", 6, 1, 60);
 
     public ItemUpdateHud() {
         super(200, 11 * 6 - 2, true);

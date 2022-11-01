@@ -13,13 +13,19 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.List;
 
+/**
+ * This implementation of Hud modules is based on KronHUD.
+ * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ * @license GPL-3.0
+ */
+
 public class CoordsHud extends TextHudEntry implements DynamicallyPositionable {
 
     public static final Identifier ID = new Identifier("kronhud", "coordshud");
 
     private final ColorOption secondColor = new ColorOption("axolotlclient.secondtextcolor", Color.WHITE);
     private final ColorOption firstColor = new ColorOption("axolotlclient.firsttextcolor", Color.SELECTOR_BLUE);
-    private final IntegerOption decimalPlaces = new IntegerOption("axolotlclient.decimalplaces", ID.getPath(), 0, 0, 15);
+    private final IntegerOption decimalPlaces = new IntegerOption("axolotlclient.decimalplaces", 0, 0, 15);
     private final BooleanOption minimal = new BooleanOption("axolotlclient.minimal", false);
 
     private final EnumOption anchor = new EnumOption("axolotlclient.anchor", AnchorPoint.values(), AnchorPoint.TOP_MIDDLE.toString());

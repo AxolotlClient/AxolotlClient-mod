@@ -4,6 +4,12 @@ import io.github.axolotlclient.modules.hud.gui.entry.SimpleTextHudEntry;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.util.Identifier;
 
+/**
+ * This implementation of Hud modules is based on KronHUD.
+ * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ * @license GPL-3.0
+ */
+
 public class PlayerCountHud extends SimpleTextHudEntry {
 
     public static Identifier ID = new Identifier("axolotlclient", "playercounthud");

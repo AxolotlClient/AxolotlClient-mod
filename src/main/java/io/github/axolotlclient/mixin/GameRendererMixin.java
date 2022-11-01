@@ -177,8 +177,8 @@ public abstract class GameRendererMixin {
     public void customCrosshairF3(float tickDelta, CallbackInfo ci){
         CrosshairHud hud = (CrosshairHud) HudManager.getInstance().get(CrosshairHud.ID);
         if(hud.isEnabled() && this.client.options.debugEnabled
-                && !this.client.options.hudHidden) {
-                //&& hud.showInF3.get()) {
+                && !this.client.options.hudHidden
+                && hud.overridesF3()) {
             ci.cancel();
         }
 

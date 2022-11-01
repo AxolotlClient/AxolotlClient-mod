@@ -1,6 +1,8 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.util.Logger;
@@ -22,6 +24,8 @@ public class PackDisplayHud extends TextHudEntry {
     private final List<PackWidget> widgets = new ArrayList<>();
     private PackWidget placeholder;
     private final List<ResourcePack> packs = new ArrayList<>();
+
+    private final BooleanOption iconsOnly = new BooleanOption("iconsonly", false);
 
     public PackDisplayHud() {
         super(200, 50, true);
@@ -66,12 +70,6 @@ public class PackDisplayHud extends TextHudEntry {
 
         if(widgets.isEmpty())init();
 
-        if(background.get()){
-            fillRect(getBounds(), backgroundColor.get());
-        }
-
-        if(outline.get()) outlineRect(getBounds(), outlineColor.get());
-
         int y= pos.y+1;
         for(int i=widgets.size()-1;i>=0;i--){ // Badly reverse the order (I'm sure there are better ways to do this)
             widgets.get(i).render(pos.x+1, y);
@@ -104,6 +102,13 @@ public class PackDisplayHud extends TextHudEntry {
     }
 
     @Override
+    public List<OptionBase<?>> getConfigurationOptions() {
+        List<OptionBase<?>> options = super.getConfigurationOptions();
+        options.add(iconsOnly);
+        return options;
+    }
+
+    @Override
     public Identifier getId() {
         return ID;
     }
@@ -128,9 +133,11 @@ public class PackDisplayHud extends TextHudEntry {
         }
 
         public void render(int x, int y) {
-            GlStateManager.color4f(1, 1, 1, 1F);
-            GlStateManager.bindTexture(texture);
-            DrawableHelper.drawTexture(x, y, 0, 0, 16, 16, 16, 16);
+            if(!iconsOnly.get()) {
+                GlStateManager.color4f(1, 1, 1, 1F);
+                GlStateManager.bindTexture(texture);
+                DrawableHelper.drawTexture(x, y, 0, 0, 16, 16, 16, 16);
+            }
             drawString(name, x + 18, y + 6, textColor.get().getAsInt(), shadow.get());
         }
     }

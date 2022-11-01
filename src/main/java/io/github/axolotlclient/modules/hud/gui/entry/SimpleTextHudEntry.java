@@ -14,6 +14,12 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.List;
 
+/**
+ * This implementation of Hud modules is based on KronHUD.
+ * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ * @license GPL-3.0
+ */
+
 public abstract class SimpleTextHudEntry extends TextHudEntry implements DynamicallyPositionable {
 
     protected final EnumOption justification = new EnumOption("axolotlclient.justification", Justification.values(), Justification.CENTER.toString());

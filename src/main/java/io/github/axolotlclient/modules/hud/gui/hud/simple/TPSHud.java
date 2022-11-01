@@ -6,6 +6,12 @@ import net.minecraft.util.Identifier;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
+/**
+ * This implementation of Hud modules is based on KronHUD.
+ * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ * @license GPL-3.0
+ */
+
 public class TPSHud extends SimpleTextHudEntry {
 
     private long lastTick = -1;

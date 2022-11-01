@@ -45,7 +45,6 @@ public class ItemUtil {
 			return null;
 		}
 		items.addAll(Arrays.asList(client.player.inventory.armor));
-		//items.addAll(client.player.inventory.)
 		items.addAll(Arrays.asList(client.player.inventory.main));
 		return items;
 	}
@@ -130,9 +129,9 @@ public class ItemUtil {
 		return timed;
 	}
 
-	// Minecraft has decided to not use matrixstack's in their itemrender class. So this is implementing itemRenderer stuff with matrices.
+	// The scaling stuff wasn't a problem on 1.8.9 so no need to create more complicated stuff
 
-	public static void renderGuiItemModel(float scale, ItemStack stack, int x, int y) {
+	public static void renderGuiItemModel(ItemStack stack, int x, int y) {
 
 		DiffuseLighting.enable();
 		GlStateManager.pushMatrix();

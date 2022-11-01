@@ -13,6 +13,12 @@ import net.minecraft.util.Identifier;
 
 import java.util.List;
 
+/**
+ * This implementation of Hud modules is based on KronHUD.
+ * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ * @license GPL-3.0
+ */
+
 public class ArrowHud extends TextHudEntry {
 
     public static final Identifier ID = new Identifier("kronhud", "arrowhud");
@@ -40,7 +46,7 @@ public class ArrowHud extends TextHudEntry {
         DrawPosition pos = getPos();
         drawCenteredString(client.textRenderer, String.valueOf(arrows), pos.x() + getWidth() / 2, pos.y() + getHeight() - 10,
                 textColor.get(), shadow.get());
-        ItemUtil.renderGuiItemModel(getScale(), currentArrow, pos.x() + 2, pos.y() + 2);
+        ItemUtil.renderGuiItemModel(currentArrow, pos.x() + 2, pos.y() + 2);
     }
 
     @Override
@@ -58,7 +64,7 @@ public class ArrowHud extends TextHudEntry {
         DrawPosition pos = getPos();
         drawCenteredString(client.textRenderer, "64", pos.x() + getWidth() / 2, pos.y() + getHeight() - 10, textColor.get(),
                 shadow.get());
-        ItemUtil.renderGuiItemModel(getScale(), new ItemStack(Items.ARROW), pos.x() + 2, pos.y() + 2);
+        ItemUtil.renderGuiItemModel(new ItemStack(Items.ARROW), pos.x() + 2, pos.y() + 2);
     }
 
     @Override

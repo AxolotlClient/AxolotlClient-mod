@@ -53,7 +53,7 @@ public class HotbarHUD extends TextHudEntry {
             int k = pos.x + j * 20 + 3;
             int l = pos.y+3;
             if(playerEntity.inventory.main[j] != null) {
-                ItemUtil.renderGuiItemModel(getScale(), playerEntity.inventory.main[j], k, l);
+                ItemUtil.renderGuiItemModel(playerEntity.inventory.main[j], k, l);
                 ItemUtil.renderGuiItemOverlay(MinecraftClient.getInstance().textRenderer, playerEntity.inventory.main[j], k, l, null, textColor.get().getAsInt(), shadow.get());
             }
         }

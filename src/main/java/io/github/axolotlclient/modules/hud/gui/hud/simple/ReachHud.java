@@ -3,8 +3,8 @@ package io.github.axolotlclient.modules.hud.gui.hud.simple;
 import com.google.common.util.concurrent.AtomicDouble;
 import io.github.axolotlclient.AxolotlclientConfig.options.IntegerOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
-import io.github.axolotlclient.mixin.MinecraftClientAccessor;
 import io.github.axolotlclient.modules.hud.gui.entry.SimpleTextHudEntry;
+import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
@@ -17,6 +17,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 // https://github.com/AxolotlClient/AxolotlClient-mod/blob/4ae2678bfe9e0908be1a7a34e61e689c8005ae0a/src/main/java/io/github/axolotlclient/modules/hud/gui/hud/ReachDisplayHud.java
+// https://github.com/DarkKronicle/KronHUD/blob/703b87a7c938ba25da9105d731b70d3bc66efd1e/src/main/java/io/github/darkkronicle/kronhud/gui/hud/simple/ReachHud.java
 public class ReachHud extends SimpleTextHudEntry {
 
     public static final Identifier ID = new Identifier("kronhud", "reachhud");
@@ -75,8 +76,8 @@ public class ReachHud extends SimpleTextHudEntry {
         Box box = attacking.getBoundingBox().stretch(rotation.x*d, rotation.y*d, rotation.z*d).expand(1.0, 1.0, 1.0);
 
 
-        BlockHitResult result = attacking.rayTrace(d, ((MinecraftClientAccessor)MinecraftClient.getInstance()).getTicker().tickDelta); //Util.raycast(attacking, camera, possibleHits, box, entity -> entity.getEntityId() == receiving.getEntityId(), d);
-        if (result == null || result.entity == null) {
+        BlockHitResult result = Util.raycast(attacking, camera, possibleHits, box, entity -> entity.getEntityId() == receiving.getEntityId(), d);
+        if (result.entity == null) {
             // This should not happen...
             return -1;
         }

@@ -22,7 +22,7 @@ public abstract class InGameHudMixin {
 
     @Shadow protected abstract boolean showCrosshair();
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;getScoreboard()Lnet/minecraft/scoreboard/Scoreboard;"))
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;color4f(FFFF)V", ordinal = 0))
     private void onHudRender(float tickDelta, CallbackInfo ci){
         HudManager.getInstance().render(MinecraftClient.getInstance(), tickDelta);
     }

@@ -3,6 +3,12 @@ package io.github.axolotlclient.modules.hud.gui.layout;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 
+/**
+ * This implementation of Hud modules is based on KronHUD.
+ * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ * @license GPL-3.0
+ */
+
 public enum Justification {
     LEFT,
     CENTER,

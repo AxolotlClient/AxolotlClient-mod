@@ -203,6 +203,8 @@
     "toppadding": "Top Padding",
     "iconsonly": "Icons Only",
     "horizontal": "Horizontal Only",
+    "applyBlend": "Apply Blending",
+    "overrideF3": "Show on Debug HUD",
 
     "enabled": "Enabled",
     "enabled.tooltip": "Whether this module is enabled or not.",
