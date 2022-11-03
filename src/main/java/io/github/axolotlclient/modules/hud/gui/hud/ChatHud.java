@@ -1,13 +1,8 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.ColorOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.IntegerOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
+import io.github.axolotlclient.AxolotlclientConfig.options.*;
 import io.github.axolotlclient.mixin.ChatHudAccessor;
-import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
-import io.github.axolotlclient.modules.hud.gui.entry.BoxHudEntry;
 import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
@@ -192,8 +187,8 @@ public class ChatHud extends TextHudEntry {
     }
 
     @Override
-    public List<OptionBase<?>> getConfigurationOptions() {
-        List<OptionBase<?>> options = super.getConfigurationOptions();
+    public List<Option<?>> getConfigurationOptions() {
+        List<Option<?>> options = super.getConfigurationOptions();
         options.add(shadow);
         options.add(background);
         options.add(bgColor);

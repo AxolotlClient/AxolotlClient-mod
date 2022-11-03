@@ -2,10 +2,7 @@ package io.github.axolotlclient.modules.hud.gui.hud;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlclientConfig.Color;
-import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.ColorOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.IntegerOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
+import io.github.axolotlclient.AxolotlclientConfig.options.*;
 import io.github.axolotlclient.modules.hud.gui.component.DynamicallyPositionable;
 import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
 import io.github.axolotlclient.modules.hud.gui.layout.AnchorPoint;
@@ -182,8 +179,8 @@ public class CompassHud extends TextHudEntry implements DynamicallyPositionable 
     }
 
     @Override
-    public List<OptionBase<?>> getConfigurationOptions() {
-        List<OptionBase<?>> options = super.getConfigurationOptions();
+    public List<Option<?>> getConfigurationOptions() {
+        List<Option<?>> options = super.getConfigurationOptions();
         options.add(widthOption);
         options.add(showDegrees);
         options.add(invert);

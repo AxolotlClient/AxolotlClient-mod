@@ -1,10 +1,9 @@
 package io.github.axolotlclient.modules.hud.gui.hud.item;
 
-import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
+import io.github.axolotlclient.AxolotlclientConfig.options.Option;
 import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.ItemUtil;
-import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
@@ -84,7 +83,7 @@ public class ArmorHud extends TextHudEntry {
     }
 
     @Override
-    public List<OptionBase<?>> getConfigurationOptions() {
+    public List<Option<?>> getConfigurationOptions() {
         return super.getConfigurationOptions();
     }
 

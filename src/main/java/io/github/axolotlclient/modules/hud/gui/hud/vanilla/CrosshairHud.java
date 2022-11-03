@@ -2,14 +2,12 @@ package io.github.axolotlclient.modules.hud.gui.hud.vanilla;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlclientConfig.Color;
-import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.ColorOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.EnumOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
+import io.github.axolotlclient.AxolotlclientConfig.options.*;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.gui.component.DynamicallyPositionable;
 import io.github.axolotlclient.modules.hud.gui.layout.AnchorPoint;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
+import io.github.axolotlclient.modules.hud.util.RenderUtil;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.EnderChestBlock;
@@ -72,19 +70,18 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
         DrawPosition pos = getPos().subtract(0, -1);
         if (type.get().equals(Crosshair.DOT.toString())) {
 
-            fillRect(pos.x + (width / 2) - 1, pos.y + (height / 2) - 2, 3, 3, color.getAsInt());
+            RenderUtil.fillBlend(pos.x + (width / 2) - 1, pos.y + (height / 2) - 2, 3, 3, color);
         } else if (type.get().equals(Crosshair.CROSS.toString())) {
 
-            fillRect(pos.x + (width / 2) - 5, pos.y + (height / 2) - 1, 6, 1, color.getAsInt());
-            fillRect(pos.x + (width / 2) + 1, pos.y + (height / 2) - 1, 5, 1, color.getAsInt());
-            fillRect(pos.x + (width / 2), pos.y + (height / 2) - 6, 1, 6, color.getAsInt());
-            fillRect(pos.x + (width / 2), pos.y + (height / 2), 1, 5, color.getAsInt());
+            RenderUtil.fillBlend(pos.x + (width / 2) - 5, pos.y + (height / 2) - 1, 6, 1, color);
+            RenderUtil.fillBlend(pos.x + (width / 2) + 1, pos.y + (height / 2) - 1, 5, 1, color);
+            RenderUtil.fillBlend(pos.x + (width / 2), pos.y + (height / 2) - 6, 1, 5, color);
+            RenderUtil.fillBlend(pos.x + (width / 2), pos.y + (height / 2), 1, 5, color);
         } else if (type.get().equals(Crosshair.TEXTURE.toString())) {
 
             MinecraftClient.getInstance().getTextureManager().bindTexture(DrawableHelper.GUI_ICONS_TEXTURE);
 
             // Draw crosshair
-            //GlStateManager.color4f((float) color.getRed() / 255, (float) color.getGreen() / 255, (float) color.getBlue() / 255, 1F);
             client.inGameHud.drawTexture((int) (((Util.getWindow().getScaledWidth() / getScale()) - 14) / 2),
                     (int) (((Util.getWindow().getScaledHeight() / getScale()) - 14) / 2), 0, 0, 16, 16);
 
@@ -133,8 +130,8 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
     }
 
     @Override
-    public List<OptionBase<?>> getConfigurationOptions() {
-        List<OptionBase<?>> options = super.getConfigurationOptions();
+    public List<Option<?>> getConfigurationOptions() {
+        List<Option<?>> options = super.getConfigurationOptions();
         options.add(type);
         options.add(showInF5);
         options.add(overrideF3);

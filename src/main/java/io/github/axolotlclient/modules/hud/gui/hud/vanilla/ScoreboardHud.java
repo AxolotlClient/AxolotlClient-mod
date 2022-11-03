@@ -206,8 +206,8 @@ public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionab
     }
 
     @Override
-    public List<OptionBase<?>> getConfigurationOptions() {
-        List<OptionBase<?>> options = new ArrayList<>();
+    public List<Option<?>> getConfigurationOptions() {
+        List<Option<?>> options = new ArrayList<>();
         options.add(enabled);
         options.add(scale);
         options.add(textColor);

@@ -1,7 +1,6 @@
 package io.github.axolotlclient.modules.rpc.gameSdk;
 
 import de.jcm.discordgamesdk.Core;
-import io.github.axolotlclient.AxolotlclientConfig.options.DisableReason;
 import io.github.axolotlclient.modules.rpc.DiscordRPC;
 import io.github.axolotlclient.util.Logger;
 import io.github.axolotlclient.util.OSUtil;
@@ -65,7 +64,7 @@ public class GameSdkDownloader {
 
             if (!sdk.exists() || !jni.exists()) {
                 Logger.error("Could not download GameSDK, no copy is available. RPC will be disabled.");
-                DiscordRPC.getInstance().enabled.setForceOff(true, DisableReason.CRASH);
+                DiscordRPC.getInstance().enabled.setForceOff(true, "crash");
                 return;
             }
 
@@ -127,7 +126,7 @@ public class GameSdkDownloader {
             extractJni(jni);
         } else {
             Logger.error("Extracting Jni failed, restart your game to try again.");
-            DiscordRPC.getInstance().enabled.setForceOff(true, DisableReason.CRASH);
+            DiscordRPC.getInstance().enabled.setForceOff(true, "crash");
         }
     }
 

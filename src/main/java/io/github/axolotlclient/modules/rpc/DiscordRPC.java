@@ -7,7 +7,6 @@ import de.jcm.discordgamesdk.activity.Activity;
 import de.jcm.discordgamesdk.activity.ActivityType;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.DisableReason;
 import io.github.axolotlclient.AxolotlclientConfig.options.EnumOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
@@ -65,7 +64,7 @@ public class DiscordRPC extends AbstractModule {
         AxolotlClient.CONFIG.addCategory(category);
 
         if(OSUtil.getOS()== OSUtil.OperatingSystem.OTHER){
-            enabled.setForceOff(true, DisableReason.CRASH);
+            enabled.setForceOff(true, "crash");
         }
 
         Optional<ModContainer> container = FabricLoader.getInstance().getModContainer("axolotlclient");

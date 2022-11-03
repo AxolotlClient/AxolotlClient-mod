@@ -1,12 +1,12 @@
 package io.github.axolotlclient.modules.hud.gui.hud.simple;
 
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.Option;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.entry.SimpleTextHudEntry;
 import io.github.axolotlclient.util.Hooks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,8 +80,8 @@ public class CPSHud extends SimpleTextHudEntry {
     }
 
     @Override
-    public List<OptionBase<?>> getConfigurationOptions() {
-        List<OptionBase<?>> options = super.getConfigurationOptions();
+    public List<Option<?>> getConfigurationOptions() {
+        List<Option<?>> options = super.getConfigurationOptions();
         options.add(fromKeybindings);
         options.add(rmb);
         return options;

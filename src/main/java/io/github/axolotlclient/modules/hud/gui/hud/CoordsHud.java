@@ -308,8 +308,8 @@ public class CoordsHud extends TextHudEntry implements DynamicallyPositionable {
     }
 
     @Override
-    public List<OptionBase<?>> getConfigurationOptions() {
-        List<OptionBase<?>> options = super.getConfigurationOptions();
+    public List<Option<?>> getConfigurationOptions() {
+        List<Option<?>> options = super.getConfigurationOptions();
         options.add(firstColor);
         options.add(secondColor);
         options.add(decimalPlaces);

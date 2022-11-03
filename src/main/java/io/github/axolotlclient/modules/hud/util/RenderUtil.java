@@ -90,6 +90,34 @@ public class RenderUtil {
         fill(x, y, x + width, y + height, color);
     }
 
+    public void fillRect(int x, int y, int width, int height, int color, boolean keepBlend){
+        if(!keepBlend){
+            drawRectangle(x, y, width, height, color);
+        } else {
+            fillBlend(x, y, x+width, y+height, color);
+        }
+    }
+
+    public void fillBlend(int x, int y, int width, int height, Color color){
+        fillBlend(x, y, x+width, y+height, color.getAsInt());
+    }
+
+    public void fillBlend(int x1, int y1, int x2, int y2, int color){
+        GlStateManager.disableTexture();
+        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+        float a = (float)(color >> 24 & 0xFF) / 255.0f;
+        float r = (float)(color >> 16 & 0xFF) / 255.0f;
+        float g = (float)(color >> 8 & 0xFF) / 255.0f;
+        float b = (float)(color & 0xFF) / 255.0f;
+        bufferBuilder.begin(7, VertexFormats.POSITION_COLOR);
+        bufferBuilder.vertex(x1, y2, 0.0f).color(r, g, b, a).next();
+        bufferBuilder.vertex(x2, y2, 0.0f).color(r, g, b, a).next();
+        bufferBuilder.vertex(x2, y1, 0.0f).color(r, g, b, a).next();
+        bufferBuilder.vertex(x1, y1, 0.0f).color(r, g, b, a).next();
+        Tessellator.getInstance().draw();
+        GlStateManager.enableTexture();
+    }
+
     public void fill(int x1, int y1, int x2, int y2, Color color) {
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
         int colorInt = colorPreRender(color);

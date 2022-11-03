@@ -1,6 +1,7 @@
 package io.github.axolotlclient.modules.hud.gui.hud.vanilla;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import io.github.axolotlclient.AxolotlclientConfig.options.Option;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
@@ -85,8 +86,8 @@ public class HotbarHUD extends TextHudEntry {
     }
 
     @Override
-    public List<OptionBase<?>> getConfigurationOptions() {
-        List<OptionBase<?>> list = new ArrayList<>();
+    public List<Option<?>> getConfigurationOptions() {
+        List<Option<?>> list = new ArrayList<>();
         list.add(enabled);
         list.add(shadow);
         return list;

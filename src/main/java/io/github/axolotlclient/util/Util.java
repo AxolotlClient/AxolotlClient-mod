@@ -78,7 +78,7 @@ public class Util {
     public static Window getWindow(){
         if(window==null){
             try {
-                window = new Window(MinecraftClient.getInstance());
+                return window = new Window(MinecraftClient.getInstance());
             } catch (Exception e){
                 return null;
             }
