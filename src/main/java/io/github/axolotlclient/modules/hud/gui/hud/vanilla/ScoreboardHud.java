@@ -7,7 +7,6 @@ import io.github.axolotlclient.AxolotlclientConfig.options.*;
 import io.github.axolotlclient.modules.hud.gui.component.DynamicallyPositionable;
 import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
 import io.github.axolotlclient.modules.hud.gui.layout.AnchorPoint;
-import io.github.axolotlclient.modules.hud.util.DrawUtil;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import io.github.axolotlclient.modules.hud.util.RenderUtil;
 import net.minecraft.client.util.math.MatrixStack;
@@ -211,8 +210,8 @@ public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionab
     }
 
     @Override
-    public List<OptionBase<?>> getConfigurationOptions() {
-        List<OptionBase<?>> options = super.getConfigurationOptions();;
+    public List<Option<?>> getConfigurationOptions() {
+        List<Option<?>> options = super.getConfigurationOptions();;
         options.add(topColor);
         options.add(scores);
         options.add(scoreColor);

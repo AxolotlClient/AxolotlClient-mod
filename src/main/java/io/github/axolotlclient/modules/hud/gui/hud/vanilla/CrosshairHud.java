@@ -3,10 +3,7 @@ package io.github.axolotlclient.modules.hud.gui.hud.vanilla;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlclientConfig.Color;
-import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.ColorOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.EnumOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
+import io.github.axolotlclient.AxolotlclientConfig.options.*;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.gui.component.DynamicallyPositionable;
 import io.github.axolotlclient.modules.hud.gui.layout.AnchorPoint;
@@ -90,12 +87,12 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
         }
 
         if (type.get().equals(Crosshair.DOT.toString())) {
-            fillRect(matrices, new Rectangle(pos.x() + (getWidth() / 2) - 2, pos.y() + (getHeight() / 2) - 2, 3, 3), color);
+            RenderUtil.fillBlend(matrices, pos.x() + (getWidth() / 2) - 2, pos.y() + (getHeight() / 2) - 2, 3, 3, color);
         } else if (type.get().equals(Crosshair.CROSS.toString())) {
-            fillRect(matrices, new Rectangle(pos.x() + (getWidth() / 2) - 6, pos.y() + (getHeight() / 2) - 1, 6, 1), color);
-            fillRect(matrices, new Rectangle(pos.x() + (getWidth() / 2), pos.y() + (getHeight() / 2) - 1, 5, 1), color);
-            fillRect(matrices, new Rectangle(pos.x() + (getWidth() / 2) - 1, pos.y() + (getHeight() / 2) - 6, 1, 6), color);
-            fillRect(matrices, new Rectangle(pos.x() + (getWidth() / 2) - 1, pos.y() + (getHeight() / 2), 1, 5), color);
+            RenderUtil.fillBlend(matrices,pos.x() + (getWidth() / 2) - 6, pos.y() + (getHeight() / 2) - 1, 6, 1, color);
+            RenderUtil.fillBlend(matrices, pos.x() + (getWidth() / 2), pos.y() + (getHeight() / 2) - 1, 5, 1, color);
+            RenderUtil.fillBlend(matrices, pos.x() + (getWidth() / 2) - 1, pos.y() + (getHeight() / 2) - 6, 1, 5, color);
+            RenderUtil.fillBlend(matrices, pos.x() + (getWidth() / 2) - 1, pos.y() + (getHeight() / 2), 1, 5, color);
         } else if (type.get().equals(Crosshair.DIRECTION.toString())) {
             Camera camera = this.client.gameRenderer.getCamera();
             MatrixStack matrixStack = RenderSystem.getModelViewStack();
@@ -146,7 +143,7 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
                 }
             }
         }
-        if (indicator == AttackIndicator.CROSSHAIR) {
+        if (indicator == AttackIndicator.CROSSHAIR && !type.get().equals(Crosshair.TEXTURE.toString())) {
             float progress = this.client.player.getAttackCooldownProgress(0.0F);
             if (progress != 1.0F) {
                 RenderUtil.drawRectangle(
@@ -198,8 +195,8 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
     }
 
     @Override
-    public List<OptionBase<?>> getConfigurationOptions() {
-        List<OptionBase<?>> options = super.getConfigurationOptions();
+    public List<Option<?>> getConfigurationOptions() {
+        List<Option<?>> options = super.getConfigurationOptions();
         options.add(type);
         options.add(showInF5);
         options.add(overrideF3);

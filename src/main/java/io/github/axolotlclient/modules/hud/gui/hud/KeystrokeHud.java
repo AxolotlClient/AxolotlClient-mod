@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.AxolotlclientConfig.Color;
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.ColorOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.Option;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
@@ -219,9 +220,9 @@ public class KeystrokeHud extends TextHudEntry {
     }
 
     @Override
-    public List<OptionBase<?>> getConfigurationOptions() {
+    public List<Option<?>> getConfigurationOptions() {
         // We want a specific order since this is a more complicated entry
-        List<OptionBase<?>> options = new ArrayList<>();
+        List<Option<?>> options = new ArrayList<>();
         options.add(enabled);
         options.add(scale);
         options.add(mouseMovement);

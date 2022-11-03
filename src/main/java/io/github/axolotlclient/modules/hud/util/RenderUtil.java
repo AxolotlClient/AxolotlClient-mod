@@ -96,6 +96,30 @@ public class RenderUtil {
         fill(matrix.peek().getModel(), x1, y1, x2, y2, color);
     }
 
+    public void fillBlend(MatrixStack matrices, Rectangle rect, Color color){
+        fillBlend(matrices, rect.x, rect.y, rect.width, rect.height, color);
+    }
+
+    public void fillBlend(MatrixStack matrices, int x, int y, int width, int height, Color color){
+        fillBlend(matrices.peek().getModel(), x, y, x+width, y+height, color.getAsInt());
+    }
+
+    public void fillBlend(Matrix4f matrix, int x1, int y1, int x2, int y2, int color){
+        RenderSystem.disableTexture();
+        BufferBuilder bufferBuilder = Tessellator.getInstance().getBufferBuilder();
+        float a = (float)(color >> 24 & 0xFF) / 255.0f;
+        float r = (float)(color >> 16 & 0xFF) / 255.0f;
+        float g = (float)(color >> 8 & 0xFF) / 255.0f;
+        float b = (float)(color & 0xFF) / 255.0f;
+        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
+        bufferBuilder.vertex(matrix, x1, y2, 0.0f).color(r, g, b, a).next();
+        bufferBuilder.vertex(matrix, x2, y2, 0.0f).color(r, g, b, a).next();
+        bufferBuilder.vertex(matrix, x2, y1, 0.0f).color(r, g, b, a).next();
+        bufferBuilder.vertex(matrix, x1, y1, 0.0f).color(r, g, b, a).next();
+        Tessellator.getInstance().draw();
+        RenderSystem.enableTexture();
+    }
+
     public void fill(Matrix4f matrix, int x1, int y1, int x2, int y2, Color color) {
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBufferBuilder();
         int colorInt = colorPreRender(color);

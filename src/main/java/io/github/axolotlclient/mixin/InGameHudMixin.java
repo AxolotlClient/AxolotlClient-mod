@@ -1,8 +1,7 @@
 package io.github.axolotlclient.mixin;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.modules.hud.HudManager;
-import io.github.axolotlclient.modules.hud.gui.hud.*;
+import io.github.axolotlclient.modules.hud.gui.hud.PotionsHud;
 import io.github.axolotlclient.modules.hud.gui.hud.vanilla.ActionBarHud;
 import io.github.axolotlclient.modules.hud.gui.hud.vanilla.CrosshairHud;
 import io.github.axolotlclient.modules.hud.gui.hud.vanilla.HotbarHUD;
@@ -35,11 +34,11 @@ public abstract class InGameHudMixin {
 
 	@Shadow private int overlayRemaining;
 
-	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderCrosshair(Lnet/minecraft/client/util/math/MatrixStack;)V"))
+	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderStatusEffectOverlay(Lnet/minecraft/client/util/math/MatrixStack;)V"))
 	private void onHudRender(MatrixStack matrices, float tickDelta, CallbackInfo ci){
-		RenderSystem.disableBlend();
-		HudManager.getInstance().render(matrices, tickDelta);
-		RenderSystem.enableBlend();
+		if(!MinecraftClient.getInstance().options.hudHidden) {
+			HudManager.getInstance().render(matrices, tickDelta);
+		}
 	}
 
 	@Inject(method = "renderStatusEffectOverlay", at = @At("HEAD"), cancellable = true)

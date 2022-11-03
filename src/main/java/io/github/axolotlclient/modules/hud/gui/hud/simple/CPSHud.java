@@ -1,6 +1,7 @@
 package io.github.axolotlclient.modules.hud.gui.hud.simple;
 
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.Option;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.entry.SimpleTextHudEntry;
 import io.github.axolotlclient.util.Hooks;
@@ -79,8 +80,8 @@ public class CPSHud extends SimpleTextHudEntry {
     }
 
     @Override
-    public List<OptionBase<?>> getConfigurationOptions() {
-        List<OptionBase<?>> options = super.getConfigurationOptions();
+    public List<Option<?>> getConfigurationOptions() {
+        List<Option<?>> options = super.getConfigurationOptions();
         options.add(fromKeybindings);
         options.add(rmb);
         return options;
@@ -90,10 +91,10 @@ public class CPSHud extends SimpleTextHudEntry {
 
         public static ClickList LEFT = new ClickList();
         public static ClickList RIGHT = new ClickList();
-        private List<Long> clicks;
+        private final List<Long> clicks;
 
         public ClickList() {
-            clicks = new ArrayList<Long>();
+            clicks = new ArrayList<>();
         }
 
         public void update() {

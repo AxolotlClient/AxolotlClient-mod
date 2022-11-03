@@ -1,6 +1,7 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.Option;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
 import io.github.axolotlclient.AxolotlclientConfig.options.StringOption;
 import io.github.axolotlclient.modules.hud.gui.entry.SimpleTextHudEntry;
@@ -142,8 +143,8 @@ public class ToggleSprintHud extends SimpleTextHudEntry {
     }
 
     @Override
-    public List<OptionBase<?>> getConfigurationOptions() {
-        List<OptionBase<?>> options = super.getConfigurationOptions();
+    public List<Option<?>> getConfigurationOptions() {
+        List<Option<?>> options = super.getConfigurationOptions();
         options.add(toggleSprint);
         options.add(toggleSneak);
         options.add(randomPlaceholder);
@@ -152,8 +153,8 @@ public class ToggleSprintHud extends SimpleTextHudEntry {
     }
 
     @Override
-    public List<OptionBase<?>> getSaveOptions() {
-        List<OptionBase<?>> options = super.getSaveOptions();
+    public List<Option<?>> getSaveOptions() {
+        List<Option<?>> options = super.getSaveOptions();
         options.add(sprintToggled);
         options.add(sneakToggled);
         return options;

@@ -315,8 +315,8 @@
 	"green": "Green",
 	"blue": "Blue",
 
-	"disableReason.crash.tooltip": "This option has been disabled <br>because it would crash your game.",
-	"disableReason.ban_reason.tooltip": "This option is disabled <br>because it is known to be bannable on your current server.",
+	"disableReason.crash": "This option has been disabled <br>because it would crash your game.",
+	"disableReason.ban_reason": "This option is disabled <br>because it is known to be bannable on your current server.",
 
 	"back": "Back",
 	"close": "Close"

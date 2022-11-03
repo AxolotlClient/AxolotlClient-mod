@@ -191,8 +191,8 @@
 	"contributors": "Contributors:",
 	"other_people": "Andere Personen:",
 	
-	"disableReason.crash.tooltip": "Diese Option ist deaktiviert <br>da sie dein Spiel crashen würde.",
-	"disableReason.ban_reason.tooltip": "Diese Option ist deaktiviert <br>da sie zu einem Ban auf deinem geradigen Server führen kann.",
+	"disableReason.crash": "Diese Option ist deaktiviert <br>da sie dein Spiel crashen würde.",
+	"disableReason.ban_reason": "Diese Option ist deaktiviert <br>da sie zu einem Ban auf deinem geradigen Server führen kann.",
 	
 	"back": "Zurück",
 	"close": "Schließen",

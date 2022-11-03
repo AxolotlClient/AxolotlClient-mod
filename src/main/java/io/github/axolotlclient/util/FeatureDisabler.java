@@ -2,7 +2,6 @@ package io.github.axolotlclient.util;
 
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.DisableReason;
 import io.github.axolotlclient.modules.freelook.Freelook;
 import net.minecraft.client.network.ServerInfo;
 
@@ -25,7 +24,7 @@ public class FeatureDisabler {
 
     public static void clear(){
         disabledServers.forEach((option, strings) -> {
-            option.setForceOff(false, DisableReason.BAN_REASON);
+            option.setForceOff(false, "ban_reason");
         });
     }
 
@@ -39,7 +38,7 @@ public class FeatureDisabler {
         }
 
         if(option.getForceDisabled() != ban) {
-            option.setForceOff(ban, DisableReason.BAN_REASON);
+            option.setForceOff(ban, "ban_reason");
         }
     }
 

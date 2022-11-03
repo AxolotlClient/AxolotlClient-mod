@@ -1,10 +1,7 @@
 package io.github.axolotlclient.modules.hud.gui;
 
 import io.github.axolotlclient.AxolotlclientConfig.Color;
-import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.DoubleOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
-import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
+import io.github.axolotlclient.AxolotlclientConfig.options.*;
 import io.github.axolotlclient.modules.hud.util.DefaultOptions;
 import io.github.axolotlclient.modules.hud.gui.component.HudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
@@ -201,8 +198,8 @@ public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
      * @return List of options
      */
     @Override
-    public List<OptionBase<?>> getConfigurationOptions() {
-        List<OptionBase<?>> options = new ArrayList<>();
+    public List<Option<?>> getConfigurationOptions() {
+        List<Option<?>> options = new ArrayList<>();
         options.add(enabled);
         options.add(scale);
         return options;
@@ -214,8 +211,8 @@ public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
      * @return
      */
     @Override
-    public List<OptionBase<?>> getSaveOptions() {
-        List<OptionBase<?>> options = getConfigurationOptions();
+    public List<Option<?>> getSaveOptions() {
+        List<Option<?>> options = getConfigurationOptions();
         options.add(x);
         options.add(y);
         return options;
@@ -227,7 +224,7 @@ public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
         return cat;
     }
     public OptionCategory getAllOptions() {
-        List<OptionBase<?>> options = getSaveOptions();
+        List<Option<?>> options = getSaveOptions();
         OptionCategory cat = new OptionCategory(getNameKey());
         cat.add(options);
         return cat;
