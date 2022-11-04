@@ -11,6 +11,7 @@ import io.github.axolotlclient.modules.hud.gui.layout.AnchorPoint;
 import io.github.axolotlclient.modules.hud.gui.layout.CardinalOrder;
 import io.github.axolotlclient.modules.hud.util.DefaultOptions;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
+import io.github.axolotlclient.util.Util;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.util.Identifier;
@@ -34,6 +35,18 @@ public class PotionsHud extends TextHudEntry implements DynamicallyPositionable 
 
     private final BooleanOption iconsOnly = new BooleanOption("axolotlclient.iconsonly", false);
     protected static final Identifier INVENTORY_TEXTURE = new Identifier("textures/gui/container/inventory.png");
+
+    private final List<StatusEffectInstance> placeholder = Util.make(()-> {
+        List<StatusEffectInstance> list = new ArrayList<>();
+        StatusEffectInstance effect = new StatusEffectInstance(StatusEffect.SPEED.id, 9999);
+        StatusEffectInstance jump = new StatusEffectInstance(StatusEffect.JUMP_BOOST.id, 99999);
+        StatusEffectInstance haste = new StatusEffectInstance(StatusEffect.HASTE.id, Integer.MAX_VALUE);
+        haste.setPermanent(true);
+        list.add(effect);
+        list.add(jump);
+        list.add(haste);
+        return list;
+    });
 
     public PotionsHud() {
         super(50, 200, false);
@@ -118,14 +131,7 @@ public class PotionsHud extends TextHudEntry implements DynamicallyPositionable 
 
     @Override
     public void renderPlaceholderComponent(float delta) {
-        StatusEffectInstance effect = new StatusEffectInstance(StatusEffect.SPEED.id, 9999);
-        StatusEffectInstance jump = new StatusEffectInstance(StatusEffect.JUMP_BOOST.id, 99999);
-        StatusEffectInstance haste = new StatusEffectInstance(StatusEffect.HASTE.id, 9999999);
-        List<StatusEffectInstance> list = new ArrayList<>();
-        list.add(effect);
-        list.add(jump);
-        list.add(haste);
-        renderEffects(list);
+        renderEffects(placeholder);
     }
 
     @Override
