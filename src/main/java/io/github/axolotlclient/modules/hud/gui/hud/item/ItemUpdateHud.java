@@ -1,10 +1,11 @@
-package io.github.axolotlclient.modules.hud.gui.hud;
+package io.github.axolotlclient.modules.hud.gui.hud.item;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlclientConfig.Color;
 import io.github.axolotlclient.AxolotlclientConfig.options.IntegerOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.Option;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
-import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
+import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.ItemUtil;
 import net.minecraft.block.Blocks;
@@ -22,7 +23,7 @@ import java.util.Optional;
  * @license GPL-3.0
  */
 
-public class ItemUpdateHud extends AbstractHudEntry {
+public class ItemUpdateHud extends TextHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "itemupdatehud");
 
     private List<ItemUtil.ItemStorage> oldItems = new ArrayList<>();
@@ -32,7 +33,7 @@ public class ItemUpdateHud extends AbstractHudEntry {
     private final IntegerOption timeout = new IntegerOption("axolotlclient.timeout", 6, 1, 60);
 
     public ItemUpdateHud() {
-        super(200, 11 * 6 - 2);
+        super(200, 11 * 6 - 2, true);
         removed = new ArrayList<>();
         added = new ArrayList<>();
     }
@@ -95,8 +96,7 @@ public class ItemUpdateHud extends AbstractHudEntry {
     }
 
     @Override
-    public void render() {
-        scale();
+    public void renderComponent(float delta) {
         DrawPosition pos = getPos();
         int lastY = 1;
         int i = 0;
@@ -142,13 +142,10 @@ public class ItemUpdateHud extends AbstractHudEntry {
             lastY = lastY + client.textRenderer.fontHeight + 2;
             i++;
         }
-        GlStateManager.popMatrix();
     }
 
     @Override
-    public void renderPlaceholder() {
-        renderPlaceholderBackground();
-        scale();
+    public void renderPlaceholderComponent(float delta) {
         DrawPosition pos = getPos();
         String addM = "+ " +
                 Formatting.DARK_GRAY + "[" +
@@ -176,15 +173,14 @@ public class ItemUpdateHud extends AbstractHudEntry {
             client.textRenderer.draw(removeM, pos.x+1, pos.y+1 + client.textRenderer.fontHeight + 3,
                     Color.SELECTOR_RED.getAsInt());
         }
-        hovered = false;
-        GlStateManager.popMatrix();
     }
 
     @Override
-    public void addConfigOptions(List<OptionBase<?>> options) {
-        super.addConfigOptions(options);
+    public List<Option<?>> getConfigurationOptions() {
+        List<Option<?>> options = super.getConfigurationOptions();
         options.add(shadow);
         options.add(timeout);
+        return options;
     }
 
     @Override

@@ -1,16 +1,22 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.EnumOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.Option;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
-import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
-import io.github.axolotlclient.modules.hud.util.DrawPosition;
+import io.github.axolotlclient.modules.hud.gui.component.DynamicallyPositionable;
+import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
+import io.github.axolotlclient.modules.hud.gui.layout.AnchorPoint;
+import io.github.axolotlclient.modules.hud.gui.layout.CardinalOrder;
+import io.github.axolotlclient.modules.hud.util.DefaultOptions;
+import io.github.axolotlclient.modules.hud.util.Rectangle;
 import io.github.axolotlclient.util.Util;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.util.Identifier;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,86 +25,122 @@ import java.util.List;
  * @license GPL-3.0
  */
 
-public class PotionsHud extends AbstractHudEntry {
+public class PotionsHud extends TextHudEntry implements DynamicallyPositionable {
 
     public static final Identifier ID = new Identifier("kronhud", "potionshud");
+
+    private final EnumOption anchor = DefaultOptions.getAnchorPoint();
+
+    private final EnumOption order = DefaultOptions.getCardinalOrder(CardinalOrder.TOP_DOWN);
+
+    private final BooleanOption iconsOnly = new BooleanOption("axolotlclient.iconsonly", false);
     protected static final Identifier INVENTORY_TEXTURE = new Identifier("textures/gui/container/inventory.png");
 
+    private final List<StatusEffectInstance> placeholder = Util.make(()-> {
+        List<StatusEffectInstance> list = new ArrayList<>();
+        StatusEffectInstance effect = new StatusEffectInstance(StatusEffect.SPEED.id, 9999);
+        StatusEffectInstance jump = new StatusEffectInstance(StatusEffect.JUMP_BOOST.id, 99999);
+        StatusEffectInstance haste = new StatusEffectInstance(StatusEffect.HASTE.id, Integer.MAX_VALUE);
+        haste.setPermanent(true);
+        list.add(effect);
+        list.add(jump);
+        list.add(haste);
+        return list;
+    });
+
     public PotionsHud() {
-        super(60, 200);
+        super(50, 200, false);
     }
 
-    @Override
-    public void render() {
-
-        GlStateManager.enableBlend();
-
-        scale();
-        DrawPosition pos = getPos();
-        int i = pos.x-2;
-        int y = pos.y;
-        Collection<StatusEffectInstance> collection = this.client.player.getStatusEffectInstances();
-        if (!collection.isEmpty()) {
-            GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-            GlStateManager.disableLighting();
-            int l = 33;
-            if (collection.size() > 5) {
-                l = 132 / (collection.size() - 1);
+    private int calculateWidth(List<StatusEffectInstance> effects) {
+        if (CardinalOrder.valueOf(order.get()).isXAxis()) {
+            if (iconsOnly.get()) {
+                return 20 * effects.size() + 2;
             }
-            for(StatusEffectInstance statusEffectInstance : collection) {
-                StatusEffect statusEffect = StatusEffect.STATUS_EFFECTS[statusEffectInstance.getEffectId()];
-                GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-                this.client.getTextureManager().bindTexture(INVENTORY_TEXTURE);
-                if (statusEffect.method_2443()) {
-                    int m = statusEffect.method_2444();
-                    this.drawTexture(i + 6, y + 6, m % 8 * 18, 198 + m / 8 * 18, 18, 18);
-                }
-
-                String string = I18n.translate(statusEffect.getTranslationKey());
-                 if (statusEffectInstance.getAmplifier() != 1) {
-                    string += " " + Util.toRoman(statusEffectInstance.getAmplifier()+1);
-                }
-
-                client.textRenderer.drawWithShadow(string, (float)(i + 10 + 18), (float)(y + 6), textColor.get().getAsInt());
-                String string2 = StatusEffect.method_2436(statusEffectInstance);
-                client.textRenderer.drawWithShadow(string2, (float)(i + 10 + 18), (float)(y + 6 + 10), 8355711);
-                y += l;
+            return 50 * effects.size() + 2;
+        } else {
+            if (iconsOnly.get()) {
+                return 20;
             }
-
+            return 50;
         }
-        GlStateManager.popMatrix();
+    }
 
+    private int calculateHeight(List<StatusEffectInstance> effects) {
+        if (CardinalOrder.valueOf(order.get()).isXAxis()) {
+            return 22;
+        } else {
+            return 20 * effects.size() + 2;
+        }
     }
 
     @Override
-    public void renderPlaceholder() {
+    public void renderComponent(float delta) {
+        List<StatusEffectInstance> effects = new ArrayList<>(client.player.getStatusEffectInstances());
+        if (effects.isEmpty()) {
+            return;
+        }
+        renderEffects(effects);
+    }
 
-        renderPlaceholderBackground();
-        scale();
-        DrawPosition pos = getPos();
-        int i = pos.x-2;
-        StatusEffect statusEffect = StatusEffect.STATUS_EFFECTS[1];
+    private void renderEffects(List<StatusEffectInstance> effects) {
+        int calcWidth = calculateWidth(effects);
+        int calcHeight = calculateHeight(effects);
+        boolean changed = false;
+        if (calcWidth != width) {
+            setWidth(calcWidth);
+            changed = true;
+        }
+        if (calcHeight != height) {
+            setHeight(calcHeight);
+            changed = true;
+        }
+        if (changed) {
+            onBoundsUpdate();
+        }
+        int lastPos = 0;
+        CardinalOrder direction = CardinalOrder.valueOf(order.get());
+
+        Rectangle bounds = getBounds();
+        int x = bounds.x();
+        int y = bounds.y();
+        for (int i = 0; i < effects.size(); i++) {
+            StatusEffectInstance effect = effects.get(direction.getDirection() == -1 ? i : effects.size() - i - 1);
+            if (direction.isXAxis()) {
+                renderPotion(effect, x + lastPos + 1, y + 1);
+                lastPos += (iconsOnly.get() ? 20 : 50);
+            } else {
+                renderPotion(effect, x + 1, y + 1 + lastPos);
+                lastPos += 20;
+            }
+        }
+    }
+
+    private void renderPotion(StatusEffectInstance effect, int x, int y) {
+        StatusEffect type = StatusEffect.STATUS_EFFECTS[effect.getEffectId()];
         GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.client.getTextureManager().bindTexture(INVENTORY_TEXTURE);
-        int m = statusEffect.method_2444();
-        this.drawTexture(i + 6, pos.y + 7, m % 8 * 18, 198 + m / 8 * 18, 18, 18);
-        client.textRenderer.drawWithShadow(I18n.translate(statusEffect.getTranslationKey()), (float)(i + 10 + 18), (float)(pos.y + 6), 16777215);
-        client.textRenderer.drawWithShadow("**:**", (float)(i + 10 + 18), (float)(pos.y + 6 + 10), textColor.get().getAsInt());
-        GlStateManager.popMatrix();
-        hovered = false;
-
+        int m = type.method_2444();
+        this.drawTexture(x, y, m % 8 * 18, 198 + m / 8 * 18, 18, 18);
+        if (!iconsOnly.get()) {
+            drawString(StatusEffect.method_2436(effect), x + 19, y + 5,
+                    textColor.get().getAsInt(), shadow.get()
+            );
+        }
     }
 
     @Override
-    public void addConfigOptions(List<OptionBase<?>> options) {
-        super.addConfigOptions(options);
-        options.add(textColor);
-        options.add(shadow);
+    public void renderPlaceholderComponent(float delta) {
+        renderEffects(placeholder);
     }
 
     @Override
-    public boolean movable() {
-        return true;
+    public List<Option<?>> getConfigurationOptions() {
+        List<Option<?>> options = super.getConfigurationOptions();
+        options.add(anchor);
+        options.add(order);
+        options.add(iconsOnly);
+        return options;
     }
 
     @Override
@@ -106,4 +148,8 @@ public class PotionsHud extends AbstractHudEntry {
         return ID;
     }
 
+    @Override
+    public AnchorPoint getAnchor() {
+        return AnchorPoint.valueOf(anchor.get());
+    }
 }

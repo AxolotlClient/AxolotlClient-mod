@@ -14,7 +14,7 @@ import org.lwjgl.input.Keyboard;
 public class Freelook extends AbstractModule {
 
     private static final Freelook INSTANCE = new Freelook();
-    private static final KeyBinding KEY = new KeyBinding("key.freelook", Keyboard.KEY_V, "category.axolotlclient");
+    private static final KeyBinding KEY = new KeyBinding("key.freelook", Keyboard.KEY_V, "axolotlclient.category.axolotlclient");
 
     private final MinecraftClient client = MinecraftClient.getInstance();
 

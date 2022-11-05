@@ -1,5 +1,8 @@
 package io.github.axolotlclient.modules.hud.util;
 
+import lombok.Data;
+import lombok.experimental.Accessors;
+
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
@@ -10,7 +13,8 @@ package io.github.axolotlclient.modules.hud.util;
  * Stores a basic rectangle.
  */
 
-
+@Data
+@Accessors(fluent = true)
 public class Rectangle {
 
     public int x;
@@ -32,7 +36,7 @@ public class Rectangle {
         return new Rectangle(this.x + x, this.y + y, width, height);
     }
 
-    public boolean isMouseOver(int mouseX, int mouseY){
+    public boolean isMouseOver(double mouseX, double mouseY){
         return mouseX>=x && mouseX<=x+width && mouseY >=y && mouseY <= y+height;
     }
 
@@ -43,4 +47,5 @@ public class Rectangle {
         this.height = height;
         return this;
     }
+
 }

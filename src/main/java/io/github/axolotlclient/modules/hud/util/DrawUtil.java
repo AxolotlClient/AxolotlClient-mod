@@ -1,6 +1,8 @@
 package io.github.axolotlclient.modules.hud.util;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlclientConfig.Color;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 
@@ -16,6 +18,10 @@ public class DrawUtil extends DrawableHelper{
         fillRect(rectangle.x, rectangle.y, rectangle.width,
                 rectangle.height,
                 color.getAsInt());
+    }
+
+    public static void fillRect(int x, int y, int width, int height, Color color) {
+        fillRect(x, y, x + width, y + height, color.getAsInt());
     }
 
     public static void fillRect(int x, int y, int width, int height, int color) {
@@ -34,37 +40,43 @@ public class DrawUtil extends DrawableHelper{
     }
 
 
-    public static void drawCenteredString(TextRenderer renderer,
-                                          String text, DrawPosition position,
-                                          Color color, boolean shadow) {
-        drawCenteredString(renderer, text, position, color.getAsInt(), shadow);
+    public static void drawCenteredString(
+            TextRenderer renderer,
+            String text, int x, int y,
+            Color color, boolean shadow
+    ) {
+        drawCenteredString(renderer, text, x, y, color.getAsInt(), shadow);
     }
 
 
-    public static void drawCenteredString(TextRenderer renderer,
-                                          String text, DrawPosition position,
-                                          int color, boolean shadow) {
-        drawString(renderer, text, position.x - renderer.getStringWidth(text) / 2,
-                position.y,
-                color, shadow);
+    public static void drawCenteredString(
+            TextRenderer renderer,
+            String text, int x, int y,
+            int color, boolean shadow
+    ) {
+        drawString(text, (float) (x - renderer.getStringWidth(text) / 2),
+                (float) y,
+                color, shadow
+        );
     }
 
-    public static void drawCenteredString(TextRenderer renderer,
-                                          String text, int centerX, int y,
-                                          int color, boolean shadow) {
-        drawString(renderer, text, centerX - renderer.getStringWidth(text) / 2,
-                y,
-                color, shadow);
+    public static void drawString(String text, float x, float y, Color color, boolean shadow){
+        drawString(text, x, y, color.getAsInt(), shadow);
     }
 
-    public static void drawString(TextRenderer renderer, String text, int x, int y,
-                                  int color, boolean shadow) {
-        if(shadow) {
-            renderer.drawWithShadow(text, x, y, color);
-        }
-        else {
-            renderer.draw(text, x, y, color);
-        }
+    public static void drawString(
+            TextRenderer textRenderer, String text, float x, float y,
+            int color, boolean shadow
+    ) {
+        drawString(text, x, y, color, shadow);
+    }
+
+    public static void drawString(
+            String text, float x, float y,
+            int color, boolean shadow) {
+
+        GlStateManager.enableTexture();
+        MinecraftClient.getInstance().textRenderer.draw(text, x, y, color, shadow);
     }
 
 }

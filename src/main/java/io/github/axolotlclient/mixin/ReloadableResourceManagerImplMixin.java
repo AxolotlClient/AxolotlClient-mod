@@ -25,7 +25,7 @@ public abstract class ReloadableResourceManagerImplMixin {
         HypixelAbstractionLayer.clearPlayerData();
 
         PackDisplayHud hud = (PackDisplayHud) HudManager.getInstance().get(PackDisplayHud.ID);
-        if(hud != null && hud.isEnabled()){
+        if(hud != null){
             hud.setPacks(resourcePacks);
         }
 

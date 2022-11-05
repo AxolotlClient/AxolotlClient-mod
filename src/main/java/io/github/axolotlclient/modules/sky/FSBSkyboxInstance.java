@@ -28,10 +28,14 @@ public class FSBSkyboxInstance extends SkyboxInstance{
         this.textures[3] = new Identifier(textures.get("top").getAsString());
         this.textures[4] = new Identifier(textures.get("east").getAsString());
         this.textures[5] = new Identifier(textures.get("west").getAsString());
-        this.fade[0] = props.get("fade").getAsJsonObject().get("startFadeIn").getAsInt();
-        this.fade[1] = props.get("fade").getAsJsonObject().get("endFadeIn").getAsInt();
-        this.fade[2] = props.get("fade").getAsJsonObject().get("startFadeOut").getAsInt();
-        this.fade[3] = props.get("fade").getAsJsonObject().get("endFadeOut").getAsInt();
+        try {
+            this.fade[0] = props.get("fade").getAsJsonObject().get("startFadeIn").getAsInt();
+            this.fade[1] = props.get("fade").getAsJsonObject().get("endFadeIn").getAsInt();
+            this.fade[2] = props.get("fade").getAsJsonObject().get("startFadeOut").getAsInt();
+            this.fade[3] = props.get("fade").getAsJsonObject().get("endFadeOut").getAsInt();
+        } catch (Exception e){
+            alwaysOn=true;
+        }
         try {
             JsonObject rotation = props.get("rotation").getAsJsonObject();
             this.rotate = props.get("shouldRotate").getAsBoolean();

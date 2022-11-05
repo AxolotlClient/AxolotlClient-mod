@@ -1,6 +1,7 @@
 package io.github.axolotlclient.mixin;
 
 import io.github.axolotlclient.modules.hud.HudEditScreen;
+import io.github.axolotlclient.modules.hud.HudManager;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.ClientBrandRetriever;
 import net.minecraft.client.MinecraftClient;
@@ -20,13 +21,14 @@ public abstract class TitleScreenMixin extends Screen {
 
     @Inject(method = "initWidgetsNormal", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget;<init>(IIILjava/lang/String;)V", ordinal = 2), cancellable = true)
     public void customTextures(int y, int spacingY, CallbackInfo ci){
+        HudManager.getInstance().refreshAllBounds();
         this.buttons.add(new ButtonWidget(192, this.width / 2 - 100, y + spacingY * 2, 200, 20, I18n.translate("axolotlclient.config")+"..."));
         ci.cancel();
     }
 
     @Inject(method = "buttonClicked", at = @At("TAIL"))
     public void onClick(ButtonWidget button, CallbackInfo ci){
-        if(button.id==192) MinecraftClient.getInstance().openScreen(new HudEditScreen(this, true));
+        if(button.id==192) MinecraftClient.getInstance().openScreen(new HudEditScreen(this));
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;drawWithShadow(Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V", ordinal = 0))

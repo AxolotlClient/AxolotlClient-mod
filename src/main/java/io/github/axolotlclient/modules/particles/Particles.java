@@ -17,7 +17,7 @@ public class Particles extends AbstractModule {
 
     private static final Particles Instance = new Particles();
 
-    public final HashMap<ParticleType, HashMap<String, OptionBase<?>>> particleOptions = new HashMap<>();
+    public final HashMap<ParticleType, HashMap<String, Option<?>>> particleOptions = new HashMap<>();
     public final HashMap<Particle, ParticleType> particleMap = new HashMap<>();
 
     private final OptionCategory cat = new OptionCategory("axolotlclient.particles");
@@ -38,7 +38,7 @@ public class Particles extends AbstractModule {
     private void addParticleOptions(){
         for(ParticleType type : Arrays.stream(ParticleType.values()).sorted(new AlphabeticalComparator()).collect(Collectors.toList())){
             OptionCategory category = new OptionCategory(StringUtils.capitalize(Util.splitAtCapitalLetters(type.getName().replace("_", ""))));
-            HashMap<String, OptionBase<?>> optionsByKey = new LinkedHashMap<>();
+            HashMap<String, Option<?>> optionsByKey = new LinkedHashMap<>();
 
             populateMap(optionsByKey,
                     new BooleanOption("axolotlclient.showParticle", true),
@@ -57,15 +57,15 @@ public class Particles extends AbstractModule {
         }
     }
 
-    private void populateMap(HashMap<String, OptionBase<?>> map, OptionBase<?>... options){
-        for(OptionBase<?> option:options){
+    private void populateMap(HashMap<String, Option<?>> map, Option<?>... options){
+        for(Option<?> option:options){
             map.put(option.getName(), option);
         }
     }
 
     public void applyOptions(Particle particle){
         if(enabled.get() && particleMap.containsKey(particle)) {
-            HashMap<String, OptionBase<?>> options = particleOptions.get(particleMap.get(particle));
+            HashMap<String, Option<?>> options = particleOptions.get(particleMap.get(particle));
 
             if (((BooleanOption)options.get("axolotlclient.customColor")).get()) {
                 Color color = ((ColorOption) options.get("axolotlclient.color")).get();
@@ -77,7 +77,7 @@ public class Particles extends AbstractModule {
 
     public int getMultiplier(ParticleType type) {
         if(enabled.get()) {
-            HashMap<String, OptionBase<?>> options = particleOptions.get(type);
+            HashMap<String, Option<?>> options = particleOptions.get(type);
 
             return ((IntegerOption) options.get("axolotlclient.count")).get();
         }

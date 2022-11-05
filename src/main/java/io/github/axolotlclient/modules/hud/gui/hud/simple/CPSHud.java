@@ -1,11 +1,12 @@
-package io.github.axolotlclient.modules.hud.gui.hud;
+package io.github.axolotlclient.modules.hud.gui.hud.simple;
 
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.Option;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
+import io.github.axolotlclient.modules.hud.gui.entry.SimpleTextHudEntry;
 import io.github.axolotlclient.util.Hooks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
-import org.lwjgl.input.Mouse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
  * @license GPL-3.0
  */
 
-public class CPSHud extends CleanHudEntry {
+public class CPSHud extends SimpleTextHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "cpshud");
 
     private final BooleanOption fromKeybindings = new BooleanOption("axolotlclient.cpskeybind", false);
@@ -24,7 +25,7 @@ public class CPSHud extends CleanHudEntry {
 
     public CPSHud() {
         super();
-        Hooks.MOUSE_INPUT.register((window, button, action, mods) -> {
+        Hooks.MOUSE_INPUT.register(button -> {
             if (!fromKeybindings.get()) {
                 if (button == 0) {
                     ClickList.LEFT.click();
@@ -55,16 +56,6 @@ public class CPSHud extends CleanHudEntry {
         ClickList.RIGHT.update();
     }
 
-    public void click(){
-        int button = Mouse.getEventButton();
-        if (Mouse.getEventButtonState()) {
-            if(button==0){
-                ClickList.LEFT.click();
-            }
-            if(button==1)ClickList.RIGHT.click();
-        }
-    }
-
     @Override
     public String getValue() {
         if (rmb.get()) {
@@ -89,10 +80,11 @@ public class CPSHud extends CleanHudEntry {
     }
 
     @Override
-    public void addConfigOptions(List<OptionBase<?>> options) {
-        super.addConfigOptions(options);
+    public List<Option<?>> getConfigurationOptions() {
+        List<Option<?>> options = super.getConfigurationOptions();
         options.add(fromKeybindings);
         options.add(rmb);
+        return options;
     }
 
     public static class ClickList {

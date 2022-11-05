@@ -62,9 +62,7 @@ public class TranslationProvider {
                 }
             }
         }
-        catch(IOException ignored) {
-            ignored.printStackTrace();
-        }
+        catch(IOException ignored) {}
     }
 
     /**

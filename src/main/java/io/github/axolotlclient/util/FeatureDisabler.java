@@ -2,7 +2,6 @@ package io.github.axolotlclient.util;
 
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.DisableReason;
 import io.github.axolotlclient.modules.freelook.Freelook;
 import net.minecraft.client.network.ServerInfo;
 
@@ -16,11 +15,15 @@ public class FeatureDisabler {
     public static void init(){
         setServers(AxolotlClient.CONFIG.fullBright, "gommehd");
         setServers(AxolotlClient.CONFIG.timeChangerEnabled, "gommehd");
-        setServers(Freelook.getInstance().enabled, "hypixel", "mineplex", "gommehd");
+        setServers(Freelook.getInstance().enabled, "hypixel", "mineplex", "gommehd", "nucleoid");
     }
 
     public static void onServerJoin(ServerInfo info){
         disabledServers.forEach((option, strings) -> disableOption(option, strings, info.address));
+    }
+
+    public static void clear(){
+        disabledServers.keySet().forEach(option -> option.setForceOff(false, ""));
     }
 
     private static void disableOption(BooleanOption option, String[] servers, String currentServer){
@@ -33,7 +36,7 @@ public class FeatureDisabler {
         }
 
         if(option.getForceDisabled() != ban) {
-            option.setForceOff(ban, DisableReason.BAN_REASON);
+            option.setForceOff(ban, "ban_reason");
         }
     }
 

@@ -1,6 +1,7 @@
 package io.github.axolotlclient.mixin;
 
 import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.modules.hud.gui.hud.PlayerHud;
 import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
@@ -20,7 +21,7 @@ public abstract class LivingEntityRendererMixin {
 
     @Inject(method = "hasLabel*", at = @At("HEAD"), cancellable = true)
     private void showOwnNametag(LivingEntity livingEntity, CallbackInfoReturnable<Boolean> cir){
-        if (AxolotlClient.CONFIG.showOwnNametag.get() && livingEntity == MinecraftClient.getInstance().player) {
+        if (AxolotlClient.CONFIG.showOwnNametag.get() && livingEntity.getEntityId() == MinecraftClient.getInstance().player.getEntityId() && !PlayerHud.isCurrentlyRendering()) {
             cir.setReturnValue(true);
         }
     }

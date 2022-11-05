@@ -1,12 +1,9 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.ColorOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.IntegerOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
+import io.github.axolotlclient.AxolotlclientConfig.options.*;
 import io.github.axolotlclient.mixin.ChatHudAccessor;
-import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
+import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
 import net.minecraft.client.MinecraftClient;
@@ -21,11 +18,11 @@ import net.minecraft.util.math.MathHelper;
 
 import java.util.List;
 
-public class ChatHud extends AbstractHudEntry {
+public class ChatHud extends TextHudEntry {
 
     public static Identifier ID = new Identifier("axolotlclient", "chathud");
     public BooleanOption background = new BooleanOption("axolotlclient.background", "chathud", true);
-    public ColorOption bgColor = new ColorOption("axolotlclient.bgColor", "#40000000");
+    public ColorOption bgColor = new ColorOption("axolotlclient.bgcolor", "#40000000");
 
     public IntegerOption chatHistory = new IntegerOption("axolotlclient.chatHistoryLength", 100, 10, 5000);
     public ColorOption scrollbarColor = new ColorOption("axolotlclient.scrollbarColor", "#70CCCCCC");
@@ -34,11 +31,11 @@ public class ChatHud extends AbstractHudEntry {
     public int ticks;
 
     public ChatHud() {
-        super(320, 20);
+        super(320, 20, false);
     }
 
     @Override
-    public void render(){
+    public void render(float delta){
 
         int scrolledLines = ((ChatHudAccessor) client.inGameHud.getChatHud()).getScrolledLines();
         List<ChatHudLine> visibleMessages = ((ChatHudAccessor) client.inGameHud.getChatHud()).getVisibleMessages();
@@ -46,6 +43,7 @@ public class ChatHud extends AbstractHudEntry {
         if (this.client.options.chatVisibilityType != PlayerEntity.ChatVisibilityType.HIDDEN) {
 
             scale();
+            GlStateManager.pushMatrix();
             DrawPosition pos = getPos();
 
             int i = getVisibleLineCount();
@@ -103,6 +101,11 @@ public class ChatHud extends AbstractHudEntry {
         }
     }
 
+    @Override
+    public void renderComponent(float delta) {
+
+    }
+
     public Text getTextAt(int x, int y){
 
         List<ChatHudLine> visibleMessages = ((ChatHudAccessor) client.inGameHud.getChatHud()).getVisibleMessages();
@@ -136,13 +139,13 @@ public class ChatHud extends AbstractHudEntry {
     }
 
     @Override
-    protected double getDefaultX() {
+    public double getDefaultX() {
         return 0.01;
     }
 
     @Override
-    protected float getDefaultY() {
-        return 0.9F;
+    public double getDefaultY() {
+        return 0.9;
     }
 
     @Override
@@ -157,9 +160,8 @@ public class ChatHud extends AbstractHudEntry {
     }
 
     @Override
-    public void renderPlaceholder() {
-        renderPlaceholderBackground();
-        scale();
+    public void renderPlaceholderComponent(float delta) {
+
         DrawPosition pos = getPos();
         if(MinecraftClient.getInstance().player!=null) {
             client.textRenderer.drawWithShadow(
@@ -172,8 +174,6 @@ public class ChatHud extends AbstractHudEntry {
                     pos.x + 1, pos.y + height - 9, -1
             );
         }
-        GlStateManager.popMatrix();
-        hovered=false;
     }
 
     @Override
@@ -187,14 +187,15 @@ public class ChatHud extends AbstractHudEntry {
     }
 
     @Override
-    public void addConfigOptions(List<OptionBase<?>> options) {
-        super.addConfigOptions(options);
+    public List<Option<?>> getConfigurationOptions() {
+        List<Option<?>> options = super.getConfigurationOptions();
         options.add(shadow);
         options.add(background);
         options.add(bgColor);
         options.add(lineSpacing);
         options.add(scrollbarColor);
         options.add(chatHistory);
+        return options;
     }
 
     public boolean isChatFocused() {

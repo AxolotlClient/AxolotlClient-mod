@@ -2,18 +2,15 @@ package io.github.axolotlclient.mixin;
 
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.NetworkHelper;
-import io.github.axolotlclient.modules.hud.HudManager;
-import io.github.axolotlclient.modules.hud.gui.hud.CPSHud;
 import io.github.axolotlclient.modules.rpc.DiscordRPC;
 import io.github.axolotlclient.modules.zoom.Zoom;
-import io.github.axolotlclient.util.Util;
+import io.github.axolotlclient.util.Hooks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
 import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.texture.TextureManager;
-import net.minecraft.client.util.Window;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.player.ClientPlayerEntity;
 import net.minecraft.world.level.LevelInfo;
@@ -121,19 +118,13 @@ public abstract class MinecraftClientMixin {
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getTime()J", ordinal = 0))
     public void onMouseButton(CallbackInfo ci){
-        CPSHud cpshud = (CPSHud) HudManager.getInstance().get(CPSHud.ID);
-        if(cpshud.isEnabled()){
-            cpshud.click();
+        if (Mouse.getEventButtonState()) {
+            Hooks.MOUSE_INPUT.invoker().onMouseButton(Mouse.getEventButton());
         }
     }
 
     @Inject(method = "connect(Lnet/minecraft/client/world/ClientWorld;Ljava/lang/String;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;flipPlayer(Lnet/minecraft/entity/player/PlayerEntity;)V"))
     public void login(ClientWorld world, String loadingMessage, CallbackInfo ci){
         NetworkHelper.setOnline();
-    }
-
-    @Inject(method = "onResolutionChanged", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/LoadingScreenRenderer;<init>(Lnet/minecraft/client/MinecraftClient;)V"))
-    public void onResize(int i, int j, CallbackInfo ci){
-        Util.window = new Window(MinecraftClient.getInstance());
     }
 }

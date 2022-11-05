@@ -1,5 +1,6 @@
-package io.github.axolotlclient.modules.hud.gui.hud;
+package io.github.axolotlclient.modules.hud.gui.hud.simple;
 
+import io.github.axolotlclient.modules.hud.gui.entry.SimpleTextHudEntry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
 
@@ -9,11 +10,10 @@ import net.minecraft.util.Identifier;
  * @license GPL-3.0
  */
 
-public class FPSHud extends CleanHudEntry {
+public class FPSHud extends SimpleTextHudEntry {
     public static final Identifier ID = new Identifier("kronhud", "fpshud");
 
     public FPSHud() {
-        //super(x, y, scale);
         super();
     }
 

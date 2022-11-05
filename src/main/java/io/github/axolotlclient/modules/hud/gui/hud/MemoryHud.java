@@ -1,11 +1,11 @@
 package io.github.axolotlclient.modules.hud.gui.hud;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlclientConfig.Color;
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.ColorOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.Option;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
-import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
+import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.resource.language.I18n;
@@ -13,7 +13,13 @@ import net.minecraft.util.Identifier;
 
 import java.util.List;
 
-public class MemoryHud extends AbstractHudEntry {
+/**
+ * This implementation of Hud modules is based on KronHUD.
+ * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ * @license GPL-3.0
+ */
+
+public class MemoryHud extends TextHudEntry {
 
     public static final Identifier ID = new Identifier("axolotlclient", "memoryhud");
 
@@ -26,18 +32,13 @@ public class MemoryHud extends AbstractHudEntry {
     private final BooleanOption showAllocated = new BooleanOption("axolotlclient.showAllocated", false);
 
     public MemoryHud() {
-        super(150, 27);
+        super(150, 27, true);
     }
 
     @Override
-    public void render() {
+    public void renderComponent(float delta) {
 
-        scale();
         DrawPosition pos = getPos();
-        if (background.get()) {
-            fillRect(getBounds(), backgroundColor.get());
-        }
-        if(outline.get()) outlineRect(getBounds(), outlineColor.get());
 
         if(showGraph.get()){
             graph.setData(pos.x + 5, pos.y + 5, getBounds().width- 10, getBounds().height - 10);
@@ -58,7 +59,7 @@ public class MemoryHud extends AbstractHudEntry {
             drawString(getMemoryLine(),
                     pos.x,
                     pos.y + (Math.round((float) height / 2) - 4) - (showAllocated.get() ? 4 : 0),
-                    textColor.get(),
+                    textColor.get().getAsInt(),
                     shadow.get()
             );
 
@@ -66,19 +67,16 @@ public class MemoryHud extends AbstractHudEntry {
                 drawString(getAllocationLine(),
                         pos.x,
                         pos.y + (Math.round((float) height / 2) - 4) + 4,
-                        textColor.get(),
+                        textColor.get().getAsInt(),
                         shadow.get()
                 );
             }
         }
-
-        GlStateManager.popMatrix();
     }
 
     @Override
-    public void renderPlaceholder() {
-        renderPlaceholderBackground();
-        scale();
+    public void renderPlaceholderComponent(float delta) {
+
         DrawPosition pos = getPos();
 
         if(showGraph.get()){
@@ -102,7 +100,7 @@ public class MemoryHud extends AbstractHudEntry {
                     pos.y + (Math.round((float) height / 2) - 4) - (showAllocated.get() ? 4 : 0),
                     Color.WHITE, shadow.get());
             if (showAllocated.get()) {
-                drawString(I18n.translate("axolotlclient.allocated")+": 976MiB",
+                drawString(I18n.translate("allocated")+": 976MiB",
                         pos.x,
                         pos.y + (Math.round((float) height / 2) - 4) + 4,
                         textColor.get(),
@@ -115,8 +113,6 @@ public class MemoryHud extends AbstractHudEntry {
                     pos.x,
                     pos.y + (Math.round((float) height / 2) - 4), Color.WHITE, shadow.get());
         }
-        GlStateManager.popMatrix();
-        hovered = false;
     }
 
     private String getMemoryLine() {
@@ -131,7 +127,7 @@ public class MemoryHud extends AbstractHudEntry {
     private String getAllocationLine(){
         long total = Runtime.getRuntime().totalMemory();
 
-        return I18n.translate("axolotlclient.allocated")+": "+toMiB(total);
+        return I18n.translate("allocated")+": "+toMiB(total);
     }
 
     private float getUsage(){
@@ -143,20 +139,14 @@ public class MemoryHud extends AbstractHudEntry {
     }
 
     @Override
-    public void addConfigOptions(List<OptionBase<?>> options) {
-        super.addConfigOptions(options);
-        options.add(textColor);
-        options.add(textAlignment);
-        options.add(shadow);
-        options.add(background);
-        options.add(backgroundColor);
-        options.add(outline);
-        options.add(outlineColor);
+    public List<Option<?>> getConfigurationOptions() {
+        List<Option<?>> options = super.getConfigurationOptions();
         options.add(showGraph);
         options.add(graphUsedColor);
         options.add(graphFreeColor);
         options.add(showText);
         options.add(showAllocated);
+        return options;
     }
 
     @Override
