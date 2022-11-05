@@ -1,5 +1,6 @@
 package io.github.axolotlclient.mixin;
 
+import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.scrollableTooltips.ScrollableTooltips;
 import io.github.axolotlclient.modules.zoom.Zoom;
 import io.github.axolotlclient.util.Hooks;
@@ -35,5 +36,11 @@ public abstract class MouseMixin {
         }
 
 		return scrollAmount;
+	}
+
+	@Inject(method = "ignorePastPos", at = @At(value = "HEAD"))
+	private void onResolutionChanged(CallbackInfo ci) {
+		// Resize and rebuild!
+		HudManager.getInstance().refreshAllBounds();
 	}
 }

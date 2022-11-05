@@ -1,7 +1,7 @@
 package io.github.axolotlclient.mixin;
 
 import io.github.axolotlclient.modules.hud.HudManager;
-import io.github.axolotlclient.modules.hud.gui.hud.CrosshairHud;
+import io.github.axolotlclient.modules.hud.gui.hud.vanilla.CrosshairHud;
 import net.minecraft.client.gui.hud.DebugHud;
 import net.minecraft.client.util.math.MatrixStack;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,8 +16,8 @@ public abstract class DebugHudMixin {
     public void onRender(MatrixStack matrices, CallbackInfo ci){
 
         CrosshairHud hud = (CrosshairHud) HudManager.getInstance().get(CrosshairHud.ID);
-        if(hud.isEnabled() && hud.showInF3.get()){
-            hud.render(matrices);
+        if(hud.isEnabled() && hud.overridesF3()){
+            hud.render(matrices, 0);
         }
 
     }

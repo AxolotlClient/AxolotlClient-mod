@@ -21,7 +21,7 @@ public class MCPSkyboxInstance extends SkyboxInstance {
             this.fade[0] = convertToTicks(json.get("startFadeIn").getAsInt());
             this.fade[1] = convertToTicks(json.get("endFadeIn").getAsInt());
             this.fade[3] = convertToTicks(json.get("endFadeOut").getAsInt());
-        } catch (NullPointerException e){
+        } catch (Exception e){
             this.alwaysOn = true;
         }
         try {

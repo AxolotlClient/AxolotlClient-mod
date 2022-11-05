@@ -1,7 +1,7 @@
 package io.github.axolotlclient.mixin;
 
 import io.github.axolotlclient.modules.hud.HudManager;
-import io.github.axolotlclient.modules.hud.gui.hud.BossBarHud;
+import io.github.axolotlclient.modules.hud.gui.hud.vanilla.BossBarHud;
 import net.minecraft.client.util.math.MatrixStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

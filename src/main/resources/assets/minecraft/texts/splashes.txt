@@ -8,7 +8,7 @@ See you ingame!
 private final SoundInstance bgm = PositionedSoundInstance.method_7051(new Identifier("minecraft", "records.chirp"));!
 Quilt Edition!
 Not on minecraft.net!
-AxolotlClient-branding/tree/1.8.9!
+AxolotlClient-branding/tree/1.19.x!
 Türkçe'de kullanılabilir!
 ඞ!
 Also ...!

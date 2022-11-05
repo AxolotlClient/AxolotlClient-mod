@@ -49,12 +49,12 @@ public class ScreenshotUtils extends AbstractModule {
                 .setStyle(Style.EMPTY
                         .withFormatting(Formatting.BLUE)
                         .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.translatable("copy_image")))
-                        .withClickEvent(new CustomClickEvent(()->{
+                        .withClickEvent(new CustomClickEvent(() -> {
                             FileTransferable selection = new FileTransferable(file);
                             try {
                                 Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
                             } catch (HeadlessException e) {
-                                Util.sendChatMessage(Text.translatable("headless_exception").append("\n"+ e.getMessage()).append("\nRunning headless: "+GraphicsEnvironment.isHeadless()));
+                                Util.sendChatMessage(Text.translatable("headless_exception").append("\n" + e.getMessage()).append("\nRunning headless: " + GraphicsEnvironment.isHeadless()));
                             }
                         })))
                 .append(" ")
@@ -62,18 +62,18 @@ public class ScreenshotUtils extends AbstractModule {
                         Text.translatable("deleteAction").setStyle(Style.EMPTY
                                 .withFormatting(Formatting.RED)
                                 .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.translatable("delete_image")))
-                                .withClickEvent(new CustomClickEvent(()-> {
+                                .withClickEvent(new CustomClickEvent(() -> {
                                     try {
                                         Files.delete(file.toPath());
                                         Util.sendChatMessage(Text.literal(I18n.translate("screenshot_deleted").replace("<name>", file.getName())));
-                                    } catch (Exception e){
-                                        Logger.warn("Couldn't delete Screenshot "+file.getName());
+                                    } catch (Exception e) {
+                                        Logger.warn("Couldn't delete Screenshot " + file.getName());
                                     }
                                 })))
                 );
     }
 
-    class FileTransferable implements Transferable {
+    protected static class FileTransferable implements Transferable {
         private final File file;
 
         public FileTransferable(File file) {
@@ -98,7 +98,7 @@ public class ScreenshotUtils extends AbstractModule {
         }
     }
 
-    public class CustomClickEvent extends ClickEvent {
+    public static class CustomClickEvent extends ClickEvent {
 
         private final OnActionCall action;
 

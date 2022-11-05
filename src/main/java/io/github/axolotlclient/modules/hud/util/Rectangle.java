@@ -1,5 +1,8 @@
 package io.github.axolotlclient.modules.hud.util;
 
+import lombok.Data;
+import lombok.experimental.Accessors;
+
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
@@ -10,7 +13,8 @@ package io.github.axolotlclient.modules.hud.util;
  * Stores a basic rectangle.
  */
 
-
+@Data
+@Accessors(fluent = true)
 public class Rectangle {
 
     public int x;

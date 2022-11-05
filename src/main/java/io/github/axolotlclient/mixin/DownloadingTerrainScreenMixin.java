@@ -12,7 +12,7 @@ public abstract class DownloadingTerrainScreenMixin {
 
     @Inject(method = "<init>", at = @At("TAIL"))
     public void noLoadingScreen(CallbackInfo ci){
-        MinecraftClient.getInstance().currentScreen.closeScreen();
+        //MinecraftClient.getInstance().currentScreen.closeScreen();
         MinecraftClient.getInstance().currentScreen = null;
     }
 }

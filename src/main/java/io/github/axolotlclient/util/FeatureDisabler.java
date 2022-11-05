@@ -2,7 +2,6 @@ package io.github.axolotlclient.util;
 
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.DisableReason;
 import io.github.axolotlclient.modules.freelook.Freelook;
 import net.minecraft.client.network.ServerInfo;
 
@@ -23,6 +22,12 @@ public class FeatureDisabler {
         disabledServers.forEach((option, strings) -> disableOption(option, strings, info.address));
     }
 
+    public static void clear(){
+        disabledServers.forEach((option, strings) -> {
+            option.setForceOff(false, "ban_reason");
+        });
+    }
+
     private static void disableOption(BooleanOption option, String[] servers, String currentServer){
         boolean ban = false;
         for(String s:servers){
@@ -33,7 +38,7 @@ public class FeatureDisabler {
         }
 
         if(option.getForceDisabled() != ban) {
-            option.setForceOff(ban, DisableReason.BAN_REASON);
+            option.setForceOff(ban, "ban_reason");
         }
     }
 

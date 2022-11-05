@@ -6,6 +6,7 @@ import io.github.axolotlclient.AxolotlclientConfig.Color;
 import io.github.axolotlclient.AxolotlclientConfig.ConfigHolder;
 import io.github.axolotlclient.AxolotlclientConfig.options.*;
 import io.github.axolotlclient.config.screen.CreditsScreen;
+import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
 
 import java.util.ArrayList;
@@ -55,7 +56,8 @@ public class AxolotlClientConfig extends ConfigHolder {
     private final List<Option> options = new ArrayList<>();
     private final List<OptionCategory> categories = new ArrayList<>();
 
-    public final List<OptionCategory> config = new ArrayList<>();
+    @Getter
+    private final List<OptionCategory> config = new ArrayList<>();
 
     public void add(Option option){
         options.add(option);

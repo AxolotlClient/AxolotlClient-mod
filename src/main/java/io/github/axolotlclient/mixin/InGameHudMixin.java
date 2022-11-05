@@ -1,7 +1,11 @@
 package io.github.axolotlclient.mixin;
 
 import io.github.axolotlclient.modules.hud.HudManager;
-import io.github.axolotlclient.modules.hud.gui.hud.*;
+import io.github.axolotlclient.modules.hud.gui.hud.PotionsHud;
+import io.github.axolotlclient.modules.hud.gui.hud.vanilla.ActionBarHud;
+import io.github.axolotlclient.modules.hud.gui.hud.vanilla.CrosshairHud;
+import io.github.axolotlclient.modules.hud.gui.hud.vanilla.HotbarHUD;
+import io.github.axolotlclient.modules.hud.gui.hud.vanilla.ScoreboardHud;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.hud.InGameHud;
@@ -30,6 +34,13 @@ public abstract class InGameHudMixin {
 
 	@Shadow private int overlayRemaining;
 
+	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderStatusEffectOverlay(Lnet/minecraft/client/util/math/MatrixStack;)V"))
+	private void onHudRender(MatrixStack matrices, float tickDelta, CallbackInfo ci){
+		if(!MinecraftClient.getInstance().options.hudHidden) {
+			HudManager.getInstance().render(matrices, tickDelta);
+		}
+	}
+
 	@Inject(method = "renderStatusEffectOverlay", at = @At("HEAD"), cancellable = true)
 	public void renderStatusEffect(MatrixStack matrices, CallbackInfo ci) {
 		PotionsHud hud = (PotionsHud) HudManager.getInstance().get(PotionsHud.ID);
@@ -42,6 +53,9 @@ public abstract class InGameHudMixin {
 	public void renderCrosshair(MatrixStack matrices, CallbackInfo ci) {
 		CrosshairHud hud = (CrosshairHud) HudManager.getInstance().get(CrosshairHud.ID);
 		if (hud != null && hud.isEnabled()) {
+			if(MinecraftClient.getInstance().options.debugEnabled && !hud.overridesF3()){
+				return;
+			}
 			ci.cancel();
 		}
 	}
@@ -58,7 +72,7 @@ public abstract class InGameHudMixin {
 	public void clearActionBar(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
 		ActionBarHud hud = (ActionBarHud) HudManager.getInstance().get(ActionBarHud.ID);
 		if (hud != null && hud.isEnabled()) {
-			if (overlayMessage == null || overlayRemaining<=0 && hud.actionBar != null) {
+			if (overlayMessage == null || overlayRemaining<=0 && hud.getActionBar() != null) {
 				hud.setActionBar(null, 0);
 			}
 		}
@@ -87,7 +101,7 @@ public abstract class InGameHudMixin {
     public void setItemNamePos(Args args){
         HotbarHUD hud = (HotbarHUD) HudManager.getInstance().get(HotbarHUD.ID);
         if(hud.isEnabled()){
-            args.set(2, ((Integer) hud.getX()).floatValue() + ((hud.width * hud.getScale())-
+            args.set(2, ((Integer) hud.getX()).floatValue() + ((hud.getWidth() * hud.getScale())-
                 MinecraftClient.getInstance().textRenderer.getWidth((StringVisitable) args.get(1)))/2);
             args.set(3, ((Integer) hud.getY()).floatValue() - 36 +
                 (!MinecraftClient.getInstance().interactionManager.hasStatusBars() ? 14 : 0));
@@ -125,7 +139,7 @@ public abstract class InGameHudMixin {
 	public int moveXPBarWidth(InGameHud instance){
 		HotbarHUD hud = (HotbarHUD) HudManager.getInstance().get(HotbarHUD.ID);
 		if(hud.isEnabled()){
-			return hud.getX()*2+hud.width;
+			return hud.getX()*2+ hud.getWidth();
 		}
 		return scaledWidth;
 	}
@@ -143,7 +157,7 @@ public abstract class InGameHudMixin {
 	public int moveStatusBarsWidth(InGameHud instance){
 		HotbarHUD hud = (HotbarHUD) HudManager.getInstance().get(HotbarHUD.ID);
 		if(hud.isEnabled()){
-			return hud.getX()*2+hud.width;
+			return hud.getX()*2+ hud.getWidth();
 		}
 		return scaledWidth;
 	}

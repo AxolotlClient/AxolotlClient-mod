@@ -2,11 +2,7 @@ package io.github.axolotlclient.modules.particles;
 
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlclientConfig.Color;
-import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.ColorOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.IntegerOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
-import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
+import io.github.axolotlclient.AxolotlclientConfig.options.*;
 import io.github.axolotlclient.mixin.ParticleAccessor;
 import io.github.axolotlclient.modules.AbstractModule;
 import net.minecraft.client.particle.Particle;
@@ -26,7 +22,7 @@ public class Particles extends AbstractModule {
 
     private static final Particles Instance = new Particles();
 
-    public final HashMap<ParticleType<?>, HashMap<String, OptionBase<?>>> particleOptions = new HashMap<>();
+    public final HashMap<ParticleType<?>, HashMap<String, Option<?>>> particleOptions = new HashMap<>();
     public final HashMap<Particle, ParticleType<?>> particleMap = new HashMap<>();
 
     private final OptionCategory cat = new OptionCategory("particles");
@@ -48,7 +44,7 @@ public class Particles extends AbstractModule {
         for(ParticleType<?> type : Registry.PARTICLE_TYPE.stream().sorted(new AlphabeticalComparator()).toList()){
             if(Registry.PARTICLE_TYPE.getId(type) != null) {
                 OptionCategory category = new OptionCategory(Arrays.stream(Registry.PARTICLE_TYPE.getId(type).getPath().split("_")).map(StringUtils::capitalize).collect(Collectors.joining(" ")), false);
-                HashMap<String, OptionBase<?>> optionsByKey = new LinkedHashMap<>();
+                HashMap<String, Option<?>> optionsByKey = new LinkedHashMap<>();
 
                 populateMap(optionsByKey,
                         new BooleanOption("showParticle", true),
@@ -68,15 +64,15 @@ public class Particles extends AbstractModule {
         }
     }
 
-    private void populateMap(HashMap<String, OptionBase<?>> map, OptionBase<?>... options){
-        for(OptionBase<?> option:options){
+    private void populateMap(HashMap<String, Option<?>> map, Option<?>... options){
+        for(Option<?> option:options){
             map.put(option.getName(), option);
         }
     }
 
     public void applyOptions(Particle particle){
         if(enabled.get() && particleMap.containsKey(particle)) {
-            HashMap<String, OptionBase<?>> options = particleOptions.get(particleMap.get(particle));
+            HashMap<String, Option<?>> options = particleOptions.get(particleMap.get(particle));
 
             if (((BooleanOption)options.get("customColor")).get()) {
                 Color color = ((ColorOption) options.get("color")).get();
@@ -88,7 +84,7 @@ public class Particles extends AbstractModule {
 
     public int getMultiplier(ParticleType<?> type) {
         if(enabled.get()) {
-            HashMap<String, OptionBase<?>> options = particleOptions.get(type);
+            HashMap<String, Option<?>> options = particleOptions.get(type);
 
             return ((IntegerOption) options.get("count")).get();
         }
