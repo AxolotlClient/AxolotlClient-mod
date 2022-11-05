@@ -1,3 +1,5 @@
+## Changelog (1.19.2):
+
 ### 1.0.0 - 2.0.0
 
 - Create the mod
@@ -38,4 +40,5 @@
 - KronHUD 2.2.3 feature set
 - Various fixes
 - now using the provided DefaultConfigManager.
+- Full Changelog: https://github.com/AxolotlClient/AxolotlClient-mod/compare/v2.2.1+1.19.2...v2.2.2+1.19.2
 
