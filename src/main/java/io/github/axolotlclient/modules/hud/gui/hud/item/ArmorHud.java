@@ -1,12 +1,15 @@
 package io.github.axolotlclient.modules.hud.gui.hud.item;
 
+import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.Option;
 import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.ItemUtil;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
@@ -21,6 +24,8 @@ public class ArmorHud extends TextHudEntry {
 
     public static final Identifier ID = new Identifier("kronhud", "armorhud");
 
+    protected BooleanOption showProtLvl = new BooleanOption("showProtectionLevel", false);
+
     public ArmorHud() {
         super(20, 100, true);
     }
@@ -32,8 +37,20 @@ public class ArmorHud extends TextHudEntry {
         renderMainItem(matrices, client.player.getInventory().getMainHandStack(), pos.x() + 2, pos.y() + lastY);
         lastY = lastY - 20;
         for (int i = 0; i <= 3; i++) {
-            ItemStack item = client.player.getInventory().armor.get(i);
-            renderItem(matrices, item, pos.x() + 2, lastY + pos.y());
+            ItemStack stack = client.player.getInventory().getArmorStack(i).copy();
+            if (showProtLvl.get() && stack.hasEnchantments()) {
+                NbtList nbtList = stack.getEnchantments();
+                if (nbtList != null) {
+                    for (int k = 0; k < nbtList.size(); ++k) {
+                        int enchantId = nbtList.getCompound(k).getShort("id");
+                        int level = nbtList.getCompound(k).getShort("lvl");
+                        if (enchantId == 0 && Enchantment.byRawId(enchantId) != null) {
+                            stack.setCount(level);
+                        }
+                    }
+                }
+            }
+            renderItem(matrices, stack, pos.x() + 2, lastY + pos.y());
             lastY = lastY - 20;
         }
     }
@@ -85,7 +102,9 @@ public class ArmorHud extends TextHudEntry {
 
     @Override
     public List<Option<?>> getConfigurationOptions() {
-        return super.getConfigurationOptions();
+        List<Option<?>> options = super.getConfigurationOptions();
+        options.add(showProtLvl);
+        return options;
     }
 
 }
