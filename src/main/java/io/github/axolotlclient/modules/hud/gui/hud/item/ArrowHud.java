@@ -35,7 +35,7 @@ public class ArrowHud extends TextHudEntry {
     public void render(float delta) {
         if (dynamic.get()) {
             ClientPlayerEntity player = client.player;
-            if (!(player.getMainHandStack().getItem() instanceof BowItem)) {
+            if (player == null || player.getMainHandStack() == null || !(player.getMainHandStack().getItem() instanceof BowItem)) {
                 return;
             }
         }

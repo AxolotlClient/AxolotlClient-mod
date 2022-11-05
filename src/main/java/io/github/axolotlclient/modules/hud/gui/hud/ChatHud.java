@@ -42,8 +42,8 @@ public class ChatHud extends TextHudEntry {
 
         if (this.client.options.chatVisibilityType != PlayerEntity.ChatVisibilityType.HIDDEN) {
 
-            scale();
             GlStateManager.pushMatrix();
+            scale();
             DrawPosition pos = getPos();
 
             int i = getVisibleLineCount();
