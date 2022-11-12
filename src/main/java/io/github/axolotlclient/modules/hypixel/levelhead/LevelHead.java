@@ -14,7 +14,7 @@ public class LevelHead implements AbstractHypixelMod {
     private final OptionCategory category = new OptionCategory("axolotlclient.levelhead");
     public BooleanOption enabled = new BooleanOption("axolotlclient.enabled", false);
     public BooleanOption background = new BooleanOption("axolotlclient.background", false);
-    public ColorOption textColor = new ColorOption("axolotlclient.textColor", Color.GOLD);
+    public ColorOption textColor = new ColorOption("axolotlclient.textcolor", Color.GOLD);
     public EnumOption mode = new EnumOption("axolotlclient.levelHeadMode", LevelHeadMode.values(), LevelHeadMode.NETWORK.toString());
 
     @Override

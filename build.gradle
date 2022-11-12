@@ -63,7 +63,7 @@ dependencies {
 	// modImplementation files("libs/legacy-modmenu-1.1.1-dev.jar") // Uncomment if you want modmenu in the dev env
 
 	modImplementation include("com.github.moehreag:search-in-resources:1.0.2")
-	modImplementation include('io.github.axolotlclient:AxolotlClient-config:1.0.12-beta.1+1.8.9')
+	modImplementation include('io.github.axolotlclient:AxolotlClient-config:1.0.12-beta.4+1.8.9')
 }
 
 // More hacks that make mac os work
