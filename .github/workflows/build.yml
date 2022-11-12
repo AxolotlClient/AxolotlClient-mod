@@ -24,17 +24,3 @@ jobs:
           # Artifact name
           name: AxolotlClient-1.8.9-automation
           path: build/libs/*.jar
-  upload:
-    if: "startsWith(github.event.head_commit.message, '[create release] ')"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: Kir-Antipov/mc-publish@v3.1
-        with:
-          modrinth-id: p2rxzX0q 
-          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-          modrinth-unfeature-mode: subset
-          modrinth-featured: true
-          
-          github-token: ${{ secrets.GH_TOKEN }}
-          github-generate-changelog: true
-          github-draft: true

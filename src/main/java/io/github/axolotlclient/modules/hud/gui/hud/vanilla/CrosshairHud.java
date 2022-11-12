@@ -2,11 +2,13 @@ package io.github.axolotlclient.modules.hud.gui.hud.vanilla;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlclientConfig.Color;
-import io.github.axolotlclient.AxolotlclientConfig.options.*;
+import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.ColorOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.EnumOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.Option;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.gui.component.DynamicallyPositionable;
 import io.github.axolotlclient.modules.hud.gui.layout.AnchorPoint;
-import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.RenderUtil;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.block.ChestBlock;
@@ -67,16 +69,17 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
             GlStateManager.blendFuncSeparate(775, 769, 1, 0);
         }
 
-        DrawPosition pos = getPos().subtract(0, -1);
+        int x = getPos().x;
+        int y = getPos().y + 1;
         if (type.get().equals(Crosshair.DOT.toString())) {
 
-            RenderUtil.fillBlend(pos.x + (width / 2) - 1, pos.y + (height / 2) - 2, 3, 3, color);
+            RenderUtil.fillBlend(x + (width / 2) - 1, y + (height / 2) - 2, 3, 3, color);
         } else if (type.get().equals(Crosshair.CROSS.toString())) {
 
-            RenderUtil.fillBlend(pos.x + (width / 2) - 5, pos.y + (height / 2) - 1, 6, 1, color);
-            RenderUtil.fillBlend(pos.x + (width / 2) + 1, pos.y + (height / 2) - 1, 5, 1, color);
-            RenderUtil.fillBlend(pos.x + (width / 2), pos.y + (height / 2) - 6, 1, 5, color);
-            RenderUtil.fillBlend(pos.x + (width / 2), pos.y + (height / 2), 1, 5, color);
+            RenderUtil.fillBlend(x + (width / 2) - 5, y + (height / 2) - 1, 6, 1, color);
+            RenderUtil.fillBlend(x + (width / 2) + 1, y + (height / 2) - 1, 5, 1, color);
+            RenderUtil.fillBlend(x + (width / 2), y + (height / 2) - 6, 1, 5, color);
+            RenderUtil.fillBlend(x + (width / 2), y + (height / 2), 1, 5, color);
         } else if (type.get().equals(Crosshair.TEXTURE.toString())) {
 
             MinecraftClient.getInstance().getTextureManager().bindTexture(DrawableHelper.GUI_ICONS_TEXTURE);

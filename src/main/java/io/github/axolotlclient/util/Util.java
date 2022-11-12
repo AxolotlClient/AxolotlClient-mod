@@ -254,11 +254,11 @@ public class Util {
         }
     }
 
-    public static void applyScissor(Rectangle scissor){
+    public static void applyScissor(int x, int y, int width, int height){
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
         Window window = new Window(MinecraftClient.getInstance());
         int scale = window.getScaleFactor();
-        GL11.glScissor(scissor.x * scale, (int) ((window.getScaledHeight() - scissor.height - scissor.y) * scale), scissor.width * scale, scissor.height * scale);
+        GL11.glScissor(x * scale, (int) ((window.getScaledHeight() - height - y) * scale), width * scale, height * scale);
     }
 
     public static float lerp(float start, float end, float percent) {

@@ -157,7 +157,7 @@ public class CreditsScreen extends Screen {
 
             @Override
             protected void renderList(int x, int y, int mouseX, int mouseY) {
-                Util.applyScissor(new Rectangle(0, yStart, this.width, yEnd-yStart));
+                Util.applyScissor(0, yStart, this.width, yEnd-yStart);
                 super.renderList(x, y, mouseX, mouseY);
                 GL11.glDisable(GL11.GL_SCISSOR_TEST);
             }
@@ -378,8 +378,8 @@ public class CreditsScreen extends Screen {
         }
 
         public void render() {
-            DrawUtil.fillRect(new io.github.axolotlclient.modules.hud.util.Rectangle(x, y, width, height), io.github.axolotlclient.AxolotlclientConfig.Color.DARK_GRAY.withAlpha(127));
-            DrawUtil.outlineRect(new Rectangle(x, y, width, height), io.github.axolotlclient.AxolotlclientConfig.Color.BLACK);
+            DrawUtil.fillRect(x, y, width, height, io.github.axolotlclient.AxolotlclientConfig.Color.DARK_GRAY.withAlpha(127));
+            DrawUtil.outlineRect(x, y, width, height, io.github.axolotlclient.AxolotlclientConfig.Color.BLACK.getAsInt());
 
             drawCenteredString(MinecraftClient.getInstance().textRenderer, credit.name, window.getWidth()/2, y+7, -16784327);
 
@@ -418,6 +418,8 @@ public class CreditsScreen extends Screen {
         }
 
         @Override
-        public boolean mouseClicked(int index, int mouseX, int mouseY, int button, int x, int y) {return false;}
+        public boolean mouseClicked(int index, int mouseX, int mouseY, int button, int x, int y) {
+            return false;
+        }
     }
 }

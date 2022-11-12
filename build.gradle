@@ -21,7 +21,7 @@ repositories {
 	}
 
 	maven {
-		url "https://moehreag.duckdns.org/maven/snapshots"
+		url "https://moehreag.duckdns.org/maven/releases"
 	}
 	mavenLocal()
 	maven { url 'https://jitpack.io' }
@@ -63,7 +63,9 @@ dependencies {
 	// modImplementation files("libs/legacy-modmenu-1.1.1-dev.jar") // Uncomment if you want modmenu in the dev env
 
 	modImplementation include("com.github.moehreag:search-in-resources:1.0.2")
-	modImplementation include('io.github.axolotlclient:AxolotlClient-config:1.0.12-beta.4+1.8.9')
+	modImplementation include('io.github.axolotlclient:AxolotlClient-config:1.0.12+1.8.9')
+
+	modApi("org.apache.logging.log4j:log4j-core:2.10.0")
 }
 
 // More hacks that make mac os work
@@ -129,8 +131,7 @@ publishing {
 	repositories {
 		maven {
 			name = "owlMaven"
-			def repository = project.version.toString().contains("beta") || project.version.toString().contains("alpha") ? "snapshots" : "release"
-			url = "https://moehreag.duckdns.org/maven/"+repository
+			url = "https://moehreag.duckdns.org/maven/releases"
 			credentials(PasswordCredentials)
 			authentication {
 				basic(BasicAuthentication)

@@ -34,8 +34,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.resource.Resource;
 import net.minecraft.util.Identifier;
 
-import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 
 
 public class AxolotlClient implements ClientModInitializer {
@@ -54,7 +56,7 @@ public class AxolotlClient implements ClientModInitializer {
     public static final BooleanOption someNiceBackground = new BooleanOption("axolotlclient.defNoSecret", false);
     public static final List<AbstractModule> modules = new ArrayList<>();
 
-    public static Integer tickTime = 0;
+    private static int tickTime = 0;
 
     @Override
     public void onInitializeClient() {
@@ -78,21 +80,22 @@ public class AxolotlClient implements ClientModInitializer {
                 return super.getName(t);
             }
         });
+        AxolotlClientConfigManager.addIgnoredName(modid, "x");
+        AxolotlClientConfigManager.addIgnoredName(modid, "y");
 
         modules.forEach(AbstractModule::lateInit);
 
-        FabricLoader.getInstance().getModContainer("axolotlclient").ifPresent(modContainer -> {
+        /*FabricLoader.getInstance().getModContainer("axolotlclient").ifPresent(modContainer -> {
             Optional<Path> optional = modContainer.findPath("resourcepacks/AxolotlClientUI.zip");
             optional.ifPresent(path -> MinecraftClient.getInstance().getResourcePackLoader().method_10366(path.toFile()));
-        });
+        });*/
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> tickClient());
 
         FeatureDisabler.init();
 
-        if(CONFIG.debugLogOutput.get()){
-            Logger.debug("Debug Output enabled, Logs will be quite verbose!");
-        }
+        Logger.debug("Debug Output enabled, Logs will be quite verbose!");
+
 
         Logger.info("AxolotlClient Initialized");
     }
