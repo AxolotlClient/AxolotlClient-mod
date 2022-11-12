@@ -43,3 +43,4 @@
 - fix some nasty bugs
 - re-add an option that had been removed in 2.2.2
 - update german translation
+- Added chinese (People's Republic of China (aka. Mainland China), Republic of China (aka. Taiwan)) translation
