@@ -15,7 +15,11 @@ public class Logger {
     }
 
     public static void error(String message, Object... args){
-        LOGGER.error(modId + message, args);
+        try {
+            LOGGER.error(modId + message, args);
+        } catch (Exception e){
+            LOGGER.warn(modId + "[ERROR]" + message, args);
+        }
     }
 
     public static void info(String message, Object... args){
