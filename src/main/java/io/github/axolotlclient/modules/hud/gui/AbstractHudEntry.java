@@ -180,7 +180,8 @@ public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
         if (trueHeight < client.getWindow().getScaledHeight() && scaledY + trueHeight > client.getWindow().getScaledHeight()) {
             scaledY = client.getWindow().getScaledHeight() - trueHeight;
         }
-        truePosition = new DrawPosition(scaledX, scaledY);
+        truePosition.x = scaledX;
+        truePosition.y = scaledY;
         renderPosition = truePosition.divide(getScale());
         renderBounds = new Rectangle(renderPosition.x(), renderPosition.y(), getWidth(), getHeight());
         trueBounds = new Rectangle(scaledX, scaledY, (int) (getWidth() * getScale()), (int) (getHeight() * getScale()));

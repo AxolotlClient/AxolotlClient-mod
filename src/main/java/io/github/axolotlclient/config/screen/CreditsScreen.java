@@ -231,7 +231,7 @@ public class CreditsScreen extends Screen {
 
         @Override
         protected void renderList(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-            Util.applyScissor(new Rectangle(0, top, this.width, bottom - top));
+            Util.applyScissor(0, top, this.width, bottom - top);
             super.renderList(matrices, mouseX, mouseY, delta);
             GL11.glDisable(GL11.GL_SCISSOR_TEST);
         }
@@ -345,8 +345,8 @@ public class CreditsScreen extends Screen {
         }
 
         public void render(MatrixStack matrices) {
-            DrawUtil.fillRect(matrices, new io.github.axolotlclient.modules.hud.util.Rectangle(x, y, width, height), io.github.axolotlclient.AxolotlclientConfig.Color.DARK_GRAY.withAlpha(127));
-            DrawUtil.outlineRect(matrices, new Rectangle(x, y, width, height), io.github.axolotlclient.AxolotlclientConfig.Color.BLACK);
+            DrawUtil.fillRect(matrices, x, y, width, height, io.github.axolotlclient.AxolotlclientConfig.Color.DARK_GRAY.withAlpha(127));
+            DrawUtil.outlineRect(matrices, x, y, width, height, io.github.axolotlclient.AxolotlclientConfig.Color.BLACK.getAsInt());
 
             DrawUtil.drawCenteredString(matrices, MinecraftClient.getInstance().textRenderer, credit.name, window.getScaledWidth() / 2, y + 7, -16784327, true);
 

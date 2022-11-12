@@ -68,7 +68,9 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
 
         matrices.push();
         scale(matrices);
-        DrawPosition pos = getPos().subtract(0, -1);
+        
+        int x = getPos().x;
+        int y = getPos().y + 1;
         Color color = getColor();
         AttackIndicator indicator = this.client.options.getAttackIndicator().get();
 
@@ -87,12 +89,12 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
         }
 
         if (type.get().equals(Crosshair.DOT.toString())) {
-            RenderUtil.fillBlend(matrices, pos.x() + (getWidth() / 2) - 2, pos.y() + (getHeight() / 2) - 2, 3, 3, color);
+            RenderUtil.fillBlend(matrices, x + (getWidth() / 2) - 2, y + (getHeight() / 2) - 2, 3, 3, color);
         } else if (type.get().equals(Crosshair.CROSS.toString())) {
-            RenderUtil.fillBlend(matrices,pos.x() + (getWidth() / 2) - 6, pos.y() + (getHeight() / 2) - 1, 6, 1, color);
-            RenderUtil.fillBlend(matrices, pos.x() + (getWidth() / 2), pos.y() + (getHeight() / 2) - 1, 5, 1, color);
-            RenderUtil.fillBlend(matrices, pos.x() + (getWidth() / 2) - 1, pos.y() + (getHeight() / 2) - 6, 1, 5, color);
-            RenderUtil.fillBlend(matrices, pos.x() + (getWidth() / 2) - 1, pos.y() + (getHeight() / 2), 1, 5, color);
+            RenderUtil.fillBlend(matrices, x + (getWidth() / 2) - 6, y + (getHeight() / 2) - 1, 6, 1, color);
+            RenderUtil.fillBlend(matrices, x + (getWidth() / 2), y + (getHeight() / 2) - 1, 5, 1, color);
+            RenderUtil.fillBlend(matrices, x + (getWidth() / 2) - 1, y + (getHeight() / 2) - 6, 1, 5, color);
+            RenderUtil.fillBlend(matrices, x + (getWidth() / 2) - 1, y + (getHeight() / 2), 1, 5, color);
         } else if (type.get().equals(Crosshair.DIRECTION.toString())) {
             Camera camera = this.client.gameRenderer.getCamera();
             MatrixStack matrixStack = RenderSystem.getModelViewStack();
@@ -131,8 +133,8 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
                     targetingEntity &= this.client.targetedEntity.isAlive();
                 }
 
-                int x = (int) ((client.getWindow().getScaledWidth() / getScale()) / 2 - 8);
-                int y = (int) ((client.getWindow().getScaledHeight() / getScale()) / 2 - 7 + 16);
+                x = (int) ((client.getWindow().getScaledWidth() / getScale()) / 2 - 8);
+                y = (int) ((client.getWindow().getScaledHeight() / getScale()) / 2 - 7 + 16);
 
                 if (targetingEntity) {
                     client.inGameHud.drawTexture(matrices, x, y, 68, 94, 16, 16);

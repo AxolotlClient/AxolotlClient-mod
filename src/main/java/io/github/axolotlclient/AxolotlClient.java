@@ -1,6 +1,7 @@
 package io.github.axolotlclient;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import io.github.axolotlclient.AxolotlclientConfig.AxolotlClientConfigManager;
 import io.github.axolotlclient.AxolotlclientConfig.DefaultConfigManager;
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
@@ -61,7 +62,7 @@ public class AxolotlClient implements ClientModInitializer {
 	public static final BooleanOption someNiceBackground = new BooleanOption("defNoSecret", false);
 	public static final List<AbstractModule> modules= new ArrayList<>();
 
-	public static Integer tickTime = 0;
+	private static int tickTime = 0;
 
 	public static UnsupportedMod badmod;
 	public static boolean titleDisclaimer = false;
@@ -82,8 +83,10 @@ public class AxolotlClient implements ClientModInitializer {
             badmod = new UnsupportedMod("Baritone", UnsupportedMod.UnsupportedReason.BAN_REASON);
 		} else if (QuiltLoader.isModLoaded("xaerominimap")) {
             badmod = new UnsupportedMod("Xaero's Minimap", UnsupportedMod.UnsupportedReason.UNKNOWN_CONSEQUENSES);
-        } else if (QuiltLoader.isModLoaded("essential-container")){
-            badmod = new UnsupportedMod("Essential", UnsupportedMod.UnsupportedReason.MIGHT_CRASH, UnsupportedMod.UnsupportedReason.UNKNOWN_CONSEQUENSES);
+        } else if (QuiltLoader.isModLoaded("essential-container")) {
+			badmod = new UnsupportedMod("Essential", UnsupportedMod.UnsupportedReason.MIGHT_CRASH, UnsupportedMod.UnsupportedReason.UNKNOWN_CONSEQUENSES);
+		} else if (QuiltLoader.isModLoaded("optifabric")) {
+			badmod = new UnsupportedMod("OptiFine", UnsupportedMod.UnsupportedReason.MIGHT_CRASH, UnsupportedMod.UnsupportedReason.UNKNOWN_CONSEQUENSES);
 		} else {
 			showWarning = false;
 		}
@@ -93,13 +96,16 @@ public class AxolotlClient implements ClientModInitializer {
 
 		getModules();
 		addExternalModules();
+
 		CONFIG.init();
 		modules.forEach(AbstractModule::init);
 
 		CONFIG.getConfig().addAll(CONFIG.getCategories());
 		CONFIG.getConfig().add(config);
 
-		io.github.axolotlclient.AxolotlclientConfig.AxolotlClientConfigManager.registerConfig(modid, CONFIG, configManager = new DefaultConfigManager(modid, QuiltLoader.getConfigDir().resolve("AxolotlClient.json"), CONFIG.getConfig()));
+		AxolotlClientConfigManager.registerConfig(modid, CONFIG, configManager = new DefaultConfigManager(modid, QuiltLoader.getConfigDir().resolve("AxolotlClient.json"), CONFIG.getConfig()));
+		AxolotlClientConfigManager.addIgnoredName(modid, "x");
+		AxolotlClientConfigManager.addIgnoredName(modid, "y");
 
 		modules.forEach(AbstractModule::lateInit);
 

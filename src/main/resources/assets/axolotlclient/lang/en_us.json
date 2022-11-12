@@ -55,6 +55,7 @@
 	"scrollableTooltips": "Scrollable Tooltips",
 	"shiftHorizontalScroll": "Scroll Horizontally (Shift)",
 	"scrollAmount": "Scroll Amount",
+	"scrollAmount.tooltip": "On scrolling, move the tooltip around this amount.",
 	"inverse": "Inverse",
 	"tnttime": "TntTime",
 	"particles": "Particles",
@@ -307,13 +308,6 @@
 	"contributors": "Contributors",
 	"other_people": "Other People",
 	"external_modules": "External Modules",
-
-	"pickColor": "Pick Color",
-	"currentColor": "Current",
-	"alpha": "Alpha",
-	"red": "Red",
-	"green": "Green",
-	"blue": "Blue",
 
 	"disableReason.crash": "This option has been disabled <br>because it would crash your game.",
 	"disableReason.ban_reason": "This option is disabled <br>because it is known to be bannable on your current server.",

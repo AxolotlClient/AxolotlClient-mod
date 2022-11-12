@@ -146,11 +146,11 @@ public class Util {
 		return lines;
 	}
 
-	public static void applyScissor(Rectangle scissor){
+	public static void applyScissor(int x, int y, int width, int height){
 		GL11.glEnable(GL11.GL_SCISSOR_TEST);
 		Window window = MinecraftClient.getInstance().getWindow();
 		double scale = window.getScaleFactor();
-		GL11.glScissor((int) (scissor.x * scale), (int) ((window.getScaledHeight() - scissor.height - scissor.y) * scale), (int) (scissor.width * scale), (int) (scissor.height * scale));
+		GL11.glScissor((int) (x * scale), (int) ((window.getScaledHeight() - height - y) * scale), (int) (width * scale), (int) (height * scale));
 	}
 
 	public static double lerp(double start, double end, double percent) {
