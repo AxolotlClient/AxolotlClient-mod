@@ -60,8 +60,7 @@ public class SkyResourceManager extends AbstractModule implements SimpleSynchron
                 }
             }
 
-        } catch (Exception e){
-            e.printStackTrace();
+        } catch (Exception ignored){
         }
         return object;
     }
@@ -88,7 +87,6 @@ public class SkyResourceManager extends AbstractModule implements SimpleSynchron
                         JsonObject.class)));
                 Logger.debug("Loaded FSB sky from " + entry.getKey());
             } catch (IOException ignored) {
-                ignored.printStackTrace();
             }
         }
 

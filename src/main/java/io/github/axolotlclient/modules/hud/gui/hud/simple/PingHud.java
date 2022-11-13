@@ -2,12 +2,13 @@ package io.github.axolotlclient.modules.hud.gui.hud.simple;
 
 import io.github.axolotlclient.AxolotlclientConfig.options.IntegerOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.Option;
-import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.entry.SimpleTextHudEntry;
-import io.github.axolotlclient.util.Logger;
 import io.github.axolotlclient.util.ThreadExecuter;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.*;
+import net.minecraft.client.network.Address;
+import net.minecraft.client.network.AllowedAddressResolver;
+import net.minecraft.client.network.ServerAddress;
+import net.minecraft.client.network.ServerInfo;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.NetworkState;
 import net.minecraft.network.listener.ClientQueryPacketListener;
@@ -60,12 +61,7 @@ public class PingHud extends SimpleTextHudEntry {
 
     private void updatePing(){
         if (MinecraftClient.getInstance().getCurrentServerEntry() != null) {
-            Logger.debug("Refreshing server ping, using "+
-                    (MinecraftClient.getInstance().getCurrentServerEntry().ping == 1 ||
-                    MinecraftClient.getInstance().getCurrentServerEntry().ping == -1?
-                            "Pinger" : "ServerInfo"));
-            if (MinecraftClient.getInstance().getCurrentServerEntry().ping==1 ||
-                    MinecraftClient.getInstance().getCurrentServerEntry().ping == -1) {
+            if (MinecraftClient.getInstance().getCurrentServerEntry().ping <= 1) {
                 getRealTimeServerPing(MinecraftClient.getInstance().getCurrentServerEntry());
             } else {
                 currentServerPing = (int) MinecraftClient.getInstance().getCurrentServerEntry().ping;
