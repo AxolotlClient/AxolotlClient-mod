@@ -16,15 +16,11 @@ import java.util.Objects;
 public abstract class MultiplayerScreenMixin {
 
     @Inject(method = "init", at = @At("HEAD"))
-    public void freePlayerData(CallbackInfo ci){
-        if(HypixelMods.getInstance().cacheMode.get()!=null && Objects.equals(HypixelMods.getInstance().cacheMode.get(), HypixelMods.HypixelApiCacheMode.ON_CLIENT_DISCONNECT.toString())) {
+    public void freePlayerData(CallbackInfo ci) {
+        if (HypixelMods.getInstance().cacheMode.get() != null && Objects.equals(HypixelMods.getInstance().cacheMode.get(), HypixelMods.HypixelApiCacheMode.ON_CLIENT_DISCONNECT.toString())) {
             HypixelAbstractionLayer.clearPlayerData();
         }
         FeatureDisabler.clear();
     }
 
-    @Inject(method = "connect(Lnet/minecraft/client/network/ServerInfo;)V", at = @At("HEAD"))
-    public void onServerJoin(ServerInfo entry, CallbackInfo ci){
-        FeatureDisabler.onServerJoin(entry);
-    }
 }

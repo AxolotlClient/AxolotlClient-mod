@@ -12,6 +12,7 @@
     "ClientPlayerEntityMixin",
     "ClientPlayNetworkHandlerMixin",
     "ClientWorldMixin",
+    "ConnectScreenMixin",
     "ControlsOptionsScreenMixin",
     "DebugHudMixin",
     "DownloadingTerrainScreenMixin",
