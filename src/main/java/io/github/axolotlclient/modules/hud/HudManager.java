@@ -42,13 +42,6 @@ public class HudManager extends AbstractModule {
 
     private HudManager() {
         this.entries = new LinkedHashMap<>();
-        ClientTickEvents.END_CLIENT_TICK.register(minecraftClient -> {
-            for (HudEntry entry : getEntries()) {
-                if (entry.tickable() && entry.isEnabled()) {
-                    entry.tick();
-                }
-            }
-        });
     }
 
     static KeyBinding key = new KeyBinding("key.openHud", Keyboard.KEY_RSHIFT, "axolotlclient.category.axolotlclient");

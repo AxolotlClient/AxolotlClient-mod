@@ -2,6 +2,7 @@ package io.github.axolotlclient.mixin;
 
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.NetworkHelper;
+import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.rpc.DiscordRPC;
 import io.github.axolotlclient.modules.zoom.Zoom;
 import io.github.axolotlclient.util.Hooks;
@@ -87,6 +88,11 @@ public abstract class MinecraftClientMixin {
         return instance.color(AxolotlClient.CONFIG.loadingScreenColor.get().getRed(),
                 AxolotlClient.CONFIG.loadingScreenColor.get().getGreen(),
                 AxolotlClient.CONFIG.loadingScreenColor.get().getBlue(), AxolotlClient.CONFIG.loadingScreenColor.get().getAlpha());
+    }
+
+    @Inject(method = "initializeGame", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/texture/TextureManager;close(Lnet/minecraft/util/Identifier;)V"))
+    private void onLaunch(CallbackInfo ci){
+        HudManager.getInstance().refreshAllBounds();
     }
 
     @Redirect(
