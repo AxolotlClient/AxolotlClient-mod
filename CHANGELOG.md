@@ -47,3 +47,7 @@
 - fix some nasty bugs
 - re-add an option that had been removed in 2.2.2
 - update german translation
+
+### 2.2.4
+
+- fix a critical crash that could totally have been avoided 

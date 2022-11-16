@@ -75,7 +75,7 @@ public class NetworkHelper {
             }
             client.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             Logger.error("Error while logging in!");
         }
     }
