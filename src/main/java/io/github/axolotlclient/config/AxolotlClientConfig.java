@@ -5,6 +5,7 @@ import io.github.axolotlclient.AxolotlclientConfig.AxolotlClientConfigConfig;
 import io.github.axolotlclient.AxolotlclientConfig.Color;
 import io.github.axolotlclient.AxolotlclientConfig.ConfigHolder;
 import io.github.axolotlclient.AxolotlclientConfig.options.*;
+import io.github.axolotlclient.NetworkHelper;
 import io.github.axolotlclient.config.screen.CreditsScreen;
 import net.minecraft.client.MinecraftClient;
 
@@ -17,7 +18,13 @@ public class AxolotlClientConfig extends ConfigHolder {
     public final BooleanOption useShadows = new BooleanOption("axolotlclient.useShadows", false);
     public final BooleanOption nametagBackground = new BooleanOption("axolotlclient.nametagBackground", true);
 
-    public final BooleanOption showBadges = new BooleanOption("axolotlclient.showBadges", true);
+    public final BooleanOption showBadges = new BooleanOption("axolotlclient.showBadges", value -> {
+        if(value){
+            NetworkHelper.setOnline();
+        } else {
+            NetworkHelper.setOffline();
+        }
+    }, true);
     public final BooleanOption customBadge = new BooleanOption("axolotlclient.customBadge", false);
     public final StringOption badgeText = new StringOption("axolotlclient.badgeText", "");
 

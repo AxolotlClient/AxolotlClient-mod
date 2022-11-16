@@ -110,7 +110,9 @@ public abstract class MinecraftClientMixin {
 
     @Inject(method = "stop", at = @At("HEAD"))
     public void stop(CallbackInfo ci){
-        NetworkHelper.setOffline();
+        if(AxolotlClient.CONFIG.showBadges.get()) {
+            NetworkHelper.setOffline();
+        }
         DiscordRPC.shutdown();
     }
 
@@ -133,7 +135,9 @@ public abstract class MinecraftClientMixin {
 
     @Inject(method = "connect(Lnet/minecraft/client/world/ClientWorld;Ljava/lang/String;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;flipPlayer(Lnet/minecraft/entity/player/PlayerEntity;)V"))
     public void login(ClientWorld world, String loadingMessage, CallbackInfo ci){
-        NetworkHelper.setOnline();
+        if(AxolotlClient.CONFIG.showBadges.get()) {
+            NetworkHelper.setOnline();
+        }
     }
 
     @Inject(method = "resizeFraembuffer", at = @At("TAIL"))
