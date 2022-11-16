@@ -3,7 +3,6 @@ package io.github.axolotlclient.util;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.modules.freelook.Freelook;
-import net.minecraft.client.network.ServerInfo;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -36,7 +35,7 @@ public class FeatureDisabler {
         }
 
         if(option.getForceDisabled() != ban) {
-            option.setForceOff(ban, "ban_reason");
+            option.setForceOff(ban, "axolotlclient.ban_reason");
         }
     }
 

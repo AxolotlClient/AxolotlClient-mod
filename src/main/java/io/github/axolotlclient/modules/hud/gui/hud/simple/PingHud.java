@@ -2,10 +2,10 @@ package io.github.axolotlclient.modules.hud.gui.hud.simple;
 
 import io.github.axolotlclient.AxolotlclientConfig.options.IntegerOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.Option;
+import io.github.axolotlclient.mixin.MinecraftClientAccessor;
 import io.github.axolotlclient.modules.hud.gui.entry.SimpleTextHudEntry;
 import io.github.axolotlclient.util.ThreadExecuter;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ServerInfo;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.NetworkState;
 import net.minecraft.network.ServerAddress;
@@ -62,10 +62,13 @@ public class PingHud extends SimpleTextHudEntry {
     private void updatePing(){
         if (MinecraftClient.getInstance().getCurrentServerEntry() != null) {
             if (MinecraftClient.getInstance().getCurrentServerEntry().ping <= 1) {
-                getRealTimeServerPing(MinecraftClient.getInstance().getCurrentServerEntry());
+                ServerAddress address = ServerAddress.parse(MinecraftClient.getInstance().getCurrentServerEntry().address);
+                getRealTimeServerPing(address.getAddress(), address.getPort());
             } else {
                 currentServerPing = (int) MinecraftClient.getInstance().getCurrentServerEntry().ping;
             }
+        }else if (((MinecraftClientAccessor)MinecraftClient.getInstance()).getServerAddress() != null) {
+            getRealTimeServerPing(((MinecraftClientAccessor)MinecraftClient.getInstance()).getServerAddress(), ((MinecraftClientAccessor)MinecraftClient.getInstance()).getServerPort());
         } else if (MinecraftClient.getInstance().isIntegratedServerRunning()){
             currentServerPing = 1;
         }
@@ -89,11 +92,10 @@ public class PingHud extends SimpleTextHudEntry {
 
     //Indicatia removed this feature...
     //We still need it :(
-    private void getRealTimeServerPing(ServerInfo server) {
+    private void getRealTimeServerPing(String address, int port) {
         ThreadExecuter.scheduleTask(() -> {
             try {
-                ServerAddress address = ServerAddress.parse(server.address);
-                final ClientConnection manager = ClientConnection.connect(InetAddress.getByName(address.getAddress()), address.getPort(), false);
+                final ClientConnection manager = ClientConnection.connect(InetAddress.getByName(address), port, false);
 
                 manager.setPacketListener(new ClientQueryPacketListener() {
                     @Override
@@ -117,7 +119,7 @@ public class PingHud extends SimpleTextHudEntry {
 
                     }
                 });
-                manager.send(new HandshakeC2SPacket(47, address.getAddress(), address.getPort(), NetworkState.STATUS));
+                manager.send(new HandshakeC2SPacket(47, address, port, NetworkState.STATUS));
                 manager.send(new QueryRequestC2SPacket());
             }
             catch (Exception ignored){}

@@ -68,7 +68,7 @@ public class ChatHud extends TextHudEntry {
                             int chatOpacity = (int)(Opacity * f);
                             ++j;
                             if (chatOpacity > 3) {
-                                int y = pos.y+height - (m * (9 + lineSpacing.get()));
+                                int y = pos.y+getHeight() - (m * (9 + lineSpacing.get()));
                                 if(background.get()) {
                                     fill(pos.x, y - (9+lineSpacing.get()), pos.x + l + 4, y, bgColor.get().withAlpha(chatOpacity/2).getAsInt());
                                 }
@@ -155,8 +155,12 @@ public class ChatHud extends TextHudEntry {
 
     @Override
     public void tick() {
-        width = (int) (client.options.chatWidth*320);
-        height = (int) (client.options.chatHeightUnfocused*180)+11;
+        //setWidth((int) (client.options.chatWidth*320));
+        int lastHeight = height;
+        setHeight(this.getHeight());//int) (client.options.chatHeightUnfocused*180)+11);
+        if(lastHeight != getHeight()){
+            onBoundsUpdate();
+        }
     }
 
     @Override
@@ -166,12 +170,12 @@ public class ChatHud extends TextHudEntry {
         if(MinecraftClient.getInstance().player!=null) {
             client.textRenderer.drawWithShadow(
                     "<" + MinecraftClient.getInstance().player.getName().asFormattedString() + "> OOh! There's my Chat now!",
-                    pos.x + 1, pos.y + height - 9, -1
+                    pos.x + 1, pos.y + getHeight() - 9, -1
             );
         } else {
             client.textRenderer.drawWithShadow(
                     "This is where your new and fresh looking chat will be!",
-                    pos.x + 1, pos.y + height - 9, -1
+                    pos.x + 1, pos.y + getHeight() - 9, -1
             );
         }
     }
@@ -202,18 +206,8 @@ public class ChatHud extends TextHudEntry {
         return this.client.currentScreen instanceof ChatScreen;
     }
 
-    public int getWidth() {
-        return getWidth(this.client.options.chatWidth);
-    }
-
     public int getHeight() {
         return getHeight(this.isChatFocused() ? this.client.options.chatHeightFocused : this.client.options.chatHeightUnfocused);
-    }
-
-    public static int getWidth(float chatWidth) {
-        int i = 320;
-        int j = 40;
-        return MathHelper.floor(chatWidth * (float)(i - j) + (float)j);
     }
 
     public static int getHeight(float chatHeight) {

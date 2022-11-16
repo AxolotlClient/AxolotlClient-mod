@@ -1,6 +1,7 @@
 package io.github.axolotlclient.modules.hud.gui.hud.simple;
 
 import io.github.axolotlclient.modules.hud.gui.entry.SimpleTextHudEntry;
+import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
 
@@ -29,10 +30,10 @@ public class IPHud extends SimpleTextHudEntry {
         if (client.isInSingleplayer()) {
             return "Singleplayer";
         }
-        if (client.getCurrentServerEntry() == null) {
+        if (Util.getCurrentServerAddress() == null) {
             return "none";
         }
-        return client.getCurrentServerEntry().address;
+        return Util.getCurrentServerAddress();
     }
 
     @Override

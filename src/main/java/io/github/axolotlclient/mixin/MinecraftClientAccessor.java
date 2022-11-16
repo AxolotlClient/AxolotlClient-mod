@@ -11,4 +11,10 @@ public interface MinecraftClientAccessor {
 
     @Accessor
     ClientTickTracker getTicker();
+
+    @Accessor
+    String getServerAddress();
+
+    @Accessor
+    int getServerPort();
 }

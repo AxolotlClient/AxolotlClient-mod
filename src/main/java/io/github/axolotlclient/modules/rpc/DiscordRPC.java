@@ -64,7 +64,7 @@ public class DiscordRPC extends AbstractModule {
         AxolotlClient.CONFIG.addCategory(category);
 
         if(OSUtil.getOS()== OSUtil.OperatingSystem.OTHER){
-            enabled.setForceOff(true, "crash");
+            enabled.setForceOff(true, "axolotlclient.crash");
         }
 
         Optional<ModContainer> container = FabricLoader.getInstance().getModContainer("axolotlclient");
@@ -130,13 +130,14 @@ public class DiscordRPC extends AbstractModule {
         switch (showServerNameMode.get()) {
             case "showIp":
                 state = MinecraftClient.getInstance().world == null ?
-                        "In the menu" : (MinecraftClient.getInstance().getCurrentServerEntry() == null ?
-                        "Singleplayer" : MinecraftClient.getInstance().getCurrentServerEntry().address);
+                        "In the menu" : (Util.getCurrentServerAddress() == null ?
+                        "Singleplayer" : Util.getCurrentServerAddress());
                 break;
             case "showName":
                 state = MinecraftClient.getInstance().world == null ?
                         "In the menu" : (MinecraftClient.getInstance().getCurrentServerEntry() == null ?
-                        "Singleplayer" : MinecraftClient.getInstance().getCurrentServerEntry().name);
+                        (Util.getCurrentServerAddress() == null ? "Singleplayer" : Util.getCurrentServerAddress()) :
+                        MinecraftClient.getInstance().getCurrentServerEntry().name);
                 break;
             case "off":
             default:
@@ -144,7 +145,7 @@ public class DiscordRPC extends AbstractModule {
                 break;
         }
 
-        if (showActivity.get() && MinecraftClient.getInstance().getCurrentServerEntry() != null) {
+        if (showActivity.get() && Util.getCurrentServerAddress() != null) {
             activity.setDetails(Util.getGame());
         } else if (showActivity.get() && currentActivity != null){
             activity.setDetails(currentActivity.getDetails());

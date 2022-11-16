@@ -176,8 +176,8 @@ public class AutoGG implements AbstractHypixelMod {
     }
 
     public void onMessage(Text message) {
-        if(client.getCurrentServerEntry() != null) {
-            if (onHypixel.get() && client.getCurrentServerEntry().address.contains("hypixel")) {
+        if(Util.getCurrentServerAddress() != null) {
+            if (onHypixel.get() && Util.getCurrentServerAddress().contains("hypixel")) {
                 if (gf.get()) {
                     processChat(message, hypixelGFStrings, gfString.get());
                 }
@@ -187,7 +187,7 @@ public class AutoGG implements AbstractHypixelMod {
                 if (glhf.get()) {
                     processChat(message, hypixelGLHFStrings, glhfString.get());
                 }
-            } else if (onBWP.get() && client.getCurrentServerEntry().address.contains("bedwarspractice.club")) {
+            } else if (onBWP.get() && Util.getCurrentServerAddress().contains("bedwarspractice.club")) {
                 if (gf.get()) {
                     processChat(message, bedwarsPracticeGFStrings, gfString.get());
                 }
@@ -197,7 +197,7 @@ public class AutoGG implements AbstractHypixelMod {
                 if (glhf.get()) {
                     processChat(message, bedwarsPracticeGLHFStrings, glhfString.get());
                 }
-            } else if (onPVPL.get() && client.getCurrentServerEntry().address.contains("pvp.land")) {
+            } else if (onPVPL.get() && Util.getCurrentServerAddress().contains("pvp.land")) {
                 if (gf.get()) {
                     processChat(message, pvpLandGFStrings, gfString.get());
                 }
@@ -207,7 +207,7 @@ public class AutoGG implements AbstractHypixelMod {
                 if (glhf.get()) {
                     processChat(message, pvpLandGLHFStrings, glhfString.get());
                 }
-            } else if (onMMC.get() && client.getCurrentServerEntry().address.contains("minemen.club")) {
+            } else if (onMMC.get() && Util.getCurrentServerAddress().contains("minemen.club")) {
                 if (gf.get()) {
                     if (minemenGFStrings.size() == 0) populateMinemenGFStrings();
                     processChat(message, minemenGFStrings, "gf");

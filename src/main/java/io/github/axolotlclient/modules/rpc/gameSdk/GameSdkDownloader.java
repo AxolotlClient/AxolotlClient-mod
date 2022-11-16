@@ -64,7 +64,7 @@ public class GameSdkDownloader {
 
             if (!sdk.exists() || !jni.exists()) {
                 Logger.error("Could not download GameSDK, no copy is available. RPC will be disabled.");
-                DiscordRPC.getInstance().enabled.setForceOff(true, "crash");
+                DiscordRPC.getInstance().enabled.setForceOff(true, "axolotlclient.crash");
                 return;
             }
 
@@ -126,7 +126,7 @@ public class GameSdkDownloader {
             extractJni(jni);
         } else {
             Logger.error("Extracting Jni failed, restart your game to try again.");
-            DiscordRPC.getInstance().enabled.setForceOff(true, "crash");
+            DiscordRPC.getInstance().enabled.setForceOff(true, "axolotlclient.crash");
         }
     }
 

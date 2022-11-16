@@ -2,7 +2,7 @@ package io.github.axolotlclient.util;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import io.github.axolotlclient.modules.hud.util.Rectangle;
+import io.github.axolotlclient.mixin.MinecraftClientAccessor;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.Window;
 import net.minecraft.entity.Entity;
@@ -113,9 +113,9 @@ public class Util {
         List<String> sidebar = getSidebar();
 
         if(sidebar.isEmpty()) game = "";
-        else if (MinecraftClient.getInstance().getCurrentServerEntry() != null && MinecraftClient.getInstance().getCurrentServerEntry().address.toLowerCase().contains(sidebar.get(0).toLowerCase())){
+        else if (Util.getCurrentServerAddress() != null && Util.getCurrentServerAddress().toLowerCase().contains(sidebar.get(0).toLowerCase())){
             if ( sidebar.get(sidebar.size() -1).toLowerCase(Locale.ROOT)
-                    .contains(MinecraftClient.getInstance().getCurrentServerEntry().address.toLowerCase(Locale.ROOT)) ||
+                    .contains(Util.getCurrentServerAddress().toLowerCase(Locale.ROOT)) ||
                     sidebar.get(sidebar.size()-1).contains("Playtime")){
                 game = "In Lobby";
             }  else {
@@ -202,6 +202,22 @@ public class Util {
         return object;
     }
 
+    public static boolean currentServerAddressContains(String address){
+        if(MinecraftClient.getInstance().getCurrentServerEntry() != null){
+            return MinecraftClient.getInstance().getCurrentServerEntry().address.contains(address);
+        }
+        return ((MinecraftClientAccessor) MinecraftClient.getInstance()).getServerAddress() != null &&
+                ((MinecraftClientAccessor) MinecraftClient.getInstance()).getServerAddress().contains(address);
+    }
+
+    public static String getCurrentServerAddress(){
+        if(MinecraftClient.getInstance().getCurrentServerEntry() != null){
+            return MinecraftClient.getInstance().getCurrentServerEntry().address;
+        }
+        return ((MinecraftClientAccessor) MinecraftClient.getInstance()).getServerAddress() != null ?
+                ((MinecraftClientAccessor) MinecraftClient.getInstance()).getServerAddress() : null;
+    }
+
     public static List<String> getSidebar() {
         List<String> lines = new ArrayList<>();
         MinecraftClient client = MinecraftClient.getInstance();
@@ -265,9 +281,6 @@ public class Util {
         return start + ((end - start) * percent);
     }
 
-    public static float easeInOutSine(float start, float end, float percent){
-        return (float) (start + (-(Math.cos(Math.PI * percent) - end) / 2));
-    }
 
     // https://stackoverflow.com/questions/12967896/converting-integers-to-roman-numerals-java
     public static String toRoman(int number) {

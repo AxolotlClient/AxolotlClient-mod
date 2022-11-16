@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
 import io.github.axolotlclient.modules.hypixel.levelhead.LevelHead;
+import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
@@ -36,8 +37,7 @@ public abstract class EntityRendererMixin<T extends Entity> {
     @Inject(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Ljava/lang/String;III)I", ordinal = 1))
     public void addLevel(T entity, String string, double d, double e, double f, int i, CallbackInfo ci){
         if(entity instanceof AbstractClientPlayerEntity){
-            if(MinecraftClient.getInstance().getCurrentServerEntry() != null &&
-                    MinecraftClient.getInstance().getCurrentServerEntry().address.contains("hypixel.net")){
+            if(Util.currentServerAddressContains("hypixel.net")){
                 if(HypixelAbstractionLayer.hasValidAPIKey() && LevelHead.getInstance().enabled.get() && string.contains(entity.getName().asFormattedString())){
                     TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
                     String text = "Level: "+ HypixelAbstractionLayer.getPlayerLevel(String.valueOf(entity.getUuid()));

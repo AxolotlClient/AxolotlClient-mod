@@ -235,10 +235,4 @@ public abstract class GameRendererMixin {
     public float freelook$prevPitch(Entity entity) {
         return Freelook.getInstance().pitch(entity.prevPitch);
     }
-
-    @Inject(method = "onResized", at = @At(value = "TAIL"))
-    public void onResize(int i, int j, CallbackInfo ci){
-        Util.window = new Window(MinecraftClient.getInstance());
-        HudManager.getInstance().refreshAllBounds();
-    }
 }
