@@ -51,3 +51,4 @@
 ### 2.2.4
 
 - fix a critical crash that could totally have been avoided 
+
