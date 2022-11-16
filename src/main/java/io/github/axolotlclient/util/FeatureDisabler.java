@@ -18,8 +18,8 @@ public class FeatureDisabler {
         setServers(Freelook.getInstance().enabled, "hypixel", "mineplex", "gommehd", "nucleoid");
     }
 
-    public static void onServerJoin(ServerInfo info){
-        disabledServers.forEach((option, strings) -> disableOption(option, strings, info.address));
+    public static void onServerJoin(String address){
+        disabledServers.forEach((option, strings) -> disableOption(option, strings, address));
     }
 
     public static void clear(){

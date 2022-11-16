@@ -4,17 +4,21 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.PlayerListHud;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.MutableText;
+import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PlayerListHud.class)
 public abstract class PlayerListHudMixin {
@@ -26,6 +30,32 @@ public abstract class PlayerListHudMixin {
 	public GameProfile getPlayerGameProfile(PlayerListEntry instance){
 		cachedPlayer = instance.getProfile();
 		return instance.getProfile();
+	}
+
+	MinecraftClient client = MinecraftClient.getInstance();
+	private PlayerListEntry playerListEntry;
+
+	@Inject(method = "getPlayerName", at = @At("HEAD"), cancellable = true)
+	public void nickHider(PlayerListEntry playerEntry, CallbackInfoReturnable<String> cir){
+		if(playerEntry.getProfile().getId()==MinecraftClient.getInstance().player.getUuid() &&
+				NickHider.Instance.hideOwnName.get()){
+			cir.setReturnValue(NickHider.Instance.hiddenNameSelf.get());
+		} else if(playerEntry.getProfile().getId()!=MinecraftClient.getInstance().player.getUuid() &&
+				NickHider.Instance.hideOtherNames.get()){
+			cir.setReturnValue(NickHider.Instance.hiddenNameOthers.get());
+		}
+	}
+
+	@ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;getPlayerName(Lnet/minecraft/client/network/PlayerListEntry;)Lnet/minecraft/text/Text;"))
+	public PlayerListEntry getPlayer(PlayerListEntry playerEntry){
+		playerListEntry = playerEntry;
+		return playerEntry;
+	}
+
+	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;getWidth(Lnet/minecraft/text/StringVisitable;)I"))
+	public int moveName(TextRenderer instance, StringVisitable text){
+		if(AxolotlClient.CONFIG.showBadges.get() && AxolotlClient.isUsingClient(playerListEntry.getProfile().getId())) return instance.getWidth(text)+10;
+		return instance.getWidth(text);
 	}
 
 	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/Text;FFI)I"))
@@ -41,6 +71,11 @@ public abstract class PlayerListHudMixin {
 		}
 		cachedPlayer=null;
 		return instance.drawWithShadow(matrices, text, x, y, color);
+	}
+
+	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;renderLatencyIcon(Lnet/minecraft/client/util/math/MatrixStack;IIILnet/minecraft/client/network/PlayerListEntry;)V"))
+	private void moveLatencyIcon(){
+
 	}
 
 	@ModifyArg(method = "getPlayerName", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;applyGameModeFormatting(Lnet/minecraft/client/network/PlayerListEntry;Lnet/minecraft/text/MutableText;)Lnet/minecraft/text/Text;"), index = 1)

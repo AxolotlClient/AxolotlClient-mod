@@ -22,9 +22,4 @@ public abstract class MultiplayerScreenMixin {
         }
         FeatureDisabler.clear();
     }
-
-    @Inject(method = "connect(Lnet/minecraft/client/network/ServerInfo;)V", at = @At("HEAD"))
-    public void onServerJoin(ServerInfo entry, CallbackInfo ci){
-        FeatureDisabler.onServerJoin(entry);
-    }
 }

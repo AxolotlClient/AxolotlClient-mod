@@ -17,6 +17,7 @@
 		"ClientPlayerEntityMixin",
 		"ClientPlayNetworkHandlerMixin",
 		"ClientWorldMixin",
+		"ConnectScreenMixin",
 		"CrashReportMixin",
 		"DebugHudMixin",
 		"DownloadingTerrainScreenMixin",

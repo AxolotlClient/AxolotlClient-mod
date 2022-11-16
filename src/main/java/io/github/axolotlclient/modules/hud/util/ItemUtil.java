@@ -224,10 +224,6 @@ public class ItemUtil {
 		public final ItemStack stack;
 		public int times;
 
-		public ItemStorage(ItemStack stack) {
-			this(stack, 1);
-		}
-
 		public ItemStorage(ItemStack stack, int times) {
 			ItemStack copy = stack.copy();
 			copy.setCount(1);
@@ -252,10 +248,6 @@ public class ItemUtil {
 
 	public static class TimedItemStorage extends ItemStorage {
 		public float start;
-
-		public TimedItemStorage(ItemStack stack) {
-			this(stack, 1);
-		}
 
 		public TimedItemStorage(ItemStack stack, int times) {
 			super(stack, times);

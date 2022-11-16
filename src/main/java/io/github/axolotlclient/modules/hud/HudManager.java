@@ -18,7 +18,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBind;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
-import org.quiltmc.qsl.lifecycle.api.client.event.ClientTickEvents;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -46,13 +45,6 @@ public class HudManager extends AbstractModule {
     private HudManager() {
         this.entries = new LinkedHashMap<>();
         client = MinecraftClient.getInstance();
-        ClientTickEvents.END.register(minecraftClient -> {
-            for (HudEntry entry : getEntries()) {
-                if (entry.tickable() && entry.isEnabled()) {
-                    entry.tick();
-                }
-            }
-        });
     }
 
     static KeyBind key = new KeyBind("key.openHud", InputUtil.KEY_RIGHT_SHIFT_CODE, "category.axolotlclient");

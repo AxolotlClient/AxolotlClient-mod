@@ -12,12 +12,10 @@ import net.minecraft.text.Text;
 
 @AllArgsConstructor
 public enum Justification {
-    LEFT("left"),
-    CENTER("center"),
-    RIGHT("right")
+    LEFT,
+    CENTER,
+    RIGHT
     ;
-
-    private final String key;
 
     public int getXOffset(Text text, int width) {
         if (this == LEFT) {

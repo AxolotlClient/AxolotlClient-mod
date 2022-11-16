@@ -74,7 +74,7 @@ public class PingHud extends SimpleTextHudEntry {
     private int second;
     @Override
     public void tick() {
-        if(second>=refreshDelay.get()*40){
+        if(second>=refreshDelay.get()*20){
             updatePing();
             second=0;
         } else second++;

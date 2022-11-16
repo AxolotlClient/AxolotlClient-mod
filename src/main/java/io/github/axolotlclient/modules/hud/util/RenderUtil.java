@@ -172,7 +172,6 @@ public class RenderUtil {
         RenderSystem.enableBlend();
         RenderSystem.disableTexture();
         RenderSystem.defaultBlendFunc();
-        //RenderSystem.setShader(getShader());
 
         return color.getAsInt();
     }
