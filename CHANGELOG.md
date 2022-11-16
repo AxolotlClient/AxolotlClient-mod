@@ -43,3 +43,7 @@
 - fix some nasty bugs
 - re-add an option that had been removed in 2.2.2
 - update german translation
+
+### 2.2.4
+
+- no changes, version bump to keep version parity to 1.19.2
