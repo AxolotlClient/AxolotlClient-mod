@@ -3,7 +3,6 @@ package io.github.axolotlclient.modules.hud.gui.hud.simple;
 import com.google.common.util.concurrent.AtomicDouble;
 import io.github.axolotlclient.AxolotlclientConfig.options.IntegerOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.Option;
-import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.entry.SimpleTextHudEntry;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;

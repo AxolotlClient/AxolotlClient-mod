@@ -204,7 +204,7 @@ public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
     /**
      * Returns a list of options that should be saved. By default, this includes {@link #getConfigurationOptions()}
      *
-     * @return
+     * @return a list of options.
      */
     @Override
     public List<Option<?>> getSaveOptions() {

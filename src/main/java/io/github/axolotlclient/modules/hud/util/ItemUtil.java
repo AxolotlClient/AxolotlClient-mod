@@ -189,19 +189,17 @@ public class ItemUtil {
 
 	private static void renderGuiQuad(BufferBuilder buffer, int x, int y, int width, int height, int red, int green, int blue, int alpha) {
 		buffer.begin(7, VertexFormats.POSITION_COLOR);
-		buffer.vertex((double)(x + 0), (double)(y + 0), 0.0).color(red, green, blue, alpha).next();
-		buffer.vertex((double)(x + 0), (double)(y + height), 0.0).color(red, green, blue, alpha).next();
-		buffer.vertex((double)(x + width), (double)(y + height), 0.0).color(red, green, blue, alpha).next();
-		buffer.vertex((double)(x + width), (double)(y + 0), 0.0).color(red, green, blue, alpha).next();
+		buffer.vertex(x, y, 0.0).color(red, green, blue, alpha).next();
+		buffer.vertex(x, y + height, 0.0).color(red, green, blue, alpha).next();
+		buffer.vertex(x + width, y + height, 0.0).color(red, green, blue, alpha).next();
+		buffer.vertex(x + width, y, 0.0).color(red, green, blue, alpha).next();
 		Tessellator.getInstance().draw();
 	}
 
 	public static class ItemStorage {
 		public final ItemStack stack;
 		public int times;
-		public ItemStorage(ItemStack stack) {
-			this(stack, 1);
-		}
+
 		public ItemStorage(ItemStack stack, int times) {
 			ItemStack copy = stack.copy();
 			copy.count =1;
@@ -220,9 +218,7 @@ public class ItemUtil {
 	}
 	public static class TimedItemStorage extends ItemStorage {
 		public float start;
-		public TimedItemStorage(ItemStack stack) {
-			this(stack, 1);
-		}
+
 		public TimedItemStorage(ItemStack stack, int times) {
 			super(stack, times);
 			this.start = MinecraftClient.getTime();

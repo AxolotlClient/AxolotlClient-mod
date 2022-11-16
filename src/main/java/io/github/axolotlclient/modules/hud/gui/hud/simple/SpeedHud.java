@@ -2,7 +2,6 @@ package io.github.axolotlclient.modules.hud.gui.hud.simple;
 
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.Option;
-import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.entry.SimpleTextHudEntry;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;

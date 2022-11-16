@@ -65,8 +65,8 @@ public class CoordsHud extends TextHudEntry implements DynamicallyPositionable {
     /**
      * Get direction. 1 = North, 2 North East, 3 East, 4 South East...
      *
-     * @param yaw
-     * @return
+     * @param yaw the player's yaw
+     * @return the direction, 0-360 degrees.
      */
     public static int getDirection(double yaw) {
         yaw %= 360;

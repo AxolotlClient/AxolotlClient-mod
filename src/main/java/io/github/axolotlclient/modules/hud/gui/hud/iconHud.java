@@ -3,7 +3,6 @@ package io.github.axolotlclient.modules.hud.gui.hud;
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.hud.gui.entry.BoxHudEntry;
-import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
 
