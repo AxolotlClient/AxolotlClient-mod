@@ -203,6 +203,9 @@ public class Util {
     }
 
     public static boolean currentServerAddressContains(String address){
+        if(MinecraftClient.getInstance().isInSingleplayer() || MinecraftClient.getInstance().isIntegratedServerRunning()){
+            return false;
+        }
         if(MinecraftClient.getInstance().getCurrentServerEntry() != null){
             return MinecraftClient.getInstance().getCurrentServerEntry().address.contains(address);
         }
@@ -211,6 +214,10 @@ public class Util {
     }
 
     public static String getCurrentServerAddress(){
+        if(MinecraftClient.getInstance().isInSingleplayer()){
+            return null;
+        }
+
         if(MinecraftClient.getInstance().getCurrentServerEntry() != null){
             return MinecraftClient.getInstance().getCurrentServerEntry().address;
         }

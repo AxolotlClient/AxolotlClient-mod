@@ -57,12 +57,12 @@ public class AxolotlClientConfig extends ConfigHolder {
     public final OptionCategory timeChanger = new OptionCategory("axolotlclient.timeChanger");
     public final OptionCategory searchFilters = new OptionCategory("searchFilters");
 
-    private final List<Option> options = new ArrayList<>();
+    private final List<Option<?>> options = new ArrayList<>();
     private final List<OptionCategory> categories = new ArrayList<>();
 
     public final List<OptionCategory> config = new ArrayList<>();
 
-    public void add(Option option){
+    public void add(Option<?> option){
         options.add(option);
     }
 
@@ -74,7 +74,7 @@ public class AxolotlClientConfig extends ConfigHolder {
         return categories;
     }
 
-    public List<Option> getOptions(){
+    public List<Option<?>> getOptions(){
         return options;
     }
 

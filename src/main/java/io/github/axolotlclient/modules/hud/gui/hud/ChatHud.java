@@ -157,7 +157,7 @@ public class ChatHud extends TextHudEntry {
     public void tick() {
         //setWidth((int) (client.options.chatWidth*320));
         int lastHeight = height;
-        setHeight(this.getHeight());//int) (client.options.chatHeightUnfocused*180)+11);
+        setHeight(getHeight(this.isChatFocused() ? this.client.options.chatHeightFocused : this.client.options.chatHeightUnfocused));//int) (client.options.chatHeightUnfocused*180)+11);
         if(lastHeight != getHeight()){
             onBoundsUpdate();
         }
@@ -206,9 +206,9 @@ public class ChatHud extends TextHudEntry {
         return this.client.currentScreen instanceof ChatScreen;
     }
 
-    public int getHeight() {
+    /*public int getHeight() {
         return getHeight(this.isChatFocused() ? this.client.options.chatHeightFocused : this.client.options.chatHeightUnfocused);
-    }
+    }*/
 
     public static int getHeight(float chatHeight) {
         int i = 180;
