@@ -1,5 +1,6 @@
 package io.github.axolotlclient.mixin;
 
+import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.NetworkHelper;
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hud.gui.hud.simple.TPSHud;
@@ -16,7 +17,9 @@ public abstract class ClientPlayNetworkHandlerMixin {
 
     @Inject(method = "onGameJoin", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;setYaw(F)V"))
     public void onGameJoin(GameJoinS2CPacket packet, CallbackInfo ci){
-        NetworkHelper.setOnline();
+        if(AxolotlClient.CONFIG.showBadges.get()) {
+            NetworkHelper.setOnline();
+        }
     }
 
     @Inject(method = "onWorldTimeUpdate", at = @At("HEAD"))

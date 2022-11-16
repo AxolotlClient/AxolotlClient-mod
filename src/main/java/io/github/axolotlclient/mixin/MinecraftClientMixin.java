@@ -1,5 +1,6 @@
 package io.github.axolotlclient.mixin;
 
+import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.NetworkHelper;
 import io.github.axolotlclient.modules.rpc.DiscordRPC;
 import io.github.axolotlclient.modules.sky.SkyResourceManager;
@@ -45,7 +46,9 @@ public abstract class MinecraftClientMixin {
 
 	@Inject(method = "stop", at = @At("HEAD"))
 	public void stop(CallbackInfo ci){
-		NetworkHelper.setOffline();
+		if(AxolotlClient.CONFIG.showBadges.get()) {
+			NetworkHelper.setOffline();
+		}
 		DiscordRPC.shutdown();
 	}
 }
