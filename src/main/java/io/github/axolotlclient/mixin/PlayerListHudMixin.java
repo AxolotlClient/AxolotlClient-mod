@@ -74,8 +74,8 @@ public abstract class PlayerListHudMixin {
 	}
 
 	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;renderLatencyIcon(Lnet/minecraft/client/util/math/MatrixStack;IIILnet/minecraft/client/network/PlayerListEntry;)V"))
-	private void moveLatencyIcon(){
-
+	private void moveLatencyIcon(PlayerListHud instance, MatrixStack matrices, int width, int x, int y, PlayerListEntry entry){
+		// This will be fixed in a later release when there's more time.
 	}
 
 	@ModifyArg(method = "getPlayerName", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;applyGameModeFormatting(Lnet/minecraft/client/network/PlayerListEntry;Lnet/minecraft/text/MutableText;)Lnet/minecraft/text/Text;"), index = 1)
