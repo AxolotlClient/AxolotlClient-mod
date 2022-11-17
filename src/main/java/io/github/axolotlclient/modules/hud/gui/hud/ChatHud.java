@@ -31,7 +31,7 @@ public class ChatHud extends TextHudEntry {
     public int ticks;
 
     public ChatHud() {
-        super(320, 20, false);
+        super(320, 80, false);
     }
 
     @Override
@@ -87,8 +87,8 @@ public class ChatHud extends TextHudEntry {
                     GlStateManager.translatef(-3.0F, 0.0F, 0.0F);
                     int r = k * m + k;
                     int n = j * m + j;
-                    int y = (pos.y+height) - scrolledLines * n / k;
-                    if(((ChatHudAccessor) client.inGameHud.getChatHud()).getMessages().size()> getVisibleLineCount()) {
+                    int y = (pos.y+getHeight()) - scrolledLines * n / k;
+                    if(((ChatHudAccessor) client.inGameHud.getChatHud()).getMessages().size() > getVisibleLineCount()) {
                         int height = n * n / r;
                         fillRect(pos.x, y, 2, -height, scrollbarColor.get().getAsInt());
                     }
@@ -153,13 +153,14 @@ public class ChatHud extends TextHudEntry {
         return true;
     }
 
+    private int lastHeight;
     @Override
     public void tick() {
         //setWidth((int) (client.options.chatWidth*320));
-        int lastHeight = height;
-        setHeight(getHeight(this.isChatFocused() ? this.client.options.chatHeightFocused : this.client.options.chatHeightUnfocused));//int) (client.options.chatHeightUnfocused*180)+11);
-        if(lastHeight != getHeight()){
+        if(lastHeight != getHeight(client.options.chatHeightUnfocused)){
+            setHeight(getHeight(this.client.options.chatHeightUnfocused));//int) (client.options.chatHeightUnfocused*180)+11);this.isChatFocused() ? this.client.options.chatHeightFocused
             onBoundsUpdate();
+            lastHeight = getHeight();
         }
     }
 
@@ -210,6 +211,10 @@ public class ChatHud extends TextHudEntry {
         return getHeight(this.isChatFocused() ? this.client.options.chatHeightFocused : this.client.options.chatHeightUnfocused);
     }*/
 
+    private float getChatHeightUnfocused(){
+        return client.options.chatHeightUnfocused;
+    }
+
     public static int getHeight(float chatHeight) {
         int i = 180;
         int j = 20;
@@ -221,7 +226,7 @@ public class ChatHud extends TextHudEntry {
     }
 
     public int getVisibleLineCount() {
-        return this.getHeight() / 9;
+        return getHeight(this.isChatFocused() ? this.client.options.chatHeightFocused : this.client.options.chatHeightUnfocused) / 9;
     }
 
     @Override
