@@ -194,7 +194,6 @@ public class ChatHud extends TextHudEntry {
     @Override
     public List<Option<?>> getConfigurationOptions() {
         List<Option<?>> options = super.getConfigurationOptions();
-        options.add(shadow);
         options.add(background);
         options.add(bgColor);
         options.add(lineSpacing);
