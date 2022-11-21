@@ -2,6 +2,7 @@ plugins {
 	id 'fabric-loom' version "1.0-SNAPSHOT"
 	id 'io.github.juuxel.loom-quiltflower' version '1.7.+' // For loom 0.8-0.9, 0.11+
 	id 'maven-publish'
+	id 'org.quiltmc.gradle.licenser' version '1.1.+'
 	id 'com.modrinth.minotaur' version "2.+"
 	id 'io.freefair.lombok' version "6.5.1"
 }
@@ -97,6 +98,11 @@ processResources {
 	filesMatching("fabric.mod.json") {
 		expand "version": project.version
 	}
+}
+
+license {
+	rule file('HEADER')
+	include '**/*.java'
 }
 
 // ensure that the encoding is set to UTF-8, no matter what the system default is
