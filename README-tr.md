@@ -2,7 +2,7 @@
 
 Legacy Fabric 1.8.9'da çeşitli özelliklere sahip olmak için tamamlanmış (neredeyse) bir mod
 
-*Dİğer dillerde'de kullanılabilir: [English](README.md)*
+*Dİğer dillerde de kullanılabilir: [English](README.md)*
 
 ### Features
 
