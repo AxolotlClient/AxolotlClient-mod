@@ -2,7 +2,7 @@
 
 Legacy Fabric 1.8.9'da çeşitli özelliklere sahip olmak için tamamlanmış (neredeyse) bir mod
 
-*Dİğer dillerde de kullanılabilir: [English](../README.md)*
+*Diğer dillerde de kullanılabilir: [English](../README.md)*
 
 ### Features
 
@@ -41,6 +41,8 @@ Legacy Fabric 1.8.9'da çeşitli özelliklere sahip olmak için tamamlanmış (n
 ### Lisans
 
 - Bu mod LGPL-3.0 Lisansı altında lisanslanmıştır.
+
+NOT! Aşağıdaki gri kutunun içinde yazılan yazı gerçek lisansın bir Türkçe çevirisidir,yasal durumlarda bu lisansın sadece İngilizce hali geçerlidir.
 ```
 AxolotlClient-mod
 Telif hakkı (C) 2021-günümüz moehreag + Katılımcılar
