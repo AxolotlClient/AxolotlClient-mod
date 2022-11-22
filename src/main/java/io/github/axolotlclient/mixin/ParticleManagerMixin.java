@@ -1,10 +1,15 @@
 package io.github.axolotlclient.mixin;
 
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.Tessellator;
 import io.github.axolotlclient.modules.particles.Particles;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleManager;
+import net.minecraft.client.particle.ParticleTextureSheet;
 import net.minecraft.client.render.Camera;
+import net.minecraft.client.render.LightmapTextureManager;
+import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleType;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,8 +19,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Queue;
 
 @Mixin(ParticleManager.class)
@@ -58,8 +65,15 @@ public abstract class ParticleManagerMixin {
         return instance.removeAll(collection);
     }
 
+    @Inject(method = "renderParticles", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/particle/Particle;buildGeometry(Lcom/mojang/blaze3d/vertex/VertexConsumer;Lnet/minecraft/client/render/Camera;F)V"), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
+    private void applyOptions(MatrixStack matrices, VertexConsumerProvider.Immediate immediate, LightmapTextureManager lightmapTextureManager, Camera camera, float f, CallbackInfo ci, MatrixStack matrixStack, Iterator var7, ParticleTextureSheet particleTextureSheet, Iterable<Particle> iterable, Tessellator tessellator, BufferBuilder bufferBuilder, Iterator<Particle> var12, Particle particle){
+        if(Particles.getInstance().particleMap.containsKey(particle)) {
+            Particles.getInstance().applyOptions(particle);
+        }
+    }
+
     // @Redirect because we need a reference of the particle, which is a local var.
-    @Redirect(method = "renderParticles", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/particle/Particle;buildGeometry(Lcom/mojang/blaze3d/vertex/VertexConsumer;Lnet/minecraft/client/render/Camera;F)V"))
+    /*@Redirect(method = "renderParticles", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/particle/Particle;buildGeometry(Lcom/mojang/blaze3d/vertex/VertexConsumer;Lnet/minecraft/client/render/Camera;F)V"))
     public void renderParticle(Particle instance, VertexConsumer vertexConsumer, Camera camera, float v){
 
         if(Particles.getInstance().particleMap.containsKey(instance)) {
@@ -67,5 +81,5 @@ public abstract class ParticleManagerMixin {
         }
 
         instance.buildGeometry(vertexConsumer, camera, v);
-    }
+    }*/
 }
