@@ -2,7 +2,7 @@
 
 Legacy Fabric 1.8.9'da çeşitli özelliklere sahip olmak için tamamlanmış (neredeyse) bir mod
 
-*Dİğer dillerde de kullanılabilir: [English](README.md)*
+*Dİğer dillerde de kullanılabilir: [English](../README.md)*
 
 ### Features
 
@@ -57,4 +57,4 @@ Bu program ile GNU Daha Az Genel Herkese Açık Lisasnsının
 bir kopyasını almış olmanız gerekiyor; eğer almadıysanız, Özgür Yazılım Kurumuna yazın,
 Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 ```
-- Daha fazla bilgi için [LICENSE](LICENSE) dosyasını görün.
+- Daha fazla bilgi için [LICENSE](../LICENSE) dosyasını görün.

@@ -2,7 +2,7 @@
 
 A Complete (nearly) mod to have various features on legacyfabric 1.8.9
 
-*Also available in other Languages: [Türkçe](README-tr.md)*
+*Also available in other Languages: [Türkçe](doc/README-tr.md)*
 
 ### Features
 
