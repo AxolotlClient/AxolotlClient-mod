@@ -26,13 +26,15 @@ import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
 import io.github.axolotlclient.AxolotlclientConfig.options.StringOption;
 import io.github.axolotlclient.modules.hypixel.AbstractHypixelMod;
+import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.text.Text;
 
 public class NickHider implements AbstractHypixelMod {
 
-    public static NickHider Instance = new NickHider();
+    @Getter
+    private final static NickHider Instance = new NickHider();
 
     private final OptionCategory category = new OptionCategory("nickhider");
 

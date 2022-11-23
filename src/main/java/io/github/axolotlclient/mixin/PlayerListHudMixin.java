@@ -60,11 +60,11 @@ public abstract class PlayerListHudMixin {
 	@Inject(method = "getPlayerName", at = @At("HEAD"), cancellable = true)
 	public void nickHider(PlayerListEntry playerEntry, CallbackInfoReturnable<String> cir){
 		if(playerEntry.getProfile().getId()==MinecraftClient.getInstance().player.getUuid() &&
-				NickHider.Instance.hideOwnName.get()){
-			cir.setReturnValue(NickHider.Instance.hiddenNameSelf.get());
+				NickHider.getInstance().hideOwnName.get()){
+			cir.setReturnValue(NickHider.getInstance().hiddenNameSelf.get());
 		} else if(playerEntry.getProfile().getId()!=MinecraftClient.getInstance().player.getUuid() &&
-				NickHider.Instance.hideOtherNames.get()){
-			cir.setReturnValue(NickHider.Instance.hiddenNameOthers.get());
+				NickHider.getInstance().hideOtherNames.get()){
+			cir.setReturnValue(NickHider.getInstance().hiddenNameOthers.get());
 		}
 	}
 
@@ -97,11 +97,11 @@ public abstract class PlayerListHudMixin {
 
 	@ModifyArg(method = "getPlayerName", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;applyGameModeFormatting(Lnet/minecraft/client/network/PlayerListEntry;Lnet/minecraft/text/MutableText;)Lnet/minecraft/text/Text;"), index = 1)
 	public MutableText hideNames(MutableText name){
-		if(NickHider.Instance.hideOwnName.get()){
-			return Text.literal(NickHider.Instance.hiddenNameSelf.get());
+		if(NickHider.getInstance().hideOwnName.get()){
+			return Text.literal(NickHider.getInstance().hiddenNameSelf.get());
 		}
-		if(NickHider.Instance.hideOtherNames.get()){
-			return Text.literal(NickHider.Instance.hiddenNameOthers.get());
+		if(NickHider.getInstance().hideOtherNames.get()){
+			return Text.literal(NickHider.getInstance().hiddenNameOthers.get());
 		}
 		return name;
 	}
