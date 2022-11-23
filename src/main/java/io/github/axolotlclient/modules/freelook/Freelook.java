@@ -46,8 +46,11 @@ public class Freelook extends AbstractModule {
 
     private final OptionCategory category = new OptionCategory("freelook");
     public final BooleanOption enabled = new BooleanOption("enabled", false);
-    private final EnumOption perspective = new EnumOption("perspective", Perspective.values(), Perspective.THIRD_PERSON_BACK.toString());
+    private final EnumOption perspective = new EnumOption("perspective", Perspective.values(),
+            Perspective.THIRD_PERSON_BACK.toString());
     private final BooleanOption invert = new BooleanOption("invert", false);
+
+    private final BooleanOption toggle = new BooleanOption("toggle", false);
 
     private Perspective previousPerspective;
 
@@ -58,7 +61,7 @@ public class Freelook extends AbstractModule {
     @Override
     public void init() {
         KeyBindingHelper.registerKeyBinding(KEY);
-        category.add(enabled, perspective, invert);
+        category.add(enabled, perspective, invert, toggle);
         AxolotlClient.CONFIG.addCategory(category);
     }
 
@@ -67,11 +70,23 @@ public class Freelook extends AbstractModule {
 
         if(!enabled.get()) return;
 
-        if(KEY.isPressed()) {
-            if(!active) {
-                start();
+        if(toggle.get()){
+            if (KEY.wasPressed()) {
+                if (active) {
+                    stop();
+                } else {
+                    start();
+                }
             }
-        } else if(active) stop();
+        } else {
+            if (KEY.isPressed()) {
+                if (!active) {
+                    start();
+                }
+            } else if (active) {
+                stop();
+            }
+        }
     }
 
     private void start() {

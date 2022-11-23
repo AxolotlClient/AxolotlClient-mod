@@ -24,13 +24,16 @@ package io.github.axolotlclient.modules.screenshotUtils;
 
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.EnumOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.util.Logger;
-import io.github.axolotlclient.util.Util;
+import lombok.AllArgsConstructor;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Util;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
@@ -38,6 +41,7 @@ import java.awt.datatransfer.Transferable;
 import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ScreenshotUtils extends AbstractModule {
     private static final ScreenshotUtils Instance = new ScreenshotUtils();
@@ -46,10 +50,58 @@ public class ScreenshotUtils extends AbstractModule {
 
     private final BooleanOption enabled = new BooleanOption("enabled", false);
 
+    private final List<Action> actions = Util.make(() -> {
+        List<Action> actions = new ArrayList<>();
+        actions.add(new Action("copyAction",
+                Formatting.AQUA,
+                new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                        Text.translatable("copy_image")),
+                new CustomClickEvent((file) -> {
+                    FileTransferable selection = new FileTransferable(file);
+                    Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
+                })
+        ));
+
+        actions.add(new Action("deleteAction",
+                Formatting.LIGHT_PURPLE,
+                new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                        Text.translatable("delete_image")),
+                new CustomClickEvent((file) -> {
+                    try {
+                        Files.delete(file.toPath());
+                        io.github.axolotlclient.util.Util.sendChatMessage(
+                                Text.literal(I18n.translate("screenshot_deleted")
+                                        .replace("<name>", file.getName())));
+                    } catch (Exception e) {
+                        Logger.warn("Couldn't delete Screenshot " + file.getName());
+                    }
+                })
+        ));
+
+        actions.add(new Action("openAction",
+                Formatting.WHITE,
+                new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                        Text.translatable("open_image")),
+                new CustomClickEvent((file) -> Util.getOperatingSystem().open(file.toURI()))
+        ));
+
+        // If you have further ideas to what actions could be added here, please let us know!
+
+        return actions;
+
+    });
+
+    private final EnumOption autoExec = new EnumOption("autoExec", Util.make(() -> {
+        List<String> names = new ArrayList<>();
+        names.add("off");
+        actions.forEach(action -> names.add(action.getName()));
+        return names.toArray(new String[0]);
+
+    }), "off");
+
     @Override
     public void init() {
-
-        category.add(enabled);
+        category.add(enabled, autoExec);
 
         AxolotlClient.CONFIG.general.addSubCategory(category);
     }
@@ -59,13 +111,32 @@ public class ScreenshotUtils extends AbstractModule {
     }
 
     public Text onScreenshotTaken(MutableText text, File shot){
-        if(enabled.get()){
-            return text.append("\n").append(getUtilsText(shot));
+        if (enabled.get()) {
+            Text t = getUtilsText(shot);
+            if (t != null) {
+                return text.append("\n").append(t);
+            }
         }
         return text;
     }
 
-    private Text getUtilsText(File file){
+    private @Nullable Text getUtilsText(File file) {
+
+        if (!autoExec.get().equals("off")) {
+
+            actions.parallelStream().filter(action -> autoExec.get().equals(action.getName())).toList().get(0).clickEvent.setFile(file).doAction();
+            return null;
+        }
+
+        MutableText message = Text.empty().copy();
+        actions.parallelStream().map(action -> action.getText(file)).iterator().forEachRemaining(text -> {
+            message.append(text);
+            message.append(" ");
+        });
+        return message;
+    }
+
+    /*private Text getUtilsText(File file){
 
         return Text.translatable("copyAction")
                 .setStyle(Style.EMPTY
@@ -93,14 +164,33 @@ public class ScreenshotUtils extends AbstractModule {
                                     }
                                 })))
                 );
+    }*/
+
+    @AllArgsConstructor
+    public static class Action {
+
+        private final String translationKey;
+        private final Formatting formatting;
+        private final HoverEvent hoverEvent;
+        private final CustomClickEvent clickEvent;
+
+        public Text getText(File file) {
+            return Text.translatable(translationKey)
+                    .setStyle(Style.EMPTY
+                            .withFormatting(formatting)
+                            .withClickEvent(clickEvent.setFile(file))
+                            .withHoverEvent(hoverEvent));
+        }
+
+        public String getName() {
+            return translationKey;
+        }
     }
 
+    @AllArgsConstructor
     protected static class FileTransferable implements Transferable {
-        private final File file;
 
-        public FileTransferable(File file) {
-            this.file = file;
-        }
+        private final File file;
 
         @Override
         public DataFlavor[] getTransferDataFlavors() {
@@ -123,18 +213,30 @@ public class ScreenshotUtils extends AbstractModule {
     public static class CustomClickEvent extends ClickEvent {
 
         private final OnActionCall action;
+        private File file;
 
         public CustomClickEvent(OnActionCall action) {
             super(Action.byName(""), "");
             this.action = action;
         }
 
-        public void doAction(){
-            action.doAction();
+        public void doAction() {
+            if (file != null) {
+                action.doAction(file);
+            } else {
+                Logger.warn("How'd you manage to do this? " +
+                        "Now there's a screenshot ClickEvent without a File attached to it!");
+            }
+        }
+
+        public CustomClickEvent setFile(File file) {
+            this.file = file;
+            return this;
         }
     }
 
     interface OnActionCall {
-        void doAction();
+
+        void doAction(File file);
     }
 }

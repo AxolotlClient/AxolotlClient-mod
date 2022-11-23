@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.util;
 
+import net.minecraft.util.Util;
+
+import java.net.URI;
 import java.util.Locale;
 
 public class OSUtil {
@@ -60,6 +63,10 @@ public class OSUtil {
 
         OperatingSystem(String... detection) {
             this.s = detection;
+        }
+
+        public void open(URI uri){
+            Util.getOperatingSystem().open(uri);
         }
     }
 }
