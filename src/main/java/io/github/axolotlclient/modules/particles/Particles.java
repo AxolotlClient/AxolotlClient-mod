@@ -57,18 +57,19 @@ public class Particles extends AbstractModule {
         AxolotlClient.CONFIG.rendering.addSubCategory(cat);
     }
 
-    private void addParticleOptions(){
-        for(ParticleType type : Arrays.stream(ParticleType.values()).sorted(new AlphabeticalComparator()).collect(Collectors.toList())){
-            OptionCategory category = new OptionCategory(StringUtils.capitalize(Util.splitAtCapitalLetters(type.getName().replace("_", ""))));
+    private void addParticleOptions() {
+        for (ParticleType type : Arrays.stream(ParticleType.values()).sorted(new AlphabeticalComparator())
+                .collect(Collectors.toList())) {
+            OptionCategory category = new OptionCategory(
+                    StringUtils.capitalize(Util.splitAtCapitalLetters(type.getName().replace("_", ""))));
             HashMap<String, Option<?>> optionsByKey = new LinkedHashMap<>();
 
-            populateMap(optionsByKey,
-                    new BooleanOption("axolotlclient.showParticle", true),
+            populateMap(optionsByKey, new BooleanOption("axolotlclient.showParticle", true),
                     new IntegerOption("axolotlclient.count", 1, 1, 20),
                     new BooleanOption("axolotlclient.customColor", false),
                     new ColorOption("axolotlclient.color", "particles", Color.WHITE));
 
-            if(type == ParticleType.CRIT || type == ParticleType.CRIT_MAGIC){
+            if (type == ParticleType.CRIT || type == ParticleType.CRIT_MAGIC) {
                 populateMap(optionsByKey, new BooleanOption("axolotlclient.alwaysCrit", false));
             }
 
@@ -79,17 +80,17 @@ public class Particles extends AbstractModule {
         }
     }
 
-    private void populateMap(HashMap<String, Option<?>> map, Option<?>... options){
-        for(Option<?> option:options){
+    private void populateMap(HashMap<String, Option<?>> map, Option<?>... options) {
+        for (Option<?> option : options) {
             map.put(option.getName(), option);
         }
     }
 
-    public void applyOptions(Particle particle){
-        if(enabled.get() && particleMap.containsKey(particle)) {
+    public void applyOptions(Particle particle) {
+        if (enabled.get() && particleMap.containsKey(particle)) {
             HashMap<String, Option<?>> options = particleOptions.get(particleMap.get(particle));
 
-            if (((BooleanOption)options.get("axolotlclient.customColor")).get()) {
+            if (((BooleanOption) options.get("axolotlclient.customColor")).get()) {
                 Color color = ((ColorOption) options.get("axolotlclient.color")).get();
                 particle.setColor(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F);
                 ((ParticleAccessor) particle).setAlpha(color.getAlpha() / 255F);
@@ -98,7 +99,7 @@ public class Particles extends AbstractModule {
     }
 
     public int getMultiplier(ParticleType type) {
-        if(enabled.get()) {
+        if (enabled.get()) {
             HashMap<String, Option<?>> options = particleOptions.get(type);
 
             return ((IntegerOption) options.get("axolotlclient.count")).get();
@@ -106,20 +107,26 @@ public class Particles extends AbstractModule {
         return 1;
     }
 
-    public boolean getAlwaysOn(ParticleType type){
-        return enabled.get() && ((BooleanOption)Particles.getInstance().particleOptions.get(type).get("axolotlclient.alwaysCrit")).get();
+    public boolean getAlwaysOn(ParticleType type) {
+        return enabled.get()
+                && ((BooleanOption) Particles.getInstance().particleOptions.get(type).get("axolotlclient.alwaysCrit"))
+                        .get();
     }
 
-    public boolean getShowParticle(ParticleType type){
-        return enabled.get() ? ((BooleanOption)Particles.getInstance().particleOptions.get(type).get("axolotlclient.showParticle")).get() : true;
+    public boolean getShowParticle(ParticleType type) {
+        return enabled.get()
+                ? ((BooleanOption) Particles.getInstance().particleOptions.get(type).get("axolotlclient.showParticle"))
+                        .get()
+                : true;
     }
 
     protected static class AlphabeticalComparator implements Comparator<ParticleType> {
 
         // Function to compare
         public int compare(ParticleType s1, ParticleType s2) {
-            if(s1.getName().equals(s2.getName())) return 0;
-            String[] strings = {s1.getName(), s2.getName()};
+            if (s1.getName().equals(s2.getName()))
+                return 0;
+            String[] strings = { s1.getName(), s2.getName() };
             Arrays.sort(strings, Collections.reverseOrder());
 
             if (strings[0].equals(s1.getName()))

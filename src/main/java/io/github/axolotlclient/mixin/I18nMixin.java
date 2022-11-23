@@ -36,8 +36,9 @@ public abstract class I18nMixin {
 
     @Inject(method = "translate", at = @At("HEAD"), cancellable = true)
     private static void translate(String key, Object[] args, CallbackInfoReturnable<String> callback) {
-        if(key.startsWith(KEY_PREFIX)) {
-            callback.setReturnValue(TranslationProvider.format(TranslationProvider.translate(key.substring(KEY_PREFIX.length())), args));
+        if (key.startsWith(KEY_PREFIX)) {
+            callback.setReturnValue(TranslationProvider
+                    .format(TranslationProvider.translate(key.substring(KEY_PREFIX.length())), args));
         }
     }
 }

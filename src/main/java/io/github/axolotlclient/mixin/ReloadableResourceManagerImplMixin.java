@@ -42,12 +42,12 @@ import java.util.List;
 @Mixin(ReloadableResourceManagerImpl.class)
 public abstract class ReloadableResourceManagerImplMixin {
 
-    @Inject(method = "reload", at=@At("TAIL"))
-    public void onReload(List<ResourcePack> resourcePacks, CallbackInfo ci){
+    @Inject(method = "reload", at = @At("TAIL"))
+    public void onReload(List<ResourcePack> resourcePacks, CallbackInfo ci) {
         HypixelAbstractionLayer.clearPlayerData();
 
         PackDisplayHud hud = (PackDisplayHud) HudManager.getInstance().get(PackDisplayHud.ID);
-        if(hud != null){
+        if (hud != null) {
             hud.setPacks(resourcePacks);
         }
 
@@ -55,10 +55,9 @@ public abstract class ReloadableResourceManagerImplMixin {
     }
 
     @Inject(method = "getResource", at = @At("HEAD"), cancellable = true)
-    public void getResource(Identifier id, CallbackInfoReturnable<Resource> cir){
-        if(AxolotlClient.runtimeResources.get(id) != null){
+    public void getResource(Identifier id, CallbackInfoReturnable<Resource> cir) {
+        if (AxolotlClient.runtimeResources.get(id) != null) {
             cir.setReturnValue(AxolotlClient.runtimeResources.get(id));
         }
     }
-
 }

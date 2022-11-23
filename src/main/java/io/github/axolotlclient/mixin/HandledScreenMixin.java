@@ -35,16 +35,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(HandledScreen.class)
 public abstract class HandledScreenMixin {
 
-    @Shadow private Slot focusedSlot;
+    @Shadow
+    private Slot focusedSlot;
 
-    @Shadow protected abstract boolean handleHotbarKeyPressed(int keyCode);
+    @Shadow
+    protected abstract boolean handleHotbarKeyPressed(int keyCode);
 
     private Slot cachedSlot;
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;popMatrix()V"))
-    public void resetScrollOnSlotChange(int mouseX, int mouseY, float tickDelta, CallbackInfo ci){
-
-        if(ScrollableTooltips.getInstance().enabled.get() && cachedSlot != focusedSlot){
+    public void resetScrollOnSlotChange(int mouseX, int mouseY, float tickDelta, CallbackInfo ci) {
+        if (ScrollableTooltips.getInstance().enabled.get() && cachedSlot != focusedSlot) {
             cachedSlot = focusedSlot;
             ScrollableTooltips.getInstance().resetScroll();
         }
@@ -62,6 +63,4 @@ public abstract class HandledScreenMixin {
     private void mouseClickedTail(int mouseX, int mouseY, int mouseButton, CallbackInfo ci) {
         handleHotbarKeyPressed(mouseButton - 100);
     }
-
-
 }

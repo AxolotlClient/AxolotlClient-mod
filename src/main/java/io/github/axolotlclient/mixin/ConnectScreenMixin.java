@@ -33,7 +33,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class ConnectScreenMixin {
 
     @Inject(method = "connect", at = @At("HEAD"))
-    private void onServerJoin(String address, int port, CallbackInfo ci){
+    private void onServerJoin(String address, int port, CallbackInfo ci) {
         FeatureDisabler.onServerJoin(address);
     }
 }

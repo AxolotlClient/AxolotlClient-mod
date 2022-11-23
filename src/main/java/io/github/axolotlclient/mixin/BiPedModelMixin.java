@@ -34,7 +34,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public abstract class BiPedModelMixin {
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/ModelPart;render(F)V", ordinal = 6))
-    public void translucentHatOne(ModelPart instance, float scale){
+    public void translucentHatOne(ModelPart instance, float scale) {
         GlStateManager.pushMatrix();
 
         GlStateManager.enableCull();
@@ -49,7 +49,7 @@ public abstract class BiPedModelMixin {
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/ModelPart;render(F)V", ordinal = 13))
-    public void translucentHatTwo(ModelPart instance, float scale){
+    public void translucentHatTwo(ModelPart instance, float scale) {
         GlStateManager.pushMatrix();
 
         GlStateManager.enableCull();

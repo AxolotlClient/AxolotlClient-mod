@@ -38,8 +38,8 @@ public class DrawPosition {
     public int x, y;
 
     public DrawPosition(int x, int y) {
-        this.x=x;
-        this.y=y;
+        this.x = x;
+        this.y = y;
     }
 
     public DrawPosition subtract(int x, int y) {
@@ -53,5 +53,4 @@ public class DrawPosition {
     public DrawPosition divide(float scale) {
         return new DrawPosition((int) (x / scale), (int) (y / scale));
     }
-
 }

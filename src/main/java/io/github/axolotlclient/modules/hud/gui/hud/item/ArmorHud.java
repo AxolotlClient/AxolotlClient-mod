@@ -58,7 +58,7 @@ public class ArmorHud extends TextHudEntry {
         renderMainItem(client.player.inventory.getMainHandStack(), pos.x() + 2, pos.y() + lastY);
         lastY = lastY - 20;
         for (int i = 0; i <= 3; i++) {
-            if(client.player.inventory.armor[i] != null) {
+            if (client.player.inventory.armor[i] != null) {
                 ItemStack stack = client.player.inventory.armor[i].copy();
                 if (showProtLvl.get() && stack.hasEnchantments()) {
                     NbtList nbtList = stack.getEnchantments();
@@ -90,16 +90,13 @@ public class ArmorHud extends TextHudEntry {
         if (total.equals("1")) {
             total = null;
         }
-        ItemUtil.renderGuiItemOverlay(client.textRenderer, stack, x, y, total, textColor.get().getAsInt(), shadow.get());
+        ItemUtil.renderGuiItemOverlay(client.textRenderer, stack, x, y, total, textColor.get().getAsInt(),
+                shadow.get());
     }
 
-    private final ItemStack[] placeholderStacks = new ItemStack[]{
-            new ItemStack(Items.IRON_BOOTS),
-            new ItemStack(Items.IRON_LEGGINGS),
-            new ItemStack(Items.IRON_CHESTPLATE),
-            new ItemStack(Items.IRON_HELMET),
-            new ItemStack(Items.IRON_SWORD)
-    };
+    private final ItemStack[] placeholderStacks = new ItemStack[] { new ItemStack(Items.IRON_BOOTS),
+            new ItemStack(Items.IRON_LEGGINGS), new ItemStack(Items.IRON_CHESTPLATE), new ItemStack(Items.IRON_HELMET),
+            new ItemStack(Items.IRON_SWORD) };
 
     @Override
     public void renderPlaceholderComponent(float delta) {
@@ -130,5 +127,4 @@ public class ArmorHud extends TextHudEntry {
         options.add(showProtLvl);
         return options;
     }
-
 }

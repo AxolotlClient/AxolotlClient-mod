@@ -57,13 +57,11 @@ public class ChatHud extends TextHudEntry {
     }
 
     @Override
-    public void render(float delta){
-
+    public void render(float delta) {
         int scrolledLines = ((ChatHudAccessor) client.inGameHud.getChatHud()).getScrolledLines();
         List<ChatHudLine> visibleMessages = ((ChatHudAccessor) client.inGameHud.getChatHud()).getVisibleMessages();
 
         if (this.client.options.chatVisibilityType != PlayerEntity.ChatVisibilityType.HIDDEN) {
-
             GlStateManager.pushMatrix();
             scale();
             DrawPosition pos = getPos();
@@ -73,30 +71,31 @@ public class ChatHud extends TextHudEntry {
             int k = visibleMessages.size();
             float f = this.client.options.chatOpacity * 0.9F + 0.1F;
             if (k > 0) {
-
                 float g = getScale();
-                int l = MathHelper.ceil((float)getWidth() / g);
+                int l = MathHelper.ceil((float) getWidth() / g);
                 GlStateManager.pushMatrix();
 
-                for(int m = 0; m + scrolledLines < visibleMessages.size() && m < i; ++m) {
+                for (int m = 0; m + scrolledLines < visibleMessages.size() && m < i; ++m) {
                     ChatHudLine chatHudLine = visibleMessages.get(m + scrolledLines);
                     if (chatHudLine != null) {
                         int n = ticks - chatHudLine.getCreationTick();
                         if (n < 200 || isChatFocused()) {
-                            double d = MathHelper.clamp((1.0 - n / 200.0)*10.0, 0.0, 1.0);
+                            double d = MathHelper.clamp((1.0 - n / 200.0) * 10.0, 0.0, 1.0);
                             d *= d;
-                            int Opacity = isChatFocused() ? 255: (int)(255.0 * d);
+                            int Opacity = isChatFocused() ? 255 : (int) (255.0 * d);
 
-                            int chatOpacity = (int)(Opacity * f);
+                            int chatOpacity = (int) (Opacity * f);
                             ++j;
                             if (chatOpacity > 3) {
-                                int y = pos.y+getHeight() - (m * (9 + lineSpacing.get()));
-                                if(background.get()) {
-                                    fill(pos.x, y - (9+lineSpacing.get()), pos.x + l + 4, y, bgColor.get().withAlpha(chatOpacity/2).getAsInt());
+                                int y = pos.y + getHeight() - (m * (9 + lineSpacing.get()));
+                                if (background.get()) {
+                                    fill(pos.x, y - (9 + lineSpacing.get()), pos.x + l + 4, y,
+                                            bgColor.get().withAlpha(chatOpacity / 2).getAsInt());
                                 }
                                 String string = chatHudLine.getText().asFormattedString();
                                 GlStateManager.enableBlend();
-                                DrawUtil.drawString(client.textRenderer, string, pos.x, (y - 8), 16777215 + (chatOpacity << 24), shadow.get());
+                                DrawUtil.drawString(client.textRenderer, string, pos.x, (y - 8),
+                                        16777215 + (chatOpacity << 24), shadow.get());
                                 GlStateManager.disableAlphaTest();
                                 GlStateManager.disableBlend();
                             }
@@ -109,12 +108,12 @@ public class ChatHud extends TextHudEntry {
                     GlStateManager.translatef(-3.0F, 0.0F, 0.0F);
                     int r = k * m + k;
                     int n = j * m + j;
-                    int y = (pos.y+getHeight()) - scrolledLines * n / k;
-                    if(((ChatHudAccessor) client.inGameHud.getChatHud()).getMessages().size() > getVisibleLineCount()) {
+                    int y = (pos.y + getHeight()) - scrolledLines * n / k;
+                    if (((ChatHudAccessor) client.inGameHud.getChatHud()).getMessages()
+                            .size() > getVisibleLineCount()) {
                         int height = n * n / r;
                         fillRect(pos.x, y, 2, -height, scrollbarColor.get().getAsInt());
                     }
-
                 }
 
                 GlStateManager.popMatrix();
@@ -125,36 +124,35 @@ public class ChatHud extends TextHudEntry {
 
     @Override
     public void renderComponent(float delta) {
-
     }
 
-    public Text getTextAt(int x, int y){
-
+    public Text getTextAt(int x, int y) {
         List<ChatHudLine> visibleMessages = ((ChatHudAccessor) client.inGameHud.getChatHud()).getVisibleMessages();
 
-        int offsetOnHudX = MathHelper.floor(x/getScale() - getPos().x);
-        int offsetOnHudY = MathHelper.floor(- (y/getScale() - (getPos().y +height)));
+        int offsetOnHudX = MathHelper.floor(x / getScale() - getPos().x);
+        int offsetOnHudY = MathHelper.floor(-(y / getScale() - (getPos().y + height)));
 
         int scrolledLines = ((ChatHudAccessor) client.inGameHud.getChatHud()).getScrolledLines();
 
         if (offsetOnHudX >= 0 && offsetOnHudY >= 0) {
             int l = Math.min(this.getVisibleLineCount(), visibleMessages.size());
-            if (offsetOnHudX <= MathHelper.floor((float)this.getWidth() / this.getScale()) && offsetOnHudY < (getFontHeight() + lineSpacing.get()) * l + l)  {
+            if (offsetOnHudX <= MathHelper.floor((float) this.getWidth() / this.getScale())
+                    && offsetOnHudY < (getFontHeight() + lineSpacing.get()) * l + l) {
                 int m = offsetOnHudY / (getFontHeight() + lineSpacing.get()) + scrolledLines;
                 if (m >= 0 && m < visibleMessages.size()) {
                     ChatHudLine chatHudLine = visibleMessages.get(m);
                     int n = 0;
 
-                    for(Text text : chatHudLine.getText()) {
+                    for (Text text : chatHudLine.getText()) {
                         if (text instanceof LiteralText) {
-                            n += this.client.textRenderer.getStringWidth(Texts.getRenderChatMessage(((LiteralText)text).getRawString(), false));
+                            n += this.client.textRenderer.getStringWidth(
+                                    Texts.getRenderChatMessage(((LiteralText) text).getRawString(), false));
                             if (n > offsetOnHudX) {
                                 return text;
                             }
                         }
                     }
                 }
-
             }
         }
         return null;
@@ -176,10 +174,11 @@ public class ChatHud extends TextHudEntry {
     }
 
     private int lastHeight;
+
     @Override
     public void tick() {
         //setWidth((int) (client.options.chatWidth*320));
-        if(lastHeight != getHeight(client.options.chatHeightUnfocused)){
+        if (lastHeight != getHeight(client.options.chatHeightUnfocused)) {
             setHeight(getHeight(this.client.options.chatHeightUnfocused));//int) (client.options.chatHeightUnfocused*180)+11);this.isChatFocused() ? this.client.options.chatHeightFocused
             onBoundsUpdate();
             lastHeight = getHeight();
@@ -188,18 +187,13 @@ public class ChatHud extends TextHudEntry {
 
     @Override
     public void renderPlaceholderComponent(float delta) {
-
         DrawPosition pos = getPos();
-        if(MinecraftClient.getInstance().player!=null) {
-            client.textRenderer.drawWithShadow(
-                    "<" + MinecraftClient.getInstance().player.getName().asFormattedString() + "> OOh! There's my Chat now!",
-                    pos.x + 1, pos.y + getHeight() - 9, -1
-            );
+        if (MinecraftClient.getInstance().player != null) {
+            client.textRenderer.drawWithShadow("<" + MinecraftClient.getInstance().player.getName().asFormattedString()
+                    + "> OOh! There's my Chat now!", pos.x + 1, pos.y + getHeight() - 9, -1);
         } else {
-            client.textRenderer.drawWithShadow(
-                    "This is where your new and fresh looking chat will be!",
-                    pos.x + 1, pos.y + getHeight() - 9, -1
-            );
+            client.textRenderer.drawWithShadow("This is where your new and fresh looking chat will be!", pos.x + 1,
+                    pos.y + getHeight() - 9, -1);
         }
     }
 
@@ -232,26 +226,28 @@ public class ChatHud extends TextHudEntry {
         return getHeight(this.isChatFocused() ? this.client.options.chatHeightFocused : this.client.options.chatHeightUnfocused);
     }*/
 
-    private float getChatHeightUnfocused(){
+    private float getChatHeightUnfocused() {
         return client.options.chatHeightUnfocused;
     }
 
     public static int getHeight(float chatHeight) {
         int i = 180;
         int j = 20;
-        return MathHelper.floor(chatHeight * (float)(i - j) + (float)j);
+        return MathHelper.floor(chatHeight * (float) (i - j) + (float) j);
     }
 
-    protected int getFontHeight(){
+    protected int getFontHeight() {
         return MathHelper.floor(MinecraftClient.getInstance().textRenderer.fontHeight);
     }
 
     public int getVisibleLineCount() {
-        return getHeight(this.isChatFocused() ? this.client.options.chatHeightFocused : this.client.options.chatHeightUnfocused) / 9;
+        return getHeight(
+                this.isChatFocused() ? this.client.options.chatHeightFocused : this.client.options.chatHeightUnfocused)
+                / 9;
     }
 
     @Override
-    public boolean overridesF3(){
+    public boolean overridesF3() {
         return true;
     }
 }

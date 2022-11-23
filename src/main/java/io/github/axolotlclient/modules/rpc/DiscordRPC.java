@@ -56,14 +56,15 @@ public class DiscordRPC extends AbstractModule {
     public OptionCategory category = new OptionCategory("axolotlclient.rpc");
 
     public BooleanOption enabled = new BooleanOption("axolotlclient.enabled", value -> {
-        if(value){
+        if (value) {
             initRPC();
         } else {
             shutdown();
         }
-    },false);
+    }, false);
     public BooleanOption showActivity = new BooleanOption("axolotlclient.showActivity", true);
-    public EnumOption showServerNameMode = new EnumOption("axolotlclient.showServerNameMode", new String[]{"showIp", "showName", "off"}, "off");
+    public EnumOption showServerNameMode = new EnumOption("axolotlclient.showServerNameMode",
+            new String[] { "showIp", "showName", "off" }, "off");
     public BooleanOption showTime = new BooleanOption("axolotlclient.showTime", true);
 
     public static Activity currentActivity;
@@ -73,19 +74,19 @@ public class DiscordRPC extends AbstractModule {
 
     private static boolean running;
 
-    public static DiscordRPC getInstance(){
-        if(Instance == null) Instance = new DiscordRPC();
+    public static DiscordRPC getInstance() {
+        if (Instance == null)
+            Instance = new DiscordRPC();
         return Instance;
     }
 
     @Override
     public void init() {
-
         category.add(enabled, showTime, showActivity, showServerNameMode);
 
         AxolotlClient.CONFIG.addCategory(category);
 
-        if(OSUtil.getOS()== OSUtil.OperatingSystem.OTHER){
+        if (OSUtil.getOS() == OSUtil.OperatingSystem.OTHER) {
             enabled.setForceOff(true, "axolotlclient.crash");
         }
 
@@ -94,13 +95,12 @@ public class DiscordRPC extends AbstractModule {
     }
 
     @SuppressWarnings("BusyWait")
-    public void initRPC(){
-        if(enabled.get()) {
+    public void initRPC() {
+        if (enabled.get()) {
             GameSdkDownloader.downloadSdk();
         }
 
-        if(enabled.get()) {
-
+        if (enabled.get()) {
             CreateParams params = new CreateParams();
 
             params.setClientID(875835666729152573L);
@@ -115,7 +115,6 @@ public class DiscordRPC extends AbstractModule {
                 running = true;
                 Thread callBacks = new Thread(() -> {
                     while (enabled.get() && running) {
-
                         discordRPC.runCallbacks();
 
                         try {
@@ -133,7 +132,7 @@ public class DiscordRPC extends AbstractModule {
                 callBacks.start();
                 Logger.info("Started RPC Core");
             } catch (Exception e) {
-                if(!e.getMessage().contains("INTERNAL_ERROR")) {
+                if (!e.getMessage().contains("INTERNAL_ERROR")) {
                     Logger.error("An error occurred: ");
                     e.printStackTrace();
                 } else {
@@ -145,21 +144,20 @@ public class DiscordRPC extends AbstractModule {
     }
 
     public void updateActivity() {
-
         Activity activity = new Activity();
 
         String state;
         switch (showServerNameMode.get()) {
             case "showIp":
-                state = MinecraftClient.getInstance().world == null ?
-                        "In the menu" : (Util.getCurrentServerAddress() == null ?
-                        "Singleplayer" : Util.getCurrentServerAddress());
+                state = MinecraftClient.getInstance().world == null ? "In the menu"
+                        : (Util.getCurrentServerAddress() == null ? "Singleplayer" : Util.getCurrentServerAddress());
                 break;
             case "showName":
-                state = MinecraftClient.getInstance().world == null ?
-                        "In the menu" : (MinecraftClient.getInstance().getCurrentServerEntry() == null ?
-                        (Util.getCurrentServerAddress() == null ? "Singleplayer" : Util.getCurrentServerAddress()) :
-                        MinecraftClient.getInstance().getCurrentServerEntry().name);
+                state = MinecraftClient.getInstance().world == null ? "In the menu"
+                        : (MinecraftClient.getInstance().getCurrentServerEntry() == null
+                                ? (Util.getCurrentServerAddress() == null ? "Singleplayer"
+                                        : Util.getCurrentServerAddress())
+                                : MinecraftClient.getInstance().getCurrentServerEntry().name);
                 break;
             case "off":
             default:
@@ -169,7 +167,7 @@ public class DiscordRPC extends AbstractModule {
 
         if (showActivity.get() && Util.getCurrentServerAddress() != null) {
             activity.setDetails(Util.getGame());
-        } else if (showActivity.get() && currentActivity != null){
+        } else if (showActivity.get() && currentActivity != null) {
             activity.setDetails(currentActivity.getDetails());
         }
 
@@ -180,7 +178,7 @@ public class DiscordRPC extends AbstractModule {
             activity.timestamps().setStart(Instant.ofEpochMilli(time.toEpochMilli()));
         }
 
-        if(currentActivity != null) {
+        if (currentActivity != null) {
             currentActivity.close();
         }
 
@@ -190,9 +188,9 @@ public class DiscordRPC extends AbstractModule {
         currentActivity = activity;
     }
 
-    public static void setWorld(String world){
-        if(running) {
-            if(currentActivity==null){
+    public static void setWorld(String world) {
+        if (running) {
+            if (currentActivity == null) {
                 DiscordRPC.getInstance().updateRPC();
             }
 
@@ -203,27 +201,24 @@ public class DiscordRPC extends AbstractModule {
         }
     }
 
-    public void updateRPC(){
-
-        if(discordRPC != null && discordRPC.isOpen()) {
+    public void updateRPC() {
+        if (discordRPC != null && discordRPC.isOpen()) {
             updateActivity();
         }
     }
 
     @Override
-    public void tick(){
-
-        if (!running && enabled.get()){
+    public void tick() {
+        if (!running && enabled.get()) {
             initRPC();
         }
 
-        if(running) {
+        if (running) {
             updateRPC();
         }
-
     }
 
-    public static void shutdown(){
+    public static void shutdown() {
         running = false;
     }
 }

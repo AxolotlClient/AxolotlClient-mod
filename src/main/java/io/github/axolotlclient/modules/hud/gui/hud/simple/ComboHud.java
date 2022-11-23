@@ -85,5 +85,4 @@ public class ComboHud extends SimpleTextHudEntry {
             lastTime = MinecraftClient.getTime();
         }
     }
-
 }

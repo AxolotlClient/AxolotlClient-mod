@@ -61,21 +61,17 @@ public class GameSdkDownloader {
                 fileName = "discord_game_sdk.dylib";
             } else {
                 if (OSUtil.getOS() != OSUtil.OperatingSystem.LINUX) {
-                    throw new RuntimeException("Could not determine OS type: " + System.getProperty("os.name") + " Detected " + OSUtil.getOS());
+                    throw new RuntimeException("Could not determine OS type: " + System.getProperty("os.name")
+                            + " Detected " + OSUtil.getOS());
                 }
 
                 fileName = "discord_game_sdk.so";
             }
 
             File sdk = new File("config/game-sdk/" + fileName);
-            File jni = new File(
-                    "config/game-sdk/"
-                            + (
-                            OSUtil.getOS() == OSUtil.OperatingSystem.WINDOWS
-                                    ? "discord_game_sdk_jni.dll"
-                                    : "libdiscord_game_sdk_jni" + (OSUtil.getOS() == OSUtil.OperatingSystem.MAC ? ".dylib" : ".so")
-                    )
-            );
+            File jni = new File("config/game-sdk/" + (OSUtil.getOS() == OSUtil.OperatingSystem.WINDOWS
+                    ? "discord_game_sdk_jni.dll"
+                    : "libdiscord_game_sdk_jni" + (OSUtil.getOS() == OSUtil.OperatingSystem.MAC ? ".dylib" : ".so")));
             if (!sdk.exists()) {
                 downloadSdk(sdk, fileName);
             }
@@ -95,7 +91,6 @@ public class GameSdkDownloader {
             e.printStackTrace();
             DiscordRPC.getInstance().enabled.set(false);
         }
-
     }
 
     private static void downloadSdk(File sdk, String fileName) throws IOException {
@@ -110,7 +105,7 @@ public class GameSdkDownloader {
         ZipInputStream zin = new ZipInputStream(con.getInputStream());
 
         ZipEntry entry;
-        while((entry = zin.getNextEntry()) != null) {
+        while ((entry = zin.getNextEntry()) != null) {
             if (entry.getName().equals("lib/" + arch + "/" + fileName)) {
                 Files.copy(zin, sdk.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 break;
@@ -122,7 +117,8 @@ public class GameSdkDownloader {
         zin.close();
     }
 
-    private static boolean retriedExtractingJni=false;
+    private static boolean retriedExtractingJni = false;
+
     private static void extractJni(File jni) throws IOException {
         String arch = System.getProperty("os.arch").toLowerCase(Locale.ROOT);
         if (arch.equals("x86_64")) {
@@ -130,21 +126,19 @@ public class GameSdkDownloader {
         }
 
         String path = "/native/"
-                + (OSUtil.getOS() == OSUtil.OperatingSystem.WINDOWS ?
-                "windows" :
-                (OSUtil.getOS() == OSUtil.OperatingSystem.MAC ? "macos" : "linux"))
-                + "/" + arch + "/" +
-                (OSUtil.getOS() == OSUtil.OperatingSystem.WINDOWS ?
-                        "discord_game_sdk_jni.dll" :
-                        "libdiscord_game_sdk_jni" + (OSUtil.getOS() == OSUtil.OperatingSystem.MAC ? ".dylib" : ".so")
-        );
+                + (OSUtil.getOS() == OSUtil.OperatingSystem.WINDOWS ? "windows"
+                        : (OSUtil.getOS() == OSUtil.OperatingSystem.MAC ? "macos" : "linux"))
+                + "/" + arch + "/"
+                + (OSUtil.getOS() == OSUtil.OperatingSystem.WINDOWS ? "discord_game_sdk_jni.dll"
+                        : "libdiscord_game_sdk_jni"
+                                + (OSUtil.getOS() == OSUtil.OperatingSystem.MAC ? ".dylib" : ".so"));
 
         InputStream in = DiscordRPC.class.getResourceAsStream(path);
-        if(in!=null) {
+        if (in != null) {
             Files.copy(in, jni.toPath(), StandardCopyOption.REPLACE_EXISTING);
-        } else if(!retriedExtractingJni) {
+        } else if (!retriedExtractingJni) {
             Logger.warn("Extracting JNI failed, retrying!");
-            retriedExtractingJni=true;
+            retriedExtractingJni = true;
             extractJni(jni);
         } else {
             Logger.error("Extracting Jni failed, restart your game to try again.");

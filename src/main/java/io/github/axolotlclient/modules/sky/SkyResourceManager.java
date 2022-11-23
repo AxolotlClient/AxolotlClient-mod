@@ -50,50 +50,49 @@ public class SkyResourceManager extends AbstractModule implements IdentifiableRe
 
     private static final SkyResourceManager Instance = new SkyResourceManager();
 
-    public static SkyResourceManager getInstance(){
+    public static SkyResourceManager getInstance() {
         return Instance;
     }
 
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    private void loadMCPSky(String loader, Identifier id, Resource resource){
-        BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8));
+    private void loadMCPSky(String loader, Identifier id, Resource resource) {
+        BufferedReader reader = new BufferedReader(
+                new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8));
 
         JsonObject object = new JsonObject();
         String string;
         String[] option;
         try {
-
             while ((string = reader.readLine()) != null) {
                 try {
-
-                    if(!string.startsWith("#")) {
+                    if (!string.startsWith("#")) {
                         option = string.split("=");
                         if (option[0].equals("source")) {
-                            if(option[1].contains(":")){
+                            if (option[1].contains(":")) {
                                 option[1] = option[1].split(":")[1];
                             } else {
                                 if (option[1].startsWith("assets")) {
                                     option[1] = option[1].replace("./", "").replace("assets/minecraft/", "");
                                 }
                                 if (id.getPath().contains("world")) {
-                                    option[1] = loader + "/sky/world" + id.getPath().split("world")[1].split("/")[0] + "/" + option[1].replace("./", "");
+                                    option[1] = loader + "/sky/world" + id.getPath().split("world")[1].split("/")[0]
+                                            + "/" + option[1].replace("./", "");
                                 }
                             }
                         }
-                        if (option[0].equals("startFadeIn") || option[0].equals("endFadeIn") || option[0].equals("startFadeOut") || option[0].equals("endFadeOut")) {
+                        if (option[0].equals("startFadeIn") || option[0].equals("endFadeIn")
+                                || option[0].equals("startFadeOut") || option[0].equals("endFadeOut")) {
                             option[1] = option[1].replace(":", "").replace("\\", "");
                         }
 
                         object.addProperty(option[0], option[1]);
                     }
-
                 } catch (Exception ignored) {}
             }
 
             SkyboxManager.getInstance().addSkybox(new MCPSkyboxInstance(object));
-
-        } catch (Exception ignored){}
+        } catch (Exception ignored) {}
     }
 
     @Override
@@ -104,20 +103,26 @@ public class SkyResourceManager extends AbstractModule implements IdentifiableRe
     @Override
     public void reload(ResourceManager resourceManager) {
         SkyboxManager.getInstance().clearSkyboxes();
-        for (Map.Entry<Identifier, Resource> entry : ((SearchableResourceManager)resourceManager).findResources("fabricskyboxes","sky", identifier -> identifier.getPath().endsWith(".json")).entrySet()){
-            Logger.debug("Loaded sky: "+entry.getKey());
-            SkyboxManager.getInstance().addSkybox(new FSBSkyboxInstance(gson.fromJson(new BufferedReader(new InputStreamReader(
-                    entry.getValue().getInputStream(),
-                            StandardCharsets.UTF_8)).lines().collect(Collectors.joining("\n")),
+        for (Map.Entry<Identifier, Resource> entry : ((SearchableResourceManager) resourceManager)
+                .findResources("fabricskyboxes", "sky", identifier -> identifier.getPath().endsWith(".json"))
+                .entrySet()) {
+            Logger.debug("Loaded sky: " + entry.getKey());
+            SkyboxManager.getInstance().addSkybox(new FSBSkyboxInstance(gson.fromJson(
+                    new BufferedReader(new InputStreamReader(entry.getValue().getInputStream(), StandardCharsets.UTF_8))
+                            .lines().collect(Collectors.joining("\n")),
                     JsonObject.class)));
         }
 
-        for (Map.Entry<Identifier, Resource> entry : ((SearchableResourceManager) resourceManager).findResources("minecraft", "optifine/sky", identifier -> identifier.getPath().endsWith(".properties")).entrySet()) {
+        for (Map.Entry<Identifier, Resource> entry : ((SearchableResourceManager) resourceManager)
+                .findResources("minecraft", "optifine/sky", identifier -> identifier.getPath().endsWith(".properties"))
+                .entrySet()) {
             Logger.debug("Loaded sky: " + entry.getKey());
             loadMCPSky("optifine", entry.getKey(), entry.getValue());
         }
 
-        for (Map.Entry<Identifier, Resource> entry : ((SearchableResourceManager) resourceManager).findResources("minecraft", "mcpatcher/sky", identifier -> identifier.getPath().endsWith(".properties")).entrySet()) {
+        for (Map.Entry<Identifier, Resource> entry : ((SearchableResourceManager) resourceManager)
+                .findResources("minecraft", "mcpatcher/sky", identifier -> identifier.getPath().endsWith(".properties"))
+                .entrySet()) {
             Logger.debug("Loaded sky: " + entry.getKey());
             loadMCPSky("mcpatcher", entry.getKey(), entry.getValue());
         }

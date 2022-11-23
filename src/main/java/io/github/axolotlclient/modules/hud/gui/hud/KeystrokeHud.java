@@ -50,12 +50,14 @@ import java.util.Optional;
  */
 
 public class KeystrokeHud extends TextHudEntry {
+
     public static final Identifier ID = new Identifier("kronhud", "keystrokehud");
 
     private final ColorOption pressedTextColor = new ColorOption("axolotlclient.heldtextcolor", new Color(0xFF000000));
     private final ColorOption pressedBackgroundColor = new ColorOption("axolotlclient.heldbackgroundcolor", 0x64FFFFFF);
-    private final ColorOption pressedOutlineColor = new ColorOption("axolotlclient.heldoutlinecolor",Color.BLACK);
-    private final BooleanOption mouseMovement = new BooleanOption("axolotlclient.mousemovement", this::onMouseMovementOption, false);
+    private final ColorOption pressedOutlineColor = new ColorOption("axolotlclient.heldoutlinecolor", Color.BLACK);
+    private final BooleanOption mouseMovement = new BooleanOption("axolotlclient.mousemovement",
+            this::onMouseMovementOption, false);
     private ArrayList<Keystroke> keystrokes;
     private static final MinecraftClient client = MinecraftClient.getInstance();
 
@@ -71,14 +73,11 @@ public class KeystrokeHud extends TextHudEntry {
     }
 
     public static Optional<String> getMouseKeyBindName(KeyBinding keyBinding) {
-        if (keyBinding.getTranslationKey()
-                      .equalsIgnoreCase(client.options.keyAttack.getTranslationKey())) {
+        if (keyBinding.getTranslationKey().equalsIgnoreCase(client.options.keyAttack.getTranslationKey())) {
             return Optional.of("LMB");
-        } else if (keyBinding.getTranslationKey()
-                             .equalsIgnoreCase(client.options.keyUse.getTranslationKey())) {
+        } else if (keyBinding.getTranslationKey().equalsIgnoreCase(client.options.keyUse.getTranslationKey())) {
             return Optional.of("RMB");
-        } else if (keyBinding.getTranslationKey()
-                             .equalsIgnoreCase(client.options.keyPickItem.getTranslationKey())) {
+        } else if (keyBinding.getTranslationKey().equalsIgnoreCase(client.options.keyPickItem.getTranslationKey())) {
             return Optional.of("MMB");
         }
         return Optional.empty();
@@ -109,14 +108,11 @@ public class KeystrokeHud extends TextHudEntry {
         keystrokes.add(new Keystroke(new Rectangle(0, 54, 53, 7), pos, client.options.keyJump, (stroke) -> {
             Rectangle bounds = stroke.bounds;
             Rectangle spaceBounds = new Rectangle(bounds.x() + stroke.offset.x() + 4,
-                    bounds.y() + stroke.offset.y() + 2,
-                    bounds.width() - 8, 1
-            );
+                    bounds.y() + stroke.offset.y() + 2, bounds.width() - 8, 1);
             fillRect(spaceBounds, stroke.getFGColor());
             if (shadow.get()) {
-                fillRect(spaceBounds.offset(1, 1),
-                        new Color((stroke.getFGColor().getAsInt() & 16579836) >> 2 | stroke.getFGColor().getAsInt() & -16777216)
-                );
+                fillRect(spaceBounds.offset(1, 1), new Color(
+                        (stroke.getFGColor().getAsInt() & 16579836) >> 2 | stroke.getFGColor().getAsInt() & -16777216));
             }
         }));
         KeyBinding.unpressAll();
@@ -156,13 +152,7 @@ public class KeystrokeHud extends TextHudEntry {
 
             GlStateManager.translatef(calculatedMouseX, calculatedMouseY, 0); // Woah KodeToad, good use of translate
 
-            DrawUtil.outlineRect(
-                    spaceX + (width / 2) - 1,
-                    spaceY + 17,
-                    11,
-                    11,
-                    Color.WHITE.getAsInt()
-            );
+            DrawUtil.outlineRect(spaceX + (width / 2) - 1, spaceY + 17, 11, 11, Color.WHITE.getAsInt());
         }
     }
 
@@ -209,7 +199,8 @@ public class KeystrokeHud extends TextHudEntry {
     }
 
     public Keystroke createFromKey(Rectangle bounds, DrawPosition offset, KeyBinding key) {
-        String name = getMouseKeyBindName(key).orElse(GameOptions.getFormattedNameForKeyCode(key.getCode()).toUpperCase());
+        String name = getMouseKeyBindName(key)
+                .orElse(GameOptions.getFormattedNameForKeyCode(key.getCode()).toUpperCase());
         if (name.length() > 4) {
             name = name.substring(0, 2);
         }
@@ -219,8 +210,8 @@ public class KeystrokeHud extends TextHudEntry {
     public Keystroke createFromString(Rectangle bounds, DrawPosition offset, KeyBinding key, String word) {
         return new Keystroke(bounds, offset, key, (stroke) -> {
             Rectangle strokeBounds = stroke.bounds;
-            float x = (strokeBounds.x() + stroke.offset.x() + ((float) strokeBounds.width() / 2)) -
-                    ((float) client.textRenderer.getStringWidth(word) / 2);
+            float x = (strokeBounds.x() + stroke.offset.x() + ((float) strokeBounds.width() / 2))
+                    - ((float) client.textRenderer.getStringWidth(word) / 2);
             float y = strokeBounds.y() + stroke.offset.y() + ((float) strokeBounds.height() / 2) - 4;
 
             drawString(word, (int) x, (int) y, stroke.getFGColor().getAsInt(), shadow.get());
@@ -266,6 +257,7 @@ public class KeystrokeHud extends TextHudEntry {
     }
 
     public class Keystroke {
+
         protected final KeyBinding key;
         protected final KeystrokeRenderer render;
         protected Rectangle bounds;
@@ -303,45 +295,29 @@ public class KeystrokeHud extends TextHudEntry {
         }
 
         public Color getColor() {
-
-            return !key.isPressed() ? Color.blend(backgroundColor.get(), pressedBackgroundColor.get(),
-                    getPercentPressed()) :
-                   Color.blend(
-                           pressedBackgroundColor.get(),
-                           backgroundColor.get(),
-                           getPercentPressed()
-                   );
+            return !key.isPressed()
+                    ? Color.blend(backgroundColor.get(), pressedBackgroundColor.get(), getPercentPressed())
+                    : Color.blend(pressedBackgroundColor.get(), backgroundColor.get(), getPercentPressed());
         }
 
         public Color getOutlineColor() {
-            return !key.isPressed() ? Color.blend(outlineColor.get(), pressedOutlineColor.get(),
-                    getPercentPressed()
-            ) :
-                   Color.blend(
-                           pressedOutlineColor.get(),
-                           outlineColor.get(),
-                           getPercentPressed()
-                   );
+            return !key.isPressed() ? Color.blend(outlineColor.get(), pressedOutlineColor.get(), getPercentPressed())
+                    : Color.blend(pressedOutlineColor.get(), outlineColor.get(), getPercentPressed());
         }
 
         public Color getFGColor() {
-            return !key.isPressed() ? Color.blend(textColor.get(), pressedTextColor.get(), getPercentPressed()) :
-                   Color.blend(
-                           pressedTextColor.get(),
-                           textColor.get(),
-                           getPercentPressed()
-                   );
+            return !key.isPressed() ? Color.blend(textColor.get(), pressedTextColor.get(), getPercentPressed())
+                    : Color.blend(pressedTextColor.get(), textColor.get(), getPercentPressed());
         }
 
         public void render() {
             renderStroke();
             render.render(this);
         }
-
     }
 
     public interface KeystrokeRenderer {
+
         void render(Keystroke stroke);
     }
-
 }

@@ -41,14 +41,14 @@ public class HypixelMods extends AbstractModule {
     public static final HypixelMods INSTANCE = new HypixelMods();
 
     public StringOption hypixel_api_key = new StringOption("axolotlclient.hypixel_api_key", "");
-    public EnumOption cacheMode = new EnumOption("axolotlclient.cache_mode", HypixelApiCacheMode.values(), HypixelApiCacheMode.ON_CLIENT_DISCONNECT.toString());
+    public EnumOption cacheMode = new EnumOption("axolotlclient.cache_mode", HypixelApiCacheMode.values(),
+            HypixelApiCacheMode.ON_CLIENT_DISCONNECT.toString());
 
     private final OptionCategory category = new OptionCategory("axolotlclient.hypixel-mods");
     private final List<AbstractHypixelMod> subModules = new ArrayList<>();
 
     @Override
     public void init() {
-
         category.add(hypixel_api_key);
         category.add(cacheMode);
 
@@ -64,9 +64,10 @@ public class HypixelMods extends AbstractModule {
     }
 
     @Override
-    public void tick(){
+    public void tick() {
         subModules.forEach(abstractHypixelMod -> {
-            if(abstractHypixelMod.tickable())abstractHypixelMod.tick();
+            if (abstractHypixelMod.tickable())
+                abstractHypixelMod.tick();
         });
     }
 
@@ -75,19 +76,17 @@ public class HypixelMods extends AbstractModule {
         HypixelAbstractionLayer.loadApiKey();
     }
 
-    public static HypixelMods getInstance(){
+    public static HypixelMods getInstance() {
         return INSTANCE;
     }
 
-    private void addSubModule(AbstractHypixelMod mod){
+    private void addSubModule(AbstractHypixelMod mod) {
         this.subModules.add(mod);
         this.category.addSubCategory(mod.getCategory());
     }
 
     public enum HypixelApiCacheMode {
-        ON_CLIENT_DISCONNECT,
-        ON_PLAYER_DISCONNECT,
-
+        ON_CLIENT_DISCONNECT, ON_PLAYER_DISCONNECT,
 
     }
 }

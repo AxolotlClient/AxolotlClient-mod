@@ -34,16 +34,15 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(KeyboardInput.class)
 public abstract class KeyboardInputMixin {
 
-
     /**
      * @author moehreag
      * @param instance The sneak key
      * @return boolean whether the player should be sneaking or not
      */
     @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/options/KeyBinding;isPressed()Z", ordinal = 5))
-    public boolean toggleSneak(KeyBinding instance){
+    public boolean toggleSneak(KeyBinding instance) {
         ToggleSprintHud hud = (ToggleSprintHud) HudManager.getInstance().get(ToggleSprintHud.ID);
-        return hud.isEnabled() && hud.getSneakToggled().get() && MinecraftClient.getInstance().currentScreen==null ||
-                instance.isPressed();
+        return hud.isEnabled() && hud.getSneakToggled().get() && MinecraftClient.getInstance().currentScreen == null
+                || instance.isPressed();
     }
 }

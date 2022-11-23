@@ -57,17 +57,16 @@ public class HypixelAbstractionLayer {
 
     private static final AtomicInteger hypixelApiCalls = new AtomicInteger(0);
 
-
     public static void loadApiKey() {
         API_KEY = HypixelMods.getInstance().hypixel_api_key.get();
-        if(API_KEY == null){
+        if (API_KEY == null) {
             return;
         }
-        if(!Objects.equals(API_KEY, "")) {
+        if (!Objects.equals(API_KEY, "")) {
             try {
                 api = new HypixelAPI(new ApacheHttpClient(UUID.fromString(API_KEY)));
                 validApiKey = true;
-            } catch (Exception ignored){
+            } catch (Exception ignored) {
                 validApiKey = false;
             }
         } else {
@@ -80,18 +79,20 @@ public class HypixelAbstractionLayer {
     }
 
     public static int getPlayerLevel(String uuid) {
-        if(api == null){
+        if (api == null) {
             loadApiKey();
         }
-        if(loadPlayerDataIfAbsent(uuid)) {
+        if (loadPlayerDataIfAbsent(uuid)) {
             try {
                 String mode = LevelHead.getInstance().mode.get();
-                if(Objects.equals(mode, LevelHead.LevelHeadMode.NETWORK.toString())){
+                if (Objects.equals(mode, LevelHead.LevelHeadMode.NETWORK.toString())) {
                     return (int) cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer().getNetworkLevel();
-                } else if (Objects.equals(mode, LevelHead.LevelHeadMode.BEDWARS.toString())){
-                    return cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer().getIntProperty("achievements.bedwars_level", 0);
-                } else if (Objects.equals(mode, LevelHead.LevelHeadMode.SKYWARS.toString())){
-                    int exp = cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer().getIntProperty("stats.SkyWars.skywars_experience", 0);
+                } else if (Objects.equals(mode, LevelHead.LevelHeadMode.BEDWARS.toString())) {
+                    return cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer()
+                            .getIntProperty("achievements.bedwars_level", 0);
+                } else if (Objects.equals(mode, LevelHead.LevelHeadMode.SKYWARS.toString())) {
+                    int exp = cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer()
+                            .getIntProperty("stats.SkyWars.skywars_experience", 0);
                     return Math.round(ExpCalculator.getLevelForExp(exp));
                 }
             } catch (TimeoutException | InterruptedException | ExecutionException e) {
@@ -101,14 +102,14 @@ public class HypixelAbstractionLayer {
         return 0;
     }
 
-    public static void clearPlayerData(){
+    public static void clearPlayerData() {
         cachedPlayerData.clear();
     }
 
     private static boolean loadPlayerDataIfAbsent(String uuid) {
-        if(cachedPlayerData.get(uuid) == null) {
+        if (cachedPlayerData.get(uuid) == null) {
             // set at 115 to have a buffer in case of disparity between threads
-            if(hypixelApiCalls.get() <= 115) {
+            if (hypixelApiCalls.get() <= 115) {
                 cachedPlayerData.put(uuid, api.getPlayerByUuid(uuid));
                 hypixelApiCalls.incrementAndGet();
                 ThreadExecuter.scheduleTask(hypixelApiCalls::decrementAndGet, 1, TimeUnit.MINUTES);
@@ -119,8 +120,6 @@ public class HypixelAbstractionLayer {
         return true;
     }
 
-
-
     private static void freePlayerData(String uuid) {
         cachedPlayerData.remove(uuid);
     }
@@ -128,5 +127,4 @@ public class HypixelAbstractionLayer {
     public static void handleDisconnectEvents(UUID uuid) {
         freePlayerData(uuid.toString());
     }
-
 }

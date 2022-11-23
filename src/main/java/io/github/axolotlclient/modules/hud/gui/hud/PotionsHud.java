@@ -57,7 +57,7 @@ public class PotionsHud extends TextHudEntry implements DynamicallyPositionable 
     private final BooleanOption iconsOnly = new BooleanOption("axolotlclient.iconsonly", false);
     protected static final Identifier INVENTORY_TEXTURE = new Identifier("textures/gui/container/inventory.png");
 
-    private final List<StatusEffectInstance> placeholder = Util.make(()-> {
+    private final List<StatusEffectInstance> placeholder = Util.make(() -> {
         List<StatusEffectInstance> list = new ArrayList<>();
         StatusEffectInstance effect = new StatusEffectInstance(StatusEffect.SPEED.id, 9999);
         StatusEffectInstance jump = new StatusEffectInstance(StatusEffect.JUMP_BOOST.id, 99999);
@@ -144,9 +144,7 @@ public class PotionsHud extends TextHudEntry implements DynamicallyPositionable 
         int m = type.method_2444();
         this.drawTexture(x, y, m % 8 * 18, 198 + m / 8 * 18, 18, 18);
         if (!iconsOnly.get()) {
-            drawString(StatusEffect.method_2436(effect), x + 19, y + 5,
-                    textColor.get().getAsInt(), shadow.get()
-            );
+            drawString(StatusEffect.method_2436(effect), x + 19, y + 5, textColor.get().getAsInt(), shadow.get());
         }
     }
 

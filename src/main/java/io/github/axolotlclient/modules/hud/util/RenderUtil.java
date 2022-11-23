@@ -105,32 +105,32 @@ public class RenderUtil {
      * Fills in a rectangle with a color. Uses raw x/y values. x/y
      */
     public void fill(int x1, int y1, int x2, int y2, int color) {
-        fill(x1, y1, x2, y2, color, ()->MinecraftClient.getInstance().gameRenderer.getShader());
+        fill(x1, y1, x2, y2, color, () -> MinecraftClient.getInstance().gameRenderer.getShader());
     }
 
     public void drawRectangle(int x, int y, int width, int height, Color color) {
         fill(x, y, x + width, y + height, color);
     }
 
-    public void fillRect(int x, int y, int width, int height, int color, boolean keepBlend){
-        if(!keepBlend){
+    public void fillRect(int x, int y, int width, int height, int color, boolean keepBlend) {
+        if (!keepBlend) {
             drawRectangle(x, y, width, height, color);
         } else {
-            fillBlend(x, y, x+width, y+height, color);
+            fillBlend(x, y, x + width, y + height, color);
         }
     }
 
-    public void fillBlend(int x, int y, int width, int height, Color color){
-        fillBlend(x, y, x+width, y+height, color.getAsInt());
+    public void fillBlend(int x, int y, int width, int height, Color color) {
+        fillBlend(x, y, x + width, y + height, color.getAsInt());
     }
 
-    public void fillBlend(int x1, int y1, int x2, int y2, int color){
+    public void fillBlend(int x1, int y1, int x2, int y2, int color) {
         GlStateManager.disableTexture();
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
-        float a = (float)(color >> 24 & 0xFF) / 255.0f;
-        float r = (float)(color >> 16 & 0xFF) / 255.0f;
-        float g = (float)(color >> 8 & 0xFF) / 255.0f;
-        float b = (float)(color & 0xFF) / 255.0f;
+        float a = (float) (color >> 24 & 0xFF) / 255.0f;
+        float r = (float) (color >> 16 & 0xFF) / 255.0f;
+        float g = (float) (color >> 8 & 0xFF) / 255.0f;
+        float b = (float) (color & 0xFF) / 255.0f;
         bufferBuilder.begin(7, VertexFormats.POSITION_COLOR);
         bufferBuilder.vertex(x1, y2, 0.0f).color(r, g, b, a).next();
         bufferBuilder.vertex(x2, y2, 0.0f).color(r, g, b, a).next();
@@ -143,10 +143,10 @@ public class RenderUtil {
     public void fill(int x1, int y1, int x2, int y2, Color color) {
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
         int colorInt = colorPreRender(color);
-        float a = (float)(colorInt >> 24 & 0xFF) / 255.0f;
-        float r = (float)(colorInt >> 16 & 0xFF) / 255.0f;
-        float g = (float)(colorInt >> 8 & 0xFF) / 255.0f;
-        float b = (float)(colorInt & 0xFF) / 255.0f;
+        float a = (float) (colorInt >> 24 & 0xFF) / 255.0f;
+        float r = (float) (colorInt >> 16 & 0xFF) / 255.0f;
+        float g = (float) (colorInt >> 8 & 0xFF) / 255.0f;
+        float b = (float) (colorInt & 0xFF) / 255.0f;
         bufferBuilder.begin(7, VertexFormats.POSITION_COLOR);
         bufferBuilder.vertex(x1, y2, 0.0f).color(r, g, b, a).next();
         bufferBuilder.vertex(x2, y2, 0.0f).color(r, g, b, a).next();
@@ -169,17 +169,18 @@ public class RenderUtil {
             y1 = y2;
             y2 = i;
         }
-        float a = (float)(color >> 24 & 0xFF) / 255.0f;
-        float r = (float)(color >> 16 & 0xFF) / 255.0f;
-        float g = (float)(color >> 8 & 0xFF) / 255.0f;
-        float b = (float)(color & 0xFF) / 255.0f;
+        float a = (float) (color >> 24 & 0xFF) / 255.0f;
+        float r = (float) (color >> 16 & 0xFF) / 255.0f;
+        float g = (float) (color >> 8 & 0xFF) / 255.0f;
+        float b = (float) (color & 0xFF) / 255.0f;
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
         GlStateManager.enableBlend();
         GlStateManager.disableTexture();
         GlStateManager.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
         //GlStateManager.setShader(shaderSupplier);
-        if(shaderSupplier.get() != null) {
-            shaderSupplier.get().render(((MinecraftClientAccessor) MinecraftClient.getInstance()).getTicker().tickDelta);
+        if (shaderSupplier.get() != null) {
+            shaderSupplier.get()
+                    .render(((MinecraftClientAccessor) MinecraftClient.getInstance()).getTicker().tickDelta);
         }
         bufferBuilder.begin(GL11.GL_QUADS, VertexFormats.POSITION_COLOR);
         bufferBuilder.vertex(x1, y2, 0.0f).color(r, g, b, a).next();
@@ -191,8 +192,9 @@ public class RenderUtil {
         GlStateManager.disableBlend();
     }
 
-    public int colorPreRender(Color color){
-        GlStateManager.color4f(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f);
+    public int colorPreRender(Color color) {
+        GlStateManager.color4f(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f,
+                color.getAlpha() / 255f);
         GlStateManager.enableBlend();
         GlStateManager.disableTexture();
         GlStateManager.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
@@ -201,7 +203,7 @@ public class RenderUtil {
         return color.getAsInt();
     }
 
-    public void colorPostRender(Color color){
+    public void colorPostRender(Color color) {
         GlStateManager.enableTexture();
         GlStateManager.disableBlend();
         GlStateManager.color4f(1, 1, 1, 1);

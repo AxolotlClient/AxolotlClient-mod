@@ -40,6 +40,7 @@ import java.util.Optional;
  */
 
 public class SnappingHelper {
+
     private final int distance = 4;
     private final HashSet<Integer> x = new HashSet<>();
     private final HashSet<Integer> y = new HashSet<>();
@@ -79,21 +80,17 @@ public class SnappingHelper {
     public void renderSnaps() {
         Integer curx, cury;
         if ((curx = getRawXSnap()) != null) {
-            DrawUtil.fillRect(new Rectangle(curx, 0, 1, (int) window.getScaledHeight()),
-                    LINE_COLOR);
+            DrawUtil.fillRect(new Rectangle(curx, 0, 1, (int) window.getScaledHeight()), LINE_COLOR);
         }
         if ((cury = getRawYSnap()) != null) {
-            DrawUtil.fillRect(new Rectangle(0, cury, (int)window.getScaledWidth(), 1),
-                    LINE_COLOR);
+            DrawUtil.fillRect(new Rectangle(0, cury, (int) window.getScaledWidth(), 1), LINE_COLOR);
         }
         //renderAll();
-
     }
 
     public void renderAll() {
         for (Integer xval : x) {
-            DrawUtil.fillRect(new Rectangle(xval, 0, 1, (int) window.getScaledHeight()),
-                    Color.WHITE);
+            DrawUtil.fillRect(new Rectangle(xval, 0, 1, (int) window.getScaledHeight()), Color.WHITE);
         }
         for (Integer yval : y) {
             DrawUtil.fillRect(new Rectangle(0, yval, (int) window.getScaledWidth(), 1), Color.WHITE);

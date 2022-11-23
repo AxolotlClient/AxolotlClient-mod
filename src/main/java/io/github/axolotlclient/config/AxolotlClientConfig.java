@@ -41,7 +41,7 @@ public class AxolotlClientConfig extends ConfigHolder {
     public final BooleanOption nametagBackground = new BooleanOption("axolotlclient.nametagBackground", true);
 
     public final BooleanOption showBadges = new BooleanOption("axolotlclient.showBadges", value -> {
-        if(value){
+        if (value) {
             NetworkHelper.setOnline();
         } else {
             NetworkHelper.setOffline();
@@ -67,15 +67,15 @@ public class AxolotlClientConfig extends ConfigHolder {
     public final IntegerOption outlineWidth = new IntegerOption("axolotlclient.outlineWidth", 1, 1, 10);
 
     public final BooleanOption debugLogOutput = new BooleanOption("axolotlclient.debugLogOutput", false);
-    public final GenericOption openCredits = new GenericOption("Credits", "Open Credits", (mouseX, mouseY)->
-        MinecraftClient.getInstance().openScreen(new CreditsScreen(MinecraftClient.getInstance().currentScreen))
-    );
+    public final GenericOption openCredits = new GenericOption("Credits", "Open Credits",
+            (mouseX, mouseY) -> MinecraftClient.getInstance()
+                    .openScreen(new CreditsScreen(MinecraftClient.getInstance().currentScreen)));
     public final BooleanOption creditsBGM = new BooleanOption("axolotlclient.creditsBGM", true);
 
     public final OptionCategory general = new OptionCategory("axolotlclient.general");
     public final OptionCategory nametagOptions = new OptionCategory("axolotlclient.nametagOptions");
     public final OptionCategory rendering = new OptionCategory("axolotlclient.rendering");
-    public final OptionCategory outlines= new OptionCategory("axolotlclient.blockOutlines");
+    public final OptionCategory outlines = new OptionCategory("axolotlclient.blockOutlines");
     public final OptionCategory timeChanger = new OptionCategory("axolotlclient.timeChanger");
     public final OptionCategory searchFilters = new OptionCategory("searchFilters");
 
@@ -84,25 +84,23 @@ public class AxolotlClientConfig extends ConfigHolder {
 
     public final List<OptionCategory> config = new ArrayList<>();
 
-    public void add(Option<?> option){
+    public void add(Option<?> option) {
         options.add(option);
     }
 
-    public void addCategory(OptionCategory cat){
+    public void addCategory(OptionCategory cat) {
         categories.add(cat);
     }
 
-    public List<OptionCategory> getCategories(){
+    public List<OptionCategory> getCategories() {
         return categories;
     }
 
-    public List<Option<?>> getOptions(){
+    public List<Option<?>> getOptions() {
         return options;
     }
 
-
-    public void init(){
-
+    public void init() {
         categories.add(general);
         categories.add(nametagOptions);
         categories.add(rendering);
@@ -126,19 +124,11 @@ public class AxolotlClientConfig extends ConfigHolder {
         general.add(openCredits);
         general.add(debugLogOutput);
 
-        searchFilters.add(AxolotlClientConfigConfig.searchIgnoreCase,
-                AxolotlClientConfigConfig.searchForOptions,
-                AxolotlClientConfigConfig.searchSort,
-                AxolotlClientConfigConfig.searchSortOrder);
+        searchFilters.add(AxolotlClientConfigConfig.searchIgnoreCase, AxolotlClientConfigConfig.searchForOptions,
+                AxolotlClientConfigConfig.searchSort, AxolotlClientConfigConfig.searchSortOrder);
         general.addSubCategory(searchFilters);
 
-        rendering.add(customSky,
-                cloudHeight,
-                AxolotlClientConfigConfig.chromaSpeed,
-                dynamicFOV,
-                fullBright,
-                lowFire
-        );
+        rendering.add(customSky, cloudHeight, AxolotlClientConfigConfig.chromaSpeed, dynamicFOV, fullBright, lowFire);
 
         timeChanger.add(timeChangerEnabled);
         timeChanger.add(customTime);
@@ -150,7 +140,5 @@ public class AxolotlClientConfig extends ConfigHolder {
         rendering.addSubCategory(outlines);
 
         AxolotlClient.config.add(creditsBGM);
-
     }
-
 }

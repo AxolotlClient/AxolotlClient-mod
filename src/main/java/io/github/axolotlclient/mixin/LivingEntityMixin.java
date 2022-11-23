@@ -47,7 +47,7 @@ public abstract class LivingEntityMixin extends Entity {
         // Kinda sucks since that means combos can't be guarenteed (i.e. fall damage, or other person hits)
         // Possible fixes: Could wait for swing animation from a player to be played. Could then track eyes to see if hit, give or take
         // 2 ticks or so? Defintely not perfect tho
-        if(source.getAttacker() instanceof PlayerEntity){
+        if (source.getAttacker() instanceof PlayerEntity) {
             ComboHud comboHud = (ComboHud) HudManager.getInstance().get(ComboHud.ID);
             comboHud.onEntityDamage(this);
         }

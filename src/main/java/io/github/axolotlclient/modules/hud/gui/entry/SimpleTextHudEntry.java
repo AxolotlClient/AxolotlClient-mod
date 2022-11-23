@@ -45,7 +45,8 @@ import java.util.List;
 
 public abstract class SimpleTextHudEntry extends TextHudEntry implements DynamicallyPositionable {
 
-    protected final EnumOption justification = new EnumOption("axolotlclient.justification", Justification.values(), Justification.CENTER.toString());
+    protected final EnumOption justification = new EnumOption("axolotlclient.justification", Justification.values(),
+            Justification.CENTER.toString());
     protected final EnumOption anchor = DefaultOptions.getAnchorPoint();
 
     private final IntegerOption minWidth;
@@ -66,7 +67,8 @@ public abstract class SimpleTextHudEntry extends TextHudEntry implements Dynamic
     @Override
     public void renderComponent(float delta) {
         GlStateManager.enableBlend();
-        GlStateManager.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GlStateManager.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE,
+                GL11.GL_ONE_MINUS_SRC_ALPHA);
         GlStateManager.disableTexture();
         DrawPosition pos = getPos();
         String value = getValue();
@@ -84,12 +86,9 @@ public abstract class SimpleTextHudEntry extends TextHudEntry implements Dynamic
             setWidth(elementWidth);
             onBoundsUpdate();
         }
-        drawString(
-                value,
+        drawString(value,
                 pos.x() + Justification.valueOf(justification.get()).getXOffset(valueWidth, getWidth() - 4) + 2,
-                pos.y() + (Math.round((float) getHeight() / 2)) - 4,
-                getTextColor().getAsInt(), shadow.get()
-        );
+                pos.y() + (Math.round((float) getHeight() / 2)) - 4, getTextColor().getAsInt(), shadow.get());
         GlStateManager.enableTexture();
         GlStateManager.disableBlend();
     }
@@ -102,12 +101,8 @@ public abstract class SimpleTextHudEntry extends TextHudEntry implements Dynamic
     public void renderPlaceholderComponent(float delta) {
         DrawPosition pos = getPos();
         String value = getPlaceholder();
-        drawString(
-                value,
-                pos.x() + Justification.valueOf(justification.get()).getXOffset(value, getWidth() - 4) + 2,
-                pos.y() + (Math.round((float) getHeight() / 2)) - 4,
-                textColor.get().getAsInt(), shadow.get()
-        );
+        drawString(value, pos.x() + Justification.valueOf(justification.get()).getXOffset(value, getWidth() - 4) + 2,
+                pos.y() + (Math.round((float) getHeight() / 2)) - 4, textColor.get().getAsInt(), shadow.get());
     }
 
     @Override

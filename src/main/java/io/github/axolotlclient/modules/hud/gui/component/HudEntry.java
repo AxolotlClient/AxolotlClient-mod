@@ -42,11 +42,9 @@ public interface HudEntry extends Identifiable, Configurable, Positionable {
         return false;
     }
 
-    default void tick() {
-    }
+    default void tick() {}
 
-    default void init() {
-    }
+    default void init() {}
 
     default double getDefaultX() {
         return 0;

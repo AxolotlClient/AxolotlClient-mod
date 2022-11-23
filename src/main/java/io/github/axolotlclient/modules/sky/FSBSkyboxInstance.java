@@ -38,9 +38,9 @@ import net.minecraft.util.Identifier;
  * @license MIT
  **/
 
-public class FSBSkyboxInstance extends SkyboxInstance{
+public class FSBSkyboxInstance extends SkyboxInstance {
 
-    public FSBSkyboxInstance(JsonObject json){
+    public FSBSkyboxInstance(JsonObject json) {
         super(json);
         JsonObject props = json.get("properties").getAsJsonObject();
         JsonObject textures = json.get("textures").getAsJsonObject();
@@ -55,36 +55,36 @@ public class FSBSkyboxInstance extends SkyboxInstance{
             this.fade[1] = props.get("fade").getAsJsonObject().get("endFadeIn").getAsInt();
             this.fade[2] = props.get("fade").getAsJsonObject().get("startFadeOut").getAsInt();
             this.fade[3] = props.get("fade").getAsJsonObject().get("endFadeOut").getAsInt();
-        } catch (Exception e){
-            alwaysOn=true;
+        } catch (Exception e) {
+            alwaysOn = true;
         }
         try {
             JsonObject rotation = props.get("rotation").getAsJsonObject();
             this.rotate = props.get("shouldRotate").getAsBoolean();
             this.rotationSpeed = rotation.get("rotationSpeed").getAsFloat();
             JsonArray axis = rotation.get("axis").getAsJsonArray();
-            for(int i=0;i<axis.size();i++){
+            for (int i = 0; i < axis.size(); i++) {
                 this.rotationAxis[i] = axis.get(i).getAsFloat();
             }
             JsonArray staticRotation = rotation.get("static").getAsJsonArray();
-            for(int i=0;i<staticRotation.size();i++){
+            for (int i = 0; i < staticRotation.size(); i++) {
                 this.rotationStatic[i] = staticRotation.get(i).getAsFloat();
             }
-        } catch (Exception ignored){}
+        } catch (Exception ignored) {}
 
         try {
             JsonObject jsonBlend = json.get("blend").getAsJsonObject();
             this.blendMode = parseBlend(jsonBlend.get("type").getAsString());
-        } catch (Exception ignored){
+        } catch (Exception ignored) {
             try {
-                Logger.debug(textures+": Using manual blend!");
+                Logger.debug(textures + ": Using manual blend!");
                 JsonObject blend = json.get("blend").getAsJsonObject();
                 this.blendEquation = blend.get("equation").getAsInt();
                 this.blendDstFactor = blend.get("dfactor").getAsInt();
                 this.blendSrcFactor = blend.get("sfactor").getAsInt();
                 this.manualBlend = true;
-            } catch (Exception e){
-                Logger.debug(textures +": Manual Blend failed, using fallback blend!", e);
+            } catch (Exception e) {
+                Logger.debug(textures + ": Manual Blend failed, using fallback blend!", e);
                 manualBlend = false;
                 blendMode = 8;
             }
@@ -95,11 +95,10 @@ public class FSBSkyboxInstance extends SkyboxInstance{
             this.showMoon = decorations.get("showMoon").getAsBoolean();
             this.showSun = decorations.get("showSun").getAsBoolean();
             this.showStars = decorations.get("showStars").getAsBoolean();
-        } catch (Exception ignored){}
+        } catch (Exception ignored) {}
     }
 
-    public void renderSkybox(){
-
+    public void renderSkybox() {
         GlStateManager.color3f(1, 1, 1);
 
         Tessellator tessellator = Tessellator.getInstance();

@@ -48,3 +48,11 @@
 
 - no changes, version bump to keep version parity to 1.19.2
 
+### 2.2.5
+
+- reformat code (@TheKodeToad)
+- update README
+- add license headers
+- add missing credits
+- add turkish translation of the README
+

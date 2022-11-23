@@ -54,42 +54,45 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(MinecraftClient.class)
 public abstract class MinecraftClientMixin {
 
-    @Shadow @Final private String gameVersion;
+    @Shadow
+    @Final
+    private String gameVersion;
 
-    @Shadow public GameOptions options;
+    @Shadow
+    public GameOptions options;
 
-    @Shadow public ClientPlayerEntity player;
+    @Shadow
+    public ClientPlayerEntity player;
 
     protected MinecraftClientMixin(TextureManager textureManager) {
         this.textureManager = textureManager;
     }
 
-    @Shadow private TextureManager textureManager;
+    @Shadow
+    private TextureManager textureManager;
 
     @Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;info(Ljava/lang/String;)V", ordinal = 1), remap = false)
-    public void noSessionIDLeak(Logger instance, String s){}
+    public void noSessionIDLeak(Logger instance, String s) {}
 
     /**
      * @author TheKodeToad & Sk1erLLC (initially created this fix).
      * @reason unnecessary garbage collection
      */
     @Redirect(method = "connect(Lnet/minecraft/client/world/ClientWorld;Ljava/lang/String;)V", at = @At(value = "INVOKE", target = "Ljava/lang/System;gc()V"))
-    public void noWorldGC() {
-    }
+    public void noWorldGC() {}
 
     /**
      * @author moehreag
      * @reason Customize Window title for use in AxolotlClient
      */
     @Inject(method = "setPixelFormat", at = @At("TAIL"))
-    public void setWindowTitle(CallbackInfo ci){
-        Display.setTitle("AxolotlClient "+ this.gameVersion);
+    public void setWindowTitle(CallbackInfo ci) {
+        Display.setTitle("AxolotlClient " + this.gameVersion);
     }
 
     @Redirect(method = "handleKeyInput", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/options/KeyBinding;getCode()I", ordinal = 5))
     // Fix taking a screenshot when pressing '<' (Because it has the same keyCode as F2)
     public int iTryToFixTheScreenshotKey(KeyBinding instance) {
-
         if (Keyboard.getEventCharacter() != '<') {
             return instance.getCode();
         }
@@ -99,71 +102,69 @@ public abstract class MinecraftClientMixin {
 
     // Don't ask me why we need both here, but otherwise it looks ugly
     @Redirect(method = "loadLogo", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/BufferBuilder;color(IIII)Lnet/minecraft/client/render/BufferBuilder;"))
-    public BufferBuilder loadingScreenColor(BufferBuilder instance, int red, int green, int blue, int alpha){
-
+    public BufferBuilder loadingScreenColor(BufferBuilder instance, int red, int green, int blue, int alpha) {
         return instance.color(AxolotlClient.CONFIG.loadingScreenColor.get().getRed(),
                 AxolotlClient.CONFIG.loadingScreenColor.get().getGreen(),
-                AxolotlClient.CONFIG.loadingScreenColor.get().getBlue(), AxolotlClient.CONFIG.loadingScreenColor.get().getAlpha());
+                AxolotlClient.CONFIG.loadingScreenColor.get().getBlue(),
+                AxolotlClient.CONFIG.loadingScreenColor.get().getAlpha());
     }
 
     @Redirect(method = "drawLogo", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/BufferBuilder;color(IIII)Lnet/minecraft/client/render/BufferBuilder;"))
-    public BufferBuilder loadingScreenBg(BufferBuilder instance, int red, int green, int blue, int alpha){
-
+    public BufferBuilder loadingScreenBg(BufferBuilder instance, int red, int green, int blue, int alpha) {
         return instance.color(AxolotlClient.CONFIG.loadingScreenColor.get().getRed(),
                 AxolotlClient.CONFIG.loadingScreenColor.get().getGreen(),
-                AxolotlClient.CONFIG.loadingScreenColor.get().getBlue(), AxolotlClient.CONFIG.loadingScreenColor.get().getAlpha());
+                AxolotlClient.CONFIG.loadingScreenColor.get().getBlue(),
+                AxolotlClient.CONFIG.loadingScreenColor.get().getAlpha());
     }
 
     @Inject(method = "initializeGame", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/texture/TextureManager;close(Lnet/minecraft/util/Identifier;)V"))
-    private void onLaunch(CallbackInfo ci){
+    private void onLaunch(CallbackInfo ci) {
         HudManager.getInstance().refreshAllBounds();
     }
 
-    @Redirect(
-            method = "<init>", at = @At(value = "FIELD", target = "Lnet/minecraft/client/RunArgs$Game;version:Ljava/lang/String;"))
+    @Redirect(method = "<init>", at = @At(value = "FIELD", target = "Lnet/minecraft/client/RunArgs$Game;version:Ljava/lang/String;"))
     private String redirectVersion(RunArgs.Game game) {
         return "1.8.9";
     }
 
     @Inject(method = "startIntegratedServer", at = @At("HEAD"))
-    public void startup(String worldFileName, String worldName, LevelInfo levelInfo, CallbackInfo ci){
+    public void startup(String worldFileName, String worldName, LevelInfo levelInfo, CallbackInfo ci) {
         DiscordRPC.setWorld(worldFileName);
     }
 
     @Inject(method = "stop", at = @At("HEAD"))
-    public void stop(CallbackInfo ci){
-        if(AxolotlClient.CONFIG.showBadges.get()) {
+    public void stop(CallbackInfo ci) {
+        if (AxolotlClient.CONFIG.showBadges.get()) {
             NetworkHelper.setOffline();
         }
         DiscordRPC.shutdown();
     }
 
-
     @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lorg/lwjgl/input/Mouse;getEventDWheel()I"), remap = false)
     public int onScroll() {
         int amount = Mouse.getEventDWheel();
-        if(amount != 0 && Zoom.scroll(amount)) {
+        if (amount != 0 && Zoom.scroll(amount)) {
             return 0;
         }
         return amount;
     }
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getTime()J", ordinal = 0))
-    public void onMouseButton(CallbackInfo ci){
+    public void onMouseButton(CallbackInfo ci) {
         if (Mouse.getEventButtonState()) {
             Hooks.MOUSE_INPUT.invoker().onMouseButton(Mouse.getEventButton());
         }
     }
 
     @Inject(method = "connect(Lnet/minecraft/client/world/ClientWorld;Ljava/lang/String;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;flipPlayer(Lnet/minecraft/entity/player/PlayerEntity;)V"))
-    public void login(ClientWorld world, String loadingMessage, CallbackInfo ci){
-        if(AxolotlClient.CONFIG.showBadges.get()) {
+    public void login(ClientWorld world, String loadingMessage, CallbackInfo ci) {
+        if (AxolotlClient.CONFIG.showBadges.get()) {
             NetworkHelper.setOnline();
         }
     }
 
     @Inject(method = "resizeFraembuffer", at = @At("TAIL"))
-    public void onResize(CallbackInfo ci){
+    public void onResize(CallbackInfo ci) {
         Util.window = new Window(MinecraftClient.getInstance());
         HudManager.getInstance().refreshAllBounds();
     }

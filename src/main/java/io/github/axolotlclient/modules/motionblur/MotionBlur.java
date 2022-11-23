@@ -61,7 +61,7 @@ public class MotionBlur extends AbstractModule {
 
     private int lastHeight;
 
-    public static MotionBlur getInstance(){
+    public static MotionBlur getInstance() {
         return Instance;
     }
 
@@ -75,25 +75,25 @@ public class MotionBlur extends AbstractModule {
     }
 
     public void onUpdate() {
-        if((shader == null || client.width!=lastWidth || client.height!=lastHeight) && client.height!=0 && client.width!=0) {
-            currentBlur=getBlur();
+        if ((shader == null || client.width != lastWidth || client.height != lastHeight) && client.height != 0
+                && client.width != 0) {
+            currentBlur = getBlur();
             try {
-                shader = new ShaderEffect(client.getTextureManager(),
-                        client.getResourceManager(), client.getFramebuffer(),
-                        shaderLocation);
+                shader = new ShaderEffect(client.getTextureManager(), client.getResourceManager(),
+                        client.getFramebuffer(), shaderLocation);
                 shader.setupDimensions(client.width, client.height);
             } catch (JsonSyntaxException | IOException e) {
                 Logger.error("Could not load motion blur", e);
             }
         }
-        if(currentBlur!=getBlur()){
-            ((ShaderEffectAccessor)shader).getPasses().forEach(shader -> {
+        if (currentBlur != getBlur()) {
+            ((ShaderEffectAccessor) shader).getPasses().forEach(shader -> {
                 GlUniform blendFactor = shader.getProgram().getUniformByName("BlendFactor");
-                if(blendFactor!=null){
+                if (blendFactor != null) {
                     blendFactor.set(getBlur());
                 }
             });
-            currentBlur=getBlur();
+            currentBlur = getBlur();
         }
 
         lastWidth = client.width;
@@ -101,7 +101,7 @@ public class MotionBlur extends AbstractModule {
     }
 
     private static float getBlur() {
-        return MotionBlur.getInstance().strength.get()/100F;
+        return MotionBlur.getInstance().strength.get() / 100F;
     }
 
     public class MotionBlurShader implements Resource {
@@ -113,41 +113,18 @@ public class MotionBlur extends AbstractModule {
 
         @Override
         public InputStream getInputStream() {
-            return IOUtils.toInputStream(String.format("{" +
-                    "    \"targets\": [" +
-                    "        \"swap\"," +
-                    "        \"previous\"" +
-                    "    ]," +
-                    "    \"passes\": [" +
-                    "        {" +
-                    "            \"name\": \"motion_blur\"," +
-                    "            \"intarget\": \"minecraft:main\"," +
-                    "            \"outtarget\": \"swap\"," +
-                    "            \"auxtargets\": [" +
-                    "                {" +
-                    "                    \"name\": \"PrevSampler\"," +
-                    "                    \"id\": \"previous\"" +
-                    "                }" +
-                    "            ]," +
-                    "            \"uniforms\": [" +
-                    "                {" +
-                    "                    \"name\": \"BlendFactor\"," +
-                    "                    \"values\": [ %s ]" +
-                    "                }" +
-                    "            ]" +
-                    "        }," +
-                    "        {" +
-                    "            \"name\": \"blit\"," +
-                    "            \"intarget\": \"swap\"," +
-                    "            \"outtarget\": \"previous\"" +
-                    "        }," +
-                    "        {" +
-                    "            \"name\": \"blit\"," +
-                    "            \"intarget\": \"swap\"," +
-                    "            \"outtarget\": \"minecraft:main\"" +
-                    "        }" +
-                    "    ]" +
-                    "}", getBlur()));
+            return IOUtils.toInputStream(String.format("{" + "    \"targets\": [" + "        \"swap\","
+                    + "        \"previous\"" + "    ]," + "    \"passes\": [" + "        {"
+                    + "            \"name\": \"motion_blur\"," + "            \"intarget\": \"minecraft:main\","
+                    + "            \"outtarget\": \"swap\"," + "            \"auxtargets\": [" + "                {"
+                    + "                    \"name\": \"PrevSampler\"," + "                    \"id\": \"previous\""
+                    + "                }" + "            ]," + "            \"uniforms\": [" + "                {"
+                    + "                    \"name\": \"BlendFactor\"," + "                    \"values\": [ %s ]"
+                    + "                }" + "            ]" + "        }," + "        {"
+                    + "            \"name\": \"blit\"," + "            \"intarget\": \"swap\","
+                    + "            \"outtarget\": \"previous\"" + "        }," + "        {"
+                    + "            \"name\": \"blit\"," + "            \"intarget\": \"swap\","
+                    + "            \"outtarget\": \"minecraft:main\"" + "        }" + "    ]" + "}", getBlur()));
         }
 
         @Override
@@ -165,6 +142,4 @@ public class MotionBlur extends AbstractModule {
             return null;
         }
     }
-
-
 }

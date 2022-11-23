@@ -81,6 +81,5 @@ public class TPSHud extends SimpleTextHudEntry {
 
         lastTick = ticks;
         lastUpdate = time;
-
     }
 }

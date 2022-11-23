@@ -36,7 +36,8 @@ import org.lwjgl.input.Keyboard;
 public class Freelook extends AbstractModule {
 
     private static final Freelook INSTANCE = new Freelook();
-    private static final KeyBinding KEY = new KeyBinding("key.freelook", Keyboard.KEY_V, "axolotlclient.category.axolotlclient");
+    private static final KeyBinding KEY = new KeyBinding("key.freelook", Keyboard.KEY_V,
+            "axolotlclient.category.axolotlclient");
 
     private final MinecraftClient client = MinecraftClient.getInstance();
 
@@ -45,7 +46,8 @@ public class Freelook extends AbstractModule {
 
     private final OptionCategory category = new OptionCategory("axolotlclient.freelook");
     public final BooleanOption enabled = new BooleanOption("axolotlclient.enabled", false);
-    private final EnumOption perspective = new EnumOption("axolotlclient.perspective", Perspective.values(), Perspective.THIRD_PERSON_BACK.toString());
+    private final EnumOption perspective = new EnumOption("axolotlclient.perspective", Perspective.values(),
+            Perspective.THIRD_PERSON_BACK.toString());
     private final BooleanOption invert = new BooleanOption("axolotlclient.invert", false);
 
     private int previousPerspective;
@@ -63,14 +65,15 @@ public class Freelook extends AbstractModule {
 
     @Override
     public void tick() {
+        if (!enabled.get())
+            return;
 
-        if(!enabled.get()) return;
-
-        if(KEY.isPressed()) {
-            if(!active) {
+        if (KEY.isPressed()) {
+            if (!active) {
                 start();
             }
-        } else if(active) stop();
+        } else if (active)
+            stop();
     }
 
     private void start() {
@@ -81,8 +84,10 @@ public class Freelook extends AbstractModule {
 
         Entity camera = client.getCameraEntity();
 
-        if(camera == null) camera = client.player;
-        if(camera == null) return;
+        if (camera == null)
+            camera = client.player;
+        if (camera == null)
+            return;
 
         yaw = camera.yaw;
         pitch = camera.pitch;
@@ -95,16 +100,18 @@ public class Freelook extends AbstractModule {
     }
 
     public boolean consumeRotation(float dx, float dy) {
-        if(!active || !enabled.get()) return false;
+        if (!active || !enabled.get())
+            return false;
 
-        if(!invert.get()) dy = -dy;
+        if (!invert.get())
+            dy = -dy;
 
         yaw += dx * 0.15F;
         pitch += dy * 0.15F;
 
-        if(pitch > 90) {
+        if (pitch > 90) {
             pitch = 90;
-        } else if(pitch < -90) {
+        } else if (pitch < -90) {
             pitch = -90;
         }
 
@@ -113,15 +120,16 @@ public class Freelook extends AbstractModule {
     }
 
     public float yaw(float defaultValue) {
-        if(!active || !enabled.get()) return defaultValue;
+        if (!active || !enabled.get())
+            return defaultValue;
 
         return yaw;
     }
 
     public float pitch(float defaultValue) {
-        if(!active || !enabled.get()) return defaultValue;
+        if (!active || !enabled.get())
+            return defaultValue;
 
         return pitch;
     }
-
 }
