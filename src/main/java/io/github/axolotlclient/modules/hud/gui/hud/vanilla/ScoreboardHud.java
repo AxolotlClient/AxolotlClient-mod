@@ -49,11 +49,11 @@ public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionab
     });
 
     private final ColorOption backgroundColor = new ColorOption("backgroundcolor", 0x4C000000);
-    private final ColorOption topColor = new ColorOption("topbackgroundcolor", 0x66000000);
+    private final ColorOption topColor = new ColorOption("topbackgroundcolor", 0xBB000000);
     private final IntegerOption topPadding = new IntegerOption("toppadding", ID.getPath(), 0, 0, 4);
     private final BooleanOption scores = new BooleanOption("scores", true);
     private final ColorOption scoreColor = new ColorOption("scorecolor", 0xFFFF5555);
-    private final EnumOption anchor = new EnumOption("anchor", AnchorPoint.values(), AnchorPoint.MIDDLE_RIGHT.toString());
+    private final EnumOption anchor = new EnumOption("anchorpoint", AnchorPoint.values(), AnchorPoint.MIDDLE_RIGHT.toString());
 
     public ScoreboardHud() {
         super(200, 146, true);
@@ -169,12 +169,12 @@ public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionab
                     RenderUtil.drawRectangle(
                             matrices,
                             textOffset,
-                           relativeY, maxWidth, 10, backgroundColor.get()
+                           relativeY, maxWidth, 10, backgroundColor.get().getAsInt()
                     );
                 } else {
                     RenderUtil.drawRectangle(
                             matrices,
-                            textOffset, relativeY, maxWidth, 9, backgroundColor.get()
+                            textOffset, relativeY, maxWidth, 9, backgroundColor.get().getAsInt()
                     );
                 }
             }

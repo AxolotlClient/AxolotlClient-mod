@@ -67,6 +67,8 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
             return;
         }
 
+        RenderSystem.setShaderColor(1, 1, 1, 1);
+
         matrices.push();
         scale(matrices);
         
@@ -90,7 +92,7 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
         }
 
         if (type.get().equals(Crosshair.DOT.toString())) {
-            RenderUtil.fillBlend(matrices, x + (getWidth() / 2) - 2, y + (getHeight() / 2) - 2, 3, 3, color);
+            fillRect(matrices, x + (getWidth() / 2) - 2, y + (getHeight() / 2) - 2, 3, 3, color.getAsInt());
         } else if (type.get().equals(Crosshair.CROSS.toString())) {
             RenderUtil.fillBlend(matrices, x + (getWidth() / 2) - 6, y + (getHeight() / 2) - 1, 6, 1, color);
             RenderUtil.fillBlend(matrices, x + (getWidth() / 2), y + (getHeight() / 2) - 1, 5, 1, color);

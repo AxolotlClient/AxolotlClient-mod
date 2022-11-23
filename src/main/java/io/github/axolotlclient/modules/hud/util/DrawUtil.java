@@ -21,7 +21,7 @@ public class DrawUtil extends DrawableHelper{
     }
 
     public static void fillRect(MatrixStack matrices, int x, int y, int width, int height, Color color) {
-        fillRect(matrices, x, y, x + width, y + height, color.getAsInt());
+        RenderUtil.drawRectangle(matrices, x, y, x + width, y + height, color.getAsInt());
     }
 
     public static void fillRect(MatrixStack matrices, int x, int y, int width, int height, int color) {

@@ -105,23 +105,25 @@ public class RenderUtil {
     }
 
     public void fillBlend(Matrix4f matrix, int x1, int y1, int x2, int y2, int color){
-        RenderSystem.disableTexture();
+        float alpha = (float)(color >> 24 & 0xFF) / 255.0F;
+        float red = (float)(color >> 16 & 0xFF) / 255.0F;
+        float green = (float)(color >> 8 & 0xFF) / 255.0F;
+        float blue = (float)(color & 0xFF) / 255.0F;
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBufferBuilder();
-        float a = (float)(color >> 24 & 0xFF) / 255.0f;
-        float r = (float)(color >> 16 & 0xFF) / 255.0f;
-        float g = (float)(color >> 8 & 0xFF) / 255.0f;
-        float b = (float)(color & 0xFF) / 255.0f;
+        RenderSystem.disableTexture();
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-        bufferBuilder.vertex(matrix, x1, y2, 0.0f).color(r, g, b, a).next();
-        bufferBuilder.vertex(matrix, x2, y2, 0.0f).color(r, g, b, a).next();
-        bufferBuilder.vertex(matrix, x2, y1, 0.0f).color(r, g, b, a).next();
-        bufferBuilder.vertex(matrix, x1, y1, 0.0f).color(r, g, b, a).next();
-        Tessellator.getInstance().draw();
+        bufferBuilder.vertex(matrix, (float)x1, (float)y2, 0.0F).color(red, green, blue, alpha).next();
+        bufferBuilder.vertex(matrix, (float)x2, (float)y2, 0.0F).color(red, green, blue, alpha).next();
+        bufferBuilder.vertex(matrix, (float)x2, (float)y1, 0.0F).color(red, green, blue, alpha).next();
+        bufferBuilder.vertex(matrix, (float)x1, (float)y1, 0.0F).color(red, green, blue, alpha).next();
+        BufferRenderer.drawWithShader(bufferBuilder.end());
         RenderSystem.enableTexture();
     }
 
     public void fill(Matrix4f matrix, int x1, int y1, int x2, int y2, Color color) {
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBufferBuilder();
+        RenderSystem.setShaderColor(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f);
         int colorInt = colorPreRender(color);
         float a = (float)(colorInt >> 24 & 0xFF) / 255.0f;
         float r = (float)(colorInt >> 16 & 0xFF) / 255.0f;
