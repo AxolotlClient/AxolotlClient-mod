@@ -130,45 +130,45 @@ public class NetworkHelper {
     // In case we ever implement more of HyCord's features...
     /*public static JsonElement getRequest(String site) {
         try {
-    
+
             CloseableHttpClient client = HttpClients.custom().disableAutomaticRetries().build();
             HttpGet get = new HttpGet(site);
             HttpResponse response = client.execute(get);
-    
+
             int status = response.getStatusLine().getStatusCode();
             if (status != 200) {
                 Logger.warn("API request failed, status code " + status);
                 return null;
             }
-    
+
             String body = EntityUtils.toString(response.getEntity());
             client.close();
-    
+
             JsonParser parser = new JsonParser();
             return parser.parse(body);
-    
+
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
-    
+
     public static String getUuid(String username) {
         JsonElement response = getRequest("https://api.mojang.com/users/profiles/minecraft/" + username);
         if (response == null)
             return null;
         return response.getAsJsonObject().get("id").getAsString();
     }
-    
+
     public static BufferedImage getImage(String imgUrl) {
         try (CloseableHttpClient client = HttpClients.custom().disableAutomaticRetries().build()) {
-    
+
             HttpGet get = new HttpGet(imgUrl);
             HttpResponse response = client.execute(get);
-    
+
             client.close();
             return ImageIO.read(response.getEntity().getContent());
-    
+
         } catch (IOException e) {
             e.printStackTrace();
         }
