@@ -53,8 +53,8 @@ public class HotbarHUD extends TextHudEntry {
 
     @Override
     public void renderComponent(float delta) {
-        PlayerEntity playerEntity = (PlayerEntity)this.client.getCameraEntity();
-        if(playerEntity == null || playerEntity.inventory == null || playerEntity.inventory.main == null) {
+        PlayerEntity playerEntity = (PlayerEntity) this.client.getCameraEntity();
+        if (playerEntity == null || playerEntity.inventory == null || playerEntity.inventory.main == null) {
             return;
         }
         DrawPosition pos = getPos();
@@ -71,12 +71,13 @@ public class HotbarHUD extends TextHudEntry {
         GlStateManager.blendFuncSeparate(770, 771, 1, 0);
         DiffuseLighting.enable();
 
-        for(int j = 0; j < 9; ++j) {
+        for (int j = 0; j < 9; ++j) {
             int k = pos.x + j * 20 + 3;
-            int l = pos.y+3;
-            if(playerEntity.inventory.main[j] != null) {
+            int l = pos.y + 3;
+            if (playerEntity.inventory.main[j] != null) {
                 ItemUtil.renderGuiItemModel(playerEntity.inventory.main[j], k, l);
-                ItemUtil.renderGuiItemOverlay(MinecraftClient.getInstance().textRenderer, playerEntity.inventory.main[j], k, l, null, textColor.get().getAsInt(), shadow.get());
+                ItemUtil.renderGuiItemOverlay(MinecraftClient.getInstance().textRenderer,
+                        playerEntity.inventory.main[j], k, l, null, textColor.get().getAsInt(), shadow.get());
             }
         }
 
@@ -88,7 +89,8 @@ public class HotbarHUD extends TextHudEntry {
     @Override
     public void renderPlaceholderComponent(float delta) {
         DrawPosition pos = getPos();
-        drawCenteredString(MinecraftClient.getInstance().textRenderer, getName(), pos.x+width/2, pos.y+height/2-4, -1, true);
+        drawCenteredString(MinecraftClient.getInstance().textRenderer, getName(), pos.x + width / 2,
+                pos.y + height / 2 - 4, -1, true);
     }
 
     @Override

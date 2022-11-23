@@ -54,7 +54,7 @@ public class TranslationProvider {
 
     public static void accept(InputStream json) {
         JsonObject obj = parser.parse(new InputStreamReader(json)).getAsJsonObject();
-        for(Map.Entry<String, JsonElement> entry : obj.entrySet()) {
+        for (Map.Entry<String, JsonElement> entry : obj.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue().getAsString();
             TRANSLATIONS.put(key, value);
@@ -70,7 +70,7 @@ public class TranslationProvider {
     }
 
     public static Identifier getLanguageId(String id) {
-        return new Identifier("axolotlclient","lang/" + id + ".json");
+        return new Identifier("axolotlclient", "lang/" + id + ".json");
     }
 
     public static void load() {
@@ -83,15 +83,15 @@ public class TranslationProvider {
             List<Resource> resources = new ArrayList<>();
 
             resources.addAll(resourceManager.getAllResources(new Identifier("axolotlclient", "lang/en_us.json")));
-            resources.addAll(resourceManager.getAllResources(new Identifier("axolotlclient", "lang/" + mc.options.language.toLowerCase(Locale.ROOT) + ".json")));
+            resources.addAll(resourceManager.getAllResources(
+                    new Identifier("axolotlclient", "lang/" + mc.options.language.toLowerCase(Locale.ROOT) + ".json")));
 
-            for(Resource resource : resources) {
-                try(InputStream in = resource.getInputStream()) {
+            for (Resource resource : resources) {
+                try (InputStream in = resource.getInputStream()) {
                     accept(in);
                 }
             }
-        }
-        catch(IOException ignored) {}
+        } catch (IOException ignored) {}
     }
 
     /**

@@ -67,40 +67,31 @@ public class ActionBarHud extends TextHudEntry {
         }
         Color vanillaColor = new Color(color);
         if (this.actionBar != null) {
-
             if (shadow.get()) {
-                client.textRenderer.drawWithShadow(actionBar,
-                        (float) getPos().x() + Math.round((float) getWidth() / 2) - (float) client.textRenderer.getStringWidth(actionBar) / 2,
-                        (float) getPos().y() + 3,
-                        customTextColor.get() ? (
-                                textColor.get().getAlpha() == 255 ?
-                                new Color(
-                                        textColor.get().getRed(),
-                                        textColor.get().getGreen(),
-                                        textColor.get().getBlue(),
-                                        vanillaColor.getAlpha()
-                                ).getAsInt() :
-                                textColor.get().getAsInt()
-                        ) :
-                        color
-                );
+                client.textRenderer
+                        .drawWithShadow(actionBar,
+                                (float) getPos().x() + Math.round((float) getWidth() / 2)
+                                        - (float) client.textRenderer.getStringWidth(actionBar) / 2,
+                                (float) getPos().y() + 3,
+                                customTextColor.get()
+                                        ? (textColor.get().getAlpha() == 255
+                                                ? new Color(textColor.get().getRed(), textColor.get().getGreen(),
+                                                        textColor.get().getBlue(), vanillaColor.getAlpha()).getAsInt()
+                                                : textColor.get().getAsInt())
+                                        : color);
             } else {
-
-                client.textRenderer.draw(actionBar,
-                        (float) getPos().x() + Math.round((float) getWidth() / 2) - ((float) client.textRenderer.getStringWidth(actionBar) / 2),
-                        (float) getPos().y() + 3,
-                        customTextColor.get() ? (
-                                textColor.get().getAlpha() == 255 ?
-                                new Color(
-                                        textColor.get().getRed(),
-                                        textColor.get().getGreen(),
-                                        textColor.get().getBlue(),
-                                        vanillaColor.getAlpha()
-                                ).getAsInt() :
-                                textColor.get().getAsInt()
-                        ) :
-                        color, false
-                );
+                client.textRenderer
+                        .draw(actionBar,
+                                (float) getPos().x() + Math.round((float) getWidth() / 2)
+                                        - ((float) client.textRenderer.getStringWidth(actionBar) / 2),
+                                (float) getPos().y() + 3,
+                                customTextColor.get()
+                                        ? (textColor.get().getAlpha() == 255
+                                                ? new Color(textColor.get().getRed(), textColor.get().getGreen(),
+                                                        textColor.get().getBlue(), vanillaColor.getAlpha()).getAsInt()
+                                                : textColor.get().getAsInt())
+                                        : color,
+                                false);
             }
             ticksShown++;
         } else {
@@ -110,11 +101,10 @@ public class ActionBarHud extends TextHudEntry {
 
     @Override
     public void renderPlaceholderComponent(float delta) {
-        client.textRenderer.draw(
-                placeholder,
-                (float) getPos().x() + Math.round((float) getWidth() / 2) - (float) client.textRenderer.getStringWidth(placeholder) / 2,
-                (float) getPos().y() + 3, -1, shadow.get()
-        );
+        client.textRenderer.draw(placeholder,
+                (float) getPos().x() + Math.round((float) getWidth() / 2)
+                        - (float) client.textRenderer.getStringWidth(placeholder) / 2,
+                (float) getPos().y() + 3, -1, shadow.get());
     }
 
     @Override

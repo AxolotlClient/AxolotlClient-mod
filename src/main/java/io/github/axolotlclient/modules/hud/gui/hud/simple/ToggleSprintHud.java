@@ -56,8 +56,10 @@ public class ToggleSprintHud extends SimpleTextHudEntry {
     private final BooleanOption randomPlaceholder = new BooleanOption("axolotlclient.randomPlaceholder", false);
     private final StringOption placeholder = new StringOption("axolotlclient.placeholder", "No keys pressed");
 
-    private final KeyBinding sprintToggle = new KeyBinding("key.toggleSprint", Keyboard.KEY_K, "axolotlclient.category.axolotlclient");
-    private final KeyBinding sneakToggle = new KeyBinding("key.toggleSneak", Keyboard.KEY_I, "axolotlclient.category.axolotlclient");
+    private final KeyBinding sprintToggle = new KeyBinding("key.toggleSprint", Keyboard.KEY_K,
+            "axolotlclient.category.axolotlclient");
+    private final KeyBinding sneakToggle = new KeyBinding("key.toggleSneak", Keyboard.KEY_I,
+            "axolotlclient.category.axolotlclient");
 
     @Getter
     private final BooleanOption sprintToggled = new BooleanOption("axolotlclient.sprintToggled", false);
@@ -82,11 +84,10 @@ public class ToggleSprintHud extends SimpleTextHudEntry {
     private void loadRandomPlaceholder() {
         try {
             BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(MinecraftClient.getInstance()
-                                                         .getResourceManager()
-                                                         .getResource(new Identifier("texts/splashes.txt"))
-                            .getInputStream(), StandardCharsets.UTF_8)
-            );
+                    new InputStreamReader(
+                            MinecraftClient.getInstance().getResourceManager()
+                                    .getResource(new Identifier("texts/splashes.txt")).getInputStream(),
+                            StandardCharsets.UTF_8));
             String string;
             while ((string = bufferedReader.readLine()) != null) {
                 string = string.trim();
@@ -125,7 +126,6 @@ public class ToggleSprintHud extends SimpleTextHudEntry {
 
     @Override
     public String getValue() {
-
         if (client.options.keySneak.isPressed()) {
             return I18n.translate("axolotlclient.sneaking_pressed");
         }
@@ -180,5 +180,4 @@ public class ToggleSprintHud extends SimpleTextHudEntry {
         options.add(sneakToggled);
         return options;
     }
-
 }

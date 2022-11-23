@@ -52,12 +52,14 @@ public class Zoom extends AbstractModule {
     public static final FloatOption zoomDivisor = new FloatOption("axolotlclient.zoomDivisor", 4F, 1F, 16F);
     public static final FloatOption zoomSpeed = new FloatOption("axolotlclient.zoomSpeed", 7.5F, 1F, 10F);
     public static final BooleanOption zoomScrolling = new BooleanOption("axolotlclient.zoomScrolling", false);
-    public static final BooleanOption decreaseSensitivity = new BooleanOption("axolotlclient.decreaseSensitivity", true);
+    public static final BooleanOption decreaseSensitivity = new BooleanOption("axolotlclient.decreaseSensitivity",
+            true);
     public static final BooleanOption smoothCamera = new BooleanOption("axolotlclient.smoothCamera", false);
 
     public final OptionCategory zoom = new OptionCategory("axolotlclient.zoom");
 
     private static final Zoom Instance = new Zoom();
+
     public static Zoom getInstance() {
         return Instance;
     }
@@ -85,7 +87,7 @@ public class Zoom extends AbstractModule {
         double result = current
                 * (zoomSpeed.get() == 10 ? targetFactor : Util.lerp(lastAnimatedFactor, animatedFactor, tickDelta));
 
-        if(lastReturnedFov != 0 && lastReturnedFov != result) {
+        if (lastReturnedFov != 0 && lastReturnedFov != result) {
             MinecraftClient.getInstance().worldRenderer.scheduleTerrainUpdate();
         }
         lastReturnedFov = result;
@@ -95,7 +97,7 @@ public class Zoom extends AbstractModule {
     public static void setOptions() {
         originalSensitivity = MinecraftClient.getInstance().options.sensitivity;
 
-        if(smoothCamera.get()) {
+        if (smoothCamera.get()) {
             originalSmoothCamera = MinecraftClient.getInstance().options.smoothCameraEnabled;
             MinecraftClient.getInstance().options.smoothCameraEnabled = true;
         }
@@ -104,7 +106,7 @@ public class Zoom extends AbstractModule {
     }
 
     private static void updateSensitivity() {
-        if(decreaseSensitivity.get()) {
+        if (decreaseSensitivity.get()) {
             MinecraftClient.getInstance().options.sensitivity = (float) (originalSensitivity / divisor);
         }
     }
@@ -115,15 +117,15 @@ public class Zoom extends AbstractModule {
     }
 
     public static void update() {
-        if(shouldStart()) {
+        if (shouldStart()) {
             start();
-        } else if(shouldStop()) {
+        } else if (shouldStop()) {
             stop();
         }
     }
 
     public static boolean scroll(double amount) {
-        if(active && zoomScrolling.get() && amount != 0) {
+        if (active && zoomScrolling.get() && amount != 0) {
             setDivisor(Math.max(1, divisor + (amount / Math.abs(amount))));
             updateSensitivity();
             return true;
@@ -162,5 +164,4 @@ public class Zoom extends AbstractModule {
         targetFactor = 1;
         restoreOptions();
     }
-
 }

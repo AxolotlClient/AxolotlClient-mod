@@ -38,7 +38,6 @@ import java.util.List;
  * @license MPL-2.0
  */
 
-
 public class AutoGG implements AbstractHypixelMod {
 
     public static AutoGG Instance = new AutoGG();
@@ -81,11 +80,11 @@ public class AutoGG implements AbstractHypixelMod {
         populateHypixelGGStrings();
         populateHypixelGFStrings();
         populateHypixelGLHFStrings();
-        
+
         populateBedwarsPracticeGGStrings();
         populateBedwarsPracticeGFStrings();
         populateBedwarsPracticeGLHFStrings();
-        
+
         populatePvpLandGGStrings();
         populatePvpLandGFStrings();
 
@@ -103,7 +102,6 @@ public class AutoGG implements AbstractHypixelMod {
         category.add(onBWP);
         category.add(onPVPL);
         category.add(onMMC);
-
     }
 
     @Override
@@ -144,10 +142,12 @@ public class AutoGG implements AbstractHypixelMod {
         hypixelGGStrings.add("Most Wool Placed -");
         hypixelGGStrings.add("Your Overall Winstreak:");
     }
+
     private void populateHypixelGFStrings() {
         hypixelGFStrings.add("SkyWars Experience (Kill)");
         hypixelGFStrings.add("coins! (Final Kill)");
     }
+
     private void populateHypixelGLHFStrings() {
         hypixelGLHFStrings.add("The game starts in 1 second!");
     }
@@ -167,7 +167,7 @@ public class AutoGG implements AbstractHypixelMod {
         bedwarsPracticeGLHFStrings.add("Game starting in 1 seconds!");
         bedwarsPracticeGLHFStrings.add("Game has started!");
     }
-    
+
     private void populatePvpLandGGStrings() {
         pvpLandGGStrings.add("The match has ended!");
         pvpLandGGStrings.add("Match Results");
@@ -192,7 +192,7 @@ public class AutoGG implements AbstractHypixelMod {
     }
 
     public void onMessage(Text message) {
-        if(Util.getCurrentServerAddress() != null) {
+        if (Util.getCurrentServerAddress() != null) {
             if (onHypixel.get() && Util.getCurrentServerAddress().contains("hypixel")) {
                 if (gf.get()) {
                     processChat(message, hypixelGFStrings, gfString.get());
@@ -225,18 +225,20 @@ public class AutoGG implements AbstractHypixelMod {
                 }
             } else if (onMMC.get() && Util.getCurrentServerAddress().contains("minemen.club")) {
                 if (gf.get()) {
-                    if (minemenGFStrings.size() == 0) populateMinemenGFStrings();
+                    if (minemenGFStrings.size() == 0)
+                        populateMinemenGFStrings();
                     processChat(message, minemenGFStrings, "gf");
                 }
                 if (gg.get()) {
-                    if (minemenGGStrings.size() == 0) populateMinemenGGStrings();
+                    if (minemenGGStrings.size() == 0)
+                        populateMinemenGGStrings();
                     processChat(message, minemenGGStrings, "gg");
                 }
                 if (glhf.get()) {
-                    if (minemenGLHFStrings.size() == 0) populateMinemenGLHFStrings();
+                    if (minemenGLHFStrings.size() == 0)
+                        populateMinemenGLHFStrings();
                     processChat(message, minemenGLHFStrings, "glhf");
                 }
-
             }
         }
     }

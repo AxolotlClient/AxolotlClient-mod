@@ -63,48 +63,57 @@ import java.nio.FloatBuffer;
 @Mixin(GameRenderer.class)
 public abstract class GameRendererMixin {
 
-    @Shadow protected abstract FloatBuffer updateFogColorBuffer(float red, float green, float blue, float alpha);
+    @Shadow
+    protected abstract FloatBuffer updateFogColorBuffer(float red, float green, float blue, float alpha);
 
-    @Shadow private MinecraftClient client;
+    @Shadow
+    private MinecraftClient client;
 
-    @Shadow private float viewDistance;
+    @Shadow
+    private float viewDistance;
 
-    @Shadow private float fogRed;
+    @Shadow
+    private float fogRed;
 
-    @Shadow private float fogGreen;
+    @Shadow
+    private float fogGreen;
 
-    @Shadow private float fogBlue;
+    @Shadow
+    private float fogBlue;
 
-    @Shadow private boolean thickFog;
+    @Shadow
+    private boolean thickFog;
 
     private float cachedMouseFactor;
+
     @Inject(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MouseInput;x:I"), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
-    public void rawMouseInput(float tickDelta, long nanoTime, CallbackInfo ci, boolean displayActive, float f, float g){
-        if(AxolotlClient.CONFIG.rawMouseInput.get()){
+    public void rawMouseInput(float tickDelta, long nanoTime, CallbackInfo ci, boolean displayActive, float f,
+            float g) {
+        if (AxolotlClient.CONFIG.rawMouseInput.get()) {
             cachedMouseFactor = g;
         }
     }
 
     @Redirect(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MouseInput;x:I"))
-    public int rawMouseX(MouseInput instance){
-        if(AxolotlClient.CONFIG.rawMouseInput.get()){
-            return (int) (instance.x/cachedMouseFactor * client.options.sensitivity);
+    public int rawMouseX(MouseInput instance) {
+        if (AxolotlClient.CONFIG.rawMouseInput.get()) {
+            return (int) (instance.x / cachedMouseFactor * client.options.sensitivity);
         }
         return instance.x;
     }
 
     @Redirect(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MouseInput;y:I"))
-    public int rawMouseY(MouseInput instance){
-        if(AxolotlClient.CONFIG.rawMouseInput.get()){
-            return (int) (instance.y/cachedMouseFactor * client.options.sensitivity);
+    public int rawMouseY(MouseInput instance) {
+        if (AxolotlClient.CONFIG.rawMouseInput.get()) {
+            return (int) (instance.y / cachedMouseFactor * client.options.sensitivity);
         }
         return instance.y;
     }
 
     @Inject(method = "renderFog", at = @At("HEAD"), cancellable = true)
-    public void noFog(int i, float tickDelta, CallbackInfo ci){
-
-        if(MinecraftClient.getInstance().world.dimension.canPlayersSleep() && AxolotlClient.CONFIG.customSky.get() && SkyboxManager.getInstance().hasSkyBoxes()) {
+    public void noFog(int i, float tickDelta, CallbackInfo ci) {
+        if (MinecraftClient.getInstance().world.dimension.canPlayersSleep() && AxolotlClient.CONFIG.customSky.get()
+                && SkyboxManager.getInstance().hasSkyBoxes()) {
             this.viewDistance = (float) (this.viewDistance * 2 + MinecraftClient.getInstance().player.getPos().y);
             Entity entity = this.client.getCameraEntity();
 
@@ -136,7 +145,8 @@ public abstract class GameRendererMixin {
                 GlStateManager.fogDensity(0.1F);
             } else if (block.getMaterial() == Material.WATER) {
                 GlStateManager.fogMode(2048);
-                if (entity instanceof LivingEntity && ((LivingEntity) entity).hasStatusEffect(StatusEffect.WATER_BREATHING)) {
+                if (entity instanceof LivingEntity
+                        && ((LivingEntity) entity).hasStatusEffect(StatusEffect.WATER_BREATHING)) {
                     GlStateManager.fogDensity(0.01F);
                 } else {
                     GlStateManager.fogDensity(0.1F - (float) EnchantmentHelper.getRespiration(entity) * 0.03F);
@@ -164,16 +174,16 @@ public abstract class GameRendererMixin {
     }
 
     @Inject(method = "getFov", at = @At(value = "RETURN", ordinal = 1), cancellable = true)
-    public void setZoom(float tickDelta, boolean changingFov, CallbackInfoReturnable<Float> cir){
+    public void setZoom(float tickDelta, boolean changingFov, CallbackInfoReturnable<Float> cir) {
         Zoom.update();
 
         float returnValue = cir.getReturnValue();
 
         if (!AxolotlClient.CONFIG.dynamicFOV.get()) {
             Entity entity = this.client.getCameraEntity();
-            float f = changingFov ? client.options.fov:70F;
-            if (entity instanceof LivingEntity && ((LivingEntity)entity).getHealth() <= 0.0F) {
-                float g = (float)((LivingEntity)entity).deathTime + tickDelta;
+            float f = changingFov ? client.options.fov : 70F;
+            if (entity instanceof LivingEntity && ((LivingEntity) entity).getHealth() <= 0.0F) {
+                float g = (float) ((LivingEntity) entity).deathTime + tickDelta;
                 f /= (1.0F - 500.0F / (g + 500.0F)) * 2.0F + 1.0F;
             }
 
@@ -190,37 +200,35 @@ public abstract class GameRendererMixin {
     }
 
     @Redirect(method = "updateLightmap", at = @At(value = "FIELD", target = "Lnet/minecraft/client/options/GameOptions;gamma:F", opcode = Opcodes.GETFIELD))
-    public float setGamma(GameOptions instance){
-        if(AxolotlClient.CONFIG.fullBright.get()) return  15F;
+    public float setGamma(GameOptions instance) {
+        if (AxolotlClient.CONFIG.fullBright.get())
+            return 15F;
         return instance.gamma;
     }
 
     @Inject(method = "renderDebugCrosshair", at = @At("HEAD"), cancellable = true)
-    public void customCrosshairF3(float tickDelta, CallbackInfo ci){
+    public void customCrosshairF3(float tickDelta, CallbackInfo ci) {
         CrosshairHud hud = (CrosshairHud) HudManager.getInstance().get(CrosshairHud.ID);
-        if(hud.isEnabled() && this.client.options.debugEnabled
-                && !this.client.options.hudHidden
+        if (hud.isEnabled() && this.client.options.debugEnabled && !this.client.options.hudHidden
                 && hud.overridesF3()) {
             ci.cancel();
         }
-
     }
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/Framebuffer;bind(Z)V",
-            shift = Shift.BEFORE))
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/Framebuffer;bind(Z)V", shift = Shift.BEFORE))
     public void worldMotionBlur(float tickDelta, long nanoTime, CallbackInfo ci) {
         motionBlur(tickDelta, nanoTime, null);
     }
 
     @Inject(method = "render", at = @At("TAIL"))
-    public void motionBlur(float tickDelta, long nanoTime, CallbackInfo ci){
-        if((ci == null) == MotionBlur.getInstance().inGuis.get()) {
+    public void motionBlur(float tickDelta, long nanoTime, CallbackInfo ci) {
+        if ((ci == null) == MotionBlur.getInstance().inGuis.get()) {
             return;
         }
 
         this.client.profiler.push("Motion Blur");
 
-        if(MotionBlur.getInstance().enabled.get() && GLX.shadersSupported) {
+        if (MotionBlur.getInstance().enabled.get() && GLX.shadersSupported) {
             MotionBlur blur = MotionBlur.getInstance();
             blur.onUpdate();
             blur.shader.render(tickDelta);
@@ -233,7 +241,8 @@ public abstract class GameRendererMixin {
     public void updateFreelook(ClientPlayerEntity entity, float yaw, float pitch) {
         Freelook freelook = Freelook.getInstance();
 
-        if(freelook.consumeRotation(yaw, pitch)) return;
+        if (freelook.consumeRotation(yaw, pitch))
+            return;
 
         entity.increaseTransforms(yaw, pitch);
     }

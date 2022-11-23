@@ -41,7 +41,7 @@ public class AutoTip implements AbstractHypixelMod {
     @Override
     public void init() {
         category.add(enabled);
-        init=true;
+        init = true;
     }
 
     @Override
@@ -51,12 +51,10 @@ public class AutoTip implements AbstractHypixelMod {
 
     @Override
     public void tick() {
-        if(init) {
-            if (System.currentTimeMillis() - lastTime > 1200000 && Util.getCurrentServerAddress() != null &&
-                    Util.currentServerAddressContains("hypixel") &&
-                    enabled.get()) {
-
-                if(MinecraftClient.getInstance().player!=null) {
+        if (init) {
+            if (System.currentTimeMillis() - lastTime > 1200000 && Util.getCurrentServerAddress() != null
+                    && Util.currentServerAddressContains("hypixel") && enabled.get()) {
+                if (MinecraftClient.getInstance().player != null) {
                     MinecraftClient.getInstance().player.sendChatMessage("/tip all");
                     lastTime = System.currentTimeMillis();
                 }

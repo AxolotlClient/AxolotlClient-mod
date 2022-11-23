@@ -52,5 +52,4 @@ public abstract class EntityRenderDispatcherMixin {
     public float freelook$prevPitch(Entity entity) {
         return Freelook.getInstance().pitch(entity.prevPitch);
     }
-
 }

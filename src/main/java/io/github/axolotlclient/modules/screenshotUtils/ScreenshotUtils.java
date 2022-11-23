@@ -40,59 +40,59 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 
 public class ScreenshotUtils extends AbstractModule {
+
     private static final ScreenshotUtils Instance = new ScreenshotUtils();
 
     private final OptionCategory category = new OptionCategory("axolotlclient.screenshotUtils");
 
     private final BooleanOption enabled = new BooleanOption("axolotlclient.enabled", false);
 
-
     @Override
     public void init() {
-
         category.add(enabled);
 
         AxolotlClient.CONFIG.general.addSubCategory(category);
     }
 
-    public static ScreenshotUtils getInstance(){
+    public static ScreenshotUtils getInstance() {
         return Instance;
     }
 
-    public Text onScreenshotTaken(Text text, File shot){
-        if(enabled.get()){
+    public Text onScreenshotTaken(Text text, File shot) {
+        if (enabled.get()) {
             return text.append("\n").append(getUtilsText(shot));
         }
         return text;
     }
 
-    private Text getUtilsText(File file){
-
+    private Text getUtilsText(File file) {
         return new LiteralText(I18n.translate("axolotlclient.copyAction"))
-                .setStyle(new Style()
-                        .setFormatting(Formatting.BLUE)
-                        .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(I18n.translate("axolotlclient.copy_image"))))
+                .setStyle(new Style().setFormatting(Formatting.BLUE)
+                        .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                                new LiteralText(I18n.translate("axolotlclient.copy_image"))))
                         .setClickEvent(new CustomClickEvent(() -> {
                             FileTransferable selection = new FileTransferable(file);
                             Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
                         })))
                 .append(" ")
-                .append(
-                        new LiteralText(I18n.translate("axolotlclient.deleteAction")).setStyle(new Style()
-                                .setFormatting(Formatting.RED)
-                                .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(I18n.translate("axolotlclient.delete_image"))))
+                .append(new LiteralText(I18n.translate("axolotlclient.deleteAction"))
+                        .setStyle(new Style().setFormatting(Formatting.RED)
+                                .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                                        new LiteralText(I18n.translate("axolotlclient.delete_image"))))
                                 .setClickEvent(new CustomClickEvent(() -> {
                                     try {
                                         Files.delete(file.toPath());
-                                        Util.sendChatMessage(new LiteralText(I18n.translate("axolotlclient.screenshot_deleted").replace("<name>", file.getName())));
+                                        Util.sendChatMessage(
+                                                new LiteralText(I18n.translate("axolotlclient.screenshot_deleted")
+                                                        .replace("<name>", file.getName())));
                                     } catch (Exception e) {
                                         Logger.warn("Couldn't delete Screenshot " + file.getName());
                                     }
-                                })))
-                );
+                                }))));
     }
 
     protected static class FileTransferable implements Transferable {
+
         private final File file;
 
         public FileTransferable(File file) {
@@ -126,12 +126,13 @@ public class ScreenshotUtils extends AbstractModule {
             this.action = action;
         }
 
-        public void doAction(){
+        public void doAction() {
             action.doAction();
         }
     }
 
     interface OnActionCall {
+
         void doAction();
     }
 }

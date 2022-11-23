@@ -39,5 +39,4 @@ public abstract class ClientPlayNetworkHandlerMixin {
         TPSHud tpsHud = (TPSHud) HudManager.getInstance().get(TPSHud.ID);
         tpsHud.updateTime(packet.getTime());
     }
-
 }

@@ -32,24 +32,24 @@ public class Logger {
 
     private static final String modId = FabricLoader.getInstance().isDevelopmentEnvironment() ? "" : "(AxolotlClient) ";
 
-    public static void warn(String message, Object... args){
+    public static void warn(String message, Object... args) {
         LOGGER.warn(modId + message, args);
     }
 
-    public static void error(String message, Object... args){
+    public static void error(String message, Object... args) {
         try {
             LOGGER.error(modId + message, args);
-        } catch (Exception e){
+        } catch (Exception e) {
             LOGGER.warn(modId + "[ERROR]" + message, args);
         }
     }
 
-    public static void info(String message, Object... args){
+    public static void info(String message, Object... args) {
         LOGGER.info(modId + message, args);
     }
 
-    public static void debug(String message, Object... args){
-        if(AxolotlClient.CONFIG.debugLogOutput.get()) {
+    public static void debug(String message, Object... args) {
+        if (AxolotlClient.CONFIG.debugLogOutput.get()) {
             info(modId + "[DEBUG] " + message, args);
         }
     }

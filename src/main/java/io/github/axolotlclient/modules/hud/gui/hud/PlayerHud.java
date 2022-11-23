@@ -89,7 +89,6 @@ public class PlayerHud extends BoxHudEntry {
         float scale = getScale() * 40;
         GlStateManager.scalef(scale, scale, scale);
 
-
         GlStateManager.rotatef(180, 0, 0, 1);
 
         // Rotate to whatever is wanted. Also make sure to offset the yaw
@@ -115,7 +114,6 @@ public class PlayerHud extends BoxHudEntry {
         renderer.pitch = 0;
         renderer.setRenderShadows(false);
 
-
         //VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
 
         currentlyRendering = true;
@@ -131,7 +129,6 @@ public class PlayerHud extends BoxHudEntry {
         client.player.prevHeadYaw = pastPrevHeadYaw;
         client.player.prevYaw = pastPrevYaw;
         client.player.bodyYaw = pastBodyYaw;
-
 
         DiffuseLighting.disable();
         GlStateManager.disableRescaleNormal();

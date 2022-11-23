@@ -56,7 +56,8 @@ public class ArrowHud extends TextHudEntry {
     public void render(float delta) {
         if (dynamic.get()) {
             ClientPlayerEntity player = client.player;
-            if (player == null || player.getMainHandStack() == null || !(player.getMainHandStack().getItem() instanceof BowItem)) {
+            if (player == null || player.getMainHandStack() == null
+                    || !(player.getMainHandStack().getItem() instanceof BowItem)) {
                 return;
             }
         }
@@ -66,8 +67,8 @@ public class ArrowHud extends TextHudEntry {
     @Override
     public void renderComponent(float delta) {
         DrawPosition pos = getPos();
-        drawCenteredString(client.textRenderer, String.valueOf(arrows), pos.x() + getWidth() / 2, pos.y() + getHeight() - 10,
-                textColor.get(), shadow.get());
+        drawCenteredString(client.textRenderer, String.valueOf(arrows), pos.x() + getWidth() / 2,
+                pos.y() + getHeight() - 10, textColor.get(), shadow.get());
         ItemUtil.renderGuiItemModel(currentArrow, pos.x() + 2, pos.y() + 2);
     }
 
@@ -84,8 +85,8 @@ public class ArrowHud extends TextHudEntry {
     @Override
     public void renderPlaceholderComponent(float delta) {
         DrawPosition pos = getPos();
-        drawCenteredString(client.textRenderer, "64", pos.x() + getWidth() / 2, pos.y() + getHeight() - 10, textColor.get(),
-                shadow.get());
+        drawCenteredString(client.textRenderer, "64", pos.x() + getWidth() / 2, pos.y() + getHeight() - 10,
+                textColor.get(), shadow.get());
         ItemUtil.renderGuiItemModel(new ItemStack(Items.ARROW), pos.x() + 2, pos.y() + 2);
     }
 
@@ -105,5 +106,4 @@ public class ArrowHud extends TextHudEntry {
     public Identifier getId() {
         return ID;
     }
-
 }

@@ -47,7 +47,6 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-
 public class Util {
 
     public static Color GlColor = new Color();
@@ -65,64 +64,66 @@ public class Util {
      * @return The amount of ticks in between start and end
      */
     public static int getTicksBetween(int start, int end) {
-        if (end < start) end += 24000;
+        if (end < start)
+            end += 24000;
         return end - start;
     }
 
-    public static int toGlCoordsX(int x){
-        if (window==null) {
+    public static int toGlCoordsX(int x) {
+        if (window == null) {
             window = new Window(MinecraftClient.getInstance());
         }
         return x * window.getScaleFactor();
     }
 
-    public static int toGlCoordsY(int y){
-        if (window==null) {
+    public static int toGlCoordsY(int y) {
+        if (window == null) {
             window = new Window(MinecraftClient.getInstance());
         }
         int scale = window.getScaleFactor();
         return MinecraftClient.getInstance().height - y * scale - scale;
     }
 
-    public static int toMCCoordsX(int x){
-        if (window==null) {
-           window = new Window(MinecraftClient.getInstance());
+    public static int toMCCoordsX(int x) {
+        if (window == null) {
+            window = new Window(MinecraftClient.getInstance());
         }
         return x * window.getWidth() / MinecraftClient.getInstance().width;
     }
-    public static int toMCCoordsY(int y){
-        if (window==null) {
+
+    public static int toMCCoordsY(int y) {
+        if (window == null) {
             window = new Window(MinecraftClient.getInstance());
         }
         return window.getHeight() - y * window.getHeight() / MinecraftClient.getInstance().height - 1;
     }
 
-    public static Window getWindow(){
-        if(window==null){
+    public static Window getWindow() {
+        if (window == null) {
             try {
                 return window = new Window(MinecraftClient.getInstance());
-            } catch (Exception e){
+            } catch (Exception e) {
                 return null;
             }
         }
         return window;
     }
 
-    public static void sendChatMessage(String msg){
+    public static void sendChatMessage(String msg) {
         MinecraftClient.getInstance().player.sendChatMessage(msg);
     }
 
-    public static void sendChatMessage(Text msg){
+    public static void sendChatMessage(Text msg) {
         MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(msg);
     }
 
-    public static String splitAtCapitalLetters(String string){
-        if(string==null || string.isEmpty()){
+    public static String splitAtCapitalLetters(String string) {
+        if (string == null || string.isEmpty()) {
             return "";
         }
         StringBuilder builder = new StringBuilder();
-        for(char c:string.toCharArray()){
-            if(Character.isUpperCase(c) && c != string.charAt(0)){
+        for (char c : string.toCharArray()) {
+            if (Character.isUpperCase(c) && c != string.charAt(0)) {
                 builder.append(" ");
             }
             builder.append(c);
@@ -130,36 +131,41 @@ public class Util {
         return builder.toString();
     }
 
-    public static String getGame(){
-
+    public static String getGame() {
         List<String> sidebar = getSidebar();
 
-        if(sidebar.isEmpty()) game = "";
-        else if (Util.getCurrentServerAddress() != null && Util.getCurrentServerAddress().toLowerCase().contains(sidebar.get(0).toLowerCase())){
-            if ( sidebar.get(sidebar.size() -1).toLowerCase(Locale.ROOT)
-                    .contains(Util.getCurrentServerAddress().toLowerCase(Locale.ROOT)) ||
-                    sidebar.get(sidebar.size()-1).contains("Playtime")){
+        if (sidebar.isEmpty())
+            game = "";
+        else if (Util.getCurrentServerAddress() != null
+                && Util.getCurrentServerAddress().toLowerCase().contains(sidebar.get(0).toLowerCase())) {
+            if (sidebar.get(sidebar.size() - 1).toLowerCase(Locale.ROOT)
+                    .contains(Util.getCurrentServerAddress().toLowerCase(Locale.ROOT))
+                    || sidebar.get(sidebar.size() - 1).contains("Playtime")) {
                 game = "In Lobby";
-            }  else {
-                if (sidebar.get(sidebar.size()-1).contains("--------")){
+            } else {
+                if (sidebar.get(sidebar.size() - 1).contains("--------")) {
                     game = "Playing Bridge Practice";
                 } else {
-                    game = "Playing "+ sidebar.get(sidebar.size() -1);
+                    game = "Playing " + sidebar.get(sidebar.size() - 1);
                 }
             }
         } else {
-            game = "Playing "+ sidebar.get(0);
+            game = "Playing " + sidebar.get(0);
         }
 
-        if(!Objects.equals(lastgame, game) && game.equals("")) game = lastgame;
-        else lastgame = game;
+        if (!Objects.equals(lastgame, game) && game.equals(""))
+            game = lastgame;
+        else
+            lastgame = game;
 
-        if (game==null){game="";}
+        if (game == null) {
+            game = "";
+        }
 
-        return Formatting.strip( game);
+        return Formatting.strip(game);
     }
 
-    public static double calculateDistance(Vec3d pos1, Vec3d pos2){
+    public static double calculateDistance(Vec3d pos1, Vec3d pos2) {
         return calculateDistance(pos1.x, pos2.x, pos1.y, pos2.y, pos1.z, pos2.z);
     }
 
@@ -167,16 +173,12 @@ public class Util {
         return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2) + Math.pow(z2 - z1, 2));
     }
 
-    public static BlockHitResult raycast(Entity entity, Vec3d vec3d, Vec3d vec3d3, Box box, Predicate<Entity> predicate, double d){
+    public static BlockHitResult raycast(Entity entity, Vec3d vec3d, Vec3d vec3d3, Box box, Predicate<Entity> predicate,
+            double d) {
         Entity targetedEntity = null;
         Vec3d vec3d4 = null;
         float f = 1.0F;
-        List<Entity> list = MinecraftClient.getInstance()
-                .world
-                .getEntitiesIn(
-                        entity,
-                        box,
-                        predicate::test);
+        List<Entity> list = MinecraftClient.getInstance().world.getEntitiesIn(entity, box, predicate::test);
         double g = d;
 
         for (Entity entity2 : list) {
@@ -209,14 +211,14 @@ public class Util {
         if (targetedEntity != null && (g < d)) {
             return new BlockHitResult(targetedEntity, vec3d4);
         }
-        if(vec3d4 != null) {
+        if (vec3d4 != null) {
             return new BlockHitResult(BlockHitResult.Type.MISS, vec3d4, null, new BlockPos(vec3d4));
         }
         return new BlockHitResult(BlockHitResult.Type.MISS, new Vec3d(0, 0, 0), null, null);
     }
 
     public static <T> T make(Supplier<T> factory) {
-        return (T)factory.get();
+        return (T) factory.get();
     }
 
     public static <T> T make(T object, Consumer<T> initializer) {
@@ -224,42 +226,47 @@ public class Util {
         return object;
     }
 
-    public static boolean currentServerAddressContains(String address){
-        if(MinecraftClient.getInstance().isInSingleplayer() || MinecraftClient.getInstance().isIntegratedServerRunning()){
+    public static boolean currentServerAddressContains(String address) {
+        if (MinecraftClient.getInstance().isInSingleplayer()
+                || MinecraftClient.getInstance().isIntegratedServerRunning()) {
             return false;
         }
-        if(MinecraftClient.getInstance().getCurrentServerEntry() != null){
+        if (MinecraftClient.getInstance().getCurrentServerEntry() != null) {
             return MinecraftClient.getInstance().getCurrentServerEntry().address.contains(address);
         }
-        return ((MinecraftClientAccessor) MinecraftClient.getInstance()).getServerAddress() != null &&
-                ((MinecraftClientAccessor) MinecraftClient.getInstance()).getServerAddress().contains(address);
+        return ((MinecraftClientAccessor) MinecraftClient.getInstance()).getServerAddress() != null
+                && ((MinecraftClientAccessor) MinecraftClient.getInstance()).getServerAddress().contains(address);
     }
 
-    public static String getCurrentServerAddress(){
-        if(MinecraftClient.getInstance().isInSingleplayer()){
+    public static String getCurrentServerAddress() {
+        if (MinecraftClient.getInstance().isInSingleplayer()) {
             return null;
         }
 
-        if(MinecraftClient.getInstance().getCurrentServerEntry() != null){
+        if (MinecraftClient.getInstance().getCurrentServerEntry() != null) {
             return MinecraftClient.getInstance().getCurrentServerEntry().address;
         }
-        return ((MinecraftClientAccessor) MinecraftClient.getInstance()).getServerAddress() != null ?
-                ((MinecraftClientAccessor) MinecraftClient.getInstance()).getServerAddress() : null;
+        return ((MinecraftClientAccessor) MinecraftClient.getInstance()).getServerAddress() != null
+                ? ((MinecraftClientAccessor) MinecraftClient.getInstance()).getServerAddress()
+                : null;
     }
 
     public static List<String> getSidebar() {
         List<String> lines = new ArrayList<>();
         MinecraftClient client = MinecraftClient.getInstance();
-        if (client.world == null) return lines;
+        if (client.world == null)
+            return lines;
 
         Scoreboard scoreboard = client.world.getScoreboard();
-        if (scoreboard == null) return lines;
+        if (scoreboard == null)
+            return lines;
         ScoreboardObjective sidebar = scoreboard.getObjectiveForSlot(1);
-        if (sidebar == null) return lines;
+        if (sidebar == null)
+            return lines;
 
         Collection<ScoreboardPlayerScore> scores = scoreboard.getAllPlayerScores(sidebar);
-        List<ScoreboardPlayerScore> list = scores.stream()
-                .filter(input -> input != null && input.getPlayerName() != null && !input.getPlayerName().startsWith("#"))
+        List<ScoreboardPlayerScore> list = scores.stream().filter(
+                input -> input != null && input.getPlayerName() != null && !input.getPlayerName().startsWith("#"))
                 .collect(Collectors.toList());
 
         if (list.size() > 15) {
@@ -270,7 +277,8 @@ public class Util {
 
         for (ScoreboardPlayerScore score : scores) {
             Team team = scoreboard.getPlayerTeam(score.getPlayerName());
-            if (team == null) return lines;
+            if (team == null)
+                return lines;
             String text = team.getPrefix() + team.getSuffix();
             if (text.trim().length() > 0)
                 lines.add(text);
@@ -283,13 +291,13 @@ public class Util {
     }
 
     public static class Color {
+
         public float red = 1.0F;
         public float green = 1.0F;
         public float blue = 1.0F;
         public float alpha = 1.0F;
 
-        public Color() {
-        }
+        public Color() {}
 
         public Color(float red, float green, float blue, float alpha) {
             this.red = red;
@@ -299,34 +307,25 @@ public class Util {
         }
     }
 
-    public static void applyScissor(int x, int y, int width, int height){
+    public static void applyScissor(int x, int y, int width, int height) {
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
         Window window = new Window(MinecraftClient.getInstance());
         int scale = window.getScaleFactor();
-        GL11.glScissor(x * scale, (int) ((window.getScaledHeight() - height - y) * scale), width * scale, height * scale);
+        GL11.glScissor(x * scale, (int) ((window.getScaledHeight() - height - y) * scale), width * scale,
+                height * scale);
     }
 
     public static float lerp(float start, float end, float percent) {
         return start + ((end - start) * percent);
     }
 
-
     // https://stackoverflow.com/questions/12967896/converting-integers-to-roman-numerals-java
     public static String toRoman(int number) {
-        if(number>0) {
-            return String.join("", Collections.nCopies(number, "I"))
-                    .replace("IIIII", "V")
-                    .replace("IIII", "IV")
-                    .replace("VV", "X")
-                    .replace("VIV", "IX")
-                    .replace("XXXXX", "L")
-                    .replace("XXXX", "XL")
-                    .replace("LL", "C")
-                    .replace("LXL", "XC")
-                    .replace("CCCCC", "D")
-                    .replace("CCCC", "CD")
-                    .replace("DD", "M")
-                    .replace("DCD", "CM");
+        if (number > 0) {
+            return String.join("", Collections.nCopies(number, "I")).replace("IIIII", "V").replace("IIII", "IV")
+                    .replace("VV", "X").replace("VIV", "IX").replace("XXXXX", "L").replace("XXXX", "XL")
+                    .replace("LL", "C").replace("LXL", "XC").replace("CCCCC", "D").replace("CCCC", "CD")
+                    .replace("DD", "M").replace("DCD", "CM");
         }
         return "";
     }

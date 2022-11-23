@@ -37,18 +37,18 @@ public class LevelHead implements AbstractHypixelMod {
     public BooleanOption enabled = new BooleanOption("axolotlclient.enabled", false);
     public BooleanOption background = new BooleanOption("axolotlclient.background", false);
     public ColorOption textColor = new ColorOption("axolotlclient.textcolor", Color.GOLD);
-    public EnumOption mode = new EnumOption("axolotlclient.levelHeadMode", LevelHeadMode.values(), LevelHeadMode.NETWORK.toString());
+    public EnumOption mode = new EnumOption("axolotlclient.levelHeadMode", LevelHeadMode.values(),
+            LevelHeadMode.NETWORK.toString());
 
     @Override
     public void init() {
-
         category.add(enabled);
         category.add(textColor);
         category.add(background);
         category.add(mode);
     }
 
-    public static LevelHead getInstance(){
+    public static LevelHead getInstance() {
         return Instance;
     }
 
@@ -57,9 +57,7 @@ public class LevelHead implements AbstractHypixelMod {
         return category;
     }
 
-    public enum LevelHeadMode{
-        NETWORK,
-        BEDWARS,
-        SKYWARS
+    public enum LevelHeadMode {
+        NETWORK, BEDWARS, SKYWARS
     }
 }

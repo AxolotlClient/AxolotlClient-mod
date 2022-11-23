@@ -33,7 +33,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class DownloadingTerrainScreenMixin {
 
     @Inject(method = "init", at = @At("TAIL"))
-    public void noLoadingScreen(CallbackInfo ci){
+    public void noLoadingScreen(CallbackInfo ci) {
         MinecraftClient.getInstance().closeScreen();
     }
 }

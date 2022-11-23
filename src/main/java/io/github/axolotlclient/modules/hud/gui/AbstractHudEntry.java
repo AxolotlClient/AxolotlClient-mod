@@ -60,7 +60,8 @@ public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
     @Setter
     @Getter
     protected int width;
-    @Setter @Getter
+    @Setter
+    @Getter
     protected int height;
 
     @Setter
@@ -96,9 +97,7 @@ public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
     }
 
     public void setX(int x) {
-        this.x.set((double) intToFloat(x, (int) Util.getWindow().getScaledWidth(),
-                0
-        ));
+        this.x.set((double) intToFloat(x, (int) Util.getWindow().getScaledWidth(), 0));
     }
 
     public int getRawY() {
@@ -106,9 +105,7 @@ public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
     }
 
     public void setY(int y) {
-        this.y.set((double) intToFloat(y, (int) Util.getWindow().getScaledHeight(),
-                0
-        ));
+        this.y.set((double) intToFloat(y, (int) Util.getWindow().getScaledHeight(), 0));
     }
 
     public Rectangle getTrueBounds() {
@@ -188,7 +185,8 @@ public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
             return;
         }
         int scaledX = floatToInt(x.get().floatValue(), (int) Util.getWindow().getScaledWidth(), 0) - offsetTrueWidth();
-        int scaledY = floatToInt(y.get().floatValue(), (int) Util.getWindow().getScaledHeight(), 0) - offsetTrueHeight();
+        int scaledY = floatToInt(y.get().floatValue(), (int) Util.getWindow().getScaledHeight(), 0)
+                - offsetTrueHeight();
         if (scaledX < 0) {
             scaledX = 0;
         }
@@ -200,7 +198,8 @@ public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
             scaledX = (int) (Util.getWindow().getScaledWidth() - trueWidth);
         }
         int trueHeight = (int) (getHeight() * getScale());
-        if (trueHeight < Util.getWindow().getScaledHeight() && scaledY + trueHeight > Util.getWindow().getScaledHeight()) {
+        if (trueHeight < Util.getWindow().getScaledHeight()
+                && scaledY + trueHeight > Util.getWindow().getScaledHeight()) {
             scaledY = (int) (Util.getWindow().getScaledHeight() - trueHeight);
         }
         truePosition.x = scaledX;
@@ -236,11 +235,12 @@ public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
         return options;
     }
 
-    public OptionCategory getOptionsAsCategory(){
+    public OptionCategory getOptionsAsCategory() {
         OptionCategory cat = new OptionCategory(getNameKey(), false);
         cat.add(getConfigurationOptions());
         return cat;
     }
+
     public OptionCategory getAllOptions() {
         List<Option<?>> options = getSaveOptions();
         OptionCategory cat = new OptionCategory(getNameKey());
@@ -257,5 +257,4 @@ public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
     public void setEnabled(boolean value) {
         enabled.set(value);
     }
-
 }

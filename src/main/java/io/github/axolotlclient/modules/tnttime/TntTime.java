@@ -57,11 +57,11 @@ public class TntTime extends AbstractModule {
 
     @Override
     public void tick() {
-        if(decimalPlaces.get() != decimals){
+        if (decimalPlaces.get() != decimals) {
             StringBuilder string = new StringBuilder("#0");
             if (decimalPlaces.get() > 0) {
                 string.append(".");
-                for(int i=0;i<decimalPlaces.get();i++) {
+                for (int i = 0; i < decimalPlaces.get(); i++) {
                     string.append("0");
                 }
             }
@@ -70,12 +70,12 @@ public class TntTime extends AbstractModule {
         }
     }
 
-    public Text getFuseTime(int time){
-        float secs = time/20F;
+    public Text getFuseTime(int time) {
+        float secs = time / 20F;
         return new LiteralText(format.format(secs)).copy().setStyle(new Style().setFormatting(getCurrentColor(secs)));
     }
 
-    private Formatting getCurrentColor(float seconds){
+    private Formatting getCurrentColor(float seconds) {
         if (seconds > 7d) {
             return Formatting.DARK_AQUA;
         } else if (seconds > 6d) {

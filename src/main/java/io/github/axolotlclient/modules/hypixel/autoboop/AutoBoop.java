@@ -29,6 +29,7 @@ import io.github.axolotlclient.util.Util;
 import net.minecraft.text.Text;
 
 public class AutoBoop implements AbstractHypixelMod {
+
     public static AutoBoop Instance = new AutoBoop();
 
     protected OptionCategory cat = new OptionCategory("axolotlclient.autoBoop");
@@ -36,7 +37,6 @@ public class AutoBoop implements AbstractHypixelMod {
 
     @Override
     public void init() {
-
         cat.add(enabled);
     }
 
@@ -45,10 +45,12 @@ public class AutoBoop implements AbstractHypixelMod {
         return cat;
     }
 
-    public void onMessage(Text message){
-        if(enabled.get() && message.asUnformattedString().contains("Friend >") && message.asUnformattedString().contains("joined.")){
-            String player = message.asUnformattedString().substring(message.asFormattedString().indexOf(">") + 2, message.asUnformattedString().lastIndexOf(" "));
-            Util.sendChatMessage( "/boop "+player);
+    public void onMessage(Text message) {
+        if (enabled.get() && message.asUnformattedString().contains("Friend >")
+                && message.asUnformattedString().contains("joined.")) {
+            String player = message.asUnformattedString().substring(message.asFormattedString().indexOf(">") + 2,
+                    message.asUnformattedString().lastIndexOf(" "));
+            Util.sendChatMessage("/boop " + player);
         }
     }
 }

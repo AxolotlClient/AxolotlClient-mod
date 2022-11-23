@@ -51,6 +51,7 @@ import java.util.List;
  */
 
 public class PingHud extends SimpleTextHudEntry {
+
     public static final Identifier ID = new Identifier("kronhud", "pinghud");
 
     private int currentServerPing;
@@ -81,28 +82,32 @@ public class PingHud extends SimpleTextHudEntry {
         return true;
     }
 
-    private void updatePing(){
+    private void updatePing() {
         if (MinecraftClient.getInstance().getCurrentServerEntry() != null) {
             if (MinecraftClient.getInstance().getCurrentServerEntry().ping <= 1) {
-                ServerAddress address = ServerAddress.parse(MinecraftClient.getInstance().getCurrentServerEntry().address);
+                ServerAddress address = ServerAddress
+                        .parse(MinecraftClient.getInstance().getCurrentServerEntry().address);
                 getRealTimeServerPing(address.getAddress(), address.getPort());
             } else {
                 currentServerPing = (int) MinecraftClient.getInstance().getCurrentServerEntry().ping;
             }
-        }else if (((MinecraftClientAccessor)MinecraftClient.getInstance()).getServerAddress() != null) {
-            getRealTimeServerPing(((MinecraftClientAccessor)MinecraftClient.getInstance()).getServerAddress(), ((MinecraftClientAccessor)MinecraftClient.getInstance()).getServerPort());
-        } else if (MinecraftClient.getInstance().isIntegratedServerRunning()){
+        } else if (((MinecraftClientAccessor) MinecraftClient.getInstance()).getServerAddress() != null) {
+            getRealTimeServerPing(((MinecraftClientAccessor) MinecraftClient.getInstance()).getServerAddress(),
+                    ((MinecraftClientAccessor) MinecraftClient.getInstance()).getServerPort());
+        } else if (MinecraftClient.getInstance().isIntegratedServerRunning()) {
             currentServerPing = 1;
         }
     }
 
     private int second;
+
     @Override
     public void tick() {
-        if(second>=refreshDelay.get()*20){
+        if (second >= refreshDelay.get() * 20) {
             updatePing();
-            second=0;
-        } else second++;
+            second = 0;
+        } else
+            second++;
     }
 
     @Override
@@ -120,6 +125,7 @@ public class PingHud extends SimpleTextHudEntry {
                 final ClientConnection manager = ClientConnection.connect(InetAddress.getByName(address), port, false);
 
                 manager.setPacketListener(new ClientQueryPacketListener() {
+
                     @Override
                     public void onResponse(QueryResponseS2CPacket packet) {
                         this.currentSystemTime = MinecraftClient.getTime();
@@ -138,13 +144,11 @@ public class PingHud extends SimpleTextHudEntry {
 
                     @Override
                     public void onDisconnected(Text reason) {
-
                     }
                 });
                 manager.send(new HandshakeC2SPacket(47, address, port, NetworkState.STATUS));
                 manager.send(new QueryRequestC2SPacket());
-            }
-            catch (Exception ignored){}
+            } catch (Exception ignored) {}
         });
     }
 }

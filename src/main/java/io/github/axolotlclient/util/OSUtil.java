@@ -36,7 +36,7 @@ public class OSUtil {
     private static OperatingSystem OS;
 
     public static OperatingSystem getOS() {
-        if(OS==null) {
+        if (OS == null) {
             String s = System.getProperty("os.name");
 
             for (OperatingSystem o : OperatingSystem.values()) {
@@ -54,24 +54,26 @@ public class OSUtil {
     }
 
     public enum OperatingSystem {
-        WINDOWS("win"){
+
+        WINDOWS("win") {
+
             @Override
             protected String[] getURLOpenCommand(URL url) {
-                return new String[]{"rundll32", "url.dll,FileProtocolHandler", url.toString()};
+                return new String[] { "rundll32", "url.dll,FileProtocolHandler", url.toString() };
             }
         },
-        LINUX("nix", "nux", "aix"),
-        MAC("mac") {
+        LINUX("nix", "nux", "aix"), MAC("mac") {
+
             @Override
             protected String[] getURLOpenCommand(URL url) {
-                return new String[]{"open", url.toString()};
+                return new String[] { "open", url.toString() };
             }
         },
         OTHER();
 
         final String[] s;
 
-        public String[] getStrings(){
+        public String[] getStrings() {
             return s;
         }
 
@@ -81,14 +83,14 @@ public class OSUtil {
 
         private void open(URL url) {
             try {
-                Process process = AccessController.doPrivileged((PrivilegedExceptionAction<Process>) () -> Runtime.getRuntime().exec(this.getURLOpenCommand(url)));
+                Process process = AccessController.doPrivileged((PrivilegedExceptionAction<Process>) () -> Runtime
+                        .getRuntime().exec(this.getURLOpenCommand(url)));
                 process.getInputStream().close();
                 process.getErrorStream().close();
                 process.getOutputStream().close();
             } catch (IOException | PrivilegedActionException var3) {
                 Logger.error("Couldn't open url '{}'", url, var3);
             }
-
         }
 
         public void open(URI uri) {
@@ -97,7 +99,6 @@ public class OSUtil {
             } catch (MalformedURLException var3) {
                 Logger.error("Couldn't open uri '{}'", uri, var3);
             }
-
         }
 
         protected String[] getURLOpenCommand(URL url) {
@@ -106,7 +107,7 @@ public class OSUtil {
                 string = string.replace("file:", "file://");
             }
 
-            return new String[]{"xdg-open", string};
+            return new String[] { "xdg-open", string };
         }
     }
 }

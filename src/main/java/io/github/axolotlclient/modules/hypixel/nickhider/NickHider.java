@@ -54,14 +54,12 @@ public class NickHider implements AbstractHypixelMod {
         category.add(hideOtherSkins);
     }
 
-    public Text editMessage(Text message){
-
-        if(hideOwnName.get() || hideOtherNames.get()) {
+    public Text editMessage(Text message) {
+        if (hideOwnName.get() || hideOtherNames.get()) {
             String msg = message.asFormattedString();
             String playerName = MinecraftClient.getInstance().player.getGameProfile().getName();
             if (hideOwnName.get() && msg.contains(playerName)) {
                 msg = msg.replaceAll(playerName, hiddenNameSelf.get());
-
             }
 
             if (hideOtherNames.get()) {
@@ -71,7 +69,6 @@ public class NickHider implements AbstractHypixelMod {
                     }
                 }
             }
-
 
             return new LiteralText(msg).setStyle(message.getStyle().deepCopy());
         }

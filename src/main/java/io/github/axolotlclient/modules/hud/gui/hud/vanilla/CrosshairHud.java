@@ -52,15 +52,17 @@ import java.util.List;
  */
 
 public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositionable {
+
     public static final Identifier ID = new Identifier("kronhud", "crosshairhud");
 
-    private final EnumOption type = new EnumOption("axolotlclient.crosshair_type", Crosshair.values(), Crosshair.CROSS.toString());
+    private final EnumOption type = new EnumOption("axolotlclient.crosshair_type", Crosshair.values(),
+            Crosshair.CROSS.toString());
     private final BooleanOption showInF5 = new BooleanOption("axolotlclient.showInF5", false);
     private final BooleanOption applyBlend = new BooleanOption("applyBlend", true);
     private final BooleanOption overrideF3 = new BooleanOption("axolotlclient.overrideF3", false);
     private final ColorOption defaultColor = new ColorOption("axolotlclient.defaultcolor", Color.WHITE);
     private final ColorOption entityColor = new ColorOption("axolotlclient.entitycolor", Color.SELECTOR_RED);
-    private final ColorOption containerColor = new ColorOption("axolotlclient.blockcolor",Color.SELECTOR_BLUE);
+    private final ColorOption containerColor = new ColorOption("axolotlclient.blockcolor", Color.SELECTOR_BLUE);
 
     public CrosshairHud() {
         super(15, 15);
@@ -78,15 +80,17 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
 
     @Override
     public void render(float delta) {
-        if (!(client.options.perspective == 0) && !showInF5.get()) return;
+        if (!(client.options.perspective == 0) && !showInF5.get())
+            return;
 
         GlStateManager.enableAlphaTest();
 
         GlStateManager.pushMatrix();
         scale();
         Color color = getColor();
-        GlStateManager.color4f((float) color.getRed() / 255, (float) color.getGreen() / 255, (float) color.getBlue() / 255, 1F);
-        if(color==defaultColor.get() && applyBlend.get()) {
+        GlStateManager.color4f((float) color.getRed() / 255, (float) color.getGreen() / 255,
+                (float) color.getBlue() / 255, 1F);
+        if (color == defaultColor.get() && applyBlend.get()) {
             GlStateManager.enableBlend();
             GlStateManager.blendFuncSeparate(775, 769, 1, 0);
         }
@@ -94,30 +98,24 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
         int x = getPos().x;
         int y = getPos().y + 1;
         if (type.get().equals(Crosshair.DOT.toString())) {
-
             RenderUtil.fillBlend(x + (width / 2) - 1, y + (height / 2) - 2, 3, 3, color);
         } else if (type.get().equals(Crosshair.CROSS.toString())) {
-
             RenderUtil.fillBlend(x + (width / 2) - 5, y + (height / 2) - 1, 6, 1, color);
             RenderUtil.fillBlend(x + (width / 2) + 1, y + (height / 2) - 1, 5, 1, color);
             RenderUtil.fillBlend(x + (width / 2), y + (height / 2) - 6, 1, 5, color);
             RenderUtil.fillBlend(x + (width / 2), y + (height / 2), 1, 5, color);
         } else if (type.get().equals(Crosshair.TEXTURE.toString())) {
-
             MinecraftClient.getInstance().getTextureManager().bindTexture(DrawableHelper.GUI_ICONS_TEXTURE);
 
             // Draw crosshair
             client.inGameHud.drawTexture((int) (((Util.getWindow().getScaledWidth() / getScale()) - 14) / 2),
                     (int) (((Util.getWindow().getScaledHeight() / getScale()) - 14) / 2), 0, 0, 16, 16);
-
-
         }
         GlStateManager.color4f(1, 1, 1, 1);
         GlStateManager.blendFuncSeparate(770, 771, 1, 0);
         GlStateManager.disableBlend();
         GlStateManager.popMatrix();
         GlStateManager.disableAlphaTest();
-
     }
 
     public Color getColor() {
@@ -129,10 +127,10 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
         } else if (hit.type == BlockHitResult.Type.BLOCK) {
             BlockPos blockPos = hit.getBlockPos();
             World world = this.client.world;
-            if (world.getBlockState(blockPos).getBlock() != null &&
-                    (world.getBlockState(blockPos).getBlock() instanceof ChestBlock ||
-                            world.getBlockState(blockPos).getBlock() instanceof EnderChestBlock ||
-                            world.getBlockState(blockPos).getBlock() instanceof HopperBlock)) {
+            if (world.getBlockState(blockPos).getBlock() != null
+                    && (world.getBlockState(blockPos).getBlock() instanceof ChestBlock
+                            || world.getBlockState(blockPos).getBlock() instanceof EnderChestBlock
+                            || world.getBlockState(blockPos).getBlock() instanceof HopperBlock)) {
                 return containerColor.get();
             }
         }
@@ -178,8 +176,6 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
     }
 
     public enum Crosshair {
-        CROSS,
-        DOT,
-        TEXTURE
+        CROSS, DOT, TEXTURE
     }
 }

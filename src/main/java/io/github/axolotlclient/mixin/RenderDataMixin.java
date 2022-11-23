@@ -42,5 +42,4 @@ public abstract class RenderDataMixin {
     private static float freelook$getPitch(PlayerEntity entity) {
         return Freelook.getInstance().pitch(entity.pitch);
     }
-
 }

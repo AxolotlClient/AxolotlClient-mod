@@ -38,14 +38,16 @@ public class ScrollableTooltips extends AbstractModule {
     public int tooltipOffsetX;
     public int tooltipOffsetY;
 
-    protected KeyBinding key = new KeyBinding("axolotlclient.key.scrollHorizontally", Keyboard.KEY_LSHIFT, "axolotlclient.category.axolotlclient");
+    protected KeyBinding key = new KeyBinding("axolotlclient.key.scrollHorizontally", Keyboard.KEY_LSHIFT,
+            "axolotlclient.category.axolotlclient");
 
     private static final ScrollableTooltips instance = new ScrollableTooltips();
 
     private final OptionCategory category = new OptionCategory("axolotlclient.scrollableTooltips");
 
     public final BooleanOption enabled = new BooleanOption("axolotlclient.enabled", false);
-    public final BooleanOption enableShiftHorizontalScroll = new BooleanOption("axolotlclient.shiftHorizontalScroll", true);
+    public final BooleanOption enableShiftHorizontalScroll = new BooleanOption("axolotlclient.shiftHorizontalScroll",
+            true);
     protected final IntegerOption scrollAmount = new IntegerOption("axolotlclient.scrollAmount", 5, 1, 20);
     protected final BooleanOption inverse = new BooleanOption("axolotlclient.inverse", false);
 
@@ -55,7 +57,6 @@ public class ScrollableTooltips extends AbstractModule {
 
     @Override
     public void init() {
-
         category.add(enabled);
         category.add(enableShiftHorizontalScroll);
         category.add(scrollAmount);
@@ -64,57 +65,47 @@ public class ScrollableTooltips extends AbstractModule {
         AxolotlClient.CONFIG.rendering.addSubCategory(category);
 
         KeyBindingHelper.registerKeyBinding(key);
-
     }
 
-    public void onRenderTooltip(){
-        if(enabled.get()) {
-
+    public void onRenderTooltip() {
+        if (enabled.get()) {
             int i = Mouse.getDWheel();
             if (i != 0) {
-
                 if (i < 0) {
                     onScroll(applyInverse(false));
                 }
 
                 if (i > 0) {
-                    onScroll( applyInverse(true));
+                    onScroll(applyInverse(true));
                 }
             }
         }
     }
 
-    protected boolean applyInverse(boolean value){
-        if(inverse.get()){
+    protected boolean applyInverse(boolean value) {
+        if (inverse.get()) {
             return !value;
         }
         return value;
     }
 
-    public void onScroll(boolean reverse){
-
+    public void onScroll(boolean reverse) {
         if ((Screen.hasShiftDown() && key.getCode() == Keyboard.KEY_LSHIFT) || key.isPressed()) {
-            if(reverse){
+            if (reverse) {
                 tooltipOffsetX -= scrollAmount.get();
-
             } else {
                 tooltipOffsetX += scrollAmount.get();
-
             }
-
         } else {
             if (reverse) {
                 tooltipOffsetY -= scrollAmount.get();
-
             } else {
                 tooltipOffsetY += scrollAmount.get();
-
             }
         }
     }
 
-    public void resetScroll(){
+    public void resetScroll() {
         tooltipOffsetY = tooltipOffsetX = 0;
     }
-
 }

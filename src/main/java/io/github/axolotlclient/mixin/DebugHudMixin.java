@@ -33,9 +33,10 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public abstract class DebugHudMixin {
 
     @Redirect(method = "getLeftText", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/ClientBrandRetriever;getClientModName()Ljava/lang/String;"))
-    public String nicerVersionString(){
-        if(FabricLoader.getInstance().getModContainer("axolotlclient").isPresent()) {
-            return ClientBrandRetriever.getClientModName() + "/" + FabricLoader.getInstance().getModContainer("axolotlclient").get().getMetadata().getVersion().getFriendlyString();
+    public String nicerVersionString() {
+        if (FabricLoader.getInstance().getModContainer("axolotlclient").isPresent()) {
+            return ClientBrandRetriever.getClientModName() + "/" + FabricLoader.getInstance()
+                    .getModContainer("axolotlclient").get().getMetadata().getVersion().getFriendlyString();
         }
         return ClientBrandRetriever.getClientModName();
     }
