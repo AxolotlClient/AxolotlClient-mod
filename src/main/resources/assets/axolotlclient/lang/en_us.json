@@ -89,6 +89,8 @@
     "onPVPL": "Active on PVPLand",
     "onMMC": "Active on MineMen.club",
     "autotip": "AutoTip",
+    "hideTipMessages": "Hide Tip Messages",
+    "hideTipMessages.tooltip": "Hides Tip Messages. Currently only works <br>if you have set your hypixel language to english.",
     "nickhider": "NickHider",
     "hiddenNameSelf": "Hide yourself as:",
     "hiddenNameOthers": "Hide others as:",

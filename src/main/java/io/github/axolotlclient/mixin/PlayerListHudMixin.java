@@ -43,11 +43,11 @@ public abstract class PlayerListHudMixin extends DrawableHelper {
     @Inject(method = "getPlayerName", at = @At("HEAD"), cancellable = true)
     public void nickHider(PlayerListEntry playerEntry, CallbackInfoReturnable<String> cir) {
         if (playerEntry.getProfile().getId() == MinecraftClient.getInstance().player.getUuid()
-                && NickHider.Instance.hideOwnName.get()) {
-            cir.setReturnValue(NickHider.Instance.hiddenNameSelf.get());
+                && NickHider.getInstance().hideOwnName.get()) {
+            cir.setReturnValue(NickHider.getInstance().hiddenNameSelf.get());
         } else if (playerEntry.getProfile().getId() != MinecraftClient.getInstance().player.getUuid()
-                && NickHider.Instance.hideOtherNames.get()) {
-            cir.setReturnValue(NickHider.Instance.hiddenNameOthers.get());
+                && NickHider.getInstance().hideOtherNames.get()) {
+            cir.setReturnValue(NickHider.getInstance().hiddenNameOthers.get());
         }
     }
 

@@ -53,10 +53,10 @@ public class HypixelMods extends AbstractModule {
         category.add(cacheMode);
 
         addSubModule(LevelHead.getInstance());
-        addSubModule(AutoGG.Instance);
-        addSubModule(AutoTip.INSTANCE);
-        addSubModule(NickHider.Instance);
-        addSubModule(AutoBoop.Instance);
+        addSubModule(AutoGG.getInstance());
+        addSubModule(AutoTip.getInstance());
+        addSubModule(NickHider.getInstance());
+        addSubModule(AutoBoop.getInstance());
 
         subModules.forEach(AbstractHypixelMod::init);
 

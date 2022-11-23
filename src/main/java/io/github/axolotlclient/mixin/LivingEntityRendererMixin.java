@@ -53,11 +53,11 @@ public abstract class LivingEntityRendererMixin {
     @Redirect(method = "method_10208(Lnet/minecraft/entity/LivingEntity;DDD)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getName()Lnet/minecraft/text/Text;"))
     public Text hideNameWhenSneaking(LivingEntity instance) {
         if (instance instanceof AbstractClientPlayerEntity) {
-            if (NickHider.Instance.hideOwnName.get() && instance.equals(MinecraftClient.getInstance().player)) {
-                return new LiteralText(NickHider.Instance.hiddenNameSelf.get());
-            } else if (NickHider.Instance.hideOtherNames.get()
+            if (NickHider.getInstance().hideOwnName.get() && instance.equals(MinecraftClient.getInstance().player)) {
+                return new LiteralText(NickHider.getInstance().hiddenNameSelf.get());
+            } else if (NickHider.getInstance().hideOtherNames.get()
                     && !instance.equals(MinecraftClient.getInstance().player)) {
-                return new LiteralText(NickHider.Instance.hiddenNameOthers.get());
+                return new LiteralText(NickHider.getInstance().hiddenNameOthers.get());
             }
         }
         return instance.getName();
@@ -65,9 +65,9 @@ public abstract class LivingEntityRendererMixin {
 
     @Inject(method = "method_10208(Lnet/minecraft/entity/LivingEntity;DDD)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Ljava/lang/String;III)I"))
     public void addBadge(LivingEntity livingEntity, double d, double e, double f, CallbackInfo ci) {
-        if (!NickHider.Instance.hideOwnName.get() && livingEntity.equals(MinecraftClient.getInstance().player))
+        if (!NickHider.getInstance().hideOwnName.get() && livingEntity.equals(MinecraftClient.getInstance().player))
             AxolotlClient.addBadge(livingEntity);
-        else if (!NickHider.Instance.hideOtherNames.get() && !livingEntity.equals(MinecraftClient.getInstance().player))
+        else if (!NickHider.getInstance().hideOtherNames.get() && !livingEntity.equals(MinecraftClient.getInstance().player))
             AxolotlClient.addBadge(livingEntity);
     }
 }

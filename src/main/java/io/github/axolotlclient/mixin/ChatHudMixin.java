@@ -25,6 +25,7 @@ package io.github.axolotlclient.mixin;
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hypixel.autoboop.AutoBoop;
 import io.github.axolotlclient.modules.hypixel.autogg.AutoGG;
+import io.github.axolotlclient.modules.hypixel.autotip.AutoTip;
 import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.gui.DrawableHelper;
@@ -48,20 +49,24 @@ public abstract class ChatHudMixin {
     @Final
     private List<ChatHudLine> visibleMessages;
 
-    @Inject(method = "addMessage(Lnet/minecraft/text/Text;IIZ)V", at = @At("HEAD"))
+    @Inject(method = "addMessage(Lnet/minecraft/text/Text;IIZ)V", at = @At("HEAD"), cancellable = true)
     public void autoGG(Text message, int messageId, int timestamp, boolean bl, CallbackInfo ci) {
-        AutoGG.Instance.onMessage(message);
-        AutoBoop.Instance.onMessage(message);
+        AutoGG.getInstance().onMessage(message);
+        AutoBoop.getInstance().onMessage(message);
+
+        if (AutoTip.getInstance().onChatMessage(message)) {
+            ci.cancel();
+        }
     }
 
     @ModifyArg(method = "addMessage(Lnet/minecraft/text/Text;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;addMessage(Lnet/minecraft/text/Text;IIZ)V"))
     public Text editChat(Text message) {
-        return NickHider.Instance.editMessage(message);
+        return NickHider.getInstance().editMessage(message);
     }
 
     @ModifyArg(method = "addMessage(Lnet/minecraft/text/Text;I)V", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;info(Ljava/lang/String;)V"), remap = false)
     public String noNamesInLogIfHidden(String message) {
-        return editChat(new LiteralText(message)).asFormattedString();
+        return editChat(new LiteralText(message)).asUnformattedString();
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;fill(IIIII)V", ordinal = 0))

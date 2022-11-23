@@ -47,11 +47,11 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
         if (AxolotlClient.CONFIG != null) {
             AbstractClientPlayerEntity player = args.get(0);
             if (player.getUuid() == MinecraftClient.getInstance().player.getUuid()
-                    && NickHider.Instance.hideOwnName.get()) {
-                args.set(4, NickHider.Instance.hiddenNameSelf.get());
+                    && NickHider.getInstance().hideOwnName.get()) {
+                args.set(4, NickHider.getInstance().hiddenNameSelf.get());
             } else if (player.getUuid() != MinecraftClient.getInstance().player.getUuid()
-                    && NickHider.Instance.hideOtherNames.get()) {
-                args.set(4, NickHider.Instance.hiddenNameOthers.get());
+                    && NickHider.getInstance().hideOtherNames.get()) {
+                args.set(4, NickHider.getInstance().hiddenNameOthers.get());
             }
         }
     }

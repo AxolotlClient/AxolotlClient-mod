@@ -26,11 +26,13 @@ import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.hypixel.AbstractHypixelMod;
 import io.github.axolotlclient.util.Util;
+import lombok.Getter;
 import net.minecraft.text.Text;
 
 public class AutoBoop implements AbstractHypixelMod {
 
-    public static AutoBoop Instance = new AutoBoop();
+    @Getter
+    private final static AutoBoop Instance = new AutoBoop();
 
     protected OptionCategory cat = new OptionCategory("axolotlclient.autoBoop");
     protected BooleanOption enabled = new BooleanOption("axolotlclient.enabled", "autoBoop", false);

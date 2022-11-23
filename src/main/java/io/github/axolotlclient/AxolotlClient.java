@@ -176,9 +176,9 @@ public class AxolotlClient implements ClientModInitializer {
 
                 int x = -(MinecraftClient.getInstance().textRenderer
                         .getStringWidth(entity.getUuid() == MinecraftClient.getInstance().player.getUuid()
-                                ? (NickHider.Instance.hideOwnName.get() ? NickHider.Instance.hiddenNameSelf.get()
+                                ? (NickHider.getInstance().hideOwnName.get() ? NickHider.getInstance().hiddenNameSelf.get()
                                         : entity.getName().asFormattedString())
-                                : (NickHider.Instance.hideOtherNames.get() ? NickHider.Instance.hiddenNameOthers.get()
+                                : (NickHider.getInstance().hideOtherNames.get() ? NickHider.getInstance().hiddenNameOthers.get()
                                         : entity.getName().asFormattedString()))
                         / 2
                         + (AxolotlClient.CONFIG.customBadge.get() ? MinecraftClient.getInstance().textRenderer
