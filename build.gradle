@@ -3,6 +3,7 @@ plugins {
 	id 'org.quiltmc.loom' version '1.0.+'
 	id "io.freefair.lombok" version "6.5.1"
 	id 'com.modrinth.minotaur' version '2.+'
+	id 'org.quiltmc.gradle.licenser' version '1.+'
 }
 
 archivesBaseName = project.archives_base_name
@@ -84,6 +85,11 @@ jar {
 	from("LICENSE") {
 		rename { "${it}_${archivesBaseName}" }
 	}
+}
+
+license {
+	rule file('HEADER')
+	include '**/*.java'
 }
 
 // Configure the maven publication

@@ -1,69 +1,62 @@
-# Axolotlclient-Mod
+# AxolotlClient-mod (1.19.2)
 
-The mod for Axolotlclient.
+A Complete (nearly) mod to have various features on Quilt, 1.19.2
 
-AxolotlClient is your customizable alternative to popular pvp clients, such as Lunar and Badlion.
+*Also available in other Languages: [Türkçe](doc/README-tr.md)*
 
-Our goal is to create a better environment for everyone, including you, the user.
+### Features
 
-You should be in charge to decide what mods you want to use, and what data is sent to other people's servers (The only thing we use is your public UUID). This is only achievable through making everything open-source (You probably know what this means as you're currently using an open-source platform).
+- an implementation of Custom Skies
+- Zoom key
+- various Hud modules (port of [KronHUD](https://github.com/DarkKronicle/KronHUD))
+    - including, but not limited to:
+        - Chat
+        - Scoreboard
+        - CPS
+        - FPS
+        - Ping
+        - Bossbar
+        - Coordinates
+        - and others!
+- Hypixel Mods
+    - AutoGG / GF / GLHF
+    - LevelHead
+    - AutoTip
+- Custom Block Outlines
+- Discord RPC
+- Badges for players using the mod
+- and more!
 
-With AxolotlClient you are deciding what to use and what not. Every aspect of the mod is toggleable in over 200 options.
-Features
+### Downloads
 
-    Custom Skies (all formats)
-    Discord RPC
-    Player Badges
-    HUD modules
-        Ping
-        FPS
-        CPS
-        Keystrokes
-        Speed
-        Scoreboard
-        and others...
-    Hypixel mods
-        LevelHead
-        AutoGG
-        AutoTip
-        AutoBoop
-        NickHider
-    Zoom
-    Time Changer
-    Custom Block Outlines
-    Motion Blur
-    Fullbright
+[![modrinth](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@2/assets/cozy/available/modrinth_64h.png)](https://modrinth.com/mod/axolotlclient)
+[![github](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@2/assets/cozy/available/github_64h.png)](https://github.com/AxolotlClient/AxolotlClient-mod)
 
-Even better: Since we rely on existing mod loaders, you are able to add your own mods as well, even when using our custom launcher.
+### Contributing
 
-A little overview of options is available in the Gallery
-
-For more information take a look at our Website or visit our discord server.
-Dependencies
-
-Before downloading, please also download the respective API package for your version:
-
-    1.8.9 requires Legacy Fabric API
-    1.16 (TBD) requires Fabric API
-    1.19+ requires QSL
-
-Disclaimers
-
-I do not endorse nor support cheats/hacks. If you feel like one or more options packaged by this mod could be regarded as one of the above, please let us know and we'll remove the said options.
-
-A pvp client in the context used above are launcher + game modifications combinations widely used on popular servers such as Hypixel and others. This is not meant in the context of cheats and/or hacks.
-
-This mod is part of a larger package, which is available in our launcher (and soon also modpack). Since some people wished for it separately, it is also released here. All the other mods available and/or downloaded are respective property of their authors. We do not intend to infringe any copyright. If you are the author of a mod used by us and wish for it to be removed, please let us know.
-
-To connect with things said above, the only thing that gets sent to our server is your public Minecraft account UUID. It will not be stored longer than one game session (from when you connect to a server/start a lan server to when you close the game). If you wish for your data to be deleted if it, for any instance has gotten to lure around the server longer, please also let us know and we will follow your request as soon as possible.
-Credits
-
-Credit to these wonderful people who create open-source mods.
-
-DarkKronicle, the creator of KronHUD on which the hud modules in this mod are based.
-
-AMereBagatelle, the author of the wonderful FabricSkyBoxes mod.
+- feel free to join the discord to discuss new features
+- if you have a feature or a new/updated translation, feel free to open a pull request.
+- note your changes in CHANGELOG.md to be added to the next version's changelog.
 
 ### Licensing
-This mod (and all of its branches) is licensed under the LGPL 3 (or later). This means you need to give credit to the authors of the code you use in your own project.
-I also want you to modify this code in a fork of this repository (and make it public), or ask for permission first to have it in a different repo.
+
+- This mod is licensed under the LGPL-3.0 License.
+```
+AxolotlClient-mod
+Copyright (C) 2021-present moehreag + Contributors
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation; either
+version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with this program; if not, write to the Free Software Foundation,
+Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+```
+- For more information see the [LICENSE](LICENSE) file.

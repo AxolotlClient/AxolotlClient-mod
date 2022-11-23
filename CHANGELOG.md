@@ -52,3 +52,8 @@
 
 - fix a critical crash that could totally have been avoided 
 
+### 2.2.5
+
+- update README, add license headers in files, add missing credits
+- add turkish translation of the README
+
