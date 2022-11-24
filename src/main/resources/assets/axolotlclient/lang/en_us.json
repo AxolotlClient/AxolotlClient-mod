@@ -273,6 +273,7 @@
     "majorindicator": "Indicator Color (Major)",
     "minorindicator": "Indicator Color (Minor)",
     "dynamicrotation": "Dynamic Rotation",
+	"autoHide": "Auto-hide",
     "rotation": "Rotation",
 
     "rpc": "Discord RPC",
