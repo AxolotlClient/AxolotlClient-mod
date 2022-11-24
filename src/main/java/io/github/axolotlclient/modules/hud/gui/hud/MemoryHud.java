@@ -53,81 +53,59 @@ public class MemoryHud extends TextHudEntry {
 
     @Override
     public void renderComponent(MatrixStack matrices, float delta) {
-
         DrawPosition pos = getPos();
 
-        if(showGraph.get()){
-            graph.setData(pos.x + 5, pos.y + 5, getBounds().width- 10, getBounds().height - 10);
+        if (showGraph.get()) {
+            graph.setData(pos.x + 5, pos.y + 5, getBounds().width - 10, getBounds().height - 10);
 
-            fill(matrices, graph.x, graph.y,
-                    (int) (graph.x + graph.width * (getUsage())),
-                    graph.y + graph.height,
+            fill(matrices, graph.x, graph.y, (int) (graph.x + graph.width * (getUsage())), graph.y + graph.height,
                     graphUsedColor.get().getAsInt());
-            fill(matrices, (int) (graph.x + graph.width * (getUsage())),
-                    graph.y, graph.x + graph.width,
-                    graph.y + graph.height,
-                    graphFreeColor.get().getAsInt());
+            fill(matrices, (int) (graph.x + graph.width * (getUsage())), graph.y, graph.x + graph.width,
+                    graph.y + graph.height, graphFreeColor.get().getAsInt());
 
             outlineRect(matrices, graph, Color.BLACK);
         }
 
-        if(showText.get()) {
-            drawString(matrices, getMemoryLine(),
-                    pos.x,
+        if (showText.get()) {
+            drawString(matrices, getMemoryLine(), pos.x,
                     pos.y + (Math.round((float) height / 2) - 4) - (showAllocated.get() ? 4 : 0),
-                    textColor.get().getAsInt(),
-                    shadow.get()
-            );
+                    textColor.get().getAsInt(), shadow.get());
 
             if (showAllocated.get()) {
-                drawString(matrices, getAllocationLine(),
-                        pos.x,
-                        pos.y + (Math.round((float) height / 2) - 4) + 4,
-                        textColor.get().getAsInt(),
-                        shadow.get()
-                );
+                drawString(matrices, getAllocationLine(), pos.x, pos.y + (Math.round((float) height / 2) - 4) + 4,
+                        textColor.get().getAsInt(), shadow.get());
             }
         }
     }
 
     @Override
     public void renderPlaceholderComponent(MatrixStack matrices, float delta) {
-
         DrawPosition pos = getPos();
 
-        if(showGraph.get()){
-            graph.setData(pos.x + 5, pos.y + 5, getBounds().width- 10, getBounds().height - 10);
+        if (showGraph.get()) {
+            graph.setData(pos.x + 5, pos.y + 5, getBounds().width - 10, getBounds().height - 10);
 
-            fill(matrices, graph.x, graph.y,
-                    (int) (graph.x + graph.width * (0.3)),
-                    graph.y + graph.height,
+            fill(matrices, graph.x, graph.y, (int) (graph.x + graph.width * (0.3)), graph.y + graph.height,
                     graphUsedColor.get().getAsInt());
-            fill(matrices, (int) (graph.x + graph.width * (0.3)),
-                    graph.y, graph.x + graph.width,
-                    graph.y + graph.height,
-                    graphFreeColor.get().getAsInt());
+            fill(matrices, (int) (graph.x + graph.width * (0.3)), graph.y, graph.x + graph.width,
+                    graph.y + graph.height, graphFreeColor.get().getAsInt());
 
             outlineRect(matrices, graph, Color.BLACK);
         }
 
-        if(showText.get()) {
-            drawString(matrices, "300MiB/1024MiB",
-                    pos.x,
-                    pos.y + (Math.round((float) height / 2) - 4) - (showAllocated.get() ? 4 : 0),
-                    Color.WHITE, shadow.get());
+        if (showText.get()) {
+            drawString(matrices, "300MiB/1024MiB", pos.x,
+                    pos.y + (Math.round((float) height / 2) - 4) - (showAllocated.get() ? 4 : 0), Color.WHITE,
+                    shadow.get());
             if (showAllocated.get()) {
-                drawString(matrices, I18n.translate("allocated")+": 976MiB",
-                        pos.x,
-                        pos.y + (Math.round((float) height / 2) - 4) + 4,
-                        textColor.get(),
-                        shadow.get());
+                drawString(matrices, I18n.translate("allocated") + ": 976MiB", pos.x,
+                        pos.y + (Math.round((float) height / 2) - 4) + 4, textColor.get(), shadow.get());
             }
         }
 
-        if(!showGraph.get() && !showText.get()){
-            drawString(matrices, I18n.translate(ID.getPath()),
-                    pos.x,
-                    pos.y + (Math.round((float) height / 2) - 4), Color.WHITE, shadow.get());
+        if (!showGraph.get() && !showText.get()) {
+            drawString(matrices, I18n.translate(ID.getPath()), pos.x, pos.y + (Math.round((float) height / 2) - 4),
+                    Color.WHITE, shadow.get());
         }
     }
 
@@ -137,16 +115,16 @@ public class MemoryHud extends TextHudEntry {
         long free = Runtime.getRuntime().freeMemory();
         long used = total - free;
 
-        return toMiB(used)+"/"+toMiB(max) + " ("+((int) (getUsage() * 100))+"%)";
+        return toMiB(used) + "/" + toMiB(max) + " (" + ((int) (getUsage() * 100)) + "%)";
     }
 
-    private String getAllocationLine(){
+    private String getAllocationLine() {
         long total = Runtime.getRuntime().totalMemory();
 
-        return I18n.translate("allocated")+": "+toMiB(total);
+        return I18n.translate("allocated") + ": " + toMiB(total);
     }
 
-    private float getUsage(){
+    private float getUsage() {
         long max = Runtime.getRuntime().maxMemory();
         long total = Runtime.getRuntime().totalMemory();
         long free = Runtime.getRuntime().freeMemory();
@@ -176,6 +154,6 @@ public class MemoryHud extends TextHudEntry {
     }
 
     private static String toMiB(long bytes) {
-        return (bytes / 1024L / 1024L)+"MiB";
+        return (bytes / 1024L / 1024L) + "MiB";
     }
 }

@@ -38,8 +38,9 @@ import java.util.Objects;
 public abstract class MultiplayerScreenMixin {
 
     @Inject(method = "init", at = @At("HEAD"))
-    public void freePlayerData(CallbackInfo ci){
-        if(Objects.equals(HypixelMods.getInstance().cacheMode.get(), HypixelMods.HypixelCacheMode.ON_CLIENT_DISCONNECT.toString())){
+    public void freePlayerData(CallbackInfo ci) {
+        if (Objects.equals(HypixelMods.getInstance().cacheMode.get(),
+                HypixelMods.HypixelCacheMode.ON_CLIENT_DISCONNECT.toString())) {
             HypixelAbstractionLayer.clearPlayerData();
         }
         FeatureDisabler.clear();

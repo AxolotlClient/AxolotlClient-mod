@@ -69,5 +69,4 @@ public interface DynamicallyPositionable extends Positionable {
     default int offsetHeight() {
         return getAnchor().offsetHeight(getHeight());
     }
-
 }

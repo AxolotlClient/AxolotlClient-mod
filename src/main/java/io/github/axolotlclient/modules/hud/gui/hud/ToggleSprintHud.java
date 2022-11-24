@@ -56,8 +56,10 @@ public class ToggleSprintHud extends SimpleTextHudEntry {
     private final BooleanOption randomPlaceholder = new BooleanOption("randomPlaceholder", ID.getPath(), false);
     private final StringOption placeholder = new StringOption("placeholder", ID.getPath(), "No keys pressed");
 
-    private final KeyBind sprintToggle = new KeyBind("keys.kronhud.toggleSprint", GLFW.GLFW_KEY_K, "keys.category.kronhud.keys");
-    private final KeyBind sneakToggle = new KeyBind("keys.kronhud.toggleSneak", GLFW.GLFW_KEY_I, "keys.category.kronhud.keys");
+    private final KeyBind sprintToggle = new KeyBind("keys.kronhud.toggleSprint", GLFW.GLFW_KEY_K,
+            "keys.category.kronhud.keys");
+    private final KeyBind sneakToggle = new KeyBind("keys.kronhud.toggleSneak", GLFW.GLFW_KEY_I,
+            "keys.category.kronhud.keys");
 
     @Getter
     private final BooleanOption sprintToggled = new BooleanOption("sprintToggled", ID.getPath(), false);
@@ -82,11 +84,10 @@ public class ToggleSprintHud extends SimpleTextHudEntry {
     private void loadRandomPlaceholder() {
         try {
             BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(MinecraftClient.getInstance()
-                                                         .getResourceManager()
-                                                         .getResourceOrThrow(new Identifier("texts/splashes.txt"))
-                                                         .open(), StandardCharsets.UTF_8)
-            );
+                    new InputStreamReader(
+                            MinecraftClient.getInstance().getResourceManager()
+                                    .getResourceOrThrow(new Identifier("texts/splashes.txt")).open(),
+                            StandardCharsets.UTF_8));
             String string;
             while ((string = bufferedReader.readLine()) != null) {
                 string = string.trim();
@@ -125,7 +126,6 @@ public class ToggleSprintHud extends SimpleTextHudEntry {
 
     @Override
     public String getValue() {
-
         if (client.options.sneakKey.isPressed()) {
             return I18n.translate("texts.kronhud.togglesprint.sneaking_pressed");
         }
@@ -180,5 +180,4 @@ public class ToggleSprintHud extends SimpleTextHudEntry {
         options.add(sneakToggled);
         return options;
     }
-
 }

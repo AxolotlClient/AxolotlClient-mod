@@ -55,5 +55,4 @@ public abstract class TextHudEntry extends BoxHudEntry {
         options.add(shadow);
         return options;
     }
-
 }

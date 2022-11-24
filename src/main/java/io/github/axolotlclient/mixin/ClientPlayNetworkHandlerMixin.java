@@ -38,8 +38,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class ClientPlayNetworkHandlerMixin {
 
     @Inject(method = "onGameJoin", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;setYaw(F)V"))
-    public void onGameJoin(GameJoinS2CPacket packet, CallbackInfo ci){
-        if(AxolotlClient.CONFIG.showBadges.get()) {
+    public void onGameJoin(GameJoinS2CPacket packet, CallbackInfo ci) {
+        if (AxolotlClient.CONFIG.showBadges.get()) {
             NetworkHelper.setOnline();
         }
     }
@@ -49,5 +49,4 @@ public abstract class ClientPlayNetworkHandlerMixin {
         TPSHud tpsHud = (TPSHud) HudManager.getInstance().get(TPSHud.ID);
         tpsHud.updateTime(packet.getTime());
     }
-
 }

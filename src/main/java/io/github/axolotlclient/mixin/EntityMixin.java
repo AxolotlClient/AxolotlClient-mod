@@ -37,17 +37,16 @@ public abstract class EntityMixin {
 
     @Inject(method = "changeLookDirection", at = @At("HEAD"), cancellable = true)
     public void interceptMovement(double cursorDeltaX, double cursorDeltaY, CallbackInfo callback) {
-        if(Freelook.getInstance().consumeRotation(cursorDeltaX, cursorDeltaY)) {
+        if (Freelook.getInstance().consumeRotation(cursorDeltaX, cursorDeltaY)) {
             callback.cancel();
         }
     }
 
-
-
     @Shadow
     public abstract float getPitch();
 
-    @Shadow public abstract float getYaw();
+    @Shadow
+    public abstract float getYaw();
 
     @Inject(method = "changeLookDirection", at = @At("HEAD"))
     private void updateLookDirection(double mouseDeltaX, double mouseDeltaY, CallbackInfo ci) {
@@ -63,4 +62,3 @@ public abstract class EntityMixin {
         Hooks.PLAYER_DIRECTION_CHANGE.invoker().onChange(prevPitch, prevYaw, pitch, yaw);
     }
 }
-

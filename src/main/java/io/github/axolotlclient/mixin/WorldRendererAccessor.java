@@ -32,5 +32,4 @@ public interface WorldRendererAccessor {
 
     @Accessor
     VertexBuffer getStarsBuffer();
-
 }

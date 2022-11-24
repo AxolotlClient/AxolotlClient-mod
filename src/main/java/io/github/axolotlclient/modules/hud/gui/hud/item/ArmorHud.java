@@ -79,7 +79,8 @@ public class ArmorHud extends TextHudEntry {
 
     public void renderItem(MatrixStack matrices, ItemStack stack, int x, int y) {
         ItemUtil.renderGuiItemModel(getScale(), stack, x, y);
-        ItemUtil.renderGuiItemOverlay(matrices, client.textRenderer, stack, x, y, null, textColor.get().getAsInt(), shadow.get());
+        ItemUtil.renderGuiItemOverlay(matrices, client.textRenderer, stack, x, y, null, textColor.get().getAsInt(),
+                shadow.get());
     }
 
     public void renderMainItem(MatrixStack matrices, ItemStack stack, int x, int y) {
@@ -88,16 +89,13 @@ public class ArmorHud extends TextHudEntry {
         if (total.equals("1")) {
             total = null;
         }
-        ItemUtil.renderGuiItemOverlay(matrices, client.textRenderer, stack, x, y, total, textColor.get().getAsInt(), shadow.get());
+        ItemUtil.renderGuiItemOverlay(matrices, client.textRenderer, stack, x, y, total, textColor.get().getAsInt(),
+                shadow.get());
     }
 
-    private final ItemStack[] placeholderStacks = new ItemStack[]{
-            new ItemStack(Items.IRON_BOOTS),
-            new ItemStack(Items.IRON_LEGGINGS),
-            new ItemStack(Items.IRON_CHESTPLATE),
-            new ItemStack(Items.IRON_HELMET),
-            new ItemStack(Items.IRON_SWORD)
-    };
+    private final ItemStack[] placeholderStacks = new ItemStack[] { new ItemStack(Items.IRON_BOOTS),
+            new ItemStack(Items.IRON_LEGGINGS), new ItemStack(Items.IRON_CHESTPLATE), new ItemStack(Items.IRON_HELMET),
+            new ItemStack(Items.IRON_SWORD) };
 
     @Override
     public void renderPlaceholderComponent(MatrixStack matrices, float delta) {
@@ -128,5 +126,4 @@ public class ArmorHud extends TextHudEntry {
         options.add(showProtLvl);
         return options;
     }
-
 }

@@ -58,5 +58,4 @@ public interface Identifiable {
     default String getName() {
         return I18n.translate(getNameKey());
     }
-
 }

@@ -32,7 +32,7 @@ public class OSUtil {
     private static OperatingSystem OS;
 
     public static OperatingSystem getOS() {
-        if(OS==null) {
+        if (OS == null) {
             String s = System.getProperty("os.name");
 
             for (OperatingSystem o : OperatingSystem.values()) {
@@ -50,14 +50,12 @@ public class OSUtil {
     }
 
     public enum OperatingSystem {
-        WINDOWS("win"),
-        LINUX("nix", "nux", "aix"),
-        MAC("mac"),
-        OTHER();
+
+        WINDOWS("win"), LINUX("nix", "nux", "aix"), MAC("mac"), OTHER();
 
         final String[] s;
 
-        public String[] getStrings(){
+        public String[] getStrings() {
             return s;
         }
 
@@ -65,7 +63,7 @@ public class OSUtil {
             this.s = detection;
         }
 
-        public void open(URI uri){
+        public void open(URI uri) {
             Util.getOperatingSystem().open(uri);
         }
     }

@@ -50,46 +50,43 @@ public class SkyResourceManager extends AbstractModule implements SimpleSynchron
 
     private final static SkyResourceManager Instance = new SkyResourceManager();
 
-    public static SkyResourceManager getInstance(){
+    public static SkyResourceManager getInstance() {
         return Instance;
     }
 
-    private static JsonObject loadMCPSky(String loader, Identifier id, Resource resource){
+    private static JsonObject loadMCPSky(String loader, Identifier id, Resource resource) {
         JsonObject object = new JsonObject();
         String line;
 
         try (BufferedReader reader = resource.openBufferedReader()) {
-
-            while ((line = reader.readLine()) != null){
-
-                if(!line.startsWith("#")) {
+            while ((line = reader.readLine()) != null) {
+                if (!line.startsWith("#")) {
                     String[] option = line.split("=");
 
                     if (option[0].equals("source")) {
-                        if(option[1].startsWith("assets")){
+                        if (option[1].startsWith("assets")) {
                             option[1] = option[1].replace("./", "").replace("assets/minecraft/", "");
                         } else {
-                            if(id.getPath().contains("world")) {
-                                option[1] = loader + "/sky/world" + id.getPath().split("world")[1].split("/")[0] + "/" + option[1].replace("./", "");
+                            if (id.getPath().contains("world")) {
+                                option[1] = loader + "/sky/world" + id.getPath().split("world")[1].split("/")[0] + "/"
+                                        + option[1].replace("./", "");
                             }
                         }
                     }
-                    if (option[0].equals("startFadeIn") || option[0].equals("endFadeIn") || option[0].equals("startFadeOut") || option[0].equals("endFadeOut")) {
+                    if (option[0].equals("startFadeIn") || option[0].equals("endFadeIn")
+                            || option[0].equals("startFadeOut") || option[0].equals("endFadeOut")) {
                         option[1] = option[1].replace(":", "").replace("\\", "");
                     }
 
                     object.addProperty(option[0], option[1]);
                 }
             }
-
-        } catch (Exception ignored){
-        }
+        } catch (Exception ignored) {}
         return object;
     }
 
     @Override
     public void init() {
-
     }
 
     @Override
@@ -102,26 +99,31 @@ public class SkyResourceManager extends AbstractModule implements SimpleSynchron
         Logger.debug("Loading Custom Skies!");
         SkyboxManager.getInstance().clearSkyboxes();
 
-        for(Map.Entry<Identifier, Resource> entry: manager.findResources("sky", identifier -> identifier.getPath().endsWith(".json")).entrySet()){
+        for (Map.Entry<Identifier, Resource> entry : manager
+                .findResources("sky", identifier -> identifier.getPath().endsWith(".json")).entrySet()) {
             Logger.debug("Loading FSB sky from " + entry.getKey());
             try (BufferedReader reader = entry.getValue().openBufferedReader()) {
-                SkyboxManager.getInstance().addSkybox(new FSBSkyboxInstance(gson.fromJson(reader.lines().collect(Collectors.joining("\n")),
-                        JsonObject.class)));
+                SkyboxManager.getInstance().addSkybox(new FSBSkyboxInstance(
+                        gson.fromJson(reader.lines().collect(Collectors.joining("\n")), JsonObject.class)));
                 Logger.debug("Loaded FSB sky from " + entry.getKey());
-            } catch (IOException ignored) {
-            }
+            } catch (IOException ignored) {}
         }
 
-        for(Map.Entry<Identifier, Resource> entry: manager.findResources("mcpatcher/sky", identifier -> identifier.getPath().endsWith(".properties")).entrySet()){
+        for (Map.Entry<Identifier, Resource> entry : manager
+                .findResources("mcpatcher/sky", identifier -> identifier.getPath().endsWith(".properties"))
+                .entrySet()) {
             Logger.debug("Loading MCP sky from " + entry.getKey());
-            SkyboxManager.getInstance().addSkybox(new MCPSkyboxInstance(loadMCPSky("mcpatcher", entry.getKey(), entry.getValue())));
-            Logger.debug("Loaded MCP sky from "+entry.getKey());
+            SkyboxManager.getInstance()
+                    .addSkybox(new MCPSkyboxInstance(loadMCPSky("mcpatcher", entry.getKey(), entry.getValue())));
+            Logger.debug("Loaded MCP sky from " + entry.getKey());
         }
 
-        for(Map.Entry<Identifier, Resource> entry: manager.findResources("optifine/sky", identifier -> identifier.getPath().endsWith(".properties")).entrySet()){
+        for (Map.Entry<Identifier, Resource> entry : manager
+                .findResources("optifine/sky", identifier -> identifier.getPath().endsWith(".properties")).entrySet()) {
             Logger.debug("Loading OF sky from " + entry.getKey());
-            SkyboxManager.getInstance().addSkybox(new MCPSkyboxInstance(loadMCPSky("optifine", entry.getKey(), entry.getValue())));
-            Logger.debug("Loaded OF sky from "+entry.getKey());
+            SkyboxManager.getInstance()
+                    .addSkybox(new MCPSkyboxInstance(loadMCPSky("optifine", entry.getKey(), entry.getValue())));
+            Logger.debug("Loaded OF sky from " + entry.getKey());
         }
 
         Logger.debug("Finished Loading Custom Skies!");

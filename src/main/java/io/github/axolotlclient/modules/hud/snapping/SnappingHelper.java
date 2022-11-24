@@ -41,6 +41,7 @@ import java.util.Optional;
  */
 
 public class SnappingHelper {
+
     private final int distance = 4;
     private final HashSet<Integer> x = new HashSet<>();
     private final HashSet<Integer> y = new HashSet<>();
@@ -80,21 +81,17 @@ public class SnappingHelper {
     public void renderSnaps(MatrixStack matrices) {
         Integer curx, cury;
         if ((curx = getRawXSnap()) != null) {
-            DrawUtil.fillRect(matrices, new Rectangle(curx, 0, 1, window.getScaledHeight()),
-                    LINE_COLOR);
+            DrawUtil.fillRect(matrices, new Rectangle(curx, 0, 1, window.getScaledHeight()), LINE_COLOR);
         }
         if ((cury = getRawYSnap()) != null) {
-            DrawUtil.fillRect(matrices, new Rectangle(0, cury, window.getScaledWidth(), 1),
-                    LINE_COLOR);
+            DrawUtil.fillRect(matrices, new Rectangle(0, cury, window.getScaledWidth(), 1), LINE_COLOR);
         }
         //renderAll();
-
     }
 
     public void renderAll(MatrixStack matrices) {
         for (Integer xval : x) {
-            DrawUtil.fillRect(matrices, new Rectangle(xval, 0, 1, window.getScaledHeight()),
-                    Color.WHITE);
+            DrawUtil.fillRect(matrices, new Rectangle(xval, 0, 1, window.getScaledHeight()), Color.WHITE);
         }
         for (Integer yval : y) {
             DrawUtil.fillRect(matrices, new Rectangle(0, yval, window.getScaledWidth(), 1), Color.WHITE);

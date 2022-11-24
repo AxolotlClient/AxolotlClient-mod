@@ -34,10 +34,8 @@ import net.minecraft.text.Text;
 
 @AllArgsConstructor
 public enum Justification {
-    LEFT,
-    CENTER,
-    RIGHT
-    ;
+
+    LEFT, CENTER, RIGHT;
 
     public int getXOffset(Text text, int width) {
         if (this == LEFT) {

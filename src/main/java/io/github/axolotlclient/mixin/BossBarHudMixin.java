@@ -33,11 +33,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(net.minecraft.client.gui.hud.BossBarHud.class)
 public abstract class BossBarHudMixin {
 
-	@Inject(method = "render", at = @At("HEAD"), cancellable = true)
-	public void render(MatrixStack matrices, CallbackInfo ci) {
-		BossBarHud hud = (BossBarHud) HudManager.getInstance().get(BossBarHud.ID);
-		if (hud != null && hud.isEnabled()) {
-			ci.cancel();
-		}
-	}
+    @Inject(method = "render", at = @At("HEAD"), cancellable = true)
+    public void render(MatrixStack matrices, CallbackInfo ci) {
+        BossBarHud hud = (BossBarHud) HudManager.getInstance().get(BossBarHud.ID);
+        if (hud != null && hud.isEnabled()) {
+            ci.cancel();
+        }
+    }
 }

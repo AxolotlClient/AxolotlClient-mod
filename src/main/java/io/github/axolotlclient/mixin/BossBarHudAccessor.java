@@ -33,6 +33,6 @@ import java.util.UUID;
 @Mixin(BossBarHud.class)
 public interface BossBarHudAccessor {
 
-    @Accessor Map<UUID, ClientBossBar> getBossBars();
-
+    @Accessor
+    Map<UUID, ClientBossBar> getBossBars();
 }

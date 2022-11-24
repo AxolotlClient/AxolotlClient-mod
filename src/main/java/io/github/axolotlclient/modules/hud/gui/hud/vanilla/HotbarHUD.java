@@ -51,7 +51,9 @@ public class HotbarHUD extends AbstractHudEntry {
 
     @Override
     public void render(MatrixStack matrices, float delta) {
-        PlayerEntity playerEntity = MinecraftClient.getInstance().cameraEntity instanceof PlayerEntity ? (PlayerEntity) MinecraftClient.getInstance().cameraEntity : null;
+        PlayerEntity playerEntity = MinecraftClient.getInstance().cameraEntity instanceof PlayerEntity
+                ? (PlayerEntity) MinecraftClient.getInstance().cameraEntity
+                : null;
         if (playerEntity != null) {
             //scale(matrices);
             DrawPosition pos = getPos();
@@ -64,12 +66,13 @@ public class HotbarHUD extends AbstractHudEntry {
             int j = this.getZOffset();
             this.setZOffset(-90);
             this.drawTexture(matrices, pos.x, pos.y, 0, 0, 182, 22);
-            this.drawTexture(matrices, pos.x - 1 + playerEntity.getInventory().selectedSlot * 20, pos.y - 1, 0, 22, 24, 22);
+            this.drawTexture(matrices, pos.x - 1 + playerEntity.getInventory().selectedSlot * 20, pos.y - 1, 0, 22, 24,
+                    22);
             if (!itemStack.isEmpty()) {
                 if (arm == Arm.LEFT) {
-                    this.drawTexture(matrices, pos.x - 29, pos.y-1, 24, 22, 29, 24);
+                    this.drawTexture(matrices, pos.x - 29, pos.y - 1, 24, 22, 29, 24);
                 } else {
-                    this.drawTexture(matrices, pos.x + width, pos.y-1, 53, 22, 29, 24);
+                    this.drawTexture(matrices, pos.x + width, pos.y - 1, 53, 22, 29, 24);
                 }
             }
 
@@ -77,24 +80,25 @@ public class HotbarHUD extends AbstractHudEntry {
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
 
-            for(int n = 0; n < 9; ++n) {
+            for (int n = 0; n < 9; ++n) {
                 int k = pos.x + n * 20 + 3;
-                int l = pos.y+3;
-                MinecraftClient.getInstance().getItemRenderer().renderGuiItemIcon(playerEntity.getInventory().main.get(n), k, l);
+                int l = pos.y + 3;
+                MinecraftClient.getInstance().getItemRenderer()
+                        .renderGuiItemIcon(playerEntity.getInventory().main.get(n), k, l);
                 ItemUtil.renderGuiItemModel(getScale(), playerEntity.getInventory().main.get(n), k, l);
-                ItemUtil.renderGuiItemOverlay(matrices, client.textRenderer, playerEntity.getInventory().main.get(n), k, l, null, -1,
-                    true);
+                ItemUtil.renderGuiItemOverlay(matrices, client.textRenderer, playerEntity.getInventory().main.get(n), k,
+                        l, null, -1, true);
             }
 
             if (!itemStack.isEmpty()) {
                 if (arm == Arm.LEFT) {
                     ItemUtil.renderGuiItemModel(getScale(), itemStack, pos.x - 26, pos.y + 3);
-                    ItemUtil.renderGuiItemOverlay(matrices, client.textRenderer, itemStack, pos.x - 26, pos.y + 3, null, -1,
-                        true);
+                    ItemUtil.renderGuiItemOverlay(matrices, client.textRenderer, itemStack, pos.x - 26, pos.y + 3, null,
+                            -1, true);
                 } else {
                     ItemUtil.renderGuiItemModel(getScale(), itemStack, pos.x + width + 10, pos.y + 3);
-                    ItemUtil.renderGuiItemOverlay(matrices, client.textRenderer, itemStack, pos.x + width + 10, pos.y + 3, null, -1,
-                        true);
+                    ItemUtil.renderGuiItemOverlay(matrices, client.textRenderer, itemStack, pos.x + width + 10,
+                            pos.y + 3, null, -1, true);
                 }
             }
 
@@ -108,7 +112,7 @@ public class HotbarHUD extends AbstractHudEntry {
                     }
 
                     RenderSystem.setShaderTexture(0, DrawableHelper.GUI_ICONS_TEXTURE);
-                    int q = (int)(f * 19.0F);
+                    int q = (int) (f * 19.0F);
                     RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
                     this.drawTexture(matrices, p, o, 0, 94, 18, 18);
                     this.drawTexture(matrices, p, o + 18 - q, 18, 112 - q, 18, q);
@@ -126,7 +130,8 @@ public class HotbarHUD extends AbstractHudEntry {
         scale(matrices);
         DrawPosition pos = getPos();
 
-        drawCenteredString(matrices, MinecraftClient.getInstance().textRenderer, getName(), pos.x+width/2, pos.y+height/2-4, -1, true);
+        drawCenteredString(matrices, MinecraftClient.getInstance().textRenderer, getName(), pos.x + width / 2,
+                pos.y + height / 2 - 4, -1, true);
 
         matrices.pop();
         hovered = false;

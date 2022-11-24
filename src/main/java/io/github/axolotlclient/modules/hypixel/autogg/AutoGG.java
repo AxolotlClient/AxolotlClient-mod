@@ -39,7 +39,6 @@ import java.util.List;
  * @license MPL-2.0
  */
 
-
 public class AutoGG implements AbstractHypixelMod {
 
     @Getter
@@ -83,11 +82,11 @@ public class AutoGG implements AbstractHypixelMod {
         populateHypixelGGStrings();
         populateHypixelGFStrings();
         populateHypixelGLHFStrings();
-        
+
         populateBedwarsPracticeGGStrings();
         populateBedwarsPracticeGFStrings();
         populateBedwarsPracticeGLHFStrings();
-        
+
         populatePvpLandGGStrings();
         populatePvpLandGFStrings();
 
@@ -105,7 +104,6 @@ public class AutoGG implements AbstractHypixelMod {
         category.add(onBWP);
         category.add(onPVPL);
         category.add(onMMC);
-
     }
 
     @Override
@@ -117,7 +115,7 @@ public class AutoGG implements AbstractHypixelMod {
         if (System.currentTimeMillis() - this.lastTime > 3000) {
             for (String s : options) {
                 if (messageReceived.getString().contains(s)) {
-	                Util.sendChatMessage(messageToSend);
+                    Util.sendChatMessage(messageToSend);
                     this.lastTime = System.currentTimeMillis();
                     return;
                 }
@@ -146,15 +144,15 @@ public class AutoGG implements AbstractHypixelMod {
         hypixelGGStrings.add("Most Wool Placed -");
         hypixelGGStrings.add("Your Overall Winstreak:");
     }
+
     private void populateHypixelGFStrings() {
         hypixelGFStrings.add("SkyWars Experience (Kill)");
         hypixelGFStrings.add("coins! (Final Kill)");
     }
+
     private void populateHypixelGLHFStrings() {
         hypixelGLHFStrings.add("The game starts in 1 second!");
     }
-
-
 
     private void populateBedwarsPracticeGGStrings() {
         bedwarsPracticeGGStrings.add("Winners -");
@@ -172,8 +170,6 @@ public class AutoGG implements AbstractHypixelMod {
         bedwarsPracticeGLHFStrings.add("Game has started!");
     }
 
-
-    
     private void populatePvpLandGGStrings() {
         pvpLandGGStrings.add("The match has ended!");
         pvpLandGGStrings.add("Match Results");
@@ -184,8 +180,6 @@ public class AutoGG implements AbstractHypixelMod {
     private void populatePvpLandGFStrings() {
         pvpLandGFStrings.add("slain by " + client.getSession().getUsername());
     }
-
-
 
     private void populateMinemenGGStrings() {
         minemenGGStrings.add("Match Results");
@@ -200,7 +194,7 @@ public class AutoGG implements AbstractHypixelMod {
     }
 
     public void onMessage(Text message) {
-        if(client.getCurrentServerEntry() != null) {
+        if (client.getCurrentServerEntry() != null) {
             if (onHypixel.get() && client.getCurrentServerEntry().address.contains("hypixel")) {
                 if (gf.get()) {
                     processChat(message, hypixelGFStrings, gfString.get());
@@ -233,18 +227,20 @@ public class AutoGG implements AbstractHypixelMod {
                 }
             } else if (onMMC.get() && client.getCurrentServerEntry().address.contains("minemen.club")) {
                 if (gf.get()) {
-                    if (minemenGFStrings.size() == 0) populateMinemenGFStrings();
+                    if (minemenGFStrings.size() == 0)
+                        populateMinemenGFStrings();
                     processChat(message, minemenGFStrings, "gf");
                 }
                 if (gg.get()) {
-                    if (minemenGGStrings.size() == 0) populateMinemenGGStrings();
+                    if (minemenGGStrings.size() == 0)
+                        populateMinemenGGStrings();
                     processChat(message, minemenGGStrings, "gg");
                 }
                 if (glhf.get()) {
-                    if (minemenGLHFStrings.size() == 0) populateMinemenGLHFStrings();
+                    if (minemenGLHFStrings.size() == 0)
+                        populateMinemenGLHFStrings();
                     processChat(message, minemenGLHFStrings, "glhf");
                 }
-
             }
         }
     }

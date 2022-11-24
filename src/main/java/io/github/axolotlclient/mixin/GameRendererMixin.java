@@ -44,30 +44,32 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class GameRendererMixin {
 
     @Final
-    @Shadow private MinecraftClient client;
+    @Shadow
+    private MinecraftClient client;
 
     @Inject(method = "getFov", at = @At(value = "RETURN", ordinal = 1), cancellable = true)
-    public void setZoom(Camera camera, float tickDelta, boolean changingFov, CallbackInfoReturnable<Double> cir){
-	    Zoom.update();
-	    double returnValue = cir.getReturnValue();
+    public void setZoom(Camera camera, float tickDelta, boolean changingFov, CallbackInfoReturnable<Double> cir) {
+        Zoom.update();
+        double returnValue = cir.getReturnValue();
 
-		if(!AxolotlClient.CONFIG.dynamicFOV.get()) {
+        if (!AxolotlClient.CONFIG.dynamicFOV.get()) {
             Entity entity = this.client.getCameraEntity();
-            double f = changingFov ? client.options.getFov().get() :70F;
-            if (entity instanceof LivingEntity && ((LivingEntity)entity).getHealth() <= 0.0F) {
-                float g = (float)((LivingEntity)entity).deathTime + tickDelta;
+            double f = changingFov ? client.options.getFov().get() : 70F;
+            if (entity instanceof LivingEntity && ((LivingEntity) entity).getHealth() <= 0.0F) {
+                float g = (float) ((LivingEntity) entity).deathTime + tickDelta;
                 f /= (1.0F - 500.0F / (g + 500.0F)) * 2.0F + 1.0F;
             }
 
-	        CameraSubmersionType cameraSubmersionType = camera.getSubmersionType();
-	        if (cameraSubmersionType == CameraSubmersionType.LAVA || cameraSubmersionType == CameraSubmersionType.WATER) {
-		        f *= MathHelper.lerp(this.client.options.getFovEffectScale().get(), 1.0, 0.85714287F);
-	        }
+            CameraSubmersionType cameraSubmersionType = camera.getSubmersionType();
+            if (cameraSubmersionType == CameraSubmersionType.LAVA
+                    || cameraSubmersionType == CameraSubmersionType.WATER) {
+                f *= MathHelper.lerp(this.client.options.getFovEffectScale().get(), 1.0, 0.85714287F);
+            }
             returnValue = f;
         }
-	    returnValue = Zoom.getFov(returnValue, tickDelta);
+        returnValue = Zoom.getFov(returnValue, tickDelta);
 
-	    cir.setReturnValue(returnValue);
+        cir.setReturnValue(returnValue);
     }
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getFramebuffer()Lcom/mojang/blaze3d/framebuffer/Framebuffer;"))
@@ -76,14 +78,14 @@ public abstract class GameRendererMixin {
     }
 
     @Inject(method = "render", at = @At("TAIL"))
-    public void motionBlur(float tickDelta, long startTime, boolean tick, CallbackInfo ci){
-        if(ci != null && !MotionBlur.getInstance().inGuis.get()) {
+    public void motionBlur(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
+        if (ci != null && !MotionBlur.getInstance().inGuis.get()) {
             return;
         }
 
         this.client.getProfiler().push("Motion Blur");
 
-        if(MotionBlur.getInstance().enabled.get()) {
+        if (MotionBlur.getInstance().enabled.get()) {
             MotionBlur blur = MotionBlur.getInstance();
             blur.onUpdate();
             blur.shader.render(tickDelta);

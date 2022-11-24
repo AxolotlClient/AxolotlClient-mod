@@ -50,7 +50,6 @@ import java.util.stream.Collectors;
  * @license GPL-3.0
  */
 
-
 public class HudManager extends AbstractModule {
 
     private final OptionCategory hudCategory = new OptionCategory("hud", false);
@@ -71,8 +70,7 @@ public class HudManager extends AbstractModule {
 
     static KeyBind key = new KeyBind("key.openHud", InputUtil.KEY_RIGHT_SHIFT_CODE, "category.axolotlclient");
 
-    public void init(){
-
+    public void init() {
         KeyBindingHelper.registerKeyBinding(key);
 
         AxolotlClient.CONFIG.addCategory(hudCategory);
@@ -116,9 +114,11 @@ public class HudManager extends AbstractModule {
         }
     }
 
-    public void tick(){
-        if(key.isPressed()) MinecraftClient.getInstance().setScreen(new HudEditScreen());
-        entries.values().stream().filter(hudEntry -> hudEntry.isEnabled() && hudEntry.tickable()).forEach(HudEntry::tick);
+    public void tick() {
+        if (key.isPressed())
+            MinecraftClient.getInstance().setScreen(new HudEditScreen());
+        entries.values().stream().filter(hudEntry -> hudEntry.isEnabled() && hudEntry.tickable())
+                .forEach(HudEntry::tick);
     }
 
     public HudManager add(AbstractHudEntry entry) {
@@ -136,7 +136,8 @@ public class HudManager extends AbstractModule {
 
     public List<HudEntry> getMoveableEntries() {
         if (entries.size() > 0) {
-            return entries.values().stream().filter((entry) -> entry.isEnabled() && entry.movable()).collect(Collectors.toList());
+            return entries.values().stream().filter((entry) -> entry.isEnabled() && entry.movable())
+                    .collect(Collectors.toList());
         }
         return new ArrayList<>();
     }
@@ -162,7 +163,8 @@ public class HudManager extends AbstractModule {
     public Optional<HudEntry> getEntryXY(int x, int y) {
         for (HudEntry entry : getMoveableEntries()) {
             Rectangle bounds = entry.getTrueBounds();
-            if (bounds.x() <= x && bounds.x() + bounds.width() >= x && bounds.y() <= y && bounds.y() + bounds.height() >= y) {
+            if (bounds.x() <= x && bounds.x() + bounds.width() >= x && bounds.y() <= y
+                    && bounds.y() + bounds.height() >= y) {
                 return Optional.of(entry);
             }
         }

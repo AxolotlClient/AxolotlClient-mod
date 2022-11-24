@@ -36,16 +36,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(HandledScreen.class)
 public abstract class HandledScreenMixin {
 
-    @Shadow @Nullable protected Slot focusedSlot;
+    @Shadow
+    @Nullable
+    protected Slot focusedSlot;
     private Slot cachedSlot;
 
     @Inject(method = "drawMouseoverTooltip", at = @At("HEAD"))
-    public void resetScrollOnChange(MatrixStack matrices, int x, int y, CallbackInfo ci){
-        if(ScrollableTooltips.getInstance().enabled.get() && cachedSlot != focusedSlot){
+    public void resetScrollOnChange(MatrixStack matrices, int x, int y, CallbackInfo ci) {
+        if (ScrollableTooltips.getInstance().enabled.get() && cachedSlot != focusedSlot) {
             cachedSlot = focusedSlot;
             ScrollableTooltips.getInstance().resetScroll();
         }
-
     }
-
 }

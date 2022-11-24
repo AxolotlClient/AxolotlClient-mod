@@ -54,7 +54,7 @@ public class Freelook extends AbstractModule {
 
     private Perspective previousPerspective;
 
-    public static Freelook getInstance(){
+    public static Freelook getInstance() {
         return Instance;
     }
 
@@ -67,10 +67,10 @@ public class Freelook extends AbstractModule {
 
     @Override
     public void tick() {
+        if (!enabled.get())
+            return;
 
-        if(!enabled.get()) return;
-
-        if(toggle.get()){
+        if (toggle.get()) {
             if (KEY.wasPressed()) {
                 if (active) {
                     stop();
@@ -97,8 +97,10 @@ public class Freelook extends AbstractModule {
 
         Entity camera = client.getCameraEntity();
 
-        if(camera == null) camera = client.player;
-        if(camera == null) return;
+        if (camera == null)
+            camera = client.player;
+        if (camera == null)
+            return;
 
         yaw = camera.getYaw();
         pitch = camera.getPitch();
@@ -111,19 +113,22 @@ public class Freelook extends AbstractModule {
     }
 
     public boolean consumeRotation(double dx, double dy) {
-        if(!active || !enabled.get()) return false;
+        if (!active || !enabled.get())
+            return false;
 
-        if(!invert.get()) dy = -dy;
+        if (!invert.get())
+            dy = -dy;
 
-        if(MinecraftClient.getInstance().options.getPerspective().isFrontView()||
-            MinecraftClient.getInstance().options.getPerspective().isFirstPerson()) dy*=-1;
+        if (MinecraftClient.getInstance().options.getPerspective().isFrontView()
+                || MinecraftClient.getInstance().options.getPerspective().isFirstPerson())
+            dy *= -1;
 
         yaw += dx * 0.15F;
         pitch += dy * 0.15F;
 
-        if(pitch > 90) {
+        if (pitch > 90) {
             pitch = 90;
-        } else if(pitch < -90) {
+        } else if (pitch < -90) {
             pitch = -90;
         }
 
@@ -132,18 +137,20 @@ public class Freelook extends AbstractModule {
     }
 
     public float yaw(float defaultValue) {
-        if(!active || !enabled.get()) return defaultValue;
+        if (!active || !enabled.get())
+            return defaultValue;
 
         return yaw;
     }
 
     public float pitch(float defaultValue) {
-        if(!active || !enabled.get()) return defaultValue;
+        if (!active || !enabled.get())
+            return defaultValue;
 
         return pitch;
     }
 
-    private void setPerspective(Perspective perspective){
+    private void setPerspective(Perspective perspective) {
         MinecraftClient.getInstance().options.setPerspective(perspective);
     }
 }

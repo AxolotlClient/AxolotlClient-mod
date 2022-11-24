@@ -59,7 +59,8 @@ public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
     @Setter
     @Getter
     protected int width;
-    @Setter @Getter
+    @Setter
+    @Getter
     protected int height;
 
     @Setter
@@ -95,9 +96,7 @@ public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
     }
 
     public void setX(int x) {
-        this.x.set((double) intToFloat(x, client.getWindow().getScaledWidth(),
-                0
-        ));
+        this.x.set((double) intToFloat(x, client.getWindow().getScaledWidth(), 0));
     }
 
     public int getRawY() {
@@ -105,9 +104,7 @@ public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
     }
 
     public void setY(int y) {
-        this.y.set((double) intToFloat(y, client.getWindow().getScaledHeight(),
-                0
-        ));
+        this.y.set((double) intToFloat(y, client.getWindow().getScaledHeight(), 0));
     }
 
     public Rectangle getTrueBounds() {
@@ -195,11 +192,13 @@ public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
             scaledY = 0;
         }
         int trueWidth = (int) (getWidth() * getScale());
-        if (trueWidth < client.getWindow().getScaledWidth() && scaledX + trueWidth > client.getWindow().getScaledWidth()) {
+        if (trueWidth < client.getWindow().getScaledWidth()
+                && scaledX + trueWidth > client.getWindow().getScaledWidth()) {
             scaledX = client.getWindow().getScaledWidth() - trueWidth;
         }
         int trueHeight = (int) (getHeight() * getScale());
-        if (trueHeight < client.getWindow().getScaledHeight() && scaledY + trueHeight > client.getWindow().getScaledHeight()) {
+        if (trueHeight < client.getWindow().getScaledHeight()
+                && scaledY + trueHeight > client.getWindow().getScaledHeight()) {
             scaledY = client.getWindow().getScaledHeight() - trueHeight;
         }
         truePosition.x = scaledX;
@@ -235,11 +234,12 @@ public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
         return options;
     }
 
-    public OptionCategory getOptionsAsCategory(){
+    public OptionCategory getOptionsAsCategory() {
         OptionCategory cat = new OptionCategory(getNameKey(), false);
         cat.add(getConfigurationOptions());
         return cat;
     }
+
     public OptionCategory getAllOptions() {
         List<Option<?>> options = getSaveOptions();
         OptionCategory cat = new OptionCategory(getNameKey());
@@ -256,5 +256,4 @@ public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
     public void setEnabled(boolean value) {
         enabled.set(value);
     }
-
 }
