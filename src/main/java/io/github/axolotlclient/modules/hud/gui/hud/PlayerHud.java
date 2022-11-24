@@ -30,9 +30,14 @@ import io.github.axolotlclient.AxolotlclientConfig.options.Option;
 import io.github.axolotlclient.modules.hud.gui.entry.BoxHudEntry;
 import io.github.axolotlclient.util.Hooks;
 import lombok.Getter;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
+import net.minecraft.entity.player.ClientPlayerEntity;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.List;
 
@@ -48,11 +53,14 @@ public class PlayerHud extends BoxHudEntry {
 
     private final DoubleOption rotation = new DoubleOption("axolotlclient.rotation", 0, 0, 360);
     private final BooleanOption dynamicRotation = new BooleanOption("axolotlclient.dynamicrotation", true);
+    private final BooleanOption autoHide = new BooleanOption("axolotlclient.autoHide", false);
 
     private float lastYawOffset = 0;
     private float yawOffset = 0;
     private float lastYOffset = 0;
     private float yOffset = 0;
+
+    private long hide;
 
     @Getter
     private static boolean currentlyRendering = false;
@@ -64,17 +72,29 @@ public class PlayerHud extends BoxHudEntry {
 
     @Override
     public void renderComponent(float delta) {
-        renderPlayer(getTruePos().x() + 31 * getScale(), getTruePos().y() + 86 * getScale(), delta);
+        renderPlayer(false, getTruePos().x() + 31 * getScale(), getTruePos().y() + 86 * getScale(), delta);
     }
 
     @Override
     public void renderPlaceholderComponent(float delta) {
-        renderPlayer(getTruePos().x() + 31 * getScale(), getTruePos().y() + 86 * getScale(), 0); // If delta was delta, it would start jittering
+        renderPlayer(true, getTruePos().x() + 31 * getScale(), getTruePos().y() + 86 * getScale(), 0); // If delta was delta, it would start jittering
     }
 
-    public void renderPlayer(double x, double y, float delta) {
+    public void renderPlayer(boolean placeholder, double x, double y, float delta) {
         if (client.player == null) {
             return;
+        }
+
+        if (!placeholder && autoHide.get()) {
+            if (isPerformingAction()) {
+                hide = -1;
+            } else if (hide == -1) {
+                hide = System.currentTimeMillis();
+            }
+    
+            if (hide != -1 && System.currentTimeMillis() - hide > 500) {
+                return;
+            }
         }
 
         float lerpY = (lastYOffset + ((yOffset - lastYOffset) * delta));
@@ -138,6 +158,14 @@ public class PlayerHud extends BoxHudEntry {
         //DiffuseLighting.setup3DGuiLighting();
     }
 
+    private boolean isPerformingAction() {
+        // inspired by tr7zw's mod
+        ClientPlayerEntity player = client.player;
+        return player.isSneaking() || player.isSprinting() || player.abilities.flying
+                || client.player.isSubmergedIn(Material.WATER) || player.hasVehicle() || player.isUsingItem()
+                || player.handSwinging || player.hurtTime > 0 || player.isOnFire();
+    }
+
     public void onPlayerDirectionChange(float prevPitch, float prevYaw, float pitch, float yaw) {
         yawOffset += (yaw - prevYaw) / 2;
     }
@@ -170,6 +198,7 @@ public class PlayerHud extends BoxHudEntry {
         List<Option<?>> options = super.getConfigurationOptions();
         options.add(dynamicRotation);
         options.add(rotation);
+        options.add(autoHide);
         return options;
     }
 }
