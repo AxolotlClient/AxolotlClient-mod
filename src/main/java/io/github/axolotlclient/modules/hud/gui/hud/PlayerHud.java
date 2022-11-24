@@ -86,14 +86,16 @@ public class PlayerHud extends BoxHudEntry {
             return;
         }
 
-        if (isPerformingAction()) {
-            hide = -1;
-        } else if (hide == -1) {
-            hide = System.currentTimeMillis();
-        }
-
-        if (!placeholder && autoHide.get() && hide != -1 && System.currentTimeMillis() - hide > 500) {
-            return;
+        if (!placeholder && autoHide.get()) {
+            if (isPerformingAction()) {
+                hide = -1;
+            } else if (hide == -1) {
+                hide = System.currentTimeMillis();
+            }
+    
+            if (hide != -1 && System.currentTimeMillis() - hide > 500) {
+                return;
+            }
         }
 
         float lerpY = (lastYOffset + ((yOffset - lastYOffset) * delta));
