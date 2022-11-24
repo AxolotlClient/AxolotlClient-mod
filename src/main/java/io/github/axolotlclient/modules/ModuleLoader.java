@@ -34,22 +34,27 @@ import java.util.stream.Collectors;
 
 public class ModuleLoader {
 
-    public static List<AbstractModule> loadExternalModules(){
+    public static List<AbstractModule> loadExternalModules() {
         ArrayList<AbstractModule> modules = new ArrayList<>();
         QuiltLoader.getEntrypointContainers("axolotlclient.module", AbstractModule.class).forEach(entrypoint -> {
             try {
                 AbstractModule module = entrypoint.getEntrypoint();
-                if(module != null) {
+                if (module != null) {
                     modules.add(module);
                     String modName = entrypoint.getProvider().metadata().name();
                     ModMetadata data = entrypoint.getProvider().metadata();
                     List<String> authorsNContributors = new ArrayList<>();
 
-                    List<String> authors = data.contributors().stream().filter(contributor -> contributor.roles().contains("Author") || contributor.roles().contains("Owner")).map(ModContributor::name).collect(Collectors.toList());
+                    List<String> authors = data.contributors().stream()
+                            .filter(contributor -> contributor.roles().contains("Author")
+                                    || contributor.roles().contains("Owner"))
+                            .map(ModContributor::name).collect(Collectors.toList());
 
-                    List<String> contributors = data.contributors().stream().map(ModContributor::name).filter(name -> !authors.contains(name)).toList();
+                    List<String> contributors = data.contributors().stream().map(ModContributor::name)
+                            .filter(name -> !authors.contains(name)).toList();
                     if (authors.isEmpty()) {
-                        data.contributors().stream().findFirst().ifPresent(modContributor -> authors.add(modContributor.name()));
+                        data.contributors().stream().findFirst()
+                                .ifPresent(modContributor -> authors.add(modContributor.name()));
                     }
                     authorsNContributors.add("Author(s):");
                     authorsNContributors.addAll(authors);
@@ -59,8 +64,8 @@ public class ModuleLoader {
                     authorsNContributors.addAll(contributors);
                     CreditsScreen.externalModuleCredits.put(modName, authorsNContributors.toArray(new String[0]));
                 }
-            } catch (Exception e){
-                Logger.warn("Skipping module: "+entrypoint.getProvider().metadata().name() + " because of error:");
+            } catch (Exception e) {
+                Logger.warn("Skipping module: " + entrypoint.getProvider().metadata().name() + " because of error:");
                 e.printStackTrace();
             }
         });

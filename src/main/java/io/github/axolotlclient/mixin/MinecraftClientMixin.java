@@ -42,35 +42,33 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(MinecraftClient.class)
 public abstract class MinecraftClientMixin {
 
-	/**
-	 * @author meohreag
-	 * @reason Customize Window title for use in AxolotlClient
-	 */
-	@Inject(method = "getWindowTitle", at = @At("HEAD"), cancellable = true)
-	private void getWindowTitle(CallbackInfoReturnable<String> cir) {
+    /**
+     * @author meohreag
+     * @reason Customize Window title for use in AxolotlClient
+     */
+    @Inject(method = "getWindowTitle", at = @At("HEAD"), cancellable = true)
+    private void getWindowTitle(CallbackInfoReturnable<String> cir) {
+        cir.setReturnValue("AxolotlClient" + " " + SharedConstants.getGameVersion().getName());
+    }
 
-		cir.setReturnValue("AxolotlClient" + " " +SharedConstants.getGameVersion().getName());
-	}
+    @Redirect(method = "<init>", at = @At(value = "FIELD", target = "Lnet/minecraft/client/RunArgs$Game;version:Ljava/lang/String;"))
+    private String redirectVersion(RunArgs.Game game) {
+        ResourceLoader.get(ResourceType.CLIENT_RESOURCES).registerReloader(SkyResourceManager.getInstance());
+        return SharedConstants.getGameVersion().getName();
+    }
 
-	@Redirect(
-		method = "<init>", at = @At(value = "FIELD", target = "Lnet/minecraft/client/RunArgs$Game;version:Ljava/lang/String;"))
-	private String redirectVersion(RunArgs.Game game) {
-		ResourceLoader.get(ResourceType.CLIENT_RESOURCES).registerReloader(SkyResourceManager.getInstance());
-		return SharedConstants.getGameVersion().getName();
-	}
-
-	@Inject(method = "getVersionType", at = @At("HEAD"), cancellable = true)
-    public void noVersionType(CallbackInfoReturnable<String> cir){
-        if(QuiltLoader.getModContainer("axolotlclient").isPresent()) {
+    @Inject(method = "getVersionType", at = @At("HEAD"), cancellable = true)
+    public void noVersionType(CallbackInfoReturnable<String> cir) {
+        if (QuiltLoader.getModContainer("axolotlclient").isPresent()) {
             cir.setReturnValue(QuiltLoader.getModContainer("axolotlclient").get().metadata().version().raw());
         }
     }
 
-	@Inject(method = "stop", at = @At("HEAD"))
-	public void stop(CallbackInfo ci){
-		if(AxolotlClient.CONFIG.showBadges.get()) {
-			NetworkHelper.setOffline();
-		}
-		DiscordRPC.shutdown();
-	}
+    @Inject(method = "stop", at = @At("HEAD"))
+    public void stop(CallbackInfo ci) {
+        if (AxolotlClient.CONFIG.showBadges.get()) {
+            NetworkHelper.setOffline();
+        }
+        DiscordRPC.shutdown();
+    }
 }

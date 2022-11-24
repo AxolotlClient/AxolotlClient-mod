@@ -59,7 +59,7 @@ public class MotionBlur extends AbstractModule {
 
     private int lastHeight;
 
-    public static MotionBlur getInstance(){
+    public static MotionBlur getInstance() {
         return Instance;
     }
 
@@ -72,29 +72,28 @@ public class MotionBlur extends AbstractModule {
     }
 
     public void onUpdate() {
-        if( (shader == null ||
-	        MinecraftClient.getInstance().getWindow().getWidth()!=lastWidth ||
-            MinecraftClient.getInstance().getWindow().getHeight()!=lastHeight ) &&
-            MinecraftClient.getInstance().getWindow().getWidth() > 0 &&
-            MinecraftClient.getInstance().getWindow().getHeight() > 0) {
-            currentBlur=getBlur();
+        if ((shader == null || MinecraftClient.getInstance().getWindow().getWidth() != lastWidth
+                || MinecraftClient.getInstance().getWindow().getHeight() != lastHeight)
+                && MinecraftClient.getInstance().getWindow().getWidth() > 0
+                && MinecraftClient.getInstance().getWindow().getHeight() > 0) {
+            currentBlur = getBlur();
             try {
-                shader = new ShaderEffect(client.getTextureManager(),
-                        client.getResourceManager(), client.getFramebuffer(),
-                        shaderLocation);
-                shader.setupDimensions(MinecraftClient.getInstance().getWindow().getWidth(), MinecraftClient.getInstance().getWindow().getHeight());
+                shader = new ShaderEffect(client.getTextureManager(), client.getResourceManager(),
+                        client.getFramebuffer(), shaderLocation);
+                shader.setupDimensions(MinecraftClient.getInstance().getWindow().getWidth(),
+                        MinecraftClient.getInstance().getWindow().getHeight());
             } catch (JsonSyntaxException | IOException e) {
                 Logger.error("Could not load motion blur", e);
             }
         }
-        if(currentBlur!=getBlur() && shader != null){
-            ((ShaderEffectAccessor)shader).getPasses().forEach(shader -> {
+        if (currentBlur != getBlur() && shader != null) {
+            ((ShaderEffectAccessor) shader).getPasses().forEach(shader -> {
                 GlUniform blendFactor = shader.getProgram().getUniformByName("BlendFactor");
-                if(blendFactor!=null){
+                if (blendFactor != null) {
                     blendFactor.setFloat(getBlur());
                 }
             });
-            currentBlur=getBlur();
+            currentBlur = getBlur();
         }
 
         lastWidth = MinecraftClient.getInstance().getWindow().getWidth();
@@ -102,49 +101,25 @@ public class MotionBlur extends AbstractModule {
     }
 
     private static float getBlur() {
-        return MotionBlur.getInstance().strength.get()/100F;
+        return MotionBlur.getInstance().strength.get() / 100F;
     }
 
     public class MotionBlurShader extends Resource {
 
-	    public MotionBlurShader() {
-		    super("", ()-> IOUtils.toInputStream(String.format("{" +
-			    "    \"targets\": [" +
-			    "        \"swap\"," +
-			    "        \"previous\"" +
-			    "    ]," +
-			    "    \"passes\": [" +
-			    "        {" +
-			    "            \"name\": \"motion_blur\"," +
-			    "            \"intarget\": \"minecraft:main\"," +
-			    "            \"outtarget\": \"swap\"," +
-			    "            \"auxtargets\": [" +
-			    "                {" +
-			    "                    \"name\": \"PrevSampler\"," +
-			    "                    \"id\": \"previous\"" +
-			    "                }" +
-			    "            ]," +
-			    "            \"uniforms\": [" +
-			    "                {" +
-			    "                    \"name\": \"BlendFactor\"," +
-			    "                    \"values\": [ %s ]" +
-			    "                }" +
-			    "            ]" +
-			    "        }," +
-			    "        {" +
-			    "            \"name\": \"blit\"," +
-			    "            \"intarget\": \"swap\"," +
-			    "            \"outtarget\": \"previous\"" +
-			    "        }," +
-			    "        {" +
-			    "            \"name\": \"blit\"," +
-			    "            \"intarget\": \"swap\"," +
-			    "            \"outtarget\": \"minecraft:main\"" +
-			    "        }" +
-			    "    ]" +
-			    "}", getBlur()) , "utf-8"));
-	    }
+        public MotionBlurShader() {
+            super("", () -> IOUtils.toInputStream(String.format("{" + "    \"targets\": [" + "        \"swap\","
+                    + "        \"previous\"" + "    ]," + "    \"passes\": [" + "        {"
+                    + "            \"name\": \"motion_blur\"," + "            \"intarget\": \"minecraft:main\","
+                    + "            \"outtarget\": \"swap\"," + "            \"auxtargets\": [" + "                {"
+                    + "                    \"name\": \"PrevSampler\"," + "                    \"id\": \"previous\""
+                    + "                }" + "            ]," + "            \"uniforms\": [" + "                {"
+                    + "                    \"name\": \"BlendFactor\"," + "                    \"values\": [ %s ]"
+                    + "                }" + "            ]" + "        }," + "        {"
+                    + "            \"name\": \"blit\"," + "            \"intarget\": \"swap\","
+                    + "            \"outtarget\": \"previous\"" + "        }," + "        {"
+                    + "            \"name\": \"blit\"," + "            \"intarget\": \"swap\","
+                    + "            \"outtarget\": \"minecraft:main\"" + "        }" + "    ]" + "}", getBlur()),
+                    "utf-8"));
+        }
     }
-
-
 }

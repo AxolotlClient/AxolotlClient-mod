@@ -118,39 +118,40 @@ public class RenderUtil {
         fill(matrix.peek().getModel(), x1, y1, x2, y2, color);
     }
 
-    public void fillBlend(MatrixStack matrices, Rectangle rect, Color color){
+    public void fillBlend(MatrixStack matrices, Rectangle rect, Color color) {
         fillBlend(matrices, rect.x, rect.y, rect.width, rect.height, color);
     }
 
-    public void fillBlend(MatrixStack matrices, int x, int y, int width, int height, Color color){
-        fillBlend(matrices.peek().getModel(), x, y, x+width, y+height, color.getAsInt());
+    public void fillBlend(MatrixStack matrices, int x, int y, int width, int height, Color color) {
+        fillBlend(matrices.peek().getModel(), x, y, x + width, y + height, color.getAsInt());
     }
 
-    public void fillBlend(Matrix4f matrix, int x1, int y1, int x2, int y2, int color){
-        float alpha = (float)(color >> 24 & 0xFF) / 255.0F;
-        float red = (float)(color >> 16 & 0xFF) / 255.0F;
-        float green = (float)(color >> 8 & 0xFF) / 255.0F;
-        float blue = (float)(color & 0xFF) / 255.0F;
+    public void fillBlend(Matrix4f matrix, int x1, int y1, int x2, int y2, int color) {
+        float alpha = (float) (color >> 24 & 0xFF) / 255.0F;
+        float red = (float) (color >> 16 & 0xFF) / 255.0F;
+        float green = (float) (color >> 8 & 0xFF) / 255.0F;
+        float blue = (float) (color & 0xFF) / 255.0F;
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBufferBuilder();
         RenderSystem.disableTexture();
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-        bufferBuilder.vertex(matrix, (float)x1, (float)y2, 0.0F).color(red, green, blue, alpha).next();
-        bufferBuilder.vertex(matrix, (float)x2, (float)y2, 0.0F).color(red, green, blue, alpha).next();
-        bufferBuilder.vertex(matrix, (float)x2, (float)y1, 0.0F).color(red, green, blue, alpha).next();
-        bufferBuilder.vertex(matrix, (float)x1, (float)y1, 0.0F).color(red, green, blue, alpha).next();
+        bufferBuilder.vertex(matrix, (float) x1, (float) y2, 0.0F).color(red, green, blue, alpha).next();
+        bufferBuilder.vertex(matrix, (float) x2, (float) y2, 0.0F).color(red, green, blue, alpha).next();
+        bufferBuilder.vertex(matrix, (float) x2, (float) y1, 0.0F).color(red, green, blue, alpha).next();
+        bufferBuilder.vertex(matrix, (float) x1, (float) y1, 0.0F).color(red, green, blue, alpha).next();
         BufferRenderer.drawWithShader(bufferBuilder.end());
         RenderSystem.enableTexture();
     }
 
     public void fill(Matrix4f matrix, int x1, int y1, int x2, int y2, Color color) {
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBufferBuilder();
-        RenderSystem.setShaderColor(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f);
+        RenderSystem.setShaderColor(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f,
+                color.getAlpha() / 255f);
         int colorInt = colorPreRender(color);
-        float a = (float)(colorInt >> 24 & 0xFF) / 255.0f;
-        float r = (float)(colorInt >> 16 & 0xFF) / 255.0f;
-        float g = (float)(colorInt >> 8 & 0xFF) / 255.0f;
-        float b = (float)(colorInt & 0xFF) / 255.0f;
+        float a = (float) (colorInt >> 24 & 0xFF) / 255.0f;
+        float r = (float) (colorInt >> 16 & 0xFF) / 255.0f;
+        float g = (float) (colorInt >> 8 & 0xFF) / 255.0f;
+        float b = (float) (colorInt & 0xFF) / 255.0f;
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
         bufferBuilder.vertex(matrix, x1, y2, 0.0f).color(r, g, b, a).next();
         bufferBuilder.vertex(matrix, x2, y2, 0.0f).color(r, g, b, a).next();
@@ -160,7 +161,8 @@ public class RenderUtil {
         colorPostRender(color);
     }
 
-    public void fill(Matrix4f matrix, int x1, int y1, int x2, int y2, int color, Supplier<ShaderProgram> shaderSupplier) {
+    public void fill(Matrix4f matrix, int x1, int y1, int x2, int y2, int color,
+            Supplier<ShaderProgram> shaderSupplier) {
         int i;
         if (x1 < x2) {
             i = x1;
@@ -172,10 +174,10 @@ public class RenderUtil {
             y1 = y2;
             y2 = i;
         }
-        float a = (float)(color >> 24 & 0xFF) / 255.0f;
-        float r = (float)(color >> 16 & 0xFF) / 255.0f;
-        float g = (float)(color >> 8 & 0xFF) / 255.0f;
-        float b = (float)(color & 0xFF) / 255.0f;
+        float a = (float) (color >> 24 & 0xFF) / 255.0f;
+        float r = (float) (color >> 16 & 0xFF) / 255.0f;
+        float g = (float) (color >> 8 & 0xFF) / 255.0f;
+        float b = (float) (color & 0xFF) / 255.0f;
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBufferBuilder();
         RenderSystem.enableBlend();
         RenderSystem.disableTexture();
@@ -191,8 +193,9 @@ public class RenderUtil {
         RenderSystem.disableBlend();
     }
 
-    public int colorPreRender(Color color){
-        RenderSystem.setShaderColor(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f);
+    public int colorPreRender(Color color) {
+        RenderSystem.setShaderColor(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f,
+                color.getAlpha() / 255f);
         RenderSystem.enableBlend();
         RenderSystem.disableTexture();
         RenderSystem.defaultBlendFunc();
@@ -200,7 +203,7 @@ public class RenderUtil {
         return color.getAsInt();
     }
 
-    public void colorPostRender(Color color){
+    public void colorPostRender(Color color) {
         RenderSystem.enableTexture();
         RenderSystem.disableBlend();
     }

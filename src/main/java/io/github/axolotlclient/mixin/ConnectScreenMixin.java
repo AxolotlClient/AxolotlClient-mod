@@ -35,7 +35,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class ConnectScreenMixin {
 
     @Inject(method = "connect(Lnet/minecraft/client/MinecraftClient;Lnet/minecraft/client/network/ServerAddress;)V", at = @At("HEAD"))
-    private void onServerJoin(MinecraftClient client, ServerAddress address, CallbackInfo ci){
+    private void onServerJoin(MinecraftClient client, ServerAddress address, CallbackInfo ci) {
         FeatureDisabler.onServerJoin(address.getAddress());
     }
 }

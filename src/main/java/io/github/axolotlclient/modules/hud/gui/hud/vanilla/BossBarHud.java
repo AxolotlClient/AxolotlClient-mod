@@ -56,9 +56,11 @@ public class BossBarHud extends TextHudEntry implements DynamicallyPositionable 
 
     public static final Identifier ID = new Identifier("kronhud", "bossbarhud");
     private static final Identifier BARS_TEXTURE = new Identifier("textures/gui/bars.png");
-    private final BossBar placeholder = new CustomBossBar(Text.literal("Boss bar"), BossBar.Color.WHITE, BossBar.Style.PROGRESS);
+    private final BossBar placeholder = new CustomBossBar(Text.literal("Boss bar"), BossBar.Color.WHITE,
+            BossBar.Style.PROGRESS);
     private final BossBar placeholder2 = Util.make(() -> {
-        BossBar boss = new CustomBossBar(Text.literal("More boss bars..."), BossBar.Color.PURPLE, BossBar.Style.PROGRESS);
+        BossBar boss = new CustomBossBar(Text.literal("More boss bars..."), BossBar.Color.PURPLE,
+                BossBar.Style.PROGRESS);
         boss.setPercent(0.45F);
         return boss;
     });
@@ -77,7 +79,7 @@ public class BossBarHud extends TextHudEntry implements DynamicallyPositionable 
         int prevLength = bossBars.size();
         bossBars = ((BossBarHudAccessor) client.inGameHud.getBossBarHud()).getBossBars();
         if (bossBars != null && bossBars.size() != prevLength) {
-            if ( bossBars.size() == 0) {
+            if (bossBars.size() == 0) {
                 // Just leave it alone, it's not rendering anyway
                 return;
             }
@@ -115,14 +117,16 @@ public class BossBarHud extends TextHudEntry implements DynamicallyPositionable 
         if (bar.get()) {
             DrawableHelper.drawTexture(matrices, x, y, 0, bossBar.getColor().ordinal() * 5 * 2, 182, 5, 256, 256);
             if (bossBar.getStyle() != BossBar.Style.PROGRESS) {
-                DrawableHelper.drawTexture(matrices, x, y, 0, 80 + (bossBar.getStyle().ordinal() - 1) * 5 * 2, 182, 5, 256, 256);
+                DrawableHelper.drawTexture(matrices, x, y, 0, 80 + (bossBar.getStyle().ordinal() - 1) * 5 * 2, 182, 5,
+                        256, 256);
             }
 
             int i = (int) (bossBar.getPercent() * 183.0F);
             if (i > 0) {
                 DrawableHelper.drawTexture(matrices, x, y, 0, bossBar.getColor().ordinal() * 5 * 2 + 5, i, 5, 256, 256);
                 if (bossBar.getStyle() != BossBar.Style.PROGRESS) {
-                    DrawableHelper.drawTexture(matrices, x, y, 0, 80 + (bossBar.getStyle().ordinal() - 1) * 5 * 2 + 5, i, 5, 256, 256);
+                    DrawableHelper.drawTexture(matrices, x, y, 0, 80 + (bossBar.getStyle().ordinal() - 1) * 5 * 2 + 5,
+                            i, 5, 256, 256);
                 }
             }
         }
@@ -158,6 +162,7 @@ public class BossBarHud extends TextHudEntry implements DynamicallyPositionable 
     }
 
     public static class CustomBossBar extends BossBar {
+
         public CustomBossBar(Text name, Color color, Style style) {
             super(MathHelper.randomUuid(), name, color, style);
         }

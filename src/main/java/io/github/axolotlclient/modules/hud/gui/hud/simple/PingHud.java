@@ -51,6 +51,7 @@ import java.util.List;
  */
 
 public class PingHud extends SimpleTextHudEntry {
+
     public static final Identifier ID = new Identifier("kronhud", "pinghud");
 
     private int currentServerPing;
@@ -81,25 +82,27 @@ public class PingHud extends SimpleTextHudEntry {
         return true;
     }
 
-    private void updatePing(){
+    private void updatePing() {
         if (MinecraftClient.getInstance().getCurrentServerEntry() != null) {
             if (MinecraftClient.getInstance().getCurrentServerEntry().ping <= 1) {
                 getRealTimeServerPing(MinecraftClient.getInstance().getCurrentServerEntry());
             } else {
                 currentServerPing = (int) MinecraftClient.getInstance().getCurrentServerEntry().ping;
             }
-        } else if (MinecraftClient.getInstance().isIntegratedServerRunning()){
+        } else if (MinecraftClient.getInstance().isIntegratedServerRunning()) {
             currentServerPing = 1;
         }
     }
 
     private int second;
+
     @Override
     public void tick() {
-        if(second>=refreshDelay.get()*20){
+        if (second >= refreshDelay.get() * 20) {
             updatePing();
-            second=0;
-        } else second++;
+            second = 0;
+        } else
+            second++;
     }
 
     @Override
@@ -117,11 +120,10 @@ public class PingHud extends SimpleTextHudEntry {
                 var address = ServerAddress.parse(server.address);
                 var optional = AllowedAddressResolver.DEFAULT.resolve(address).map(Address::getInetSocketAddress);
 
-
                 if (optional.isPresent()) {
-
                     ClientConnection manager = ClientConnection.connect(optional.get(), false);
                     manager.setPacketListener(new ClientQueryPacketListener() {
+
                         @Override
                         public void onResponse(QueryResponseS2CPacket packet) {
                             this.currentSystemTime = net.minecraft.util.Util.getMeasuringTimeMs();
@@ -140,7 +142,6 @@ public class PingHud extends SimpleTextHudEntry {
 
                         @Override
                         public void onDisconnected(Text reason) {
-
                         }
 
                         @Override

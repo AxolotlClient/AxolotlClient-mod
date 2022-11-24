@@ -38,7 +38,6 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-
 public class NetworkHelper {
 
     private static boolean loggedIn;
@@ -47,10 +46,9 @@ public class NetworkHelper {
     private static final AtomicInteger concurrentCalls = new AtomicInteger(0);
     private static final int maxCalls = 3;
 
-    public static boolean getOnline(UUID uuid){
-
+    public static boolean getOnline(UUID uuid) {
         if (!AxolotlClient.playerCache.containsKey(uuid)) {
-            if(concurrentCalls.get() <= maxCalls) {
+            if (concurrentCalls.get() <= maxCalls) {
                 concurrentCalls.incrementAndGet();
                 Runnable runnable = () -> getUser(uuid);
                 ThreadExecuter.scheduleTask(runnable);
@@ -58,29 +56,27 @@ public class NetworkHelper {
                 ThreadExecuter.scheduleTask(concurrentCalls::decrementAndGet, 1, TimeUnit.MINUTES);
             }
         }
-        return AxolotlClient.playerCache.get(uuid) != null ? AxolotlClient.playerCache.get(uuid): false;
+        return AxolotlClient.playerCache.get(uuid) != null ? AxolotlClient.playerCache.get(uuid) : false;
     }
 
-    public static void getUser(UUID uuid){
-        try{
+    public static void getUser(UUID uuid) {
+        try {
             CloseableHttpClient client = HttpClients.createMinimal();
-            HttpGet get = new HttpGet("https://moehreag.duckdns.org/axolotlclient-api/?uuid="+uuid.toString());
-            HttpResponse response= client.execute(get);
+            HttpGet get = new HttpGet("https://moehreag.duckdns.org/axolotlclient-api/?uuid=" + uuid.toString());
+            HttpResponse response = client.execute(get);
             String body = EntityUtils.toString(response.getEntity());
             client.close();
-            if (body.contains("true")){
+            if (body.contains("true")) {
                 AxolotlClient.playerCache.put(uuid, true);
             } else {
                 AxolotlClient.playerCache.put(uuid, false);
             }
-
-        } catch (Exception ignored){
+        } catch (Exception ignored) {
             AxolotlClient.playerCache.put(uuid, false);
         }
     }
 
     public static void setOnline() {
-
         try {
             uuid = MinecraftClient.getInstance().player.getUuid();
 
@@ -88,12 +84,12 @@ public class NetworkHelper {
             HttpPost post = new HttpPost("https://moehreag.duckdns.org/axolotlclient-api/");
             post.setHeader("Accept", "application/json");
             post.setHeader("Content-type", "application/json");
-            post.setEntity(new StringEntity("{\n\t\"uuid\": \""+uuid.toString()+"\",\n\t\"online\": true\n}"));
+            post.setEntity(new StringEntity("{\n\t\"uuid\": \"" + uuid.toString() + "\",\n\t\"online\": true\n}"));
             HttpResponse response = client.execute(post);
             String body = EntityUtils.toString(response.getEntity());
-            if(body.contains("Success!")){
+            if (body.contains("Success!")) {
                 Logger.info("Sucessfully logged in at AxolotlClient!");
-                loggedIn=true;
+                loggedIn = true;
             }
             client.close();
         } catch (Exception e) {
@@ -102,13 +98,13 @@ public class NetworkHelper {
         }
     }
 
-    public static void setOffline(){
-
-        if(loggedIn) {
+    public static void setOffline() {
+        if (loggedIn) {
             try {
                 Logger.info("Logging off..");
                 CloseableHttpClient client = HttpClients.createDefault();
-                HttpDelete delete = new HttpDelete("https://moehreag.duckdns.org/axolotlclient-api/?uuid=" + uuid.toString());
+                HttpDelete delete = new HttpDelete(
+                        "https://moehreag.duckdns.org/axolotlclient-api/?uuid=" + uuid.toString());
                 delete.setHeader("Accept", "application/json");
                 delete.setHeader("Content-type", "application/json");
                 HttpResponse response = client.execute(delete);
@@ -119,7 +115,6 @@ public class NetworkHelper {
                     throw new Exception("Error while logging off: " + body);
                 }
                 client.close();
-
             } catch (Exception ex) {
                 ex.printStackTrace();
                 Logger.error("Error while logging off!");
@@ -130,44 +125,44 @@ public class NetworkHelper {
     // In case we ever implement more of HyCord's features...
     /*public static JsonElement getRequest(String site) {
         try {
-
+    
             CloseableHttpClient client = HttpClients.custom().disableAutomaticRetries().build();
             HttpGet get = new HttpGet(site);
             HttpResponse response = client.execute(get);
-
+    
             int status = response.getStatusLine().getStatusCode();
             if (status != 200) {
                 Logger.warn("API request failed, status code " + status);
                 return null;
             }
-
+    
             String body = EntityUtils.toString(response.getEntity());
             client.close();
-
+    
             return JsonParser.parseReader(new StringReader(body));
-
+    
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
-
+    
     public static String getUuid(String username) {
         JsonElement response = getRequest("https://api.mojang.com/users/profiles/minecraft/" + username);
         if (response == null)
             return null;
         return response.getAsJsonObject().get("id").getAsString();
     }
-
+    
     public static BufferedImage getImage(String imgUrl) {
         try (CloseableHttpClient client = HttpClients.custom().disableAutomaticRetries().build()) {
-
+    
             HttpGet get = new HttpGet(imgUrl);
             HttpResponse response = client.execute(get);
-
+    
             client.close();
             return ImageIO.read(response.getEntity().getContent());
-
+    
         } catch (IOException e) {
             e.printStackTrace();
         }

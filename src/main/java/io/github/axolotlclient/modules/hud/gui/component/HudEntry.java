@@ -40,7 +40,7 @@ public interface HudEntry extends Identifiable, Configurable, Positionable {
         return false;
     }
 
-    default boolean overridesF3(){
+    default boolean overridesF3() {
         return false;
     }
 

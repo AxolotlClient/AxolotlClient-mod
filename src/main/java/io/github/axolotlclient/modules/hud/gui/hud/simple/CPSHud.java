@@ -39,6 +39,7 @@ import java.util.List;
  */
 
 public class CPSHud extends SimpleTextHudEntry {
+
     public static final Identifier ID = new Identifier("kronhud", "cpshud");
 
     private final BooleanOption fromKeybindings = new BooleanOption("cpskeybind", ID.getPath(), false);
@@ -129,7 +130,5 @@ public class CPSHud extends SimpleTextHudEntry {
         public int clicks() {
             return clicks.size();
         }
-
     }
-
 }

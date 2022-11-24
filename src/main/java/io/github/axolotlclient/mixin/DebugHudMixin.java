@@ -35,12 +35,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class DebugHudMixin {
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiler/Profiler;pop()V"))
-    public void onRender(MatrixStack matrices, CallbackInfo ci){
-
+    public void onRender(MatrixStack matrices, CallbackInfo ci) {
         CrosshairHud hud = (CrosshairHud) HudManager.getInstance().get(CrosshairHud.ID);
-        if(hud.isEnabled() && hud.overridesF3()){
+        if (hud.isEnabled() && hud.overridesF3()) {
             hud.render(matrices, 0);
         }
-
     }
 }

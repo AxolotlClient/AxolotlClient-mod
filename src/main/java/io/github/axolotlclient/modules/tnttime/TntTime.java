@@ -44,7 +44,7 @@ public class TntTime extends AbstractModule {
     public final BooleanOption enabled = new BooleanOption("enabled", false);
     private final IntegerOption decimalPlaces = new IntegerOption("decimalplaces", 2, 0, 6);
 
-    public static TntTime getInstance(){
+    public static TntTime getInstance() {
         return Instance;
     }
 
@@ -56,7 +56,7 @@ public class TntTime extends AbstractModule {
 
     @Override
     public void tick() {
-        if(decimalPlaces.get() != decimals || format == null){
+        if (decimalPlaces.get() != decimals || format == null) {
             StringBuilder string = new StringBuilder("#0");
             if (decimalPlaces.get() > 0) {
                 string.append(".");
@@ -67,12 +67,13 @@ public class TntTime extends AbstractModule {
         }
     }
 
-    public Text getFuseTime(int time){
-        float secs = time/20F;
-        return Text.of(String.valueOf(format.format(secs))).copy().setStyle(Style.EMPTY.withColor(getCurrentColor(secs)));
+    public Text getFuseTime(int time) {
+        float secs = time / 20F;
+        return Text.of(String.valueOf(format.format(secs))).copy()
+                .setStyle(Style.EMPTY.withColor(getCurrentColor(secs)));
     }
 
-    private Formatting getCurrentColor(float seconds){
+    private Formatting getCurrentColor(float seconds) {
         if (seconds > 7d) {
             return Formatting.DARK_AQUA;
         } else if (seconds > 6d) {

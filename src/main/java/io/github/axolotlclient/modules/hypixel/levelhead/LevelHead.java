@@ -41,14 +41,13 @@ public class LevelHead implements AbstractHypixelMod {
 
     @Override
     public void init() {
-
         category.add(enabled);
         category.add(textColor);
         category.add(background);
         category.add(mode);
     }
 
-    public static LevelHead getInstance(){
+    public static LevelHead getInstance() {
         return Instance;
     }
 
@@ -58,8 +57,6 @@ public class LevelHead implements AbstractHypixelMod {
     }
 
     public enum LevelHeadMode {
-        NETWORK,
-        BEDWARS,
-        SKYWARS
+        NETWORK, BEDWARS, SKYWARS
     }
 }

@@ -28,8 +28,8 @@ import io.github.axolotlclient.modules.hud.HudEditScreen;
 
 public class ModMenuCompat implements ModMenuApi {
 
-	@Override
-	public ConfigScreenFactory<?> getModConfigScreenFactory() {
-		return (HudEditScreen::new);
-	}
+    @Override
+    public ConfigScreenFactory<?> getModConfigScreenFactory() {
+        return (HudEditScreen::new);
+    }
 }

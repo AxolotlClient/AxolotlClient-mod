@@ -51,6 +51,7 @@ import java.util.Optional;
  */
 
 public class ItemUpdateHud extends TextHudEntry {
+
     public static final Identifier ID = new Identifier("kronhud", "itemupdatehud");
 
     private List<ItemUtil.ItemStorage> oldItems = new ArrayList<>();
@@ -86,7 +87,8 @@ public class ItemUpdateHud extends TextHudEntry {
     }
 
     private void updateAdded() {
-        List<ItemUtil.ItemStorage> added = ItemUtil.compare(ItemUtil.storageFromItem(ItemUtil.getItems(client)), oldItems);
+        List<ItemUtil.ItemStorage> added = ItemUtil.compare(ItemUtil.storageFromItem(ItemUtil.getItems(client)),
+                oldItems);
         ArrayList<ItemUtil.TimedItemStorage> timedAdded = new ArrayList<>();
         for (ItemUtil.ItemStorage stack : added) {
             timedAdded.add(stack.timed());
@@ -106,7 +108,8 @@ public class ItemUpdateHud extends TextHudEntry {
     }
 
     private void updateRemoved() {
-        List<ItemUtil.ItemStorage> removed = ItemUtil.compare(oldItems, ItemUtil.storageFromItem(ItemUtil.getItems(client)));
+        List<ItemUtil.ItemStorage> removed = ItemUtil.compare(oldItems,
+                ItemUtil.storageFromItem(ItemUtil.getItems(client)));
         List<ItemUtil.TimedItemStorage> timed = ItemUtil.untimedToTimed(removed);
         for (ItemUtil.TimedItemStorage stack : timed) {
             if (stack.stack.isEmpty()) {
@@ -133,19 +136,18 @@ public class ItemUpdateHud extends TextHudEntry {
             }
             TextCollector message = new TextCollector();
             message.add(Text.literal("+ "));
-            message.add(Text.literal("[").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(Color.DARK_GRAY.getAsInt()))));
+            message.add(
+                    Text.literal("[").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(Color.DARK_GRAY.getAsInt()))));
             message.add(Text.literal(item.times + "").setStyle(Style.EMPTY.withColor(Formatting.WHITE)));
-            message.add(Text.literal("] ").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(Color.DARK_GRAY.getAsInt()))));
+            message.add(
+                    Text.literal("] ").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(Color.DARK_GRAY.getAsInt()))));
             message.add(item.stack.getName());
             OrderedText text = Language.getInstance().reorder(message.getCombined());
             if (shadow.get()) {
-                client.textRenderer.drawWithShadow(
-                        matrices, text, pos.x(), pos.y() + lastY, Color.SELECTOR_GREEN.getAsInt()
-                );
+                client.textRenderer.drawWithShadow(matrices, text, pos.x(), pos.y() + lastY,
+                        Color.SELECTOR_GREEN.getAsInt());
             } else {
-                client.textRenderer.draw(
-                        matrices, text, pos.x(), pos.y() + lastY, Color.SELECTOR_GREEN.getAsInt()
-                );
+                client.textRenderer.draw(matrices, text, pos.x(), pos.y() + lastY, Color.SELECTOR_GREEN.getAsInt());
             }
             lastY = lastY + client.textRenderer.fontHeight + 2;
             i++;
@@ -156,19 +158,18 @@ public class ItemUpdateHud extends TextHudEntry {
             }
             TextCollector message = new TextCollector();
             message.add(Text.literal("- "));
-            message.add(Text.literal("[").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(Color.DARK_GRAY.getAsInt()))));
+            message.add(
+                    Text.literal("[").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(Color.DARK_GRAY.getAsInt()))));
             message.add(Text.literal(item.times + "").setStyle(Style.EMPTY.withColor(Formatting.WHITE)));
-            message.add(Text.literal("] ").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(Color.DARK_GRAY.getAsInt()))));
+            message.add(
+                    Text.literal("] ").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(Color.DARK_GRAY.getAsInt()))));
             message.add(item.stack.getName());
             OrderedText text = Language.getInstance().reorder(message.getCombined());
             if (shadow.get()) {
-                client.textRenderer.drawWithShadow(
-                        matrices, text, pos.x(), pos.y() + lastY, Formatting.RED.getColorValue()
-                );
+                client.textRenderer.drawWithShadow(matrices, text, pos.x(), pos.y() + lastY,
+                        Formatting.RED.getColorValue());
             } else {
-                client.textRenderer.draw(
-                        matrices, text, pos.x(), pos.y() + lastY, Formatting.RED.getColorValue()
-                );
+                client.textRenderer.draw(matrices, text, pos.x(), pos.y() + lastY, Formatting.RED.getColorValue());
             }
             lastY = lastY + client.textRenderer.fontHeight + 2;
             i++;
@@ -186,13 +187,10 @@ public class ItemUpdateHud extends TextHudEntry {
         addM.add(new ItemStack(Items.DIRT).getName());
         OrderedText addText = Language.getInstance().reorder(addM.getCombined());
         if (shadow.get()) {
-            client.textRenderer.drawWithShadow(
-                    matrices, addText, pos.x(), pos.y(), Formatting.RED.getColorValue()
-            );
+            client.textRenderer.drawWithShadow(matrices, addText, pos.x(), pos.y(), Formatting.RED.getColorValue());
         } else {
-            client.textRenderer.draw(
-                    matrices, addText, pos.x(), pos.y() + client.textRenderer.fontHeight + 2, Formatting.RED.getColorValue()
-            );
+            client.textRenderer.draw(matrices, addText, pos.x(), pos.y() + client.textRenderer.fontHeight + 2,
+                    Formatting.RED.getColorValue());
         }
         TextCollector removeM = new TextCollector();
         removeM.add(Text.literal("- "));
@@ -202,13 +200,11 @@ public class ItemUpdateHud extends TextHudEntry {
         removeM.add(new ItemStack(Items.GRASS).getName());
         OrderedText removeText = Language.getInstance().reorder(removeM.getCombined());
         if (shadow.get()) {
-            client.textRenderer.drawWithShadow(matrices, removeText, pos.x(), pos.y() + client.textRenderer.fontHeight + 2,
-                    Formatting.RED.getColorValue()
-            );
+            client.textRenderer.drawWithShadow(matrices, removeText, pos.x(),
+                    pos.y() + client.textRenderer.fontHeight + 2, Formatting.RED.getColorValue());
         } else {
             client.textRenderer.draw(matrices, removeText, pos.x(), pos.y() + client.textRenderer.fontHeight + 3,
-                    Formatting.RED.getColorValue()
-            );
+                    Formatting.RED.getColorValue());
         }
     }
 
@@ -229,6 +225,4 @@ public class ItemUpdateHud extends TextHudEntry {
     public boolean movable() {
         return true;
     }
-
 }
-

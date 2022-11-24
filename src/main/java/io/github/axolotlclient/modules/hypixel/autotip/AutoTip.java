@@ -43,7 +43,8 @@ public class AutoTip implements AbstractHypixelMod {
     private final BooleanOption hideMessages = new BooleanOption("hideTipMessages", false);
 
     private final Pattern messagePattern = Pattern.compile("^You tipped [0-9]+ players in [0-9]+ different games!$");
-    private final Pattern tippedPattern = Pattern.compile("^You already tipped everyone that has boosters active, so there isn't anybody to be tipped right now!$");
+    private final Pattern tippedPattern = Pattern.compile(
+            "^You already tipped everyone that has boosters active, so there isn't anybody to be tipped right now!$");
 
     private long lastTime;
     private boolean init = false;
@@ -51,7 +52,7 @@ public class AutoTip implements AbstractHypixelMod {
     @Override
     public void init() {
         category.add(enabled, hideMessages);
-        init=true;
+        init = true;
     }
 
     @Override
@@ -61,22 +62,22 @@ public class AutoTip implements AbstractHypixelMod {
 
     @Override
     public void tick() {
-        if(init) {
-            if (System.currentTimeMillis() - lastTime > 1200000 && MinecraftClient.getInstance().getCurrentServerEntry() != null &&
-                    MinecraftClient.getInstance().getCurrentServerEntry().address.contains("hypixel") &&
-                    enabled.get()) {
-
-                if(MinecraftClient.getInstance().player!=null) {
-	                Util.sendChatMessage("/tip all");
+        if (init) {
+            if (System.currentTimeMillis() - lastTime > 1200000
+                    && MinecraftClient.getInstance().getCurrentServerEntry() != null
+                    && MinecraftClient.getInstance().getCurrentServerEntry().address.contains("hypixel")
+                    && enabled.get()) {
+                if (MinecraftClient.getInstance().player != null) {
+                    Util.sendChatMessage("/tip all");
                     lastTime = System.currentTimeMillis();
                 }
             }
         }
     }
 
-    public boolean onChatMessage(Text text){
-        return enabled.get() && hideMessages.get() &&
-                (messagePattern.matcher(text.getString()).matches() || tippedPattern.matcher(text.getString()).matches());
+    public boolean onChatMessage(Text text) {
+        return enabled.get() && hideMessages.get() && (messagePattern.matcher(text.getString()).matches()
+                || tippedPattern.matcher(text.getString()).matches());
     }
 
     @Override

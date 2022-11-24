@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ScreenshotUtils extends AbstractModule {
+
     private static final ScreenshotUtils Instance = new ScreenshotUtils();
 
     private final OptionCategory category = new OptionCategory("screenshotUtils");
@@ -52,43 +53,32 @@ public class ScreenshotUtils extends AbstractModule {
 
     private final List<Action> actions = Util.make(() -> {
         List<Action> actions = new ArrayList<>();
-        actions.add(new Action("copyAction",
-                Formatting.AQUA,
-                new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                        Text.translatable("copy_image")),
+        actions.add(new Action("copyAction", Formatting.AQUA,
+                new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.translatable("copy_image")),
                 new CustomClickEvent((file) -> {
                     FileTransferable selection = new FileTransferable(file);
                     Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
-                })
-        ));
+                })));
 
-        actions.add(new Action("deleteAction",
-                Formatting.LIGHT_PURPLE,
-                new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                        Text.translatable("delete_image")),
+        actions.add(new Action("deleteAction", Formatting.LIGHT_PURPLE,
+                new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.translatable("delete_image")),
                 new CustomClickEvent((file) -> {
                     try {
                         Files.delete(file.toPath());
                         io.github.axolotlclient.util.Util.sendChatMessage(
-                                Text.literal(I18n.translate("screenshot_deleted")
-                                        .replace("<name>", file.getName())));
+                                Text.literal(I18n.translate("screenshot_deleted").replace("<name>", file.getName())));
                     } catch (Exception e) {
                         Logger.warn("Couldn't delete Screenshot " + file.getName());
                     }
-                })
-        ));
+                })));
 
-        actions.add(new Action("openAction",
-                Formatting.WHITE,
-                new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                        Text.translatable("open_image")),
-                new CustomClickEvent((file) -> Util.getOperatingSystem().open(file.toURI()))
-        ));
+        actions.add(new Action("openAction", Formatting.WHITE,
+                new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.translatable("open_image")),
+                new CustomClickEvent((file) -> Util.getOperatingSystem().open(file.toURI()))));
 
         // If you have further ideas to what actions could be added here, please let us know!
 
         return actions;
-
     });
 
     private final EnumOption autoExec = new EnumOption("autoExec", Util.make(() -> {
@@ -96,7 +86,6 @@ public class ScreenshotUtils extends AbstractModule {
         names.add("off");
         actions.forEach(action -> names.add(action.getName()));
         return names.toArray(new String[0]);
-
     }), "off");
 
     @Override
@@ -106,11 +95,11 @@ public class ScreenshotUtils extends AbstractModule {
         AxolotlClient.CONFIG.general.addSubCategory(category);
     }
 
-    public static ScreenshotUtils getInstance(){
+    public static ScreenshotUtils getInstance() {
         return Instance;
     }
 
-    public Text onScreenshotTaken(MutableText text, File shot){
+    public Text onScreenshotTaken(MutableText text, File shot) {
         if (enabled.get()) {
             Text t = getUtilsText(shot);
             if (t != null) {
@@ -121,10 +110,9 @@ public class ScreenshotUtils extends AbstractModule {
     }
 
     private @Nullable Text getUtilsText(File file) {
-
         if (!autoExec.get().equals("off")) {
-
-            actions.parallelStream().filter(action -> autoExec.get().equals(action.getName())).toList().get(0).clickEvent.setFile(file).doAction();
+            actions.parallelStream().filter(action -> autoExec.get().equals(action.getName())).toList()
+                    .get(0).clickEvent.setFile(file).doAction();
             return null;
         }
 
@@ -137,7 +125,7 @@ public class ScreenshotUtils extends AbstractModule {
     }
 
     /*private Text getUtilsText(File file){
-
+    
         return Text.translatable("copyAction")
                 .setStyle(Style.EMPTY
                         .withFormatting(Formatting.BLUE)
@@ -175,11 +163,8 @@ public class ScreenshotUtils extends AbstractModule {
         private final CustomClickEvent clickEvent;
 
         public Text getText(File file) {
-            return Text.translatable(translationKey)
-                    .setStyle(Style.EMPTY
-                            .withFormatting(formatting)
-                            .withClickEvent(clickEvent.setFile(file))
-                            .withHoverEvent(hoverEvent));
+            return Text.translatable(translationKey).setStyle(Style.EMPTY.withFormatting(formatting)
+                    .withClickEvent(clickEvent.setFile(file)).withHoverEvent(hoverEvent));
         }
 
         public String getName() {
@@ -224,8 +209,8 @@ public class ScreenshotUtils extends AbstractModule {
             if (file != null) {
                 action.doAction(file);
             } else {
-                Logger.warn("How'd you manage to do this? " +
-                        "Now there's a screenshot ClickEvent without a File attached to it!");
+                Logger.warn("How'd you manage to do this? "
+                        + "Now there's a screenshot ClickEvent without a File attached to it!");
             }
         }
 

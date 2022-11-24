@@ -38,17 +38,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(PlayerListEntry.class)
 public abstract class PlayerListEntryMixin {
 
-    @Shadow @Final private GameProfile profile;
+    @Shadow
+    @Final
+    private GameProfile profile;
 
     @Inject(method = "getSkinTexture", at = @At("RETURN"), cancellable = true)
-    public void hideSkins(CallbackInfoReturnable<Identifier> cir){
-        if(profile.equals(MinecraftClient.getInstance().player.getGameProfile()) &&
-                NickHider.getInstance().hideOwnSkin.get()){
-
+    public void hideSkins(CallbackInfoReturnable<Identifier> cir) {
+        if (profile.equals(MinecraftClient.getInstance().player.getGameProfile())
+                && NickHider.getInstance().hideOwnSkin.get()) {
             cir.setReturnValue(DefaultSkinHelper.getTexture(profile.getId()));
-        } else if(!profile.equals(MinecraftClient.getInstance().player.getGameProfile()) &&
-                NickHider.getInstance().hideOtherSkins.get()){
-
+        } else if (!profile.equals(MinecraftClient.getInstance().player.getGameProfile())
+                && NickHider.getInstance().hideOtherSkins.get()) {
             cir.setReturnValue(DefaultSkinHelper.getTexture(profile.getId()));
         }
     }

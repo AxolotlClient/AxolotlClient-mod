@@ -44,45 +44,49 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class EntityRendererMixin<T extends Entity> {
 
     @Inject(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Lnet/minecraft/text/Text;FFIZLnet/minecraft/util/math/Matrix4f;Lnet/minecraft/client/render/VertexConsumerProvider;ZII)I", ordinal = 0))
-    public void addBadges(T entity, Text text, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci){
-        if(entity instanceof AbstractClientPlayerEntity && text.getString().contains(entity.getName().getString()))
+    public void addBadges(T entity, Text text, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light,
+            CallbackInfo ci) {
+        if (entity instanceof AbstractClientPlayerEntity && text.getString().contains(entity.getName().getString()))
             AxolotlClient.addBadge(entity, matrices);
     }
 
     @ModifyArg(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Lnet/minecraft/text/Text;FFIZLnet/minecraft/util/math/Matrix4f;Lnet/minecraft/client/render/VertexConsumerProvider;ZII)I"), index = 8)
-    public int bgColor(int color){
-        if(AxolotlClient.CONFIG.nametagBackground.get()){
+    public int bgColor(int color) {
+        if (AxolotlClient.CONFIG.nametagBackground.get()) {
             return color;
         } else {
             return 0;
         }
     }
 
-	@ModifyArg(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Lnet/minecraft/text/Text;FFIZLnet/minecraft/util/math/Matrix4f;Lnet/minecraft/client/render/VertexConsumerProvider;ZII)I"), index = 4)
-	public boolean enableShadows(boolean shadow){
-		return AxolotlClient.CONFIG.useShadows.get();
-	}
+    @ModifyArg(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Lnet/minecraft/text/Text;FFIZLnet/minecraft/util/math/Matrix4f;Lnet/minecraft/client/render/VertexConsumerProvider;ZII)I"), index = 4)
+    public boolean enableShadows(boolean shadow) {
+        return AxolotlClient.CONFIG.useShadows.get();
+    }
 
     @Inject(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Lnet/minecraft/text/Text;FFIZLnet/minecraft/util/math/Matrix4f;Lnet/minecraft/client/render/VertexConsumerProvider;ZII)I", ordinal = 1))
-    public void addLevel(T entity, Text string, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci){
-        if(entity instanceof AbstractClientPlayerEntity){
-            if(MinecraftClient.getInstance().getCurrentServerEntry() != null &&
-                    MinecraftClient.getInstance().getCurrentServerEntry().address.contains("hypixel.net")){
-                if(HypixelAbstractionLayer.hasValidAPIKey() && LevelHead.getInstance().enabled.get() && string.getString().contains(entity.getName().getString())){
+    public void addLevel(T entity, Text string, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light,
+            CallbackInfo ci) {
+        if (entity instanceof AbstractClientPlayerEntity) {
+            if (MinecraftClient.getInstance().getCurrentServerEntry() != null
+                    && MinecraftClient.getInstance().getCurrentServerEntry().address.contains("hypixel.net")) {
+                if (HypixelAbstractionLayer.hasValidAPIKey() && LevelHead.getInstance().enabled.get()
+                        && string.getString().contains(entity.getName().getString())) {
                     TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
-                    String text = "Level: "+ HypixelAbstractionLayer.getPlayerLevel(String.valueOf(entity.getUuid()));
+                    String text = "Level: " + HypixelAbstractionLayer.getPlayerLevel(String.valueOf(entity.getUuid()));
 
-                    float x = -textRenderer.getWidth(text)/2F;
-                    float y = string.getString().contains("deadmau5")?-20:-10;
+                    float x = -textRenderer.getWidth(text) / 2F;
+                    float y = string.getString().contains("deadmau5") ? -20 : -10;
 
-					Matrix4f matrix4f = matrices.peek().getModel();
-	                MinecraftClient.getInstance().textRenderer.draw(text, x, y, LevelHead.getInstance().textColor.get().getAsInt(), AxolotlClient.CONFIG.useShadows.get(), matrix4f, vertexConsumers, false, LevelHead.getInstance().background.get()? 127 : 0, light);
-
-                } else if(!HypixelAbstractionLayer.hasValidAPIKey()){
+                    Matrix4f matrix4f = matrices.peek().getModel();
+                    MinecraftClient.getInstance().textRenderer.draw(text, x, y,
+                            LevelHead.getInstance().textColor.get().getAsInt(), AxolotlClient.CONFIG.useShadows.get(),
+                            matrix4f, vertexConsumers, false, LevelHead.getInstance().background.get() ? 127 : 0,
+                            light);
+                } else if (!HypixelAbstractionLayer.hasValidAPIKey()) {
                     HypixelAbstractionLayer.loadApiKey();
                 }
             }
         }
     }
-
 }

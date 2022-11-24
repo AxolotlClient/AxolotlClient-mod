@@ -60,14 +60,13 @@ public class NickHider implements AbstractHypixelMod {
         return category;
     }
 
-    public Text editMessage(Text message){
-        if(hideOwnName.get() || hideOtherNames.get()) {
+    public Text editMessage(Text message) {
+        if (hideOwnName.get() || hideOtherNames.get()) {
             String msg = message.getString();
 
             String playerName = MinecraftClient.getInstance().player.getName().getString();
             if (NickHider.Instance.hideOwnName.get() && msg.contains(playerName)) {
                 msg = msg.replaceAll(playerName, NickHider.Instance.hiddenNameSelf.get());
-
             }
 
             if (NickHider.Instance.hideOtherNames.get()) {

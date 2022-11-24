@@ -47,10 +47,11 @@ public abstract class PlayerEntityMixin extends Entity {
     }
 
     @Inject(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getAttributeValue(Lnet/minecraft/entity/attribute/EntityAttribute;)D"))
-    public void getReach(Entity entity, CallbackInfo ci){
-        if((Object) this == MinecraftClient.getInstance().player || entity.equals(MinecraftClient.getInstance().player)){
+    public void getReach(Entity entity, CallbackInfo ci) {
+        if ((Object) this == MinecraftClient.getInstance().player
+                || entity.equals(MinecraftClient.getInstance().player)) {
             ReachHud reachDisplayHud = (ReachHud) HudManager.getInstance().get(ReachHud.ID);
-            if(reachDisplayHud != null && reachDisplayHud.isEnabled()){
+            if (reachDisplayHud != null && reachDisplayHud.isEnabled()) {
                 reachDisplayHud.updateDistance(this, entity);
             }
 
@@ -60,20 +61,20 @@ public abstract class PlayerEntityMixin extends Entity {
     }
 
     @Inject(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;onAttacking(Lnet/minecraft/entity/Entity;)V"))
-    public void alwaysCrit(Entity entity, CallbackInfo ci){
-        if(Particles.getInstance().getAlwaysOn(ParticleTypes.CRIT)) {
+    public void alwaysCrit(Entity entity, CallbackInfo ci) {
+        if (Particles.getInstance().getAlwaysOn(ParticleTypes.CRIT)) {
             MinecraftClient.getInstance().player.addCritParticles(entity);
         }
-        if(Particles.getInstance().getAlwaysOn(ParticleTypes.ENCHANTED_HIT)) {
+        if (Particles.getInstance().getAlwaysOn(ParticleTypes.ENCHANTED_HIT)) {
             MinecraftClient.getInstance().player.addEnchantedHitParticles(entity);
         }
     }
 
     @Inject(method = "damage", at = @At("HEAD"))
     public void damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        if(source.getAttacker() != null && getUuid() == MinecraftClient.getInstance().player.getUuid()){
+        if (source.getAttacker() != null && getUuid() == MinecraftClient.getInstance().player.getUuid()) {
             ReachHud reachDisplayHud = (ReachHud) HudManager.getInstance().get(ReachHud.ID);
-            if(reachDisplayHud != null && reachDisplayHud.isEnabled()){
+            if (reachDisplayHud != null && reachDisplayHud.isEnabled()) {
                 reachDisplayHud.updateDistance(source.getAttacker(), this);
             }
         }

@@ -31,18 +31,17 @@ package io.github.axolotlclient.modules.hypixel;
 
 public class ExpCalculator {
 
-    private static final int[] EASY_LEVEL_EXP = {
-            0, // Level 1
+    private static final int[] EASY_LEVEL_EXP = { 0, // Level 1
             20, //20
             50, //70
             80, //150
-            100,//250
-            250,//500
-            500,//1000
-            1000,//2000
-            1500,//3500
-            2500,//6000
-            4000,//10000
+            100, //250
+            250, //500
+            500, //1000
+            1000, //2000
+            1500, //3500
+            2500, //6000
+            4000, //10000
             5000//15000
     };
     private static final int EXP_PER_LEVEL = 10000;

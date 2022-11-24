@@ -45,7 +45,8 @@ import java.util.List;
 
 public abstract class SimpleTextHudEntry extends TextHudEntry implements DynamicallyPositionable {
 
-    protected final EnumOption justification = new EnumOption("justification", Justification.values(), Justification.CENTER.toString());
+    protected final EnumOption justification = new EnumOption("justification", Justification.values(),
+            Justification.CENTER.toString());
     protected final EnumOption anchor = DefaultOptions.getAnchorPoint();
 
     private final IntegerOption minWidth;
@@ -66,7 +67,9 @@ public abstract class SimpleTextHudEntry extends TextHudEntry implements Dynamic
     @Override
     public void renderComponent(MatrixStack matrices, float delta) {
         RenderSystem.enableBlend();
-        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
+                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
+                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         RenderSystem.disableTexture();
         DrawPosition pos = getPos();
         String value = getValue();
@@ -84,12 +87,9 @@ public abstract class SimpleTextHudEntry extends TextHudEntry implements Dynamic
             setWidth(elementWidth);
             onBoundsUpdate();
         }
-        drawString(
-                matrices, value,
+        drawString(matrices, value,
                 pos.x() + Justification.valueOf(justification.get()).getXOffset(valueWidth, getWidth() - 4) + 2,
-                pos.y() + (Math.round((float) getHeight() / 2)) - 4,
-                getTextColor().getAsInt(), shadow.get()
-        );
+                pos.y() + (Math.round((float) getHeight() / 2)) - 4, getTextColor().getAsInt(), shadow.get());
         RenderSystem.enableTexture();
         RenderSystem.disableBlend();
     }
@@ -102,12 +102,9 @@ public abstract class SimpleTextHudEntry extends TextHudEntry implements Dynamic
     public void renderPlaceholderComponent(MatrixStack matrices, float delta) {
         DrawPosition pos = getPos();
         String value = getPlaceholder();
-        drawString(
-                matrices, value,
+        drawString(matrices, value,
                 pos.x() + Justification.valueOf(justification.get()).getXOffset(value, getWidth() - 4) + 2,
-                pos.y() + (Math.round((float) getHeight() / 2)) - 4,
-                textColor.get().getAsInt(), shadow.get()
-        );
+                pos.y() + (Math.round((float) getHeight() / 2)) - 4, textColor.get().getAsInt(), shadow.get());
     }
 
     @Override

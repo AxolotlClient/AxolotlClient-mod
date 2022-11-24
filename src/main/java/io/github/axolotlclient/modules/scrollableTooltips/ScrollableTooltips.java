@@ -43,13 +43,12 @@ public class ScrollableTooltips extends AbstractModule {
     protected final IntegerOption scrollAmount = new IntegerOption("scrollAmount", 5, 1, 20);
     protected final BooleanOption inverse = new BooleanOption("inverse", false);
 
-    public static ScrollableTooltips getInstance(){
+    public static ScrollableTooltips getInstance() {
         return Instance;
     }
 
     @Override
     public void init() {
-
         category.add(enabled);
         category.add(enableShiftHorizontalScroll);
         category.add(scrollAmount);
@@ -58,37 +57,30 @@ public class ScrollableTooltips extends AbstractModule {
         AxolotlClient.CONFIG.rendering.addSubCategory(category);
     }
 
-    protected boolean applyInverse(boolean value){
-        if(inverse.get()){
+    protected boolean applyInverse(boolean value) {
+        if (inverse.get()) {
             return !value;
         }
         return value;
     }
 
-    public void onScroll(boolean reverse){
-
+    public void onScroll(boolean reverse) {
         if (Screen.hasShiftDown()) {
-            if(applyInverse(reverse)){
+            if (applyInverse(reverse)) {
                 tooltipOffsetX -= scrollAmount.get();
-
             } else {
                 tooltipOffsetX += scrollAmount.get();
-
             }
-
         } else {
             if (applyInverse(reverse)) {
                 tooltipOffsetY -= scrollAmount.get();
-
             } else {
                 tooltipOffsetY += scrollAmount.get();
-
             }
         }
     }
 
-    public void resetScroll(){
+    public void resetScroll() {
         tooltipOffsetY = tooltipOffsetX = 0;
     }
-
 }

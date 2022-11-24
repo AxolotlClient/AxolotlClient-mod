@@ -36,17 +36,15 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 @Mixin(PlayerEntityRenderer.class)
 public abstract class PlayerEntityRendererMixin {
 
-
-    @ModifyArgs(method = "renderLabelIfPresent(Lnet/minecraft/client/network/AbstractClientPlayerEntity;Lnet/minecraft/text/Text;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V",
-    at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/LivingEntityRenderer;renderLabelIfPresent(Lnet/minecraft/entity/Entity;Lnet/minecraft/text/Text;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V"))
-    public void modifiyName(Args args){
-        if(AxolotlClient.CONFIG != null) {
+    @ModifyArgs(method = "renderLabelIfPresent(Lnet/minecraft/client/network/AbstractClientPlayerEntity;Lnet/minecraft/text/Text;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/LivingEntityRenderer;renderLabelIfPresent(Lnet/minecraft/entity/Entity;Lnet/minecraft/text/Text;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V"))
+    public void modifiyName(Args args) {
+        if (AxolotlClient.CONFIG != null) {
             AbstractClientPlayerEntity player = args.get(0);
-            if(player.getUuid() == MinecraftClient.getInstance().player.getUuid() &&
-                    NickHider.getInstance().hideOwnName.get()){
+            if (player.getUuid() == MinecraftClient.getInstance().player.getUuid()
+                    && NickHider.getInstance().hideOwnName.get()) {
                 args.set(1, Text.literal(NickHider.getInstance().hiddenNameSelf.get()));
-            } else if(player.getUuid()!=MinecraftClient.getInstance().player.getUuid() &&
-                    NickHider.getInstance().hideOtherNames.get()){
+            } else if (player.getUuid() != MinecraftClient.getInstance().player.getUuid()
+                    && NickHider.getInstance().hideOtherNames.get()) {
                 args.set(1, Text.literal(NickHider.getInstance().hiddenNameOthers.get()));
             }
         }

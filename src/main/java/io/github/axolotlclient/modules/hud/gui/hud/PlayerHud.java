@@ -114,7 +114,8 @@ public class PlayerHud extends BoxHudEntry {
         renderer.setRotation(quaternion);
         renderer.setRenderShadows(false);
 
-        VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
+        VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders()
+                .getEntityVertexConsumers();
 
         currentlyRendering = true;
         renderer.render(client.player, 0, 0, 0, 0, delta, nextStack, immediate, 15728880);
@@ -154,7 +155,7 @@ public class PlayerHud extends BoxHudEntry {
         } else if (client.player != null && client.player.isFallFlying()) {
             // Elytra!
 
-            float j = (float)client.player.getRoll() + 1;
+            float j = (float) client.player.getRoll() + 1;
             float k = MathHelper.clamp(j * j / 100.0F, 0.0F, 1.0F);
 
             float pitch = k * (-90.0F - client.player.getPitch()) + 90;

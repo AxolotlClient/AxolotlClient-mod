@@ -102,8 +102,8 @@ public class ReachHud extends SimpleTextHudEntry {
         Vec3d possibleHits = camera.add(rotation.x * d, rotation.y * d, rotation.z * d);
         Box box = attacking.getBoundingBox().stretch(rotation.multiply(d)).expand(1.0, 1.0, 1.0);
 
-
-        EntityHitResult result = ProjectileUtil.raycast(attacking, camera, possibleHits, box, entity -> entity.getId() == receiving.getId(), d);
+        EntityHitResult result = ProjectileUtil.raycast(attacking, camera, possibleHits, box,
+                entity -> entity.getId() == receiving.getId(), d);
         if (result == null || result.getEntity() == null) {
             // This should not happen...
             return -1;
@@ -114,7 +114,7 @@ public class ReachHud extends SimpleTextHudEntry {
     public void updateDistance(Entity attacking, Entity receiving) {
         double distance = getAttackDistance(attacking, receiving);
         if (distance < 0) {
-            distance*=-1;
+            distance *= -1;
             // This should not happen...
             currentDist = "NaN";
             //return;

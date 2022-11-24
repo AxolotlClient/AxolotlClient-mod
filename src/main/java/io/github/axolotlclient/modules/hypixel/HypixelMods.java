@@ -41,18 +41,18 @@ public class HypixelMods extends AbstractModule {
     private static final HypixelMods INSTANCE = new HypixelMods();
 
     public StringOption hypixel_api_key = new StringOption("hypixel_api_key", "");
-    public final EnumOption cacheMode = new EnumOption("cache_mode", HypixelCacheMode.values(), HypixelCacheMode.ON_CLIENT_DISCONNECT.toString());
+    public final EnumOption cacheMode = new EnumOption("cache_mode", HypixelCacheMode.values(),
+            HypixelCacheMode.ON_CLIENT_DISCONNECT.toString());
 
     private final OptionCategory category = new OptionCategory("hypixel-mods");
     private final List<AbstractHypixelMod> subModules = new ArrayList<>();
 
-    public static HypixelMods getInstance(){
+    public static HypixelMods getInstance() {
         return INSTANCE;
     }
 
     @Override
     public void init() {
-
         category.add(hypixel_api_key);
         category.add(cacheMode);
 
@@ -60,16 +60,17 @@ public class HypixelMods extends AbstractModule {
         addSubModule(AutoGG.getInstance());
         addSubModule(AutoTip.getInstance());
         addSubModule(NickHider.getInstance());
-		addSubModule(AutoBoop.getInstance());
+        addSubModule(AutoBoop.getInstance());
 
         subModules.forEach(AbstractHypixelMod::init);
 
         AxolotlClient.CONFIG.addCategory(category);
     }
 
-    public void tick(){
+    public void tick() {
         subModules.forEach(abstractHypixelMod -> {
-            if(abstractHypixelMod.tickable())abstractHypixelMod.tick();
+            if (abstractHypixelMod.tickable())
+                abstractHypixelMod.tick();
         });
     }
 
@@ -78,7 +79,7 @@ public class HypixelMods extends AbstractModule {
         HypixelAbstractionLayer.loadApiKey();
     }
 
-    private void addSubModule(AbstractHypixelMod mod){
+    private void addSubModule(AbstractHypixelMod mod) {
         this.subModules.add(mod);
         this.category.addSubCategory(mod.getCategory());
     }
@@ -87,8 +88,7 @@ public class HypixelMods extends AbstractModule {
         return null;
     }
 
-    public enum HypixelCacheMode{
-        ON_CLIENT_DISCONNECT,
-        ON_PLAYER_DISCONNECT
+    public enum HypixelCacheMode {
+        ON_CLIENT_DISCONNECT, ON_PLAYER_DISCONNECT
     }
 }

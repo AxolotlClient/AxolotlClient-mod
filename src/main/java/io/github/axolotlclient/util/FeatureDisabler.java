@@ -34,37 +34,37 @@ public class FeatureDisabler {
 
     private static final HashMap<BooleanOption, String[]> disabledServers = new HashMap<>();
 
-    public static void init(){
+    public static void init() {
         setServers(AxolotlClient.CONFIG.fullBright, "gommehd");
         setServers(AxolotlClient.CONFIG.timeChangerEnabled, "gommehd");
         setServers(Freelook.getInstance().enabled, "hypixel", "mineplex", "gommehd", "nucleoid");
     }
 
-    public static void onServerJoin(String address){
+    public static void onServerJoin(String address) {
         disabledServers.forEach((option, strings) -> disableOption(option, strings, address));
     }
 
-    public static void clear(){
+    public static void clear() {
         disabledServers.forEach((option, strings) -> {
             option.setForceOff(false, "ban_reason");
         });
     }
 
-    private static void disableOption(BooleanOption option, String[] servers, String currentServer){
+    private static void disableOption(BooleanOption option, String[] servers, String currentServer) {
         boolean ban = false;
-        for(String s:servers){
+        for (String s : servers) {
             if (currentServer.toLowerCase(Locale.ROOT).contains(s.toLowerCase(Locale.ROOT))) {
                 ban = true;
                 break;
             }
         }
 
-        if(option.getForceDisabled() != ban) {
+        if (option.getForceDisabled() != ban) {
             option.setForceOff(ban, "ban_reason");
         }
     }
 
-    private static void setServers(BooleanOption option, String... servers){
+    private static void setServers(BooleanOption option, String... servers) {
         disabledServers.put(option, servers);
     }
 }

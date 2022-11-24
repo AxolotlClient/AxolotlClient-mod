@@ -34,10 +34,12 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 @Mixin(EmitterParticle.class)
 public abstract class EmitterParticleMixin {
 
-    @Shadow @Final private ParticleEffect parameters;
+    @Shadow
+    @Final
+    private ParticleEffect parameters;
 
     @ModifyConstant(method = "tick", constant = @Constant(intValue = 16))
-    public int multiplyParticles(int constant){
+    public int multiplyParticles(int constant) {
         return constant * Particles.getInstance().getMultiplier(parameters.getType());
     }
 }

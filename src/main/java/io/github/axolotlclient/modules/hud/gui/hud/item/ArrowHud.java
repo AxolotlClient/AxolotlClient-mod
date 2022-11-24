@@ -50,11 +50,8 @@ public class ArrowHud extends TextHudEntry {
     private final BooleanOption dynamic = new BooleanOption("dynamic", false);
     private final BooleanOption allArrowTypes = new BooleanOption("allArrowTypes", false);
 
-    private final ItemStack[] arrowTypes = new ItemStack[]{
-            new ItemStack(Items.ARROW),
-            new ItemStack(Items.TIPPED_ARROW),
-            new ItemStack(Items.SPECTRAL_ARROW)
-    };
+    private final ItemStack[] arrowTypes = new ItemStack[] { new ItemStack(Items.ARROW),
+            new ItemStack(Items.TIPPED_ARROW), new ItemStack(Items.SPECTRAL_ARROW) };
     private ItemStack currentArrow = arrowTypes[0];
 
     public ArrowHud() {
@@ -65,10 +62,8 @@ public class ArrowHud extends TextHudEntry {
     public void render(MatrixStack matrices, float delta) {
         if (dynamic.get()) {
             ClientPlayerEntity player = client.player;
-            if (!(
-                    player.getStackInHand(Hand.MAIN_HAND).getItem() instanceof RangedWeaponItem
-                            || player.getStackInHand(Hand.OFF_HAND).getItem() instanceof RangedWeaponItem
-            )) {
+            if (!(player.getStackInHand(Hand.MAIN_HAND).getItem() instanceof RangedWeaponItem
+                    || player.getStackInHand(Hand.OFF_HAND).getItem() instanceof RangedWeaponItem)) {
                 return;
             }
         }
@@ -78,10 +73,8 @@ public class ArrowHud extends TextHudEntry {
     @Override
     public void renderComponent(MatrixStack matrices, float delta) {
         DrawPosition pos = getPos();
-        drawCenteredString(
-                matrices, client.textRenderer, String.valueOf(arrows), pos.x() + getWidth() / 2, pos.y() + getHeight() - 10,
-                textColor.get(), shadow.get()
-        );
+        drawCenteredString(matrices, client.textRenderer, String.valueOf(arrows), pos.x() + getWidth() / 2,
+                pos.y() + getHeight() - 10, textColor.get(), shadow.get());
         ItemUtil.renderGuiItemModel(getScale(), currentArrow, pos.x() + 2, pos.y() + 2);
     }
 
@@ -111,10 +104,8 @@ public class ArrowHud extends TextHudEntry {
     @Override
     public void renderPlaceholderComponent(MatrixStack matrices, float delta) {
         DrawPosition pos = getPos();
-        drawCenteredString(
-                matrices, client.textRenderer, "64", pos.x() + getWidth() / 2, pos.y() + getHeight() - 10, textColor.get(),
-                shadow.get()
-        );
+        drawCenteredString(matrices, client.textRenderer, "64", pos.x() + getWidth() / 2, pos.y() + getHeight() - 10,
+                textColor.get(), shadow.get());
         ItemUtil.renderGuiItemModel(getScale(), arrowTypes[0], pos.x() + 2, pos.y() + 2);
     }
 
@@ -135,5 +126,4 @@ public class ArrowHud extends TextHudEntry {
     public Identifier getId() {
         return ID;
     }
-
 }

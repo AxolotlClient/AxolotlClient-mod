@@ -34,7 +34,7 @@ public abstract class IdentifierMixin {
     // Only because some specific sky pack creators can't name their stuff correctly...
 
     @Inject(method = "isPathValid", at = @At("HEAD"), cancellable = true)
-    private static void isPathValidYes(String path, CallbackInfoReturnable<Boolean> cir){
+    private static void isPathValidYes(String path, CallbackInfoReturnable<Boolean> cir) {
         cir.setReturnValue(!path.contains("DUMMY"));
     }
 }

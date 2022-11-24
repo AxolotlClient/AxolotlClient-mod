@@ -31,7 +31,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public abstract class MinecraftClientMainMixin {
 
     @Redirect(method = "<clinit>", at = @At(value = "INVOKE", target = "Ljava/lang/System;setProperty(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;"))
-    private static String noHeadless(String key, String value){
+    private static String noHeadless(String key, String value) {
         return "";
     }
 }

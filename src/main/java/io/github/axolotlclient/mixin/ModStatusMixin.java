@@ -29,12 +29,12 @@ import org.spongepowered.asm.mixin.Overwrite;
 @Mixin(ModStatus.class)
 public abstract class ModStatusMixin {
 
-	/**
-	 * @author moehreag
-	 * @reason Remove mod signs because they're ugly
-	 */
-	@Overwrite
-	public boolean isModded(){
-		return false;
-	}
+    /**
+     * @author moehreag
+     * @reason Remove mod signs because they're ugly
+     */
+    @Overwrite
+    public boolean isModded() {
+        return false;
+    }
 }

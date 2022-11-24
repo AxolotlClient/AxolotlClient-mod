@@ -49,7 +49,7 @@ public class CompassHud extends TextHudEntry implements DynamicallyPositionable 
     private final IntegerOption widthOption = new IntegerOption("width", this::updateWidth, width, 100, 800);
 
     private final ColorOption lookingBox = new ColorOption("lookingbox", new Color(0x80000000));
-    private final ColorOption degreesColor = new ColorOption("degreescolor",  new Color(-1));
+    private final ColorOption degreesColor = new ColorOption("degreescolor", new Color(-1));
     private final ColorOption majorIndicatorColor = new ColorOption("majorindicator", new Color(-1));
     private final ColorOption minorIndicatorColor = new ColorOption("minorindicator", new Color(0xCCFFFFFF));
     private final ColorOption cardinalColor = new ColorOption("cardinalcolor", Color.WHITE);
@@ -57,7 +57,7 @@ public class CompassHud extends TextHudEntry implements DynamicallyPositionable 
     private final BooleanOption invert = new BooleanOption("invert_direction", false);
     private final BooleanOption showDegrees = new BooleanOption("showdegrees", true);
 
-    private void updateWidth(int newWidth){
+    private void updateWidth(int newWidth) {
         setWidth(newWidth);
         onBoundsUpdate();
     }
@@ -95,20 +95,18 @@ public class CompassHud extends TextHudEntry implements DynamicallyPositionable 
             degrees += 360;
         }
         float start = degrees - 150 + 360;
-//        float end = degrees + 150 + 360;
+        //        float end = degrees + 150 + 360;
         int startIndicator = ((int) (start + 8) / 15) * 15;
         int amount = 21;
-//        int endIndicator = startIndicator + 15 * amount;
+        //        int endIndicator = startIndicator + 15 * amount;
         int dist = width / (amount);
         DrawPosition pos = getPos();
         int x = pos.x();
         int y = pos.y() + 1;
         RenderUtil.drawRectangle(matrices, pos.x() + (int) halfWidth - 1, pos.y(), 3, 11, lookingBox.get());
         if (showDegrees.get()) {
-            DrawUtil.drawCenteredString(
-                    matrices, client.textRenderer, String.valueOf((int) degrees), x + (int) halfWidth, y + 20, degreesColor.get(),
-                    shadow.get()
-            );
+            DrawUtil.drawCenteredString(matrices, client.textRenderer, String.valueOf((int) degrees),
+                    x + (int) halfWidth, y + 20, degreesColor.get(), shadow.get());
         }
         float shift = (startIndicator - start) / 15f * dist;
         if (invert.get()) {
@@ -140,16 +138,15 @@ public class CompassHud extends TextHudEntry implements DynamicallyPositionable 
                 Color color = cardinalColor.get();
                 color = color.withAlpha((int) (color.getAlpha() * targetOpacity));
                 if (color.getAlpha() > 0) {
-                    DrawUtil.drawCenteredString(
-                            matrices, client.textRenderer, getCardString(indicator, d), innerX + 1, y + 10, color, shadow.get());
+                    DrawUtil.drawCenteredString(matrices, client.textRenderer, getCardString(indicator, d), innerX + 1,
+                            y + 10, color, shadow.get());
                 }
-
             } else if (indicator == Indicator.SEMI_CARDINAL) {
                 Color color = semiCardinalColor.get();
                 color = color.withAlpha((int) (color.getAlpha() * targetOpacity));
                 if (color.getAlpha() > 0) {
-                    DrawUtil.drawCenteredString(
-                            matrices, client.textRenderer, getCardString(indicator, d), innerX + 1, y + 1, color, shadow.get());
+                    DrawUtil.drawCenteredString(matrices, client.textRenderer, getCardString(indicator, d), innerX + 1,
+                            y + 1, color, shadow.get());
                 }
             } else {
                 // We have to call .color() here so that transparency stays
@@ -211,9 +208,7 @@ public class CompassHud extends TextHudEntry implements DynamicallyPositionable 
     }
 
     private enum Indicator {
-        CARDINAL,
-        SEMI_CARDINAL,
-        SMALL
+        CARDINAL, SEMI_CARDINAL, SMALL
 
     }
 }

@@ -212,12 +212,10 @@ public interface Positionable {
         return new Rectangle(pos.x, pos.y, getTrueWidth(), getTrueHeight());
     }
 
-
     /**
      * Updated when location/size changes
      */
     default void onBoundsUpdate() {
-
     }
 
     /**
@@ -238,7 +236,6 @@ public interface Positionable {
      * Sets the raw height (this is unscaled)
      */
     void setHeight(int height);
-
 
     /**
      * The height modifier after taking raw position. This is really only used for {@link DynamicallyPositionable}
@@ -265,6 +262,4 @@ public interface Positionable {
     default int offsetTrueHeight() {
         return (int) (offsetHeight() * getScale());
     }
-
-
 }
