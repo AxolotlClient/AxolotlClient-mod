@@ -23,7 +23,7 @@
 package io.github.axolotlclient.mixin;
 
 import io.github.axolotlclient.modules.hud.HudManager;
-import io.github.axolotlclient.modules.hud.gui.hud.ToggleSprintHud;
+import io.github.axolotlclient.modules.hud.gui.hud.simple.ToggleSprintHud;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBind;
 import org.spongepowered.asm.mixin.Mixin;

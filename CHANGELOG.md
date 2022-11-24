@@ -54,6 +54,12 @@
 
 ### 2.2.5
 
-- update README, add license headers in files, add missing credits
+- reformat code (@TheKodeToad)
+- add PlayerHUD Auto-Hide Option (@TheKodeToad) 
+- update README
+- add license headers
+- add missing credits
 - add turkish translation of the README
+- add Option to hide AutoTip tip messages
+- Add Option to toggle Freelook
 

@@ -20,7 +20,7 @@
  * For more information, see the LICENSE file.
  */
 
-package io.github.axolotlclient.modules.hud.gui.hud;
+package io.github.axolotlclient.modules.hud.gui.hud.simple;
 
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.Option;
@@ -56,10 +56,8 @@ public class ToggleSprintHud extends SimpleTextHudEntry {
     private final BooleanOption randomPlaceholder = new BooleanOption("randomPlaceholder", ID.getPath(), false);
     private final StringOption placeholder = new StringOption("placeholder", ID.getPath(), "No keys pressed");
 
-    private final KeyBind sprintToggle = new KeyBind("keys.kronhud.toggleSprint", GLFW.GLFW_KEY_K,
-            "keys.category.kronhud.keys");
-    private final KeyBind sneakToggle = new KeyBind("keys.kronhud.toggleSneak", GLFW.GLFW_KEY_I,
-            "keys.category.kronhud.keys");
+    private final KeyBind sprintToggle = new KeyBind("key.toggleSprint", GLFW.GLFW_KEY_K, "category.axolotlclient");
+    private final KeyBind sneakToggle = new KeyBind("key.toggleSneak", GLFW.GLFW_KEY_I, "category.axolotlclient");
 
     @Getter
     private final BooleanOption sprintToggled = new BooleanOption("sprintToggled", ID.getPath(), false);
@@ -127,17 +125,17 @@ public class ToggleSprintHud extends SimpleTextHudEntry {
     @Override
     public String getValue() {
         if (client.options.sneakKey.isPressed()) {
-            return I18n.translate("texts.kronhud.togglesprint.sneaking_pressed");
+            return I18n.translate("axolotlclient.sneaking_pressed");
         }
         if (client.options.sprintKey.isPressed()) {
-            return I18n.translate("texts.kronhud.togglesprint.sprinting_pressed");
+            return I18n.translate("axolotlclient.sprinting_pressed");
         }
 
         if (toggleSneak.get() && sneakToggled.get()) {
-            return I18n.translate("texts.kronhud.togglesprint.sneaking_toggled");
+            return I18n.translate("axolotlclient.sneaking_toggled");
         }
         if (toggleSprint.get() && sprintToggled.get()) {
-            return I18n.translate("texts.kronhud.togglesprint.sprinting_toggled");
+            return I18n.translate("axolotlclient.sprinting_toggled");
         }
         return getPlaceholder();
     }
