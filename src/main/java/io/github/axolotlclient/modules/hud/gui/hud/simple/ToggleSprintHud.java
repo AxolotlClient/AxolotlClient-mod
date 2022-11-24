@@ -125,17 +125,17 @@ public class ToggleSprintHud extends SimpleTextHudEntry {
     @Override
     public String getValue() {
         if (client.options.sneakKey.isPressed()) {
-            return I18n.translate("axolotlclient.sneaking_pressed");
+            return I18n.translate("sneaking_pressed");
         }
         if (client.options.sprintKey.isPressed()) {
-            return I18n.translate("axolotlclient.sprinting_pressed");
+            return I18n.translate("sprinting_pressed");
         }
 
         if (toggleSneak.get() && sneakToggled.get()) {
-            return I18n.translate("axolotlclient.sneaking_toggled");
+            return I18n.translate("sneaking_toggled");
         }
         if (toggleSprint.get() && sprintToggled.get()) {
-            return I18n.translate("axolotlclient.sprinting_toggled");
+            return I18n.translate("sprinting_toggled");
         }
         return getPlaceholder();
     }
