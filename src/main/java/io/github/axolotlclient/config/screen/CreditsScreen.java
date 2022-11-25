@@ -22,13 +22,20 @@
 
 package io.github.axolotlclient.config.screen;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import org.lwjgl.opengl.GL11;
+
 import com.mojang.blaze3d.platform.GlStateManager;
+
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlclientConfig.Color;
 import io.github.axolotlclient.mixin.SoundManagerAccessor;
 import io.github.axolotlclient.mixin.SoundSystemAccessor;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
-import io.github.axolotlclient.modules.hud.util.Rectangle;
+import io.github.axolotlclient.modules.hud.util.RenderUtil;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -47,12 +54,7 @@ import net.minecraft.text.Style;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import org.lwjgl.opengl.GL11;
 import paulscode.sound.SoundSystem;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class CreditsScreen extends Screen {
 
@@ -355,6 +357,8 @@ public class CreditsScreen extends Screen {
         private int width;
         private int height;
 
+        private final Color DARK_GRAY = Color.DARK_GRAY.withAlpha(127);
+
         protected HashMap<String, ClickEvent> effects = new HashMap<>();
         protected HashMap<Integer, String> lines = new HashMap<>();
 
@@ -389,8 +393,8 @@ public class CreditsScreen extends Screen {
         }
 
         public void render() {
-            DrawUtil.fillRect(x, y, width, height,
-                    io.github.axolotlclient.AxolotlclientConfig.Color.DARK_GRAY.withAlpha(127));
+            RenderUtil.drawRectangle(x, y, width, height,
+                    DARK_GRAY);
             DrawUtil.outlineRect(x, y, width, height,
                     io.github.axolotlclient.AxolotlclientConfig.Color.BLACK.getAsInt());
 

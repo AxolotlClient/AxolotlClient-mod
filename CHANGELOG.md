@@ -58,4 +58,6 @@
 - add turkish translation of the README
 - add Option to hide AutoTip tip messages
 - Add Option to toggle Freelook 
+- add Chinese (PRC) translation (@HowardZHY)
+- add Chinese (TW) translation (@HowardZHY)
 
