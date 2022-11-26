@@ -60,4 +60,5 @@
 - Add Option to toggle Freelook 
 - add Chinese (PRC) translation (@HowardZHY)
 - add Chinese (TW) translation (@HowardZHY)
+- update config library to 1.0.13
 
