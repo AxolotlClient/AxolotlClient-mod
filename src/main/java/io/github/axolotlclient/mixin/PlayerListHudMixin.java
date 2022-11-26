@@ -36,6 +36,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -44,6 +45,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PlayerListHud.class)
 public abstract class PlayerListHudMixin {
+
+    @Shadow protected abstract Text applyGameModeFormatting(PlayerListEntry entry, MutableText name);
 
     private GameProfile cachedPlayer;
 
@@ -57,13 +60,14 @@ public abstract class PlayerListHudMixin {
     private PlayerListEntry playerListEntry;
 
     @Inject(method = "getPlayerName", at = @At("HEAD"), cancellable = true)
-    public void nickHider(PlayerListEntry playerEntry, CallbackInfoReturnable<String> cir) {
-        if (playerEntry.getProfile().getId() == MinecraftClient.getInstance().player.getUuid()
+    public void nickHider(PlayerListEntry playerEntry, CallbackInfoReturnable<Text> cir) {
+        assert MinecraftClient.getInstance().player != null;
+        if (playerEntry.getProfile().equals(MinecraftClient.getInstance().player.getGameProfile())
                 && NickHider.getInstance().hideOwnName.get()) {
-            cir.setReturnValue(NickHider.getInstance().hiddenNameSelf.get());
-        } else if (playerEntry.getProfile().getId() != MinecraftClient.getInstance().player.getUuid()
+            cir.setReturnValue(this.applyGameModeFormatting(playerEntry, Text.literal(NickHider.getInstance().hiddenNameSelf.get())));
+        } else if (!playerEntry.getProfile().equals(MinecraftClient.getInstance().player.getGameProfile())
                 && NickHider.getInstance().hideOtherNames.get()) {
-            cir.setReturnValue(NickHider.getInstance().hiddenNameOthers.get());
+            cir.setReturnValue(this.applyGameModeFormatting(playerEntry, Text.literal(NickHider.getInstance().hiddenNameOthers.get())));
         }
     }
 

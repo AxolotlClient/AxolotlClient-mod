@@ -77,24 +77,33 @@ public class NetworkHelper {
     }
 
     public static void setOnline() {
-        try {
-            uuid = MinecraftClient.getInstance().player.getUuid();
 
-            CloseableHttpClient client = HttpClients.createDefault();
-            HttpPost post = new HttpPost("https://moehreag.duckdns.org/axolotlclient-api/");
-            post.setHeader("Accept", "application/json");
-            post.setHeader("Content-type", "application/json");
-            post.setEntity(new StringEntity("{\n\t\"uuid\": \"" + uuid.toString() + "\",\n\t\"online\": true\n}"));
-            HttpResponse response = client.execute(post);
-            String body = EntityUtils.toString(response.getEntity());
-            if (body.contains("Success!")) {
-                Logger.info("Sucessfully logged in at AxolotlClient!");
-                loggedIn = true;
+        if(uuid == null){
+            try {
+
+                uuid = MinecraftClient.getInstance().player.getUuid();
+            } catch (NullPointerException ignored){}
+        }
+
+        if(uuid != null) {
+            try {
+
+                CloseableHttpClient client = HttpClients.createDefault();
+                HttpPost post = new HttpPost("https://moehreag.duckdns.org/axolotlclient-api/");
+                post.setHeader("Accept", "application/json");
+                post.setHeader("Content-type", "application/json");
+                post.setEntity(new StringEntity("{\n\t\"uuid\": \"" + uuid.toString() + "\",\n\t\"online\": true\n}"));
+                HttpResponse response = client.execute(post);
+                String body = EntityUtils.toString(response.getEntity());
+                if (body.contains("Success!")) {
+                    Logger.info("Sucessfully logged in at AxolotlClient!");
+                    loggedIn = true;
+                }
+                client.close();
+            } catch (Exception e) {
+                //e.printStackTrace();
+                Logger.error("Error while logging in!");
             }
-            client.close();
-        } catch (Exception e) {
-            //e.printStackTrace();
-            Logger.error("Error while logging in!");
         }
     }
 

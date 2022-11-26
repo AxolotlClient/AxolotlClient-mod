@@ -12,7 +12,7 @@ group = project.maven_group
 
 repositories {
 	maven {
-		url "https://moehreag.duckdns.org/maven/snapshots"
+		url "https://moehreag.duckdns.org/maven/releases"
 	}
 
 	maven {
@@ -39,7 +39,7 @@ dependencies {
 	modImplementation "org.quiltmc:quilt-loader:${project.loader_version}"
 	modImplementation "org.quiltmc.quilted-fabric-api:quilted-fabric-api:${quilted_fabric_api_version}"
 
-	include(modImplementation "io.github.axolotlclient:AxolotlClient-config:1.0.13-beta.1+1.19.2")
+	modImplementation include("io.github.axolotlclient:AxolotlClient-config:${project.config_version}+${project.minecraft_version}")
 
 	modImplementation "com.terraformersmc:modmenu:4.0.5"
 
