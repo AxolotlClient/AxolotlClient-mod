@@ -290,5 +290,16 @@
     "majorindicator": "Indikatorfarbe (Major)",
     "minorindicator": "Indikatorfarbe (Minor)",
     "dynamicrotation": "Dynamische Rotation",
-    "rotation": "Rotation"
+    "rotation": "Rotation",
+    "openAction": "[Öffnen]",
+    "open_image": "Dieses Bild Öffnen",
+    "autoExec": "Automatische Ausführung",
+    "autoExec.tooltip": "Eine Aktion automatisch ausführen.",
+    "hideTipMessages": "Tip-Nachrichten verstecken",
+    "hideTipMessages.tooltip": "Versteckt Tip-Nachrichten. Funktioniert nur, <br>wenn deine Hypixel-Sprache auf Englisch eingestellt ist.",
+    "autoHide": "Automatisch verstecken",
+    "toggle": "Toggle",
+    "toggle.tooltip": "Verwende die Taste um Freelook zu toggeln.",
+    "beams": "Beacon Beams",
+    "showBeaconBeams": "Zeige Beacon Beams"
 }
