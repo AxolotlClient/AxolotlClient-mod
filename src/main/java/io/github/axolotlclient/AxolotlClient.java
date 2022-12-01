@@ -36,6 +36,7 @@ import io.github.axolotlclient.modules.hypixel.HypixelMods;
 import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
 import io.github.axolotlclient.modules.motionblur.MotionBlur;
 import io.github.axolotlclient.modules.particles.Particles;
+import io.github.axolotlclient.modules.renderOptions.BeaconBeam;
 import io.github.axolotlclient.modules.rpc.DiscordRPC;
 import io.github.axolotlclient.modules.screenshotUtils.ScreenshotUtils;
 import io.github.axolotlclient.modules.scrollableTooltips.ScrollableTooltips;
@@ -156,6 +157,7 @@ public class AxolotlClient implements ClientModInitializer {
         modules.add(TntTime.getInstance());
         modules.add(Particles.getInstance());
         modules.add(ScreenshotUtils.getInstance());
+        modules.add(BeaconBeam.getInstance());
     }
 
     private static void addExternalModules() {

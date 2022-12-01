@@ -312,6 +312,10 @@
 	"toggle": "Toggle",
 	"toggle.tooltip": "Use the set key to toggle whether Freelook is enabled.",
 
+	"beams": "Beacon Beams",
+	"showBeaconBeams": "Show Beacon Beams",
+	"showEndGatewayBeams": "Show End Gateway Beams",
+
 	"credits": "Credits",
 	"creditsBGM": "BGM",
 	"contributors": "Contributors",

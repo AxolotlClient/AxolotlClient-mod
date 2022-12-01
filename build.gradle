@@ -120,6 +120,7 @@ modrinth {
 	uploadFile = remapJar
 	gameVersions = ["${project.minecraft_version}"]
 	loaders = ["quilt"]
+	additionalFiles = [sourcesJar]
 	dependencies {
 		required.project "qsl"
 	}

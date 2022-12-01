@@ -64,3 +64,8 @@
 - Add Option to toggle Freelook
 - update config library to 1.0.13
 
+### 2.2.6
+
+- add sourcesJar to files to be uploaded to modrinth
+- add option to hide Beacon Beams
+
