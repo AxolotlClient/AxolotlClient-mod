@@ -52,7 +52,7 @@ public abstract class ReloadableResourceManagerMixin {
 
         PackDisplayHud hud = (PackDisplayHud) HudManager.getInstance().get(PackDisplayHud.ID);
         if (hud != null) {
-            hud.setPacks(resourcePacks);
+            hud.update();
         }
     }
 

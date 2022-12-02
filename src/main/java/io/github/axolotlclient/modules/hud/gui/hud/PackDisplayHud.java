@@ -28,15 +28,17 @@ import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.Option;
 import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
-import io.github.axolotlclient.util.Logger;
 import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.resource.ResourceIoSupplier;
 import net.minecraft.resource.pack.ResourcePack;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +51,6 @@ public class PackDisplayHud extends TextHudEntry {
     private final BooleanOption iconsOnly = new BooleanOption("iconsonly", false);
 
     public final List<PackWidget> widgets = new ArrayList<>();
-    private final List<ResourcePack> packs = new ArrayList<>();
     private PackWidget placeholder;
 
     public PackDisplayHud() {
@@ -58,17 +59,16 @@ public class PackDisplayHud extends TextHudEntry {
 
     @Override
     public void init() {
-        packs.forEach(pack -> {
-            try {
-                InputStream s = pack.openRoot("pack.png");
-                if (s != null) {
-                    s.close();
-                    if (packs.size() == 1) {
-                        widgets.add(new PackWidget(pack));
-                    } else if (!pack.getName().equalsIgnoreCase("Default")) {
-                        widgets.add(new PackWidget(pack));
-                    }
+        int listSize = client.getResourcePackManager().getProfiles().size();
+        MinecraftClient.getInstance().getResourcePackManager().getEnabledProfiles().forEach(profile -> {
+            try (ResourcePack pack = profile.createResourcePack()) {
+
+                if (listSize == 1) {
+                    widgets.add(createWidget(profile.getDisplayName(), pack));
+                } else if (!pack.getName().equalsIgnoreCase("vanilla")) {
+                    widgets.add(createWidget(profile.getDisplayName(), pack));
                 }
+
             } catch (Exception ignored) {}
         });
 
@@ -84,10 +84,16 @@ public class PackDisplayHud extends TextHudEntry {
         onBoundsUpdate();
     }
 
-    public void setPacks(List<ResourcePack> packs) {
-        widgets.clear();
-        this.packs.clear();
-        this.packs.addAll(packs);
+    private PackWidget createWidget(Text displayName, ResourcePack pack) throws IOException, AssertionError {
+        ResourceIoSupplier<InputStream> supplier = pack.openRoot("pack.png");
+        assert supplier != null;
+        InputStream stream = supplier.get();
+        if (stream != null) {
+            int texture = new NativeImageBackedTexture(NativeImage.read(stream)).getGlId();
+            stream.close();
+            return new PackWidget(displayName, texture);
+        }
+        return null;
     }
 
     @Override
@@ -130,9 +136,12 @@ public class PackDisplayHud extends TextHudEntry {
             onBoundsUpdate();
         }
         if (placeholder == null) {
-            placeholder = new PackWidget(MinecraftClient.getInstance().getResourcePackProvider().getPack());
+            try (ResourcePack defaultPack = MinecraftClient.getInstance().m_iuvifafs()) {
+                placeholder = createWidget(defaultPack.getDisplayName(), defaultPack);
+            } catch (Exception ignored){}
+        } else {
+            placeholder.render(matrices, getPos().x + 1, getPos().y + 1);
         }
-        placeholder.render(matrices, getPos().x + 1, getPos().y + 1);
     }
 
     @Override
@@ -152,23 +161,29 @@ public class PackDisplayHud extends TextHudEntry {
         return true;
     }
 
+    public void update() {
+        widgets.clear();
+        init();
+    }
+
     private class PackWidget {
 
-        private int texture;
+        private final int texture;
         @Getter
         public final String name;
 
-        public PackWidget(ResourcePack pack) {
-            this.name = pack.getName();
-            try {
-                InputStream stream = pack.openRoot("pack.png");
+        public PackWidget(Text name, int textureId) {
+            this.name = name.getString();
+            texture = textureId;
+            /*try {
+                InputStream stream = pack.openRoot("pack.png").get();
                 assert stream != null;
                 this.texture = new NativeImageBackedTexture(NativeImage.read(stream)).getGlId();
                 stream.close();
             } catch (Exception e) {
                 Logger.warn("Pack " + pack.getName()
                         + " somehow threw an error! Please investigate... Does it have an icon?");
-            }
+            }*/
         }
 
         public void render(MatrixStack matrices, int x, int y) {

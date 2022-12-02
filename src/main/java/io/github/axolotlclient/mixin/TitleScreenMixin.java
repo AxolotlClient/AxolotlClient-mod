@@ -62,11 +62,13 @@ public abstract class TitleScreenMixin extends Screen {
         }
     }
 
-    @ModifyArgs(method = "initWidgetsNormal", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget;<init>(IIIILnet/minecraft/text/Text;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;Lnet/minecraft/client/gui/widget/ButtonWidget$TooltipSupplier;)V", ordinal = 1))
+    @ModifyArgs(method = "initWidgetsNormal",
+            at = @At(value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/widget/ButtonWidget;builder(Lnet/minecraft/text/Text;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;)Lnet/minecraft/client/gui/widget/ButtonWidget$Builder;", ordinal = 2))
     public void noRealmsbutOptionsButton(Args args) {
         if (!QuiltLoader.isModLoaded("modmenu")) {
-            args.set(4, Text.translatable("config"));
-            args.set(5, (ButtonWidget.PressAction) buttonWidget -> MinecraftClient.getInstance()
+            args.set(0, Text.translatable("config"));
+            args.set(1, (ButtonWidget.PressAction) buttonWidget -> MinecraftClient.getInstance()
                     .setScreen(new HudEditScreen(this)));
         }
     }

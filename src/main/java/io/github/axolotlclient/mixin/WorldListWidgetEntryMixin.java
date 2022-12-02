@@ -24,7 +24,7 @@ package io.github.axolotlclient.mixin;
 
 import io.github.axolotlclient.modules.rpc.DiscordRPC;
 import net.minecraft.client.gui.screen.world.WorldListWidget;
-import net.minecraft.world.level.storage.LevelSummary;
+import net.minecraft.world.storage.WorldSaveSummary;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -37,7 +37,7 @@ public abstract class WorldListWidgetEntryMixin {
 
     @Shadow
     @Final
-    private LevelSummary level;
+    private WorldSaveSummary level;
 
     @Inject(method = "play", at = @At("HEAD"))
     public void onSPWorldJoin(CallbackInfo ci) {

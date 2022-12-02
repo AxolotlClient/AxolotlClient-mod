@@ -23,11 +23,11 @@
 package io.github.axolotlclient.modules.hud.gui.hud.simple;
 
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.KeyBindOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.Option;
 import io.github.axolotlclient.AxolotlclientConfig.options.StringOption;
 import io.github.axolotlclient.modules.hud.gui.entry.SimpleTextHudEntry;
 import lombok.Getter;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBind;
 import net.minecraft.client.resource.language.I18n;
@@ -57,7 +57,9 @@ public class ToggleSprintHud extends SimpleTextHudEntry {
     private final StringOption placeholder = new StringOption("placeholder", ID.getPath(), "No keys pressed");
 
     private final KeyBind sprintToggle = new KeyBind("key.toggleSprint", GLFW.GLFW_KEY_K, "category.axolotlclient");
+    private final KeyBindOption sprintKey = new KeyBindOption("key.toggleSprint", sprintToggle, (key)->{});
     private final KeyBind sneakToggle = new KeyBind("key.toggleSneak", GLFW.GLFW_KEY_I, "category.axolotlclient");
+    private final KeyBindOption sneakKey = new KeyBindOption("key.toggleSneak", sneakToggle, (key)->{});
 
     @Getter
     private final BooleanOption sprintToggled = new BooleanOption("sprintToggled", ID.getPath(), false);
@@ -75,8 +77,8 @@ public class ToggleSprintHud extends SimpleTextHudEntry {
 
     @Override
     public void init() {
-        KeyBindingHelper.registerKeyBinding(sprintToggle);
-        KeyBindingHelper.registerKeyBinding(sneakToggle);
+        //KeyBindingHelper.registerKeyBinding(sprintToggle);
+        //KeyBindingHelper.registerKeyBinding(sneakToggle);
     }
 
     private void loadRandomPlaceholder() {
@@ -165,7 +167,9 @@ public class ToggleSprintHud extends SimpleTextHudEntry {
     public List<Option<?>> getConfigurationOptions() {
         List<Option<?>> options = super.getConfigurationOptions();
         options.add(toggleSprint);
+        options.add(sprintKey);
         options.add(toggleSneak);
+        options.add(sneakKey);
         options.add(randomPlaceholder);
         options.add(placeholder);
         return options;

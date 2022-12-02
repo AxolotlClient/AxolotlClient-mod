@@ -29,7 +29,7 @@ import lombok.experimental.UtilityClass;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.ShaderProgram;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.Matrix4f;
+import org.joml.Matrix4f;
 
 import java.util.function.Supplier;
 
@@ -135,10 +135,10 @@ public class RenderUtil {
         RenderSystem.disableTexture();
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-        bufferBuilder.vertex(matrix, (float) x1, (float) y2, 0.0F).color(red, green, blue, alpha).next();
-        bufferBuilder.vertex(matrix, (float) x2, (float) y2, 0.0F).color(red, green, blue, alpha).next();
-        bufferBuilder.vertex(matrix, (float) x2, (float) y1, 0.0F).color(red, green, blue, alpha).next();
-        bufferBuilder.vertex(matrix, (float) x1, (float) y1, 0.0F).color(red, green, blue, alpha).next();
+        bufferBuilder.m_rkxaaknb(matrix, (float) x1, (float) y2, 0.0F).color(red, green, blue, alpha).next();
+        bufferBuilder.m_rkxaaknb(matrix, (float) x2, (float) y2, 0.0F).color(red, green, blue, alpha).next();
+        bufferBuilder.m_rkxaaknb(matrix, (float) x2, (float) y1, 0.0F).color(red, green, blue, alpha).next();
+        bufferBuilder.m_rkxaaknb(matrix, (float) x1, (float) y1, 0.0F).color(red, green, blue, alpha).next();
         BufferRenderer.drawWithShader(bufferBuilder.end());
         RenderSystem.enableTexture();
     }
@@ -153,10 +153,10 @@ public class RenderUtil {
         float g = (float) (colorInt >> 8 & 0xFF) / 255.0f;
         float b = (float) (colorInt & 0xFF) / 255.0f;
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-        bufferBuilder.vertex(matrix, x1, y2, 0.0f).color(r, g, b, a).next();
-        bufferBuilder.vertex(matrix, x2, y2, 0.0f).color(r, g, b, a).next();
-        bufferBuilder.vertex(matrix, x2, y1, 0.0f).color(r, g, b, a).next();
-        bufferBuilder.vertex(matrix, x1, y1, 0.0f).color(r, g, b, a).next();
+        bufferBuilder.m_rkxaaknb(matrix, x1, y2, 0.0f).color(r, g, b, a).next();
+        bufferBuilder.m_rkxaaknb(matrix, x2, y2, 0.0f).color(r, g, b, a).next();
+        bufferBuilder.m_rkxaaknb(matrix, x2, y1, 0.0f).color(r, g, b, a).next();
+        bufferBuilder.m_rkxaaknb(matrix, x1, y1, 0.0f).color(r, g, b, a).next();
         BufferRenderer.drawWithShader(bufferBuilder.end());
         colorPostRender(color);
     }
@@ -184,10 +184,10 @@ public class RenderUtil {
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShader(shaderSupplier);
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-        bufferBuilder.vertex(matrix, x1, y2, 0.0f).color(r, g, b, a).next();
-        bufferBuilder.vertex(matrix, x2, y2, 0.0f).color(r, g, b, a).next();
-        bufferBuilder.vertex(matrix, x2, y1, 0.0f).color(r, g, b, a).next();
-        bufferBuilder.vertex(matrix, x1, y1, 0.0f).color(r, g, b, a).next();
+        bufferBuilder.m_rkxaaknb(matrix, x1, y2, 0.0f).color(r, g, b, a).next();
+        bufferBuilder.m_rkxaaknb(matrix, x2, y2, 0.0f).color(r, g, b, a).next();
+        bufferBuilder.m_rkxaaknb(matrix, x2, y1, 0.0f).color(r, g, b, a).next();
+        bufferBuilder.m_rkxaaknb(matrix, x1, y1, 0.0f).color(r, g, b, a).next();
         BufferRenderer.drawWithShader(bufferBuilder.end());
         RenderSystem.enableTexture();
         RenderSystem.disableBlend();

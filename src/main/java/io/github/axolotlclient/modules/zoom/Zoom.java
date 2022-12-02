@@ -26,10 +26,10 @@ import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.FloatOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.KeyBindOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.util.Util;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBind;
 
@@ -71,11 +71,11 @@ public class Zoom extends AbstractModule {
         zoom.add(zoomScrolling);
         zoom.add(decreaseSensitivity);
         zoom.add(smoothCamera);
+        zoom.add(new KeyBindOption("key.zoom", keyBinding = new KeyBind("key.zoom", InputUtil.KEY_C_CODE, "category.axolotlclient"), keyBind -> {}));
 
         AxolotlClient.CONFIG.rendering.addSubCategory(zoom);
 
-        keyBinding = new KeyBind("key.zoom", InputUtil.KEY_C_CODE, "category.axolotlclient");
-        KeyBindingHelper.registerKeyBinding(keyBinding);
+        //KeyBindingHelper.registerKeyBinding(keyBinding);
 
         active = false;
     }

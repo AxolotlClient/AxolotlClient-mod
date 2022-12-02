@@ -36,9 +36,10 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Axis;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Quaternion;
-import net.minecraft.util.math.Vec3f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 import java.util.List;
 
@@ -111,7 +112,7 @@ public class PlayerHud extends BoxHudEntry {
         float scale = getScale() * 40;
         nextStack.scale(scale, scale, scale);
 
-        Quaternion quaternion = Vec3f.POSITIVE_Z.getDegreesQuaternion(180.0F);
+        Quaternionf quaternion = Axis.Z_POSITIVE.rotationDegrees(180.0F);
 
         nextStack.multiply(quaternion);
         // Rotate to whatever is wanted. Also make sure to offset the yaw
@@ -119,7 +120,7 @@ public class PlayerHud extends BoxHudEntry {
         if (dynamicRotation.get()) {
             deltaYaw -= (lastYawOffset + ((yawOffset - lastYawOffset) * delta));
         }
-        nextStack.multiply(new Quaternion(new Vec3f(0, 1, 0), deltaYaw - 180 + rotation.get().floatValue(), true));
+        nextStack.multiply(new Quaternionf().fromAxisAngleDeg(new Vector3f(0, 1, 0), deltaYaw - 180 + rotation.get().floatValue()));
 
         // Save these to set them back later
         float pastYaw = client.player.getYaw();

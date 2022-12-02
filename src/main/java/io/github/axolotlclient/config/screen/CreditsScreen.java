@@ -27,7 +27,6 @@ import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlclientConfig.Color;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
-import io.github.axolotlclient.modules.hud.util.Rectangle;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Element;
@@ -44,6 +43,7 @@ import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.ClickEvent;
+import net.minecraft.text.ScreenTexts;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -153,26 +153,24 @@ public class CreditsScreen extends Screen {
         creditsList = new CreditsList(client, width, height, 50, height - 50, 25);
         addSelectableChild(creditsList);
 
-        this.addDrawableChild(
-                new ButtonWidget(width / 2 - 75, height - 50 + 22, 150, 20, Text.translatable("back"), buttonWidget -> {
-                    if (creditOverlay == null) {
-                        MinecraftClient.getInstance().setScreen(parent);
-                        stopBGM();
-                    } else {
-                        creditOverlay = null;
-                    }
-                }));
+        this.addDrawableChild(new ButtonWidget.Builder(ScreenTexts.BACK, buttonWidget -> {
+            if (creditOverlay == null) {
+                MinecraftClient.getInstance().setScreen(parent);
+                stopBGM();
+            } else {
+                creditOverlay = null;
+            }
+        }).positionAndSize(width / 2 - 75, height - 50 + 22, 150, 20).build());
 
-        this.addDrawableChild(new ButtonWidget(6, this.height - 26, 100, 20,
-                Text.translatable("creditsBGM").append(": ").append(
-                        Text.translatable(AxolotlClient.CONFIG.creditsBGM.get() ? "options.on" : "options.off")),
+        this.addDrawableChild(new ButtonWidget.Builder(Text.translatable("creditsBGM").append(": ")
+                .append(Text.translatable(AxolotlClient.CONFIG.creditsBGM.get() ? "options.on" : "options.off")),
                 buttonWidget -> {
                     AxolotlClient.CONFIG.creditsBGM.toggle();
                     AxolotlClient.configManager.save();
                     stopBGM();
                     buttonWidget.setMessage(Text.translatable("creditsBGM").append(": ").append(
                             Text.translatable(AxolotlClient.CONFIG.creditsBGM.get() ? "options.on" : "options.off")));
-                }));
+                }).positionAndSize(6, this.height - 26, 100, 20).build());
     }
 
     private void initCredits() {
@@ -281,7 +279,7 @@ public class CreditsScreen extends Screen {
         public Credit(String name, String... things) {
             this.name = name;
             this.things = things;
-            c = new ButtonWidget(-2, -2, 1, 1, Text.of(name), buttonWidget -> creditOverlay = new Overlay(this));
+            c = ButtonWidget.builder(Text.of(name), buttonWidget -> creditOverlay = new Overlay(this)).positionAndSize(-2, -2, 1, 1).build();
         }
 
         @Override

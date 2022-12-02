@@ -30,14 +30,10 @@ import io.github.axolotlclient.modules.AbstractModule;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.particle.ParticleType;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.BuiltinRegistries;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Particles extends AbstractModule {
@@ -63,10 +59,10 @@ public class Particles extends AbstractModule {
     }
 
     private void addParticleOptions() {
-        for (ParticleType<?> type : Registry.PARTICLE_TYPE.stream().sorted(new AlphabeticalComparator()).toList()) {
-            if (Registry.PARTICLE_TYPE.getId(type) != null) {
+        for (ParticleType<?> type : BuiltinRegistries.PARTICLE_TYPE.stream().sorted(new AlphabeticalComparator()).toList()) {
+            if (BuiltinRegistries.PARTICLE_TYPE.getId(type) != null) {
                 OptionCategory category = new OptionCategory(
-                        Arrays.stream(Registry.PARTICLE_TYPE.getId(type).getPath().split("_"))
+                        Arrays.stream(BuiltinRegistries.PARTICLE_TYPE.getId(type).getPath().split("_"))
                                 .map(StringUtils::capitalize).collect(Collectors.joining(" ")),
                         false);
                 HashMap<String, Option<?>> optionsByKey = new LinkedHashMap<>();
@@ -140,8 +136,8 @@ public class Particles extends AbstractModule {
         }
 
         private String getName(ParticleType<?> type) {
-            if (Registry.PARTICLE_TYPE.getId(type) != null) {
-                return Registry.PARTICLE_TYPE.getId(type).getPath();
+            if (BuiltinRegistries.PARTICLE_TYPE.getId(type) != null) {
+                return BuiltinRegistries.PARTICLE_TYPE.getId(type).getPath();
             }
             return "";
         }

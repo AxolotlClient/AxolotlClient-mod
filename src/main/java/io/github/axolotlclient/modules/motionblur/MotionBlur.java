@@ -107,7 +107,7 @@ public class MotionBlur extends AbstractModule {
     public class MotionBlurShader extends Resource {
 
         public MotionBlurShader() {
-            super("", () -> IOUtils.toInputStream(String.format("{" + "    \"targets\": [" + "        \"swap\","
+            super(MinecraftClient.getInstance().m_iuvifafs(), () -> IOUtils.toInputStream(String.format("{" + "    \"targets\": [" + "        \"swap\","
                     + "        \"previous\"" + "    ]," + "    \"passes\": [" + "        {"
                     + "            \"name\": \"motion_blur\"," + "            \"intarget\": \"minecraft:main\","
                     + "            \"outtarget\": \"swap\"," + "            \"auxtargets\": [" + "                {"

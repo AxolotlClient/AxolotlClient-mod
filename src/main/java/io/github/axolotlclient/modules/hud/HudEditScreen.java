@@ -34,6 +34,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.ScreenTexts;
 import net.minecraft.text.Text;
 
 import java.awt.*;
@@ -160,27 +161,26 @@ public class HudEditScreen extends Screen {
 
     @Override
     public void init() {
-        this.addDrawableChild(new ButtonWidget(width / 2 - 50, height / 2 + 12, 100, 20,
-                Text.translatable("hud.snapping").append(": ")
-                        .append(Text.translatable(snapping.get() ? "options.on" : "options.off")),
-                buttonWidget -> {
-                    snapping.toggle();
-                    buttonWidget.setMessage(Text.translatable("hud.snapping").append(": ")
-                            .append(Text.translatable(snapping.get() ? "options.on" : "options.off")));
-                    AxolotlClient.configManager.save();
-                }));
+        this.addDrawableChild(new ButtonWidget.Builder(Text.translatable("hud.snapping").append(": ")
+                .append(Text.translatable(snapping.get() ? "options.on" : "options.off")),
+                        buttonWidget -> {
+                            snapping.toggle();
+                            buttonWidget.setMessage(Text.translatable("hud.snapping").append(": ")
+                                    .append(Text.translatable(snapping.get() ? "options.on" : "options.off")));
+                            AxolotlClient.configManager.save();
+                        }).positionAndSize(width / 2 - 50, height / 2 + 12, 100, 20).build());
 
-        this.addDrawableChild(new ButtonWidget(width / 2 - 75, height / 2 - 10, 150, 20,
-                Text.translatable("hud.clientOptions"),
+        this.addDrawableChild(new ButtonWidget.Builder(Text.translatable("hud.clientOptions"),
                 buttonWidget -> MinecraftClient.getInstance().setScreen(new OptionsScreenBuilder(this,
                         new OptionCategory("config", false).addSubCategories(AxolotlClient.CONFIG.getCategories()),
-                        AxolotlClient.modid))));
+                        AxolotlClient.modid))).positionAndSize(width / 2 - 75, height / 2 - 10, 150, 20).build());
 
         if (parent != null)
-            addDrawableChild(new ButtonWidget(width / 2 - 75, height - 50 + 22, 150, 20, Text.translatable("back"),
-                    buttonWidget -> MinecraftClient.getInstance().setScreen(parent)));
+            addDrawableChild(new ButtonWidget.Builder(ScreenTexts.BACK, buttonWidget -> MinecraftClient.getInstance().setScreen(parent))
+                    .positionAndSize(width / 2 - 75, height - 50 + 22, 150, 20).build());
         else
-            addDrawableChild(new ButtonWidget(width / 2 - 75, height - 50 + 22, 150, 20, Text.translatable("close"),
-                    buttonWidget -> MinecraftClient.getInstance().setScreen(null)));
+            addDrawableChild(new ButtonWidget.Builder(Text.translatable("close"),
+                    buttonWidget -> MinecraftClient.getInstance().setScreen(null))
+                    .positionAndSize(width / 2 - 75, height - 50 + 22, 150, 20).build());
     }
 }

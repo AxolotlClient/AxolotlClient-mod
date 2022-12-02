@@ -7,12 +7,15 @@ plugins {
 }
 
 archivesBaseName = project.archives_base_name
-version = project.version
+version = project.version+"+"+project.minecraft_version
 group = project.maven_group
 
 repositories {
 	maven {
 		url "https://moehreag.duckdns.org/maven/releases"
+	}
+	maven {
+		url "https://moehreag.duckdns.org/maven/snapshots"
 	}
 
 	maven {
@@ -37,11 +40,17 @@ dependencies {
 	mappings "org.quiltmc:quilt-mappings:${minecraft_version}+build.${quilt_mappings}:intermediary-v2"
 
 	modImplementation "org.quiltmc:quilt-loader:${project.loader_version}"
-	modImplementation "org.quiltmc.quilted-fabric-api:quilted-fabric-api:${quilted_fabric_api_version}"
+	//modImplementation "org.quiltmc.quilted-fabric-api:quilted-fabric-api:${quilted_fabric_api_version}"
+
+	//modImplementation "org.quiltmc:qsl:${qsl_version}+${minecraft_version}"
+
+	modImplementation "org.quiltmc.qsl.core:resource_loader:${qsl_version}+${minecraft_version}"
 
 	modImplementation include("io.github.axolotlclient:AxolotlClient-config:${project.config_version}+${project.minecraft_version}")
 
-	modImplementation "com.terraformersmc:modmenu:4.0.5"
+	modImplementation files("modmenuDummy.jar")
+
+	//modImplementation "com.terraformersmc:modmenu:4.0.5"
 
 	include( implementation('com.github.JnCrMx:discord-game-sdk4j:0.5.5'))
 

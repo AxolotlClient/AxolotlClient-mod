@@ -23,22 +23,24 @@
 package io.github.axolotlclient.mixin;
 
 import io.github.axolotlclient.modules.hud.HudEditScreen;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.GameMenuScreen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyArgs;
-import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
+import org.spongepowered.asm.mixin.injection.Redirect;
+
+import java.util.function.Supplier;
 
 @Mixin(GameMenuScreen.class)
 public abstract class GameMenuScreenMixin {
 
-    @ModifyArgs(method = "initWidgets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget;<init>(IIIILnet/minecraft/text/Text;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;)V", ordinal = 3))
-    public void addClientOptionsButton(Args args) {
-        args.set(4, Text.translatable("title_short"));
-        args.set(5, (ButtonWidget.PressAction) (buttonWidget) -> MinecraftClient.getInstance()
-                .setScreen(new HudEditScreen(((GameMenuScreen) (Object) this))));
+    @Shadow protected abstract ButtonWidget m_cqzqwlun(Text text, Supplier<Screen> supplier);
+
+    @Redirect(method = "initWidgets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/GameMenuScreen;m_rkfzqxdi(Lnet/minecraft/text/Text;Ljava/lang/String;)Lnet/minecraft/client/gui/widget/ButtonWidget;", ordinal = 1))
+    private ButtonWidget addClientOptionsButton(GameMenuScreen instance, Text text, String string){
+        return m_cqzqwlun(Text.translatable("title_short"), () -> new HudEditScreen(((GameMenuScreen) (Object) this)));
     }
 }

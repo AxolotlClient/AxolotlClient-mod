@@ -31,8 +31,8 @@ import com.mojang.blaze3d.vertex.VertexFormats;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Matrix4f;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.Axis;
+import org.joml.Matrix4f;
 
 public class MCPSkyboxInstance extends SkyboxInstance {
 
@@ -95,36 +95,36 @@ public class MCPSkyboxInstance extends SkyboxInstance {
                     u = 0;
                     v = 0;
                 } else if (i == 1) {
-                    matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(90));
+                    matrices.multiply(Axis.X_POSITIVE.rotationDegrees(90));
                     u = 1 / 3F;
                     v = 0.5F;
                 } else if (i == 2) {
-                    matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-90));
-                    matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180));
+                    matrices.multiply(Axis.X_POSITIVE.rotationDegrees(-90));
+                    matrices.multiply(Axis.Y_POSITIVE.rotationDegrees(180));
                     u = 2 / 3F;
                     v = 0F;
                 } else if (i == 3) {
-                    matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(180));
+                    matrices.multiply(Axis.X_POSITIVE.rotationDegrees(180));
                     u = 1 / 3F;
                     v = 0F;
                 } else if (i == 4) {
-                    matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(90));
-                    matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-90));
+                    matrices.multiply(Axis.Z_POSITIVE.rotationDegrees(90));
+                    matrices.multiply(Axis.Y_POSITIVE.rotationDegrees(-90));
                     u = 2 / 3F;
                     v = 0.5F;
                 } else {
-                    matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(-90));
-                    matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(90));
+                    matrices.multiply(Axis.Z_POSITIVE.rotationDegrees(-90));
+                    matrices.multiply(Axis.Y_POSITIVE.rotationDegrees(90));
                     v = 0.5F;
                     u = 0;
                 }
 
                 Matrix4f matrix4f = matrices.peek().getModel();
                 bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
-                bufferBuilder.vertex(matrix4f, -100, -100, -100).uv(u, v).color(1F, 1F, 1F, alpha).next();
-                bufferBuilder.vertex(matrix4f, -100, -100, 100).uv(u, v + 0.5F).color(1F, 1F, 1F, alpha).next();
-                bufferBuilder.vertex(matrix4f, 100, -100, 100).uv(u + 1 / 3F, v + 0.5F).color(1F, 1F, 1F, alpha).next();
-                bufferBuilder.vertex(matrix4f, 100, -100, -100).uv(u + 1 / 3F, v).color(1F, 1F, 1F, alpha).next();
+                bufferBuilder.m_rkxaaknb(matrix4f, -100, -100, -100).uv(u, v).color(1F, 1F, 1F, alpha).next();
+                bufferBuilder.m_rkxaaknb(matrix4f, -100, -100, 100).uv(u, v + 0.5F).color(1F, 1F, 1F, alpha).next();
+                bufferBuilder.m_rkxaaknb(matrix4f, 100, -100, 100).uv(u + 1 / 3F, v + 0.5F).color(1F, 1F, 1F, alpha).next();
+                bufferBuilder.m_rkxaaknb(matrix4f, 100, -100, -100).uv(u + 1 / 3F, v).color(1F, 1F, 1F, alpha).next();
                 tessellator.draw();
 
                 matrices.pop();

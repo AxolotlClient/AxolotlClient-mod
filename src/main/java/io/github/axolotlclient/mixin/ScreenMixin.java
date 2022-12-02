@@ -27,7 +27,6 @@ import io.github.axolotlclient.modules.scrollableTooltips.ScrollableTooltips;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.Style;
 import org.spongepowered.asm.mixin.Mixin;
@@ -44,8 +43,7 @@ public abstract class ScreenMixin {
     public void modifyTooltipPosition(Args args) {
         if (ScrollableTooltips.getInstance().enabled.get()) {
             if ((MinecraftClient.getInstance().currentScreen instanceof CreativeInventoryScreen)
-                    && ((CreativeInventoryScreen) MinecraftClient.getInstance().currentScreen)
-                            .getSelectedTab() != ItemGroup.INVENTORY.getIndex()) {
+                    && ((CreativeInventoryScreen) MinecraftClient.getInstance().currentScreen).m_zqfbkfzl()) {
                 return;
             }
 

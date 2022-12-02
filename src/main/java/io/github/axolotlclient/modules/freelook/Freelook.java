@@ -26,9 +26,9 @@ import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.EnumOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.KeyBindOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBind;
 import net.minecraft.client.option.Perspective;
@@ -37,7 +37,7 @@ import net.minecraft.entity.Entity;
 public class Freelook extends AbstractModule {
 
     private static final Freelook Instance = new Freelook();
-    private static final KeyBind KEY = new KeyBind("key.freelook", InputUtil.KEY_V_CODE, "category.axolotlclient");
+    private static KeyBind KEY;
 
     private final MinecraftClient client = MinecraftClient.getInstance();
 
@@ -46,6 +46,7 @@ public class Freelook extends AbstractModule {
 
     private final OptionCategory category = new OptionCategory("freelook");
     public final BooleanOption enabled = new BooleanOption("enabled", false);
+    private final KeyBindOption keyOption = new KeyBindOption("key.freelook", KEY = new KeyBind("key.freelook", InputUtil.KEY_V_CODE, "category.axolotlclient"), (key)->{});
     private final EnumOption perspective = new EnumOption("perspective", Perspective.values(),
             Perspective.THIRD_PERSON_BACK.toString());
     private final BooleanOption invert = new BooleanOption("invert", false);
@@ -60,8 +61,8 @@ public class Freelook extends AbstractModule {
 
     @Override
     public void init() {
-        KeyBindingHelper.registerKeyBinding(KEY);
-        category.add(enabled, perspective, invert, toggle);
+        //KeyBindingHelper.registerKeyBinding(KEY);
+        category.add(enabled, keyOption, perspective, invert, toggle);
         AxolotlClient.CONFIG.addCategory(category);
     }
 

@@ -44,8 +44,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.Axis;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -126,8 +126,8 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
             matrixStack.push();
             matrixStack.translate(client.getWindow().getScaledWidth() / 2F, client.getWindow().getScaledHeight() / 2F,
                     0);
-            matrixStack.multiply(Vec3f.NEGATIVE_X.getDegreesQuaternion(camera.getPitch()));
-            matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(camera.getYaw()));
+            matrixStack.multiply(Axis.X_NEGATIVE.rotationDegrees(camera.getPitch()));
+            matrixStack.multiply(Axis.Y_POSITIVE.rotationDegrees(camera.getYaw()));
             matrixStack.scale(-getScale(), -getScale(), -getScale());
             RenderSystem.applyModelViewMatrix();
             RenderSystem.renderCrosshair(10);

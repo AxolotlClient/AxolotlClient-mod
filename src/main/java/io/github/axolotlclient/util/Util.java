@@ -26,7 +26,6 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.glfw.Window;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.ChatPreview;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.ScoreboardPlayerScore;
@@ -128,12 +127,8 @@ public class Util {
         return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2) + Math.pow(z2 - z1, 2));
     }
 
-    // I suppose this is something introduced with the chat cryptography features in 1.19
-    private static final ChatPreview whateverThisIs = new ChatPreview(MinecraftClient.getInstance());
-
     public static void sendChatMessage(String msg) {
-        Text text = net.minecraft.util.Util.map(whateverThisIs.tryConsumeResponse(msg), ChatPreview.Response::response);
-        MinecraftClient.getInstance().player.sendCommand(msg.substring(1), text);
+        MinecraftClient.getInstance().player.sendMessage(Text.literal(msg), false);
     }
 
     public static void sendChatMessage(Text msg) {

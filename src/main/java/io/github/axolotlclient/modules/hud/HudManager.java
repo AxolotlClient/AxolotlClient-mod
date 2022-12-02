@@ -24,6 +24,7 @@ package io.github.axolotlclient.modules.hud;
 
 import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.AxolotlclientConfig.options.KeyBindOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
@@ -35,7 +36,6 @@ import io.github.axolotlclient.modules.hud.gui.hud.item.ItemUpdateHud;
 import io.github.axolotlclient.modules.hud.gui.hud.simple.*;
 import io.github.axolotlclient.modules.hud.gui.hud.vanilla.*;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBind;
 import net.minecraft.client.util.math.MatrixStack;
@@ -66,12 +66,12 @@ public class HudManager extends AbstractModule {
     private HudManager() {
         this.entries = new LinkedHashMap<>();
         client = MinecraftClient.getInstance();
+        KeyBind key = new KeyBind("key.openHud", InputUtil.KEY_RIGHT_SHIFT_CODE, "category.axolotlclient");
+        hudCategory.add(new KeyBindOption("key.openHud", key, keyBind -> MinecraftClient.getInstance().setScreen(new HudEditScreen())));
     }
 
-    static KeyBind key = new KeyBind("key.openHud", InputUtil.KEY_RIGHT_SHIFT_CODE, "category.axolotlclient");
-
     public void init() {
-        KeyBindingHelper.registerKeyBinding(key);
+        //KeyBindingHelper.registerKeyBinding(key);
 
         AxolotlClient.CONFIG.addCategory(hudCategory);
 
@@ -115,8 +115,6 @@ public class HudManager extends AbstractModule {
     }
 
     public void tick() {
-        if (key.isPressed())
-            MinecraftClient.getInstance().setScreen(new HudEditScreen());
         entries.values().stream().filter(hudEntry -> hudEntry.isEnabled() && hudEntry.tickable())
                 .forEach(HudEntry::tick);
     }

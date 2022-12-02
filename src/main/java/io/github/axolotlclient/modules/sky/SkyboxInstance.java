@@ -34,9 +34,9 @@ import net.minecraft.client.render.BackgroundRenderer;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Axis;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Matrix4f;
-import net.minecraft.util.math.Vec3f;
+import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL14;
 
 import java.util.Locale;
@@ -228,27 +228,27 @@ public abstract class SkyboxInstance {
     }
 
     protected void setupRotate(MatrixStack matrices, float delta, float brightness) {
-        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(rotationStatic[0]));
-        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(rotationStatic[1]));
-        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(rotationStatic[2]));
+        matrices.multiply(Axis.X_POSITIVE.rotationDegrees(rotationStatic[0]));
+        matrices.multiply(Axis.Y_POSITIVE.rotationDegrees(rotationStatic[1]));
+        matrices.multiply(Axis.Z_POSITIVE.rotationDegrees(rotationStatic[2]));
         if (rotate) {
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, brightness);
-            matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(rotationAxis[0]));
-            matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(rotationAxis[1]));
-            matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(rotationAxis[2]));
-            matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-90.0F));
-            matrices.multiply(Vec3f.NEGATIVE_X.getDegreesQuaternion(
+            matrices.multiply(Axis.X_POSITIVE.rotationDegrees(rotationAxis[0]));
+            matrices.multiply(Axis.Y_POSITIVE.rotationDegrees(rotationAxis[1]));
+            matrices.multiply(Axis.Z_POSITIVE.rotationDegrees(rotationAxis[2]));
+            matrices.multiply(Axis.Y_POSITIVE.rotationDegrees(-90.0F));
+            matrices.multiply(Axis.X_NEGATIVE.rotationDegrees(
                     MinecraftClient.getInstance().world.getSkyAngle(delta) * 360F * rotationSpeed));
-            matrices.multiply(Vec3f.NEGATIVE_Z.getDegreesQuaternion(rotationAxis[0]));
-            matrices.multiply(Vec3f.NEGATIVE_Y.getDegreesQuaternion(rotationAxis[1]));
-            matrices.multiply(Vec3f.NEGATIVE_X.getDegreesQuaternion(rotationAxis[2]));
+            matrices.multiply(Axis.Z_NEGATIVE.rotationDegrees(rotationAxis[0]));
+            matrices.multiply(Axis.Y_NEGATIVE.rotationDegrees(rotationAxis[1]));
+            matrices.multiply(Axis.X_NEGATIVE.rotationDegrees(rotationAxis[2]));
         }
     }
 
     protected void clearRotate(MatrixStack matrices) {
-        matrices.multiply(Vec3f.NEGATIVE_X.getDegreesQuaternion(rotationStatic[0]));
-        matrices.multiply(Vec3f.NEGATIVE_Y.getDegreesQuaternion(rotationStatic[1]));
-        matrices.multiply(Vec3f.NEGATIVE_Z.getDegreesQuaternion(rotationStatic[2]));
+        matrices.multiply(Axis.X_NEGATIVE.rotationDegrees(rotationStatic[0]));
+        matrices.multiply(Axis.Y_NEGATIVE.rotationDegrees(rotationStatic[1]));
+        matrices.multiply(Axis.Z_NEGATIVE.rotationDegrees(rotationStatic[2]));
     }
 
     public void render(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Runnable runnable) {
@@ -275,9 +275,9 @@ public abstract class SkyboxInstance {
         matrices.push();
         float i = 1.0F - MinecraftClient.getInstance().world.getRainGradient(delta);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, i);
-        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-90.0F));
+        matrices.multiply(Axis.Y_POSITIVE.rotationDegrees(-90.0F));
         matrices.multiply(
-                Vec3f.POSITIVE_X.getDegreesQuaternion(MinecraftClient.getInstance().world.getSkyAngle(delta) * 360.0F));
+                Axis.X_POSITIVE.rotationDegrees(MinecraftClient.getInstance().world.getSkyAngle(delta) * 360.0F));
         Matrix4f matrix4f2 = matrices.peek().getModel();
         float k = 30.0F;
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
@@ -287,10 +287,10 @@ public abstract class SkyboxInstance {
         if (showSun) {
             RenderSystem.setShaderTexture(0, SUN);
             bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-            bufferBuilder.vertex(matrix4f2, -k, 100.0F, -k).uv(0.0F, 0.0F).next();
-            bufferBuilder.vertex(matrix4f2, k, 100.0F, -k).uv(1.0F, 0.0F).next();
-            bufferBuilder.vertex(matrix4f2, k, 100.0F, k).uv(1.0F, 1.0F).next();
-            bufferBuilder.vertex(matrix4f2, -k, 100.0F, k).uv(0.0F, 1.0F).next();
+            bufferBuilder.m_rkxaaknb(matrix4f2, -k, 100.0F, -k).uv(0.0F, 0.0F).next();
+            bufferBuilder.m_rkxaaknb(matrix4f2, k, 100.0F, -k).uv(1.0F, 0.0F).next();
+            bufferBuilder.m_rkxaaknb(matrix4f2, k, 100.0F, k).uv(1.0F, 1.0F).next();
+            bufferBuilder.m_rkxaaknb(matrix4f2, -k, 100.0F, k).uv(0.0F, 1.0F).next();
             BufferRenderer.drawWithShader(bufferBuilder.end());
         }
         if (showMoon) {
@@ -304,10 +304,10 @@ public abstract class SkyboxInstance {
             float p = (float) (s + 1) / 4.0F;
             float q = (float) (m + 1) / 2.0F;
             bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-            bufferBuilder.vertex(matrix4f2, -k, -100.0F, k).uv(p, q).next();
-            bufferBuilder.vertex(matrix4f2, k, -100.0F, k).uv(t, q).next();
-            bufferBuilder.vertex(matrix4f2, k, -100.0F, -k).uv(t, o).next();
-            bufferBuilder.vertex(matrix4f2, -k, -100.0F, -k).uv(p, o).next();
+            bufferBuilder.m_rkxaaknb(matrix4f2, -k, -100.0F, k).uv(p, q).next();
+            bufferBuilder.m_rkxaaknb(matrix4f2, k, -100.0F, k).uv(t, q).next();
+            bufferBuilder.m_rkxaaknb(matrix4f2, k, -100.0F, -k).uv(t, o).next();
+            bufferBuilder.m_rkxaaknb(matrix4f2, -k, -100.0F, -k).uv(p, o).next();
             BufferRenderer.drawWithShader(bufferBuilder.end());
         }
         if (showStars) {
