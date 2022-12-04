@@ -31,10 +31,6 @@ repositories {
 	maven { url 'https://jitpack.io' }
 }
 
-loom {
-	accessWidenerPath = file("src/main/resources/axolotlclient.accesswidener")
-}
-
 dependencies {
 	minecraft "com.mojang:minecraft:${minecraft_version}"
 	mappings "org.quiltmc:quilt-mappings:${minecraft_version}+build.${quilt_mappings}:intermediary-v2"

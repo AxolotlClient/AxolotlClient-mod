@@ -27,6 +27,7 @@ import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlclientConfig.Color;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
+import io.github.axolotlclient.modules.hud.util.RenderUtil;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Element;
@@ -369,7 +370,7 @@ public class CreditsScreen extends Screen {
         }
 
         public void render(MatrixStack matrices) {
-            DrawUtil.fillRect(matrices, x, y, width, height,
+            RenderUtil.drawRectangle(matrices, x, y, width, height,
                     io.github.axolotlclient.AxolotlclientConfig.Color.DARK_GRAY.withAlpha(127));
             DrawUtil.outlineRect(matrices, x, y, width, height,
                     io.github.axolotlclient.AxolotlclientConfig.Color.BLACK.getAsInt());
