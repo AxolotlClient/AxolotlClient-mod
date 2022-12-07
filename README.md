@@ -1,3 +1,7 @@
+> **Note**
+> This branch will no longer be updated since as of 2022-12-07, 
+> Minecraft 1.19.3 has been released. 
+
 # AxolotlClient-mod (1.19.2)
 
 A Complete (nearly) mod to have various features on Quilt, 1.19.2
