@@ -317,7 +317,7 @@ public abstract class SkyboxInstance {
                 RenderSystem.setShaderColor(u, u, u, u);
                 BackgroundRenderer.clearFog();
                 worldRendererAccessor.getStarsBuffer().bind();
-                worldRendererAccessor.getStarsBuffer().setShader(matrices.peek().getModel(), projectionMatrix,
+                worldRendererAccessor.getStarsBuffer().draw(matrices.peek().getModel(), projectionMatrix,
                         GameRenderer.getPositionShader());
                 VertexBuffer.unbind();
                 runnable.run();

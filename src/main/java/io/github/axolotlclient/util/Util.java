@@ -128,7 +128,8 @@ public class Util {
     }
 
     public static void sendChatMessage(String msg) {
-        MinecraftClient.getInstance().player.sendMessage(Text.literal(msg), false);
+        assert MinecraftClient.getInstance().player != null;
+        MinecraftClient.getInstance().player.networkHandler.m_gkszsvqi(msg.substring(1));
     }
 
     public static void sendChatMessage(Text msg) {

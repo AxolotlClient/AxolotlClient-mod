@@ -30,7 +30,7 @@ import io.github.axolotlclient.modules.AbstractModule;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.particle.ParticleType;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.BuiltinRegistries;
+import net.minecraft.registry.Registries;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
@@ -59,10 +59,10 @@ public class Particles extends AbstractModule {
     }
 
     private void addParticleOptions() {
-        for (ParticleType<?> type : BuiltinRegistries.PARTICLE_TYPE.stream().sorted(new AlphabeticalComparator()).toList()) {
-            if (BuiltinRegistries.PARTICLE_TYPE.getId(type) != null) {
+        for (ParticleType<?> type : Registries.PARTICLE_TYPE.stream().sorted(new AlphabeticalComparator()).toList()) {
+            if (Registries.PARTICLE_TYPE.getId(type) != null) {
                 OptionCategory category = new OptionCategory(
-                        Arrays.stream(BuiltinRegistries.PARTICLE_TYPE.getId(type).getPath().split("_"))
+                        Arrays.stream(Registries.PARTICLE_TYPE.getId(type).getPath().split("_"))
                                 .map(StringUtils::capitalize).collect(Collectors.joining(" ")),
                         false);
                 HashMap<String, Option<?>> optionsByKey = new LinkedHashMap<>();
@@ -136,8 +136,8 @@ public class Particles extends AbstractModule {
         }
 
         private String getName(ParticleType<?> type) {
-            if (BuiltinRegistries.PARTICLE_TYPE.getId(type) != null) {
-                return BuiltinRegistries.PARTICLE_TYPE.getId(type).getPath();
+            if (Registries.PARTICLE_TYPE.getId(type) != null) {
+                return Registries.PARTICLE_TYPE.getId(type).getPath();
             }
             return "";
         }
