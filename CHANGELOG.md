@@ -66,4 +66,5 @@
 
 - add sourcesJar to files to be uploaded to modrinth
 - add option to hide Beacon Beams
+- port to 1.19.3
 
