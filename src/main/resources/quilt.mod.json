@@ -18,6 +18,7 @@
 				"issues": "https://github.com/AxolotlClient/Axolotlclient-mod/issues",
 				"sources": "https://github.com/Axolotlclient?tab=repositories"
 			},
+			"license": "LGPL-3.0-or-later",
 			"icon": "assets/axolotlclient/icon.png"
 		},
 		"intermediate_mappings": "net.fabricmc:intermediary",

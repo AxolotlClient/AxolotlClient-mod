@@ -47,6 +47,7 @@ public class Freelook extends AbstractModule {
     private final OptionCategory category = new OptionCategory("freelook");
     public final BooleanOption enabled = new BooleanOption("enabled", false);
     private final KeyBindOption keyOption = new KeyBindOption("key.freelook", KEY = new KeyBind("key.freelook", InputUtil.KEY_V_CODE, "category.axolotlclient"), (key)->{});
+    private final EnumOption mode = new EnumOption("mode", new String[]{"snap_perspective", "freelook"}, "freelook");
     private final EnumOption perspective = new EnumOption("perspective", Perspective.values(),
             Perspective.THIRD_PERSON_BACK.toString());
     private final BooleanOption invert = new BooleanOption("invert", false);
@@ -62,7 +63,7 @@ public class Freelook extends AbstractModule {
     @Override
     public void init() {
         //KeyBindingHelper.registerKeyBinding(KEY);
-        category.add(enabled, keyOption, perspective, invert, toggle);
+        category.add(enabled, keyOption, mode, perspective, invert, toggle);
         AxolotlClient.CONFIG.addCategory(category);
     }
 
@@ -93,6 +94,7 @@ public class Freelook extends AbstractModule {
     private void start() {
         active = true;
 
+
         previousPerspective = client.options.getPerspective();
         setPerspective(Perspective.valueOf(perspective.get()));
 
@@ -114,7 +116,7 @@ public class Freelook extends AbstractModule {
     }
 
     public boolean consumeRotation(double dx, double dy) {
-        if (!active || !enabled.get())
+        if (!active || !enabled.get() || !mode.get().equals("freelook"))
             return false;
 
         if (!invert.get())
@@ -138,14 +140,14 @@ public class Freelook extends AbstractModule {
     }
 
     public float yaw(float defaultValue) {
-        if (!active || !enabled.get())
+        if (!active || !enabled.get() || !mode.get().equals("freelook"))
             return defaultValue;
 
         return yaw;
     }
 
     public float pitch(float defaultValue) {
-        if (!active || !enabled.get())
+        if (!active || !enabled.get() || !mode.get().equals("freelook"))
             return defaultValue;
 
         return pitch;
