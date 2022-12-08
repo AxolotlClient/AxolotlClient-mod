@@ -46,6 +46,7 @@ public class Freelook extends AbstractModule {
 
     private final OptionCategory category = new OptionCategory("axolotlclient.freelook");
     public final BooleanOption enabled = new BooleanOption("axolotlclient.enabled", false);
+    private final EnumOption mode = new EnumOption("axolotlclient.mode", new String[]{"axolotlclient.snap_perspective", "axolotlclient.freelook"}, "axolotlclient.freelook");
     private final EnumOption perspective = new EnumOption("axolotlclient.perspective", Perspective.values(),
             Perspective.THIRD_PERSON_BACK.toString());
     private final BooleanOption invert = new BooleanOption("axolotlclient.invert", false);
@@ -61,7 +62,7 @@ public class Freelook extends AbstractModule {
     @Override
     public void init() {
         KeyBindingHelper.registerKeyBinding(KEY);
-        category.add(enabled, perspective, invert, toggle);
+        category.add(enabled, mode, perspective, invert, toggle);
         AxolotlClient.CONFIG.addCategory(category);
     }
 
@@ -113,7 +114,7 @@ public class Freelook extends AbstractModule {
     }
 
     public boolean consumeRotation(float dx, float dy) {
-        if (!active || !enabled.get())
+        if (!active || !enabled.get() || !mode.get().equals("freelook"))
             return false;
 
         if (!invert.get())
@@ -133,14 +134,14 @@ public class Freelook extends AbstractModule {
     }
 
     public float yaw(float defaultValue) {
-        if (!active || !enabled.get())
+        if (!active || !enabled.get() || !mode.get().equals("freelook"))
             return defaultValue;
 
         return yaw;
     }
 
     public float pitch(float defaultValue) {
-        if (!active || !enabled.get())
+        if (!active || !enabled.get() || !mode.get().equals("freelook"))
             return defaultValue;
 
         return pitch;

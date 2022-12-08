@@ -288,6 +288,8 @@
     "showName": "Show Server Name",
     "off": "Disabled",
     "freelook": "Freelook",
+    "mode": "Mode",
+    "snap_perspective": "Snap Perspective",
     "perspective": "Perspective",
     "FIRST_PERSON": "First Person",
     "THIRD_PERSON_BACK": "Third Person (Back)",

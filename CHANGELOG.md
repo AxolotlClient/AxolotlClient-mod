@@ -68,3 +68,8 @@
 - add option to hide Beacon Beams
 - port to 1.19.3
 
+### 2.2.7
+
+- fix KeyBindOptions not being saved
+    - since this is a critical fix, this will also be released for 1.19.2
+- add 'Snap-Perspective' mode to Freelook
