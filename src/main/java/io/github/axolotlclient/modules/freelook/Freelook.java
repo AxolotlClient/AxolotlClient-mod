@@ -27,6 +27,7 @@ import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.EnumOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
+import io.github.axolotlclient.util.FeatureDisabler;
 import net.legacyfabric.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.options.KeyBinding;
@@ -46,7 +47,10 @@ public class Freelook extends AbstractModule {
 
     private final OptionCategory category = new OptionCategory("axolotlclient.freelook");
     public final BooleanOption enabled = new BooleanOption("axolotlclient.enabled", false);
-    private final EnumOption mode = new EnumOption("axolotlclient.mode", new String[]{"axolotlclient.snap_perspective", "axolotlclient.freelook"}, "axolotlclient.freelook");
+    private final EnumOption mode = new EnumOption("axolotlclient.mode",
+            new String[]{"axolotlclient.snap_perspective", "axolotlclient.freelook"},
+            value -> FeatureDisabler.update(),
+            "axolotlclient.freelook");
     private final EnumOption perspective = new EnumOption("axolotlclient.perspective", Perspective.values(),
             Perspective.THIRD_PERSON_BACK.toString());
     private final BooleanOption invert = new BooleanOption("axolotlclient.invert", false);
@@ -114,7 +118,7 @@ public class Freelook extends AbstractModule {
     }
 
     public boolean consumeRotation(float dx, float dy) {
-        if (!active || !enabled.get() || !mode.get().equals("freelook"))
+        if (!active || !enabled.get() || !mode.get().equals("axolotlclient.freelook"))
             return false;
 
         if (!invert.get())
@@ -134,16 +138,20 @@ public class Freelook extends AbstractModule {
     }
 
     public float yaw(float defaultValue) {
-        if (!active || !enabled.get() || !mode.get().equals("freelook"))
+        if (!active || !enabled.get() || !mode.get().equals("axolotlclient.freelook"))
             return defaultValue;
 
         return yaw;
     }
 
     public float pitch(float defaultValue) {
-        if (!active || !enabled.get() || !mode.get().equals("freelook"))
+        if (!active || !enabled.get() || !mode.get().equals("axolotlclient.freelook"))
             return defaultValue;
 
         return pitch;
+    }
+
+    public boolean needsDisabling(){
+        return mode.get().equals("axolotlclient.freelook");
     }
 }

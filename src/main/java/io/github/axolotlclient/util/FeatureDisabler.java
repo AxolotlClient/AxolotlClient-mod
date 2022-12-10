@@ -25,22 +25,30 @@ package io.github.axolotlclient.util;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.modules.freelook.Freelook;
+import net.minecraft.client.resource.language.I18n;
 
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.function.Supplier;
 
 public class FeatureDisabler {
 
     private static final HashMap<BooleanOption, String[]> disabledServers = new HashMap<>();
+    private static final HashMap<BooleanOption, Supplier<Boolean>> conditions = new HashMap<>();
+
+    private static final Supplier<Boolean> NONE = () -> true;
+
+    private static String currentAdress;
 
     public static void init() {
-        setServers(AxolotlClient.CONFIG.fullBright, "gommehd");
-        setServers(AxolotlClient.CONFIG.timeChangerEnabled, "gommehd");
-        setServers(Freelook.getInstance().enabled, "hypixel", "mineplex", "gommehd", "nucleoid");
+        setServers(AxolotlClient.CONFIG.fullBright, NONE, "gommehd");
+        setServers(AxolotlClient.CONFIG.timeChangerEnabled, NONE, "gommehd");
+        setServers(Freelook.getInstance().enabled, () -> Freelook.getInstance().needsDisabling(), "hypixel", "mineplex", "gommehd", "nucleoid");
     }
 
     public static void onServerJoin(String address) {
-        disabledServers.forEach((option, strings) -> disableOption(option, strings, address));
+        currentAdress = address;
+        update();
     }
 
     public static void clear() {
@@ -51,17 +59,22 @@ public class FeatureDisabler {
         boolean ban = false;
         for (String s : servers) {
             if (currentServer.toLowerCase(Locale.ROOT).contains(s.toLowerCase(Locale.ROOT))) {
-                ban = true;
+                ban = conditions.get(option).get();
                 break;
             }
         }
 
         if (option.getForceDisabled() != ban) {
-            option.setForceOff(ban, "axolotlclient.ban_reason");
+            option.setForceOff(ban, I18n.translate("axolotlclient.ban_reason"));
         }
     }
 
-    private static void setServers(BooleanOption option, String... servers) {
+    private static void setServers(BooleanOption option, Supplier<Boolean> condition, String... servers) {
         disabledServers.put(option, servers);
+        conditions.put(option, condition);
+    }
+
+    public static void update(){
+        disabledServers.forEach((option, strings) -> disableOption(option, strings, currentAdress));
     }
 }

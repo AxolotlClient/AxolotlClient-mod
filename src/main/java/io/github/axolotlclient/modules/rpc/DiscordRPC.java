@@ -39,6 +39,7 @@ import io.github.axolotlclient.util.Util;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.resource.language.I18n;
 
 import java.time.Instant;
 import java.util.Optional;
@@ -87,7 +88,7 @@ public class DiscordRPC extends AbstractModule {
         AxolotlClient.CONFIG.addCategory(category);
 
         if (OSUtil.getOS() == OSUtil.OperatingSystem.OTHER) {
-            enabled.setForceOff(true, "axolotlclient.crash");
+            enabled.setForceOff(true, I18n.translate("axolotlclient.crash"));
         }
 
         Optional<ModContainer> container = FabricLoader.getInstance().getModContainer("axolotlclient");

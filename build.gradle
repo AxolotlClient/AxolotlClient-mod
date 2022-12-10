@@ -71,7 +71,7 @@ dependencies {
 
 // More hacks that make mac os work
 if (System.getProperty("os.name").toLowerCase().contains("mac")) {
-	configurations.all {
+	configurations.configureEach {
 		resolutionStrategy {
 			dependencySubstitution {
 				substitute module('org.lwjgl.lwjgl:lwjgl_util:2.9.2-nightly-201408222') using module('org.lwjgl.lwjgl:lwjgl_util:2.9.4-nightly-20150209')
@@ -83,7 +83,7 @@ if (System.getProperty("os.name").toLowerCase().contains("mac")) {
 }
 
 // Fix netty with Java 17+ (be happy if it didn't break for you)
-configurations.all {
+configurations.configureEach {
 	resolutionStrategy {
 		dependencySubstitution {
 			substitute module('io.netty:netty-all:4.0.23.Final') using module('io.netty:netty-all:4.0.26.Final')
@@ -153,7 +153,7 @@ modrinth {
 	gameVersions = ["${project.minecraft_version}"]
 	loaders = ["fabric"]
 	dependencies {
-		//required.project "legacy-fabric-api" // Once lfapi is on modrinth (aka 'its next release')
+		required.project "legacy-fabric-api"
 	}
 
 	// Changelog fetching: Credit LambdAurora.

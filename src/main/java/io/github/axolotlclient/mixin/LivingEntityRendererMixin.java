@@ -32,9 +32,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -69,5 +67,25 @@ public abstract class LivingEntityRendererMixin {
             AxolotlClient.addBadge(livingEntity);
         else if (!NickHider.getInstance().hideOtherNames.get() && !livingEntity.equals(MinecraftClient.getInstance().player))
             AxolotlClient.addBadge(livingEntity);
+    }
+
+    @ModifyConstant(method = "method_10252", constant = @Constant(floatValue = 1.0f, ordinal = 0))
+    private float customHitColorRed(float constant){
+        return AxolotlClient.CONFIG.hitColor.get().getRed()/255F;
+    }
+
+    @ModifyConstant(method = "method_10252", constant = @Constant(floatValue = 0.0f, ordinal = 0))
+    private float customHitColorGreen(float constant){
+        return AxolotlClient.CONFIG.hitColor.get().getGreen()/255F;
+    }
+
+    @ModifyConstant(method = "method_10252", constant = @Constant(floatValue = 0.0f, ordinal = 1))
+    private float customHitColorBlue(float constant){
+        return AxolotlClient.CONFIG.hitColor.get().getBlue()/255F;
+    }
+
+    @ModifyConstant(method = "method_10252", constant = @Constant(floatValue = 0.3f, ordinal = 0))
+    private float customHitColorAlpha(float constant){
+        return AxolotlClient.CONFIG.hitColor.get().getAlpha()/255F;
     }
 }

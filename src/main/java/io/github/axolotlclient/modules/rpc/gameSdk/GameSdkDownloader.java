@@ -26,6 +26,7 @@ import de.jcm.discordgamesdk.Core;
 import io.github.axolotlclient.modules.rpc.DiscordRPC;
 import io.github.axolotlclient.util.Logger;
 import io.github.axolotlclient.util.OSUtil;
+import net.minecraft.client.resource.language.I18n;
 
 import java.io.File;
 import java.io.IOException;
@@ -82,7 +83,7 @@ public class GameSdkDownloader {
 
             if (!sdk.exists() || !jni.exists()) {
                 Logger.error("Could not download GameSDK, no copy is available. RPC will be disabled.");
-                DiscordRPC.getInstance().enabled.setForceOff(true, "axolotlclient.crash");
+                DiscordRPC.getInstance().enabled.setForceOff(true, I18n.translate("axolotlclient.crash"));
                 return;
             }
 
@@ -142,7 +143,7 @@ public class GameSdkDownloader {
             extractJni(jni);
         } else {
             Logger.error("Extracting Jni failed, restart your game to try again.");
-            DiscordRPC.getInstance().enabled.setForceOff(true, "axolotlclient.crash");
+            DiscordRPC.getInstance().enabled.setForceOff(true, I18n.translate("axolotlclient.crash"));
         }
     }
 

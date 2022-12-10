@@ -57,6 +57,7 @@ public class AxolotlClientConfig extends ConfigHolder {
     public final BooleanOption dynamicFOV = new BooleanOption("axolotlclient.dynamicFov", true);
     public final BooleanOption fullBright = new BooleanOption("axolotlclient.fullBright", false);
     public final BooleanOption lowFire = new BooleanOption("axolotlclient.lowFire", false);
+    public final ColorOption hitColor = new ColorOption("axolotlclient.hitColor", new Color(255, 0, 0, 77));
 
     public final ColorOption loadingScreenColor = new ColorOption("axolotlclient.loadingBgColor", new Color(-1));
     public final BooleanOption nightMode = new BooleanOption("axolotlclient.nightMode", false);
@@ -128,7 +129,13 @@ public class AxolotlClientConfig extends ConfigHolder {
                 AxolotlClientConfigConfig.searchSort, AxolotlClientConfigConfig.searchSortOrder);
         general.addSubCategory(searchFilters);
 
-        rendering.add(customSky, cloudHeight, AxolotlClientConfigConfig.chromaSpeed, dynamicFOV, fullBright, lowFire);
+        rendering.add(customSky,
+                cloudHeight,
+                AxolotlClientConfigConfig.chromaSpeed,
+                dynamicFOV,
+                fullBright,
+                lowFire,
+                hitColor);
 
         timeChanger.add(timeChangerEnabled);
         timeChanger.add(customTime);
