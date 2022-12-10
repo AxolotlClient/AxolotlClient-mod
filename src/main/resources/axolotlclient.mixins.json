@@ -39,6 +39,8 @@
     "ModStatusMixin",
     "MouseMixin",
     "MultiplayerScreenMixin",
+    "OverlayTextureAccessor",
+    "OverlayTextureMixin",
     "ParticleAccessor",
     "ParticleManagerMixin",
     "PlayerEntityMixin",
