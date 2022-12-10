@@ -76,3 +76,7 @@
   - since this is a critical fix, this will also be released for 1.19.2
 - add 'Snap-Perspective' mode to Freelook
 
+### 2.2.8
+
+- HitColor option
+- Allow Snap Perspective mode to be used on servers where Freelook is disallowed

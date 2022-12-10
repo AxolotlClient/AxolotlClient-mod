@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.config;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.texture.NativeImage;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlclientConfig.AxolotlClientConfigConfig;
 import io.github.axolotlclient.AxolotlclientConfig.Color;
@@ -29,8 +31,10 @@ import io.github.axolotlclient.AxolotlclientConfig.ConfigHolder;
 import io.github.axolotlclient.AxolotlclientConfig.options.*;
 import io.github.axolotlclient.NetworkHelper;
 import io.github.axolotlclient.config.screen.CreditsScreen;
+import io.github.axolotlclient.mixin.OverlayTextureAccessor;
 import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.texture.NativeImageBackedTexture;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +63,37 @@ public class AxolotlClientConfig extends ConfigHolder {
     public final BooleanOption fullBright = new BooleanOption("fullBright", false);
     public final BooleanOption lowFire = new BooleanOption("lowFire", false);
     public final BooleanOption lowShield = new BooleanOption("lowShield", false);
+    public final ColorOption hitColor = new ColorOption("hitColor",
+            value -> {
+                try { // needed because apparently someone created a bug that makes this be called when the config is loaded. Will be fixed with the next release.
+                    NativeImageBackedTexture texture = ((OverlayTextureAccessor) MinecraftClient.getInstance().gameRenderer.getOverlayTexture()).getTexture();
+                    NativeImage nativeImage = texture.getImage();
+                    if (nativeImage != null) {
+                        int color = 255-value.getAlpha();
+                        color = (color << 8) + value.getBlue();
+                        color = (color << 8) + value.getGreen();
+                        color = (color << 8) + value.getRed();
+
+                        for (int i = 0; i < 16; ++i) {
+                            for (int j = 0; j < 16; ++j) {
+                                if (i < 8) {
+                                    nativeImage.setPixelColor(j, i, color);
+                                } else {
+                                    int k = (int) ((1.0F - (float) j / 15.0F * 0.75F) * 255.0F);
+                                    nativeImage.setPixelColor(j, i, k << 24 | 16777215);
+                                }
+                            }
+                        }
+
+                        RenderSystem.activeTexture(33985);
+                        texture.bindTexture();
+                        nativeImage.upload(0, 0, 0, 0, 0,
+                                nativeImage.getWidth(), nativeImage.getHeight(), false, true, false, false);
+                        RenderSystem.activeTexture(33984);
+                    }
+                } catch (Exception ignored){}
+            },
+            new Color(255, 0, 0, 77));
 
     public final ColorOption loadingScreenColor = new ColorOption("loadingBgColor", new Color(239, 50, 61, 255));
     public final BooleanOption nightMode = new BooleanOption("nightMode", false);
@@ -137,13 +172,14 @@ public class AxolotlClientConfig extends ConfigHolder {
                 AxolotlClientConfigConfig.searchSortOrder);
         general.addSubCategory(searchFilters);
 
-        rendering.add(customSky);
-        rendering.add(showSunMoon);
-        rendering.add(AxolotlClientConfigConfig.chromaSpeed);
-        rendering.add(dynamicFOV);
-        rendering.add(fullBright);
-        rendering.add(lowFire);
-        rendering.add(lowShield);
+        rendering.add(customSky,
+                showSunMoon,
+                AxolotlClientConfigConfig.chromaSpeed,
+                dynamicFOV,
+                fullBright,
+                lowFire,
+                lowShield,
+                hitColor);
 
 		timeChanger.add(timeChangerEnabled);
 		timeChanger.add(customTime);

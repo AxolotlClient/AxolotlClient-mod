@@ -29,6 +29,7 @@ import io.github.axolotlclient.AxolotlclientConfig.options.EnumOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.KeyBindOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
+import io.github.axolotlclient.util.FeatureDisabler;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBind;
 import net.minecraft.client.option.Perspective;
@@ -47,7 +48,10 @@ public class Freelook extends AbstractModule {
     private final OptionCategory category = new OptionCategory("freelook");
     public final BooleanOption enabled = new BooleanOption("enabled", false);
     private final KeyBindOption keyOption = new KeyBindOption("key.freelook", KEY = new KeyBind("key.freelook", InputUtil.KEY_V_CODE, "category.axolotlclient"), (key)->{});
-    private final EnumOption mode = new EnumOption("mode", new String[]{"snap_perspective", "freelook"}, "freelook");
+    private final EnumOption mode = new EnumOption("mode",
+            value -> FeatureDisabler.update(),
+            new String[]{"snap_perspective", "freelook"},
+            "freelook");
     private final EnumOption perspective = new EnumOption("perspective", Perspective.values(),
             Perspective.THIRD_PERSON_BACK.toString());
     private final BooleanOption invert = new BooleanOption("invert", false);
@@ -155,5 +159,9 @@ public class Freelook extends AbstractModule {
 
     private void setPerspective(Perspective perspective) {
         MinecraftClient.getInstance().options.setPerspective(perspective);
+    }
+
+    public boolean needsDisabling(){
+        return mode.get().equals("freelook");
     }
 }

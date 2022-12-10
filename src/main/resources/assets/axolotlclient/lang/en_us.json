@@ -49,6 +49,8 @@
 	"lowFire.tooltip": "Reduces the height of the fire overlay if you are burning",
 	"lowShield": "Low Shield",
 	"lowShield.tooltip": "Reduces the height of the shield Overlay while holding or blocking.",
+	"hitColor": "Hit Color",
+	"hitColor.tooltip": "The Color used for entities when they are being hurt. <br>Chroma does NOT work for this, since the image used gets <br>regenerated every time this is changed.",
 
 	"motionBlur": "Motion Blur",
 	"zoom": "Zoom",
