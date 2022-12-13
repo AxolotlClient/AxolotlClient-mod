@@ -32,6 +32,7 @@ import io.github.axolotlclient.modules.hypixel.autogg.AutoGG;
 import io.github.axolotlclient.modules.hypixel.autotip.AutoTip;
 import io.github.axolotlclient.modules.hypixel.levelhead.LevelHead;
 import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
+import io.github.axolotlclient.modules.hypixel.skyblock.Skyblock;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +58,7 @@ public class HypixelMods extends AbstractModule {
         addSubModule(AutoTip.getInstance());
         addSubModule(NickHider.getInstance());
         addSubModule(AutoBoop.getInstance());
+        addSubModule(Skyblock.getInstance());
 
         subModules.forEach(AbstractHypixelMod::init);
 

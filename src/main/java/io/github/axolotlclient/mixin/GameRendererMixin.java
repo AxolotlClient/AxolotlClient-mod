@@ -22,29 +22,8 @@
 
 package io.github.axolotlclient.mixin;
 
-import com.mojang.blaze3d.platform.GLX;
-import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.modules.freelook.Freelook;
-import io.github.axolotlclient.modules.hud.HudManager;
-import io.github.axolotlclient.modules.hud.gui.hud.vanilla.CrosshairHud;
-import io.github.axolotlclient.modules.motionblur.MotionBlur;
-import io.github.axolotlclient.modules.sky.SkyboxManager;
-import io.github.axolotlclient.modules.zoom.Zoom;
-import io.github.axolotlclient.util.Util;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.MouseInput;
-import net.minecraft.client.options.GameOptions;
-import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.util.Window;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.player.ClientPlayerEntity;
+import java.nio.FloatBuffer;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 import org.objectweb.asm.Opcodes;
@@ -58,7 +37,29 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import java.nio.FloatBuffer;
+import com.mojang.blaze3d.platform.GLX;
+import com.mojang.blaze3d.platform.GlStateManager;
+
+import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.modules.freelook.Freelook;
+import io.github.axolotlclient.modules.hud.HudManager;
+import io.github.axolotlclient.modules.hud.gui.hud.vanilla.CrosshairHud;
+import io.github.axolotlclient.modules.hypixel.skyblock.Skyblock;
+import io.github.axolotlclient.modules.motionblur.MotionBlur;
+import io.github.axolotlclient.modules.sky.SkyboxManager;
+import io.github.axolotlclient.modules.zoom.Zoom;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.MouseInput;
+import net.minecraft.client.options.GameOptions;
+import net.minecraft.client.render.Camera;
+import net.minecraft.client.render.GameRenderer;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.player.ClientPlayerEntity;
 
 @Mixin(GameRenderer.class)
 public abstract class GameRendererMixin {
@@ -238,10 +239,10 @@ public abstract class GameRendererMixin {
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/ClientPlayerEntity;increaseTransforms(FF)V"))
-    public void updateFreelook(ClientPlayerEntity entity, float yaw, float pitch) {
+    public void updateRotation(ClientPlayerEntity entity, float yaw, float pitch) {
         Freelook freelook = Freelook.getInstance();
 
-        if (freelook.consumeRotation(yaw, pitch))
+        if (freelook.consumeRotation(yaw, pitch) || Skyblock.getInstance().rotationLocked.get())
             return;
 
         entity.increaseTransforms(yaw, pitch);
