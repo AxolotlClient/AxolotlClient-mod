@@ -23,6 +23,7 @@
 package io.github.axolotlclient.mixin;
 
 import io.github.axolotlclient.modules.freelook.Freelook;
+import io.github.axolotlclient.modules.hypixel.skyblock.Skyblock;
 import io.github.axolotlclient.util.Hooks;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
@@ -37,7 +38,7 @@ public abstract class EntityMixin {
 
     @Inject(method = "changeLookDirection", at = @At("HEAD"), cancellable = true)
     public void interceptMovement(double cursorDeltaX, double cursorDeltaY, CallbackInfo callback) {
-        if (Freelook.getInstance().consumeRotation(cursorDeltaX, cursorDeltaY)) {
+        if (Freelook.getInstance().consumeRotation(cursorDeltaX, cursorDeltaY) || Skyblock.getInstance().rotationLocked.get()) {
             callback.cancel();
         }
     }

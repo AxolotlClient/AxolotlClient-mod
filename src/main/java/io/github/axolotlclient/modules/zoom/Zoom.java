@@ -45,7 +45,7 @@ public class Zoom extends AbstractModule {
     public static boolean active;
     private static Double originalSensitivity;
     private static boolean originalSmoothCamera;
-    public static KeyBind keyBinding;
+    public static final KeyBind keyBinding = new KeyBind("key.zoom", InputUtil.KEY_C_CODE, "category.axolotlclient");
     private static double targetFactor = 1;
     private static double divisor;
     private static float lastAnimatedFactor = 1;
@@ -71,7 +71,7 @@ public class Zoom extends AbstractModule {
         zoom.add(zoomScrolling);
         zoom.add(decreaseSensitivity);
         zoom.add(smoothCamera);
-        zoom.add(new KeyBindOption("key.zoom", keyBinding = new KeyBind("key.zoom", InputUtil.KEY_C_CODE, "category.axolotlclient"), keyBind -> {}));
+        zoom.add(new KeyBindOption("key.zoom", keyBinding, keyBind -> {}));
 
         AxolotlClient.CONFIG.rendering.addSubCategory(zoom);
 
