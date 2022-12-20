@@ -50,7 +50,7 @@ dependencies {
 		implementation 'org.lwjgl.lwjgl:lwjgl-platform:2.9.4-nightly-20150209'
 	}
 
-	include( implementation('com.github.JnCrMx:discord-game-sdk4j:0.5.5'))
+	include( implementation('com.github.JnCrMx:discord-game-sdk4j:v0.5.5'))
 
 	include(modImplementation("net.hypixel:hypixel-api-core:4.1") {
 		exclude group: "com.google.code.gson", module: "gson"
