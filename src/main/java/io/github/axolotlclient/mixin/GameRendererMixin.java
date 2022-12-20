@@ -47,6 +47,7 @@ import io.github.axolotlclient.modules.hud.gui.hud.vanilla.CrosshairHud;
 import io.github.axolotlclient.modules.hypixel.skyblock.Skyblock;
 import io.github.axolotlclient.modules.motionblur.MotionBlur;
 import io.github.axolotlclient.modules.sky.SkyboxManager;
+import io.github.axolotlclient.modules.unfocusedFpsLimiter.UnfocusedFpsLimiter;
 import io.github.axolotlclient.modules.zoom.Zoom;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -266,5 +267,12 @@ public abstract class GameRendererMixin {
     @Redirect(method = "transformCamera", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;prevPitch:F"))
     public float freelook$prevPitch(Entity entity) {
         return Freelook.getInstance().pitch(entity.prevPitch);
+    }
+
+    @Inject(method = "render", at = @At("HEAD"), cancellable = true)
+    private void limitFpsOnLostFocus(float tickDelta, long nanoTime, CallbackInfo ci){
+        if(!UnfocusedFpsLimiter.getInstance().checkForRender()){
+            ci.cancel();
+        }
     }
 }

@@ -22,7 +22,13 @@
 
 package io.github.axolotlclient;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
+
 import com.mojang.blaze3d.platform.GlStateManager;
+
 import io.github.axolotlclient.AxolotlclientConfig.AxolotlClientConfigManager;
 import io.github.axolotlclient.AxolotlclientConfig.ConfigManager;
 import io.github.axolotlclient.AxolotlclientConfig.DefaultConfigManager;
@@ -44,6 +50,7 @@ import io.github.axolotlclient.modules.screenshotUtils.ScreenshotUtils;
 import io.github.axolotlclient.modules.scrollableTooltips.ScrollableTooltips;
 import io.github.axolotlclient.modules.sky.SkyResourceManager;
 import io.github.axolotlclient.modules.tnttime.TntTime;
+import io.github.axolotlclient.modules.unfocusedFpsLimiter.UnfocusedFpsLimiter;
 import io.github.axolotlclient.modules.zoom.Zoom;
 import io.github.axolotlclient.util.FeatureDisabler;
 import io.github.axolotlclient.util.Logger;
@@ -56,11 +63,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.resource.Resource;
 import net.minecraft.util.Identifier;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
 
 public class AxolotlClient implements ClientModInitializer {
 
@@ -136,6 +138,7 @@ public class AxolotlClient implements ClientModInitializer {
         modules.add(Particles.getInstance());
         modules.add(ScreenshotUtils.getInstance());
         modules.add(BeaconBeam.getInstance());
+        modules.add(UnfocusedFpsLimiter.getInstance());
     }
 
     private static void addExternalModules() {

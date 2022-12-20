@@ -22,6 +22,20 @@
 
 package io.github.axolotlclient.mixin;
 
+import java.util.concurrent.locks.LockSupport;
+
+import org.apache.logging.log4j.Logger;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.NetworkHelper;
 import io.github.axolotlclient.modules.hud.HudManager;
@@ -39,17 +53,6 @@ import net.minecraft.client.util.Window;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.player.ClientPlayerEntity;
 import net.minecraft.world.level.LevelInfo;
-import org.apache.logging.log4j.Logger;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(MinecraftClient.class)
 public abstract class MinecraftClientMixin {
@@ -168,4 +171,10 @@ public abstract class MinecraftClientMixin {
         Util.window = new Window(MinecraftClient.getInstance());
         HudManager.getInstance().refreshAllBounds();
     }
+
+    @Redirect(method = "runGameLoop", at = @At(value = "INVOKE", target = "Ljava/lang/Thread;yield()V"))
+    private void waitForTasks(){
+        LockSupport.parkNanos("waiting for tasks", 500_000);
+    }
+
 }
