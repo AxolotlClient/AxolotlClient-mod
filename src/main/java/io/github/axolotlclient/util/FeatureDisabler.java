@@ -37,7 +37,7 @@ public class FeatureDisabler {
 
     private static final Supplier<Boolean> NONE = ()-> true;
 
-    private static String currentAdress;
+    private static String currentAddress;
 
     public static void init() {
         setServers(AxolotlClient.CONFIG.fullBright, NONE, "gommehd");
@@ -46,7 +46,7 @@ public class FeatureDisabler {
     }
 
     public static void onServerJoin(String address) {
-        currentAdress = address;
+        currentAddress = address;
         update();
     }
 
@@ -74,6 +74,6 @@ public class FeatureDisabler {
     }
 
     public static void update(){
-        disabledServers.forEach((option, strings) -> disableOption(option, strings, currentAdress));
+        disabledServers.forEach((option, strings) -> disableOption(option, strings, currentAddress));
     }
 }
