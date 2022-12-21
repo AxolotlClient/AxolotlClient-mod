@@ -80,3 +80,4 @@
 
 - HitColor option
 - Allow Snap Perspective mode to be used on servers where Freelook is disallowed
+- add a port of the Dynamic FPS mod by juliand665 to 1.8.9
