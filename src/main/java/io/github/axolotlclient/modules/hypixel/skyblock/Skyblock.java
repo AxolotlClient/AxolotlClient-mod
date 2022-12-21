@@ -22,13 +22,11 @@
 
 package io.github.axolotlclient.modules.hypixel.skyblock;
 
-import lombok.Getter;
-import org.lwjgl.input.Keyboard;
-
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.KeyBindOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.hypixel.AbstractHypixelMod;
+import lombok.Getter;
 import net.minecraft.client.options.KeyBinding;
 
 public class Skyblock implements AbstractHypixelMod {
@@ -40,7 +38,7 @@ public class Skyblock implements AbstractHypixelMod {
 
     public final BooleanOption rotationLocked = new BooleanOption("axolotlclient.rotationLocked", false);
     private final KeyBindOption lock = new KeyBindOption("axolotlclient.lockRotation",
-            new KeyBinding("axolotlclient.lockRotation", Keyboard.KEY_P, "category.axolotlclient"),
+            new KeyBinding("axolotlclient.lockRotation", 25, "axolotlclient.category.axolotlclient"),
             keyBinding -> rotationLocked.toggle());
 
     @Override
