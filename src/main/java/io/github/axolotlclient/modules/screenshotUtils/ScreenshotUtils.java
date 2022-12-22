@@ -31,6 +31,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.jetbrains.annotations.Nullable;
+
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.EnumOption;
@@ -43,7 +45,6 @@ import lombok.AllArgsConstructor;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
-import org.jetbrains.annotations.Nullable;
 
 public class ScreenshotUtils extends AbstractModule {
 
@@ -53,45 +54,7 @@ public class ScreenshotUtils extends AbstractModule {
 
     private final BooleanOption enabled = new BooleanOption("axolotlclient.enabled", false);
 
-    private final List<Action> actions = Util.make(() -> {
-        List<Action> actions = new ArrayList<>();
-        actions.add(new Action("axolotlclient.copyAction",
-                Formatting.AQUA,
-                new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                        new LiteralText(I18n.translate("axolotlclient.copy_image"))),
-                new CustomClickEvent((file) -> {
-                    FileTransferable selection = new FileTransferable(file);
-                    Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
-                })
-        ));
-
-        actions.add(new Action("axolotlclient.deleteAction",
-                Formatting.LIGHT_PURPLE,
-                new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                        new LiteralText(I18n.translate("axolotlclient.delete_image"))),
-                new CustomClickEvent((file) -> {
-                    try {
-                        Files.delete(file.toPath());
-                        Util.sendChatMessage(
-                                new LiteralText(I18n.translate("axolotlclient.screenshot_deleted")
-                                        .replace("<name>", file.getName())));
-                    } catch (Exception e) {
-                        Logger.warn("Couldn't delete Screenshot " + file.getName());
-                    }
-                })
-        ));
-
-        actions.add(new Action("axolotlclient.openAction",
-                Formatting.WHITE,
-                new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                        new LiteralText(I18n.translate("axolotlclient.open_image"))),
-                new CustomClickEvent((file) -> OSUtil.getOS().open(file.toURI()))
-        ));
-
-        // If you have further ideas to what actions could be added here, please let us know!
-
-        return actions;
-    });
+    private final List<Action> actions = new ArrayList<>();
 
     private final EnumOption autoExec = new EnumOption("axolotlclient.autoExec", Util.make(() -> {
         List<String> names = new ArrayList<>();
@@ -106,6 +69,38 @@ public class ScreenshotUtils extends AbstractModule {
         category.add(enabled, autoExec);
 
         AxolotlClient.CONFIG.general.addSubCategory(category);
+
+        actions.add(new Action("axolotlclient.copyAction",
+                Formatting.AQUA,
+                "axolotlclient.copy_image",
+                new CustomClickEvent((file) -> {
+                    FileTransferable selection = new FileTransferable(file);
+                    Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
+                })
+        ));
+
+        actions.add(new Action("axolotlclient.deleteAction",
+                Formatting.LIGHT_PURPLE,
+                "axolotlclient.delete_image",
+                new CustomClickEvent((file) -> {
+                    try {
+                        Files.delete(file.toPath());
+                        Util.sendChatMessage(
+                                new LiteralText(I18n.translate("axolotlclient.screenshot_deleted")
+                                        .replace("<name>", file.getName())));
+                    } catch (Exception e) {
+                        Logger.warn("Couldn't delete Screenshot " + file.getName());
+                    }
+                })
+        ));
+
+        actions.add(new Action("axolotlclient.openAction",
+                Formatting.WHITE,
+                "axolotlclient.open_image",
+                new CustomClickEvent((file) -> OSUtil.getOS().open(file.toURI()))
+        ));
+
+        // If you have further ideas to what actions could be added here, please let us know!
     }
 
     public static ScreenshotUtils getInstance() {
@@ -143,7 +138,7 @@ public class ScreenshotUtils extends AbstractModule {
 
         private final String translationKey;
         private final Formatting formatting;
-        private final HoverEvent hoverEvent;
+        private final String hoverTextKey;
         private final CustomClickEvent clickEvent;
 
         public Text getText(File file) {
@@ -151,7 +146,7 @@ public class ScreenshotUtils extends AbstractModule {
                     .setStyle(new Style()
                             .setFormatting(formatting)
                             .setClickEvent(clickEvent.setFile(file))
-                            .setHoverEvent(hoverEvent));
+                            .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(I18n.translate(hoverTextKey)))));
         }
 
         public String getName() {
