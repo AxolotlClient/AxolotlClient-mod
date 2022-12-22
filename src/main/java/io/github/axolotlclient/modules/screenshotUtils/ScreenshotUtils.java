@@ -54,14 +54,14 @@ public class ScreenshotUtils extends AbstractModule {
     private final List<Action> actions = Util.make(() -> {
         List<Action> actions = new ArrayList<>();
         actions.add(new Action("copyAction", Formatting.AQUA,
-                new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.translatable("copy_image")),
+                "copy_image",
                 new CustomClickEvent((file) -> {
                     FileTransferable selection = new FileTransferable(file);
                     Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
                 })));
 
         actions.add(new Action("deleteAction", Formatting.LIGHT_PURPLE,
-                new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.translatable("delete_image")),
+                "delete_image",
                 new CustomClickEvent((file) -> {
                     try {
                         Files.delete(file.toPath());
@@ -73,7 +73,7 @@ public class ScreenshotUtils extends AbstractModule {
                 })));
 
         actions.add(new Action("openAction", Formatting.WHITE,
-                new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.translatable("open_image")),
+                "open_image",
                 new CustomClickEvent((file) -> Util.getOperatingSystem().open(file.toURI()))));
 
         // If you have further ideas to what actions could be added here, please let us know!
@@ -124,47 +124,17 @@ public class ScreenshotUtils extends AbstractModule {
         return message;
     }
 
-    /*private Text getUtilsText(File file){
-    
-        return Text.translatable("copyAction")
-                .setStyle(Style.EMPTY
-                        .withFormatting(Formatting.BLUE)
-                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.translatable("copy_image")))
-                        .withClickEvent(new CustomClickEvent(() -> {
-                            FileTransferable selection = new FileTransferable(file);
-                            try {
-                                Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
-                            } catch (HeadlessException e) {
-                                Util.sendChatMessage(Text.translatable("headless_exception").append("\n" + e.getMessage()).append("\nRunning headless: " + GraphicsEnvironment.isHeadless()));
-                            }
-                        })))
-                .append(" ")
-                .append(
-                        Text.translatable("deleteAction").setStyle(Style.EMPTY
-                                .withFormatting(Formatting.RED)
-                                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.translatable("delete_image")))
-                                .withClickEvent(new CustomClickEvent(() -> {
-                                    try {
-                                        Files.delete(file.toPath());
-                                        Util.sendChatMessage(Text.literal(I18n.translate("screenshot_deleted").replace("<name>", file.getName())));
-                                    } catch (Exception e) {
-                                        Logger.warn("Couldn't delete Screenshot " + file.getName());
-                                    }
-                                })))
-                );
-    }*/
-
     @AllArgsConstructor
     public static class Action {
 
         private final String translationKey;
         private final Formatting formatting;
-        private final HoverEvent hoverEvent;
+        private final String hoverTextKey;
         private final CustomClickEvent clickEvent;
 
         public Text getText(File file) {
             return Text.translatable(translationKey).setStyle(Style.EMPTY.withFormatting(formatting)
-                    .withClickEvent(clickEvent.setFile(file)).withHoverEvent(hoverEvent));
+                    .withClickEvent(clickEvent.setFile(file)).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.translatable(hoverTextKey))));
         }
 
         public String getName() {
