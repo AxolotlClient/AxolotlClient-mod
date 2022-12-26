@@ -43,6 +43,8 @@ public class FeatureDisabler {
         setServers(AxolotlClient.CONFIG.fullBright, NONE, "gommehd");
         setServers(AxolotlClient.CONFIG.timeChangerEnabled, NONE, "gommehd");
         setServers(Freelook.getInstance().enabled, () -> Freelook.getInstance().needsDisabling(), "hypixel", "mineplex", "gommehd", "nucleoid");
+
+
     }
 
     public static void onServerJoin(String address) {
