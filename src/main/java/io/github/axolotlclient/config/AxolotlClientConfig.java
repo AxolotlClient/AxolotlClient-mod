@@ -101,8 +101,7 @@ public class AxolotlClientConfig extends ConfigHolder {
     public final BooleanOption enableCustomOutlines = new BooleanOption("enabled", false);
     public final ColorOption outlineColor = new ColorOption("color", Color.parse("#DD000000"));
     public final BooleanOption outlineChroma = new BooleanOption("chroma", false);
-    // If you find a reasonable (without rewriting  a lot) way to implement this let me know!
-    //public final DoubleOption outlineWidth = new DoubleOption("outlineWidth", 1, 1, 10);
+    public final DoubleOption outlineWidth = new DoubleOption("outlineWidth",1, 1, 10);
 
     public final GenericOption openCredits = new GenericOption("Credits", "Open Credits", (mouseX, mouseY)->
             MinecraftClient.getInstance().setScreen(new CreditsScreen(MinecraftClient.getInstance().currentScreen))
@@ -188,7 +187,7 @@ public class AxolotlClientConfig extends ConfigHolder {
         outlines.add(enableCustomOutlines);
         outlines.add(outlineColor);
         outlines.add(outlineChroma);
-        //outlines.add(outlineWidth); // I could not get this to have an effect.
+        outlines.add(outlineWidth); // I could not get this to have an effect.
 
         AxolotlClient.config.add(creditsBGM);
 

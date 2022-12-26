@@ -23,13 +23,18 @@
 package io.github.axolotlclient.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.sky.SkyboxManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.shape.VoxelShape;
 import org.joml.Matrix4f;
+import org.lwjgl.opengl.GL11;
 import org.quiltmc.loader.api.QuiltLoader;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -52,6 +57,8 @@ public abstract class WorldRendererMixin {
     @Shadow
     @Final
     private MinecraftClient client;
+
+    @Shadow protected abstract BufferBuilder.RenderedBuffer renderClouds(BufferBuilder builder, double x, double y, double z, Vec3d color);
 
     @Inject(method = "renderSky", at = @At("HEAD"), cancellable = true)
     public void axolotlclient$renderSky(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Camera preStep, boolean bl,

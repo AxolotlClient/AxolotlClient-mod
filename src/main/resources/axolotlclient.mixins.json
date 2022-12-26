@@ -46,6 +46,7 @@
     "PlayerListEntryMixin",
     "PlayerListHudMixin",
     "ReloadableResourceManagerMixin",
+    "RenderLayerMixin",
     "RenderSystemMixin",
     "ScreenMixin",
     "ScreenshotRecorderMixin",
