@@ -34,7 +34,6 @@
     "LivingEntityRendererMixin",
     "MinecraftClientAccessor",
     "MinecraftClientMixin",
-    "MultiplayerScreenMixin",
     "ParticleAccessor",
     "ParticleManagerMixin",
     "PlayerEntityMixin",

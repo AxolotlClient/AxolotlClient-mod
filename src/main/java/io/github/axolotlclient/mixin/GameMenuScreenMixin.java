@@ -22,19 +22,25 @@
 
 package io.github.axolotlclient.mixin;
 
-import io.github.axolotlclient.modules.hud.HudEditScreen;
-import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.GameMenuScreen;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.resource.language.I18n;
+import java.util.Objects;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
+
+import io.github.axolotlclient.modules.hud.HudEditScreen;
+import io.github.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
+import io.github.axolotlclient.modules.hypixel.HypixelMods;
+import io.github.axolotlclient.util.FeatureDisabler;
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.GameMenuScreen;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.resource.language.I18n;
 
 @Mixin(GameMenuScreen.class)
 public abstract class GameMenuScreenMixin extends Screen {
@@ -74,6 +80,13 @@ public abstract class GameMenuScreenMixin extends Screen {
     public void customButtons(ButtonWidget button, CallbackInfo ci) {
         if (button.id == 20) {
             MinecraftClient.getInstance().openScreen(new HudEditScreen((GameMenuScreen) (Object) this));
+        } else if(button.id == 1){
+            FeatureDisabler.clear();
+            if (HypixelMods.getInstance().cacheMode.get() != null
+                    && Objects.equals(HypixelMods.getInstance().cacheMode.get(),
+                    HypixelMods.HypixelApiCacheMode.ON_CLIENT_DISCONNECT.toString())) {
+                HypixelAbstractionLayer.clearPlayerData();
+            }
         }
     }
 }
