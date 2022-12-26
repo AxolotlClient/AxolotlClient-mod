@@ -34,12 +34,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class KeyBindMixin {
 
     @Inject(method = "setBoundKey", at = @At("RETURN"))
-    public void boundKeySet(InputUtil.Key key, CallbackInfo ci) {
+    public void axolotlclient$boundKeySet(InputUtil.Key key, CallbackInfo ci) {
         Hooks.KEYBIND_CHANGE.invoker().setBoundKey(key);
     }
 
     @Inject(method = "setPressed", at = @At("RETURN"))
-    public void onPress(boolean pressed, CallbackInfo ci) {
+    public void axolotlclient$onPress(boolean pressed, CallbackInfo ci) {
         if (pressed) {
             Hooks.KEYBIND_PRESS.invoker().onPress((KeyBind) ((Object) this));
         }

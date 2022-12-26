@@ -43,7 +43,7 @@ public abstract class ClientWorldMixin {
     protected abstract EntityLookup<Entity> getEntityLookup();
 
     @Inject(method = "removeEntity", at = @At("HEAD"))
-    public void onEntityRemoved(int entityId, Entity.RemovalReason removalReason, CallbackInfo ci) {
+    public void axolotlclient$onEntityRemoved(int entityId, Entity.RemovalReason removalReason, CallbackInfo ci) {
         Entity entity = this.getEntityLookup().get(entityId);
         if (entity instanceof PlayerEntity && HypixelMods.getInstance().cacheMode.get()
                 .equals(HypixelMods.HypixelCacheMode.ON_PLAYER_DISCONNECT.toString())) {
@@ -52,7 +52,7 @@ public abstract class ClientWorldMixin {
     }
 
     @ModifyArg(method = "setTimeOfDay", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld$Properties;setTimeOfDay(J)V"))
-    public long timeChanger(long time) {
+    public long axolotlclient$timeChanger(long time) {
         if (AxolotlClient.CONFIG.timeChangerEnabled.get()) {
             return AxolotlClient.CONFIG.customTime.get();
         }

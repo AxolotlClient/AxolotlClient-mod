@@ -36,7 +36,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class BackgroundRendererMixin {
 
     @Inject(method = "applyFog", at = @At("TAIL"))
-    private static void applyNoFog(Camera camera, BackgroundRenderer.FogType fogType, float viewDistance,
+    private static void axolotlclient$applyNoFog(Camera camera, BackgroundRenderer.FogType fogType, float viewDistance,
             boolean thickFog, float tickDelta, CallbackInfo ci) {
         if (camera.getSubmersionType() == CameraSubmersionType.NONE
                 && (thickFog || fogType == BackgroundRenderer.FogType.FOG_TERRAIN)) {

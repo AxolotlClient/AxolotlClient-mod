@@ -61,14 +61,14 @@ public abstract class InGameHudMixin {
     private int overlayRemaining;
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderStatusEffectOverlay(Lnet/minecraft/client/util/math/MatrixStack;)V"))
-    private void onHudRender(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
+    private void axolotlclient$onHudRender(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
         if (!MinecraftClient.getInstance().options.hudHidden) {
             HudManager.getInstance().render(matrices, tickDelta);
         }
     }
 
     @Inject(method = "renderStatusEffectOverlay", at = @At("HEAD"), cancellable = true)
-    public void renderStatusEffect(MatrixStack matrices, CallbackInfo ci) {
+    public void axolotlclient$renderStatusEffect(MatrixStack matrices, CallbackInfo ci) {
         PotionsHud hud = (PotionsHud) HudManager.getInstance().get(PotionsHud.ID);
         if (hud != null && hud.isEnabled()) {
             ci.cancel();
@@ -76,7 +76,7 @@ public abstract class InGameHudMixin {
     }
 
     @Inject(method = "renderCrosshair", at = @At("HEAD"), cancellable = true)
-    public void renderCrosshair(MatrixStack matrices, CallbackInfo ci) {
+    public void axolotlclient$renderCrosshair(MatrixStack matrices, CallbackInfo ci) {
         CrosshairHud hud = (CrosshairHud) HudManager.getInstance().get(CrosshairHud.ID);
         if (hud != null && hud.isEnabled()) {
             if (MinecraftClient.getInstance().options.debugEnabled && !hud.overridesF3()) {
@@ -87,7 +87,7 @@ public abstract class InGameHudMixin {
     }
 
     @Inject(method = "renderScoreboardSidebar", at = @At("HEAD"), cancellable = true)
-    public void renderScoreboard(MatrixStack matrices, ScoreboardObjective objective, CallbackInfo ci) {
+    public void axolotlclient$renderScoreboard(MatrixStack matrices, ScoreboardObjective objective, CallbackInfo ci) {
         ScoreboardHud hud = (ScoreboardHud) HudManager.getInstance().get(ScoreboardHud.ID);
         if (hud != null && hud.isEnabled()) {
             ci.cancel();
@@ -95,7 +95,7 @@ public abstract class InGameHudMixin {
     }
 
     @Inject(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/InGameHud;overlayMessage:Lnet/minecraft/text/Text;", ordinal = 0))
-    public void clearActionBar(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
+    public void axolotlclient$clearActionBar(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
         ActionBarHud hud = (ActionBarHud) HudManager.getInstance().get(ActionBarHud.ID);
         if (hud != null && hud.isEnabled()) {
             if (overlayMessage == null || overlayRemaining <= 0 && hud.getActionBar() != null) {
@@ -105,7 +105,7 @@ public abstract class InGameHudMixin {
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/Text;FFI)I", ordinal = 0))
-    public int getActionBar(TextRenderer instance, MatrixStack matrices, Text message, float x, float y, int color) {
+    public int axolotlclient$getActionBar(TextRenderer instance, MatrixStack matrices, Text message, float x, float y, int color) {
         ActionBarHud hud = (ActionBarHud) HudManager.getInstance().get(ActionBarHud.ID);
         if (hud != null && hud.isEnabled()) {
             hud.setActionBar(message, color);// give ourselves the correct values
@@ -116,7 +116,7 @@ public abstract class InGameHudMixin {
     }
 
     @Inject(method = "renderHotbar", at = @At("HEAD"), cancellable = true)
-    public void customHotbar(float tickDelta, MatrixStack matrices, CallbackInfo ci) {
+    public void axolotlclient$customHotbar(float tickDelta, MatrixStack matrices, CallbackInfo ci) {
         HotbarHUD hud = (HotbarHUD) HudManager.getInstance().get(HotbarHUD.ID);
         if (hud.isEnabled()) {
             ci.cancel();
@@ -124,7 +124,7 @@ public abstract class InGameHudMixin {
     }
 
     @ModifyArgs(method = "renderHeldItemTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/Text;FFI)I"))
-    public void setItemNamePos(Args args) {
+    public void axolotlclient$setItemNamePos(Args args) {
         HotbarHUD hud = (HotbarHUD) HudManager.getInstance().get(HotbarHUD.ID);
         if (hud.isEnabled()) {
             args.set(2, ((Integer) hud.getX()).floatValue() + ((hud.getWidth() * hud.getScale())
@@ -135,7 +135,7 @@ public abstract class InGameHudMixin {
     }
 
     @ModifyArgs(method = "renderMountJumpBar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V"))
-    public void moveHorseHealth(Args args) {
+    public void axolotlclient$moveHorseHealth(Args args) {
         HotbarHUD hud = (HotbarHUD) HudManager.getInstance().get(HotbarHUD.ID);
         if (hud.isEnabled()) {
             args.set(1, hud.getX());
@@ -144,7 +144,7 @@ public abstract class InGameHudMixin {
     }
 
     @ModifyArgs(method = "renderExperienceBar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V"))
-    public void moveXPBar(Args args) {
+    public void axolotlclient$moveXPBar(Args args) {
         HotbarHUD hud = (HotbarHUD) HudManager.getInstance().get(HotbarHUD.ID);
         if (hud.isEnabled()) {
             args.set(1, hud.getX());
@@ -153,7 +153,7 @@ public abstract class InGameHudMixin {
     }
 
     @Redirect(method = "renderExperienceBar", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/InGameHud;scaledHeight:I"))
-    public int moveXPBarHeight(InGameHud instance) {
+    public int axolotlclient$moveXPBarHeight(InGameHud instance) {
         HotbarHUD hud = (HotbarHUD) HudManager.getInstance().get(HotbarHUD.ID);
         if (hud.isEnabled()) {
             return hud.getY() + 22;
@@ -162,7 +162,7 @@ public abstract class InGameHudMixin {
     }
 
     @Redirect(method = "renderExperienceBar", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/InGameHud;scaledWidth:I"))
-    public int moveXPBarWidth(InGameHud instance) {
+    public int axolotlclient$moveXPBarWidth(InGameHud instance) {
         HotbarHUD hud = (HotbarHUD) HudManager.getInstance().get(HotbarHUD.ID);
         if (hud.isEnabled()) {
             return hud.getX() * 2 + hud.getWidth();
@@ -171,7 +171,7 @@ public abstract class InGameHudMixin {
     }
 
     @Redirect(method = "renderStatusBars", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/InGameHud;scaledHeight:I"))
-    public int moveStatusBarsHeight(InGameHud instance) {
+    public int axolotlclient$moveStatusBarsHeight(InGameHud instance) {
         HotbarHUD hud = (HotbarHUD) HudManager.getInstance().get(HotbarHUD.ID);
         if (hud.isEnabled()) {
             return hud.getY() + 22;
@@ -180,7 +180,7 @@ public abstract class InGameHudMixin {
     }
 
     @Redirect(method = "renderStatusBars", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/InGameHud;scaledWidth:I"))
-    public int moveStatusBarsWidth(InGameHud instance) {
+    public int axolotlclient$moveStatusBarsWidth(InGameHud instance) {
         HotbarHUD hud = (HotbarHUD) HudManager.getInstance().get(HotbarHUD.ID);
         if (hud.isEnabled()) {
             return hud.getX() * 2 + hud.getWidth();

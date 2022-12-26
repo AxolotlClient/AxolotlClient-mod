@@ -37,7 +37,7 @@ public abstract class ConnectScreenMixin {
 
     @Inject(method = "connect(Lnet/minecraft/client/MinecraftClient;Lnet/minecraft/client/network/ServerAddress;Lnet/minecraft/client/network/ServerInfo;)V",
             at = @At(value = "INVOKE", target = "Ljava/lang/Thread;start()V", shift = At.Shift.AFTER))
-    private void onServerJoin(MinecraftClient client, ServerAddress address, ServerInfo serverInfo, CallbackInfo ci) {
+    private void axolotlclient$onServerJoin(MinecraftClient client, ServerAddress address, ServerInfo serverInfo, CallbackInfo ci) {
         FeatureDisabler.onServerJoin(address.getAddress());
     }
 }

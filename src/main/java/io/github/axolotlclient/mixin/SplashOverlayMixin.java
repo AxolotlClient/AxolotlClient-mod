@@ -36,13 +36,13 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 public abstract class SplashOverlayMixin {
 
     @Inject(method = "withAlpha", at = @At("HEAD"), cancellable = true)
-    private static void customBackgroundColor(int color, int alpha, CallbackInfoReturnable<Integer> cir) {
+    private static void axolotlclient$customBackgroundColor(int color, int alpha, CallbackInfoReturnable<Integer> cir) {
         cir.setReturnValue(AxolotlClient.CONFIG.loadingScreenColor.get().withAlpha(alpha).getAsInt());
     }
 
     @SuppressWarnings("mapping")
     @ModifyArgs(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;_clearColor(FFFF)V"))
-    public void customBackgroundColor$2(Args args) {
+    public void axolotlclient$customBackgroundColor$2(Args args) {
         Color color = AxolotlClient.CONFIG.loadingScreenColor.get();
         args.set(0, (float) color.getRed() / 255);
         args.set(1, (float) color.getGreen() / 255);

@@ -40,7 +40,7 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 public abstract class ScreenMixin {
 
     @ModifyArgs(method = "renderTooltip(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/item/ItemStack;II)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;renderTooltip(Lnet/minecraft/client/util/math/MatrixStack;Ljava/util/List;Ljava/util/Optional;II)V"))
-    public void modifyTooltipPosition(Args args) {
+    public void axolotlclient$modifyTooltipPosition(Args args) {
         if (ScrollableTooltips.getInstance().enabled.get()) {
             if ((MinecraftClient.getInstance().currentScreen instanceof CreativeInventoryScreen)
                     && ((CreativeInventoryScreen) MinecraftClient.getInstance().currentScreen).m_zqfbkfzl()) {
@@ -53,7 +53,7 @@ public abstract class ScreenMixin {
     }
 
     @Inject(method = "handleTextClick", at = @At(value = "INVOKE", target = "Lnet/minecraft/text/ClickEvent;getAction()Lnet/minecraft/text/ClickEvent$Action;", ordinal = 0), cancellable = true)
-    public void customClickEvents(Style style, CallbackInfoReturnable<Boolean> cir) {
+    public void axolotlclient$customClickEvents(Style style, CallbackInfoReturnable<Boolean> cir) {
         ClickEvent event = style.getClickEvent();
         if (event instanceof ScreenshotUtils.CustomClickEvent) {
             ((ScreenshotUtils.CustomClickEvent) event).doAction();

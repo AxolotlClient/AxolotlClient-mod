@@ -25,7 +25,6 @@
     "GameMenuScreenMixin",
     "GameRendererMixin",
     "HandledScreenMixin",
-    "IdentifierMixin",
     "InGameHudMixin",
     "InGameOverlayRendererMixin",
     "KeyBindMixin",

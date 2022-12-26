@@ -35,7 +35,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class InGameOverlayRendererMixin {
 
     @Inject(method = "renderFireOverlay", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;push()V"))
-    private static void lowFire(MinecraftClient client, MatrixStack matrices, CallbackInfo ci) {
+    private static void axolotlclient$lowFire(MinecraftClient client, MatrixStack matrices, CallbackInfo ci) {
         if (AxolotlClient.CONFIG.lowFire.get()) {
             matrices.translate(0, -0.2F, 0);
         }

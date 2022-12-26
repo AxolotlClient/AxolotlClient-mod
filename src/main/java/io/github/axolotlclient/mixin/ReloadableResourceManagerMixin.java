@@ -46,7 +46,7 @@ import java.util.concurrent.Executor;
 public abstract class ReloadableResourceManagerMixin {
 
     @Inject(method = "reload", at = @At("TAIL"))
-    public void reload(Executor prepareExecutor, Executor applyExecutor, CompletableFuture<Unit> initialStage,
+    public void axolotlclient$reload(Executor prepareExecutor, Executor applyExecutor, CompletableFuture<Unit> initialStage,
             List<ResourcePack> resourcePacks, CallbackInfoReturnable<ResourceReload> cir) {
         HypixelAbstractionLayer.clearPlayerData();
 
@@ -57,7 +57,7 @@ public abstract class ReloadableResourceManagerMixin {
     }
 
     @Inject(method = "getResource", at = @At("HEAD"), cancellable = true)
-    public void getResource(Identifier id, CallbackInfoReturnable<Optional<Resource>> cir) {
+    public void axolotlclient$getResource(Identifier id, CallbackInfoReturnable<Optional<Resource>> cir) {
         if (AxolotlClient.runtimeResources.get(id) != null) {
             cir.setReturnValue(Optional.of(AxolotlClient.runtimeResources.get(id)));
         }

@@ -39,7 +39,7 @@ public abstract class RenderSystemMixin {
     private static float[] shaderColor;
 
     @Inject(method = "_setShaderColor", at = @At(value = "HEAD"), cancellable = true, remap = false)
-    private static void reduceBlue(float red, float green, float blue, float alpha, CallbackInfo ci) {
+    private static void axolotlclient$reduceBlue(float red, float green, float blue, float alpha, CallbackInfo ci) {
         if (AxolotlClient.CONFIG.nightMode.get()) {
             shaderColor[0] = red;
             shaderColor[1] = green;

@@ -45,10 +45,10 @@ public abstract class GameRendererMixin {
 
     @Final
     @Shadow
-    private MinecraftClient client;
+    MinecraftClient client;
 
     @Inject(method = "getFov", at = @At(value = "RETURN", ordinal = 1), cancellable = true)
-    public void setZoom(Camera camera, float tickDelta, boolean changingFov, CallbackInfoReturnable<Double> cir) {
+    public void axolotlclient$setZoom(Camera camera, float tickDelta, boolean changingFov, CallbackInfoReturnable<Double> cir) {
         Zoom.update();
         double returnValue = cir.getReturnValue();
 
@@ -73,12 +73,12 @@ public abstract class GameRendererMixin {
     }
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getFramebuffer()Lcom/mojang/blaze3d/framebuffer/Framebuffer;"))
-    public void worldMotionBlur(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
-        motionBlur(tickDelta, startTime, tick, null);
+    public void axolotlclient$worldMotionBlur(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
+        axolotlclient$motionBlur(tickDelta, startTime, tick, null);
     }
 
     @Inject(method = "render", at = @At("TAIL"))
-    public void motionBlur(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
+    public void axolotlclient$motionBlur(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
         if (ci != null && !MotionBlur.getInstance().inGuis.get()) {
             return;
         }

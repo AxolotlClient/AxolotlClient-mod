@@ -51,7 +51,7 @@ public abstract class PlayerListHudMixin {
     private GameProfile cachedPlayer;
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/PlayerListEntry;getProfile()Lcom/mojang/authlib/GameProfile;"))
-    public GameProfile getPlayerGameProfile(PlayerListEntry instance) {
+    public GameProfile axolotlclient$getPlayerGameProfile(PlayerListEntry instance) {
         cachedPlayer = instance.getProfile();
         return instance.getProfile();
     }
@@ -60,7 +60,7 @@ public abstract class PlayerListHudMixin {
     private PlayerListEntry playerListEntry;
 
     @Inject(method = "getPlayerName", at = @At("HEAD"), cancellable = true)
-    public void nickHider(PlayerListEntry playerEntry, CallbackInfoReturnable<Text> cir) {
+    public void axolotlclient$nickHider(PlayerListEntry playerEntry, CallbackInfoReturnable<Text> cir) {
         assert MinecraftClient.getInstance().player != null;
         if (playerEntry.getProfile().equals(MinecraftClient.getInstance().player.getGameProfile())
                 && NickHider.getInstance().hideOwnName.get()) {
@@ -72,20 +72,20 @@ public abstract class PlayerListHudMixin {
     }
 
     @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;getPlayerName(Lnet/minecraft/client/network/PlayerListEntry;)Lnet/minecraft/text/Text;"))
-    public PlayerListEntry getPlayer(PlayerListEntry playerEntry) {
+    public PlayerListEntry axolotlclient$getPlayer(PlayerListEntry playerEntry) {
         playerListEntry = playerEntry;
         return playerEntry;
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;getWidth(Lnet/minecraft/text/StringVisitable;)I"))
-    public int moveName(TextRenderer instance, StringVisitable text) {
+    public int axolotlclient$moveName(TextRenderer instance, StringVisitable text) {
         if (AxolotlClient.CONFIG.showBadges.get() && AxolotlClient.isUsingClient(playerListEntry.getProfile().getId()))
             return instance.getWidth(text) + 10;
         return instance.getWidth(text);
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/Text;FFI)I"))
-    public int moveName(TextRenderer instance, MatrixStack matrices, Text text, float x, float y, int color) {
+    public int axolotlclient$moveName(TextRenderer instance, MatrixStack matrices, Text text, float x, float y, int color) {
         if (AxolotlClient.CONFIG.showBadges.get() && AxolotlClient.isUsingClient(cachedPlayer.getId())) {
             RenderSystem.setShaderTexture(0, AxolotlClient.badgeIcon);
             RenderSystem.setShaderColor(1, 1, 1, 1);
@@ -99,7 +99,7 @@ public abstract class PlayerListHudMixin {
     }
 
     @ModifyArg(method = "getPlayerName", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;applyGameModeFormatting(Lnet/minecraft/client/network/PlayerListEntry;Lnet/minecraft/text/MutableText;)Lnet/minecraft/text/Text;"), index = 1)
-    public MutableText hideNames(MutableText name) {
+    public MutableText axolotlclient$hideNames(MutableText name) {
         if (NickHider.getInstance().hideOwnName.get()) {
             return Text.literal(NickHider.getInstance().hiddenNameSelf.get());
         }

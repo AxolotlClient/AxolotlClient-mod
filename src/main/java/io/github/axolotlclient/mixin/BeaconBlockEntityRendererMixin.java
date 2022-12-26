@@ -37,7 +37,7 @@ public abstract class BeaconBlockEntityRendererMixin {
 
 
     @Inject(method = "renderBeam(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;Lnet/minecraft/util/Identifier;FFJII[FFF)V", at = @At("HEAD"), cancellable = true)
-    private static void cancelBeamRender(MatrixStack matrices, VertexConsumerProvider vertexConsumers, Identifier textureId, float tickDelta,
+    private static void axolotlclient$cancelBeamRender(MatrixStack matrices, VertexConsumerProvider vertexConsumers, Identifier textureId, float tickDelta,
                                          float heightScale, long worldTime, int yOffset, int maxY, float[] color, float innerRadius, float outerRadius, CallbackInfo ci) {
         if(!BeaconBeam.getInstance().showBeam(textureId.getPath().contains("end_gateway"))) {
             ci.cancel();

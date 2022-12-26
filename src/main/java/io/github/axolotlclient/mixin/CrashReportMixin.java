@@ -33,7 +33,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class CrashReportMixin {
 
     @Inject(method = "addStackTrace", at = @At(value = "TAIL"))
-    public void addAxolotlclientInfo(StringBuilder builder, CallbackInfo ci) {
+    public void axolotlclient$addAxolotlclientInfo(StringBuilder builder, CallbackInfo ci) {
         if (AxolotlClient.badmod != null) {
             builder.append("\n\n").append("---- Axolotlclient Information ----\n");
             builder.append("Unsupported Mods were found!\n").append("Suspected mod: ")

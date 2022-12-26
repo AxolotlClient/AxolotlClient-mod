@@ -43,7 +43,7 @@ public abstract class LivingEntityMixin extends Entity {
     }
 
     @Inject(method = "damage", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;lastDamageTime:J"))
-    private void onDamage(DamageSource source, float damage, CallbackInfoReturnable<Boolean> ci) {
+    private void axolotlclient$onDamage(DamageSource source, float damage, CallbackInfoReturnable<Boolean> ci) {
         // The client doesn't really get any sort of information about why a person is damaged
         // Kinda sucks since that means combos can't be guarenteed (i.e. fall damage, or other person hits)
         // Possible fixes: Could wait for swing animation from a player to be played. Could then track eyes to see if hit, give or take

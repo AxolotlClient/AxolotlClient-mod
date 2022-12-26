@@ -40,7 +40,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class ChatHudMixin {
 
     @Inject(method = "addMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/chat/MessageSignature;Lnet/minecraft/client/gui/hud/ChatMessageTag;)V", at = @At("HEAD"), cancellable = true)
-    public void autoThings(Text message, MessageSignature signature, ChatMessageTag tag, CallbackInfo ci) {
+    public void axolotlclient$autoThings(Text message, MessageSignature signature, ChatMessageTag tag, CallbackInfo ci) {
         AutoGG.getInstance().onMessage(message);
         AutoBoop.getInstance().onMessage(message);
 
@@ -50,7 +50,7 @@ public abstract class ChatHudMixin {
     }
 
     @ModifyArg(method = "addMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/chat/MessageSignature;Lnet/minecraft/client/gui/hud/ChatMessageTag;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;addMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/chat/MessageSignature;ILnet/minecraft/client/gui/hud/ChatMessageTag;Z)V"), index = 0)
-    public Text editChat(Text message) {
+    public Text axolotlclient$editChat(Text message) {
         return NickHider.getInstance().editMessage(message);
     }
 }

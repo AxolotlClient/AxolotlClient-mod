@@ -40,7 +40,7 @@ public abstract class ClientPlayerEntityMixin {
      * @return whether or not the user should try to sprint
      */
     @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/KeyBind;isPressed()Z"))
-    private boolean alwaysPressed(KeyBind sprintKey) {
+    private boolean axolotlclient$alwaysPressed(KeyBind sprintKey) {
         ToggleSprintHud hud = (ToggleSprintHud) HudManager.getInstance().get(ToggleSprintHud.ID);
         return hud.getSprintToggled().get() || sprintKey.isPressed();
     }
