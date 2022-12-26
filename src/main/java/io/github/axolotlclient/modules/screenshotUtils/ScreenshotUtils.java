@@ -50,43 +50,35 @@ public class ScreenshotUtils extends AbstractModule {
 
     private static final ScreenshotUtils Instance = new ScreenshotUtils();
 
-    private final OptionCategory category = new OptionCategory("axolotlclient.screenshotUtils");
+    private final OptionCategory category = new OptionCategory("screenshotUtils");
 
-    private final BooleanOption enabled = new BooleanOption("axolotlclient.enabled", false);
+    private final BooleanOption enabled = new BooleanOption("enabled", false);
 
     private final List<Action> actions = new ArrayList<>();
 
-    private final EnumOption autoExec = new EnumOption("axolotlclient.autoExec", Util.make(() -> {
-        List<String> names = new ArrayList<>();
-        names.add("axolotlclient.off");
-        actions.forEach(action -> names.add(action.getName()));
-        return names.toArray(new String[0]);
-
-    }), "axolotlclient.off");
+    private EnumOption autoExec;
 
     @Override
     public void init() {
-        category.add(enabled, autoExec);
 
-        AxolotlClient.CONFIG.general.addSubCategory(category);
 
-        actions.add(new Action("axolotlclient.copyAction",
+        actions.add(new Action("copyAction",
                 Formatting.AQUA,
-                "axolotlclient.copy_image",
+                "copy_image",
                 new CustomClickEvent((file) -> {
                     FileTransferable selection = new FileTransferable(file);
                     Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
                 })
         ));
 
-        actions.add(new Action("axolotlclient.deleteAction",
+        actions.add(new Action("deleteAction",
                 Formatting.LIGHT_PURPLE,
-                "axolotlclient.delete_image",
+                "delete_image",
                 new CustomClickEvent((file) -> {
                     try {
                         Files.delete(file.toPath());
                         Util.sendChatMessage(
-                                new LiteralText(I18n.translate("axolotlclient.screenshot_deleted")
+                                new LiteralText(I18n.translate("screenshot_deleted")
                                         .replace("<name>", file.getName())));
                     } catch (Exception e) {
                         Logger.warn("Couldn't delete Screenshot " + file.getName());
@@ -94,13 +86,25 @@ public class ScreenshotUtils extends AbstractModule {
                 })
         ));
 
-        actions.add(new Action("axolotlclient.openAction",
+        actions.add(new Action("openAction",
                 Formatting.WHITE,
-                "axolotlclient.open_image",
+                "open_image",
                 new CustomClickEvent((file) -> OSUtil.getOS().open(file.toURI()))
         ));
 
         // If you have further ideas to what actions could be added here, please let us know!
+
+        autoExec = new EnumOption("autoExec", Util.make(() -> {
+            List<String> names = new ArrayList<>();
+            names.add("off");
+            actions.forEach(action -> names.add(action.getName()));
+            return names.toArray(new String[0]);
+
+        }), "off");
+
+        category.add(enabled, autoExec);
+
+        AxolotlClient.CONFIG.general.addSubCategory(category);
     }
 
     public static ScreenshotUtils getInstance() {
@@ -119,7 +123,7 @@ public class ScreenshotUtils extends AbstractModule {
 
     private @Nullable Text getUtilsText(File file) {
 
-        if (!autoExec.get().equals("axolotlclient.off")) {
+        if (!autoExec.get().equals("off")) {
 
             actions.parallelStream().filter(action -> autoExec.get().equals(action.getName())).collect(Collectors.toList()).get(0).clickEvent.setFile(file).doAction();
             return null;

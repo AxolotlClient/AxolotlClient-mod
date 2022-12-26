@@ -48,11 +48,11 @@ public class DefaultOptions {
     }
 
     public static DoubleOption getScale(HudEntry entry) {
-        return new DoubleOption("axolotlclient.scale", value -> entry.onBoundsUpdate(), 1, 0, 2);
+        return new DoubleOption("scale", value -> entry.onBoundsUpdate(), 1, 0, 2);
     }
 
     public static BooleanOption getEnabled() {
-        return new BooleanOption("axolotlclient.enabled", false);
+        return new BooleanOption("enabled", false);
     }
 
     public static EnumOption getAnchorPoint() {
@@ -60,10 +60,10 @@ public class DefaultOptions {
     }
 
     public static EnumOption getAnchorPoint(AnchorPoint defaultValue) {
-        return new EnumOption("axolotlclient.anchorpoint", AnchorPoint.values(), defaultValue.toString());
+        return new EnumOption("anchorpoint", AnchorPoint.values(), defaultValue.toString());
     }
 
     public static EnumOption getCardinalOrder(CardinalOrder defaultValue) {
-        return new EnumOption("axolotlclient.cardinalorder", CardinalOrder.values(), defaultValue.toString());
+        return new EnumOption("cardinalorder", CardinalOrder.values(), defaultValue.toString());
     }
 }

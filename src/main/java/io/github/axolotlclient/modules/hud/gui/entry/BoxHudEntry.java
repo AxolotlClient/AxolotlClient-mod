@@ -22,15 +22,15 @@
 
 package io.github.axolotlclient.modules.hud.gui.entry;
 
+import java.util.List;
+
 import com.mojang.blaze3d.platform.GlStateManager;
+
 import io.github.axolotlclient.AxolotlclientConfig.Color;
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.ColorOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.Option;
-import io.github.axolotlclient.AxolotlclientConfig.options.OptionBase;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
-
-import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -42,11 +42,11 @@ public abstract class BoxHudEntry extends AbstractHudEntry {
 
     private final boolean backgroundAllowed;
 
-    protected BooleanOption background = new BooleanOption("axolotlclient.background", true);
-    protected ColorOption backgroundColor = new ColorOption("axolotlclient.bgcolor", 0x64000000);
+    protected BooleanOption background = new BooleanOption("background", true);
+    protected ColorOption backgroundColor = new ColorOption("bgcolor", 0x64000000);
 
-    protected BooleanOption outline = new BooleanOption("axolotlclient.outline", false);
-    protected ColorOption outlineColor = new ColorOption("axolotlclient.outlinecolor", Color.WHITE);
+    protected BooleanOption outline = new BooleanOption("outline", false);
+    protected ColorOption outlineColor = new ColorOption("outlinecolor", Color.WHITE);
 
     public BoxHudEntry(int width, int height, boolean backgroundAllowed) {
         super(width, height);

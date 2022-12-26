@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.modules.hypixel.autotip;
 
+import java.util.regex.Pattern;
+
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.hypixel.AbstractHypixelMod;
@@ -30,17 +32,15 @@ import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 
-import java.util.regex.Pattern;
-
 public class AutoTip implements AbstractHypixelMod {
 
     @Getter
     private final static AutoTip Instance = new AutoTip();
 
-    private final OptionCategory category = new OptionCategory("axolotlclient.autotip");
+    private final OptionCategory category = new OptionCategory("autotip");
 
-    private final BooleanOption enabled = new BooleanOption("axolotlclient.enabled", false);
-    private final BooleanOption hideMessages = new BooleanOption("axolotlclient.hideTipMessages", false);
+    private final BooleanOption enabled = new BooleanOption("enabled", false);
+    private final BooleanOption hideMessages = new BooleanOption("hideTipMessages", false);
 
     private final Pattern messagePattern = Pattern.compile("^You tipped [0-9]+ players in [0-9]+ different games!$");
     private final Pattern tippedPattern = Pattern.compile("^You already tipped everyone that has boosters active, so there isn't anybody to be tipped right now!$");

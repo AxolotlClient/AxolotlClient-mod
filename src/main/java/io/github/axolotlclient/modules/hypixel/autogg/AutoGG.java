@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.modules.hypixel.autogg;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
 import io.github.axolotlclient.AxolotlclientConfig.options.StringOption;
@@ -30,9 +33,6 @@ import io.github.axolotlclient.util.Util;
 import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Based on <a href="https://github.com/DragonEggBedrockBreaking/AutoGG/blob/trunk/src/main/java/uk/debb/autogg/mixin/MixinChatHud.java">DragonEggBedrockBreaking's AutoGG Mod</a>
@@ -44,22 +44,22 @@ public class AutoGG implements AbstractHypixelMod {
     @Getter
     private static final AutoGG Instance = new AutoGG();
 
-    private final OptionCategory category = new OptionCategory("axolotlclient.autogg");
+    private final OptionCategory category = new OptionCategory("autogg");
     private final MinecraftClient client = MinecraftClient.getInstance();
     private long lastTime = 0;
-    public BooleanOption gg = new BooleanOption("axolotlclient.printGG", false);
-    public StringOption ggString = new StringOption("axolotlclient.ggString", "gg");
+    public BooleanOption gg = new BooleanOption("printGG", false);
+    public StringOption ggString = new StringOption("ggString", "gg");
 
-    public BooleanOption gf = new BooleanOption("axolotlclient.printGF", false);
-    public StringOption gfString = new StringOption("axolotlclient.gfString", "gf");
+    public BooleanOption gf = new BooleanOption("printGF", false);
+    public StringOption gfString = new StringOption("gfString", "gf");
 
-    public BooleanOption glhf = new BooleanOption("axolotlclient.printGLHF", false);
-    public StringOption glhfString = new StringOption("axolotlclient.glhfString", "glhf");
+    public BooleanOption glhf = new BooleanOption("printGLHF", false);
+    public StringOption glhfString = new StringOption("glhfString", "glhf");
 
-    private final BooleanOption onHypixel = new BooleanOption("axolotlclient.onHypixel", false);
-    private final BooleanOption onBWP = new BooleanOption("axolotlclient.onBWP", false);
-    private final BooleanOption onPVPL = new BooleanOption("axolotlclient.onPVPL", false);
-    private final BooleanOption onMMC = new BooleanOption("axolotlclient.onMMC", false);
+    private final BooleanOption onHypixel = new BooleanOption("onHypixel", false);
+    private final BooleanOption onBWP = new BooleanOption("onBWP", false);
+    private final BooleanOption onPVPL = new BooleanOption("onPVPL", false);
+    private final BooleanOption onMMC = new BooleanOption("onMMC", false);
 
     private final List<String> hypixelGGStrings = new ArrayList<>();
     private final List<String> hypixelGFStrings = new ArrayList<>();

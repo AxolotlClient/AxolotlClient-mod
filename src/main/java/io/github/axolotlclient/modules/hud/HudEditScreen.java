@@ -22,7 +22,12 @@
 
 package io.github.axolotlclient.modules.hud;
 
+import java.awt.*;
+import java.util.List;
+import java.util.Optional;
+
 import com.mojang.blaze3d.platform.GlStateManager;
+
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
@@ -35,10 +40,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.resource.language.I18n;
-
-import java.awt.*;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -95,14 +96,14 @@ public class HudEditScreen extends Screen {
     @Override
     public void mouseClicked(int mouseX, int mouseY, int button) {
         super.mouseClicked(mouseX, mouseY, button);
-        Optional<HudEntry> entry = HudManager.getInstance().getEntryXY((int) Math.round(mouseX),
-                (int) Math.round(mouseY));
+        Optional<HudEntry> entry = HudManager.getInstance().getEntryXY(Math.round(mouseX),
+                Math.round(mouseY));
         if (button == 0) {
             mouseDown = true;
             if (entry.isPresent()) {
                 current = entry.get();
-                offset = new DrawPosition((int) Math.round(mouseX - current.getTruePos().x()),
-                        (int) Math.round(mouseY - current.getTruePos().y()));
+                offset = new DrawPosition(Math.round(mouseX - current.getTruePos().x()),
+                        Math.round(mouseY - current.getTruePos().y()));
                 updateSnapState();
             } else {
                 current = null;

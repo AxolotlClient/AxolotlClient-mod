@@ -22,14 +22,14 @@
 
 package io.github.axolotlclient.util;
 
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.function.Supplier;
+
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.modules.freelook.Freelook;
 import net.minecraft.client.resource.language.I18n;
-
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.function.Supplier;
 
 public class FeatureDisabler {
 
@@ -65,7 +65,7 @@ public class FeatureDisabler {
         }
 
         if (option.getForceDisabled() != ban) {
-            option.setForceOff(ban, I18n.translate("axolotlclient.ban_reason"));
+            option.setForceOff(ban, I18n.translate("ban_reason"));
         }
     }
 

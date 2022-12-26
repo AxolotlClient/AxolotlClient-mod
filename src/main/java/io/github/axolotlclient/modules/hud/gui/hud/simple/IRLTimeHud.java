@@ -22,15 +22,15 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.simple;
 
-import io.github.axolotlclient.AxolotlclientConfig.options.Option;
-import io.github.axolotlclient.AxolotlclientConfig.options.StringOption;
-import io.github.axolotlclient.modules.hud.gui.entry.SimpleTextHudEntry;
-import net.minecraft.util.Identifier;
-
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+
+import io.github.axolotlclient.AxolotlclientConfig.options.Option;
+import io.github.axolotlclient.AxolotlclientConfig.options.StringOption;
+import io.github.axolotlclient.modules.hud.gui.entry.SimpleTextHudEntry;
+import net.minecraft.util.Identifier;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -46,7 +46,7 @@ public class IRLTimeHud extends SimpleTextHudEntry {
     private DateTimeFormatter formatter = null;
     private boolean error = false;
 
-    private final StringOption format = new StringOption("axolotlclient.dateformat", this::updateDateTimeFormatter,
+    private final StringOption format = new StringOption("dateformat", this::updateDateTimeFormatter,
             "HH:mm:ss");
 
     @Override

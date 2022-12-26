@@ -22,7 +22,10 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.vanilla;
 
+import java.util.List;
+
 import com.mojang.blaze3d.platform.GlStateManager;
+
 import io.github.axolotlclient.AxolotlclientConfig.Color;
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.ColorOption;
@@ -43,8 +46,6 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.List;
-
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
@@ -55,14 +56,14 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
 
     public static final Identifier ID = new Identifier("kronhud", "crosshairhud");
 
-    private final EnumOption type = new EnumOption("axolotlclient.crosshair_type", Crosshair.values(),
+    private final EnumOption type = new EnumOption("crosshair_type", Crosshair.values(),
             Crosshair.CROSS.toString());
-    private final BooleanOption showInF5 = new BooleanOption("axolotlclient.showInF5", false);
+    private final BooleanOption showInF5 = new BooleanOption("showInF5", false);
     private final BooleanOption applyBlend = new BooleanOption("applyBlend", true);
-    private final BooleanOption overrideF3 = new BooleanOption("axolotlclient.overrideF3", false);
-    private final ColorOption defaultColor = new ColorOption("axolotlclient.defaultcolor", Color.WHITE);
-    private final ColorOption entityColor = new ColorOption("axolotlclient.entitycolor", Color.SELECTOR_RED);
-    private final ColorOption containerColor = new ColorOption("axolotlclient.blockcolor", Color.SELECTOR_BLUE);
+    private final BooleanOption overrideF3 = new BooleanOption("overrideF3", false);
+    private final ColorOption defaultColor = new ColorOption("defaultcolor", Color.WHITE);
+    private final ColorOption entityColor = new ColorOption("entitycolor", Color.SELECTOR_RED);
+    private final ColorOption containerColor = new ColorOption("blockcolor", Color.SELECTOR_BLUE);
 
     public CrosshairHud() {
         super(15, 15);

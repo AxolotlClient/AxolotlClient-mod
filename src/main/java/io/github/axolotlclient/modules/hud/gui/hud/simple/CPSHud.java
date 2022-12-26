@@ -22,15 +22,15 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.simple;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.Option;
 import io.github.axolotlclient.modules.hud.gui.entry.SimpleTextHudEntry;
 import io.github.axolotlclient.util.Hooks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -42,8 +42,8 @@ public class CPSHud extends SimpleTextHudEntry {
 
     public static final Identifier ID = new Identifier("kronhud", "cpshud");
 
-    private final BooleanOption fromKeybindings = new BooleanOption("axolotlclient.cpskeybind", false);
-    private final BooleanOption rmb = new BooleanOption("axolotlclient.rightcps", false);
+    private final BooleanOption fromKeybindings = new BooleanOption("cpskeybind", false);
+    private final BooleanOption rmb = new BooleanOption("rightcps", false);
 
     public CPSHud() {
         super();

@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.vanilla;
 
+import java.util.List;
+
 import io.github.axolotlclient.AxolotlclientConfig.Color;
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.IntegerOption;
@@ -29,8 +31,6 @@ import io.github.axolotlclient.AxolotlclientConfig.options.Option;
 import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
 import lombok.Getter;
 import net.minecraft.util.Identifier;
-
-import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -42,8 +42,8 @@ public class ActionBarHud extends TextHudEntry {
 
     public static final Identifier ID = new Identifier("kronhud", "actionbarhud");
 
-    public IntegerOption timeShown = new IntegerOption("axolotlclient.timeshown", 60, 40, 300);
-    public BooleanOption customTextColor = new BooleanOption("axolotlclient.customtextcolor", false);
+    public IntegerOption timeShown = new IntegerOption("timeshown", 60, 40, 300);
+    public BooleanOption customTextColor = new BooleanOption("customtextcolor", false);
 
     @Getter
     private String actionBar;

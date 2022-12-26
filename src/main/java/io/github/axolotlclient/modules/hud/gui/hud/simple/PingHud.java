@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.simple;
 
+import java.net.InetAddress;
+import java.util.List;
+
 import io.github.axolotlclient.AxolotlclientConfig.options.IntegerOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.Option;
 import io.github.axolotlclient.mixin.MinecraftClientAccessor;
@@ -41,9 +44,6 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-import java.net.InetAddress;
-import java.util.List;
-
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
@@ -56,7 +56,7 @@ public class PingHud extends SimpleTextHudEntry {
 
     private int currentServerPing;
 
-    private final IntegerOption refreshDelay = new IntegerOption("axolotlclient.refreshTime", 4, 1, 15);
+    private final IntegerOption refreshDelay = new IntegerOption("refreshTime", 4, 1, 15);
 
     public PingHud() {
         super();

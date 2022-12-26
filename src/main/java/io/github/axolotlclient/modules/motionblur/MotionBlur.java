@@ -22,7 +22,13 @@
 
 package io.github.axolotlclient.modules.motionblur;
 
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.apache.commons.io.IOUtils;
+
 import com.google.gson.JsonSyntaxException;
+
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.FloatOption;
@@ -36,10 +42,6 @@ import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.client.resource.ResourceMetadataProvider;
 import net.minecraft.resource.Resource;
 import net.minecraft.util.Identifier;
-import org.apache.commons.io.IOUtils;
-
-import java.io.IOException;
-import java.io.InputStream;
 
 public class MotionBlur extends AbstractModule {
 
@@ -47,11 +49,11 @@ public class MotionBlur extends AbstractModule {
 
     private final Identifier shaderLocation = new Identifier("minecraft:shaders/post/motion_blur.json");
 
-    public final BooleanOption enabled = new BooleanOption("axolotlclient.enabled", false);
-    public final FloatOption strength = new FloatOption("axolotlclient.strength", 50F, 1F, 99F);
-    public final BooleanOption inGuis = new BooleanOption("axolotlclient.inGuis", false);
+    public final BooleanOption enabled = new BooleanOption("enabled", false);
+    public final FloatOption strength = new FloatOption("strength", 50F, 1F, 99F);
+    public final BooleanOption inGuis = new BooleanOption("inGuis", false);
 
-    public final OptionCategory category = new OptionCategory("axolotlclient.motionBlur");
+    public final OptionCategory category = new OptionCategory("motionBlur");
 
     public ShaderEffect shader;
     private final MinecraftClient client = MinecraftClient.getInstance();

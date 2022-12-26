@@ -49,17 +49,17 @@ public class UnfocusedFpsLimiter extends AbstractModule {
     @Getter
     private static final UnfocusedFpsLimiter Instance = new UnfocusedFpsLimiter();
 
-    private final BooleanOption enabled = new BooleanOption("axolotlclient.enabled", false);
-    private final BooleanOption reduceFPSWhenUnfocused = new BooleanOption("axolotlclient.reduceFPS", false);
-    private final IntegerOption unfocusedFPS = new IntegerOption("axolotlclient.unfocusedFPS", 10, 0, 60);
-    private final BooleanOption restoreOnHover = new BooleanOption("axolotlclient.restoreOnHover", true);
-    private final FloatOption unfocusedVolumeMultiplier = new FloatOption("axolotlclient.unfocusedVolumeMultiplier", 0.25f, 0f, 1f);
-    private final FloatOption hiddenVolumeMultiplier = new FloatOption("axolotlclient.hiddenVolumeMultiplier", 0f, 0f, 1f);
-    private final BooleanOption runGCOnUnfocus = new BooleanOption("axolotlclient.runGCOnUnfocus", false);
+    private final BooleanOption enabled = new BooleanOption("enabled", false);
+    private final BooleanOption reduceFPSWhenUnfocused = new BooleanOption("reduceFPS", false);
+    private final IntegerOption unfocusedFPS = new IntegerOption("unfocusedFPS", 10, 0, 60);
+    private final BooleanOption restoreOnHover = new BooleanOption("restoreOnHover", true);
+    private final FloatOption unfocusedVolumeMultiplier = new FloatOption("unfocusedVolumeMultiplier", 0.25f, 0f, 1f);
+    private final FloatOption hiddenVolumeMultiplier = new FloatOption("hiddenVolumeMultiplier", 0f, 0f, 1f);
+    private final BooleanOption runGCOnUnfocus = new BooleanOption("runGCOnUnfocus", false);
 
     @Override
     public void init() {
-        OptionCategory category = new OptionCategory("axolotlclient.fpsLimiter");
+        OptionCategory category = new OptionCategory("fpsLimiter");
         category.add(enabled, reduceFPSWhenUnfocused, unfocusedFPS, restoreOnHover, unfocusedVolumeMultiplier, hiddenVolumeMultiplier, runGCOnUnfocus);
         AxolotlClient.CONFIG.rendering.add(category);
     }

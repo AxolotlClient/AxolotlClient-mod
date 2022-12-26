@@ -22,7 +22,12 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import com.mojang.blaze3d.platform.GlStateManager;
+
 import io.github.axolotlclient.AxolotlclientConfig.Color;
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.ColorOption;
@@ -39,10 +44,6 @@ import net.minecraft.client.options.KeyBinding;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
@@ -53,10 +54,10 @@ public class KeystrokeHud extends TextHudEntry {
 
     public static final Identifier ID = new Identifier("kronhud", "keystrokehud");
 
-    private final ColorOption pressedTextColor = new ColorOption("axolotlclient.heldtextcolor", new Color(0xFF000000));
-    private final ColorOption pressedBackgroundColor = new ColorOption("axolotlclient.heldbackgroundcolor", 0x64FFFFFF);
-    private final ColorOption pressedOutlineColor = new ColorOption("axolotlclient.heldoutlinecolor", Color.BLACK);
-    private final BooleanOption mouseMovement = new BooleanOption("axolotlclient.mousemovement",
+    private final ColorOption pressedTextColor = new ColorOption("heldtextcolor", new Color(0xFF000000));
+    private final ColorOption pressedBackgroundColor = new ColorOption("heldbackgroundcolor", 0x64FFFFFF);
+    private final ColorOption pressedOutlineColor = new ColorOption("heldoutlinecolor", Color.BLACK);
+    private final BooleanOption mouseMovement = new BooleanOption("mousemovement",
             this::onMouseMovementOption, false);
     private ArrayList<Keystroke> keystrokes;
     private static final MinecraftClient client = MinecraftClient.getInstance();

@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.modules.rpc;
 
+import java.time.Instant;
+import java.util.Optional;
+
 import de.jcm.discordgamesdk.Core;
 import de.jcm.discordgamesdk.CreateParams;
 import de.jcm.discordgamesdk.DiscordEventHandler;
@@ -41,9 +44,6 @@ import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.resource.language.I18n;
 
-import java.time.Instant;
-import java.util.Optional;
-
 /**
  * This DiscordRPC module is derived from <a href="https://github.com/DeDiamondPro/HyCord">HyCord</a>.
  * @license GPL-3.0
@@ -54,19 +54,19 @@ public class DiscordRPC extends AbstractModule {
 
     private static DiscordRPC Instance;
 
-    public OptionCategory category = new OptionCategory("axolotlclient.rpc");
+    public OptionCategory category = new OptionCategory("rpc");
 
-    public BooleanOption enabled = new BooleanOption("axolotlclient.enabled", value -> {
+    public BooleanOption enabled = new BooleanOption("enabled", value -> {
         if (value) {
             initRPC();
         } else {
             shutdown();
         }
     }, false);
-    public BooleanOption showActivity = new BooleanOption("axolotlclient.showActivity", true);
-    public EnumOption showServerNameMode = new EnumOption("axolotlclient.showServerNameMode",
+    public BooleanOption showActivity = new BooleanOption("showActivity", true);
+    public EnumOption showServerNameMode = new EnumOption("showServerNameMode",
             new String[] { "showIp", "showName", "off" }, "off");
-    public BooleanOption showTime = new BooleanOption("axolotlclient.showTime", true);
+    public BooleanOption showTime = new BooleanOption("showTime", true);
 
     public static Activity currentActivity;
     public static Core discordRPC;
@@ -88,7 +88,7 @@ public class DiscordRPC extends AbstractModule {
         AxolotlClient.CONFIG.addCategory(category);
 
         if (OSUtil.getOS() == OSUtil.OperatingSystem.OTHER) {
-            enabled.setForceOff(true, I18n.translate("axolotlclient.crash"));
+            enabled.setForceOff(true, I18n.translate("crash"));
         }
 
         Optional<ModContainer> container = FabricLoader.getInstance().getModContainer("axolotlclient");

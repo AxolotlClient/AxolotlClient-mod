@@ -22,9 +22,16 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.vanilla;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.GlStateManager;
+
 import io.github.axolotlclient.AxolotlclientConfig.options.*;
 import io.github.axolotlclient.modules.hud.gui.component.DynamicallyPositionable;
 import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
@@ -36,12 +43,6 @@ import io.github.axolotlclient.util.Util;
 import net.minecraft.scoreboard.*;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -69,11 +70,11 @@ public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionab
         return objective;
     });
 
-    private final ColorOption backgroundColor = new ColorOption("axolotlclient.backgroundcolor", 0x4C000000);
-    private final ColorOption topColor = new ColorOption("axolotlclient.topbackgroundcolor", 0x66000000);
-    private final IntegerOption topPadding = new IntegerOption("axolotlclient.toppadding", 0, 0, 4);
-    private final BooleanOption scores = new BooleanOption("axolotlclient.scores", true);
-    private final ColorOption scoreColor = new ColorOption("axolotlclient.scorecolor", 0xFFFF5555);
+    private final ColorOption backgroundColor = new ColorOption("backgroundcolor", 0x4C000000);
+    private final ColorOption topColor = new ColorOption("topbackgroundcolor", 0x66000000);
+    private final IntegerOption topPadding = new IntegerOption("toppadding", 0, 0, 4);
+    private final BooleanOption scores = new BooleanOption("scores", true);
+    private final ColorOption scoreColor = new ColorOption("scorecolor", 0xFFFF5555);
     private final EnumOption anchor = DefaultOptions.getAnchorPoint(AnchorPoint.MIDDLE_RIGHT);
 
     public ScoreboardHud() {

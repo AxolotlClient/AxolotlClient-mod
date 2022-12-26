@@ -22,6 +22,10 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.util.List;
+
 import io.github.axolotlclient.AxolotlclientConfig.Color;
 import io.github.axolotlclient.AxolotlclientConfig.options.*;
 import io.github.axolotlclient.modules.hud.gui.component.DynamicallyPositionable;
@@ -30,10 +34,6 @@ import io.github.axolotlclient.modules.hud.gui.layout.AnchorPoint;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.util.Identifier;
-
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -45,12 +45,12 @@ public class CoordsHud extends TextHudEntry implements DynamicallyPositionable {
 
     public static final Identifier ID = new Identifier("kronhud", "coordshud");
 
-    private final ColorOption secondColor = new ColorOption("axolotlclient.secondtextcolor", Color.WHITE);
-    private final ColorOption firstColor = new ColorOption("axolotlclient.firsttextcolor", Color.SELECTOR_BLUE);
-    private final IntegerOption decimalPlaces = new IntegerOption("axolotlclient.decimalplaces", 0, 0, 15);
-    private final BooleanOption minimal = new BooleanOption("axolotlclient.minimal", false);
+    private final ColorOption secondColor = new ColorOption("secondtextcolor", Color.WHITE);
+    private final ColorOption firstColor = new ColorOption("firsttextcolor", Color.SELECTOR_BLUE);
+    private final IntegerOption decimalPlaces = new IntegerOption("decimalplaces", 0, 0, 15);
+    private final BooleanOption minimal = new BooleanOption("minimal", false);
 
-    private final EnumOption anchor = new EnumOption("axolotlclient.anchor", AnchorPoint.values(),
+    private final EnumOption anchor = new EnumOption("anchor", AnchorPoint.values(),
             AnchorPoint.TOP_MIDDLE.toString());
 
     public CoordsHud() {

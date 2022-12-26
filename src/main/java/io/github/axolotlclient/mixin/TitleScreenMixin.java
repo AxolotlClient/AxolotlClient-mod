@@ -45,14 +45,14 @@ public abstract class TitleScreenMixin extends Screen {
         if(!FabricLoader.getInstance().isModLoaded("modmenu")){
 
             args.set(0, 192);
-            args.set(3, I18n.translate("axolotlclient.config") + "...");
+            args.set(3, I18n.translate("config") + "...");
         }
     }
 
     @Inject(method = "initWidgetsNormal", at = @At("TAIL"))
     private void addOptionsButton(int y, int spacingY, CallbackInfo ci){
         if(FabricLoader.getInstance().isModLoaded("modmenu")){
-            buttons.add(new ButtonWidget(192, this.width / 2 - 100, y+spacingY*3, I18n.translate("axolotlclient.config") + "..."));
+            buttons.add(new ButtonWidget(192, this.width / 2 - 100, y+spacingY*3, I18n.translate("config") + "..."));
         }
     }
 

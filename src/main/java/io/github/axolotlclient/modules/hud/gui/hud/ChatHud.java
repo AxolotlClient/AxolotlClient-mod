@@ -22,8 +22,14 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud;
 
+import java.util.List;
+
 import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.axolotlclient.AxolotlclientConfig.options.*;
+
+import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.ColorOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.IntegerOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.Option;
 import io.github.axolotlclient.mixin.ChatHudAccessor;
 import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
@@ -38,17 +44,15 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
-import java.util.List;
-
 public class ChatHud extends TextHudEntry {
 
     public static Identifier ID = new Identifier("axolotlclient", "chathud");
-    public BooleanOption background = new BooleanOption("axolotlclient.background", "chathud", true);
-    public ColorOption bgColor = new ColorOption("axolotlclient.bgcolor", "#40000000");
+    public BooleanOption background = new BooleanOption("background", "chathud", true);
+    public ColorOption bgColor = new ColorOption("bgcolor", "#40000000");
 
-    public IntegerOption chatHistory = new IntegerOption("axolotlclient.chatHistoryLength", 100, 10, 5000);
-    public ColorOption scrollbarColor = new ColorOption("axolotlclient.scrollbarColor", "#70CCCCCC");
-    public IntegerOption lineSpacing = new IntegerOption("axolotlclient.lineSpacing", 0, 0, 10);
+    public IntegerOption chatHistory = new IntegerOption("chatHistoryLength", 100, 10, 5000);
+    public ColorOption scrollbarColor = new ColorOption("scrollbarColor", "#70CCCCCC");
+    public IntegerOption lineSpacing = new IntegerOption("lineSpacing", 0, 0, 10);
 
     public int ticks;
 

@@ -22,7 +22,11 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.mojang.blaze3d.platform.GlStateManager;
+
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.EnumOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.Option;
@@ -36,9 +40,6 @@ import io.github.axolotlclient.util.Util;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.util.Identifier;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -54,7 +55,7 @@ public class PotionsHud extends TextHudEntry implements DynamicallyPositionable 
 
     private final EnumOption order = DefaultOptions.getCardinalOrder(CardinalOrder.TOP_DOWN);
 
-    private final BooleanOption iconsOnly = new BooleanOption("axolotlclient.iconsonly", false);
+    private final BooleanOption iconsOnly = new BooleanOption("iconsonly", false);
     protected static final Identifier INVENTORY_TEXTURE = new Identifier("textures/gui/container/inventory.png");
 
     private final List<StatusEffectInstance> placeholder = Util.make(() -> {

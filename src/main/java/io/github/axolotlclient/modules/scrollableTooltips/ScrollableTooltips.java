@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.modules.scrollableTooltips;
 
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.IntegerOption;
@@ -30,26 +33,24 @@ import io.github.axolotlclient.modules.AbstractModule;
 import net.legacyfabric.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.options.KeyBinding;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 
 public class ScrollableTooltips extends AbstractModule {
 
     public int tooltipOffsetX;
     public int tooltipOffsetY;
 
-    protected KeyBinding key = new KeyBinding("axolotlclient.key.scrollHorizontally", Keyboard.KEY_LSHIFT,
-            "axolotlclient.category.axolotlclient");
+    protected KeyBinding key = new KeyBinding("key.scrollHorizontally", Keyboard.KEY_LSHIFT,
+            "category.axolotlclient");
 
     private static final ScrollableTooltips instance = new ScrollableTooltips();
 
-    private final OptionCategory category = new OptionCategory("axolotlclient.scrollableTooltips");
+    private final OptionCategory category = new OptionCategory("scrollableTooltips");
 
-    public final BooleanOption enabled = new BooleanOption("axolotlclient.enabled", false);
-    public final BooleanOption enableShiftHorizontalScroll = new BooleanOption("axolotlclient.shiftHorizontalScroll",
+    public final BooleanOption enabled = new BooleanOption("enabled", false);
+    public final BooleanOption enableShiftHorizontalScroll = new BooleanOption("shiftHorizontalScroll",
             true);
-    protected final IntegerOption scrollAmount = new IntegerOption("axolotlclient.scrollAmount", 5, 1, 20);
-    protected final BooleanOption inverse = new BooleanOption("axolotlclient.inverse", false);
+    protected final IntegerOption scrollAmount = new IntegerOption("scrollAmount", 5, 1, 20);
+    protected final BooleanOption inverse = new BooleanOption("inverse", false);
 
     public static ScrollableTooltips getInstance() {
         return instance;

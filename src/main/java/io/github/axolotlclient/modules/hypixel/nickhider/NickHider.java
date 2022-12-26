@@ -37,14 +37,14 @@ public class NickHider implements AbstractHypixelMod {
     @Getter
     private static final NickHider Instance = new NickHider();
 
-    private final OptionCategory category = new OptionCategory("axolotlclient.nickhider");
+    private final OptionCategory category = new OptionCategory("nickhider");
 
-    public StringOption hiddenNameSelf = new StringOption("axolotlclient.hiddenNameSelf", "You");
-    public StringOption hiddenNameOthers = new StringOption("axolotlclient.hiddenNameOthers", "Player");
-    public BooleanOption hideOwnName = new BooleanOption("axolotlclient.hideOwnName", false);
-    public BooleanOption hideOtherNames = new BooleanOption("axolotlclient.hideOtherNames", false);
-    public BooleanOption hideOwnSkin = new BooleanOption("axolotlclient.hideOwnSkin", false);
-    public BooleanOption hideOtherSkins = new BooleanOption("axolotlclient.hideOtherSkins", false);
+    public StringOption hiddenNameSelf = new StringOption("hiddenNameSelf", "You");
+    public StringOption hiddenNameOthers = new StringOption("hiddenNameOthers", "Player");
+    public BooleanOption hideOwnName = new BooleanOption("hideOwnName", false);
+    public BooleanOption hideOtherNames = new BooleanOption("hideOtherNames", false);
+    public BooleanOption hideOwnSkin = new BooleanOption("hideOwnSkin", false);
+    public BooleanOption hideOtherSkins = new BooleanOption("hideOtherSkins", false);
 
     @Override
     public void init() {

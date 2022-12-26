@@ -33,9 +33,9 @@ public class BeaconBeam extends AbstractModule {
     @Getter
     private final static BeaconBeam Instance = new BeaconBeam();
 
-    private final BooleanOption showBeaconBeams = new BooleanOption("axolotlclient.showBeaconBeams", true);
+    private final BooleanOption showBeaconBeams = new BooleanOption("showBeaconBeams", true);
 
-    private final OptionCategory beams = new OptionCategory("axolotlclient.beams");
+    private final OptionCategory beams = new OptionCategory("beams");
 
     @Override
     public void init() {

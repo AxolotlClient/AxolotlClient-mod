@@ -33,7 +33,6 @@ import io.github.axolotlclient.AxolotlclientConfig.AxolotlClientConfigManager;
 import io.github.axolotlclient.AxolotlclientConfig.ConfigManager;
 import io.github.axolotlclient.AxolotlclientConfig.DefaultConfigManager;
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.Identifiable;
 import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
 import io.github.axolotlclient.config.AxolotlClientConfig;
 import io.github.axolotlclient.modules.AbstractModule;
@@ -76,8 +75,8 @@ public class AxolotlClient implements ClientModInitializer {
 
     public static final Identifier badgeIcon = new Identifier("axolotlclient", "textures/badge.png");
 
-    public static final OptionCategory config = new OptionCategory("axolotlclient.storedOptions");
-    public static final BooleanOption someNiceBackground = new BooleanOption("axolotlclient.defNoSecret", false);
+    public static final OptionCategory config = new OptionCategory("storedOptions");
+    public static final BooleanOption someNiceBackground = new BooleanOption("defNoSecret", false);
     public static final List<AbstractModule> modules = new ArrayList<>();
 
     private static int tickTime = 0;
@@ -96,16 +95,7 @@ public class AxolotlClient implements ClientModInitializer {
         CONFIG.config.add(config);
 
         AxolotlClientConfigManager.registerConfig(modid, CONFIG, configManager = new DefaultConfigManager(modid,
-                FabricLoader.getInstance().getConfigDir().resolve("AxolotlClient.json"), CONFIG.config) {
-
-            @Override
-            public String getName(Identifiable t) {
-                if (super.getName(t).startsWith("axolotlclient.")) {
-                    return super.getName(t).substring(14);
-                }
-                return super.getName(t);
-            }
-        });
+                FabricLoader.getInstance().getConfigDir().resolve("AxolotlClient.json"), CONFIG.config));
         AxolotlClientConfigManager.addIgnoredName(modid, "x");
         AxolotlClientConfigManager.addIgnoredName(modid, "y");
 

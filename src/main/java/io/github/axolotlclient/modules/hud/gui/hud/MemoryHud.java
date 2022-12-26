@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud;
 
+import java.util.List;
+
 import io.github.axolotlclient.AxolotlclientConfig.Color;
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.ColorOption;
@@ -31,8 +33,6 @@ import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.util.Identifier;
-
-import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -45,14 +45,14 @@ public class MemoryHud extends TextHudEntry {
     public static final Identifier ID = new Identifier("axolotlclient", "memoryhud");
 
     private final Rectangle graph = new Rectangle(0, 0, 0, 0);
-    private final ColorOption graphUsedColor = new ColorOption("axolotlclient.graphUsedColor",
+    private final ColorOption graphUsedColor = new ColorOption("graphUsedColor",
             Color.SELECTOR_RED.withAlpha(255));
-    private final ColorOption graphFreeColor = new ColorOption("axolotlclient.graphFreeColor",
+    private final ColorOption graphFreeColor = new ColorOption("graphFreeColor",
             Color.SELECTOR_GREEN.withAlpha(255));
 
-    private final BooleanOption showGraph = new BooleanOption("axolotlclient.showGraph", true);
-    private final BooleanOption showText = new BooleanOption("axolotlclient.showText", false);
-    private final BooleanOption showAllocated = new BooleanOption("axolotlclient.showAllocated", false);
+    private final BooleanOption showGraph = new BooleanOption("showGraph", true);
+    private final BooleanOption showText = new BooleanOption("showText", false);
+    private final BooleanOption showAllocated = new BooleanOption("showAllocated", false);
 
     public MemoryHud() {
         super(150, 27, true);

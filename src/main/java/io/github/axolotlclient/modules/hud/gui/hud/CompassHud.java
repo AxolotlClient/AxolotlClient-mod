@@ -22,9 +22,15 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud;
 
+import java.util.List;
+
 import com.mojang.blaze3d.platform.GlStateManager;
+
 import io.github.axolotlclient.AxolotlclientConfig.Color;
-import io.github.axolotlclient.AxolotlclientConfig.options.*;
+import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.ColorOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.IntegerOption;
+import io.github.axolotlclient.AxolotlclientConfig.options.Option;
 import io.github.axolotlclient.modules.hud.gui.component.DynamicallyPositionable;
 import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
 import io.github.axolotlclient.modules.hud.gui.layout.AnchorPoint;
@@ -32,8 +38,6 @@ import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
 import io.github.axolotlclient.modules.hud.util.RenderUtil;
 import net.minecraft.util.Identifier;
-
-import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -47,16 +51,16 @@ public class CompassHud extends TextHudEntry implements DynamicallyPositionable 
 
     private final IntegerOption widthOption = new IntegerOption("width", this::updateWidth, width, 100, 800);
 
-    private final ColorOption lookingBox = new ColorOption("axolotlclient.lookingbox", new Color(0x80000000));
-    private final ColorOption degreesColor = new ColorOption("axolotlclient.degreescolor", new Color(-1));
-    private final ColorOption majorIndicatorColor = new ColorOption("axolotlclient.majorindicator", new Color(-1));
-    private final ColorOption minorIndicatorColor = new ColorOption("axolotlclient.minorindicator",
+    private final ColorOption lookingBox = new ColorOption("lookingbox", new Color(0x80000000));
+    private final ColorOption degreesColor = new ColorOption("degreescolor", new Color(-1));
+    private final ColorOption majorIndicatorColor = new ColorOption("majorindicator", new Color(-1));
+    private final ColorOption minorIndicatorColor = new ColorOption("minorindicator",
             new Color(0xCCFFFFFF));
-    private final ColorOption cardinalColor = new ColorOption("axolotlclient.cardinalcolor", Color.WHITE);
-    private final ColorOption semiCardinalColor = new ColorOption("axolotlclient.semicardinalcolor",
+    private final ColorOption cardinalColor = new ColorOption("cardinalcolor", Color.WHITE);
+    private final ColorOption semiCardinalColor = new ColorOption("semicardinalcolor",
             new Color(0xFFAAAAAA));
-    private final BooleanOption invert = new BooleanOption("axolotlclient.invert_direction", false);
-    private final BooleanOption showDegrees = new BooleanOption("axolotlclient.showdegrees", true);
+    private final BooleanOption invert = new BooleanOption("invert_direction", false);
+    private final BooleanOption showDegrees = new BooleanOption("showdegrees", true);
 
     private void updateWidth(int newWidth) {
         setWidth(newWidth);

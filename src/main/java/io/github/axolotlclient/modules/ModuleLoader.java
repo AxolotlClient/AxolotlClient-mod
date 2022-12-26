@@ -22,19 +22,19 @@
 
 package io.github.axolotlclient.modules;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.github.axolotlclient.config.screen.CreditsScreen;
 import io.github.axolotlclient.util.Logger;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ModuleLoader {
 
     public static List<AbstractModule> loadExternalModules() {
         ArrayList<AbstractModule> modules = new ArrayList<>();
-        FabricLoader.getInstance().getEntrypointContainers("axolotlclient.module", AbstractModule.class)
+        FabricLoader.getInstance().getEntrypointContainers("module", AbstractModule.class)
                 .forEach(entrypoint -> {
                     try {
                         AbstractModule module = entrypoint.getEntrypoint();

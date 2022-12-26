@@ -22,7 +22,12 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import com.mojang.blaze3d.platform.GlStateManager;
+
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.Option;
 import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
@@ -35,10 +40,6 @@ import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.resource.ResourcePack;
 import net.minecraft.util.Identifier;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-
 public class PackDisplayHud extends TextHudEntry {
 
     public static Identifier ID = new Identifier("axolotlclient", "packdisplayhud");
@@ -47,7 +48,7 @@ public class PackDisplayHud extends TextHudEntry {
     private PackWidget placeholder;
     private final List<ResourcePack> packs = new ArrayList<>();
 
-    private final BooleanOption iconsOnly = new BooleanOption("axolotlclient.iconsonly", false);
+    private final BooleanOption iconsOnly = new BooleanOption("iconsonly", false);
 
     public PackDisplayHud() {
         super(200, 50, true);

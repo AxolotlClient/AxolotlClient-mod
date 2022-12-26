@@ -22,24 +22,22 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud;
 
+import java.util.List;
+
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
+
 import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.DoubleOption;
 import io.github.axolotlclient.AxolotlclientConfig.options.Option;
 import io.github.axolotlclient.modules.hud.gui.entry.BoxHudEntry;
 import io.github.axolotlclient.util.Hooks;
 import lombok.Getter;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.entity.player.ClientPlayerEntity;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-
-import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -51,9 +49,9 @@ public class PlayerHud extends BoxHudEntry {
 
     public static final Identifier ID = new Identifier("kronhud", "playerhud");
 
-    private final DoubleOption rotation = new DoubleOption("axolotlclient.rotation", 0, 0, 360);
-    private final BooleanOption dynamicRotation = new BooleanOption("axolotlclient.dynamicrotation", true);
-    private final BooleanOption autoHide = new BooleanOption("axolotlclient.autoHide", false);
+    private final DoubleOption rotation = new DoubleOption("rotation", 0, 0, 360);
+    private final BooleanOption dynamicRotation = new BooleanOption("dynamicrotation", true);
+    private final BooleanOption autoHide = new BooleanOption("autoHide", false);
 
     private float lastYawOffset = 0;
     private float yawOffset = 0;
