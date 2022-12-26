@@ -22,19 +22,20 @@
 
 package io.github.axolotlclient.mixin;
 
-import io.github.axolotlclient.modules.renderOptions.BeaconBeam;
-import net.minecraft.block.entity.BeaconBlockEntity;
-import net.minecraft.client.render.block.entity.BeaconBlockEntityRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import io.github.axolotlclient.modules.renderOptions.BeaconBeam;
+import net.minecraft.block.entity.BeaconBlockEntity;
+import net.minecraft.client.render.block.entity.BeaconBlockEntityRenderer;
+
 @Mixin(BeaconBlockEntityRenderer.class)
 public abstract class BeaconBlockEntityRendererMixin {
 
     @Inject(method = "render(Lnet/minecraft/block/entity/BeaconBlockEntity;DDDFI)V", at = @At("HEAD"), cancellable = true)
-    private void cancelBeamRendering(BeaconBlockEntity beaconBlockEntity, double d, double e, double f, float g, int i, CallbackInfo ci) {
+    private void axolotlclient$cancelBeamRendering(BeaconBlockEntity beaconBlockEntity, double d, double e, double f, float g, int i, CallbackInfo ci) {
         if(!BeaconBeam.getInstance().showBeam()) {
             ci.cancel();
         }

@@ -22,20 +22,22 @@
 
 package io.github.axolotlclient.mixin;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.util.Util;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.mojang.blaze3d.platform.GlStateManager;
+
+import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.util.Util;
+
 @Mixin(GlStateManager.class)
 public abstract class GlStateManagerMixin {
 
     @Inject(method = "color4f", at = @At("HEAD"), cancellable = true)
-    private static void nightMode(float red, float green, float blue, float alpha, CallbackInfo ci) {
+    private static void axolotlclient$nightMode(float red, float green, float blue, float alpha, CallbackInfo ci) {
         if (AxolotlClient.CONFIG.nightMode.get()) {
             if (red != Util.GlColor.red || green != Util.GlColor.green || blue != Util.GlColor.blue
                     || alpha != Util.GlColor.alpha) {

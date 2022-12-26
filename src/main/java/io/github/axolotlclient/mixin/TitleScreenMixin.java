@@ -41,7 +41,7 @@ import net.minecraft.client.resource.language.I18n;
 public abstract class TitleScreenMixin extends Screen {
 
     @ModifyArgs(method = "initWidgetsNormal", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget;<init>(IIILjava/lang/String;)V", ordinal = 2))
-    private void replaceRealmsButton(Args args){
+    private void axolotlclient$replaceRealmsButton(Args args){
         if(!FabricLoader.getInstance().isModLoaded("modmenu")){
 
             args.set(0, 192);
@@ -50,14 +50,14 @@ public abstract class TitleScreenMixin extends Screen {
     }
 
     @Inject(method = "initWidgetsNormal", at = @At("TAIL"))
-    private void addOptionsButton(int y, int spacingY, CallbackInfo ci){
+    private void axolotlclient$addOptionsButton(int y, int spacingY, CallbackInfo ci){
         if(FabricLoader.getInstance().isModLoaded("modmenu")){
             buttons.add(new ButtonWidget(192, this.width / 2 - 100, y+spacingY*3, I18n.translate("config") + "..."));
         }
     }
 
     @ModifyConstant(method = "init", constant = @Constant(intValue = 72))
-    private int moveButtons(int constant){
+    private int axolotlclient$moveButtons(int constant){
         if(FabricLoader.getInstance().isModLoaded("modmenu")){
             return constant + 25;
         }
@@ -65,13 +65,13 @@ public abstract class TitleScreenMixin extends Screen {
     }
 
     @Inject(method = "buttonClicked", at = @At("TAIL"))
-    public void onClick(ButtonWidget button, CallbackInfo ci) {
+    public void axolotlclient$onClick(ButtonWidget button, CallbackInfo ci) {
         if (button.id == 192)
             MinecraftClient.getInstance().openScreen(new HudEditScreen(this));
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;drawWithShadow(Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V", ordinal = 0))
-    public void customBranding(TitleScreen instance, TextRenderer textRenderer, String s, int x, int y, int color) {
+    public void axolotlclient$customBranding(TitleScreen instance, TextRenderer textRenderer, String s, int x, int y, int color) {
         if (FabricLoader.getInstance().getModContainer("axolotlclient").isPresent()) {
             instance.drawWithShadow(textRenderer,
                     "Minecraft 1.8.9/" + ClientBrandRetriever.getClientModName() + " " + FabricLoader.getInstance()

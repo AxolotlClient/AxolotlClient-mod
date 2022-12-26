@@ -22,6 +22,15 @@
 
 package io.github.axolotlclient.mixin;
 
+import java.net.URI;
+
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
+
 import io.github.axolotlclient.modules.screenshotUtils.ScreenshotUtils;
 import io.github.axolotlclient.modules.scrollableTooltips.ScrollableTooltips;
 import io.github.axolotlclient.util.OSUtil;
@@ -31,14 +40,6 @@ import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import net.minecraft.item.itemgroup.ItemGroup;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.Text;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.*;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
-
-import java.net.URI;
 
 @Mixin(Screen.class)
 public abstract class ScreenMixin {
@@ -47,7 +48,7 @@ public abstract class ScreenMixin {
     public int height;
 
     @ModifyArgs(method = "renderTooltip(Lnet/minecraft/item/ItemStack;II)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;renderTooltip(Ljava/util/List;II)V"))
-    public void modifyTooltipPosition(Args args) {
+    public void axolotlclient$modifyTooltipPosition(Args args) {
         if (ScrollableTooltips.getInstance().enabled.get()) {
             if ((MinecraftClient.getInstance().currentScreen instanceof CreativeInventoryScreen)
                     && ((CreativeInventoryScreen) MinecraftClient.getInstance().currentScreen)
@@ -62,18 +63,18 @@ public abstract class ScreenMixin {
     }
 
     @ModifyConstant(method = "renderTooltip(Ljava/util/List;II)V", constant = @Constant(intValue = 6))
-    public int noLimit(int constant) {
+    public int axolotlclient$noLimit(int constant) {
         return -(height * 2);
     }
 
     @Inject(method = "openLink", at = @At("HEAD"), cancellable = true)
-    public void openLink(URI link, CallbackInfo ci) {
+    public void axolotlclient$openLink(URI link, CallbackInfo ci) {
         OSUtil.getOS().open(link);
         ci.cancel();
     }
 
     @Inject(method = "handleTextClick", at = @At(value = "INVOKE", target = "Lnet/minecraft/text/ClickEvent;getAction()Lnet/minecraft/text/ClickEvent$Action;", ordinal = 0), cancellable = true)
-    public void customClickEvents(Text text, CallbackInfoReturnable<Boolean> cir) {
+    public void axolotlclient$customClickEvents(Text text, CallbackInfoReturnable<Boolean> cir) {
         ClickEvent event = text.getStyle().getClickEvent();
         if (event instanceof ScreenshotUtils.CustomClickEvent) {
             ((ScreenshotUtils.CustomClickEvent) event).doAction();

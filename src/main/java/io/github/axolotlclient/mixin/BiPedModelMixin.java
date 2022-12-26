@@ -22,19 +22,21 @@
 
 package io.github.axolotlclient.mixin;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.client.render.entity.model.BiPedModel;
-import net.minecraft.client.render.model.ModelPart;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+import com.mojang.blaze3d.platform.GlStateManager;
+
+import net.minecraft.client.render.entity.model.BiPedModel;
+import net.minecraft.client.render.model.ModelPart;
+
 @Mixin(BiPedModel.class)
 public abstract class BiPedModelMixin {
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/ModelPart;render(F)V", ordinal = 6))
-    public void translucentHatOne(ModelPart instance, float scale) {
+    public void axolotlclient$translucentHatOne(ModelPart instance, float scale) {
         GlStateManager.pushMatrix();
 
         GlStateManager.enableCull();
@@ -49,7 +51,7 @@ public abstract class BiPedModelMixin {
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/ModelPart;render(F)V", ordinal = 13))
-    public void translucentHatTwo(ModelPart instance, float scale) {
+    public void axolotlclient$translucentHatTwo(ModelPart instance, float scale) {
         GlStateManager.pushMatrix();
 
         GlStateManager.enableCull();

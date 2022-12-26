@@ -22,6 +22,11 @@
 
 package io.github.axolotlclient.mixin;
 
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.hud.gui.hud.PlayerHud;
 import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
@@ -31,16 +36,12 @@ import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.*;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntityRenderer.class)
 public abstract class LivingEntityRendererMixin {
 
     @Inject(method = "hasLabel*", at = @At("HEAD"), cancellable = true)
-    private void showOwnNametag(LivingEntity livingEntity, CallbackInfoReturnable<Boolean> cir) {
+    private void axolotlclient$showOwnNametag(LivingEntity livingEntity, CallbackInfoReturnable<Boolean> cir) {
         if (AxolotlClient.CONFIG.showOwnNametag.get()
                 && livingEntity.getEntityId() == MinecraftClient.getInstance().player.getEntityId()
                 && !PlayerHud.isCurrentlyRendering()) {
@@ -49,7 +50,7 @@ public abstract class LivingEntityRendererMixin {
     }
 
     @Redirect(method = "method_10208(Lnet/minecraft/entity/LivingEntity;DDD)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getName()Lnet/minecraft/text/Text;"))
-    public Text hideNameWhenSneaking(LivingEntity instance) {
+    public Text axolotlclient$hideNameWhenSneaking(LivingEntity instance) {
         if (instance instanceof AbstractClientPlayerEntity) {
             if (NickHider.getInstance().hideOwnName.get() && instance.equals(MinecraftClient.getInstance().player)) {
                 return new LiteralText(NickHider.getInstance().hiddenNameSelf.get());
@@ -62,7 +63,7 @@ public abstract class LivingEntityRendererMixin {
     }
 
     @Inject(method = "method_10208(Lnet/minecraft/entity/LivingEntity;DDD)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Ljava/lang/String;III)I"))
-    public void addBadge(LivingEntity livingEntity, double d, double e, double f, CallbackInfo ci) {
+    public void axolotlclient$addBadge(LivingEntity livingEntity, double d, double e, double f, CallbackInfo ci) {
         if (!NickHider.getInstance().hideOwnName.get() && livingEntity.equals(MinecraftClient.getInstance().player))
             AxolotlClient.addBadge(livingEntity);
         else if (!NickHider.getInstance().hideOtherNames.get() && !livingEntity.equals(MinecraftClient.getInstance().player))
@@ -70,22 +71,22 @@ public abstract class LivingEntityRendererMixin {
     }
 
     @ModifyConstant(method = "method_10252", constant = @Constant(floatValue = 1.0f, ordinal = 0))
-    private float customHitColorRed(float constant){
+    private float axolotlclient$customHitColorRed(float constant){
         return AxolotlClient.CONFIG.hitColor.get().getRed()/255F;
     }
 
     @ModifyConstant(method = "method_10252", constant = @Constant(floatValue = 0.0f, ordinal = 0))
-    private float customHitColorGreen(float constant){
+    private float axolotlclient$customHitColorGreen(float constant){
         return AxolotlClient.CONFIG.hitColor.get().getGreen()/255F;
     }
 
     @ModifyConstant(method = "method_10252", constant = @Constant(floatValue = 0.0f, ordinal = 1))
-    private float customHitColorBlue(float constant){
+    private float axolotlclient$customHitColorBlue(float constant){
         return AxolotlClient.CONFIG.hitColor.get().getBlue()/255F;
     }
 
     @ModifyConstant(method = "method_10252", constant = @Constant(floatValue = 0.3f, ordinal = 0))
-    private float customHitColorAlpha(float constant){
+    private float axolotlclient$customHitColorAlpha(float constant){
         return AxolotlClient.CONFIG.hitColor.get().getAlpha()/255F;
     }
 }

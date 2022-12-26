@@ -89,7 +89,7 @@ public abstract class GameRendererMixin {
     private float cachedMouseFactor;
 
     @Inject(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MouseInput;x:I"), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
-    public void rawMouseInput(float tickDelta, long nanoTime, CallbackInfo ci, boolean displayActive, float f,
+    public void axolotlclient$rawMouseInput(float tickDelta, long nanoTime, CallbackInfo ci, boolean displayActive, float f,
             float g) {
         if (AxolotlClient.CONFIG.rawMouseInput.get()) {
             cachedMouseFactor = g;
@@ -97,7 +97,7 @@ public abstract class GameRendererMixin {
     }
 
     @Redirect(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MouseInput;x:I"))
-    public int rawMouseX(MouseInput instance) {
+    public int axolotlclient$rawMouseX(MouseInput instance) {
         if (AxolotlClient.CONFIG.rawMouseInput.get()) {
             return (int) (instance.x / cachedMouseFactor * client.options.sensitivity);
         }
@@ -105,7 +105,7 @@ public abstract class GameRendererMixin {
     }
 
     @Redirect(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MouseInput;y:I"))
-    public int rawMouseY(MouseInput instance) {
+    public int axolotlclient$rawMouseY(MouseInput instance) {
         if (AxolotlClient.CONFIG.rawMouseInput.get()) {
             return (int) (instance.y / cachedMouseFactor * client.options.sensitivity);
         }
@@ -113,7 +113,7 @@ public abstract class GameRendererMixin {
     }
 
     @Inject(method = "renderFog", at = @At("HEAD"), cancellable = true)
-    public void noFog(int i, float tickDelta, CallbackInfo ci) {
+    public void axolotlclient$noFog(int i, float tickDelta, CallbackInfo ci) {
         if (MinecraftClient.getInstance().world.dimension.canPlayersSleep() && AxolotlClient.CONFIG.customSky.get()
                 && SkyboxManager.getInstance().hasSkyBoxes()) {
             this.viewDistance = (float) (this.viewDistance * 2 + MinecraftClient.getInstance().player.getPos().y);
@@ -176,7 +176,7 @@ public abstract class GameRendererMixin {
     }
 
     @Inject(method = "getFov", at = @At(value = "RETURN", ordinal = 1), cancellable = true)
-    public void setZoom(float tickDelta, boolean changingFov, CallbackInfoReturnable<Float> cir) {
+    public void axolotlclient$setZoom(float tickDelta, boolean changingFov, CallbackInfoReturnable<Float> cir) {
         Zoom.update();
 
         float returnValue = cir.getReturnValue();
@@ -202,14 +202,14 @@ public abstract class GameRendererMixin {
     }
 
     @Redirect(method = "updateLightmap", at = @At(value = "FIELD", target = "Lnet/minecraft/client/options/GameOptions;gamma:F", opcode = Opcodes.GETFIELD))
-    public float setGamma(GameOptions instance) {
+    public float axolotlclient$setGamma(GameOptions instance) {
         if (AxolotlClient.CONFIG.fullBright.get())
             return 15F;
         return instance.gamma;
     }
 
     @Inject(method = "renderDebugCrosshair", at = @At("HEAD"), cancellable = true)
-    public void customCrosshairF3(float tickDelta, CallbackInfo ci) {
+    public void axolotlclient$customCrosshairF3(float tickDelta, CallbackInfo ci) {
         CrosshairHud hud = (CrosshairHud) HudManager.getInstance().get(CrosshairHud.ID);
         if (hud.isEnabled() && this.client.options.debugEnabled && !this.client.options.hudHidden
                 && hud.overridesF3()) {
@@ -218,12 +218,12 @@ public abstract class GameRendererMixin {
     }
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/Framebuffer;bind(Z)V", shift = Shift.BEFORE))
-    public void worldMotionBlur(float tickDelta, long nanoTime, CallbackInfo ci) {
-        motionBlur(tickDelta, nanoTime, null);
+    public void axolotlclient$worldMotionBlur(float tickDelta, long nanoTime, CallbackInfo ci) {
+        axolotlclient$motionBlur(tickDelta, nanoTime, null);
     }
 
     @Inject(method = "render", at = @At("TAIL"))
-    public void motionBlur(float tickDelta, long nanoTime, CallbackInfo ci) {
+    public void axolotlclient$motionBlur(float tickDelta, long nanoTime, CallbackInfo ci) {
         if ((ci == null) == MotionBlur.getInstance().inGuis.get()) {
             return;
         }
@@ -240,7 +240,7 @@ public abstract class GameRendererMixin {
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/ClientPlayerEntity;increaseTransforms(FF)V"))
-    public void updateRotation(ClientPlayerEntity entity, float yaw, float pitch) {
+    public void axolotlclient$updateRotation(ClientPlayerEntity entity, float yaw, float pitch) {
         Freelook freelook = Freelook.getInstance();
 
         if (freelook.consumeRotation(yaw, pitch) || Skyblock.getInstance().rotationLocked.get())
@@ -250,27 +250,27 @@ public abstract class GameRendererMixin {
     }
 
     @Redirect(method = "transformCamera", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;yaw:F"))
-    public float freelook$yaw(Entity entity) {
+    public float axolotlclient$freelook$yaw(Entity entity) {
         return Freelook.getInstance().yaw(entity.yaw);
     }
 
     @Redirect(method = "transformCamera", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;prevYaw:F"))
-    public float freelook$prevYaw(Entity entity) {
+    public float axolotlclient$freelook$prevYaw(Entity entity) {
         return Freelook.getInstance().yaw(entity.prevYaw);
     }
 
     @Redirect(method = "transformCamera", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;pitch:F"))
-    public float freelook$pitch(Entity entity) {
+    public float axolotlclient$freelook$pitch(Entity entity) {
         return Freelook.getInstance().pitch(entity.pitch);
     }
 
     @Redirect(method = "transformCamera", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;prevPitch:F"))
-    public float freelook$prevPitch(Entity entity) {
+    public float axolotlclient$freelook$prevPitch(Entity entity) {
         return Freelook.getInstance().pitch(entity.prevPitch);
     }
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
-    private void limitFpsOnLostFocus(float tickDelta, long nanoTime, CallbackInfo ci){
+    private void axolotlclient$limitFpsOnLostFocus(float tickDelta, long nanoTime, CallbackInfo ci){
         if(!UnfocusedFpsLimiter.getInstance().checkForRender()){
             ci.cancel();
         }

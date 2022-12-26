@@ -36,7 +36,7 @@ public abstract class I18nMixin {
     private static final String KEY_PREFIX = "axolotlclient.";
 
     @Inject(method = "translate", at = @At("HEAD"), cancellable = true)
-    private static void translate(String key, Object[] args, CallbackInfoReturnable<String> callback) {
+    private static void axolotlclient$translate(String key, Object[] args, CallbackInfoReturnable<String> callback) {
         if (key.startsWith(KEY_PREFIX)) {
             callback.setReturnValue(TranslationProvider
                     .format(TranslationProvider.translate(key.substring(KEY_PREFIX.length())), args));

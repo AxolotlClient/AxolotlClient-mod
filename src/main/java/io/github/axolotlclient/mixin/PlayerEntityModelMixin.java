@@ -22,47 +22,49 @@
 
 package io.github.axolotlclient.mixin;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.client.render.entity.model.PlayerEntityModel;
-import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.mojang.blaze3d.platform.GlStateManager;
+
+import net.minecraft.client.render.entity.model.PlayerEntityModel;
+import net.minecraft.entity.Entity;
+
 @Mixin(PlayerEntityModel.class)
 public abstract class PlayerEntityModelMixin {
 
     @Inject(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/render/entity/model/PlayerEntityModel;child:Z"))
-    public void translucencyStart(Entity entity, float f, float g, float h, float i, float j, float scale,
+    public void axolotlclient$translucencyStart(Entity entity, float f, float g, float h, float i, float j, float scale,
             CallbackInfo ci) {
         startTranslucency();
     }
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;popMatrix()V"))
-    public void translucencyStop(Entity entity, float f, float g, float h, float i, float j, float scale,
+    public void axolotlclient$translucencyStop(Entity entity, float f, float g, float h, float i, float j, float scale,
             CallbackInfo ci) {
         stopTranslucency();
     }
 
     @Inject(method = "renderRightArm", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/ModelPart;render(F)V", ordinal = 1))
-    public void handTranslucentRightStart(CallbackInfo ci) {
+    public void axolotlclient$handTranslucentRightStart(CallbackInfo ci) {
         startTranslucency();
     }
 
     @Inject(method = "renderRightArm", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/ModelPart;render(F)V", ordinal = 1, shift = At.Shift.AFTER))
-    public void handTranslucentRightStop(CallbackInfo ci) {
+    public void axolotlclient$handTranslucentRightStop(CallbackInfo ci) {
         stopTranslucency();
     }
 
     @Inject(method = "renderLeftArm", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/ModelPart;render(F)V", ordinal = 1))
-    public void handTranslucentLeftStart(CallbackInfo ci) {
+    public void axolotlclient$handTranslucentLeftStart(CallbackInfo ci) {
         startTranslucency();
     }
 
     @Inject(method = "renderLeftArm", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/ModelPart;render(F)V", ordinal = 1, shift = At.Shift.AFTER))
-    public void handTranslucentLEftStop(CallbackInfo ci) {
+    public void axolotlclient$handTranslucentLEftStop(CallbackInfo ci) {
         stopTranslucency();
     }
 
