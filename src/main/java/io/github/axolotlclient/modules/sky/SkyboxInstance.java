@@ -287,10 +287,10 @@ public abstract class SkyboxInstance {
         if (showSun) {
             RenderSystem.setShaderTexture(0, SUN);
             bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-            bufferBuilder.m_rkxaaknb(matrix4f2, -k, 100.0F, -k).uv(0.0F, 0.0F).next();
-            bufferBuilder.m_rkxaaknb(matrix4f2, k, 100.0F, -k).uv(1.0F, 0.0F).next();
-            bufferBuilder.m_rkxaaknb(matrix4f2, k, 100.0F, k).uv(1.0F, 1.0F).next();
-            bufferBuilder.m_rkxaaknb(matrix4f2, -k, 100.0F, k).uv(0.0F, 1.0F).next();
+            bufferBuilder.vertex(matrix4f2, -k, 100.0F, -k).uv(0.0F, 0.0F).next();
+            bufferBuilder.vertex(matrix4f2, k, 100.0F, -k).uv(1.0F, 0.0F).next();
+            bufferBuilder.vertex(matrix4f2, k, 100.0F, k).uv(1.0F, 1.0F).next();
+            bufferBuilder.vertex(matrix4f2, -k, 100.0F, k).uv(0.0F, 1.0F).next();
             BufferRenderer.drawWithShader(bufferBuilder.end());
         }
         if (showMoon) {
@@ -304,10 +304,10 @@ public abstract class SkyboxInstance {
             float p = (float) (s + 1) / 4.0F;
             float q = (float) (m + 1) / 2.0F;
             bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-            bufferBuilder.m_rkxaaknb(matrix4f2, -k, -100.0F, k).uv(p, q).next();
-            bufferBuilder.m_rkxaaknb(matrix4f2, k, -100.0F, k).uv(t, q).next();
-            bufferBuilder.m_rkxaaknb(matrix4f2, k, -100.0F, -k).uv(t, o).next();
-            bufferBuilder.m_rkxaaknb(matrix4f2, -k, -100.0F, -k).uv(p, o).next();
+            bufferBuilder.vertex(matrix4f2, -k, -100.0F, k).uv(p, q).next();
+            bufferBuilder.vertex(matrix4f2, k, -100.0F, k).uv(t, q).next();
+            bufferBuilder.vertex(matrix4f2, k, -100.0F, -k).uv(t, o).next();
+            bufferBuilder.vertex(matrix4f2, -k, -100.0F, -k).uv(p, o).next();
             BufferRenderer.drawWithShader(bufferBuilder.end());
         }
         if (showStars) {

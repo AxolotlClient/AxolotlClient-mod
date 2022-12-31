@@ -43,14 +43,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(EntityRenderer.class)
 public abstract class EntityRendererMixin<T extends Entity> {
 
-    @Inject(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;m_mrvofiwb(Lnet/minecraft/text/Text;FFIZLorg/joml/Matrix4f;Lnet/minecraft/client/render/VertexConsumerProvider;ZII)I", ordinal = 0))
+    @Inject(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Lnet/minecraft/text/Text;FFIZLorg/joml/Matrix4f;Lnet/minecraft/client/render/VertexConsumerProvider;ZII)I", ordinal = 0))
     public void axolotlclient$addBadges(T entity, Text text, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light,
             CallbackInfo ci) {
         if (entity instanceof AbstractClientPlayerEntity && text.getString().contains(entity.getName().getString()))
             AxolotlClient.addBadge(entity, matrices);
     }
 
-    @ModifyArg(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;m_mrvofiwb(Lnet/minecraft/text/Text;FFIZLorg/joml/Matrix4f;Lnet/minecraft/client/render/VertexConsumerProvider;ZII)I"), index = 8)
+    @ModifyArg(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Lnet/minecraft/text/Text;FFIZLorg/joml/Matrix4f;Lnet/minecraft/client/render/VertexConsumerProvider;ZII)I"), index = 8)
     public int axolotlclient$bgColor(int color) {
         if (AxolotlClient.CONFIG.nametagBackground.get()) {
             return color;
@@ -59,12 +59,12 @@ public abstract class EntityRendererMixin<T extends Entity> {
         }
     }
 
-    @ModifyArg(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;m_mrvofiwb(Lnet/minecraft/text/Text;FFIZLorg/joml/Matrix4f;Lnet/minecraft/client/render/VertexConsumerProvider;ZII)I"), index = 4)
+    @ModifyArg(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Lnet/minecraft/text/Text;FFIZLorg/joml/Matrix4f;Lnet/minecraft/client/render/VertexConsumerProvider;ZII)I"), index = 4)
     public boolean axolotlclient$enableShadows(boolean shadow) {
         return AxolotlClient.CONFIG.useShadows.get();
     }
 
-    @Inject(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;m_mrvofiwb(Lnet/minecraft/text/Text;FFIZLorg/joml/Matrix4f;Lnet/minecraft/client/render/VertexConsumerProvider;ZII)I", ordinal = 1))
+    @Inject(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Lnet/minecraft/text/Text;FFIZLorg/joml/Matrix4f;Lnet/minecraft/client/render/VertexConsumerProvider;ZII)I", ordinal = 1))
     public void axolotlclient$addLevel(T entity, Text string, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light,
             CallbackInfo ci) {
         if (entity instanceof AbstractClientPlayerEntity) {
@@ -79,7 +79,7 @@ public abstract class EntityRendererMixin<T extends Entity> {
                     float y = string.getString().contains("deadmau5") ? -20 : -10;
 
                     Matrix4f matrix4f = matrices.peek().getModel();
-                    MinecraftClient.getInstance().textRenderer.m_etfbxupi(text, x, y,
+                    MinecraftClient.getInstance().textRenderer.draw(text, x, y,
                             LevelHead.getInstance().textColor.get().getAsInt(), AxolotlClient.CONFIG.useShadows.get(),
                             matrix4f, vertexConsumers, false, LevelHead.getInstance().background.get() ? 127 : 0,
                             light);

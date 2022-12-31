@@ -136,10 +136,10 @@ public class FSBSkyboxInstance extends SkyboxInstance {
                 }
                 Matrix4f matrix4f = matrices.peek().getModel();
                 bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
-                bufferBuilder.m_rkxaaknb(matrix4f, -100, -100, -100).uv(0F, 0F).color(1F, 1F, 1F, alpha).next();
-                bufferBuilder.m_rkxaaknb(matrix4f, -100, -100, 100).uv(0F, 1F).color(1F, 1F, 1F, alpha).next();
-                bufferBuilder.m_rkxaaknb(matrix4f, 100, -100, 100).uv(1F, 1F).color(1F, 1F, 1F, alpha).next();
-                bufferBuilder.m_rkxaaknb(matrix4f, 100, -100, -100).uv(1F, 0F).color(1F, 1F, 1F, alpha).next();
+                bufferBuilder.vertex(matrix4f, -100, -100, -100).uv(0F, 0F).color(1F, 1F, 1F, alpha).next();
+                bufferBuilder.vertex(matrix4f, -100, -100, 100).uv(0F, 1F).color(1F, 1F, 1F, alpha).next();
+                bufferBuilder.vertex(matrix4f, 100, -100, 100).uv(1F, 1F).color(1F, 1F, 1F, alpha).next();
+                bufferBuilder.vertex(matrix4f, 100, -100, -100).uv(1F, 0F).color(1F, 1F, 1F, alpha).next();
                 BufferRenderer.drawWithShader(bufferBuilder.end());
 
                 matrices.pop();

@@ -121,10 +121,10 @@ public class MCPSkyboxInstance extends SkyboxInstance {
 
                 Matrix4f matrix4f = matrices.peek().getModel();
                 bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
-                bufferBuilder.m_rkxaaknb(matrix4f, -100, -100, -100).uv(u, v).color(1F, 1F, 1F, alpha).next();
-                bufferBuilder.m_rkxaaknb(matrix4f, -100, -100, 100).uv(u, v + 0.5F).color(1F, 1F, 1F, alpha).next();
-                bufferBuilder.m_rkxaaknb(matrix4f, 100, -100, 100).uv(u + 1 / 3F, v + 0.5F).color(1F, 1F, 1F, alpha).next();
-                bufferBuilder.m_rkxaaknb(matrix4f, 100, -100, -100).uv(u + 1 / 3F, v).color(1F, 1F, 1F, alpha).next();
+                bufferBuilder.vertex(matrix4f, -100, -100, -100).uv(u, v).color(1F, 1F, 1F, alpha).next();
+                bufferBuilder.vertex(matrix4f, -100, -100, 100).uv(u, v + 0.5F).color(1F, 1F, 1F, alpha).next();
+                bufferBuilder.vertex(matrix4f, 100, -100, 100).uv(u + 1 / 3F, v + 0.5F).color(1F, 1F, 1F, alpha).next();
+                bufferBuilder.vertex(matrix4f, 100, -100, -100).uv(u + 1 / 3F, v).color(1F, 1F, 1F, alpha).next();
                 tessellator.draw();
 
                 matrices.pop();

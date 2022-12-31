@@ -31,7 +31,8 @@ import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -47,6 +48,7 @@ public class AutoGG implements AbstractHypixelMod {
     private final OptionCategory category = new OptionCategory("autogg");
     private final MinecraftClient client = MinecraftClient.getInstance();
     private long lastTime = 0;
+
     public BooleanOption gg = new BooleanOption("printGG", false);
     public StringOption ggString = new StringOption("ggString", "gg");
 
@@ -61,38 +63,25 @@ public class AutoGG implements AbstractHypixelMod {
     private final BooleanOption onPVPL = new BooleanOption("onPVPL", false);
     private final BooleanOption onMMC = new BooleanOption("onMMC", false);
 
-    private final List<String> hypixelGGStrings = new ArrayList<>();
-    private final List<String> hypixelGFStrings = new ArrayList<>();
-    private final List<String> hypixelGLHFStrings = new ArrayList<>();
 
-    private final List<String> bedwarsPracticeGGStrings = new ArrayList<>();
-    private final List<String> bedwarsPracticeGFStrings = new ArrayList<>();
-    private final List<String> bedwarsPracticeGLHFStrings = new ArrayList<>();
+    private final HashMap<String, List<String>> ggStrings = new HashMap<>();
+    private final HashMap<String, List<String>> gfStrings = new HashMap<>();
+    private final HashMap<String, List<String>> glhfStrings = new HashMap<>();
 
-    private final List<String> pvpLandGGStrings = new ArrayList<>();
-    private final List<String> pvpLandGFStrings = new ArrayList<>();
-    private final List<String> pvpLandGLHFStrings = new ArrayList<>();
-
-    private final List<String> minemenGGStrings = new ArrayList<>();
-    private final List<String> minemenGFStrings = new ArrayList<>();
-    private final List<String> minemenGLHFStrings = new ArrayList<>();
+    private final HashMap<String, BooleanOption> serverMap = new HashMap<>();
 
     @Override
     public void init() {
-        populateHypixelGGStrings();
-        populateHypixelGFStrings();
-        populateHypixelGLHFStrings();
+        populateGGStrings();
+        populateGFStrings();
+        populateGLHFStrings();
+        serverMap.put("hypixel.net", onHypixel);
 
-        populateBedwarsPracticeGGStrings();
-        populateBedwarsPracticeGFStrings();
-        populateBedwarsPracticeGLHFStrings();
+        serverMap.put("bedwarspractice.club", onBWP);
 
-        populatePvpLandGGStrings();
-        populatePvpLandGFStrings();
+        serverMap.put("pvp.land", onPVPL);
 
-        populateMinemenGGStrings();
-        populateMinemenGFStrings();
-        populateMinemenGLHFStrings();
+        serverMap.put("minemen.club", onMMC);
 
         category.add(gg);
         category.add(ggString);
@@ -112,7 +101,7 @@ public class AutoGG implements AbstractHypixelMod {
     }
 
     private void processChat(Text messageReceived, List<String> options, String messageToSend) {
-        if (System.currentTimeMillis() - this.lastTime > 3000) {
+        if (System.currentTimeMillis() - this.lastTime > 3000 && options != null) {
             for (String s : options) {
                 if (messageReceived.getString().contains(s)) {
                     Util.sendChatMessage(messageToSend);
@@ -123,125 +112,84 @@ public class AutoGG implements AbstractHypixelMod {
         }
     }
 
-    private void populateHypixelGGStrings() {
-        hypixelGGStrings.add("1st Killer -");
-        hypixelGGStrings.add("1st Place -");
-        hypixelGGStrings.add("Winner:");
-        hypixelGGStrings.add(" - Damage Dealt -");
-        hypixelGGStrings.add("Winning Team -");
-        hypixelGGStrings.add("1st -");
-        hypixelGGStrings.add("Winners:");
-        hypixelGGStrings.add("Winner:");
-        hypixelGGStrings.add("Winning Team:");
-        hypixelGGStrings.add(" won the game!");
-        hypixelGGStrings.add("Top Seeker:");
-        hypixelGGStrings.add("1st Place:");
-        hypixelGGStrings.add("Last team standing!");
-        hypixelGGStrings.add("Winner #1 (");
-        hypixelGGStrings.add("Top Survivors");
-        hypixelGGStrings.add("Winners -");
-        hypixelGGStrings.add("Sumo Duel -");
-        hypixelGGStrings.add("Most Wool Placed -");
-        hypixelGGStrings.add("Your Overall Winstreak:");
+    private void populateGGStrings() {
+        ggStrings.put("hypixel.net", addToList(
+                "1st Killer -",
+                        "1st Place -",
+                        "Winner:",
+                        " - Damage Dealt -",
+                        "Winning Team -",
+                        "1st -",
+                        "Winners:",
+                        "Winner:",
+                        "Winning Team:",
+                        " won the game!",
+                        "Top Seeker:",
+                        "1st Place:",
+                        "Last team standing!",
+                        "Winner #1 (",
+                        "Top Survivors",
+                        "Winners -",
+                        "Sumo Duel -",
+                        "Most Wool Placed -",
+                        "Your Overall Winstreak:"
+                )
+        );
+
+        ggStrings.put("bedwarspractice.club", addToList(
+                "Winners -",
+                "Game Won!",
+                "Game Lost!",
+                "The winning team is"));
+
+        ggStrings.put("pvp.land", addToList(
+                "The match has ended!",
+                "Match Results",
+                "Winner:",
+                "Loser:"
+        ));
+
+        ggStrings.put("minemen.club", addToList("Match Results"));
     }
 
-    private void populateHypixelGFStrings() {
-        hypixelGFStrings.add("SkyWars Experience (Kill)");
-        hypixelGFStrings.add("coins! (Final Kill)");
+    private void populateGFStrings() {
+        gfStrings.put("hypixel.net", addToList("SkyWars Experience (Kill)",
+                "coins! (Final Kill)"));
+
+        gfStrings.put("bedwarspractice.club", addToList(client.getSession().getUsername() + " FINAL KILL!"));
+
+        gfStrings.put("pvp.land", addToList("slain by " + client.getSession().getUsername()));
+
+        gfStrings.put("minemen.club", addToList("killed by " + client.getSession().getUsername() + "!"));
     }
 
-    private void populateHypixelGLHFStrings() {
-        hypixelGLHFStrings.add("The game starts in 1 second!");
+    private void populateGLHFStrings() {
+        glhfStrings.put("hypixel.net", addToList("The game starts in 1 second!"));
+
+        glhfStrings.put("bedwarspractice.club", addToList("Game starting in 1 seconds!", "Game has started!"));
+
+        glhfStrings.put("minemen.club", addToList("1..."));
     }
 
-    private void populateBedwarsPracticeGGStrings() {
-        bedwarsPracticeGGStrings.add("Winners -");
-        bedwarsPracticeGGStrings.add("Game Won!");
-        bedwarsPracticeGGStrings.add("Game Lost!");
-        bedwarsPracticeGGStrings.add("The winning team is");
-    }
-
-    private void populateBedwarsPracticeGFStrings() {
-        bedwarsPracticeGFStrings.add(client.getSession().getUsername() + " FINAL KILL!");
-    }
-
-    private void populateBedwarsPracticeGLHFStrings() {
-        bedwarsPracticeGLHFStrings.add("Game starting in 1 seconds!");
-        bedwarsPracticeGLHFStrings.add("Game has started!");
-    }
-
-    private void populatePvpLandGGStrings() {
-        pvpLandGGStrings.add("The match has ended!");
-        pvpLandGGStrings.add("Match Results");
-        pvpLandGGStrings.add("Winner:");
-        pvpLandGGStrings.add("Loser:");
-    }
-
-    private void populatePvpLandGFStrings() {
-        pvpLandGFStrings.add("slain by " + client.getSession().getUsername());
-    }
-
-    private void populateMinemenGGStrings() {
-        minemenGGStrings.add("Match Results");
-    }
-
-    private void populateMinemenGFStrings() {
-        minemenGFStrings.add("killed by " + client.getSession().getUsername() + "!");
-    }
-
-    private void populateMinemenGLHFStrings() {
-        minemenGLHFStrings.add("1...");
+    private List<String> addToList(String... strings){
+        return Arrays.stream(strings).toList();
     }
 
     public void onMessage(Text message) {
         if (client.getCurrentServerEntry() != null) {
-            if (onHypixel.get() && client.getCurrentServerEntry().address.contains("hypixel")) {
-                if (gf.get()) {
-                    processChat(message, hypixelGFStrings, gfString.get());
-                }
-                if (gg.get()) {
-                    processChat(message, hypixelGGStrings, ggString.get());
-                }
-                if (glhf.get()) {
-                    processChat(message, hypixelGLHFStrings, glhfString.get());
-                }
-            } else if (onBWP.get() && client.getCurrentServerEntry().address.contains("bedwarspractice.club")) {
-                if (gf.get()) {
-                    processChat(message, bedwarsPracticeGFStrings, gfString.get());
-                }
-                if (gg.get()) {
-                    processChat(message, bedwarsPracticeGGStrings, ggString.get());
-                }
-                if (glhf.get()) {
-                    processChat(message, bedwarsPracticeGLHFStrings, glhfString.get());
-                }
-            } else if (onPVPL.get() && client.getCurrentServerEntry().address.contains("pvp.land")) {
-                if (gf.get()) {
-                    processChat(message, pvpLandGFStrings, gfString.get());
-                }
-                if (gg.get()) {
-                    processChat(message, pvpLandGGStrings, ggString.get());
-                }
-                if (glhf.get()) {
-                    processChat(message, pvpLandGLHFStrings, glhfString.get());
-                }
-            } else if (onMMC.get() && client.getCurrentServerEntry().address.contains("minemen.club")) {
-                if (gf.get()) {
-                    if (minemenGFStrings.size() == 0)
-                        populateMinemenGFStrings();
-                    processChat(message, minemenGFStrings, "gf");
-                }
-                if (gg.get()) {
-                    if (minemenGGStrings.size() == 0)
-                        populateMinemenGGStrings();
-                    processChat(message, minemenGGStrings, "gg");
-                }
-                if (glhf.get()) {
-                    if (minemenGLHFStrings.size() == 0)
-                        populateMinemenGLHFStrings();
-                    processChat(message, minemenGLHFStrings, "glhf");
-                }
-            }
+            serverMap.keySet().forEach(s -> {
+               if(serverMap.get(s).get() && client.getCurrentServerEntry().address.contains(s)){
+                   if(gf.get()){
+                       processChat(message, gfStrings.get(s), gfString.get());
+                   }
+                   if(gg.get()){
+                       processChat(message, ggStrings.get(s), ggString.get());
+                   }
+                   if(glhf.get()){
+                       processChat(message, glhfStrings.get(s), glhfString.get());
+                   }
+               }
+            });
         }
     }
 }

@@ -32,8 +32,10 @@ import net.minecraft.scoreboard.ScoreboardPlayerScore;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.util.ChatUtil;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.Vec3d;
+import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.opengl.GL11;
 
 import java.util.*;
@@ -128,8 +130,13 @@ public class Util {
     }
 
     public static void sendChatMessage(String msg) {
+        msg = ChatUtil.cutString(StringUtils.normalizeSpace(msg.trim()));
         assert MinecraftClient.getInstance().player != null;
-        MinecraftClient.getInstance().player.networkHandler.m_gkszsvqi(msg.substring(1));
+        if (msg.startsWith("/")) {
+            MinecraftClient.getInstance().player.networkHandler.m_gkszsvqi(msg.substring(1));
+        } else {
+            MinecraftClient.getInstance().player.networkHandler.m_fzlgisyq(msg);
+        }
     }
 
     public static void sendChatMessage(Text msg) {
