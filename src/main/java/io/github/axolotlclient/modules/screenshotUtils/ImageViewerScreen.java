@@ -27,6 +27,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.URI;
 
 import javax.imageio.ImageIO;
 
@@ -37,6 +38,7 @@ import com.google.common.hash.Hashing;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import io.github.axolotlclient.util.Logger;
+import io.github.axolotlclient.util.OSUtil;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -50,6 +52,8 @@ public class ImageViewerScreen extends Screen {
 
     // Icon from https://lucide.dev, "arrow-right"
     private static final Identifier downloadIcon = new Identifier("axolotlclient", "textures/go.png");
+
+    private static final URI aboutPage = URI.create("https://github.com/AxolotlClient/AxolotlClient-mod/wiki/Features#screenshot-sharing");
 
     private Identifier imageId;
     private NativeImageBackedTexture image;
@@ -146,6 +150,13 @@ public class ImageViewerScreen extends Screen {
             }
         };
         buttons.add(copy);
+
+        buttons.add(new ButtonWidget(28, width - 60, 100, 50, 20, I18n.translate("aboutAction")){
+            @Override
+            public void renderToolTip(int mouseX, int mouseY) {
+                ImageViewerScreen.this.renderTooltip(I18n.translate("about_image"), mouseX, mouseY);
+            }
+        });
     }
 
 
@@ -188,6 +199,9 @@ public class ImageViewerScreen extends Screen {
                 }, null);
                 Logger.info("Copied image "+imageName+" to the clipboard!");
                 break;
+            case 28:
+                OSUtil.getOS().open(aboutPage);
+                break;
         }
     }
 
@@ -219,7 +233,13 @@ public class ImageViewerScreen extends Screen {
             MinecraftClient.getInstance().getTextureManager().bindTexture(imageId);
             drawTexture(width/2 - imageWidth/2, 50, 0, 0, imageWidth, imageHeight, imageWidth, imageHeight);
 
-            buttons.stream().filter(buttonWidget -> buttonWidget.id>25).forEach(buttonWidget -> buttonWidget.x = width/2 + imageWidth/2 + 10);
+            buttons.stream().filter(buttonWidget -> buttonWidget.id>25).forEach(buttonWidget -> {
+                buttonWidget.x = width/2 + imageWidth/2 + 10;
+
+                if(buttonWidget.id == 28){
+                    buttonWidget.y = 50+imageHeight-20;
+                }
+            });
 
             buttons.stream().filter(buttonWidget -> buttonWidget.id>25).filter(buttonWidget -> !buttonWidget.visible).forEach(buttonWidget -> buttonWidget.visible = true);
 
