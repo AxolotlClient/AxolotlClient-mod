@@ -25,7 +25,7 @@ package io.github.axolotlclient.modules.hud.util;
 import com.mojang.blaze3d.lighting.DiffuseLighting;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import io.github.axolotlclient.AxolotlclientConfig.Color;
+import io.github.axolotlclient.AxolotlClientConfig.Color;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;

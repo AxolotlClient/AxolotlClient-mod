@@ -23,10 +23,11 @@
 package io.github.axolotlclient;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import io.github.axolotlclient.AxolotlclientConfig.AxolotlClientConfigManager;
-import io.github.axolotlclient.AxolotlclientConfig.DefaultConfigManager;
-import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
+import io.github.axolotlclient.AxolotlClientConfig.AxolotlClientConfigManager;
+import io.github.axolotlclient.AxolotlClientConfig.DefaultConfigManager;
+import io.github.axolotlclient.AxolotlClientConfig.common.ConfigManager;
+import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.config.AxolotlClientConfig;
 import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.modules.ModuleLoader;
@@ -74,7 +75,7 @@ public class AxolotlClient implements ClientModInitializer {
     public static String modid = "AxolotlClient";
 
     public static AxolotlClientConfig CONFIG;
-    public static io.github.axolotlclient.AxolotlclientConfig.ConfigManager configManager;
+    public static ConfigManager configManager;
     public static HashMap<UUID, Boolean> playerCache = new HashMap<>();
 
     public static HashMap<Identifier, Resource> runtimeResources = new HashMap<>();
@@ -127,10 +128,10 @@ public class AxolotlClient implements ClientModInitializer {
         CONFIG.getConfig().addAll(CONFIG.getCategories());
         CONFIG.getConfig().add(config);
 
-        AxolotlClientConfigManager.registerConfig(modid, CONFIG, configManager = new DefaultConfigManager(modid,
+        AxolotlClientConfigManager.getInstance().registerConfig(modid, CONFIG, configManager = new DefaultConfigManager(modid,
                 QuiltLoader.getConfigDir().resolve("AxolotlClient.json"), CONFIG.getConfig()));
-        AxolotlClientConfigManager.addIgnoredName(modid, "x");
-        AxolotlClientConfigManager.addIgnoredName(modid, "y");
+        AxolotlClientConfigManager.getInstance().addIgnoredName(modid, "x");
+        AxolotlClientConfigManager.getInstance().addIgnoredName(modid, "y");
 
         modules.forEach(AbstractModule::lateInit);
 

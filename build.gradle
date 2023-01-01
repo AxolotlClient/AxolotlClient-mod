@@ -29,21 +29,27 @@ repositories {
 
 	mavenLocal()
 	maven { url 'https://jitpack.io' }
+	mavenCentral()
 }
 
 dependencies {
+
 	minecraft "com.mojang:minecraft:${minecraft_version}"
 	mappings "org.quiltmc:quilt-mappings:${minecraft_version}+build.${quilt_mappings}:intermediary-v2"
 
 	modImplementation "org.quiltmc:quilt-loader:${project.loader_version}"
 
-	modImplementation "org.quiltmc.qsl.core:resource_loader:${qsl_version}+${minecraft_version}"
+	modImplementation "org.quiltmc.quilted-fabric-api:quilted-fabric-api:5.0.0-alpha.7+0.70.0-1.19.3"
 
-	modImplementation include("io.github.axolotlclient:AxolotlClient-config:${project.config_version}+${project.minecraft_version}")
+	modImplementation include("io.github.axolotlclient:AxolotlClient-config:${project.config_version}+${project.minecraft_version}"){
+		exclude group: "org.quiltmc.qsl.core"
+		exclude group: "org.quiltmc.qsl.management"
+		exclude group: "com.terraformersmc"
+	}
 
-	modImplementation files("modmenuDummy.jar")
+	//modImplementation files("modmenuDummy.jar")
 
-	//modImplementation "com.terraformersmc:modmenu:4.0.5"
+	modImplementation "com.terraformersmc:modmenu:5.0.2"
 
 	include( implementation('com.github.JnCrMx:discord-game-sdk4j:v0.5.5'))
 
@@ -56,6 +62,8 @@ dependencies {
 		exclude group: "com.google.code.gson", module: "gson"
 		exclude group: "org.apache.httpcomponents", module: "httpclient"
 	})
+
+	implementation include('org.apache.httpcomponents:httpmime:4.5.14')
 }
 
 processResources {

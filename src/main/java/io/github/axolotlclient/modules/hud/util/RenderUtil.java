@@ -24,7 +24,7 @@ package io.github.axolotlclient.modules.hud.util;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import io.github.axolotlclient.AxolotlclientConfig.Color;
+import io.github.axolotlclient.AxolotlClientConfig.Color;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.ShaderProgram;

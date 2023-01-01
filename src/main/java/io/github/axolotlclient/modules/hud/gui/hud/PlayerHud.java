@@ -24,9 +24,9 @@ package io.github.axolotlclient.modules.hud.gui.hud;
 
 import com.mojang.blaze3d.lighting.DiffuseLighting;
 import com.mojang.blaze3d.systems.RenderSystem;
-import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.DoubleOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.Option;
+import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.DoubleOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.Option;
 import io.github.axolotlclient.modules.hud.gui.entry.BoxHudEntry;
 import io.github.axolotlclient.util.Hooks;
 import lombok.Getter;

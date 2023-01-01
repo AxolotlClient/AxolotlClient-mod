@@ -23,7 +23,7 @@
 package io.github.axolotlclient.util;
 
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.modules.freelook.Freelook;
 
 import java.util.HashMap;

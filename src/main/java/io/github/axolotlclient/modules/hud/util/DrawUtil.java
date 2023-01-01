@@ -22,7 +22,7 @@
 
 package io.github.axolotlclient.modules.hud.util;
 
-import io.github.axolotlclient.AxolotlclientConfig.Color;
+import io.github.axolotlclient.AxolotlClientConfig.Color;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;

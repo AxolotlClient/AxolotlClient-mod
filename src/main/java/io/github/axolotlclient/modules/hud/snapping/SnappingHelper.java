@@ -23,7 +23,7 @@
 package io.github.axolotlclient.modules.hud.snapping;
 
 import com.mojang.blaze3d.glfw.Window;
-import io.github.axolotlclient.AxolotlclientConfig.Color;
+import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import lombok.Setter;

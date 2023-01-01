@@ -23,9 +23,9 @@
 package io.github.axolotlclient.modules.hud;
 
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
-import io.github.axolotlclient.AxolotlclientConfig.screen.OptionsScreenBuilder;
+import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
+import io.github.axolotlclient.AxolotlClientConfig.screen.OptionsScreenBuilder;
 import io.github.axolotlclient.modules.hud.gui.component.HudEntry;
 import io.github.axolotlclient.modules.hud.snapping.SnappingHelper;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
@@ -172,7 +172,7 @@ public class HudEditScreen extends Screen {
 
         this.addDrawableChild(new ButtonWidget.Builder(Text.translatable("hud.clientOptions"),
                 buttonWidget -> MinecraftClient.getInstance().setScreen(new OptionsScreenBuilder(this,
-                        new OptionCategory("config", false).addSubCategories(AxolotlClient.CONFIG.getCategories()),
+                        (OptionCategory) new OptionCategory("config", false).addSubCategories(AxolotlClient.CONFIG.getCategories()),
                         AxolotlClient.modid))).positionAndSize(width / 2 - 75, height / 2 - 10, 150, 20).build());
 
         if (parent != null)

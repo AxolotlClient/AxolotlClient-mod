@@ -22,9 +22,9 @@
 
 package io.github.axolotlclient.modules.hypixel.nickhider;
 
-import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
-import io.github.axolotlclient.AxolotlclientConfig.options.StringOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
+import io.github.axolotlclient.AxolotlClientConfig.options.StringOption;
 import io.github.axolotlclient.modules.hypixel.AbstractHypixelMod;
 import lombok.Getter;
 import net.minecraft.client.MinecraftClient;

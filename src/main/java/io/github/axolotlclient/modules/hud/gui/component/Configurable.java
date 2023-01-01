@@ -22,8 +22,8 @@
 
 package io.github.axolotlclient.modules.hud.gui.component;
 
-import io.github.axolotlclient.AxolotlclientConfig.options.Option;
-import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
+import io.github.axolotlclient.AxolotlClientConfig.options.Option;
+import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 
 import java.util.List;
 

@@ -25,10 +25,13 @@ package io.github.axolotlclient.config;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.texture.NativeImage;
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.AxolotlclientConfig.AxolotlClientConfigConfig;
-import io.github.axolotlclient.AxolotlclientConfig.Color;
-import io.github.axolotlclient.AxolotlclientConfig.ConfigHolder;
-import io.github.axolotlclient.AxolotlclientConfig.options.*;
+import io.github.axolotlclient.AxolotlClientConfig.AxolotlClientConfigConfig;
+import io.github.axolotlclient.AxolotlClientConfig.common.ConfigHolder;
+import io.github.axolotlclient.AxolotlClientConfig.common.options.Option;
+import io.github.axolotlclient.AxolotlClientConfig.common.options.OptionCategory;
+import io.github.axolotlclient.AxolotlClientConfig.options.ColorOption;
+import io.github.axolotlclient.AxolotlClientConfig.Color;
+import io.github.axolotlclient.AxolotlClientConfig.options.*;
 import io.github.axolotlclient.NetworkHelper;
 import io.github.axolotlclient.config.screen.CreditsScreen;
 import io.github.axolotlclient.mixin.OverlayTextureAccessor;
@@ -109,12 +112,12 @@ public class AxolotlClientConfig extends ConfigHolder {
     public final BooleanOption debugLogOutput = new BooleanOption("debugLogOutput", false);
     public final BooleanOption creditsBGM = new BooleanOption("creditsBGM", true);
 
-    public final OptionCategory general = new OptionCategory("general");
-    public final OptionCategory nametagOptions = new OptionCategory( "nametagOptions");
-    public final OptionCategory rendering = new OptionCategory("rendering");
-    public final OptionCategory outlines= new OptionCategory("blockOutlines");
-	public final OptionCategory timeChanger = new OptionCategory("timeChanger");
-    public final OptionCategory searchFilters = new OptionCategory("searchFilters");
+    public final OptionCategory general = new io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory("general");
+    public final OptionCategory nametagOptions = new io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory( "nametagOptions");
+    public final OptionCategory rendering = new io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory("rendering");
+    public final OptionCategory outlines= new io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory("blockOutlines");
+	public final OptionCategory timeChanger = new io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory("timeChanger");
+    public final OptionCategory searchFilters = new io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory("searchFilters");
 
     private final List<Option<?>> options = new ArrayList<>();
     private final List<OptionCategory> categories = new ArrayList<>();
@@ -187,7 +190,7 @@ public class AxolotlClientConfig extends ConfigHolder {
         outlines.add(enableCustomOutlines);
         outlines.add(outlineColor);
         outlines.add(outlineChroma);
-        outlines.add(outlineWidth); // I could not get this to have an effect.
+        //outlines.add(outlineWidth); // I could not get this to have an effect.
 
         AxolotlClient.config.add(creditsBGM);
 
