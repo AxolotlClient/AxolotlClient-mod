@@ -25,6 +25,7 @@ package io.github.axolotlclient.modules.screenshotUtils;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.mojang.blaze3d.texture.NativeImage;
 import io.github.axolotlclient.NetworkHelper;
@@ -134,7 +135,7 @@ public class ImageShare {
                     JsonElement element = JsonParser.parseString(body);
 
                     return element.getAsJsonObject().get("pasteId").getAsString();
-                } catch (Exception e) {
+                } catch (JsonParseException e) {
                     Logger.warn("Not Json data: \n" + body);
                 }
             } else {
