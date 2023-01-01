@@ -52,10 +52,6 @@ public class ScreenshotUtils extends AbstractModule {
 
     public final StringOption shareUrl = new StringOption("shareUrl", "https://bin.gart.sh");
 
-    private final GenericOption openViewer = new GenericOption("imageViewer", "openViewer", (m1, m2) -> {
-        MinecraftClient.getInstance().setScreen(new ImageViewerScreen(MinecraftClient.getInstance().currentScreen));
-    });
-
     private final List<Action> actions = Util.make(() -> {
         List<Action> actions = new ArrayList<>();
         actions.add(new Action("copyAction", Formatting.AQUA,
@@ -84,7 +80,12 @@ public class ScreenshotUtils extends AbstractModule {
         actions.add(new Action("uploadAction", Formatting.LIGHT_PURPLE,
                 "upload_image",
                 new CustomClickEvent(file -> {
-                    ImageShare.getInstance().uploadImage(shareUrl.get(), file);
+                    new Thread("Image Uploader"){
+                        @Override
+                        public void run() {
+                            ImageShare.getInstance().uploadImage(shareUrl.get(), file);
+                        }
+                    }.start();
                 })));
 
         // If you have further ideas to what actions could be added here, please let us know!
@@ -101,7 +102,9 @@ public class ScreenshotUtils extends AbstractModule {
 
     @Override
     public void init() {
-        category.add(enabled, autoExec, shareUrl, openViewer);
+        category.add(enabled, autoExec, shareUrl, new GenericOption("imageViewer", "Open Viewer", (m1, m2) -> {
+            MinecraftClient.getInstance().setScreen(new ImageViewerScreen(MinecraftClient.getInstance().currentScreen));
+        }));
 
         AxolotlClient.CONFIG.general.addSubCategory(category);
     }

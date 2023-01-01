@@ -9,6 +9,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.ScreenTexts;
@@ -78,10 +79,10 @@ public class ImageViewerScreen extends Screen {
     protected void init() {
 
         urlBox = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width/2-100, imageId == null ? height/2-10 : height-80, 200, 20, Text.translatable("urlBox"));
-        urlBox.setSuggestion("Paste URL or ID...");
+        urlBox.setSuggestion(I18n.translate("pasteURL"));
         urlBox.setChangedListener(s -> {
             if(s.isEmpty()){
-                urlBox.setSuggestion("Paste URL or ID...");
+                urlBox.setSuggestion(I18n.translate("pasteURL"));
             } else {
                 urlBox.setSuggestion("");
             }
@@ -91,11 +92,12 @@ public class ImageViewerScreen extends Screen {
         }
         addDrawableChild(urlBox);
 
+        setInitialFocus(urlBox);
+
         addDrawableChild(new ButtonWidget(width/2 + 110, imageId == null ? height/2-10 : height-80,
                 20, 20, Text.translatable("download"), buttonWidget -> {
                     Logger.info("Downloading image from "+urlBox.getText());
                     imageId = downloadImage(url = urlBox.getText());
-                    //MinecraftClient.getInstance().setScreen(new ImageViewerScreen(parent, urlBox.getText()));
                     clearAndInit();
                 }, Supplier::get){
             @Override
@@ -120,8 +122,6 @@ public class ImageViewerScreen extends Screen {
                 buttonWidget -> {
                     try {
                         Files.write(QuiltLoader.getGameDir().resolve("screenshots").resolve("_share-"+imageName), Objects.requireNonNull(image.getImage()).getBytes());
-                        buttonWidget.setMessage(Text.translatable("imageSaved"));
-                        buttonWidget.active = false;
                     } catch (IOException e) {
                         Logger.info("Failed to save image!");
                     }
