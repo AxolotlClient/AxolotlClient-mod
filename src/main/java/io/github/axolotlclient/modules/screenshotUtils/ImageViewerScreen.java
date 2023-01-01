@@ -11,6 +11,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import org.jetbrains.annotations.NotNull;
+import org.lwjgl.input.Keyboard;
 
 import com.google.common.hash.Hashing;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -74,6 +75,7 @@ public class ImageViewerScreen extends Screen {
 
     @Override
     public void init() {
+        Keyboard.enableRepeatEvents(true);
 
         urlBox = new TextFieldWidget(23, MinecraftClient.getInstance().textRenderer, width/2-100, imageId == null ? height/2-10 : height-80, 200, 20){
             @Override
@@ -81,13 +83,15 @@ public class ImageViewerScreen extends Screen {
                 super.render();
 
                 if (getText().isEmpty()) {
-                    drawWithShadow(MinecraftClient.getInstance().textRenderer, I18n.translate("pasteURL"), x+2, y+6, -8355712);
+                    drawWithShadow(MinecraftClient.getInstance().textRenderer, I18n.translate("pasteURL"), x+3, y+6, -8355712);
                 }
             }
         };
         if(!url.isEmpty()){
             urlBox.setText(url);
         }
+
+        urlBox.setFocused(true);
 
         buttons.add(new ButtonWidget(24, width/2 + 110, imageId == null ? height/2-10 : height-80,
                 20, 20, I18n.translate("download")){
@@ -117,13 +121,14 @@ public class ImageViewerScreen extends Screen {
         editButtons.add(copy);
     }
 
+
+
     @Override
     protected void buttonClicked(ButtonWidget button) {
         switch (button.id){
             case 24:
                 Logger.info("Downloading image from "+urlBox.getText());
                 imageId = downloadImage(url = urlBox.getText());
-                //MinecraftClient.getInstance().setScreen(new ImageViewerScreen(parent, urlBox.getText()));
                 init(MinecraftClient.getInstance(), width, height);
                 break;
             case 25:
@@ -132,8 +137,6 @@ public class ImageViewerScreen extends Screen {
             case 26:
                 try {
                     ImageIO.write(rawImage, "png", FabricLoader.getInstance().getGameDir().resolve("screenshots").resolve("_share-"+imageName).toFile());
-                    button.message = I18n.translate("imageSaved");
-                    button.active = false;
                 } catch (IOException e) {
                     Logger.info("Failed to save image!");
                 }
@@ -171,6 +174,15 @@ public class ImageViewerScreen extends Screen {
     protected void mouseClicked(int mouseX, int mouseY, int button) {
         super.mouseClicked(mouseX, mouseY, button);
         urlBox.mouseClicked(mouseX, mouseY, button);
+
+        if(button == 0){
+            editButtons.forEach(buttonWidget -> {
+                if (buttonWidget.isMouseOver(this.client, mouseX, mouseY)) {
+                    buttonWidget.playDownSound(this.client.getSoundManager());
+                    this.buttonClicked(buttonWidget);
+                }
+            });
+        }
     }
 
     @Override
@@ -207,6 +219,7 @@ public class ImageViewerScreen extends Screen {
     @Override
     public void removed() {
         super.removed();
+        Keyboard.enableRepeatEvents(false);
         if(image != null){
             MinecraftClient.getInstance().getTextureManager().close(imageId);
         }

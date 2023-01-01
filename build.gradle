@@ -67,8 +67,6 @@ dependencies {
 	modImplementation include("io.github.axolotlclient:AxolotlClient-config:${project.config_version}+${project.minecraft_version}")
 
 	modApi("org.apache.logging.log4j:log4j-core:2.10.0")
-
-	implementation include('org.apache.httpcomponents:httpmime:4.5.14')
 }
 
 // More hacks that make mac os work

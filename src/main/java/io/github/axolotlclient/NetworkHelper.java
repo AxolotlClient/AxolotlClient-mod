@@ -22,9 +22,11 @@
 
 package io.github.axolotlclient;
 
-import io.github.axolotlclient.util.Logger;
-import io.github.axolotlclient.util.ThreadExecuter;
-import net.minecraft.client.MinecraftClient;
+import java.io.IOException;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
@@ -34,9 +36,12 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+
+import io.github.axolotlclient.util.Logger;
+import io.github.axolotlclient.util.ThreadExecuter;
+import net.minecraft.client.MinecraftClient;
 
 public class NetworkHelper {
 
@@ -128,16 +133,18 @@ public class NetworkHelper {
     }
 
     // In case we ever implement more of HyCord's features...
-    /*public static JsonElement getRequest(String site) {
-        try {
+    public static JsonElement getRequest(String site) {
+        return getRequest(site, HttpClients.custom().disableAutomaticRetries().build());
+    }
 
-            CloseableHttpClient client = HttpClients.custom().disableAutomaticRetries().build();
-            HttpGet get = new HttpGet(site);
+    public static JsonElement getRequest(String url, CloseableHttpClient client){
+        try {
+            HttpGet get = new HttpGet(url);
             HttpResponse response = client.execute(get);
 
             int status = response.getStatusLine().getStatusCode();
             if (status != 200) {
-                Logger.warn("API request failed, status code " + status);
+                Logger.warn("API request failed, status code " + status+"\nBody: "+EntityUtils.toString(response.getEntity()));
                 return null;
             }
 
@@ -153,7 +160,7 @@ public class NetworkHelper {
         return null;
     }
 
-    public static String getUuid(String username) {
+    /*public static String getUuid(String username) {
         JsonElement response = getRequest("https://api.mojang.com/users/profiles/minecraft/" + username);
         if (response == null)
             return null;

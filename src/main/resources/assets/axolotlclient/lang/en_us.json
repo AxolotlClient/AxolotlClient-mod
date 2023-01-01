@@ -258,6 +258,8 @@
     "secondtextcolor": "Second Color",
     "semicardinalcolor": "Semi-Cardinal Color",
     "shadow": "Shadow",
+    "shareUrl.tooltip": "Must be a 'gartbin' server.",
+    "shareUrl": "Share Server URL",
     "shiftHorizontalScroll": "Scroll Horizontal (if key pressed)",
     "shiftHorizontalScroll.tooltip": "Allow scrolling horizontally if the specific key <br>is pressed. <br>The key is changeable in the Controls Menu.",
     "showA": "Show A",
