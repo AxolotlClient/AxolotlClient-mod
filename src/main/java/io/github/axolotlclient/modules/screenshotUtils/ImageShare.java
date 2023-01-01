@@ -150,10 +150,12 @@ public class ImageShare {
     }
 
     public ImageInstance downloadImage(String id){
-        if(id.contains(ScreenshotUtils.getInstance().shareUrl.get()+"/api/")){
+        if(id.contains(ScreenshotUtils.getInstance().shareUrl.get()+"/api/")) {
             return download(id);
-        } else if(id.contains("/")){
-            return null;
+        } else if(id.contains(ScreenshotUtils.getInstance().shareUrl.get()) && !id.contains("api")) {
+            return downloadImage(id.substring(id.lastIndexOf("/")));
+        } else if(id.startsWith("https://") && id.contains("api")) {
+            download(id);
         }
         return download(ScreenshotUtils.getInstance().shareUrl.get()+"/api/"+id);
     }

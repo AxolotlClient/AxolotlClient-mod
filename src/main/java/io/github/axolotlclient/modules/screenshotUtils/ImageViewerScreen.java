@@ -26,6 +26,7 @@ import com.google.common.hash.Hashing;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.texture.NativeImage;
 import io.github.axolotlclient.util.Logger;
+import io.github.axolotlclient.util.OSUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.tooltip.Tooltip;
@@ -47,9 +48,10 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.function.Supplier;
 
@@ -57,6 +59,8 @@ public class ImageViewerScreen extends Screen {
 
     // Icon from https://lucide.dev, "arrow-right"
     private static final Identifier downloadIcon = new Identifier("axolotlclient", "textures/go.png");
+
+    private static final URI aboutPage = URI.create("https://github.com/AxolotlClient/AxolotlClient-mod/wiki/Features#screenshot-sharing");
 
     private Identifier imageId;
     private NativeImageBackedTexture image;
@@ -68,7 +72,7 @@ public class ImageViewerScreen extends Screen {
     private TextFieldWidget urlBox;
     private double imgAspectRatio;
 
-    private final List<ButtonWidget> editButtons = new ArrayList<>();
+    private final HashMap<ButtonWidget, Boolean> editButtons = new HashMap<>();
 
     public ImageViewerScreen(Screen parent) {
         super(Text.of("Image viewer"));
@@ -150,8 +154,7 @@ public class ImageViewerScreen extends Screen {
                         Logger.info("Failed to save image!");
                     }
                 }).position(width - 60, 50).width(50).tooltip(Tooltip.create(Text.translatable("save_image"))).build();
-        addSelectableChild(save);
-        editButtons.add(save);
+        addImageButton(save, true);
 
         ButtonWidget copy = ButtonWidget.builder(Text.translatable("copyAction"), buttonWidget -> {
             Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new Transferable() {
@@ -173,8 +176,17 @@ public class ImageViewerScreen extends Screen {
             }, null);
             Logger.info("Copied image "+imageName+" to the clipboard!");
         }).position(width - 60, 75).width(50).tooltip(Tooltip.create(Text.translatable("copy_image"))).build();
-        addSelectableChild(copy);
-        editButtons.add(copy);
+        addImageButton(copy, true);
+
+        ButtonWidget about = ButtonWidget.builder(Text.translatable("aboutAction"), buttonWidget -> {
+            OSUtil.getOS().open(aboutPage);
+        }).position(width - 60, 100).width(50).tooltip(Tooltip.create(Text.translatable("about_image"))).build();
+        addImageButton(about, true);
+    }
+
+    private void addImageButton(ButtonWidget button, boolean right){
+        addSelectableChild(button);
+        editButtons.put(button, right);
     }
 
     @Override
@@ -192,8 +204,18 @@ public class ImageViewerScreen extends Screen {
             RenderSystem.setShaderTexture(0, imageId);
             drawTexture(matrices, width/2 - imageWidth/2, 50, 0, 0, imageWidth, imageHeight, imageWidth, imageHeight);
 
-            editButtons.forEach(buttonWidget -> {
-                buttonWidget.setX(width/2 + imageWidth/2 + 10);
+            editButtons.keySet().forEach(buttonWidget -> {
+
+                if(editButtons.get(buttonWidget)) {
+                    buttonWidget.setX(width / 2 + imageWidth / 2 + 10);
+                } else {
+                    buttonWidget.setX(width / 2 - imageWidth / 2 - 10 - buttonWidget.getWidth());
+                }
+
+                if(buttonWidget.getMessage().getString().toLowerCase(Locale.ENGLISH).contains("about")){
+                    buttonWidget.setY(50+imageHeight-buttonWidget.getHeight());
+                }
+
                 buttonWidget.render(matrices, mouseX, mouseY, delta);
             });
         } else {
