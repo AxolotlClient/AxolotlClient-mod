@@ -22,9 +22,16 @@
 
 package io.github.axolotlclient.modules.hud.gui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.axolotlclient.AxolotlclientConfig.Color;
-import io.github.axolotlclient.AxolotlclientConfig.options.*;
+
+import io.github.axolotlclient.AxolotlClientConfig.Color;
+import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.DoubleOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.Option;
+import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.hud.gui.component.HudEntry;
 import io.github.axolotlclient.modules.hud.util.DefaultOptions;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
@@ -35,9 +42,6 @@ import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.math.MathHelper;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.

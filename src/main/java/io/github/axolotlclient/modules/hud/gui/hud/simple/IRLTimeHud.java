@@ -27,8 +27,8 @@ import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import io.github.axolotlclient.AxolotlclientConfig.options.Option;
-import io.github.axolotlclient.AxolotlclientConfig.options.StringOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.Option;
+import io.github.axolotlclient.AxolotlClientConfig.options.StringOption;
 import io.github.axolotlclient.modules.hud.gui.entry.SimpleTextHudEntry;
 import net.minecraft.util.Identifier;
 

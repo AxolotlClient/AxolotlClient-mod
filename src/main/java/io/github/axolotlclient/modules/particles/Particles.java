@@ -28,8 +28,8 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.AxolotlclientConfig.Color;
-import io.github.axolotlclient.AxolotlclientConfig.options.*;
+import io.github.axolotlclient.AxolotlClientConfig.Color;
+import io.github.axolotlclient.AxolotlClientConfig.options.*;
 import io.github.axolotlclient.mixin.ParticleAccessor;
 import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.util.Util;

@@ -27,10 +27,10 @@ import java.util.List;
 
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.NetworkHelper;
-import io.github.axolotlclient.AxolotlclientConfig.AxolotlClientConfigConfig;
-import io.github.axolotlclient.AxolotlclientConfig.Color;
-import io.github.axolotlclient.AxolotlclientConfig.ConfigHolder;
-import io.github.axolotlclient.AxolotlclientConfig.options.*;
+import io.github.axolotlclient.AxolotlClientConfig.AxolotlClientConfigConfig;
+import io.github.axolotlclient.AxolotlClientConfig.Color;
+import io.github.axolotlclient.AxolotlClientConfig.common.ConfigHolder;
+import io.github.axolotlclient.AxolotlClientConfig.options.*;
 import io.github.axolotlclient.config.screen.CreditsScreen;
 import net.minecraft.client.MinecraftClient;
 
@@ -81,9 +81,9 @@ public class AxolotlClientConfig extends ConfigHolder {
     public final OptionCategory searchFilters = new OptionCategory("searchFilters");
 
     private final List<Option<?>> options = new ArrayList<>();
-    private final List<OptionCategory> categories = new ArrayList<>();
+    private final List<io.github.axolotlclient.AxolotlClientConfig.common.options.OptionCategory> categories = new ArrayList<>();
 
-    public final List<OptionCategory> config = new ArrayList<>();
+    public final List<io.github.axolotlclient.AxolotlClientConfig.common.options.OptionCategory> config = new ArrayList<>();
 
     public void add(Option<?> option) {
         options.add(option);
@@ -93,7 +93,7 @@ public class AxolotlClientConfig extends ConfigHolder {
         categories.add(cat);
     }
 
-    public List<OptionCategory> getCategories() {
+    public List<io.github.axolotlclient.AxolotlClientConfig.common.options.OptionCategory> getCategories() {
         return categories;
     }
 
@@ -106,7 +106,7 @@ public class AxolotlClientConfig extends ConfigHolder {
         categories.add(nametagOptions);
         categories.add(rendering);
 
-        categories.forEach(OptionCategory::clearOptions);
+        categories.forEach(io.github.axolotlclient.AxolotlClientConfig.common.options.OptionCategory::clearOptions);
 
         nametagOptions.add(showOwnNametag);
         nametagOptions.add(useShadows);

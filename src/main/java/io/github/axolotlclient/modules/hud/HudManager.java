@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 import org.lwjgl.input.Keyboard;
 
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
+import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.gui.component.HudEntry;

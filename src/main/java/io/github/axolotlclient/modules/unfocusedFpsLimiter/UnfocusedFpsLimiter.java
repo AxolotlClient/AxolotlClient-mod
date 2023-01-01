@@ -29,10 +29,10 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.FloatOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.IntegerOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
+import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.FloatOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.IntegerOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
 import lombok.Getter;
 import net.minecraft.client.MinecraftClient;

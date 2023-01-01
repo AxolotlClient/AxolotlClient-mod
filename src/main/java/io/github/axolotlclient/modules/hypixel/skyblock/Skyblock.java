@@ -22,9 +22,9 @@
 
 package io.github.axolotlclient.modules.hypixel.skyblock;
 
-import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.KeyBindOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
+import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.KeyBindOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.hypixel.AbstractHypixelMod;
 import lombok.Getter;
 import net.minecraft.client.options.KeyBinding;

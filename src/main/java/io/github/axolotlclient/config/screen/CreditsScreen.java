@@ -31,7 +31,7 @@ import org.lwjgl.opengl.GL11;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.AxolotlclientConfig.Color;
+import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.mixin.SoundManagerAccessor;
 import io.github.axolotlclient.mixin.SoundSystemAccessor;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
@@ -322,17 +322,17 @@ public class CreditsScreen extends Screen {
                 boolean hovered) {
             if (hovered) {
                 drawVerticalLine(x - 100, y, y + 20,
-                        io.github.axolotlclient.AxolotlclientConfig.Color.ERROR.getAsInt());
+                        io.github.axolotlclient.AxolotlClientConfig.Color.ERROR.getAsInt());
                 drawVerticalLine(x + 100, y, y + 20,
-                        io.github.axolotlclient.AxolotlclientConfig.Color.ERROR.getAsInt());
+                        io.github.axolotlclient.AxolotlClientConfig.Color.ERROR.getAsInt());
                 drawHorizontalLine(x - 100, x + 100, y + 20,
-                        io.github.axolotlclient.AxolotlclientConfig.Color.ERROR.getAsInt());
+                        io.github.axolotlclient.AxolotlClientConfig.Color.ERROR.getAsInt());
                 drawHorizontalLine(x - 100, x + 100, y,
-                        io.github.axolotlclient.AxolotlclientConfig.Color.ERROR.getAsInt());
+                        io.github.axolotlclient.AxolotlClientConfig.Color.ERROR.getAsInt());
             }
             this.hovered = hovered;
             drawCenteredString(MinecraftClient.getInstance().textRenderer, name, x, y + 5,
-                    hovered ? io.github.axolotlclient.AxolotlclientConfig.Color.SELECTOR_RED.getAsInt() : -1);
+                    hovered ? io.github.axolotlclient.AxolotlClientConfig.Color.SELECTOR_RED.getAsInt() : -1);
         }
 
         @Override
@@ -396,14 +396,14 @@ public class CreditsScreen extends Screen {
             RenderUtil.drawRectangle(x, y, width, height,
                     DARK_GRAY);
             DrawUtil.outlineRect(x, y, width, height,
-                    io.github.axolotlclient.AxolotlclientConfig.Color.BLACK.getAsInt());
+                    io.github.axolotlclient.AxolotlClientConfig.Color.BLACK.getAsInt());
 
             drawCenteredString(MinecraftClient.getInstance().textRenderer, credit.name, window.getWidth() / 2, y + 7,
                     -16784327);
 
             lines.forEach(
                     (integer, s) -> drawCenteredString(MinecraftClient.getInstance().textRenderer, s, x + width / 2,
-                            integer, io.github.axolotlclient.AxolotlclientConfig.Color.SELECTOR_GREEN.getAsInt()));
+                            integer, io.github.axolotlclient.AxolotlClientConfig.Color.SELECTOR_GREEN.getAsInt()));
         }
 
         public boolean isMouseOver(int mouseX, int mouseY) {

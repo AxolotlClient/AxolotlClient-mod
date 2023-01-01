@@ -25,9 +25,9 @@ package io.github.axolotlclient.modules.tnttime;
 import java.text.DecimalFormat;
 
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.IntegerOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
+import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.IntegerOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Style;

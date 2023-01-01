@@ -27,7 +27,7 @@ import java.util.Locale;
 import java.util.function.Supplier;
 
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.modules.freelook.Freelook;
 import net.minecraft.client.resource.language.I18n;
 

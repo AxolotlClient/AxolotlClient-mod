@@ -32,7 +32,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.GlStateManager;
 
-import io.github.axolotlclient.AxolotlclientConfig.options.*;
+import io.github.axolotlclient.AxolotlClientConfig.options.*;
 import io.github.axolotlclient.modules.hud.gui.component.DynamicallyPositionable;
 import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
 import io.github.axolotlclient.modules.hud.gui.layout.AnchorPoint;

@@ -34,14 +34,13 @@ import java.util.stream.Collectors;
 import org.jetbrains.annotations.Nullable;
 
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.EnumOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
+import io.github.axolotlclient.AxolotlClientConfig.options.*;
 import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.util.Logger;
 import io.github.axolotlclient.util.OSUtil;
 import io.github.axolotlclient.util.Util;
 import lombok.AllArgsConstructor;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
@@ -54,13 +53,18 @@ public class ScreenshotUtils extends AbstractModule {
 
     private final BooleanOption enabled = new BooleanOption("enabled", false);
 
+    public final StringOption shareUrl = new StringOption("shareUrl", "https://bin.gart.sh");
+
+    private final GenericOption openViewer = new GenericOption("imageViewer", "openViewer", (m1, m2) -> {
+        MinecraftClient.getInstance().openScreen(new ImageViewerScreen(MinecraftClient.getInstance().currentScreen));
+    });
+
     private final List<Action> actions = new ArrayList<>();
 
     private EnumOption autoExec;
 
     @Override
     public void init() {
-
 
         actions.add(new Action("copyAction",
                 Formatting.AQUA,
@@ -92,6 +96,12 @@ public class ScreenshotUtils extends AbstractModule {
                 new CustomClickEvent((file) -> OSUtil.getOS().open(file.toURI()))
         ));
 
+        actions.add(new Action("uploadAction", Formatting.LIGHT_PURPLE,
+                "upload_image",
+                new CustomClickEvent(file -> {
+                    ImageShare.getInstance().uploadImage(shareUrl.get(), file);
+                })));
+
         // If you have further ideas to what actions could be added here, please let us know!
 
         autoExec = new EnumOption("autoExec", Util.make(() -> {
@@ -102,7 +112,7 @@ public class ScreenshotUtils extends AbstractModule {
 
         }), "off");
 
-        category.add(enabled, autoExec);
+        category.add(enabled, autoExec, openViewer);
 
         AxolotlClient.CONFIG.general.addSubCategory(category);
     }

@@ -26,9 +26,9 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.IntegerOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
+import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.IntegerOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
 import net.legacyfabric.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.gui.screen.Screen;

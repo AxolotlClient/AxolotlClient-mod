@@ -30,9 +30,9 @@ import org.apache.commons.io.IOUtils;
 import com.google.gson.JsonSyntaxException;
 
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.FloatOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
+import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.FloatOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.mixin.ShaderEffectAccessor;
 import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.util.Logger;

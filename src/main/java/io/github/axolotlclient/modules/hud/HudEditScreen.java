@@ -29,9 +29,9 @@ import java.util.Optional;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
-import io.github.axolotlclient.AxolotlclientConfig.screen.OptionsScreenBuilder;
+import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
+import io.github.axolotlclient.AxolotlClientConfig.screen.OptionsScreenBuilder;
 import io.github.axolotlclient.modules.hud.gui.component.HudEntry;
 import io.github.axolotlclient.modules.hud.snapping.SnappingHelper;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
@@ -181,7 +181,7 @@ public class HudEditScreen extends Screen {
                 break;
             case 1:
                 MinecraftClient.getInstance().openScreen(new OptionsScreenBuilder(this,
-                        new OptionCategory("config", false).addSubCategories(AxolotlClient.CONFIG.getCategories()),
+                        (OptionCategory) new OptionCategory("config", false).addSubCategories(AxolotlClient.CONFIG.getCategories()),
                         AxolotlClient.modid));
                 break;
             case 0:

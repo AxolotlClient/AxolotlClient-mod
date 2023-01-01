@@ -22,11 +22,11 @@
 
 package io.github.axolotlclient.modules.hypixel.levelhead;
 
-import io.github.axolotlclient.AxolotlclientConfig.Color;
-import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.ColorOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.EnumOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
+import io.github.axolotlclient.AxolotlClientConfig.Color;
+import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.ColorOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.EnumOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.hypixel.AbstractHypixelMod;
 
 public class LevelHead implements AbstractHypixelMod {

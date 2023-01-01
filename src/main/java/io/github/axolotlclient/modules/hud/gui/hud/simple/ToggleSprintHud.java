@@ -32,9 +32,9 @@ import java.util.Random;
 
 import org.lwjgl.input.Keyboard;
 
-import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.Option;
-import io.github.axolotlclient.AxolotlclientConfig.options.StringOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.Option;
+import io.github.axolotlclient.AxolotlClientConfig.options.StringOption;
 import io.github.axolotlclient.modules.hud.gui.entry.SimpleTextHudEntry;
 import lombok.Getter;
 import net.legacyfabric.fabric.api.client.keybinding.v1.KeyBindingHelper;

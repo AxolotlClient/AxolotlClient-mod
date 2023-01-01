@@ -29,11 +29,11 @@ import java.util.UUID;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 
-import io.github.axolotlclient.AxolotlclientConfig.AxolotlClientConfigManager;
-import io.github.axolotlclient.AxolotlclientConfig.ConfigManager;
-import io.github.axolotlclient.AxolotlclientConfig.DefaultConfigManager;
-import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
+import io.github.axolotlclient.AxolotlClientConfig.AxolotlClientConfigManager;
+import io.github.axolotlclient.AxolotlClientConfig.DefaultConfigManager;
+import io.github.axolotlclient.AxolotlClientConfig.common.ConfigManager;
+import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.config.AxolotlClientConfig;
 import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.modules.ModuleLoader;
@@ -94,10 +94,10 @@ public class AxolotlClient implements ClientModInitializer {
         CONFIG.config.addAll(CONFIG.getCategories());
         CONFIG.config.add(config);
 
-        AxolotlClientConfigManager.registerConfig(modid, CONFIG, configManager = new DefaultConfigManager(modid,
+        AxolotlClientConfigManager.getInstance().registerConfig(modid, CONFIG, configManager = new DefaultConfigManager(modid,
                 FabricLoader.getInstance().getConfigDir().resolve("AxolotlClient.json"), CONFIG.config));
-        AxolotlClientConfigManager.addIgnoredName(modid, "x");
-        AxolotlClientConfigManager.addIgnoredName(modid, "y");
+        AxolotlClientConfigManager.getInstance().addIgnoredName(modid, "x");
+        AxolotlClientConfigManager.getInstance().addIgnoredName(modid, "y");
 
         modules.forEach(AbstractModule::lateInit);
 

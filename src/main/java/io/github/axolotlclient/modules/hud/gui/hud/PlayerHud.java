@@ -27,9 +27,9 @@ import java.util.List;
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
 
-import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.DoubleOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.Option;
+import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.DoubleOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.Option;
 import io.github.axolotlclient.modules.hud.gui.entry.BoxHudEntry;
 import io.github.axolotlclient.util.Hooks;
 import lombok.Getter;
@@ -49,7 +49,7 @@ public class PlayerHud extends BoxHudEntry {
 
     public static final Identifier ID = new Identifier("kronhud", "playerhud");
 
-    private final DoubleOption rotation = new DoubleOption("rotation", 0, 0, 360);
+    private final DoubleOption rotation = new DoubleOption("rotation", 0d, 0d, 360d);
     private final BooleanOption dynamicRotation = new BooleanOption("dynamicrotation", true);
     private final BooleanOption autoHide = new BooleanOption("autoHide", false);
 

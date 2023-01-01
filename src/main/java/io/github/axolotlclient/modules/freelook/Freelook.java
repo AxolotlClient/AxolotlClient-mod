@@ -25,9 +25,9 @@ package io.github.axolotlclient.modules.freelook;
 import org.lwjgl.input.Keyboard;
 
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.EnumOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.OptionCategory;
+import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.EnumOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.util.FeatureDisabler;
 import net.legacyfabric.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -49,8 +49,8 @@ public class Freelook extends AbstractModule {
     private final OptionCategory category = new OptionCategory("freelook");
     public final BooleanOption enabled = new BooleanOption("enabled", false);
     private final EnumOption mode = new EnumOption("mode",
-            new String[]{"snap_perspective", "freelook"},
             value -> FeatureDisabler.update(),
+            new String[]{"snap_perspective", "freelook"},
             "freelook");
     private final EnumOption perspective = new EnumOption("perspective", Perspective.values(),
             Perspective.THIRD_PERSON_BACK.toString());

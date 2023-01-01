@@ -22,9 +22,9 @@
 
 package io.github.axolotlclient.modules.hud.util;
 
-import io.github.axolotlclient.AxolotlclientConfig.options.BooleanOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.DoubleOption;
-import io.github.axolotlclient.AxolotlclientConfig.options.EnumOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.DoubleOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.EnumOption;
 import io.github.axolotlclient.modules.hud.gui.component.HudEntry;
 import io.github.axolotlclient.modules.hud.gui.layout.AnchorPoint;
 import io.github.axolotlclient.modules.hud.gui.layout.CardinalOrder;
@@ -40,15 +40,15 @@ import lombok.experimental.UtilityClass;
 public class DefaultOptions {
 
     public static DoubleOption getX(double defaultX, HudEntry entry) {
-        return new DoubleOption("x", value -> entry.onBoundsUpdate(), defaultX, 0, 1);
+        return new DoubleOption("x", value -> entry.onBoundsUpdate(), defaultX, 0d, 1d);
     }
 
     public static DoubleOption getY(double defaultY, HudEntry entry) {
-        return new DoubleOption("y", value -> entry.onBoundsUpdate(), defaultY, 0, 1);
+        return new DoubleOption("y", value -> entry.onBoundsUpdate(), defaultY, 0d, 1d);
     }
 
     public static DoubleOption getScale(HudEntry entry) {
-        return new DoubleOption("scale", value -> entry.onBoundsUpdate(), 1, 0, 2);
+        return new DoubleOption("scale", value -> entry.onBoundsUpdate(), 1d, 0d, 2d);
     }
 
     public static BooleanOption getEnabled() {
