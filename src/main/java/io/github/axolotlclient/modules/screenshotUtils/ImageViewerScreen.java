@@ -5,8 +5,6 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -41,8 +39,6 @@ public class ImageViewerScreen extends Screen {
 
     private TextFieldWidget urlBox;
     private double imgAspectRatio;
-
-    private final List<ButtonWidget> editButtons = new ArrayList<>();
 
     public ImageViewerScreen(Screen parent) {
         super();
@@ -113,12 +109,21 @@ public class ImageViewerScreen extends Screen {
 
         buttons.add(new ButtonWidget(25, width/2-75, height-50, 150, 20, I18n.translate("gui.back")));
 
-        ButtonWidget save = new ButtonWidget(26, width - 60, 50, 50, 20, I18n.translate("saveAction"));
+        ButtonWidget save = new ButtonWidget(26, width - 60, 50, 50, 20, I18n.translate("saveAction")){
+            @Override
+            public void renderToolTip(int mouseX, int mouseY) {
+                ImageViewerScreen.this.renderTooltip(I18n.translate("save_image"), mouseX, mouseY);
+            }
+        };
+        buttons.add(save);
 
-        editButtons.add(save);
-
-        ButtonWidget copy = new ButtonWidget(27, width - 60, 75, 50, 20, I18n.translate("copyAction"));
-        editButtons.add(copy);
+        ButtonWidget copy = new ButtonWidget(27, width - 60, 75, 50, 20, I18n.translate("copyAction")){
+            @Override
+            public void renderToolTip(int mouseX, int mouseY) {
+                ImageViewerScreen.this.renderTooltip(I18n.translate("copy_image"), mouseX, mouseY);
+            }
+        };
+        buttons.add(copy);
     }
 
 
@@ -127,7 +132,7 @@ public class ImageViewerScreen extends Screen {
     protected void buttonClicked(ButtonWidget button) {
         switch (button.id){
             case 24:
-                Logger.info("Downloading image from "+urlBox.getText());
+                //Logger.info("Downloading image from "+urlBox.getText());
                 imageId = downloadImage(url = urlBox.getText());
                 init(MinecraftClient.getInstance(), width, height);
                 break;
@@ -174,23 +179,13 @@ public class ImageViewerScreen extends Screen {
     protected void mouseClicked(int mouseX, int mouseY, int button) {
         super.mouseClicked(mouseX, mouseY, button);
         urlBox.mouseClicked(mouseX, mouseY, button);
-
-        if(button == 0){
-            editButtons.forEach(buttonWidget -> {
-                if (buttonWidget.isMouseOver(this.client, mouseX, mouseY)) {
-                    buttonWidget.playDownSound(this.client.getSoundManager());
-                    this.buttonClicked(buttonWidget);
-                }
-            });
-        }
     }
 
     @Override
     public void render(int mouseX, int mouseY, float delta) {
         renderBackground();
-        GlStateManager.enableTexture();
 
-        super.render(mouseX, mouseY, delta);
+
         urlBox.render();
 
         if(imageId != null){
@@ -202,12 +197,22 @@ public class ImageViewerScreen extends Screen {
             MinecraftClient.getInstance().getTextureManager().bindTexture(imageId);
             drawTexture(width/2 - imageWidth/2, 50, 0, 0, imageWidth, imageHeight, imageWidth, imageHeight);
 
-            editButtons.forEach(buttonWidget -> {
-                buttonWidget.x = width/2 + imageWidth/2 + 10;
-                buttonWidget.render(MinecraftClient.getInstance(), mouseX, mouseY);
-            });
+            buttons.stream().filter(buttonWidget -> buttonWidget.id>25).forEach(buttonWidget -> buttonWidget.x = width/2 + imageWidth/2 + 10);
+
+            buttons.stream().filter(buttonWidget -> buttonWidget.id>25).filter(buttonWidget -> !buttonWidget.visible).forEach(buttonWidget -> buttonWidget.visible = true);
+
         } else {
             drawCenteredString(MinecraftClient.getInstance().textRenderer, I18n.translate("viewScreenshot"), width/2, height/4, -1);
+            buttons.stream().filter(buttonWidget -> buttonWidget.id>25).filter(buttonWidget -> buttonWidget.visible).forEach(buttonWidget -> buttonWidget.visible = false);
+        }
+
+        super.render(mouseX, mouseY, delta);
+
+        for(ButtonWidget buttonWidget : this.buttons) {
+            if (buttonWidget.isHovered()) {
+                buttonWidget.renderToolTip(mouseX, mouseY);
+                break;
+            }
         }
     }
 

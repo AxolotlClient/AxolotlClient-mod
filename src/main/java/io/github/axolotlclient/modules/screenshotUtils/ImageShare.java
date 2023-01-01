@@ -34,6 +34,7 @@ import net.minecraft.client.resource.language.I18n;
 import net.minecraft.text.HoverEvent;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Style;
+import net.minecraft.util.Formatting;
 
 public class ImageShare {
 
@@ -49,23 +50,26 @@ public class ImageShare {
     }
 
     public void uploadImage(String url, File file){
-        String downloadUrl = upload(url+"/api/stream", file);
+        String downloadUrl = upload(url + "/api/stream", file);
 
-        if(downloadUrl.isEmpty()){
+        if (downloadUrl.isEmpty()) {
             Util.sendChatMessage(new LiteralText(I18n.translate("imageUploadFailure")));
         } else {
-            Util.sendChatMessage(new LiteralText(I18n.translate("imageUploadSuccess") +" ")
-                    .append(new LiteralText(downloadUrl)
+            Util.sendChatMessage(new LiteralText(I18n.translate("imageUploadSuccess") + " ")
+                    .append(new LiteralText(url + "/" + downloadUrl)
                             .setStyle(new Style()
-                                    .setClickEvent(new ScreenshotUtils.CustomClickEvent(null){
-                                                       @Override
-                                                       public void doAction() {
-                                                           Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(downloadUrl), null);
-                                                       }
-                                                   }
-                                            )
+                                    .setUnderline(true)
+                                    .setFormatting(Formatting.DARK_PURPLE)
+                                    .setClickEvent(new ScreenshotUtils.CustomClickEvent(null) {
+                                        @Override
+                                        public void doAction() {
+                                            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(url + "/" + downloadUrl), null);
+                                        }
+                                    }
+                                    )
                                     .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(I18n.translate("clickToCopy")))))));
         }
+
     }
 
     public String upload(String url, File file){
