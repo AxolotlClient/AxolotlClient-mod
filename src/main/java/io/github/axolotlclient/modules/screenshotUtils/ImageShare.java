@@ -45,6 +45,7 @@ import org.apache.http.util.EntityUtils;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 
 import io.github.axolotlclient.NetworkHelper;
@@ -147,7 +148,7 @@ public class ImageShare {
                     JsonElement element = new JsonParser().parse(body);
 
                     return element.getAsJsonObject().get("pasteId").getAsString();
-                } catch (Exception e) {
+                } catch (JsonParseException e) {
                     Logger.warn("Not Json data: \n" + body);
                 }
             }
