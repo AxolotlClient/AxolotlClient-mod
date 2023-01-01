@@ -32,7 +32,7 @@
 				"versions": ">=0.16.0-"
 			},
 			{
-				"id": "quilt_base",
+				"id": "quilt_resource_loader",
 				"versions": ">=1.0.0-"
 			},
 			{

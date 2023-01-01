@@ -13,6 +13,7 @@ import net.minecraft.text.ClickEvent;
 import net.minecraft.text.HoverEvent;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.entity.StringEntity;
@@ -43,15 +44,16 @@ public class ImageShare {
     }
 
     public void uploadImage(String url, File file){
-        String downloadUrl = upload(url+"/api/stream", file);
+        String downloadUrl = upload(url + "/api/stream", file);
 
-        if(downloadUrl.isEmpty()){
+        if (downloadUrl.isEmpty()) {
             Util.sendChatMessage(Text.translatable("imageUploadFailure"));
         } else {
             Util.sendChatMessage(Text.translatable("imageUploadSuccess").append(" ")
-                    .append(Text.literal(downloadUrl)
+                    .append(Text.literal(url + "/" + downloadUrl)
                             .setStyle(Style.EMPTY
-                                    .withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, downloadUrl))
+                                    .withFormatting(Formatting.UNDERLINE, Formatting.DARK_PURPLE)
+                                    .withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, url + "/" + downloadUrl))
                                     .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.translatable("clickToCopy"))))));
         }
     }

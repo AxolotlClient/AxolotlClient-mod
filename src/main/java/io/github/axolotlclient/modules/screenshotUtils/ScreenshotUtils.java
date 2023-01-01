@@ -38,6 +38,7 @@ import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.io.File;
+import java.net.URI;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -83,7 +84,7 @@ public class ScreenshotUtils extends AbstractModule {
                     new Thread("Image Uploader"){
                         @Override
                         public void run() {
-                            ImageShare.getInstance().uploadImage(shareUrl.get(), file);
+                            ImageShare.getInstance().uploadImage(shareUrl.get().trim(), file);
                         }
                     }.start();
                 })));
@@ -102,7 +103,7 @@ public class ScreenshotUtils extends AbstractModule {
 
     @Override
     public void init() {
-        category.add(enabled, autoExec, shareUrl, new GenericOption("imageViewer", "Open Viewer", (m1, m2) -> {
+        category.add(enabled, autoExec, shareUrl, new GenericOption("imageViewer", "openViewer", (m1, m2) -> {
             MinecraftClient.getInstance().setScreen(new ImageViewerScreen(MinecraftClient.getInstance().currentScreen));
         }));
 

@@ -29,7 +29,6 @@ repositories {
 
 	mavenLocal()
 	maven { url 'https://jitpack.io' }
-	mavenCentral()
 }
 
 dependencies {
@@ -39,17 +38,15 @@ dependencies {
 
 	modImplementation "org.quiltmc:quilt-loader:${project.loader_version}"
 
-	modImplementation "org.quiltmc.quilted-fabric-api:quilted-fabric-api:5.0.0-alpha.7+0.70.0-1.19.3"
+	//modImplementation "org.quiltmc.quilted-fabric-api:quilted-fabric-api:5.0.0-alpha.7+0.70.0-1.19.3"
 
-	modImplementation include("io.github.axolotlclient:AxolotlClient-config:${project.config_version}+${project.minecraft_version}"){
-		exclude group: "org.quiltmc.qsl.core"
-		exclude group: "org.quiltmc.qsl.management"
-		exclude group: "com.terraformersmc"
-	}
+
+	modImplementation include("org.quiltmc.qsl.core:resource_loader:${qsl_version}+${minecraft_version}")
+	modImplementation include("io.github.axolotlclient:AxolotlClient-config:${project.config_version}+${project.minecraft_version}")
 
 	//modImplementation files("modmenuDummy.jar")
 
-	modImplementation "com.terraformersmc:modmenu:5.0.2"
+	modApi "com.terraformersmc:modmenu:5.0.2"
 
 	include( implementation('com.github.JnCrMx:discord-game-sdk4j:v0.5.5'))
 

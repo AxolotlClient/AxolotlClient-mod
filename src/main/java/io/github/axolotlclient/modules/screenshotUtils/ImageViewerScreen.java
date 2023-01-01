@@ -6,6 +6,7 @@ import com.mojang.blaze3d.texture.NativeImage;
 import io.github.axolotlclient.util.Logger;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.render.GameRenderer;
@@ -96,7 +97,7 @@ public class ImageViewerScreen extends Screen {
 
         addDrawableChild(new ButtonWidget(width/2 + 110, imageId == null ? height/2-10 : height-80,
                 20, 20, Text.translatable("download"), buttonWidget -> {
-                    Logger.info("Downloading image from "+urlBox.getText());
+                    //Logger.info("Downloading image from "+urlBox.getText());
                     imageId = downloadImage(url = urlBox.getText());
                     clearAndInit();
                 }, Supplier::get){
@@ -122,10 +123,11 @@ public class ImageViewerScreen extends Screen {
                 buttonWidget -> {
                     try {
                         Files.write(QuiltLoader.getGameDir().resolve("screenshots").resolve("_share-"+imageName), Objects.requireNonNull(image.getImage()).getBytes());
+                        Logger.info("Saved image "+imageName+" to screenshots folder!");
                     } catch (IOException e) {
                         Logger.info("Failed to save image!");
                     }
-                }).position(width - 60, 50).width(50).build();
+                }).position(width - 60, 50).width(50).tooltip(Tooltip.create(Text.translatable("save_image"))).build();
         addSelectableChild(save);
         editButtons.add(save);
 
@@ -148,7 +150,7 @@ public class ImageViewerScreen extends Screen {
                 }
             }, null);
             Logger.info("Copied image "+imageName+" to the clipboard!");
-        }).position(width - 60, 75).width(50).build();
+        }).position(width - 60, 75).width(50).tooltip(Tooltip.create(Text.translatable("copy_image"))).build();
         addSelectableChild(copy);
         editButtons.add(copy);
     }
