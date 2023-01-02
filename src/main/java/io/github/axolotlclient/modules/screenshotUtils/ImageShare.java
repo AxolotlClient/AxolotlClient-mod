@@ -153,7 +153,7 @@ public class ImageShare {
         if(id.contains(ScreenshotUtils.getInstance().shareUrl.get()+"/api/")) {
             return download(id);
         } else if(id.contains(ScreenshotUtils.getInstance().shareUrl.get()) && !id.contains("api")) {
-            return downloadImage(id.substring(id.lastIndexOf("/")));
+            return downloadImage(id.substring(id.lastIndexOf("/")+1));
         } else if(id.startsWith("https://") && id.contains("api")) {
             download(id);
         }
