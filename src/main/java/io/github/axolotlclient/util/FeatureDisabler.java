@@ -26,10 +26,19 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.function.Supplier;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.modules.freelook.Freelook;
+import io.github.axolotlclient.modules.hud.HudManager;
+import io.github.axolotlclient.modules.hud.gui.hud.simple.ToggleSprintHud;
+import net.legacyfabric.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
+import net.legacyfabric.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.resource.language.I18n;
+import net.minecraft.util.Identifier;
 
 public class FeatureDisabler {
 
@@ -40,10 +49,36 @@ public class FeatureDisabler {
 
     private static String currentAddress;
 
+    private static final Identifier channelName = new Identifier("axolotlclient", "block_mods");
+
+    // Features that can be disabled on the server's behalf
+    // If something should be added here, feel free to ping us via your favorite way.
+    private static final HashMap<String, BooleanOption> features = Util.make(()->{
+        HashMap<String, BooleanOption> features = new HashMap<>();
+        features.put("freelook", Freelook.getInstance().enabled);
+        features.put("timechanger", AxolotlClient.CONFIG.timeChangerEnabled);
+        features.put("fullbright", AxolotlClient.CONFIG.fullBright);
+        return features;
+    });
+
     public static void init() {
         setServers(AxolotlClient.CONFIG.fullBright, NONE, "gommehd");
         setServers(AxolotlClient.CONFIG.timeChangerEnabled, NONE, "gommehd");
         setServers(Freelook.getInstance().enabled, () -> Freelook.getInstance().needsDisabling(), "hypixel", "mineplex", "gommehd", "nucleoid");
+        setServers(((ToggleSprintHud) HudManager.getInstance().get(ToggleSprintHud.ID)).toggleSneak, NONE, "hypixel");
+
+        ClientPlayConnectionEvents.INIT.register((handler0, client0) ->
+                        ClientPlayNetworking.registerGlobalReceiver(channelName.toString(), (client, handler, buf, responseSender) -> {
+                            JsonArray array = new JsonParser().parse(buf.readString(32767)).getAsJsonArray();
+                            for (JsonElement element : array) {
+                                try {
+                                    features.get(element.getAsString()).setForceOff(true, "ban_reason");
+                                } catch (Exception e) {
+                                    Logger.error("Failed to disable " + element.getAsString() + "!");
+                                }
+                            }
+                        })
+        );
     }
 
     public static void onServerJoin(String address) {
@@ -53,6 +88,7 @@ public class FeatureDisabler {
 
     public static void clear() {
         disabledServers.keySet().forEach(option -> option.setForceOff(false, ""));
+        features.values().forEach(option -> option.setForceOff(false, ""));
     }
 
     private static void disableOption(BooleanOption option, String[] servers, String currentServer) {
