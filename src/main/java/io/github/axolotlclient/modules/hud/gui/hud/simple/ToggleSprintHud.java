@@ -52,7 +52,7 @@ public class ToggleSprintHud extends SimpleTextHudEntry {
 
     public static final Identifier ID = new Identifier("kronhud", "togglesprint");
     private final BooleanOption toggleSprint = new BooleanOption("toggleSprint", ID.getPath(), false);
-    private final BooleanOption toggleSneak = new BooleanOption("toggleSneak", ID.getPath(), false);
+    public final BooleanOption toggleSneak = new BooleanOption("toggleSneak", ID.getPath(), false);
     private final BooleanOption randomPlaceholder = new BooleanOption("randomPlaceholder", ID.getPath(), false);
     private final StringOption placeholder = new StringOption("placeholder", ID.getPath(), "No keys pressed");
 

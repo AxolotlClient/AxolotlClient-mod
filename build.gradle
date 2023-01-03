@@ -40,7 +40,7 @@ dependencies {
 
 	//modImplementation "org.quiltmc.quilted-fabric-api:quilted-fabric-api:5.0.0-alpha.7+0.70.0-1.19.3"
 
-
+	modImplementation include("org.quiltmc.qsl.core:networking:${qsl_version}+${minecraft_version}")
 	modImplementation include("org.quiltmc.qsl.core:resource_loader:${qsl_version}+${minecraft_version}")
 	modImplementation include("io.github.axolotlclient:AxolotlClient-config:${project.config_version}+${project.minecraft_version}")
 

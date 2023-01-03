@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021-2022 moehreag <moehreag@gmail.com> & Contributors
+ * Copyright © 2021-2023 moehreag <moehreag@gmail.com> & Contributors
  *
  * This file is part of AxolotlClient.
  *
@@ -52,7 +52,6 @@ public abstract class GameMenuScreenMixin {
     @ModifyArg(method = "initWidgets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget;builder(Lnet/minecraft/text/Text;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;)Lnet/minecraft/client/gui/widget/ButtonWidget$Builder;", ordinal = 1), index = 1)
     private ButtonWidget.PressAction axolotlclient$clearFeatureRestrictions(ButtonWidget.PressAction onPress){
         return (buttonWidget) -> {
-            FeatureDisabler.clear();
             if (Objects.equals(HypixelMods.getInstance().cacheMode.get(),
                     HypixelMods.HypixelCacheMode.ON_CLIENT_DISCONNECT.toString())) {
                 HypixelAbstractionLayer.clearPlayerData();
