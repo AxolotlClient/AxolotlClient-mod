@@ -1,6 +1,6 @@
-# AxolotlClient-mod (1.19.2)
+# AxolotlClient-mod (1.19.3)
 
-A Complete (nearly) mod to have various features on Quilt, 1.19.2
+A Complete (nearly) mod to have various features on Quilt, 1.19.3
 
 *Also available in other Languages: [Türkçe](doc/README-tr.md)*
 
