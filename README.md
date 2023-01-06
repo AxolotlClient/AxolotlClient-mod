@@ -1,31 +1,66 @@
-# AxolotlClient-mod (1.19.2)
+# AxolotlClient-mod (1.19.3)
 
-A Complete (nearly) mod to have various features on Quilt, 1.19.2
+A Complete (nearly) mod to have various features on Quilt, 1.19.3
 
 *Also available in other Languages: [Türkçe](doc/README-tr.md)*
 
 ### Features
 
-- an implementation of Custom Skies
-- Zoom key
-- various Hud modules (port of [KronHUD](https://github.com/DarkKronicle/KronHUD))
-    - including, but not limited to:
-        - Chat
-        - Scoreboard
-        - CPS
-        - FPS
-        - Ping
-        - Bossbar
-        - Coordinates
-        - and others!
-- Hypixel Mods
-    - AutoGG / GF / GLHF
-    - LevelHead
-    - AutoTip
+- Custom Skies Implementation
+- Freelook (Disabled on some servers)
+- Nametag
+- Beacon Beams
+- Dynamic FOV
+- Low Fire / Low Shield
+- Hit Color
+- Screenshot Utils
+- Zoom
+- Various Hud Modules (port of [KronHUD](https://github.com/DarkKronicle/KronHUD))
+  - including, but not limited to:
+    - Ping
+    - FPS
+    - CPS
+    - Armor
+    - Potions
+    - Keystrokes
+    - ToggleModifiers
+    - Server IP
+    - Icon
+    - Speed
+    - Scoreboard
+    - Crosshair
+    - Coordinates
+    - ActionBar
+    - BossBar
+    - Arrow
+    - Item Update
+    - Pack Display
+    - Real Time
+    - Reach
+    - Hotbar
+    - Memory
+    - PlayerCount
+    - Compass
+    - TPS (Ticks per second)
+    - Combo
+    - Player
+    - Chat
+- Hypixel Features
+  - AutoGG / GF / GLHF
+  - LevelHead
+  - Nick Hider
+  - Skyblock
+  - AutoTip
+  - AutoBoop
 - Custom Block Outlines
+- Time Changer
+- Fullbright
+- Motion Blur
+- TNT Time
+- Scrollable Tooltips
+- Particles
 - Discord RPC
-- Badges for players using the mod
-- and more!
+- Custom Badges
 
 ### Downloads
 
