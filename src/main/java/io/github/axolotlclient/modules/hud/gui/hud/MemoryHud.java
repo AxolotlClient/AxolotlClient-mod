@@ -25,8 +25,13 @@ package io.github.axolotlclient.modules.hud.gui.hud;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.ColorOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.EnumOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.Option;
+import io.github.axolotlclient.modules.hud.gui.component.DynamicallyPositionable;
 import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
+import io.github.axolotlclient.modules.hud.gui.layout.AnchorPoint;
+import io.github.axolotlclient.modules.hud.gui.layout.Justification;
+import io.github.axolotlclient.modules.hud.util.DefaultOptions;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.resource.language.I18n;
@@ -35,7 +40,7 @@ import net.minecraft.util.Identifier;
 
 import java.util.List;
 
-public class MemoryHud extends TextHudEntry {
+public class MemoryHud extends TextHudEntry implements DynamicallyPositionable {
 
     public static final Identifier ID = new Identifier("axolotlclient", "memoryhud");
 
@@ -46,6 +51,10 @@ public class MemoryHud extends TextHudEntry {
     private final BooleanOption showGraph = new BooleanOption("showGraph", true);
     private final BooleanOption showText = new BooleanOption("showText", false);
     private final BooleanOption showAllocated = new BooleanOption("showAllocated", false);
+
+    protected final EnumOption justification = new EnumOption("justification", Justification.values(),
+            Justification.CENTER.toString());
+    protected final EnumOption anchor = DefaultOptions.getAnchorPoint();
 
     public MemoryHud() {
         super(150, 27, true);
@@ -67,12 +76,15 @@ public class MemoryHud extends TextHudEntry {
         }
 
         if (showText.get()) {
-            drawString(matrices, getMemoryLine(), pos.x,
+            String mem = getMemoryLine();
+            drawString(matrices, mem, pos.x + Justification.valueOf(justification.get()).getXOffset(client.textRenderer.getWidth(mem), getWidth() - 4) + 2,
                     pos.y + (Math.round((float) height / 2) - 4) - (showAllocated.get() ? 4 : 0),
                     textColor.get().getAsInt(), shadow.get());
 
             if (showAllocated.get()) {
-                drawString(matrices, getAllocationLine(), pos.x, pos.y + (Math.round((float) height / 2) - 4) + 4,
+                String alloc = getAllocationLine();
+                drawString(matrices, alloc, pos.x + Justification.valueOf(justification.get()).getXOffset(client.textRenderer.getWidth(alloc), getWidth() - 4) + 2,
+                        pos.y + (Math.round((float) height / 2) - 4) + 4,
                         textColor.get().getAsInt(), shadow.get());
             }
         }
@@ -94,17 +106,24 @@ public class MemoryHud extends TextHudEntry {
         }
 
         if (showText.get()) {
-            drawString(matrices, "300MiB/1024MiB", pos.x,
+            String mem = "300MiB/1024MiB";
+            drawString(matrices, mem,
+                    pos.x + Justification.valueOf(justification.get()).getXOffset(client.textRenderer.getWidth(mem), getWidth() - 4) + 2,
                     pos.y + (Math.round((float) height / 2) - 4) - (showAllocated.get() ? 4 : 0), Color.WHITE,
                     shadow.get());
             if (showAllocated.get()) {
-                drawString(matrices, I18n.translate("allocated") + ": 976MiB", pos.x,
+                String alloc = I18n.translate("allocated") + ": 976MiB";
+                drawString(matrices, alloc,
+                        pos.x + Justification.valueOf(justification.get()).getXOffset(client.textRenderer.getWidth(alloc), getWidth() - 4) + 2,
                         pos.y + (Math.round((float) height / 2) - 4) + 4, textColor.get(), shadow.get());
             }
         }
 
         if (!showGraph.get() && !showText.get()) {
-            drawString(matrices, I18n.translate(ID.getPath()), pos.x, pos.y + (Math.round((float) height / 2) - 4),
+            String value = I18n.translate(ID.getPath());
+            drawString(matrices, value,
+                    pos.x + Justification.valueOf(justification.get()).getXOffset(client.textRenderer.getWidth(value), getWidth() - 4) + 2,
+                    pos.y + (Math.round((float) height / 2) - 4),
                     Color.WHITE, shadow.get());
         }
     }
@@ -135,6 +154,8 @@ public class MemoryHud extends TextHudEntry {
     @Override
     public List<Option<?>> getConfigurationOptions() {
         List<Option<?>> options = super.getConfigurationOptions();
+        options.add(justification);
+        options.add(anchor);
         options.add(showGraph);
         options.add(graphUsedColor);
         options.add(graphFreeColor);
@@ -155,5 +176,10 @@ public class MemoryHud extends TextHudEntry {
 
     private static String toMiB(long bytes) {
         return (bytes / 1024L / 1024L) + "MiB";
+    }
+
+    @Override
+    public AnchorPoint getAnchor() {
+        return AnchorPoint.valueOf(anchor.get());
     }
 }
