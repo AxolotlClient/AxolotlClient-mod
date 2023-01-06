@@ -27,8 +27,13 @@ import java.util.List;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.ColorOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.EnumOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.Option;
+import io.github.axolotlclient.modules.hud.gui.component.DynamicallyPositionable;
 import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
+import io.github.axolotlclient.modules.hud.gui.layout.AnchorPoint;
+import io.github.axolotlclient.modules.hud.gui.layout.Justification;
+import io.github.axolotlclient.modules.hud.util.DefaultOptions;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.resource.language.I18n;
@@ -40,9 +45,13 @@ import net.minecraft.util.Identifier;
  * @license GPL-3.0
  */
 
-public class MemoryHud extends TextHudEntry {
+public class MemoryHud extends TextHudEntry implements DynamicallyPositionable {
 
     public static final Identifier ID = new Identifier("axolotlclient", "memoryhud");
+
+    protected final EnumOption justification = new EnumOption("justification", Justification.values(),
+            Justification.CENTER.toString());
+    protected final EnumOption anchor = DefaultOptions.getAnchorPoint();
 
     private final Rectangle graph = new Rectangle(0, 0, 0, 0);
     private final ColorOption graphUsedColor = new ColorOption("graphUsedColor",
@@ -74,12 +83,14 @@ public class MemoryHud extends TextHudEntry {
         }
 
         if (showText.get()) {
-            drawString(getMemoryLine(), pos.x,
+            String mem = getMemoryLine();
+            drawString(mem, pos.x + Justification.valueOf(justification.get()).getXOffset(client.textRenderer.getStringWidth(mem), getWidth() - 4) + 2,
                     pos.y + (Math.round((float) height / 2) - 4) - (showAllocated.get() ? 4 : 0),
                     textColor.get().getAsInt(), shadow.get());
 
             if (showAllocated.get()) {
-                drawString(getAllocationLine(), pos.x, pos.y + (Math.round((float) height / 2) - 4) + 4,
+                String alloc = getAllocationLine();
+                drawString(alloc, pos.x + Justification.valueOf(justification.get()).getXOffset(client.textRenderer.getStringWidth(alloc), getWidth() - 4) + 2, pos.y + (Math.round((float) height / 2) - 4) + 4,
                         textColor.get().getAsInt(), shadow.get());
             }
         }
@@ -101,17 +112,21 @@ public class MemoryHud extends TextHudEntry {
         }
 
         if (showText.get()) {
-            drawString("300MiB/1024MiB", pos.x,
+            String mem = "300MiB/1024MiB";
+            drawString(mem, pos.x + Justification.valueOf(justification.get()).getXOffset(client.textRenderer.getStringWidth(mem), getWidth() - 4) + 2,
                     pos.y + (Math.round((float) height / 2) - 4) - (showAllocated.get() ? 4 : 0), Color.WHITE,
                     shadow.get());
             if (showAllocated.get()) {
-                drawString(I18n.translate("allocated") + ": 976MiB", pos.x,
+                String alloc = I18n.translate("allocated") + ": 976MiB";
+                drawString(alloc, pos.x + Justification.valueOf(justification.get()).getXOffset(client.textRenderer.getStringWidth(alloc), getWidth() - 4) + 2,
                         pos.y + (Math.round((float) height / 2) - 4) + 4, textColor.get(), shadow.get());
             }
         }
 
         if (!showGraph.get() && !showText.get()) {
-            drawString(I18n.translate(ID.getPath()), pos.x, pos.y + (Math.round((float) height / 2) - 4), Color.WHITE,
+            String value = I18n.translate(ID.getPath());
+            drawString(value, pos.x + Justification.valueOf(justification.get()).getXOffset(client.textRenderer.getStringWidth(value), getWidth() - 4) + 2,
+                    pos.y + (Math.round((float) height / 2) - 4), Color.WHITE,
                     shadow.get());
         }
     }
@@ -142,6 +157,8 @@ public class MemoryHud extends TextHudEntry {
     @Override
     public List<Option<?>> getConfigurationOptions() {
         List<Option<?>> options = super.getConfigurationOptions();
+        options.add(justification);
+        options.add(anchor);
         options.add(showGraph);
         options.add(graphUsedColor);
         options.add(graphFreeColor);
@@ -162,5 +179,10 @@ public class MemoryHud extends TextHudEntry {
 
     private static String toMiB(long bytes) {
         return (bytes / 1024L / 1024L) + "MiB";
+    }
+
+    @Override
+    public AnchorPoint getAnchor() {
+        return AnchorPoint.valueOf(anchor.get());
     }
 }
