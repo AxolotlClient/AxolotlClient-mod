@@ -81,3 +81,15 @@
 - HitColor option
 - Allow Snap Perspective mode to be used on servers where Freelook is disallowed
 - add a port of the Dynamic FPS mod by juliand665 to 1.8.9
+
+### 2.2.9
+
+- Fix some bugs
+- update config library, now uses the `multiversion` branch
+- Server API for disabling certain features
+- refactored AutoGG
+- prefix mixins
+- Image sharing via [gartbin](https://bin.gart.sh)
+- Complete README feature list (RoonMoonlight)
+- Weather Changer
+- Tablist Customisation
