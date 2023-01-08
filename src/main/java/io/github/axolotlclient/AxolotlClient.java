@@ -48,6 +48,7 @@ import io.github.axolotlclient.modules.rpc.DiscordRPC;
 import io.github.axolotlclient.modules.screenshotUtils.ScreenshotUtils;
 import io.github.axolotlclient.modules.scrollableTooltips.ScrollableTooltips;
 import io.github.axolotlclient.modules.sky.SkyResourceManager;
+import io.github.axolotlclient.modules.tablist.Tablist;
 import io.github.axolotlclient.modules.tnttime.TntTime;
 import io.github.axolotlclient.modules.unfocusedFpsLimiter.UnfocusedFpsLimiter;
 import io.github.axolotlclient.modules.zoom.Zoom;
@@ -129,6 +130,7 @@ public class AxolotlClient implements ClientModInitializer {
         modules.add(ScreenshotUtils.getInstance());
         modules.add(BeaconBeam.getInstance());
         modules.add(UnfocusedFpsLimiter.getInstance());
+        modules.add(Tablist.getInstance());
     }
 
     private static void addExternalModules() {

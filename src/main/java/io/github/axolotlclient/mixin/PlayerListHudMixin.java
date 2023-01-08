@@ -24,16 +24,19 @@ package io.github.axolotlclient.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
+import io.github.axolotlclient.modules.tablist.Tablist;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.PlayerListHud;
 import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.network.ClientConnection;
 
 @Mixin(PlayerListHud.class)
 public abstract class PlayerListHudMixin extends DrawableHelper {
@@ -87,5 +90,28 @@ public abstract class PlayerListHudMixin extends DrawableHelper {
             DrawableHelper.drawTexture((int) x, (int) y, 0, 0, 8, 8, 8, 8);
             args.set(1, x + 10);
         }
+    }
+
+    @Inject(method = "renderLatencyIcon", at = @At("HEAD"), cancellable = true)
+    private void axolotlclient$numericalPing(int width, int x, int y, PlayerListEntry entry, CallbackInfo ci) {
+        if (Tablist.getInstance().renderNumericPing(width, x, y, entry)) {
+            ci.cancel();
+        }
+    }
+
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;isIntegratedServerRunning()Z"))
+    private boolean showPlayerHeads$1(MinecraftClient instance) {
+        if (Tablist.getInstance().showPlayerHeads.get()) {
+            return instance.isIntegratedServerRunning();
+        }
+        return false;
+    }
+
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ClientConnection;isEncrypted()Z"))
+    private boolean showPlayerHeads$1(ClientConnection instance) {
+        if (Tablist.getInstance().showPlayerHeads.get()) {
+            return instance.isEncrypted();
+        }
+        return false;
     }
 }
