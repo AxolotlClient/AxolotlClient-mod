@@ -95,7 +95,7 @@ public class ImageShare {
 
     }
 
-    public String upload(String url, File file){
+    private String upload(String url, File file){
 
         try (CloseableHttpClient client = createHttpClient()){
 
@@ -171,7 +171,7 @@ public class ImageShare {
         return download(ScreenshotUtils.getInstance().shareUrl.get()+"/api/"+id);
     }
 
-    public ImageInstance download(String url){
+    private ImageInstance download(String url){
 
         if(!url.isEmpty()) {
             JsonElement element = NetworkHelper.getRequest(url, createHttpClient());

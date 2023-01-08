@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021-2022 moehreag <moehreag@gmail.com> & Contributors
+ * Copyright © 2021-2023 moehreag <moehreag@gmail.com> & Contributors
  *
  * This file is part of AxolotlClient.
  *
@@ -21,8 +21,6 @@
  */
 
 package io.github.axolotlclient.mixin;
-
-import java.util.concurrent.locks.LockSupport;
 
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.input.Keyboard;
@@ -171,10 +169,4 @@ public abstract class MinecraftClientMixin {
         Util.window = new Window(MinecraftClient.getInstance());
         HudManager.getInstance().refreshAllBounds();
     }
-
-    @Redirect(method = "runGameLoop", at = @At(value = "INVOKE", target = "Ljava/lang/Thread;yield()V"))
-    private void axolotlclient$waitForTasks(){
-        LockSupport.parkNanos("waiting for tasks", 500_000);
-    }
-
 }

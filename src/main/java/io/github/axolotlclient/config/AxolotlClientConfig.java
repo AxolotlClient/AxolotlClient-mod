@@ -67,6 +67,9 @@ public class AxolotlClientConfig extends ConfigHolder {
     public final ColorOption outlineColor = new ColorOption("color", Color.parse("#DD000000"));
     public final IntegerOption outlineWidth = new IntegerOption("outlineWidth", 1, 1, 10);
 
+    public final BooleanOption weatherChangerEnabled = new BooleanOption("enabled", false);
+    public final EnumOption weather = new EnumOption("weather", new String[]{"clear", "rain"}, "clear");
+
     public final BooleanOption debugLogOutput = new BooleanOption("debugLogOutput", false);
     public final GenericOption openCredits = new GenericOption("Credits", "Open Credits",
             (mouseX, mouseY) -> MinecraftClient.getInstance()
@@ -79,6 +82,7 @@ public class AxolotlClientConfig extends ConfigHolder {
     public final OptionCategory outlines = new OptionCategory("blockOutlines");
     public final OptionCategory timeChanger = new OptionCategory("timeChanger");
     public final OptionCategory searchFilters = new OptionCategory("searchFilters");
+    public final OptionCategory weatherChanger = new OptionCategory("weatherChanger");
 
     private final List<Option<?>> options = new ArrayList<>();
     private final List<io.github.axolotlclient.AxolotlClientConfig.common.options.OptionCategory> categories = new ArrayList<>();
@@ -127,7 +131,7 @@ public class AxolotlClientConfig extends ConfigHolder {
 
         searchFilters.add(AxolotlClientConfigConfig.searchIgnoreCase, AxolotlClientConfigConfig.searchForOptions,
                 AxolotlClientConfigConfig.searchSort, AxolotlClientConfigConfig.searchSortOrder);
-        general.addSubCategory(searchFilters);
+        general.add(searchFilters);
 
         rendering.add(customSky,
                 cloudHeight,
@@ -139,12 +143,16 @@ public class AxolotlClientConfig extends ConfigHolder {
 
         timeChanger.add(timeChangerEnabled);
         timeChanger.add(customTime);
-        rendering.addSubCategory(timeChanger);
+        rendering.add(timeChanger);
 
         outlines.add(enableCustomOutlines);
         outlines.add(outlineColor);
         outlines.add(outlineWidth);
-        rendering.addSubCategory(outlines);
+        rendering.add(outlines);
+
+        weatherChanger.add(weatherChangerEnabled);
+        weatherChanger.add(weather);
+        rendering.add(weatherChanger);
 
         AxolotlClient.config.add(creditsBGM);
     }

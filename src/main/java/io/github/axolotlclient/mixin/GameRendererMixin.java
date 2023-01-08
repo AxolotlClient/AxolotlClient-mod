@@ -56,6 +56,7 @@ import net.minecraft.client.MouseInput;
 import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -274,5 +275,22 @@ public abstract class GameRendererMixin {
         if(!UnfocusedFpsLimiter.getInstance().checkForRender()){
             ci.cancel();
         }
+    }
+
+    @Inject(method = "renderWeather", at = @At("HEAD"), cancellable = true)
+    private void axolotlclient$changeWeather(float tickDelta, CallbackInfo ci){
+        if(AxolotlClient.CONFIG.weatherChangerEnabled.get()){
+            if(AxolotlClient.CONFIG.weather.get().equals("clear")){
+                ci.cancel();
+            }
+        }
+    }
+
+    @Redirect(method = "renderWeather", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;getRainGradient(F)F"))
+    private float axolotlclient$changeWeather$3(ClientWorld instance, float v){
+        if(AxolotlClient.CONFIG.weatherChangerEnabled.get() && !AxolotlClient.CONFIG.weather.get().equals("clear")) {
+            return 100;
+        }
+        return MinecraftClient.getInstance().world.getRainGradient(v);
     }
 }

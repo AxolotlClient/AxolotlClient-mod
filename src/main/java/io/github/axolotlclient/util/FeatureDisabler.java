@@ -58,11 +58,12 @@ public class FeatureDisabler {
         features.put("freelook", Freelook.getInstance().enabled);
         features.put("timechanger", AxolotlClient.CONFIG.timeChangerEnabled);
         features.put("fullbright", AxolotlClient.CONFIG.fullBright);
+        features.put("lowfire", AxolotlClient.CONFIG.lowFire);
         return features;
     });
 
     public static void init() {
-        setServers(AxolotlClient.CONFIG.fullBright, NONE, "gommehd");
+        setServers(AxolotlClient.CONFIG.lowFire, NONE, "gommehd");
         setServers(AxolotlClient.CONFIG.timeChangerEnabled, NONE, "gommehd");
         setServers(Freelook.getInstance().enabled, () -> Freelook.getInstance().needsDisabling(), "hypixel", "mineplex", "gommehd", "nucleoid");
         setServers(((ToggleSprintHud) HudManager.getInstance().get(ToggleSprintHud.ID)).toggleSneak, NONE, "hypixel");
