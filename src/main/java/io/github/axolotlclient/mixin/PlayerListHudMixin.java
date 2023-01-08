@@ -26,12 +26,14 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
+import io.github.axolotlclient.modules.tablist.Tablist;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.PlayerListHud;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.network.ClientConnection;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Text;
@@ -41,6 +43,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PlayerListHud.class)
@@ -56,7 +59,6 @@ public abstract class PlayerListHudMixin {
         return instance.getProfile();
     }
 
-    MinecraftClient client = MinecraftClient.getInstance();
     private PlayerListEntry playerListEntry;
 
     @Inject(method = "getPlayerName", at = @At("HEAD"), cancellable = true)
@@ -107,5 +109,28 @@ public abstract class PlayerListHudMixin {
             return Text.literal(NickHider.getInstance().hiddenNameOthers.get());
         }
         return name;
+    }
+    
+    @Inject(method = "renderLatencyIcon", at = @At("HEAD"), cancellable = true)
+    private void axolotlclient$numericalPing(MatrixStack matrices, int width, int x, int y, PlayerListEntry entry, CallbackInfo ci){
+        if(Tablist.getInstance().renderNumericPing(matrices, width, x, y, entry)){
+            ci.cancel();
+        }
+    }
+
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;isInSingleplayer()Z"))
+    private boolean showPlayerHeads$1(MinecraftClient instance) {
+        if (Tablist.getInstance().showPlayerHeads.get()) {
+            return instance.isInSingleplayer();
+        }
+        return false;
+    }
+
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ClientConnection;isEncrypted()Z"))
+    private boolean showPlayerHeads$1(ClientConnection instance) {
+        if (Tablist.getInstance().showPlayerHeads.get()) {
+            return instance.isEncrypted();
+        }
+        return false;
     }
 }
