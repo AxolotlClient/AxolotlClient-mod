@@ -68,7 +68,11 @@ public class FeatureDisabler {
         setServers(Freelook.getInstance().enabled, () -> Freelook.getInstance().needsDisabling(), "hypixel", "mineplex", "gommehd", "nucleoid");
         setServers(((ToggleSprintHud) HudManager.getInstance().get(ToggleSprintHud.ID)).toggleSneak, NONE, "hypixel");
 
-        ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> onServerJoin(Objects.requireNonNull(handler.m_uccwwurs()).address));
+        ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
+            if(handler.m_uccwwurs() != null) {
+                onServerJoin(Objects.requireNonNull(handler.m_uccwwurs()).address);
+            }
+        });
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> clear());
 
         ClientPlayConnectionEvents.INIT.register((handler0, client0) ->

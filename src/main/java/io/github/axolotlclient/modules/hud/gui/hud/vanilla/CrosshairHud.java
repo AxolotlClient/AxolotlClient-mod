@@ -25,10 +25,7 @@ package io.github.axolotlclient.modules.hud.gui.hud.vanilla;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
-import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
-import io.github.axolotlclient.AxolotlClientConfig.options.ColorOption;
-import io.github.axolotlclient.AxolotlClientConfig.options.EnumOption;
-import io.github.axolotlclient.AxolotlClientConfig.options.Option;
+import io.github.axolotlclient.AxolotlClientConfig.options.*;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.gui.component.DynamicallyPositionable;
 import io.github.axolotlclient.modules.hud.gui.layout.AnchorPoint;
@@ -53,6 +50,7 @@ import java.util.List;
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ *
  * @license GPL-3.0
  */
 
@@ -71,8 +69,58 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
     private final BooleanOption applyBlend = new BooleanOption("applyBlend", true);
     private final BooleanOption overrideF3 = new BooleanOption("overrideF3", false);
 
+    private final GraphicsOption customTextureGraphics = new GraphicsOption("customTextureGraphics",
+            new int[][]{
+                    new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    new int[]{0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0},
+                    new int[]{0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0},
+                    new int[]{0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0},
+                    new int[]{0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0},
+                    new int[]{0, 0, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 0, 0},
+                    new int[]{0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0},
+                    new int[]{0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0},
+                    new int[]{0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0},
+                    new int[]{0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0},
+                    new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            });
+
     public CrosshairHud() {
         super(15, 15);
+    }
+
+    @Override
+    public boolean movable() {
+        return false;
+    }
+
+    @Override
+    public Identifier getId() {
+        return ID;
+    }
+
+    @Override
+    public List<Option<?>> getConfigurationOptions() {
+        List<Option<?>> options = super.getConfigurationOptions();
+        options.add(type);
+        options.add(customTextureGraphics);
+        options.add(showInF5);
+        options.add(overrideF3);
+        options.add(applyBlend);
+        options.add(defaultColor);
+        options.add(entityColor);
+        options.add(containerColor);
+        options.add(attackIndicatorBackgroundColor);
+        options.add(attackIndicatorForegroundColor);
+        return options;
+    }
+
+    @Override
+    public boolean overridesF3() {
+        return overrideF3.get();
     }
 
     @Override
@@ -133,17 +181,30 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
             RenderSystem.renderCrosshair(10);
             matrixStack.pop();
             RenderSystem.applyModelViewMatrix();
-        } else if (type.get().equals(Crosshair.TEXTURE.toString())) {
+        } else if (type.get().equals(Crosshair.TEXTURE.toString()) || type.get().equals(Crosshair.CUSTOM.toString())) {
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            RenderSystem.setShader(GameRenderer::getPositionTexShader);
-            RenderSystem.setShaderTexture(0, DrawableHelper.GUI_ICONS_TEXTURE);
+            if (type.get().equals(Crosshair.TEXTURE.toString())) {
+                RenderSystem.setShader(GameRenderer::getPositionTexShader);
+                RenderSystem.setShaderTexture(0, DrawableHelper.GUI_ICONS_TEXTURE);
+                // Draw crosshair
+                RenderSystem.setShaderColor((float) color.getRed() / 255, (float) color.getGreen() / 255,
+                        (float) color.getBlue() / 255, (float) color.getAlpha() / 255);
+                client.inGameHud.drawTexture(matrices,
+                        (int) (((client.getWindow().getScaledWidth() / getScale()) - 15) / 2),
+                        (int) (((client.getWindow().getScaledHeight() / getScale()) - 15) / 2), 0, 0, 15, 15);
+            } else {
+                customTextureGraphics.bindTexture();
+                // Draw crosshair
+                RenderSystem.setShaderColor((float) color.getRed() / 255, (float) color.getGreen() / 255,
+                        (float) color.getBlue() / 255, (float) color.getAlpha() / 255);
 
-            // Draw crosshair
-            RenderSystem.setShaderColor((float) color.getRed() / 255, (float) color.getGreen() / 255,
-                    (float) color.getBlue() / 255, (float) color.getAlpha() / 255);
-            client.inGameHud.drawTexture(matrices,
-                    (int) (((client.getWindow().getScaledWidth() / getScale()) - 15) / 2),
-                    (int) (((client.getWindow().getScaledHeight() / getScale()) - 15) / 2), 0, 0, 15, 15);
+                drawTexture(matrices,
+                        (int) (((client.getWindow().getScaledWidth() / getScale()) - 15) / 2),
+                        (int) (((client.getWindow().getScaledHeight() / getScale()) - 15) / 2), 0, 0, 15, 15, 15, 15);
+
+                RenderSystem.setShaderTexture(0, DrawableHelper.GUI_ICONS_TEXTURE);
+            }
+
             RenderSystem.setShaderColor(1, 1, 1, 1);
 
             // Draw attack indicator
@@ -206,45 +267,12 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
     }
 
     @Override
-    public boolean movable() {
-        return false;
-    }
-
-    @Override
-    public Identifier getId() {
-        return ID;
-    }
-
-    @Override
-    public List<Option<?>> getConfigurationOptions() {
-        List<Option<?>> options = super.getConfigurationOptions();
-        options.add(type);
-        options.add(showInF5);
-        options.add(overrideF3);
-        options.add(applyBlend);
-        options.add(defaultColor);
-        options.add(entityColor);
-        options.add(containerColor);
-        options.add(attackIndicatorBackgroundColor);
-        options.add(attackIndicatorForegroundColor);
-        return options;
-    }
-
-    @Override
-    public boolean overridesF3() {
-        return overrideF3.get();
-    }
-
-    @Override
     public AnchorPoint getAnchor() {
         return AnchorPoint.MIDDLE_MIDDLE;
     }
 
     @AllArgsConstructor
     public enum Crosshair {
-
-        CROSS("cross"), DOT("dot"), DIRECTION("direction"), TEXTURE("texture");
-
-        private final String value;
+        CROSS, DOT, DIRECTION, TEXTURE, CUSTOM
     }
 }

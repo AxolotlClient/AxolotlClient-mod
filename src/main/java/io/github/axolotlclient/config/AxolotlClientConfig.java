@@ -77,14 +77,9 @@ public class AxolotlClientConfig extends ConfigHolder {
                         color = (color << 8) + value.getGreen();
                         color = (color << 8) + value.getRed();
 
-                        for (int i = 0; i < 16; ++i) {
-                            for (int j = 0; j < 16; ++j) {
-                                if (i < 8) {
-                                    nativeImage.setPixelColor(j, i, color);
-                                } else {
-                                    int k = (int) ((1.0F - (float) j / 15.0F * 0.75F) * 255.0F);
-                                    nativeImage.setPixelColor(j, i, k << 24 | 16777215);
-                                }
+                        for (int i = 0; i <8 ; ++i) {
+                            for (int j = 0; j <8; ++j) {
+                                nativeImage.setPixelColor(j, i, color);
                             }
                         }
 
