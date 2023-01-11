@@ -91,3 +91,8 @@
 - Complete README feature list (RoonMoonlight)
 - Weather Changer
 - Tablist Customisation
+
+### 2.2.10
+
+- Add a `graphical` option type
+- Add custom crosshair texture option

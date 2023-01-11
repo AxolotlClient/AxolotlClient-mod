@@ -27,10 +27,7 @@ import java.util.List;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import io.github.axolotlclient.AxolotlClientConfig.Color;
-import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
-import io.github.axolotlclient.AxolotlClientConfig.options.ColorOption;
-import io.github.axolotlclient.AxolotlClientConfig.options.EnumOption;
-import io.github.axolotlclient.AxolotlClientConfig.options.Option;
+import io.github.axolotlclient.AxolotlClientConfig.options.*;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import io.github.axolotlclient.modules.hud.gui.component.DynamicallyPositionable;
 import io.github.axolotlclient.modules.hud.gui.layout.AnchorPoint;
@@ -56,8 +53,7 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
 
     public static final Identifier ID = new Identifier("kronhud", "crosshairhud");
 
-    private final EnumOption type = new EnumOption("crosshair_type", Crosshair.values(),
-            Crosshair.CROSS.toString());
+    private final EnumOption type = new EnumOption("crosshair_type", Crosshair.values(), Crosshair.CROSS.toString());
     private final BooleanOption showInF5 = new BooleanOption("showInF5", false);
     private final BooleanOption applyBlend = new BooleanOption("applyBlend", true);
     private final BooleanOption overrideF3 = new BooleanOption("overrideF3", false);
@@ -65,8 +61,55 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
     private final ColorOption entityColor = new ColorOption("entitycolor", Color.SELECTOR_RED);
     private final ColorOption containerColor = new ColorOption("blockcolor", Color.SELECTOR_BLUE);
 
+    private final GraphicsOption customTextureGraphics = new GraphicsOption("customTextureGraphics",
+            new int[][] {
+                    new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                    new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                    new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                    new int[] { 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0 },
+                    new int[] { 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0 },
+                    new int[] { 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0 },
+                    new int[] { 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0 },
+                    new int[] { 0, 0, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 0, 0 },
+                    new int[] { 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0 },
+                    new int[] { 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0 },
+                    new int[] { 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0 },
+                    new int[] { 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0 },
+                    new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                    new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                    new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, });
+
     public CrosshairHud() {
         super(15, 15);
+    }
+
+    @Override
+    public boolean movable() {
+        return false;
+    }
+
+    @Override
+    public Identifier getId() {
+        return ID;
+    }
+
+    @Override
+    public List<Option<?>> getConfigurationOptions() {
+        List<Option<?>> options = super.getConfigurationOptions();
+        options.add(type);
+        options.add(customTextureGraphics);
+        options.add(showInF5);
+        options.add(overrideF3);
+        options.add(applyBlend);
+        options.add(defaultColor);
+        options.add(entityColor);
+        options.add(containerColor);
+        return options;
+    }
+
+    @Override
+    public boolean overridesF3() {
+        return overrideF3.get();
     }
 
     @Override
@@ -111,6 +154,10 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
             // Draw crosshair
             client.inGameHud.drawTexture((int) (((Util.getWindow().getScaledWidth() / getScale()) - 14) / 2),
                     (int) (((Util.getWindow().getScaledHeight() / getScale()) - 14) / 2), 0, 0, 16, 16);
+        } else if (type.get().equals(Crosshair.CUSTOM.toString())) {
+            customTextureGraphics.bindTexture();
+            drawTexture((int) (((Util.getWindow().getScaledWidth() / getScale()) - 14) / 2),
+                    (int) (((Util.getWindow().getScaledHeight() / getScale()) - 14) / 2), 0, 0, 16, 16, 16, 16);
         }
         GlStateManager.color4f(1, 1, 1, 1);
         GlStateManager.blendFuncSeparate(770, 771, 1, 0);
@@ -144,39 +191,11 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
     }
 
     @Override
-    public boolean movable() {
-        return false;
-    }
-
-    @Override
-    public Identifier getId() {
-        return ID;
-    }
-
-    @Override
-    public List<Option<?>> getConfigurationOptions() {
-        List<Option<?>> options = super.getConfigurationOptions();
-        options.add(type);
-        options.add(showInF5);
-        options.add(overrideF3);
-        options.add(applyBlend);
-        options.add(defaultColor);
-        options.add(entityColor);
-        options.add(containerColor);
-        return options;
-    }
-
-    @Override
-    public boolean overridesF3() {
-        return overrideF3.get();
-    }
-
-    @Override
     public AnchorPoint getAnchor() {
         return AnchorPoint.MIDDLE_MIDDLE;
     }
 
     public enum Crosshair {
-        CROSS, DOT, TEXTURE
+        CROSS, DOT, TEXTURE, CUSTOM
     }
 }

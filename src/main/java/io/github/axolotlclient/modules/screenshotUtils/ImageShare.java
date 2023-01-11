@@ -73,6 +73,7 @@ public class ImageShare {
     }
 
     public void uploadImage(String url, File file){
+        Util.sendChatMessage(new LiteralText(I18n.translate("imageUploadStarted")));
         String downloadUrl = upload(url + "/api/stream", file);
 
         if (downloadUrl.isEmpty()) {
