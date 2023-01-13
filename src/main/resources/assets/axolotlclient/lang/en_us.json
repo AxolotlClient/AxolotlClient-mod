@@ -203,6 +203,8 @@
     "minwidth": "Minimum Width",
     "mode": "Mode",
     "motionBlur": "Motion Blur",
+    "mouseMovementIndicator": "Mouse Movement Indicator (static)",
+    "mouseMovementIndicatorOuter": "Mouse Movement Indicator (moving)",
     "mousemovement": "Show Mouse Movement",
     "nametagBackground": "Nametag Background",
     "nametagOptions": "Nametag Options",

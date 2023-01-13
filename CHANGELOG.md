@@ -96,3 +96,4 @@
 
 - Add a `graphical` option type
 - Add custom crosshair texture option
+- add customization options to the mouse movement indicator of the KeystrokeHud
