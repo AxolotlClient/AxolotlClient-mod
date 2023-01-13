@@ -26,6 +26,7 @@ import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.ColorOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.GraphicsOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.Option;
 import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
@@ -58,6 +59,28 @@ public class KeystrokeHud extends TextHudEntry {
     private final ColorOption pressedBackgroundColor = new ColorOption("heldbackgroundcolor", 0x64FFFFFF);
     private final ColorOption pressedOutlineColor = new ColorOption("heldoutlinecolor", Color.BLACK);
     private final BooleanOption mouseMovement = new BooleanOption("mousemovement", this::onMouseMovementOption, false);
+    private final GraphicsOption mouseMovementIndicatorInner = new GraphicsOption("mouseMovementIndicator", new int[][]{
+            new int[]{0, 0, 0, 0, 0, 0, 0},
+            new int[]{0, 0, 0, 0, 0, 0, 0},
+            new int[]{0, 0, 0, 0, 0, 0, 0},
+            new int[]{0, 0, 0, -1, 0, 0, 0},
+            new int[]{0, 0, 0, 0, 0, 0, 0},
+            new int[]{0, 0, 0, 0, 0, 0, 0},
+            new int[]{0, 0, 0, 0, 0, 0, 0}
+    }, true);
+    private final GraphicsOption mouseMovementIndicatorOuter = new GraphicsOption("mouseMovementIndicatorOuter", new int[][]{
+            new int[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
+            new int[]{-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1},
+            new int[]{-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1},
+            new int[]{-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1},
+            new int[]{-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1},
+            new int[]{-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1},
+            new int[]{-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1},
+            new int[]{-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1},
+            new int[]{-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1},
+            new int[]{-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1},
+            new int[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}
+    }, true);
     private ArrayList<Keystroke> keystrokes;
     private final MinecraftClient client;
 
@@ -121,6 +144,8 @@ public class KeystrokeHud extends TextHudEntry {
         }));
         KeyBind.unpressAll();
         KeyBind.updatePressedStates();
+
+        onMouseMovementOption(mouseMovement.get());
     }
 
     @Override
@@ -152,11 +177,13 @@ public class KeystrokeHud extends TextHudEntry {
             float calculatedMouseX = (lastMouseX + ((mouseX - lastMouseX) * delta)) - 5;
             float calculatedMouseY = (lastMouseY + ((mouseY - lastMouseY) * delta)) - 5;
 
-            DrawUtil.fillRect(matrices, spaceX + (width / 2) - 1, spaceY + 17, 1, 1, Color.WHITE.getAsInt());
+            mouseMovementIndicatorInner.bindTexture();
+            drawTexture(matrices, spaceX + (width/2) - 7/2 -1, spaceY + 17 - (7/2), 0, 0, 7, 7, 7, 7);
 
             matrices.translate(calculatedMouseX, calculatedMouseY, 0); // Woah KodeToad, good use of translate
 
-            DrawUtil.outlineRect(matrices, spaceX + (width / 2) - 1, spaceY + 17, 11, 11, Color.WHITE.getAsInt());
+            mouseMovementIndicatorOuter.bindTexture();
+            drawTexture(matrices, spaceX + (width / 2) - 1, spaceY + 17, 0, 0, 11, 11, 11, 11);
         }
     }
 
@@ -238,6 +265,8 @@ public class KeystrokeHud extends TextHudEntry {
         options.add(enabled);
         options.add(scale);
         options.add(mouseMovement);
+        options.add(mouseMovementIndicatorInner);
+        options.add(mouseMovementIndicatorOuter);
         options.add(textColor);
         options.add(pressedTextColor);
         options.add(shadow);
