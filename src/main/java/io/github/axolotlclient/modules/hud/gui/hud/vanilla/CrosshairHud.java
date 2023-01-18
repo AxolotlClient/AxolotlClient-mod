@@ -156,8 +156,9 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
                     (int) (((Util.getWindow().getScaledHeight() / getScale()) - 14) / 2), 0, 0, 16, 16);
         } else if (type.get().equals(Crosshair.CUSTOM.toString())) {
             customTextureGraphics.bindTexture();
-            drawTexture((int) (((Util.getWindow().getScaledWidth() / getScale()) - 14) / 2),
-                    (int) (((Util.getWindow().getScaledHeight() / getScale()) - 14) / 2), 0, 0, 16, 16, 16, 16);
+            drawTexture(x+(width/2) - (15/2), y+height/2 - 15/2 -1, 0, 0, 15, 15, 15, 15);
+            /*drawTexture((int) (((Util.getWindow().getScaledWidth() / getScale()) - 15) / 2),
+                    (int) (((Util.getWindow().getScaledHeight() / getScale()) - 15) / 2), 0, 0, 15, 15, 15, 15);*/
         }
         GlStateManager.color4f(1, 1, 1, 1);
         GlStateManager.blendFuncSeparate(770, 771, 1, 0);
