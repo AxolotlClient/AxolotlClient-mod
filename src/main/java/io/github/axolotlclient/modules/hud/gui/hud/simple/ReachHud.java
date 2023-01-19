@@ -33,6 +33,7 @@ import io.github.axolotlclient.AxolotlClientConfig.options.Option;
 import io.github.axolotlclient.modules.hud.gui.entry.SimpleTextHudEntry;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
@@ -57,17 +58,17 @@ public class ReachHud extends SimpleTextHudEntry {
     @Override
     public String getValue() {
         if (currentDist == null) {
-            return "0 blocks";
+            return "0 "+ I18n.translate("blocks");
         } else if (lastTime + 2000 < MinecraftClient.getTime()) {
             currentDist = null;
-            return "0 blocks";
+            return "0 " + I18n.translate("blocks");
         }
         return currentDist;
     }
 
     @Override
     public String getPlaceholder() {
-        return "3.45 blocks";
+        return "3.45 " + I18n.translate("blocks");
     }
 
     private static Vec3d compareTo(Vec3d compare, Vec3d test, AtomicDouble max) {
@@ -126,7 +127,7 @@ public class ReachHud extends SimpleTextHudEntry {
         }
         DecimalFormat formatter = new DecimalFormat(format.toString());
         formatter.setRoundingMode(RoundingMode.HALF_UP);
-        currentDist = formatter.format(distance) + " blocks";
+        currentDist = formatter.format(distance) +" " + I18n.translate("blocks");
         lastTime = MinecraftClient.getTime();
     }
 
@@ -134,7 +135,6 @@ public class ReachHud extends SimpleTextHudEntry {
     public List<Option<?>> getConfigurationOptions() {
         List<Option<?>> options = super.getConfigurationOptions();
         options.add(decimalPlaces);
-        options.remove(textColor);
         return options;
     }
 }
