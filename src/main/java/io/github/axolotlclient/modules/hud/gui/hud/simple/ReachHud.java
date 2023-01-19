@@ -26,6 +26,7 @@ import com.google.common.util.concurrent.AtomicDouble;
 import io.github.axolotlclient.AxolotlClientConfig.options.IntegerOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.Option;
 import io.github.axolotlclient.modules.hud.gui.entry.SimpleTextHudEntry;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.util.Identifier;
@@ -61,17 +62,17 @@ public class ReachHud extends SimpleTextHudEntry {
     @Override
     public String getValue() {
         if (currentDist == null) {
-            return "0 blocks";
+            return "0 " + I18n.translate("blocks");
         } else if (lastTime + 2000 < Util.getMeasuringTimeMs()) {
             currentDist = null;
-            return "0 blocks";
+            return "0 " + I18n.translate("blocks");
         }
         return currentDist;
     }
 
     @Override
     public String getPlaceholder() {
-        return "3.45 blocks";
+        return "3.45 " + I18n.translate("blocks");
     }
 
     private static Vec3d compareTo(Vec3d compare, Vec3d test, AtomicDouble max) {
@@ -127,7 +128,7 @@ public class ReachHud extends SimpleTextHudEntry {
         }
         DecimalFormat formatter = new DecimalFormat(format.toString());
         formatter.setRoundingMode(RoundingMode.HALF_UP);
-        currentDist = formatter.format(distance) + " blocks";
+        currentDist = formatter.format(distance) + " " + I18n.translate("blocks");
         lastTime = Util.getMeasuringTimeMs();
     }
 
@@ -135,7 +136,6 @@ public class ReachHud extends SimpleTextHudEntry {
     public List<Option<?>> getConfigurationOptions() {
         List<Option<?>> options = super.getConfigurationOptions();
         options.add(decimalPlaces);
-        options.remove(textColor);
         return options;
     }
 }
