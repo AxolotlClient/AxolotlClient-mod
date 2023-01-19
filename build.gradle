@@ -44,7 +44,7 @@ dependencies {
 
 	modImplementation "com.terraformersmc:modmenu:4.0.5"
 
-	include( implementation('com.github.JnCrMx:discord-game-sdk4j:0.5.5'))
+	include( implementation('com.github.JnCrMx:discord-game-sdk4j:v0.5.5'))
 
 	include(modImplementation("net.hypixel:hypixel-api-core:4.1") {
 		exclude group: "com.google.code.gson", module: "gson"
