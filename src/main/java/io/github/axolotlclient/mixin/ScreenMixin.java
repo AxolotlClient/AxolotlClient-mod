@@ -31,6 +31,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
+import io.github.axolotlclient.modules.blur.MenuBlur;
 import io.github.axolotlclient.modules.screenshotUtils.ScreenshotUtils;
 import io.github.axolotlclient.modules.scrollableTooltips.ScrollableTooltips;
 import io.github.axolotlclient.util.OSUtil;
@@ -79,6 +80,13 @@ public abstract class ScreenMixin {
         if (event instanceof ScreenshotUtils.CustomClickEvent) {
             ((ScreenshotUtils.CustomClickEvent) event).doAction();
             cir.setReturnValue(true);
+        }
+    }
+
+    @Inject(method = "renderBackground(I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;fillGradient(IIIIII)V"), cancellable = true)
+    private void axolotlclient$menuBlur(int alpha, CallbackInfo ci){
+        if(MenuBlur.getInstance().renderScreen()){
+            ci.cancel();
         }
     }
 }

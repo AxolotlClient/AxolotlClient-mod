@@ -36,6 +36,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.NetworkHelper;
+import io.github.axolotlclient.modules.blur.MenuBlur;
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.rpc.DiscordRPC;
 import io.github.axolotlclient.modules.zoom.Zoom;
@@ -43,6 +44,7 @@ import io.github.axolotlclient.util.Hooks;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.render.BufferBuilder;
@@ -170,5 +172,10 @@ public abstract class MinecraftClientMixin {
     public void axolotlclient$onResize(CallbackInfo ci) {
         Util.window = new Window(MinecraftClient.getInstance());
         HudManager.getInstance().refreshAllBounds();
+    }
+
+    @Inject(method = "openScreen", at = @At("HEAD"))
+    private void axolotlclient$onScreenOpen(Screen screen, CallbackInfo ci){
+        MenuBlur.getInstance().onScreenOpen();
     }
 }

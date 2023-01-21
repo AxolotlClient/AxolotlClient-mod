@@ -41,11 +41,12 @@ import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.modules.blur.MenuBlur;
+import io.github.axolotlclient.modules.blur.MotionBlur;
 import io.github.axolotlclient.modules.freelook.Freelook;
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hud.gui.hud.vanilla.CrosshairHud;
 import io.github.axolotlclient.modules.hypixel.skyblock.Skyblock;
-import io.github.axolotlclient.modules.motionblur.MotionBlur;
 import io.github.axolotlclient.modules.sky.SkyboxManager;
 import io.github.axolotlclient.modules.unfocusedFpsLimiter.UnfocusedFpsLimiter;
 import io.github.axolotlclient.modules.zoom.Zoom;
@@ -221,6 +222,8 @@ public abstract class GameRendererMixin {
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/Framebuffer;bind(Z)V", shift = Shift.BEFORE))
     public void axolotlclient$worldMotionBlur(float tickDelta, long nanoTime, CallbackInfo ci) {
         axolotlclient$motionBlur(tickDelta, nanoTime, null);
+
+        MenuBlur.getInstance().updateBlur();
     }
 
     @Inject(method = "render", at = @At("TAIL"))

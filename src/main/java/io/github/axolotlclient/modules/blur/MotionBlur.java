@@ -20,7 +20,7 @@
  * For more information, see the LICENSE file.
  */
 
-package io.github.axolotlclient.modules.motionblur;
+package io.github.axolotlclient.modules.blur;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -60,7 +60,6 @@ public class MotionBlur extends AbstractModule {
     private float currentBlur;
 
     private int lastWidth;
-
     private int lastHeight;
 
     public static MotionBlur getInstance() {
@@ -85,7 +84,7 @@ public class MotionBlur extends AbstractModule {
                         client.getFramebuffer(), shaderLocation);
                 shader.setupDimensions(client.width, client.height);
             } catch (JsonSyntaxException | IOException e) {
-                Logger.error("Could not load motion blur", e);
+                Logger.error("Could not load motion blur: ", e);
             }
         }
         if (currentBlur != getBlur()) {
@@ -106,7 +105,7 @@ public class MotionBlur extends AbstractModule {
         return MotionBlur.getInstance().strength.get() / 100F;
     }
 
-    public class MotionBlurShader implements Resource {
+    private static class MotionBlurShader implements Resource {
 
         @Override
         public Identifier getId() {

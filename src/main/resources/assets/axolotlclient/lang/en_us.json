@@ -352,5 +352,9 @@
     "zoomDivisor": "FOV Divisor",
     "zoomScrolling": "Zoom Scrolling",
     "zoomScrolling.tooltip": "Whether to allow scrolling to modify the zoom factor.",
-    "zoomSpeed": "Animation Speed"
+    "zoomSpeed": "Animation Speed",
+    "menublur": "Menu Blur",
+    "fadeTime": "Fade Time (Seconds)",
+    "showHeader": "Show Header",
+    "showFooter": "Show Footer"
 }

@@ -48,6 +48,8 @@ public class Tablist extends AbstractModule {
     private final BooleanOption shadow = new BooleanOption("shadow", true);
 
     public final BooleanOption showPlayerHeads = new BooleanOption("showPlayerHeads", true);
+    public final BooleanOption showHeader = new BooleanOption("showHeader", true);
+    public final BooleanOption showFooter = new BooleanOption("showFooter", true);
 
     private final OptionCategory tablist = new OptionCategory("tablist");
 

@@ -23,6 +23,7 @@
 package io.github.axolotlclient.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -37,10 +38,15 @@ import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.PlayerListHud;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.network.ClientConnection;
+import net.minecraft.scoreboard.Scoreboard;
+import net.minecraft.scoreboard.ScoreboardObjective;
+import net.minecraft.text.Text;
 
 @Mixin(PlayerListHud.class)
 public abstract class PlayerListHudMixin extends DrawableHelper {
 
+    @Shadow private Text header;
+    @Shadow private Text footer;
     MinecraftClient client = MinecraftClient.getInstance();
     private PlayerListEntry playerListEntry;
 
@@ -100,7 +106,7 @@ public abstract class PlayerListHudMixin extends DrawableHelper {
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;isIntegratedServerRunning()Z"))
-    private boolean showPlayerHeads$1(MinecraftClient instance) {
+    private boolean axolotlclient$showPlayerHeads$1(MinecraftClient instance) {
         if (Tablist.getInstance().showPlayerHeads.get()) {
             return instance.isIntegratedServerRunning();
         }
@@ -108,10 +114,20 @@ public abstract class PlayerListHudMixin extends DrawableHelper {
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ClientConnection;isEncrypted()Z"))
-    private boolean showPlayerHeads$1(ClientConnection instance) {
+    private boolean axolotlclient$showPlayerHeads$1(ClientConnection instance) {
         if (Tablist.getInstance().showPlayerHeads.get()) {
             return instance.isEncrypted();
         }
         return false;
+    }
+
+    @Inject(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;header:Lnet/minecraft/text/Text;"))
+    private void axolotlclient$setRenderHeaderFooter(int width, Scoreboard scoreboard, ScoreboardObjective playerListScoreboardObjective, CallbackInfo ci){
+        if(!Tablist.getInstance().showHeader.get()){
+            header = null;
+        }
+        if(!Tablist.getInstance().showFooter.get()){
+            footer = null;
+        }
     }
 }
