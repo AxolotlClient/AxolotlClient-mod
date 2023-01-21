@@ -88,7 +88,9 @@ public abstract class MinecraftClientMixin {
      */
     @Inject(method = "setPixelFormat", at = @At("TAIL"))
     public void axolotlclient$setWindowTitle(CallbackInfo ci) {
-        Display.setTitle("AxolotlClient " + this.gameVersion);
+        if(AxolotlClient.CONFIG.customWindowTitle.get()) {
+            Display.setTitle("AxolotlClient " + this.gameVersion);
+        }
     }
 
     @Redirect(method = "handleKeyInput", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/options/KeyBinding;getCode()I", ordinal = 5))

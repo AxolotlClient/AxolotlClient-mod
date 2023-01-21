@@ -75,6 +75,7 @@ public class AxolotlClientConfig extends ConfigHolder {
             (mouseX, mouseY) -> MinecraftClient.getInstance()
                     .openScreen(new CreditsScreen(MinecraftClient.getInstance().currentScreen)));
     public final BooleanOption creditsBGM = new BooleanOption("creditsBGM", true);
+    public final BooleanOption customWindowTitle = new BooleanOption("customWindowTitle", true);
 
     public final OptionCategory general = new OptionCategory("general");
     public final OptionCategory nametagOptions = new OptionCategory("nametagOptions");
@@ -125,6 +126,7 @@ public class AxolotlClientConfig extends ConfigHolder {
         general.add(AxolotlClientConfigConfig.showQuickToggles);
         general.add(AxolotlClientConfigConfig.showOptionTooltips);
         general.add(AxolotlClientConfigConfig.showCategoryTooltips);
+        general.add(customWindowTitle);
         general.add(rawMouseInput);
         general.add(openCredits);
         general.add(debugLogOutput);

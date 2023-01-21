@@ -111,6 +111,7 @@
     "customColor.tooltip": "Whether to use a custom color for this Particle.",
     "customSky": "Custom Skies",
     "customTextureGraphics": "Custom Texture",
+    "customWindowTitle": "Custom Window Title",
     "customtextcolor": "Custom Text Color",
     "dateformat": "Date Format",
     "debugLogOutput": "Debug Log Output",
