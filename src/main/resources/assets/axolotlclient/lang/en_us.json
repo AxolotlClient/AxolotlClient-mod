@@ -113,6 +113,7 @@
 	"customSky": "Custom Skies",
 	"customSky.tooltip": "Whether to enable custom skies.",
 	"customTextureGraphics": "Custom Texture",
+	"customWindowTitle": "Custom Window Title",
 	"customtextcolor": "Custom Text Color",
 	"dateformat": "Date Format",
 	"debugLogOutput": "Debug Log Output",

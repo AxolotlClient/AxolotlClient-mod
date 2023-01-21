@@ -95,6 +95,7 @@ public class AxolotlClientConfig extends ConfigHolder {
 
     public final ColorOption loadingScreenColor = new ColorOption("loadingBgColor", new Color(239, 50, 61, 255));
     public final BooleanOption nightMode = new BooleanOption("nightMode", false);
+    public final BooleanOption customWindowTitle = new BooleanOption("customWindowTitle", true);
 
     public final BooleanOption enableCustomOutlines = new BooleanOption("enabled", false);
     public final ColorOption outlineColor = new ColorOption("color", Color.parse("#DD000000"));
@@ -164,6 +165,7 @@ public class AxolotlClientConfig extends ConfigHolder {
         general.add(AxolotlClientConfigConfig.showQuickToggles);
         general.add(AxolotlClientConfigConfig.showOptionTooltips);
         general.add(AxolotlClientConfigConfig.showCategoryTooltips);
+        general.add(customWindowTitle);
         general.add(openCredits);
         general.add(debugLogOutput);
 

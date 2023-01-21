@@ -48,7 +48,9 @@ public abstract class MinecraftClientMixin {
      */
     @Inject(method = "getWindowTitle", at = @At("HEAD"), cancellable = true)
     private void axolotlclient$getWindowTitle(CallbackInfoReturnable<String> cir) {
-        cir.setReturnValue("AxolotlClient" + " " + SharedConstants.getGameVersion().getName());
+        if(AxolotlClient.CONFIG.customWindowTitle.get()) {
+            cir.setReturnValue("AxolotlClient" + " " + SharedConstants.getGameVersion().getName());
+        }
     }
 
     @Redirect(method = "<init>", at = @At(value = "FIELD", target = "Lnet/minecraft/client/RunArgs$Game;version:Ljava/lang/String;"))
