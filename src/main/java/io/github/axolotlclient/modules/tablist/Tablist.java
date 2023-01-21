@@ -48,13 +48,15 @@ public class Tablist extends AbstractModule {
     private final ColorOption pingColor5 = new ColorOption("pingColor5", Color.parse("#FFFF0000"));
     private final BooleanOption shadow = new BooleanOption("shadow", true);
 
-    public BooleanOption showPlayerHeads = new BooleanOption("showPlayerHeads", true);
+    public final BooleanOption showPlayerHeads = new BooleanOption("showPlayerHeads", true);
+    public final BooleanOption showHeader = new BooleanOption("showHeader", true);
+    public final BooleanOption showFooter = new BooleanOption("showFooter", true);
 
     private final OptionCategory tablist = new OptionCategory("tablist");
 
     @Override
     public void init() {
-        tablist.add(numericalPing, showPlayerHeads, shadow);
+        tablist.add(numericalPing, showPlayerHeads, shadow, showHeader, showFooter);
         tablist.add(pingColor0, pingColor1, pingColor2, pingColor3, pingColor4, pingColor5);
 
         AxolotlClient.CONFIG.rendering.add(tablist);

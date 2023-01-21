@@ -22,8 +22,18 @@
 
 package io.github.axolotlclient.mixin;
 
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
 import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.systems.RenderSystem;
+
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
 import io.github.axolotlclient.modules.tablist.Tablist;
@@ -34,17 +44,11 @@ import net.minecraft.client.gui.hud.PlayerListHud;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.ClientConnection;
+import net.minecraft.scoreboard.Scoreboard;
+import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Text;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PlayerListHud.class)
 public abstract class PlayerListHudMixin {
@@ -58,6 +62,10 @@ public abstract class PlayerListHudMixin {
         cachedPlayer = instance.getProfile();
         return instance.getProfile();
     }
+
+    @Shadow private Text header;
+    @Shadow private Text footer;
+    MinecraftClient client = MinecraftClient.getInstance();
 
     private PlayerListEntry playerListEntry;
 
@@ -127,10 +135,20 @@ public abstract class PlayerListHudMixin {
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ClientConnection;isEncrypted()Z"))
-    private boolean showPlayerHeads$1(ClientConnection instance) {
+    private boolean axolotlclient$showPlayerHeads$1(ClientConnection instance) {
         if (Tablist.getInstance().showPlayerHeads.get()) {
             return instance.isEncrypted();
         }
         return false;
+    }
+
+    @Inject(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;header:Lnet/minecraft/text/Text;"))
+    private void axolotlclient$setRenderHeaderFooter(MatrixStack matrices, int scaledWindowWidth, Scoreboard scoreboard, ScoreboardObjective objective, CallbackInfo ci){
+        if(!Tablist.getInstance().showHeader.get()){
+            header = null;
+        }
+        if(!Tablist.getInstance().showFooter.get()){
+            footer = null;
+        }
     }
 }

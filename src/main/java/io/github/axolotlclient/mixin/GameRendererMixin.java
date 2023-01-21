@@ -22,8 +22,17 @@
 
 package io.github.axolotlclient.mixin;
 
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.modules.motionblur.MotionBlur;
+import io.github.axolotlclient.modules.blur.MenuBlur;
+import io.github.axolotlclient.modules.blur.MotionBlur;
 import io.github.axolotlclient.modules.zoom.Zoom;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
@@ -32,13 +41,6 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(GameRenderer.class)
 public abstract class GameRendererMixin {
@@ -75,6 +77,8 @@ public abstract class GameRendererMixin {
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getFramebuffer()Lcom/mojang/blaze3d/framebuffer/Framebuffer;"))
     public void axolotlclient$worldMotionBlur(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
         axolotlclient$motionBlur(tickDelta, startTime, tick, null);
+
+        MenuBlur.getInstance().updateBlur();
     }
 
     @Inject(method = "render", at = @At("TAIL"))

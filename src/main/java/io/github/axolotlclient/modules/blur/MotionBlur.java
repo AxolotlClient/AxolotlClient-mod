@@ -20,7 +20,7 @@
  * For more information, see the LICENSE file.
  */
 
-package io.github.axolotlclient.modules.motionblur;
+package io.github.axolotlclient.modules.blur;
 
 import com.google.gson.JsonSyntaxException;
 import com.mojang.blaze3d.shader.GlUniform;
@@ -56,7 +56,6 @@ public class MotionBlur extends AbstractModule {
     private float currentBlur;
 
     private int lastWidth;
-
     private int lastHeight;
 
     public static MotionBlur getInstance() {
@@ -83,7 +82,7 @@ public class MotionBlur extends AbstractModule {
                 shader.setupDimensions(MinecraftClient.getInstance().getWindow().getWidth(),
                         MinecraftClient.getInstance().getWindow().getHeight());
             } catch (JsonSyntaxException | IOException e) {
-                Logger.error("Could not load motion blur", e);
+                Logger.error("Could not load motion blur: ", e);
             }
         }
         if (currentBlur != getBlur() && shader != null) {
@@ -104,7 +103,7 @@ public class MotionBlur extends AbstractModule {
         return MotionBlur.getInstance().strength.get() / 100F;
     }
 
-    public class MotionBlurShader extends Resource {
+    private static class MotionBlurShader extends Resource {
 
         public MotionBlurShader() {
             super(MinecraftClient.getInstance().m_iuvifafs(), () -> IOUtils.toInputStream(String.format("{" + "    \"targets\": [" + "        \"swap\","
