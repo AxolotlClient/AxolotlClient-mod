@@ -58,6 +58,10 @@ runClient {
 	classpath(sourceSets.test.runtimeClasspath)
 }
 
+java {
+	withSourcesJar()
+}
+
 // Configure the maven publication
 publishing {
 	publications {

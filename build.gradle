@@ -36,6 +36,10 @@ allprojects {
 		maven { url 'https://jitpack.io' }
 		mavenCentral()
 	}
+
+	java {
+		withSourcesJar()
+	}
 }
 
 subprojects {
@@ -46,10 +50,7 @@ subprojects {
 
 	java {
 		withSourcesJar()
-		withJavadocJar()
 	}
-
-
 
 	jar {
 		filesMatching('LICENSE') {

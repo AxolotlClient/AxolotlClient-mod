@@ -54,6 +54,10 @@ processResources {
 	}
 }
 
+java {
+	withSourcesJar()
+}
+
 runClient {
 	classpath(sourceSets.test.runtimeClasspath)
 }

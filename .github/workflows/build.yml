@@ -19,8 +19,8 @@ jobs:
         run: ./gradlew build
 
       - name: Upload a Build Artifact
-        uses: actions/upload-artifact@v3.1.2
+        uses: actions/upload-artifact@v3
         with:
           # Artifact name
           name: AxolotlClient-1.8.9-automation
-          path: ./**/build/*.jar
+          path: 1.*/build/libs/*
