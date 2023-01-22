@@ -23,5 +23,4 @@ jobs:
         with:
           # Artifact name
           name: AxolotlClient-1.8.9-automation
-          path: build/libs/*.jar
-
+          path: ./**/build/*.jar

@@ -5,7 +5,7 @@ plugins {
 
 group = maven_group
 version = "${project.version}+${project.minecraft_1193}"
-archivesBaseName = "axolotlclient-mod-quilt"
+archivesBaseName = "AxolotlClient"
 
 sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
