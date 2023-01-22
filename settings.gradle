@@ -11,3 +11,7 @@ pluginManagement {
 		gradlePluginPortal()
 	}
 }
+include '1.8.9'
+include 'common'
+include '1.19.3'
+

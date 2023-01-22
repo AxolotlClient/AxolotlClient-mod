@@ -1,6 +1,6 @@
-# AxolotlClient-mod (1.8.9)
+# AxolotlClient-mod
 
-A Complete (nearly) mod to have various features on legacyfabric 1.8.9
+A Complete (nearly) mod to have various features on various Minecraft versions
 
 *Also available in other Languages: [Türkçe](doc/README-tr.md)*
 
@@ -65,7 +65,7 @@ A Complete (nearly) mod to have various features on legacyfabric 1.8.9
 ### Downloads
 
 [![modrinth](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@2/assets/cozy/available/modrinth_64h.png)](https://modrinth.com/mod/axolotlclient)
-[![github](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@2/assets/cozy/available/github_64h.png)](https://github.com/AxolotlClient/AxolotlClient-mod)
+[![github](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@2/assets/cozy/available/github_64h.png)](https://github.com/AxolotlClient/AxolotlClient-mod/releases)
 
 ### Contributing
 

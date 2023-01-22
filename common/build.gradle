@@ -1,0 +1,35 @@
+plugins {
+    id 'java'
+}
+
+group 'io.github.axolotlclient'
+archivesBaseName = "axolotlclient-mod-common"
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+repositories {
+	maven {
+		url "https://moehreag.duckdns.org/maven/snapshots"
+	}
+
+	maven {
+		url 'https://repo.hypixel.net/repository/Hypixel/'
+	}
+
+	maven {
+		name 'TerraformersMC Maven'
+		url 'https://maven.terraformersmc.com/releases/'
+	}
+
+	mavenLocal()
+	maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+	compileOnly("io.github.axolotlclient:AxolotlClient-config:${project.config}+${project.minecraft_119}")
+}
+
+test {
+
+}

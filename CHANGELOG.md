@@ -1,3 +1,5 @@
+## Changelog (1.19.2):
+
 ### 1.0.0 - 2.0.0
 
 - Create the mod
@@ -23,20 +25,22 @@
 - Add TnTTime
 - Add external Module Support
 - Add some other stuff I forgot
-- Full Changelog: https://github.com/AxolotlClient/AxolotlClient-mod/compare/v2.1.0+1.8.9...v2.2.0+1.8.9
+- Full Changelog: https://github.com/AxolotlClient/AxolotlClient-mod/compare/v2.0.0+1.19...v2.2.0+1.19.2
 
 ### 2.2.1
 
 - use own maven instead of JitPack
 - updated Translations
 - fix bugs in the config library
+- Accessibility Improvements
+- Narration Support
 
 ### 2.2.2
 
-- Port of KronHUD 2.2.3's feature set
-- Use JSON format for translations
-- Various Fixes
-- now using the provided DefaultConfigManager
+- KronHUD 2.2.3 feature set
+- Various fixes
+- now using the provided DefaultConfigManager.
+- Full Changelog: https://github.com/AxolotlClient/AxolotlClient-mod/compare/v2.2.1+1.19.2...v2.2.2+1.19.2
 
 ### 2.2.3
 
@@ -46,20 +50,18 @@
 
 ### 2.2.4
 
-- no changes, version bump to keep version parity to 1.19.2
+- fix a critical crash that could totally have been avoided 
 
 ### 2.2.5
 
 - reformat code (@TheKodeToad)
-- add PlayerHUD Auto-Hide Option (@TheKodeToad)
+- add PlayerHUD Auto-Hide Option (@TheKodeToad) 
 - update README
 - add license headers
 - add missing credits
 - add turkish translation of the README
 - add Option to hide AutoTip tip messages
-- Add Option to toggle Freelook 
-- add Chinese (PRC) translation (@HowardZHY)
-- add Chinese (TW) translation (@HowardZHY)
+- Add Option to toggle Freelook
 - update config library to 1.0.13
 
 ### 2.2.6
@@ -71,7 +73,7 @@
 ### 2.2.7
 
 - fix KeyBindOptions not being saved
-    - since this is a critical fix, this will also be released for 1.19.2
+  - since this is a critical fix, this will also be released for 1.19.2
 - add 'Snap-Perspective' mode to Freelook
 
 ### 2.2.8
