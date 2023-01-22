@@ -12,6 +12,9 @@ repositories {
 	maven {
 		url "https://moehreag.duckdns.org/maven/snapshots"
 	}
+	maven {
+		url "https://moehreag.duckdns.org/maven/releases"
+	}
 
 	maven {
 		url 'https://repo.hypixel.net/repository/Hypixel/'
@@ -27,7 +30,7 @@ repositories {
 }
 
 dependencies {
-	compileOnly("io.github.axolotlclient:AxolotlClient-config:${project.config}+${project.minecraft_119}")
+	compileOnly("io.github.axolotlclient:AxolotlClient-config:${project.config}+${project.minecraft_18}")
 }
 
 test {

@@ -126,7 +126,6 @@ public class FSBSkyboxInstance extends SkyboxInstance {
                     matrices.multiply(Axis.Y_POSITIVE.rotationDegrees(180.0F));
                 } else if (i == 3) {
                     matrices.multiply(Axis.X_POSITIVE.rotationDegrees(180.0F));
-                    matrices.multiply(Axis.Y_POSITIVE.rotationDegrees(90.0F));
                 } else if (i == 4) {
                     matrices.multiply(Axis.Z_POSITIVE.rotationDegrees(90.0F));
                     matrices.multiply(Axis.Y_POSITIVE.rotationDegrees(-90.0F));

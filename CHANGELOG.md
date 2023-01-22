@@ -50,12 +50,12 @@
 
 ### 2.2.4
 
-- fix a critical crash that could totally have been avoided 
+- fix a critical crash that could totally have been avoided
 
 ### 2.2.5
 
 - reformat code (@TheKodeToad)
-- add PlayerHUD Auto-Hide Option (@TheKodeToad) 
+- add PlayerHUD Auto-Hide Option (@TheKodeToad)
 - update README
 - add license headers
 - add missing credits
@@ -99,3 +99,7 @@
 - Add a `graphical` option type
 - Add custom crosshair texture option
 - add customization options to the mouse movement indicator of the KeystrokeHud
+
+### 3.0.0
+
+- all versions now share parts of a codebase

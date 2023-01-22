@@ -4,7 +4,7 @@ plugins {
 }
 
 group = maven_group
-version = "${project.version}+${project.minecraft_119}"
+version = "${project.version}+${project.minecraft_1193}"
 archivesBaseName = "axolotlclient-mod-quilt"
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -17,19 +17,19 @@ repositories {
 }
 
 dependencies {
-	minecraft "com.mojang:minecraft:${project.minecraft_119}"
-	mappings "org.quiltmc:quilt-mappings:${project.mappings_119}:intermediary-v2"
+	minecraft "com.mojang:minecraft:${project.minecraft_1193}"
+	mappings "org.quiltmc:quilt-mappings:${project.mappings_1193}:intermediary-v2"
 
 	modImplementation "org.quiltmc:quilt-loader:${project.quilt_loader}"
 
-	modImplementation include("org.quiltmc.qsl.core:networking:${project.qsl}+${project.minecraft_119}")
-	modImplementation include("org.quiltmc.qsl.core:resource_loader:${project.qsl}+${project.minecraft_119}")
+	modImplementation include("org.quiltmc.qsl.core:networking:${project.qsl_1193}+${project.minecraft_1193}")
+	modImplementation include("org.quiltmc.qsl.core:resource_loader:${project.qsl_1193}+${project.minecraft_1193}")
 
-	modImplementation ("io.github.axolotlclient:AxolotlClient-config:${project.config}+${project.minecraft_119}") {
+	modImplementation ("io.github.axolotlclient:AxolotlClient-config:${project.config}+${project.minecraft_1193}") {
 		exclude group: "com.terraformersmc"
 	}
 	modCompileOnlyApi("com.terraformersmc:modmenu:5.0.2")
-	include "io.github.axolotlclient:AxolotlClient-config:${project.config}+${project.minecraft_119}"
+	include "io.github.axolotlclient:AxolotlClient-config:${project.config}+${project.minecraft_1193}"
 
 	implementation include(project(":common"))
 
@@ -86,7 +86,7 @@ modrinth {
 	versionNumber = "${project.version}"
 	versionType = "release"
 	uploadFile = remapJar
-	gameVersions = ["${project.minecraft_119}"]
+	gameVersions = ["${project.minecraft_1193}"]
 	loaders = ["quilt"]
 	additionalFiles = [remapSourcesJar]
 	dependencies {

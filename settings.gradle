@@ -14,4 +14,6 @@ pluginManagement {
 include '1.8.9'
 include 'common'
 include '1.19.3'
+include '1.19.2'
+include '1.16_combat-6'
 
