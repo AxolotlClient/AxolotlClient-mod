@@ -24,7 +24,7 @@ package io.github.axolotlclient.modules.hud.gui.hud.vanilla;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlclientConfig.options.Option;
-import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
+import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.ItemUtil;
 import net.minecraft.client.MinecraftClient;
@@ -40,17 +40,17 @@ import net.minecraft.util.Identifier;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HotbarHUD extends AbstractHudEntry {
+public class HotbarHUD extends TextHudEntry {
 
     public static Identifier ID = new Identifier("axolotlclient", "hotbarhud");
     private static final Identifier WIDGETS_TEXTURE = new Identifier("textures/gui/widgets.png");
 
     public HotbarHUD() {
-        super(182, 22);
+        super(182, 22, false);
     }
 
     @Override
-    public void render(MatrixStack matrices, float delta) {
+    public void renderComponent(MatrixStack matrices, float delta) {
         PlayerEntity playerEntity = MinecraftClient.getInstance().cameraEntity instanceof PlayerEntity
                 ? (PlayerEntity) MinecraftClient.getInstance().cameraEntity
                 : null;
@@ -125,16 +125,11 @@ public class HotbarHUD extends AbstractHudEntry {
     }
 
     @Override
-    public void renderPlaceholder(MatrixStack matrices, float delta) {
-        renderPlaceholderBackground(matrices);
-        scale(matrices);
+    public void renderPlaceholderComponent(MatrixStack matrices, float delta) {
         DrawPosition pos = getPos();
 
         drawCenteredString(matrices, MinecraftClient.getInstance().textRenderer, getName(), pos.x + width / 2,
                 pos.y + height / 2 - 4, -1, true);
-
-        matrices.pop();
-        hovered = false;
     }
 
     @Override
