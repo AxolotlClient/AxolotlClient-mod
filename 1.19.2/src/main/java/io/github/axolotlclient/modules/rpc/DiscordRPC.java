@@ -24,7 +24,7 @@ package io.github.axolotlclient.modules.rpc;
 
 import de.jcm.discordgamesdk.Core;
 import de.jcm.discordgamesdk.CreateParams;
-import de.jcm.discordgamesdk.DiscordEventHandler;
+import de.jcm.discordgamesdk.DiscordEventAdapter;
 import de.jcm.discordgamesdk.activity.Activity;
 import de.jcm.discordgamesdk.activity.ActivityType;
 import io.github.axolotlclient.AxolotlClient;
@@ -41,38 +41,92 @@ import java.time.Instant;
 
 /**
  * This DiscordRPC module is derived from <a href="https://github.com/DeDiamondPro/HyCord">HyCord</a>.
- * @license GPL-3.0
+ *
  * @author DeDiamondPro
+ * @license GPL-3.0
  */
 
 public class DiscordRPC extends AbstractModule {
 
-    private static DiscordRPC Instance;
-
-    public OptionCategory category = new OptionCategory("rpc");
-
-    public BooleanOption enabled = new BooleanOption("enabled", value -> {
+    public static Activity currentActivity;
+    public static Core discordRPC;
+    private static DiscordRPC Instance;    public BooleanOption enabled = new BooleanOption("enabled", value -> {
         if (value) {
             initRPC();
         } else {
             shutdown();
         }
     }, false);
+    private static boolean running;
+    public OptionCategory category = new OptionCategory("rpc");
     public BooleanOption showActivity = new BooleanOption("showActivity", true);
     public EnumOption showServerNameMode = new EnumOption("showServerNameMode",
-            new String[] { "showIp", "showName", "off" }, "off");
+            new String[]{"showIp", "showName", "off"}, "off");
     public BooleanOption showTime = new BooleanOption("showTime", true);
-
-    public static Activity currentActivity;
-    public static Core discordRPC;
     Instant time = Instant.now();
 
-    private static boolean running;
+    public static void setWorld(String world) {
+        if (running) {
+            if (currentActivity == null) {
+                DiscordRPC.getInstance().updateRPC();
+            }
+            currentActivity.setDetails("World: " + world);
+            if (discordRPC.isOpen()) {
+                discordRPC.activityManager().updateActivity(currentActivity);
+            }
+        }
+    }
+
+    public void updateRPC() {
+        if (discordRPC != null && discordRPC.isOpen()) {
+            updateActivity();
+        }
+    }
 
     public static DiscordRPC getInstance() {
         if (Instance == null)
             Instance = new DiscordRPC();
         return Instance;
+    }
+
+    public void updateActivity() {
+        Activity activity = new Activity();
+
+        String state = switch (showServerNameMode.get()) {
+            case "showIp" -> MinecraftClient.getInstance().world == null ? "In the menu"
+                    : (MinecraftClient.getInstance().getCurrentServerEntry() == null ? "Singleplayer"
+                    : MinecraftClient.getInstance().getCurrentServerEntry().address);
+            case "showName" -> MinecraftClient.getInstance().world == null ? "In the menu"
+                    : (MinecraftClient.getInstance().getCurrentServerEntry() == null ? "Singleplayer"
+                    : MinecraftClient.getInstance().getCurrentServerEntry().name);
+            default -> "";
+        };
+
+        if (showActivity.get() && MinecraftClient.getInstance().getCurrentServerEntry() != null) {
+            activity.setDetails(Util.getGame());
+        } else if (showActivity.get() && currentActivity != null) {
+            activity.setDetails(currentActivity.getDetails());
+        }
+
+        activity.setState(state);
+        activity.setType(ActivityType.PLAYING);
+
+        if (showTime.get()) {
+            activity.timestamps().setStart(Instant.ofEpochMilli(time.toEpochMilli()));
+        }
+
+        if (currentActivity != null) {
+            currentActivity.close();
+        }
+
+        activity.assets().setLargeText("AxolotlClient " + MinecraftClient.getInstance().getGameVersion());
+        activity.assets().setLargeImage("icon");
+        discordRPC.activityManager().updateActivity(activity);
+        currentActivity = activity;
+    }
+
+    public static void shutdown() {
+        running = false;
     }
 
     public void init() {
@@ -82,6 +136,16 @@ public class DiscordRPC extends AbstractModule {
 
         if (OSUtil.getOS() == OSUtil.OperatingSystem.OTHER) {
             enabled.setForceOff(true, "crash");
+        }
+    }
+
+    public void tick() {
+        if (!running && enabled.get()) {
+            initRPC();
+        }
+
+        if (running) {
+            updateRPC();
         }
     }
 
@@ -97,7 +161,7 @@ public class DiscordRPC extends AbstractModule {
             params.setClientID(875835666729152573L);
             params.setFlags(CreateParams.Flags.NO_REQUIRE_DISCORD);
 
-            DiscordEventHandler handler = new DiscordEventHandler();
+            DiscordEventAdapter handler = new DiscordEventAdapter() {};
             params.registerEventHandler(handler);
 
             try {
@@ -131,71 +195,5 @@ public class DiscordRPC extends AbstractModule {
         }
     }
 
-    public void updateActivity() {
-        Activity activity = new Activity();
 
-        String state = switch (showServerNameMode.get()) {
-            case "showIp" -> MinecraftClient.getInstance().world == null ? "In the menu"
-                    : (MinecraftClient.getInstance().getCurrentServerEntry() == null ? "Singleplayer"
-                            : MinecraftClient.getInstance().getCurrentServerEntry().address);
-            case "showName" -> MinecraftClient.getInstance().world == null ? "In the menu"
-                    : (MinecraftClient.getInstance().getCurrentServerEntry() == null ? "Singleplayer"
-                            : MinecraftClient.getInstance().getCurrentServerEntry().name);
-            default -> "";
-        };
-
-        if (showActivity.get() && MinecraftClient.getInstance().getCurrentServerEntry() != null) {
-            activity.setDetails(Util.getGame());
-        } else if (showActivity.get() && currentActivity != null) {
-            activity.setDetails(currentActivity.getDetails());
-        }
-
-        activity.setState(state);
-        activity.setType(ActivityType.PLAYING);
-
-        if (showTime.get()) {
-            activity.timestamps().setStart(Instant.ofEpochMilli(time.toEpochMilli()));
-        }
-
-        if (currentActivity != null) {
-            currentActivity.close();
-        }
-
-        activity.assets().setLargeText("AxolotlClient " + MinecraftClient.getInstance().getGameVersion());
-        activity.assets().setLargeImage("icon");
-        discordRPC.activityManager().updateActivity(activity);
-        currentActivity = activity;
-    }
-
-    public static void setWorld(String world) {
-        if (running) {
-            if (currentActivity == null) {
-                DiscordRPC.getInstance().updateRPC();
-            }
-            currentActivity.setDetails("World: " + world);
-            if (discordRPC.isOpen()) {
-                discordRPC.activityManager().updateActivity(currentActivity);
-            }
-        }
-    }
-
-    public void updateRPC() {
-        if (discordRPC != null && discordRPC.isOpen()) {
-            updateActivity();
-        }
-    }
-
-    public void tick() {
-        if (!running && enabled.get()) {
-            initRPC();
-        }
-
-        if (running) {
-            updateRPC();
-        }
-    }
-
-    public static void shutdown() {
-        running = false;
-    }
 }

@@ -24,7 +24,7 @@ package io.github.axolotlclient.modules.rpc;
 
 import de.jcm.discordgamesdk.Core;
 import de.jcm.discordgamesdk.CreateParams;
-import de.jcm.discordgamesdk.DiscordEventHandler;
+import de.jcm.discordgamesdk.DiscordEventAdapter;
 import de.jcm.discordgamesdk.activity.Activity;
 import de.jcm.discordgamesdk.activity.ActivityType;
 import io.github.axolotlclient.AxolotlClient;
@@ -41,33 +41,47 @@ import java.time.Instant;
 
 /**
  * This DiscordRPC module is derived from <a href="https://github.com/DeDiamondPro/HyCord">HyCord</a>.
- * @license GPL-3.0
+ *
  * @author DeDiamondPro
+ * @license GPL-3.0
  */
 
 public class DiscordRPC extends AbstractModule {
 
-    private static DiscordRPC Instance;
-
-    public OptionCategory category = new OptionCategory("rpc");
-
-    public BooleanOption enabled = new BooleanOption("enabled", value -> {
+    public static Activity currentActivity;
+    public static Core discordRPC;
+    private static DiscordRPC Instance;    public BooleanOption enabled = new BooleanOption("enabled", value -> {
         if (value) {
             initRPC();
         } else {
             shutdown();
         }
     }, false);
+    private static boolean running;
+    public OptionCategory category = new OptionCategory("rpc");
     public BooleanOption showActivity = new BooleanOption("showActivity", true);
     public EnumOption showServerNameMode = new EnumOption("showServerNameMode",
-            new String[] { "showIp", "showName", "off" }, "off");
+            new String[]{"showIp", "showName", "off"}, "off");
     public BooleanOption showTime = new BooleanOption("showTime", true);
-
-    public static Activity currentActivity;
-    public static Core discordRPC;
     Instant time = Instant.now();
 
-    private static boolean running;
+    public static void setWorld(String world) {
+        if (running) {
+            if (currentActivity == null) {
+                DiscordRPC.getInstance().updateRPC();
+            }
+            currentActivity.setDetails("World: " + world);
+            if (discordRPC.isOpen()) {
+                discordRPC.activityManager().updateActivity(currentActivity);
+            }
+        }
+    }
+
+    public void updateRPC() {
+        if (discordRPC != null && discordRPC.isOpen()) {
+            updateActivity();
+        }
+    }
 
     public static DiscordRPC getInstance() {
         if (Instance == null)
@@ -75,66 +89,11 @@ public class DiscordRPC extends AbstractModule {
         return Instance;
     }
 
-    public void init() {
-        category.add(enabled, showTime, showActivity, showServerNameMode);
-
-        AxolotlClient.CONFIG.addCategory(category);
-
-        if (OSUtil.getOS() == OSUtil.OperatingSystem.OTHER) {
-            enabled.setForceOff(true, "crash");
-        }
-    }
-
-    @SuppressWarnings("BusyWait")
-    public void initRPC() {
-        if (enabled.get()) {
-            GameSdkDownloader.downloadSdk(AxolotlClient.LOGGER, enabled);
-        }
-
-        if (enabled.get()) {
-            CreateParams params = new CreateParams();
-
-            params.setClientID(875835666729152573L);
-            params.setFlags(CreateParams.Flags.NO_REQUIRE_DISCORD);
-
-            DiscordEventHandler handler = new DiscordEventHandler();
-            params.registerEventHandler(handler);
-
-            try {
-                discordRPC = new Core(params);
-
-                running = true;
-                Thread callBacks = new Thread(() -> {
-                    while (enabled.get() && running) {
-                        discordRPC.runCallbacks();
-
-                        try {
-                            Thread.sleep(16);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    discordRPC.close();
-                    Thread.currentThread().interrupt();
-                });
-                callBacks.start();
-                AxolotlClient.LOGGER.info("Started RPC Core");
-            } catch (Exception e) {
-                if (!e.getMessage().contains("INTERNAL_ERROR")) {
-                    AxolotlClient.LOGGER.error("An error occurred: ");
-                    e.printStackTrace();
-                } else {
-                    enabled.set(false);
-                }
-            }
-        }
-    }
-
     public void updateActivity() {
         Activity activity = new Activity();
 
-        String state;switch (showServerNameMode.get()) {
+        String state;
+        switch (showServerNameMode.get()) {
             case "showIp":
                 state = MinecraftClient.getInstance().world == null ? "In the menu"
                         : (MinecraftClient.getInstance().getCurrentServerEntry() == null ? "Singleplayer" : MinecraftClient.getInstance().getCurrentServerEntry().address);
@@ -175,21 +134,17 @@ public class DiscordRPC extends AbstractModule {
         currentActivity = activity;
     }
 
-    public static void setWorld(String world) {
-        if (running) {
-            if (currentActivity == null) {
-                DiscordRPC.getInstance().updateRPC();
-            }
-            currentActivity.setDetails("World: " + world);
-            if (discordRPC.isOpen()) {
-                discordRPC.activityManager().updateActivity(currentActivity);
-            }
-        }
+    public static void shutdown() {
+        running = false;
     }
 
-    public void updateRPC() {
-        if (discordRPC != null && discordRPC.isOpen()) {
-            updateActivity();
+    public void init() {
+        category.add(enabled, showTime, showActivity, showServerNameMode);
+
+        AxolotlClient.CONFIG.addCategory(category);
+
+        if (OSUtil.getOS() == OSUtil.OperatingSystem.OTHER) {
+            enabled.setForceOff(true, "crash");
         }
     }
 
@@ -203,7 +158,51 @@ public class DiscordRPC extends AbstractModule {
         }
     }
 
-    public static void shutdown() {
-        running = false;
+    @SuppressWarnings("BusyWait")
+    public void initRPC() {
+        if (enabled.get()) {
+            GameSdkDownloader.downloadSdk(AxolotlClient.LOGGER, enabled);
+        }
+
+        if (enabled.get()) {
+            CreateParams params = new CreateParams();
+
+            params.setClientID(875835666729152573L);
+            params.setFlags(CreateParams.Flags.NO_REQUIRE_DISCORD);
+
+            DiscordEventAdapter handler = new DiscordEventAdapter() {};
+            params.registerEventHandler(handler);
+
+            try {
+                discordRPC = new Core(params);
+
+                running = true;
+                Thread callBacks = new Thread(() -> {
+                    while (enabled.get() && running) {
+                        discordRPC.runCallbacks();
+
+                        try {
+                            Thread.sleep(16);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    discordRPC.close();
+                    Thread.currentThread().interrupt();
+                });
+                callBacks.start();
+                AxolotlClient.LOGGER.info("Started RPC Core");
+            } catch (Exception e) {
+                if (!e.getMessage().contains("INTERNAL_ERROR")) {
+                    AxolotlClient.LOGGER.error("An error occurred: ");
+                    e.printStackTrace();
+                } else {
+                    enabled.set(false);
+                }
+            }
+        }
     }
+
+
 }
