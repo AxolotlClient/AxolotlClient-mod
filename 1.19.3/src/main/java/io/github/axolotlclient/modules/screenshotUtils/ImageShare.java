@@ -22,15 +22,11 @@
 
 package io.github.axolotlclient.modules.screenshotUtils;
 
-import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonParser;
 import com.mojang.blaze3d.texture.NativeImage;
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.NetworkHelper;
-import io.github.axolotlclient.util.Logger;
+import io.github.axolotlclient.util.NetworkHelper;
 import io.github.axolotlclient.util.Util;
 import lombok.Getter;
 import net.minecraft.text.ClickEvent;
@@ -38,25 +34,18 @@ import net.minecraft.text.HoverEvent;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.RequestBuilder;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
 import org.quiltmc.loader.api.QuiltLoader;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.Base64;
-import java.util.List;
 
 public class ImageShare {
 
-    private final String separator = ";";//"ⓢ¢€ⓢ¢";
+    private final String separator = ";";
 
     @Getter
     private static final ImageShare Instance = new ImageShare();
@@ -89,63 +78,9 @@ public class ImageShare {
 
             AxolotlClient.LOGGER.info("Uploading image "+file.getName());
 
-            JsonElement el = NetworkHelper.getRequest(url, createHttpClient());
-            if(el != null) {
-                JsonObject initGet = el.getAsJsonObject();
-                String tempId = initGet.get("id").getAsString();
-                int chunkSize = initGet.get("chunkSize").getAsInt();
-                int maxChunks = initGet.get("maxChunks").getAsInt();
-
-                String data = encodeB64(file);
-
-                List<String> dataList = new ArrayList<>();
-
-                for (char c : data.toCharArray()) {
-                    dataList.add(String.valueOf(c));
-                }
-
-                List<String> chunks = new ArrayList<>();
-                Lists.partition(dataList, chunkSize).forEach(list -> chunks.add(String.join("", list)));
-
-                if(chunks.size() > maxChunks){
-                    throw new IllegalStateException("Too much Data!");
-                }
-
-                long index = 0;
-                for (String content : chunks) {
-                    RequestBuilder requestBuilder = RequestBuilder.post().setUri(url + "/" + tempId);
-                    requestBuilder.setHeader("Content-Type", "application/json");
-                    requestBuilder.setEntity(new StringEntity("{" +
-                            "\"index\":"+index+"," +
-                            "  \"content\": \"" + content + "\"" +
-                            "}"));
-                    AxolotlClient.LOGGER.debug(EntityUtils.toString(client.execute(requestBuilder.build()).getEntity()));
-                    index += content.getBytes(StandardCharsets.UTF_8).length;
-                }
-
-                AxolotlClient.LOGGER.debug("Finishing Stream... tempId was: "+tempId);
-
-                RequestBuilder requestBuilder = RequestBuilder.post().setUri(url + "/" + tempId + "/end");
-                requestBuilder.setHeader("Content-Type", "application/json");
-
-                requestBuilder.setEntity(new StringEntity("{\"language\": \"image:png/base64\", \"expiration\": 168, \"password\":\"\"}"));
-
-                HttpResponse response = client.execute(requestBuilder.build());
-
-                String body = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
-                try {
-                    JsonElement element = JsonParser.parseString(body);
-
-                    return element.getAsJsonObject().get("pasteId").getAsString();
-                } catch (JsonParseException e) {
-                    AxolotlClient.LOGGER.warn("Not Json data: \n" + body);
-                }
-            } else {
-                AxolotlClient.LOGGER.error("Server Error!");
-            }
+            ImageNetworking.upload(encodeB64(file), url, client, AxolotlClient.LOGGER);
         } catch (Exception e){
             e.printStackTrace();
-            // upload failed.
         }
 
         return "";
@@ -192,7 +127,6 @@ public class ImageShare {
         } catch (Exception e){
             e.printStackTrace();
         }
-        //Logger.warn("Not base64 data: "+data);
         return null;
     }
 }

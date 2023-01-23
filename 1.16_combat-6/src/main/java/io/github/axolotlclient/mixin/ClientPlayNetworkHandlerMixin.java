@@ -23,7 +23,7 @@
 package io.github.axolotlclient.mixin;
 
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.NetworkHelper;
+import io.github.axolotlclient.util.NetworkHelper;
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hud.gui.hud.simple.TPSHud;
 import net.minecraft.client.network.ClientPlayNetworkHandler;

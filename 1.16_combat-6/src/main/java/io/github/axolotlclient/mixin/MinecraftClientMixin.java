@@ -23,7 +23,7 @@
 package io.github.axolotlclient.mixin;
 
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.NetworkHelper;
+import io.github.axolotlclient.util.NetworkHelper;
 import io.github.axolotlclient.modules.blur.MenuBlur;
 import io.github.axolotlclient.modules.rpc.DiscordRPC;
 import net.fabricmc.loader.api.FabricLoader;

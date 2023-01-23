@@ -50,6 +50,7 @@ import io.github.axolotlclient.modules.zoom.Zoom;
 import io.github.axolotlclient.util.FeatureDisabler;
 import io.github.axolotlclient.util.Logger;
 import io.github.axolotlclient.util.LoggerImpl;
+import io.github.axolotlclient.util.NetworkHelper;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.legacyfabric.fabric.api.client.event.lifecycle.v1.ClientTickEvents;

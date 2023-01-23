@@ -30,7 +30,7 @@ import io.github.axolotlclient.AxolotlClientConfig.common.ConfigHolder;
 import io.github.axolotlclient.AxolotlClientConfig.common.options.Option;
 import io.github.axolotlclient.AxolotlClientConfig.common.options.OptionCategory;
 import io.github.axolotlclient.AxolotlClientConfig.options.*;
-import io.github.axolotlclient.NetworkHelper;
+import io.github.axolotlclient.util.NetworkHelper;
 import io.github.axolotlclient.config.screen.CreditsScreen;
 import io.github.axolotlclient.mixin.OverlayTextureAccessor;
 import lombok.Getter;

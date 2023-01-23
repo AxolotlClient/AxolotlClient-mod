@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.NetworkHelper;
+import io.github.axolotlclient.util.NetworkHelper;
 import io.github.axolotlclient.AxolotlClientConfig.AxolotlClientConfigConfig;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.AxolotlClientConfig.common.ConfigHolder;

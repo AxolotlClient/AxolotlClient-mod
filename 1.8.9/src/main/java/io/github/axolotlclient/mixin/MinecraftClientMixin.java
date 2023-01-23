@@ -35,7 +35,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.NetworkHelper;
+import io.github.axolotlclient.util.NetworkHelper;
 import io.github.axolotlclient.modules.blur.MenuBlur;
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.rpc.DiscordRPC;

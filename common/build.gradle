@@ -37,6 +37,8 @@ dependencies {
 	compileOnly("io.github.axolotlclient.AxolotlClient-config:AxolotlClientConfig-common:${project.config}")
 
 	compileOnly("com.google.guava:guava:17.0")
+	compileOnly("org.apache.httpcomponents:httpclient:4.3.3")
+	compileOnly("com.google.code.gson:gson:2.2.4")
 
 	shadow(implementation("net.hypixel:hypixel-api-core:4.1") {
 		exclude group: "com.google.code.gson", module: "gson"
@@ -48,8 +50,7 @@ dependencies {
 		exclude group: "org.apache.httpcomponents", module: "httpclient"
 	})
 
-	implementation('com.github.JnCrMx:discord-game-sdk4j:v0.5.5')
-	shadow('com.github.JnCrMx:discord-game-sdk4j:v0.5.5')
+	shadow implementation('com.github.JnCrMx:discord-game-sdk4j:v0.5.5')
 }
 
 build {
