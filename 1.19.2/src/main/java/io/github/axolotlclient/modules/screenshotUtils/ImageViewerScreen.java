@@ -26,7 +26,6 @@ import com.google.common.hash.Hashing;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.texture.NativeImage;
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.util.Logger;
 import io.github.axolotlclient.util.OSUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -179,7 +178,7 @@ public class ImageViewerScreen extends Screen {
         addImageButton(copy, true);
 
         ButtonWidget about = new ButtonWidget(width - 60, 100, 50, 20, Text.translatable("aboutAction"), buttonWidget -> {
-            OSUtil.getOS().open(aboutPage);
+            OSUtil.getOS().open(aboutPage, AxolotlClient.LOGGER);
         }, (buttonWidget, matrixStack, i, j) -> ImageViewerScreen.this.renderTooltip(matrixStack,Text.translatable("about_image"), i, j));
 
         addImageButton(about, true);

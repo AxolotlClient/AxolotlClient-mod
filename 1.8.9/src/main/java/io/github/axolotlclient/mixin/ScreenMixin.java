@@ -24,6 +24,8 @@ package io.github.axolotlclient.mixin;
 
 import java.net.URI;
 
+import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.util.OSUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
@@ -34,7 +36,6 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 import io.github.axolotlclient.modules.blur.MenuBlur;
 import io.github.axolotlclient.modules.screenshotUtils.ScreenshotUtils;
 import io.github.axolotlclient.modules.scrollableTooltips.ScrollableTooltips;
-import io.github.axolotlclient.util.OSUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
@@ -70,7 +71,7 @@ public abstract class ScreenMixin {
 
     @Inject(method = "openLink", at = @At("HEAD"), cancellable = true)
     public void axolotlclient$openLink(URI link, CallbackInfo ci) {
-        OSUtil.getOS().open(link);
+        OSUtil.getOS().open(link, AxolotlClient.LOGGER);
         ci.cancel();
     }
 

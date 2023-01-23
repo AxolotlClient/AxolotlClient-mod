@@ -1,7 +1,7 @@
 plugins {
 	id 'java'
 	id 'maven-publish'
-	id "io.freefair.lombok" version '6.6.+'
+	id "io.freefair.lombok" version '6.6.+' apply false
 	id 'com.modrinth.minotaur' version '2.+'
 	id 'org.quiltmc.gradle.licenser' version '1.+'
 }
@@ -36,10 +36,6 @@ allprojects {
 		maven { url 'https://jitpack.io' }
 		mavenCentral()
 	}
-
-	java {
-		withSourcesJar()
-	}
 }
 
 subprojects {
@@ -63,6 +59,10 @@ subprojects {
 license {
 	rule file('HEADER')
 	include '**/*.java'
+}
+
+build {
+	tasks.jar.enabled = false
 }
 
 tasks.withType(JavaCompile).configureEach {

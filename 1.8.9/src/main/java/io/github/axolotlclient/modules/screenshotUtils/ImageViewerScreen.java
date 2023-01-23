@@ -32,14 +32,13 @@ import java.net.URI;
 import javax.imageio.ImageIO;
 
 import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.util.OSUtil;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.input.Keyboard;
 
 import com.google.common.hash.Hashing;
 import com.mojang.blaze3d.platform.GlStateManager;
 
-import io.github.axolotlclient.util.Logger;
-import io.github.axolotlclient.util.OSUtil;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -201,7 +200,7 @@ public class ImageViewerScreen extends Screen {
                 AxolotlClient.LOGGER.info("Copied image "+imageName+" to the clipboard!");
                 break;
             case 28:
-                OSUtil.getOS().open(aboutPage);
+                OSUtil.getOS().open(aboutPage, AxolotlClient.LOGGER);
                 break;
         }
     }

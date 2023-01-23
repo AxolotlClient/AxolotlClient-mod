@@ -31,13 +31,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import io.github.axolotlclient.util.OSUtil;
 import org.jetbrains.annotations.Nullable;
 
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.*;
 import io.github.axolotlclient.modules.AbstractModule;
-import io.github.axolotlclient.util.Logger;
-import io.github.axolotlclient.util.OSUtil;
 import io.github.axolotlclient.util.Util;
 import lombok.AllArgsConstructor;
 import net.minecraft.client.MinecraftClient;
@@ -93,7 +92,7 @@ public class ScreenshotUtils extends AbstractModule {
         actions.add(new Action("openAction",
                 Formatting.WHITE,
                 "open_image",
-                new CustomClickEvent((file) -> OSUtil.getOS().open(file.toURI()))
+                new CustomClickEvent((file) -> OSUtil.getOS().open(file.toURI(), AxolotlClient.LOGGER))
         ));
 
         actions.add(new Action("uploadAction", Formatting.LIGHT_PURPLE,
