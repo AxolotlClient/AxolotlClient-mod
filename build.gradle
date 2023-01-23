@@ -54,11 +54,11 @@ subprojects {
 			rename '^(LICENSE.*?)(\\..*)?$', "\$1_${archivesBaseName}\$2"
 		}
 	}
-}
 
-license {
-	rule file('HEADER')
-	include '**/*.java'
+	license {
+		rule file('../HEADER')
+		include '**/*.java'
+	}
 }
 
 build {
