@@ -22,6 +22,7 @@
 
 package io.github.axolotlclient.modules;
 
+import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.config.screen.CreditsScreen;
 import io.github.axolotlclient.util.Logger;
 import org.quiltmc.loader.api.ModContributor;
@@ -66,7 +67,7 @@ public class ModuleLoader {
                     CreditsScreen.externalModuleCredits.put(modName, authorsNContributors.toArray(new String[0]));
                 }
             } catch (Exception e) {
-                Logger.warn("Skipping module: " + entrypoint.getProvider().metadata().name() + " because of error:");
+                AxolotlClient.LOGGER.warn("Skipping module: " + entrypoint.getProvider().metadata().name() + " because of error:");
                 e.printStackTrace();
             }
         });

@@ -55,8 +55,4 @@ public class LevelHead implements AbstractHypixelMod {
     public OptionCategory getCategory() {
         return category;
     }
-
-    public enum LevelHeadMode {
-        NETWORK, BEDWARS, SKYWARS
-    }
 }

@@ -24,7 +24,7 @@ repositories {
 
 loom {
 	setIntermediaryUrl('https://maven.legacyfabric.net/net/fabricmc/intermediary/%1$s/intermediary-%1$s-v2.jar')
-	accessWidenerPath = file("src/main/resources/axolotlclient.accesswidener")
+	accessWidenerPath.set(file("src/main/resources/axolotlclient.accesswidener"))
 }
 
 dependencies {
@@ -32,7 +32,6 @@ dependencies {
 	mappings "net.legacyfabric:yarn:${project.mappings_18}"
 
 	modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader}"
-	//modImplementation "org.quiltmc:quilt-loader:${project.quilt_loader}"
 
 	annotationProcessor "org.ow2.asm:asm:${project.asmVersion}"
 	annotationProcessor "org.ow2.asm:asm-analysis:${project.asmVersion}"
@@ -45,21 +44,11 @@ dependencies {
 
 	modCompileOnlyApi(files("libs/legacy-modmenu-1.2.0+1.8.9-dev.jar"))
 
-	implementation include(project(":common"))
-
-	include( implementation('com.github.JnCrMx:discord-game-sdk4j:v0.5.5'))
-
-	include(implementation("net.hypixel:hypixel-api-core:4.1") {
-		exclude group: "com.google.code.gson", module: "gson"
-		exclude group: "org.apache.httpcomponents", module: "httpclient"
-	})
-
-	include(implementation("net.hypixel:hypixel-api-transport-apache:4.1") {
-		exclude group: "com.google.code.gson", module: "gson"
-		exclude group: "org.apache.httpcomponents", module: "httpclient"
-	})
+	implementation include(project(path: ":common", configuration: 'shadow'))
 
 	modImplementation include("com.github.moehreag:search-in-resources:1.0.2")
+
+	implementation('com.github.JnCrMx:discord-game-sdk4j:v0.5.5')
 }
 
 processResources {

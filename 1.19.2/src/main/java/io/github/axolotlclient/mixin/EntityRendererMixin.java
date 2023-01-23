@@ -73,7 +73,7 @@ public abstract class EntityRendererMixin<T extends Entity> {
                 if (HypixelAbstractionLayer.hasValidAPIKey() && LevelHead.getInstance().enabled.get()
                         && string.getString().contains(entity.getName().getString())) {
                     TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
-                    String text = "Level: " + HypixelAbstractionLayer.getPlayerLevel(String.valueOf(entity.getUuid()));
+                    String text = "Level: " + HypixelAbstractionLayer.getPlayerLevel(String.valueOf(entity.getUuid()), LevelHead.getInstance().mode.get());
 
                     float x = -textRenderer.getWidth(text) / 2F;
                     float y = string.getString().contains("deadmau5") ? -20 : -10;

@@ -24,6 +24,7 @@ package io.github.axolotlclient.modules.screenshotUtils;
 
 import com.google.common.hash.Hashing;
 import com.mojang.blaze3d.systems.RenderSystem;
+import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.util.Logger;
 import io.github.axolotlclient.util.OSUtil;
 import net.fabricmc.loader.api.FabricLoader;
@@ -146,9 +147,9 @@ public class ImageViewerScreen extends Screen {
                 buttonWidget -> {
                     try {
                         Files.write(FabricLoader.getInstance().getGameDir().resolve("screenshots").resolve("_share-"+imageName), Objects.requireNonNull(image.getImage()).getBytes());
-                        Logger.info("Saved image "+imageName+" to screenshots folder!");
+                        AxolotlClient.LOGGER.info("Saved image "+imageName+" to screenshots folder!");
                     } catch (IOException e) {
-                        Logger.info("Failed to save image!");
+                        AxolotlClient.LOGGER.info("Failed to save image!");
                     }
                 }, (buttonWidget, matrixStack, i, j) -> ImageViewerScreen.this.renderTooltip(matrixStack, new TranslatableText("save_image"), i, j));
         addImageButton(save, true);
@@ -171,7 +172,7 @@ public class ImageViewerScreen extends Screen {
                     return ImageIO.read(new ByteArrayInputStream(Objects.requireNonNull(image.getImage()).getBytes()));
                 }
             }, null);
-            Logger.info("Copied image "+imageName+" to the clipboard!");
+            AxolotlClient.LOGGER.info("Copied image "+imageName+" to the clipboard!");
         }, (buttonWidget, matrixStack, i, j) -> ImageViewerScreen.this.renderTooltip(matrixStack, new TranslatableText("copy_image"), i, j));
 
         addImageButton(copy, true);

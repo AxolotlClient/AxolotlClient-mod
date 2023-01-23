@@ -46,10 +46,7 @@ import io.github.axolotlclient.modules.sky.SkyResourceManager;
 import io.github.axolotlclient.modules.tablist.Tablist;
 import io.github.axolotlclient.modules.tnttime.TntTime;
 import io.github.axolotlclient.modules.zoom.Zoom;
-import io.github.axolotlclient.util.FeatureDisabler;
-import io.github.axolotlclient.util.Logger;
-import io.github.axolotlclient.util.UnsupportedMod;
-import io.github.axolotlclient.util.Util;
+import io.github.axolotlclient.util.*;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
@@ -86,6 +83,8 @@ public class AxolotlClient implements ClientModInitializer {
     public static final List<AbstractModule> modules = new ArrayList<>();
 
     private static int tickTime = 0;
+
+    public static Logger LOGGER = new LoggerImpl();
 
     public static UnsupportedMod badmod;
     public static boolean titleDisclaimer = false;
@@ -140,9 +139,9 @@ public class AxolotlClient implements ClientModInitializer {
 
         FeatureDisabler.init();
 
-        Logger.debug("Debug Output activated, Logs will be more verbose!");
+        LOGGER.debug("Debug Output activated, Logs will be more verbose!");
 
-        Logger.info("AxolotlClient Initialized");
+        LOGGER.info("AxolotlClient Initialized");
     }
 
     public static void getModules() {

@@ -33,7 +33,6 @@ import io.github.axolotlclient.AxolotlClientConfig.options.EnumOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.modules.rpc.gameSdk.GameSdkDownloader;
-import io.github.axolotlclient.util.Logger;
 import io.github.axolotlclient.util.OSUtil;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
@@ -89,7 +88,7 @@ public class DiscordRPC extends AbstractModule {
     @SuppressWarnings("BusyWait")
     public void initRPC() {
         if (enabled.get()) {
-            GameSdkDownloader.downloadSdk();
+            GameSdkDownloader.downloadSdk(AxolotlClient.LOGGER, enabled);
         }
 
         if (enabled.get()) {
@@ -120,10 +119,10 @@ public class DiscordRPC extends AbstractModule {
                     Thread.currentThread().interrupt();
                 });
                 callBacks.start();
-                Logger.info("Started RPC Core");
+                AxolotlClient.LOGGER.info("Started RPC Core");
             } catch (Exception e) {
                 if (!e.getMessage().contains("INTERNAL_ERROR")) {
-                    Logger.error("An error occurred: ");
+                    AxolotlClient.LOGGER.error("An error occurred: ");
                     e.printStackTrace();
                 } else {
                     enabled.set(false);

@@ -25,7 +25,7 @@ package io.github.axolotlclient.modules.sky;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.axolotlclient.util.Logger;
+import io.github.axolotlclient.AxolotlClient;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
@@ -77,14 +77,14 @@ public class FSBSkyboxInstance extends SkyboxInstance {
             this.blendMode = parseBlend(jsonBlend.get("type").getAsString());
         } catch (Exception ignored) {
             try {
-                Logger.debug(textures + ": Using manual blend!");
+                AxolotlClient.LOGGER.debug(textures + ": Using manual blend!");
                 JsonObject blend = json.get("blend").getAsJsonObject();
                 this.blendEquation = blend.get("equation").getAsInt();
                 this.blendDstFactor = blend.get("dfactor").getAsInt();
                 this.blendSrcFactor = blend.get("sfactor").getAsInt();
                 this.manualBlend = true;
             } catch (Exception e) {
-                Logger.debug(textures + ": Manual Blend failed, using fallback blend!", e);
+                AxolotlClient.LOGGER.debug(textures + ": Manual Blend failed, using fallback blend!", e);
                 manualBlend = false;
                 blendMode = 8;
             }

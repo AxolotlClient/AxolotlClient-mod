@@ -25,6 +25,7 @@ package io.github.axolotlclient.modules.screenshotUtils;
 import com.google.common.hash.Hashing;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.texture.NativeImage;
+import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.util.Logger;
 import io.github.axolotlclient.util.OSUtil;
 import net.minecraft.client.MinecraftClient;
@@ -149,9 +150,9 @@ public class ImageViewerScreen extends Screen {
                 buttonWidget -> {
                     try {
                         Files.write(QuiltLoader.getGameDir().resolve("screenshots").resolve("_share-"+imageName), Objects.requireNonNull(image.getImage()).getBytes());
-                        Logger.info("Saved image "+imageName+" to screenshots folder!");
+                        AxolotlClient.LOGGER.info("Saved image "+imageName+" to screenshots folder!");
                     } catch (IOException e) {
-                        Logger.info("Failed to save image!");
+                        AxolotlClient.LOGGER.info("Failed to save image!");
                     }
                 }).position(width - 60, 50).width(50).tooltip(Tooltip.create(Text.translatable("save_image"))).build();
         addImageButton(save, true);
@@ -174,7 +175,7 @@ public class ImageViewerScreen extends Screen {
                     return ImageIO.read(new ByteArrayInputStream(Objects.requireNonNull(image.getImage()).getBytes()));
                 }
             }, null);
-            Logger.info("Copied image "+imageName+" to the clipboard!");
+            AxolotlClient.LOGGER.info("Copied image "+imageName+" to the clipboard!");
         }).position(width - 60, 75).width(50).tooltip(Tooltip.create(Text.translatable("copy_image"))).build();
         addImageButton(copy, true);
 

@@ -1,9 +1,10 @@
 plugins {
     id 'java'
+	id 'com.github.johnrengelman.shadow' version '7.+'
 }
 
 group 'io.github.axolotlclient'
-archivesBaseName = "axolotlclient-mod-common"
+archivesBaseName = project.archives_base_name
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
@@ -30,9 +31,78 @@ repositories {
 }
 
 dependencies {
+
+	// take the oldest version just to build against
 	compileOnly("io.github.axolotlclient:AxolotlClient-config:${project.config}+${project.minecraft_18}")
+	compileOnly("io.github.axolotlclient.AxolotlClient-config:AxolotlClientConfig-common:${project.config}")
+
+	compileOnly("com.google.guava:guava:17.0")
+
+	shadow(implementation("net.hypixel:hypixel-api-core:4.1") {
+		exclude group: "com.google.code.gson", module: "gson"
+		exclude group: "org.apache.httpcomponents", module: "httpclient"
+	})
+
+	shadow(implementation("net.hypixel:hypixel-api-transport-apache:4.1") {
+		exclude group: "com.google.code.gson", module: "gson"
+		exclude group: "org.apache.httpcomponents", module: "httpclient"
+	})
+
+	implementation('com.github.JnCrMx:discord-game-sdk4j:v0.5.5')
+	shadow('com.github.JnCrMx:discord-game-sdk4j:v0.5.5')
 }
 
-test {
+build {
+	dependsOn(shadowJar)
+	tasks.jar.enabled = false
+}
 
+jar {
+	return shadowJar
+}
+
+processResources {
+	inputs.property 'version', version
+
+	filesMatching('fabric.mod.json') {
+		expand "version": version
+	}
+}
+
+tasks.withType(AbstractArchiveTask).configureEach {
+	preserveFileTimestamps = false
+	reproducibleFileOrder = true
+}
+
+shadowJar {
+	archiveClassifier.set('')
+	minimize()
+}
+import com.github.jengelman.gradle.plugins.shadow.tasks.ConfigureShadowRelocation
+
+task relocateShadowJar(type: ConfigureShadowRelocation) {
+	target = tasks.shadowJar
+	prefix = "axolotlclient"
+
+}
+
+tasks.shadowJar.dependsOn tasks.relocateShadowJar
+
+publishing {
+	publications {
+		shadow(MavenPublication) { publication ->
+			project.shadow.component(publication)
+		}
+	}
+	repositories {
+		maven {
+			name = "owlMaven"
+			def repository = project.version.toString().contains("beta") || project.version.toString().contains("alpha") ? "snapshots" : "releases"
+			url = "https://moehreag.duckdns.org/maven/"+repository
+			credentials(PasswordCredentials)
+			authentication {
+				basic(BasicAuthentication)
+			}
+		}
+	}
 }

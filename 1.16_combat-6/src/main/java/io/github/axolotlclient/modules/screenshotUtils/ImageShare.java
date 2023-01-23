@@ -27,6 +27,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
+import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.NetworkHelper;
 import io.github.axolotlclient.util.Logger;
 import io.github.axolotlclient.util.Util;
@@ -83,7 +84,7 @@ public class ImageShare {
 
         try (CloseableHttpClient client = createHttpClient()){
 
-            Logger.info("Uploading image "+file.getName());
+            AxolotlClient.LOGGER.info("Uploading image "+file.getName());
 
             JsonElement el = NetworkHelper.getRequest(url, createHttpClient());
             if(el != null) {
@@ -115,11 +116,11 @@ public class ImageShare {
                             "\"index\":"+index+"," +
                             "  \"content\": \"" + content + "\"" +
                             "}"));
-                    Logger.debug(EntityUtils.toString(client.execute(requestBuilder.build()).getEntity()));
+                    AxolotlClient.LOGGER.debug(EntityUtils.toString(client.execute(requestBuilder.build()).getEntity()));
                     index += content.getBytes(StandardCharsets.UTF_8).length;
                 }
 
-                Logger.debug("Finishing Stream... tempId was: "+tempId);
+                AxolotlClient.LOGGER.debug("Finishing Stream... tempId was: "+tempId);
 
                 RequestBuilder requestBuilder = RequestBuilder.post().setUri(url + "/" + tempId + "/end");
                 requestBuilder.setHeader("Content-Type", "application/json");
@@ -134,10 +135,10 @@ public class ImageShare {
 
                     return element.getAsJsonObject().get("pasteId").getAsString();
                 } catch (JsonParseException e) {
-                    Logger.warn("Not Json data: \n" + body);
+                    AxolotlClient.LOGGER.warn("Not Json data: \n" + body);
                 }
             } else {
-                Logger.error("Server Error!");
+                AxolotlClient.LOGGER.error("Server Error!");
             }
         } catch (Exception e){
             e.printStackTrace();

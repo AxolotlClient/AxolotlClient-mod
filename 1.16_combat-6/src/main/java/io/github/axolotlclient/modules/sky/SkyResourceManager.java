@@ -25,6 +25,7 @@ package io.github.axolotlclient.modules.sky;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.util.Logger;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
@@ -102,36 +103,36 @@ public class SkyResourceManager extends AbstractModule implements SimpleSynchron
     @Override
     public void apply(ResourceManager manager) {
         try {
-            Logger.debug("Loading Custom Skies!");
+            AxolotlClient.LOGGER.debug("Loading Custom Skies!");
             SkyboxManager.getInstance().clearSkyboxes();
 
             for (Identifier entry : manager
                     .findResources("sky", identifier -> identifier.endsWith(".json"))) {
-                Logger.debug("Loading FSB sky from " + entry);
+                AxolotlClient.LOGGER.debug("Loading FSB sky from " + entry);
                 SkyboxManager.getInstance().addSkybox(new FSBSkyboxInstance(gson.fromJson(
                         new BufferedReader(new InputStreamReader(manager.getResource(entry).getInputStream(), StandardCharsets.UTF_8))
                                 .lines().collect(Collectors.joining("\n")),
                         JsonObject.class)));
-                Logger.debug("Loaded FSB sky from " + entry);
+                AxolotlClient.LOGGER.debug("Loaded FSB sky from " + entry);
             }
 
             for (Identifier entry : manager
                     .findResources("mcpatcher/sky", identifier -> identifier.endsWith(".properties"))) {
-                Logger.debug("Loading MCP sky from " + entry);
+                AxolotlClient.LOGGER.debug("Loading MCP sky from " + entry);
                 loadMCPSky("mcpatcher", entry, manager.getResource(entry));
-                Logger.debug("Loaded MCP sky from " + entry);
+                AxolotlClient.LOGGER.debug("Loaded MCP sky from " + entry);
             }
 
             for (Identifier entry : manager
                     .findResources("optifine/sky", identifier -> identifier.endsWith(".properties"))) {
-                Logger.debug("Loading OF sky from " + entry);
+                AxolotlClient.LOGGER.debug("Loading OF sky from " + entry);
                 loadMCPSky("optifine", entry, manager.getResource(entry));
-                Logger.debug("Loaded OF sky from " + entry);
+                AxolotlClient.LOGGER.debug("Loaded OF sky from " + entry);
             }
 
-            Logger.debug("Finished Loading Custom Skies!");
+            AxolotlClient.LOGGER.debug("Finished Loading Custom Skies!");
         } catch (Exception e) {
-            Logger.warn("Failed to load skies!", e);
+            AxolotlClient.LOGGER.warn("Failed to load skies!", e);
         }
     }
 

@@ -84,7 +84,7 @@ public class MotionBlur extends AbstractModule {
                         client.getFramebuffer(), shaderLocation);
                 shader.setupDimensions(client.width, client.height);
             } catch (JsonSyntaxException | IOException e) {
-                Logger.error("Could not load motion blur: ", e);
+                AxolotlClient.LOGGER.error("Could not load motion blur: ", e);
             }
         }
         if (currentBlur != getBlur()) {

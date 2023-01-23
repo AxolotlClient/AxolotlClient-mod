@@ -97,13 +97,13 @@ public class NetworkHelper {
                 HttpResponse response = client.execute(post);
                 String body = EntityUtils.toString(response.getEntity());
                 if (body.contains("Success!")) {
-                    Logger.info("Sucessfully logged in at AxolotlClient!");
+                    AxolotlClient.LOGGER.info("Sucessfully logged in at AxolotlClient!");
                     loggedIn = true;
                 }
                 client.close();
             } catch (Exception e) {
                 //e.printStackTrace();
-                Logger.error("Error while logging in!");
+                AxolotlClient.LOGGER.error("Error while logging in!");
             }
         }
     }
@@ -111,7 +111,7 @@ public class NetworkHelper {
     public static void setOffline() {
         if (loggedIn) {
             try {
-                Logger.info("Logging off..");
+                AxolotlClient.LOGGER.info("Logging off..");
                 CloseableHttpClient client = HttpClients.createDefault();
                 HttpDelete delete = new HttpDelete(
                         "https://moehreag.duckdns.org/axolotlclient-api/?uuid=" + uuid.toString());
@@ -120,14 +120,14 @@ public class NetworkHelper {
                 HttpResponse response = client.execute(delete);
                 String body = EntityUtils.toString(response.getEntity());
                 if (body.contains("Success!")) {
-                    Logger.info("Successfully logged off!");
+                    AxolotlClient.LOGGER.info("Successfully logged off!");
                 } else {
                     throw new Exception("Error while logging off: " + body);
                 }
                 client.close();
             } catch (Exception ex) {
                 ex.printStackTrace();
-                Logger.error("Error while logging off!");
+                AxolotlClient.LOGGER.error("Error while logging off!");
             }
         }
     }
@@ -144,7 +144,7 @@ public class NetworkHelper {
 
             int status = response.getStatusLine().getStatusCode();
             if (status != 200) {
-                Logger.warn("API request failed, status code " + status+"\nBody: "+EntityUtils.toString(response.getEntity()));
+                AxolotlClient.LOGGER.warn("API request failed, status code " + status+"\nBody: "+EntityUtils.toString(response.getEntity()));
                 return null;
             }
 

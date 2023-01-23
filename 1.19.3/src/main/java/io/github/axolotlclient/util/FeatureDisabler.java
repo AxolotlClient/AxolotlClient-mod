@@ -82,7 +82,7 @@ public class FeatureDisabler {
                         try {
                             features.get(element.getAsString()).setForceOff(true, "ban_reason");
                         } catch (Exception e) {
-                            Logger.error("Failed to disable " + element.getAsString() + "!");
+                            AxolotlClient.LOGGER.error("Failed to disable " + element.getAsString() + "!");
                         }
                     }
                 })

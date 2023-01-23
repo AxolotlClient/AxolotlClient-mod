@@ -28,6 +28,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 
+import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.Option;
 import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
@@ -152,7 +153,7 @@ public class PackDisplayHud extends TextHudEntry {
             try {
                 this.texture = new NativeImageBackedTexture(pack.getIcon()).getGlId();
             } catch (Exception e) {
-                Logger.warn("Pack " + pack.getName()
+                AxolotlClient.LOGGER.warn("Pack " + pack.getName()
                         + " somehow threw an error! Please investigate... Does it have an icon?");
             }
         }

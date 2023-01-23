@@ -112,7 +112,7 @@ public class MenuBlur extends AbstractModule {
                             client.getFramebuffer(), shaderLocation);
                     shader.setupDimensions(client.getWindow().getWidth(), client.getWindow().getHeight());
                 } catch (IOException e) {
-                    Logger.error("Failed to load Menu Blur: ", e);
+                    AxolotlClient.LOGGER.error("Failed to load Menu Blur: ", e);
                     return;
                 }
             }

@@ -43,6 +43,7 @@ allprojects {
 }
 
 subprojects {
+	apply plugin: 'java'
 	apply plugin: "maven-publish"
 	apply plugin: "io.freefair.lombok"
 	apply plugin: 'com.modrinth.minotaur'

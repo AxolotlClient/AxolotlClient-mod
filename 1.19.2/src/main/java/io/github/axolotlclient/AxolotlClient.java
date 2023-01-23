@@ -46,10 +46,7 @@ import io.github.axolotlclient.modules.sky.SkyResourceManager;
 import io.github.axolotlclient.modules.tablist.Tablist;
 import io.github.axolotlclient.modules.tnttime.TntTime;
 import io.github.axolotlclient.modules.zoom.Zoom;
-import io.github.axolotlclient.util.FeatureDisabler;
-import io.github.axolotlclient.util.Logger;
-import io.github.axolotlclient.util.UnsupportedMod;
-import io.github.axolotlclient.util.Util;
+import io.github.axolotlclient.util.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
@@ -93,6 +90,8 @@ public class AxolotlClient implements ClientModInitializer {
     public static UnsupportedMod badmod;
     public static boolean titleDisclaimer = false;
     public static boolean showWarning = true;
+
+    public static Logger LOGGER = new LoggerImpl();
 
     @Override
     public void onInitializeClient(ModContainer container) {
@@ -143,9 +142,9 @@ public class AxolotlClient implements ClientModInitializer {
 
         FeatureDisabler.init();
 
-        Logger.debug("Debug Output activated, Logs will be more verbose!");
+        LOGGER.debug("Debug Output activated, Logs will be more verbose!");
 
-        Logger.info("AxolotlClient Initialized");
+        LOGGER.info("AxolotlClient Initialized");
     }
 
     public static void getModules() {

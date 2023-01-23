@@ -31,19 +31,9 @@ dependencies {
 	modCompileOnlyApi("com.terraformersmc:modmenu:4.1.2")
 	include "io.github.axolotlclient:AxolotlClient-config:${project.config}+${project.minecraft_1192}"
 
-	implementation include(project(":common"))
+	implementation include(project(path: ":common", configuration: 'shadow'))
 
-	include( implementation('com.github.JnCrMx:discord-game-sdk4j:v0.5.5'))
-
-	include(implementation("net.hypixel:hypixel-api-core:4.1") {
-		exclude group: "com.google.code.gson", module: "gson"
-		exclude group: "org.apache.httpcomponents", module: "httpclient"
-	})
-
-	include(implementation("net.hypixel:hypixel-api-transport-apache:4.1") {
-		exclude group: "com.google.code.gson", module: "gson"
-		exclude group: "org.apache.httpcomponents", module: "httpclient"
-	})
+	implementation('com.github.JnCrMx:discord-game-sdk4j:v0.5.5')
 }
 
 processResources {

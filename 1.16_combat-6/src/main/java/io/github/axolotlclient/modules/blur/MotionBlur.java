@@ -85,7 +85,7 @@ public class MotionBlur extends AbstractModule {
                 shader.setupDimensions(MinecraftClient.getInstance().getWindow().getWidth(),
                         MinecraftClient.getInstance().getWindow().getHeight());
             } catch (JsonSyntaxException | IOException e) {
-                Logger.error("Could not load motion blur: ", e);
+                AxolotlClient.LOGGER.error("Could not load motion blur: ", e);
             }
         }
         if (currentBlur != getBlur() && shader != null) {

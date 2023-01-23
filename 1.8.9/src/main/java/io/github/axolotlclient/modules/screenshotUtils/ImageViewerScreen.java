@@ -31,6 +31,7 @@ import java.net.URI;
 
 import javax.imageio.ImageIO;
 
+import io.github.axolotlclient.AxolotlClient;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.input.Keyboard;
 
@@ -176,7 +177,7 @@ public class ImageViewerScreen extends Screen {
                 try {
                     ImageIO.write(rawImage, "png", FabricLoader.getInstance().getGameDir().resolve("screenshots").resolve("_share-"+imageName).toFile());
                 } catch (IOException e) {
-                    Logger.info("Failed to save image!");
+                    AxolotlClient.LOGGER.info("Failed to save image!");
                 }
                 break;
             case 27:
@@ -197,7 +198,7 @@ public class ImageViewerScreen extends Screen {
                         return rawImage;
                     }
                 }, null);
-                Logger.info("Copied image "+imageName+" to the clipboard!");
+                AxolotlClient.LOGGER.info("Copied image "+imageName+" to the clipboard!");
                 break;
             case 28:
                 OSUtil.getOS().open(aboutPage);

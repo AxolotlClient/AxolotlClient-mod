@@ -70,7 +70,7 @@ public class ScreenshotUtils extends AbstractModule {
                         io.github.axolotlclient.util.Util.sendChatMessage(
                                 Text.literal(I18n.translate("screenshot_deleted").replace("<name>", file.getName())));
                     } catch (Exception e) {
-                        Logger.warn("Couldn't delete Screenshot " + file.getName());
+                        AxolotlClient.LOGGER.warn("Couldn't delete Screenshot " + file.getName());
                     }
                 })));
 
@@ -194,7 +194,7 @@ public class ScreenshotUtils extends AbstractModule {
             if (file != null) {
                 action.doAction(file);
             } else {
-                Logger.warn("How'd you manage to do this? "
+                AxolotlClient.LOGGER.warn("How'd you manage to do this? "
                         + "Now there's a screenshot ClickEvent without a File attached to it!");
             }
         }

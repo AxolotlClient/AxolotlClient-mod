@@ -25,8 +25,8 @@ package io.github.axolotlclient.modules.sky;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.AbstractModule;
-import io.github.axolotlclient.util.Logger;
 import io.github.moehreag.searchInResources.SearchableResourceManager;
 import net.legacyfabric.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.legacyfabric.fabric.api.resource.ResourceManagerHelper;
@@ -106,7 +106,7 @@ public class SkyResourceManager extends AbstractModule implements IdentifiableRe
         for (Map.Entry<Identifier, Resource> entry : ((SearchableResourceManager) resourceManager)
                 .findResources("fabricskyboxes", "sky", identifier -> identifier.getPath().endsWith(".json"))
                 .entrySet()) {
-            Logger.debug("Loaded sky: " + entry.getKey());
+            AxolotlClient.LOGGER.debug("Loaded sky: " + entry.getKey());
             SkyboxManager.getInstance().addSkybox(new FSBSkyboxInstance(gson.fromJson(
                     new BufferedReader(new InputStreamReader(entry.getValue().getInputStream(), StandardCharsets.UTF_8))
                             .lines().collect(Collectors.joining("\n")),
@@ -116,14 +116,14 @@ public class SkyResourceManager extends AbstractModule implements IdentifiableRe
         for (Map.Entry<Identifier, Resource> entry : ((SearchableResourceManager) resourceManager)
                 .findResources("minecraft", "optifine/sky", identifier -> identifier.getPath().endsWith(".properties"))
                 .entrySet()) {
-            Logger.debug("Loaded sky: " + entry.getKey());
+            AxolotlClient.LOGGER.debug("Loaded sky: " + entry.getKey());
             loadMCPSky("optifine", entry.getKey(), entry.getValue());
         }
 
         for (Map.Entry<Identifier, Resource> entry : ((SearchableResourceManager) resourceManager)
                 .findResources("minecraft", "mcpatcher/sky", identifier -> identifier.getPath().endsWith(".properties"))
                 .entrySet()) {
-            Logger.debug("Loaded sky: " + entry.getKey());
+            AxolotlClient.LOGGER.debug("Loaded sky: " + entry.getKey());
             loadMCPSky("mcpatcher", entry.getKey(), entry.getValue());
         }
     }

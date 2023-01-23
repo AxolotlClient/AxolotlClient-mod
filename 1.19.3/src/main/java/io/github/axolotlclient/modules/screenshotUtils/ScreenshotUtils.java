@@ -25,7 +25,6 @@ package io.github.axolotlclient.modules.screenshotUtils;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.*;
 import io.github.axolotlclient.modules.AbstractModule;
-import io.github.axolotlclient.util.Logger;
 import lombok.AllArgsConstructor;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.resource.language.I18n;
@@ -38,7 +37,6 @@ import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.io.File;
-import java.net.URI;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +68,7 @@ public class ScreenshotUtils extends AbstractModule {
                         io.github.axolotlclient.util.Util.sendChatMessage(
                                 Text.literal(I18n.translate("screenshot_deleted").replace("<name>", file.getName())));
                     } catch (Exception e) {
-                        Logger.warn("Couldn't delete Screenshot " + file.getName());
+                        AxolotlClient.LOGGER.warn("Couldn't delete Screenshot " + file.getName());
                     }
                 })));
 
@@ -194,7 +192,7 @@ public class ScreenshotUtils extends AbstractModule {
             if (file != null) {
                 action.doAction(file);
             } else {
-                Logger.warn("How'd you manage to do this? "
+                AxolotlClient.LOGGER.warn("How'd you manage to do this? "
                         + "Now there's a screenshot ClickEvent without a File attached to it!");
             }
         }

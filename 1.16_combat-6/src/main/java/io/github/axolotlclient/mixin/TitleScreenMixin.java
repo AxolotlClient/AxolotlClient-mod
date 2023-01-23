@@ -60,7 +60,7 @@ public abstract class TitleScreenMixin extends Screen {
     public void axolotlclient$inMenu(int y, int spacingY, CallbackInfo ci) {
         if (MinecraftClient.getInstance().options.keySaveToolbarActivator.equals(Zoom.keyBinding)) {
             MinecraftClient.getInstance().options.keySaveToolbarActivator.setBoundKey(InputUtil.UNKNOWN_KEY);
-            Logger.info("Unbound \"Save Toolbar Activator\" to resolve conflict with the zoom key!");
+            AxolotlClient.LOGGER.info("Unbound \"Save Toolbar Activator\" to resolve conflict with the zoom key!");
         }
     }
 

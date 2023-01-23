@@ -55,6 +55,7 @@ import io.github.axolotlclient.modules.unfocusedFpsLimiter.UnfocusedFpsLimiter;
 import io.github.axolotlclient.modules.zoom.Zoom;
 import io.github.axolotlclient.util.FeatureDisabler;
 import io.github.axolotlclient.util.Logger;
+import io.github.axolotlclient.util.LoggerImpl;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.legacyfabric.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -82,6 +83,8 @@ public class AxolotlClient implements ClientModInitializer {
     public static final List<AbstractModule> modules = new ArrayList<>();
 
     private static int tickTime = 0;
+
+    public static Logger LOGGER = new LoggerImpl();
 
     @Override
     public void onInitializeClient() {
@@ -112,9 +115,9 @@ public class AxolotlClient implements ClientModInitializer {
 
         FeatureDisabler.init();
 
-        Logger.debug("Debug Output enabled, Logs will be quite verbose!");
+        LOGGER.debug("Debug Output enabled, Logs will be quite verbose!");
 
-        Logger.info("AxolotlClient Initialized");
+        LOGGER.info("AxolotlClient Initialized");
     }
 
     private static void getModules() {

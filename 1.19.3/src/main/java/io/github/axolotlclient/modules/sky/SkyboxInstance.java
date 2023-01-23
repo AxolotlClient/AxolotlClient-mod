@@ -26,6 +26,7 @@ import com.google.gson.JsonObject;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.mixin.WorldRendererAccessor;
 import io.github.axolotlclient.util.Logger;
 import io.github.axolotlclient.util.Util;
@@ -166,7 +167,7 @@ public abstract class SkyboxInstance {
                 case "replace":
                     return 8;
                 default:
-                    Logger.warn("Unknown blend: " + str);
+                    AxolotlClient.LOGGER.warn("Unknown blend: " + str);
                     return 1;
             }
         }

@@ -34,6 +34,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import io.github.axolotlclient.AxolotlClient;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.entity.ContentType;
@@ -100,7 +101,7 @@ public class ImageShare {
 
         try (CloseableHttpClient client = createHttpClient()){
 
-            Logger.info("Uploading image "+file.getName());
+            AxolotlClient.LOGGER.info("Uploading image "+file.getName());
 
             JsonElement el = NetworkHelper.getRequest(url, createHttpClient());
             if(el != null) {
@@ -132,11 +133,11 @@ public class ImageShare {
                             "\"index\":"+index+"," +
                             "  \"content\": \"" + content + "\"" +
                             "}"));
-                    Logger.debug(EntityUtils.toString(client.execute(requestBuilder.build()).getEntity()));
+                    AxolotlClient.LOGGER.debug(EntityUtils.toString(client.execute(requestBuilder.build()).getEntity()));
                     index += content.getBytes(StandardCharsets.UTF_8).length;
                 }
 
-                Logger.debug("Finishing Stream... tempId was: "+tempId);
+                AxolotlClient.LOGGER.debug("Finishing Stream... tempId was: "+tempId);
 
                 RequestBuilder requestBuilder = RequestBuilder.post().setUri(url + "/" + tempId + "/end");
 
@@ -150,7 +151,7 @@ public class ImageShare {
 
                     return element.getAsJsonObject().get("pasteId").getAsString();
                 } catch (JsonParseException e) {
-                    Logger.warn("Not Json data: \n" + body);
+                    AxolotlClient.LOGGER.warn("Not Json data: \n" + body);
                 }
             }
         } catch (Exception e){

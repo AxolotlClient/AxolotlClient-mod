@@ -22,9 +22,6 @@
 
 package io.github.axolotlclient.modules.rpc;
 
-import java.time.Instant;
-import java.util.Optional;
-
 import de.jcm.discordgamesdk.Core;
 import de.jcm.discordgamesdk.CreateParams;
 import de.jcm.discordgamesdk.DiscordEventHandler;
@@ -36,13 +33,15 @@ import io.github.axolotlclient.AxolotlClientConfig.options.EnumOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.modules.rpc.gameSdk.GameSdkDownloader;
-import io.github.axolotlclient.util.Logger;
 import io.github.axolotlclient.util.OSUtil;
 import io.github.axolotlclient.util.Util;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.resource.language.I18n;
+
+import java.time.Instant;
+import java.util.Optional;
 
 /**
  * This DiscordRPC module is derived from <a href="https://github.com/DeDiamondPro/HyCord">HyCord</a>.
@@ -98,7 +97,7 @@ public class DiscordRPC extends AbstractModule {
     @SuppressWarnings("BusyWait")
     public void initRPC() {
         if (enabled.get()) {
-            GameSdkDownloader.downloadSdk();
+            GameSdkDownloader.downloadSdk(AxolotlClient.LOGGER, enabled);
         }
 
         if (enabled.get()) {
@@ -131,13 +130,13 @@ public class DiscordRPC extends AbstractModule {
                 callBacks.setName("Discord RPC Thread");
                 callBacks.setDaemon(true);
                 callBacks.start();
-                Logger.info("Started RPC Core");
+                AxolotlClient.LOGGER.info("Started RPC Core");
             } catch (Exception e) {
                 if (!e.getMessage().contains("INTERNAL_ERROR")) {
-                    Logger.error("An error occurred: ");
+                    AxolotlClient.LOGGER.error("An error occurred: ");
                     e.printStackTrace();
                 } else {
-                    Logger.debug("Error starting RPC: ", e);
+                    AxolotlClient.LOGGER.debug("Error starting RPC: ", e);
                     enabled.set(false);
                 }
             }

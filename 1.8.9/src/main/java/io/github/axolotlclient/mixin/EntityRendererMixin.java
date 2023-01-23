@@ -22,6 +22,7 @@
 
 package io.github.axolotlclient.mixin;
 
+import io.github.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -31,7 +32,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
 import io.github.axolotlclient.modules.hypixel.levelhead.LevelHead;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
@@ -65,7 +65,7 @@ public abstract class EntityRendererMixin<T extends Entity> {
                 if (HypixelAbstractionLayer.hasValidAPIKey() && LevelHead.getInstance().enabled.get()
                         && string.contains(entity.getName().asFormattedString())) {
                     TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
-                    String text = "Level: " + HypixelAbstractionLayer.getPlayerLevel(String.valueOf(entity.getUuid()));
+                    String text = "Level: " + HypixelAbstractionLayer.getPlayerLevel(String.valueOf(entity.getUuid()), LevelHead.getInstance().mode.get());
 
                     float x = textRenderer.getStringWidth(text) / 2F;
                     int y = string.contains("deadmau5") ? -20 : -10;

@@ -22,5 +22,5 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           # Artifact name
-          name: AxolotlClient-1.8.9-automation
+          name: AxolotlClient-automation
           path: 1.*/build/libs/*
