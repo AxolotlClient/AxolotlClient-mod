@@ -58,10 +58,6 @@ build {
 	tasks.jar.enabled = false
 }
 
-jar {
-	return shadowJar
-}
-
 processResources {
 	inputs.property 'version', version
 
