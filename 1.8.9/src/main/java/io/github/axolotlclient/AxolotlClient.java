@@ -22,20 +22,14 @@
 
 package io.github.axolotlclient;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
-
 import com.mojang.blaze3d.platform.GlStateManager;
-
 import io.github.axolotlclient.AxolotlClientConfig.AxolotlClientConfigManager;
 import io.github.axolotlclient.AxolotlClientConfig.DefaultConfigManager;
 import io.github.axolotlclient.AxolotlClientConfig.common.ConfigManager;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.config.AxolotlClientConfig;
-import io.github.axolotlclient.modules.AbstractModule;
+import io.github.axolotlclient.modules.Module;
 import io.github.axolotlclient.modules.ModuleLoader;
 import io.github.axolotlclient.modules.blur.MenuBlur;
 import io.github.axolotlclient.modules.blur.MotionBlur;
@@ -66,6 +60,11 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.resource.Resource;
 import net.minecraft.util.Identifier;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
+
 public class AxolotlClient implements ClientModInitializer {
 
     public static String modid = "AxolotlClient";
@@ -80,7 +79,7 @@ public class AxolotlClient implements ClientModInitializer {
 
     public static final OptionCategory config = new OptionCategory("storedOptions");
     public static final BooleanOption someNiceBackground = new BooleanOption("defNoSecret", false);
-    public static final List<AbstractModule> modules = new ArrayList<>();
+    public static final List<Module> modules = new ArrayList<>();
 
     private static int tickTime = 0;
 
@@ -94,7 +93,7 @@ public class AxolotlClient implements ClientModInitializer {
         getModules();
         addExternalModules();
         CONFIG.init();
-        modules.forEach(AbstractModule::init);
+        modules.forEach(Module::init);
 
         CONFIG.config.addAll(CONFIG.getCategories());
         CONFIG.config.add(config);
@@ -104,7 +103,7 @@ public class AxolotlClient implements ClientModInitializer {
         AxolotlClientConfigManager.getInstance().addIgnoredName(modid, "x");
         AxolotlClientConfigManager.getInstance().addIgnoredName(modid, "y");
 
-        modules.forEach(AbstractModule::lateInit);
+        modules.forEach(Module::lateInit);
 
         /*FabricLoader.getInstance().getModContainer("axolotlclient").ifPresent(modContainer -> {
             Optional<Path> optional = modContainer.findPath("resourcepacks/AxolotlClientUI.zip");
@@ -156,7 +155,7 @@ public class AxolotlClient implements ClientModInitializer {
     }
 
     public static void tickClient() {
-        modules.forEach(AbstractModule::tick);
+        modules.forEach(Module::tick);
 
         if (tickTime >= 6000) {
             //System.out.println("Cleared Cache of Other Players!");

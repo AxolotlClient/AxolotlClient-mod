@@ -29,7 +29,7 @@ import io.github.axolotlclient.AxolotlClientConfig.common.ConfigManager;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.config.AxolotlClientConfig;
-import io.github.axolotlclient.modules.AbstractModule;
+import io.github.axolotlclient.modules.Module;
 import io.github.axolotlclient.modules.ModuleLoader;
 import io.github.axolotlclient.modules.blur.MenuBlur;
 import io.github.axolotlclient.modules.blur.MotionBlur;
@@ -80,7 +80,7 @@ public class AxolotlClient implements ClientModInitializer {
 
     public static final OptionCategory config = new OptionCategory("storedOptions");
     public static final BooleanOption someNiceBackground = new BooleanOption("defNoSecret", false);
-    public static final List<AbstractModule> modules = new ArrayList<>();
+    public static final List<Module> modules = new ArrayList<>();
 
     private static int tickTime = 0;
 
@@ -121,7 +121,7 @@ public class AxolotlClient implements ClientModInitializer {
         addExternalModules();
 
         CONFIG.init();
-        modules.forEach(AbstractModule::init);
+        modules.forEach(Module::init);
 
         CONFIG.getConfig().addAll(CONFIG.getCategories());
         CONFIG.getConfig().add(config);
@@ -131,7 +131,7 @@ public class AxolotlClient implements ClientModInitializer {
         AxolotlClientConfigManager.getInstance().addIgnoredName(modid, "x");
         AxolotlClientConfigManager.getInstance().addIgnoredName(modid, "y");
 
-        modules.forEach(AbstractModule::lateInit);
+        modules.forEach(Module::lateInit);
 
         /*ResourceLoader.registerBuiltinResourcePack(new Identifier("axolotlclient", "axolotlclient-ui"), container,
                 ResourcePackActivationType.NORMAL);*/
@@ -175,7 +175,7 @@ public class AxolotlClient implements ClientModInitializer {
     }
 
     public static void tickClient() {
-        modules.forEach(AbstractModule::tick);
+        modules.forEach(Module::tick);
 
         if (tickTime >= 6000) {
             //System.out.println("Cleared Cache of Other Players!");

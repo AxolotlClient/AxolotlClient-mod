@@ -4,6 +4,7 @@ on: [push, pull_request]
 
 jobs:
   build:
+    if: "!startsWith(github.event.head_commit.message, '[skip]')"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.6.0
@@ -12,7 +13,7 @@ jobs:
         with:
           distribution: "temurin"
           java-version: 17
-
+          cache: 'gradle'
       - name: Grant execute permission
         run: chmod +x ./gradlew
       - name: Build with Gradle

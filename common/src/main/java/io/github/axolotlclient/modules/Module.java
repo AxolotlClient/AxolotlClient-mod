@@ -23,4 +23,9 @@
 package io.github.axolotlclient.modules;
 
 public interface Module {
+    default void init(){}
+
+    default void lateInit(){}
+
+    default void tick(){}
 }

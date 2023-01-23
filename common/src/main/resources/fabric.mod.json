@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "id": "axolotlclient",
+  "id": "axolotlclient-common",
   "version": "${version}",
-  "name": "AxolotlClient",
-  "description": "Mod for AxolotlClient",
+  "name": "AxolotlClient (Common)",
+  "description": "Shared code for AxolotlClient versions",
   "authors": [
     "moehreag"
   ],
