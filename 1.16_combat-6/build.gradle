@@ -32,10 +32,10 @@ dependencies {
 
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_cts8}"
 
-	modImplementation ("io.github.axolotlclient:AxolotlClient-config:${project.config}+${project.minecraft_cts8}") {
+	modImplementation ("io.github.axolotlclient:AxolotlClient-config:${project.config}+1.16") {
 		exclude group: "com.terraformersmc"
 	}
-	include "io.github.axolotlclient:AxolotlClient-config:${project.config}+${project.minecraft_cts8}"
+	include "io.github.axolotlclient:AxolotlClient-config:${project.config}+1.16"
 
 	modCompileOnlyApi("com.terraformersmc:modmenu:1.15.0") // there is no working modmenu release for this version, but we still provide support for it just in case.
 

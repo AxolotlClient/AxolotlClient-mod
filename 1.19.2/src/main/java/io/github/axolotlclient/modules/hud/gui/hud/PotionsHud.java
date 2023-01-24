@@ -132,7 +132,7 @@ public class PotionsHud extends TextHudEntry implements DynamicallyPositionable 
         StatusEffect type = effect.getEffectType();
         Sprite sprite = client.getStatusEffectSpriteManager().getSprite(type);
 
-        RenderSystem.setShaderTexture(0, sprite.getId());
+        RenderSystem.setShaderTexture(0, sprite.getAtlas().getId());
         RenderSystem.setShaderColor(1, 1, 1, 1);
         DrawableHelper.drawSprite(matrices, x, y, 0, 18, 18, sprite);
         if (!iconsOnly.get()) {
