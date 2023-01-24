@@ -4,7 +4,7 @@ plugins {
 }
 
 group = maven_group
-version = "${project.version}+${project.minecraft_cts8}"
+version = "${project.version}+${project.minecraft_1165}"
 archivesBaseName = "AxolotlClient"
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -17,7 +17,7 @@ repositories {
 }
 
 dependencies {
-	minecraft "com.mojang:minecraft:1.16.5"
+	minecraft "com.mojang:minecraft:${project.minecraft_1165}"
 	mappings "net.fabricmc:yarn:${project.mappings_1165}:v2"
 
 	modImplementation "net.fabricmc:fabric-loader:${fabric_loader}"
@@ -29,7 +29,7 @@ dependencies {
 	}
 	include "io.github.axolotlclient:AxolotlClient-config:${project.config}+1.16"
 
-	modCompileOnlyApi("com.terraformersmc:modmenu:1.15.0") // there is no working modmenu release for this version, but we still provide support for it just in case.
+	modCompileOnlyApi("com.terraformersmc:modmenu:1.15.0")
 
 	implementation include(project(path: ":common", configuration: 'shadow'))
 
