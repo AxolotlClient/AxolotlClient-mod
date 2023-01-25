@@ -22,12 +22,7 @@
 
 package io.github.axolotlclient.modules.hud.gui.entry;
 
-import java.util.List;
-
-import org.lwjgl.opengl.GL11;
-
 import com.mojang.blaze3d.platform.GlStateManager;
-
 import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.AxolotlClientConfig.options.EnumOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.IntegerOption;
@@ -37,6 +32,9 @@ import io.github.axolotlclient.modules.hud.gui.layout.AnchorPoint;
 import io.github.axolotlclient.modules.hud.gui.layout.Justification;
 import io.github.axolotlclient.modules.hud.util.DefaultOptions;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
+import org.lwjgl.opengl.GL11;
+
+import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.

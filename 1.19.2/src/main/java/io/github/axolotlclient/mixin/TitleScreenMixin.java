@@ -26,7 +26,6 @@ import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.hud.HudEditScreen;
 import io.github.axolotlclient.modules.zoom.Zoom;
-import io.github.axolotlclient.util.Logger;
 import io.github.axolotlclient.util.UnsupportedMod;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;

@@ -22,20 +22,19 @@
 
 package io.github.axolotlclient.mixin;
 
-import java.util.Objects;
-
+import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
+import io.github.axolotlclient.modules.hypixel.HypixelMods;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.modules.hypixel.HypixelMods;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
+import java.util.Objects;
 
 @Mixin(ClientWorld.class)
 public abstract class ClientWorldMixin {

@@ -22,12 +22,7 @@
 
 package io.github.axolotlclient.modules.blur;
 
-import java.io.IOException;
-
-import org.apache.commons.io.IOUtils;
-
 import com.mojang.blaze3d.shader.GlUniform;
-
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
@@ -36,7 +31,6 @@ import io.github.axolotlclient.AxolotlClientConfig.options.IntegerOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.mixin.ShaderEffectAccessor;
 import io.github.axolotlclient.modules.AbstractModule;
-import io.github.axolotlclient.util.Logger;
 import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.ShaderEffect;
@@ -45,6 +39,9 @@ import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.resource.Resource;
 import net.minecraft.util.Identifier;
+import org.apache.commons.io.IOUtils;
+
+import java.io.IOException;
 
 /**
  * Totally not stolen from Sol.

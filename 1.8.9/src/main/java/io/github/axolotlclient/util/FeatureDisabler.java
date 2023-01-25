@@ -22,14 +22,9 @@
 
 package io.github.axolotlclient.util;
 
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.function.Supplier;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.modules.freelook.Freelook;
@@ -39,6 +34,10 @@ import net.legacyfabric.fabric.api.client.networking.v1.ClientPlayConnectionEven
 import net.legacyfabric.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.util.Identifier;
+
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.function.Supplier;
 
 public class FeatureDisabler {
 

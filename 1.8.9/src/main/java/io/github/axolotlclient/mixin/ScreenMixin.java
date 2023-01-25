@@ -22,10 +22,17 @@
 
 package io.github.axolotlclient.mixin;
 
-import java.net.URI;
-
 import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.modules.blur.MenuBlur;
+import io.github.axolotlclient.modules.screenshotUtils.ScreenshotUtils;
+import io.github.axolotlclient.modules.scrollableTooltips.ScrollableTooltips;
 import io.github.axolotlclient.util.OSUtil;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
+import net.minecraft.item.itemgroup.ItemGroup;
+import net.minecraft.text.ClickEvent;
+import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
@@ -33,15 +40,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
-import io.github.axolotlclient.modules.blur.MenuBlur;
-import io.github.axolotlclient.modules.screenshotUtils.ScreenshotUtils;
-import io.github.axolotlclient.modules.scrollableTooltips.ScrollableTooltips;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
-import net.minecraft.item.itemgroup.ItemGroup;
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.Text;
+import java.net.URI;
 
 @Mixin(Screen.class)
 public abstract class ScreenMixin {

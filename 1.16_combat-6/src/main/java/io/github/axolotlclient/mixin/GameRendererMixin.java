@@ -72,9 +72,8 @@ public abstract class GameRendererMixin {
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getFramebuffer()Lnet/minecraft/client/gl/Framebuffer;"))
     public void axolotlclient$worldMotionBlur(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
-        axolotlclient$motionBlur(tickDelta, startTime, tick, null);
-
         MenuBlur.getInstance().updateBlur();
+        axolotlclient$motionBlur(tickDelta, startTime, tick, null);
     }
 
     @Inject(method = "render", at = @At("TAIL"))

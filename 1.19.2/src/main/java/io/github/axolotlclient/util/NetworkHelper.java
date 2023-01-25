@@ -24,8 +24,6 @@ package io.github.axolotlclient.util;
 
 import com.google.gson.JsonElement;
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.util.NetworkUtil;
-import io.github.axolotlclient.util.ThreadExecuter;
 import net.minecraft.client.MinecraftClient;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;

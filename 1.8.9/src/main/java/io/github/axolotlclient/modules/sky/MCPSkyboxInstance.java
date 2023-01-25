@@ -24,7 +24,6 @@ package io.github.axolotlclient.modules.sky;
 
 import com.google.gson.JsonObject;
 import com.mojang.blaze3d.platform.GlStateManager;
-
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;

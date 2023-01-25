@@ -22,12 +22,7 @@
 
 package io.github.axolotlclient.modules.hud;
 
-import java.awt.*;
-import java.util.List;
-import java.util.Optional;
-
 import com.mojang.blaze3d.platform.GlStateManager;
-
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
@@ -40,6 +35,10 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.resource.language.I18n;
+
+import java.awt.*;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * This implementation of Hud modules is based on KronHUD.

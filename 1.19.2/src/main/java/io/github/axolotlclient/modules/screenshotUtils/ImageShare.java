@@ -78,7 +78,7 @@ public class ImageShare {
 
             AxolotlClient.LOGGER.info("Uploading image "+file.getName());
 
-            ImageNetworking.upload(encodeB64(file), url, client, AxolotlClient.LOGGER);
+            return ImageNetworking.upload(encodeB64(file), url, client, AxolotlClient.LOGGER);
         } catch (Exception e){
             e.printStackTrace();
         }

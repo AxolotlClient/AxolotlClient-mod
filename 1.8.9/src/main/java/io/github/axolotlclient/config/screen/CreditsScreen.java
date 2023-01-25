@@ -22,14 +22,7 @@
 
 package io.github.axolotlclient.config.screen;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import org.lwjgl.opengl.GL11;
-
 import com.mojang.blaze3d.platform.GlStateManager;
-
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.mixin.SoundManagerAccessor;
@@ -54,7 +47,12 @@ import net.minecraft.text.Style;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
+import org.lwjgl.opengl.GL11;
 import paulscode.sound.SoundSystem;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class CreditsScreen extends Screen {
 

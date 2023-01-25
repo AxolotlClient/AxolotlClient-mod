@@ -44,7 +44,6 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**

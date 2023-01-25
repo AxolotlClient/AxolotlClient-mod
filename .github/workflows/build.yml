@@ -17,7 +17,7 @@ jobs:
       - name: Grant execute permission
         run: chmod +x ./gradlew
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew build --no-daemon
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3

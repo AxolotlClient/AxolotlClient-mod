@@ -22,6 +22,18 @@
 
 package io.github.axolotlclient.modules.screenshotUtils;
 
+import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.AxolotlClientConfig.options.*;
+import io.github.axolotlclient.modules.AbstractModule;
+import io.github.axolotlclient.util.OSUtil;
+import io.github.axolotlclient.util.Util;
+import lombok.AllArgsConstructor;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.resource.language.I18n;
+import net.minecraft.text.*;
+import net.minecraft.util.Formatting;
+import org.jetbrains.annotations.Nullable;
+
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -30,19 +42,6 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import io.github.axolotlclient.util.OSUtil;
-import org.jetbrains.annotations.Nullable;
-
-import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.AxolotlClientConfig.options.*;
-import io.github.axolotlclient.modules.AbstractModule;
-import io.github.axolotlclient.util.Util;
-import lombok.AllArgsConstructor;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.resource.language.I18n;
-import net.minecraft.text.*;
-import net.minecraft.util.Formatting;
 
 public class ScreenshotUtils extends AbstractModule {
 

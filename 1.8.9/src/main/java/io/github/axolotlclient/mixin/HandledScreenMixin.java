@@ -22,16 +22,15 @@
 
 package io.github.axolotlclient.mixin;
 
+import io.github.axolotlclient.modules.scrollableTooltips.ScrollableTooltips;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.inventory.slot.Slot;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import io.github.axolotlclient.modules.scrollableTooltips.ScrollableTooltips;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.inventory.slot.Slot;
 
 @Mixin(HandledScreen.class)
 public abstract class HandledScreenMixin {

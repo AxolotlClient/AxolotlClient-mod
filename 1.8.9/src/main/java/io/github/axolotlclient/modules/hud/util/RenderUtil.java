@@ -22,12 +22,7 @@
 
 package io.github.axolotlclient.modules.hud.util;
 
-import java.util.function.Supplier;
-
-import org.lwjgl.opengl.GL11;
-
 import com.mojang.blaze3d.platform.GlStateManager;
-
 import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.mixin.MinecraftClientAccessor;
 import lombok.experimental.UtilityClass;
@@ -36,6 +31,9 @@ import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
+import org.lwjgl.opengl.GL11;
+
+import java.util.function.Supplier;
 
 /**
  * This implementation of Hud modules is based on KronHUD.

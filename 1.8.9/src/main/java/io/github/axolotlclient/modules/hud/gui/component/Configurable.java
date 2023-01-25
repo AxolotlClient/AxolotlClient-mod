@@ -22,10 +22,10 @@
 
 package io.github.axolotlclient.modules.hud.gui.component;
 
-import java.util.List;
-
 import io.github.axolotlclient.AxolotlClientConfig.options.Option;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
+
+import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.

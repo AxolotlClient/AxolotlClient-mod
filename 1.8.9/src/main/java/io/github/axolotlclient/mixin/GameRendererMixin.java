@@ -22,24 +22,8 @@
 
 package io.github.axolotlclient.mixin;
 
-import java.nio.FloatBuffer;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GLContext;
-import org.objectweb.asm.Opcodes;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.At.Shift;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
-
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.blur.MenuBlur;
 import io.github.axolotlclient.modules.blur.MotionBlur;
@@ -57,12 +41,25 @@ import net.minecraft.client.MouseInput;
 import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.player.ClientPlayerEntity;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GLContext;
+import org.objectweb.asm.Opcodes;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.At.Shift;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+
+import java.nio.FloatBuffer;
 
 @Mixin(GameRenderer.class)
 public abstract class GameRendererMixin {
@@ -92,7 +89,7 @@ public abstract class GameRendererMixin {
 
     @Inject(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MouseInput;x:I"), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
     public void axolotlclient$rawMouseInput(float tickDelta, long nanoTime, CallbackInfo ci, boolean displayActive, float f,
-            float g) {
+                                            float g) {
         if (AxolotlClient.CONFIG.rawMouseInput.get()) {
             cachedMouseFactor = g;
         }
@@ -221,9 +218,8 @@ public abstract class GameRendererMixin {
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/Framebuffer;bind(Z)V", shift = Shift.BEFORE))
     public void axolotlclient$worldMotionBlur(float tickDelta, long nanoTime, CallbackInfo ci) {
-        axolotlclient$motionBlur(tickDelta, nanoTime, null);
-
         MenuBlur.getInstance().updateBlur();
+        axolotlclient$motionBlur(tickDelta, nanoTime, null);
     }
 
     @Inject(method = "render", at = @At("TAIL"))
@@ -274,26 +270,16 @@ public abstract class GameRendererMixin {
     }
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
-    private void axolotlclient$limitFpsOnLostFocus(float tickDelta, long nanoTime, CallbackInfo ci){
-        if(!UnfocusedFpsLimiter.getInstance().checkForRender()){
+    private void axolotlclient$limitFpsOnLostFocus(float tickDelta, long nanoTime, CallbackInfo ci) {
+        if (!UnfocusedFpsLimiter.getInstance().checkForRender()) {
             ci.cancel();
         }
     }
 
     @Inject(method = "renderWeather", at = @At("HEAD"), cancellable = true)
-    private void axolotlclient$changeWeather(float tickDelta, CallbackInfo ci){
-        if(AxolotlClient.CONFIG.weatherChangerEnabled.get()){
-            if(AxolotlClient.CONFIG.weather.get().equals("clear")){
-                ci.cancel();
-            }
+    private void axolotlclient$changeWeather(float tickDelta, CallbackInfo ci) {
+        if (AxolotlClient.CONFIG.noRain.get()) {
+            ci.cancel();
         }
-    }
-
-    @Redirect(method = "renderWeather", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;getRainGradient(F)F"))
-    private float axolotlclient$changeWeather$3(ClientWorld instance, float v){
-        if(AxolotlClient.CONFIG.weatherChangerEnabled.get() && !AxolotlClient.CONFIG.weather.get().equals("clear")) {
-            return 100;
-        }
-        return MinecraftClient.getInstance().world.getRainGradient(v);
     }
 }

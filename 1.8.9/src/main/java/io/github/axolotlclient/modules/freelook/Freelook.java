@@ -22,8 +22,6 @@
 
 package io.github.axolotlclient.modules.freelook;
 
-import org.lwjgl.input.Keyboard;
-
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.EnumOption;
@@ -34,6 +32,7 @@ import net.legacyfabric.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.options.KeyBinding;
 import net.minecraft.entity.Entity;
+import org.lwjgl.input.Keyboard;
 
 public class Freelook extends AbstractModule {
 

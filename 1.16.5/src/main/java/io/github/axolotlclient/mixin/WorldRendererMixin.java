@@ -30,14 +30,12 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.client.world.ClientWorld;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
@@ -85,18 +83,8 @@ public abstract class WorldRendererMixin {
 
     @Inject(method = "renderWeather", at = @At("HEAD"), cancellable = true)
     private void axolotlclient$changeWeather(LightmapTextureManager manager, float tickDelta, double cameraX, double cameraY, double cameraZ, CallbackInfo ci){
-        if(AxolotlClient.CONFIG.weatherChangerEnabled.get()){
-            if(AxolotlClient.CONFIG.weather.get().equals("clear")){
-                ci.cancel();
-            }
+        if(AxolotlClient.CONFIG.noRain.get()){
+            ci.cancel();
         }
-    }
-
-    @Redirect(method = "renderWeather", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;getRainGradient(F)F"))
-    private float axolotlclient$changeWeather$3(ClientWorld instance, float v){
-        if(AxolotlClient.CONFIG.weatherChangerEnabled.get() && !AxolotlClient.CONFIG.weather.get().equals("clear")) {
-            return 100;
-        }
-        return MinecraftClient.getInstance().world.getRainGradient(v);
     }
 }

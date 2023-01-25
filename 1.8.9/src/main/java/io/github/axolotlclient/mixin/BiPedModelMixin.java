@@ -22,15 +22,13 @@
 
 package io.github.axolotlclient.mixin;
 
+import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.render.entity.model.BiPedModel;
+import net.minecraft.client.render.model.ModelPart;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-
-import com.mojang.blaze3d.platform.GlStateManager;
-
-import net.minecraft.client.render.entity.model.BiPedModel;
-import net.minecraft.client.render.model.ModelPart;
 
 @Mixin(BiPedModel.class)
 public abstract class BiPedModelMixin {

@@ -22,11 +22,6 @@
 
 package io.github.axolotlclient.modules.hud;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
-import org.lwjgl.input.Keyboard;
-
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
@@ -43,6 +38,10 @@ import net.legacyfabric.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.options.KeyBinding;
 import net.minecraft.util.Identifier;
+import org.lwjgl.input.Keyboard;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * This implementation of Hud modules is based on KronHUD.

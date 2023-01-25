@@ -22,20 +22,18 @@
 
 package io.github.axolotlclient.mixin;
 
+import com.mojang.authlib.GameProfile;
+import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.client.util.DefaultSkinHelper;
+import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import com.mojang.authlib.GameProfile;
-
-import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.PlayerListEntry;
-import net.minecraft.client.util.DefaultSkinHelper;
-import net.minecraft.util.Identifier;
 
 @Mixin(PlayerListEntry.class)
 public abstract class PlayerListEntryMixin {

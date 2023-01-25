@@ -22,11 +22,8 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud;
 
-import java.util.List;
-
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
-
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.DoubleOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.Option;
@@ -38,6 +35,8 @@ import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.entity.player.ClientPlayerEntity;
 import net.minecraft.util.Identifier;
+
+import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -89,7 +88,7 @@ public class PlayerHud extends BoxHudEntry {
             } else if (hide == -1) {
                 hide = System.currentTimeMillis();
             }
-    
+
             if (hide != -1 && System.currentTimeMillis() - hide > 500) {
                 return;
             }

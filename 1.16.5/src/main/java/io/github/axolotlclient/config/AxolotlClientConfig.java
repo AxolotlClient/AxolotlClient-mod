@@ -30,9 +30,9 @@ import io.github.axolotlclient.AxolotlClientConfig.common.ConfigHolder;
 import io.github.axolotlclient.AxolotlClientConfig.common.options.Option;
 import io.github.axolotlclient.AxolotlClientConfig.common.options.OptionCategory;
 import io.github.axolotlclient.AxolotlClientConfig.options.*;
-import io.github.axolotlclient.util.NetworkHelper;
 import io.github.axolotlclient.config.screen.CreditsScreen;
 import io.github.axolotlclient.mixin.OverlayTextureAccessor;
+import io.github.axolotlclient.util.NetworkHelper;
 import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.texture.NativeImage;
@@ -101,8 +101,7 @@ public class AxolotlClientConfig extends ConfigHolder {
     public final BooleanOption outlineChroma = new BooleanOption("chroma", false);
     public final DoubleOption outlineWidth = new DoubleOption("outlineWidth",1, 1, 10);
 
-    public final BooleanOption weatherChangerEnabled = new BooleanOption("enabled", false);
-    public final EnumOption weather = new EnumOption("weather", new String[]{"clear", "rain"}, "clear");
+    public final BooleanOption noRain = new BooleanOption("noRain", false);
 
     public final GenericOption openCredits = new GenericOption("Credits", "Open Credits", (mouseX, mouseY)->
             MinecraftClient.getInstance().openScreen(new CreditsScreen(MinecraftClient.getInstance().currentScreen))
@@ -116,7 +115,6 @@ public class AxolotlClientConfig extends ConfigHolder {
     public final OptionCategory outlines= new io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory("blockOutlines");
 	public final OptionCategory timeChanger = new io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory("timeChanger");
     public final OptionCategory searchFilters = new io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory("searchFilters");
-    public final OptionCategory weatherChanger = new io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory("weatherChanger");
 
     private final List<Option<?>> options = new ArrayList<>();
     private final List<OptionCategory> categories = new ArrayList<>();
@@ -192,9 +190,7 @@ public class AxolotlClientConfig extends ConfigHolder {
         outlines.add(outlineChroma);
         //outlines.add(outlineWidth); // I could not get this to have an effect.
 
-        weatherChanger.add(weatherChangerEnabled);
-        weatherChanger.add(weather);
-        rendering.add(weatherChanger);
+        rendering.add(noRain);
 
         AxolotlClient.config.add(creditsBGM);
 

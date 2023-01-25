@@ -22,9 +22,10 @@
 
 package io.github.axolotlclient.mixin;
 
-import java.util.Collection;
-import java.util.List;
-
+import io.github.axolotlclient.modules.particles.Particles;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleManager;
+import net.minecraft.client.particle.ParticleType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -32,10 +33,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import io.github.axolotlclient.modules.particles.Particles;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.ParticleManager;
-import net.minecraft.client.particle.ParticleType;
+import java.util.Collection;
+import java.util.List;
 
 @Mixin(ParticleManager.class)
 public abstract class ParticleManagerMixin {

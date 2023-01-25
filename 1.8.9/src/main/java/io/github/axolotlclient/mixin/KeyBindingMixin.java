@@ -22,6 +22,10 @@
 
 package io.github.axolotlclient.mixin;
 
+import io.github.axolotlclient.util.Hooks;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.options.KeyBinding;
+import net.minecraft.util.collection.IntObjectStorage;
 import org.lwjgl.input.Keyboard;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -30,11 +34,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import io.github.axolotlclient.util.Hooks;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.options.KeyBinding;
-import net.minecraft.util.collection.IntObjectStorage;
 
 @Mixin(KeyBinding.class)
 public abstract class KeyBindingMixin {

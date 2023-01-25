@@ -22,14 +22,13 @@
 
 package io.github.axolotlclient.mixin;
 
+import io.github.axolotlclient.modules.renderOptions.BeaconBeam;
+import net.minecraft.block.entity.BeaconBlockEntity;
+import net.minecraft.client.render.block.entity.BeaconBlockEntityRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import io.github.axolotlclient.modules.renderOptions.BeaconBeam;
-import net.minecraft.block.entity.BeaconBlockEntity;
-import net.minecraft.client.render.block.entity.BeaconBlockEntityRenderer;
 
 @Mixin(BeaconBlockEntityRenderer.class)
 public abstract class BeaconBlockEntityRendererMixin {

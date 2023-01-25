@@ -22,11 +22,6 @@
 
 package io.github.axolotlclient.modules.particles;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
-import org.apache.commons.lang3.StringUtils;
-
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.AxolotlClientConfig.options.*;
@@ -35,6 +30,10 @@ import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleType;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Particles extends AbstractModule {
 

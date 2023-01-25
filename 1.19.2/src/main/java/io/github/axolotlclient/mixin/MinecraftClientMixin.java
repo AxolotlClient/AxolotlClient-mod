@@ -22,6 +22,16 @@
 
 package io.github.axolotlclient.mixin;
 
+import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.modules.blur.MenuBlur;
+import io.github.axolotlclient.modules.rpc.DiscordRPC;
+import io.github.axolotlclient.modules.sky.SkyResourceManager;
+import io.github.axolotlclient.util.NetworkHelper;
+import net.minecraft.SharedConstants;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.RunArgs;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.resource.ResourceType;
 import org.quiltmc.loader.api.QuiltLoader;
 import org.quiltmc.qsl.resource.loader.api.ResourceLoader;
 import org.spongepowered.asm.mixin.Mixin;
@@ -30,17 +40,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.util.NetworkHelper;
-import io.github.axolotlclient.modules.blur.MenuBlur;
-import io.github.axolotlclient.modules.rpc.DiscordRPC;
-import io.github.axolotlclient.modules.sky.SkyResourceManager;
-import net.minecraft.SharedConstants;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.RunArgs;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.resource.ResourceType;
 
 @Mixin(MinecraftClient.class)
 public abstract class MinecraftClientMixin {
@@ -79,6 +78,8 @@ public abstract class MinecraftClientMixin {
 
     @Inject(method = "setScreen", at = @At("HEAD"))
     private void axolotlclient$onScreenOpen(Screen screen, CallbackInfo ci){
-        MenuBlur.getInstance().onScreenOpen();
+        if(MinecraftClient.getInstance().currentScreen == null) {
+            MenuBlur.getInstance().onScreenOpen();
+        }
     }
 }

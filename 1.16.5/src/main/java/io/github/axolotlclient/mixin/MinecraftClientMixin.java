@@ -23,9 +23,9 @@
 package io.github.axolotlclient.mixin;
 
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.util.NetworkHelper;
 import io.github.axolotlclient.modules.blur.MenuBlur;
 import io.github.axolotlclient.modules.rpc.DiscordRPC;
+import io.github.axolotlclient.util.NetworkHelper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
@@ -74,7 +74,9 @@ public abstract class MinecraftClientMixin {
 
     @Inject(method = "openScreen", at = @At("HEAD"))
     private void axolotlclient$onScreenOpen(Screen screen, CallbackInfo ci){
-        MenuBlur.getInstance().onScreenOpen();
+        if(MinecraftClient.getInstance().currentScreen == null) {
+            MenuBlur.getInstance().onScreenOpen();
+        }
     }
 
     @Inject(method = "isModded", at = @At("HEAD"), cancellable = true)

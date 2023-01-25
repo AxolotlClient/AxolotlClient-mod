@@ -22,16 +22,16 @@
 
 package io.github.axolotlclient.modules.hud.snapping;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-
 import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import io.github.axolotlclient.util.Util;
 import lombok.Setter;
 import net.minecraft.client.util.Window;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * This implementation of Hud modules is based on KronHUD.

@@ -22,9 +22,6 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.simple;
 
-import java.net.InetAddress;
-import java.util.List;
-
 import io.github.axolotlclient.AxolotlClientConfig.options.IntegerOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.Option;
 import io.github.axolotlclient.mixin.MinecraftClientAccessor;
@@ -43,6 +40,9 @@ import net.minecraft.network.packet.s2c.query.QueryResponseS2CPacket;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+
+import java.net.InetAddress;
+import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.

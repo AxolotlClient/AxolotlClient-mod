@@ -22,8 +22,6 @@
 
 package io.github.axolotlclient.modules.tnttime;
 
-import java.text.DecimalFormat;
-
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.IntegerOption;
@@ -33,6 +31,8 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+
+import java.text.DecimalFormat;
 
 public class TntTime extends AbstractModule {
 

@@ -22,12 +22,6 @@
 
 package io.github.axolotlclient.modules.unfocusedFpsLimiter;
 
-import java.util.concurrent.locks.LockSupport;
-
-import org.jetbrains.annotations.Nullable;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
-
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.FloatOption;
@@ -37,6 +31,11 @@ import io.github.axolotlclient.modules.AbstractModule;
 import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.SoundCategory;
+import org.jetbrains.annotations.Nullable;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
+
+import java.util.concurrent.locks.LockSupport;
 
 /**
  * This module is based on the mod DynamicFps by juliand665.
