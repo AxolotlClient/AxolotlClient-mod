@@ -1,0 +1,32 @@
+name: "Release"
+
+on:
+  push:
+    tags:
+      - "*"
+  worflow_dispatch:
+
+jobs:
+  release:
+    if: "github.ref == 'refs/heads/multiversion'"
+    name: "Tagged Release"
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: gradle/wrapper-validation-action@v1
+      - uses: actions/setup-java@v3
+        with:
+          distribution: "temurin"
+          java-version: 17
+          cache: 'gradle'
+      - name: Grant execute permission
+        run: chmod +x ./gradlew
+      - name: Build with Gradle
+        run: ./gradlew build --no-daemon
+
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GH_TOKEN }}"
+          prerelease: false
+          files: 1.*/build/libs/*

@@ -38,7 +38,7 @@ import java.util.List;
 public abstract class TextHudEntry extends BoxHudEntry {
 
     protected ColorOption textColor = new ColorOption("textcolor", Color.WHITE);
-    protected BooleanOption shadow = new BooleanOption("axolotlclient.shadow", getShadowDefault());
+    protected BooleanOption shadow = new BooleanOption("shadow", getShadowDefault());
 
     protected boolean getShadowDefault() {
         return true;
