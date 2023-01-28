@@ -20,23 +20,12 @@
  * For more information, see the LICENSE file.
  */
 
-package io.github.axolotlclient.mixin;
+package io.github.axolotlclient.util;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.util.Session;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Mutable;
-import org.spongepowered.asm.mixin.gen.Accessor;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
-@Mixin(MinecraftClient.class)
-public interface MinecraftClientAccessor {
+public class GsonHelper {
 
-    @Accessor
-    static int getCurrentFps() {
-        return 0;
-    }
-
-    @Accessor("session")
-    @Mutable
-    void setSession(Session session);
+    public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 }

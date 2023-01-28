@@ -24,6 +24,8 @@ package io.github.axolotlclient.mixin;
 
 import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.modules.auth.Auth;
+import io.github.axolotlclient.modules.auth.AuthWidget;
 import io.github.axolotlclient.modules.hud.HudEditScreen;
 import io.github.axolotlclient.modules.zoom.Zoom;
 import io.github.axolotlclient.util.UnsupportedMod;
@@ -58,6 +60,9 @@ public abstract class TitleScreenMixin extends Screen {
         if (MinecraftClient.getInstance().options.saveToolbarActivatorKey.keyEquals(Zoom.keyBinding)) {
             MinecraftClient.getInstance().options.saveToolbarActivatorKey.setBoundKey(InputUtil.UNKNOWN_KEY);
             AxolotlClient.LOGGER.info("Unbound \"Save Toolbar Activator\" to resolve conflict with the zoom key!");
+        }
+        if(Auth.getInstance().showButton.get()) {
+            addDrawableChild(new AuthWidget());
         }
     }
 

@@ -22,21 +22,37 @@
 
 package io.github.axolotlclient.mixin;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.util.Session;
+import net.minecraft.advancement.Achievement;
+import net.minecraft.client.gui.AchievementNotification;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(MinecraftClient.class)
-public interface MinecraftClientAccessor {
+@Mixin(AchievementNotification.class)
+public interface AchievementNotificationAccessor {
+    @Accessor
+    String getTitle();
 
     @Accessor
-    static int getCurrentFps() {
-        return 0;
-    }
+    void setTitle(String title);
 
-    @Accessor("session")
-    @Mutable
-    void setSession(Session session);
+    @Accessor
+    String getName();
+
+    @Accessor
+    void setName(String name);
+
+    @Accessor
+    Achievement getAchievement();
+
+    @Accessor
+    void setAchievement(Achievement achievement);
+
+    @Accessor
+    boolean isPermanent();
+
+    @Accessor
+    void setPermanent(boolean permanent);
+
+    @Accessor
+    void setTime(long time);
 }

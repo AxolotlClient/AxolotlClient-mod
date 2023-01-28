@@ -31,6 +31,7 @@ import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.config.AxolotlClientConfig;
 import io.github.axolotlclient.modules.Module;
 import io.github.axolotlclient.modules.ModuleLoader;
+import io.github.axolotlclient.modules.auth.Auth;
 import io.github.axolotlclient.modules.blur.MenuBlur;
 import io.github.axolotlclient.modules.blur.MotionBlur;
 import io.github.axolotlclient.modules.freelook.Freelook;
@@ -136,6 +137,7 @@ public class AxolotlClient implements ClientModInitializer {
         modules.add(BeaconBeam.getInstance());
         modules.add(UnfocusedFpsLimiter.getInstance());
         modules.add(Tablist.getInstance());
+        modules.add(Auth.getInstance());
     }
 
     private static void addExternalModules() {

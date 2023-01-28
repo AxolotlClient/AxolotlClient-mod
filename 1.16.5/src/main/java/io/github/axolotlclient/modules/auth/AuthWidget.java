@@ -20,23 +20,17 @@
  * For more information, see the LICENSE file.
  */
 
-package io.github.axolotlclient.mixin;
+package io.github.axolotlclient.modules.auth;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.util.Session;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Mutable;
-import org.spongepowered.asm.mixin.gen.Accessor;
+import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.text.Text;
 
-@Mixin(MinecraftClient.class)
-public interface MinecraftClientAccessor {
+public class AuthWidget extends ButtonWidget {
 
-    @Accessor
-    static int getCurrentFps() {
-        return 0;
+    public AuthWidget() {
+        super(10, 10,
+                MinecraftClient.getInstance().textRenderer.getWidth(MinecraftClient.getInstance().getSession().getUsername()) + 10,
+                20, Text.of(MinecraftClient.getInstance().getSession().getUsername()), buttonWidget -> MinecraftClient.getInstance().openScreen(new AccountsScreen(MinecraftClient.getInstance().currentScreen)));
     }
-
-    @Accessor("session")
-    @Mutable
-    void setSession(Session session);
 }

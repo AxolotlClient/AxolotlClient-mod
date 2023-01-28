@@ -99,7 +99,7 @@ public class AxolotlClientConfig extends ConfigHolder {
     public final BooleanOption enableCustomOutlines = new BooleanOption("enabled", false);
     public final ColorOption outlineColor = new ColorOption("color", Color.parse("#DD000000"));
     public final BooleanOption outlineChroma = new BooleanOption("chroma", false);
-    public final DoubleOption outlineWidth = new DoubleOption("outlineWidth",1, 1, 10);
+    public final FloatOption outlineWidth = new FloatOption("outlineWidth", RenderSystem::lineWidth, 1F, 1F, 10F);
 
     public final BooleanOption noRain = new BooleanOption("noRain", false);
 
@@ -188,7 +188,7 @@ public class AxolotlClientConfig extends ConfigHolder {
         outlines.add(enableCustomOutlines);
         outlines.add(outlineColor);
         outlines.add(outlineChroma);
-        //outlines.add(outlineWidth); // I could not get this to have an effect.
+        outlines.add(outlineWidth); // I could not get this to have an effect.
 
         rendering.add(noRain);
 

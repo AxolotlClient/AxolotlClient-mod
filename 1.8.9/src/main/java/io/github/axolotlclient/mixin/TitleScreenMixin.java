@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.mixin;
 
+import io.github.axolotlclient.modules.auth.AccountsScreen;
+import io.github.axolotlclient.modules.auth.Auth;
+import io.github.axolotlclient.modules.auth.AuthWidget;
 import io.github.axolotlclient.modules.hud.HudEditScreen;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.ClientBrandRetriever;
@@ -50,6 +53,9 @@ public abstract class TitleScreenMixin extends Screen {
             args.set(0, 192);
             args.set(3, I18n.translate("config") + "...");
         }
+        if(Auth.getInstance().showButton.get()) {
+            buttons.add(new AuthWidget());
+        }
     }
 
     @Inject(method = "initWidgetsNormal", at = @At("TAIL"))
@@ -71,6 +77,8 @@ public abstract class TitleScreenMixin extends Screen {
     public void axolotlclient$onClick(ButtonWidget button, CallbackInfo ci) {
         if (button.id == 192)
             MinecraftClient.getInstance().openScreen(new HudEditScreen(this));
+        else if(button.id == 242)
+            MinecraftClient.getInstance().openScreen(new AccountsScreen(MinecraftClient.getInstance().currentScreen));
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;drawWithShadow(Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V", ordinal = 0))
