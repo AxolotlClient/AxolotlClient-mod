@@ -104,3 +104,4 @@
 
 - all versions now share parts of a codebase
 - add versions for 1.19.2, CTS and 1.16.5
+- update French translation (CornetPanique86)

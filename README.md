@@ -15,7 +15,7 @@ A Complete (nearly) mod to have various features on various Minecraft versions
 - Hit Color
 - Screenshot Utils
 - Zoom
-- Various Hud Modules (port of [KronHUD](https://github.com/DarkKronicle/KronHUD))
+- Various Hud Modules (port of [KronHUD](https://github.com/DarkKronicle/KronHUD), but with additions)
   - including, but not limited to:
     - Ping
     - FPS
