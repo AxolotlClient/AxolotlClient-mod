@@ -34,8 +34,14 @@ import lombok.Getter;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.resource.language.I18n;
+import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.client.util.Session;
+import net.minecraft.util.Identifier;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Collectors;
 
@@ -54,8 +60,9 @@ public class Auth extends Accounts implements Module {
         this.auth = new MSAuth(AxolotlClient.LOGGER, this);
         if (isContained(client.getSession().getUuid())) {
             current = getAccounts().stream().filter(account -> account.getUuid().equals(client.getSession().getUuid())).collect(Collectors.toList()).get(0);
-            current.refresh(auth, () -> {
-            });
+            if(current.isExpired()) {
+                current.refresh(auth, () -> {});
+            }
         } else {
             current = new MSAccount(client.getSession().getUsername(), client.getSession().getUuid(), client.getSession().getAccessToken());
         }
@@ -93,5 +100,17 @@ public class Auth extends Accounts implements Module {
         return AxolotlClient.LOGGER;
     }
 
-
+    public void loadSkinFile(Identifier skinId, MSAccount account){
+        if(MinecraftClient.getInstance().getTextureManager().getTexture(skinId) == null) {
+            try {
+                BufferedImage image = ImageIO.read(Auth.getInstance().getSkinFile(account));
+                if (image != null) {
+                    client.getTextureManager().loadTexture(skinId, new NativeImageBackedTexture(image));
+                    AxolotlClient.LOGGER.debug("Loaded skin file for "+ account.getName());
+                }
+            } catch (IOException e) {
+                AxolotlClient.LOGGER.warn("Couldn't load skin file for " + account.getName());
+            }
+        }
+    }
 }

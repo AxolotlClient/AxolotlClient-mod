@@ -83,14 +83,8 @@ public class AccountsListWidget extends AlwaysSelectedEntryListWidget<AccountsLi
             this.screen = screen;
             this.account = account;
             this.client = MinecraftClient.getInstance();
-            this.skin = new Identifier("accounts_"+account.getUuid());
-            if(client.getTextureManager().getTexture(skin) == null) {
-                try {
-                    client.getTextureManager().registerTexture(skin, new NativeImageBackedTexture(NativeImage.read(Files.newInputStream(Auth.getInstance().getSkinFile(account).toPath()))));
-                } catch (IOException e) {
-                    AxolotlClient.LOGGER.warn("Couldn't load skin file for " + account.getName());
-                }
-            }
+            this.skin = new Identifier(Auth.getInstance().getSkinTextureId(account));
+            Auth.getInstance().loadSkinFile(skin, account);
         }
 
         @Override
@@ -110,6 +104,7 @@ public class AccountsListWidget extends AlwaysSelectedEntryListWidget<AccountsLi
             RenderSystem.setShaderTexture(0, skin);
             RenderSystem.enableBlend();
             drawTexture(matrices, x-1, y-1, 33, 33, 8, 8, 8, 8, 64, 64);
+            drawTexture(matrices, x-1, y-1, 33, 33, 40, 8, 8, 8, 64, 64);
             RenderSystem.disableBlend();
             client.textRenderer.draw(matrices, account.getName(), x + 3 + 33, y + 1, -1);
             client.textRenderer.draw(matrices, account.getUuid(), x + 3 + 33, y + 12, 8421504);

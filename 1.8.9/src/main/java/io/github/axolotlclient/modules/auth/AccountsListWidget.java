@@ -110,17 +110,8 @@ public class AccountsListWidget extends EntryListWidget {
             this.screen = screen;
             this.account = account;
             this.client = MinecraftClient.getInstance();
-            this.skin = new Identifier("accounts_"+account.getUuid());
-            if(client.getTextureManager().getTexture(skin) == null) {
-                try {
-                    BufferedImage image = ImageIO.read(Auth.getInstance().getSkinFile(account));
-                    if (image != null) {
-                        client.getTextureManager().loadTexture(skin, new NativeImageBackedTexture(image));
-                    }
-                } catch (IOException e) {
-                    AxolotlClient.LOGGER.warn("Couldn't load skin file for " + account.getName());
-                }
-            }
+            this.skin = new Identifier(Auth.getInstance().getSkinTextureId(account));
+            Auth.getInstance().loadSkinFile(skin, account);
         }
 
         @Override
@@ -140,9 +131,11 @@ public class AccountsListWidget extends EntryListWidget {
                 client.getTextureManager().bindTexture(warningSign);
                 drawTexture(x - 35, y+1, 0, 0, 25, 25, 25, 25);
             }
+            GlStateManager.color4f(1, 1, 1, 1);
             client.getTextureManager().bindTexture(skin);
             GlStateManager.enableBlend();
             drawTexture(x-1, y-1, 8, 8, 8, 8, 33, 33, 64, 64);
+            drawTexture(x-1, y-1, 40, 8, 8, 8, 33, 33, 64, 64);
             GlStateManager.disableBlend();
         }
 

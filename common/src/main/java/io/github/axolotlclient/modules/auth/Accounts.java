@@ -116,6 +116,10 @@ public abstract class Accounts {
         }
     }
 
+    public String getSkinTextureId(MSAccount account){
+        return "accounts_"+account.getUuid();
+    }
+
     public void save() {
         JsonArray array = new JsonArray();
         accounts.forEach(account -> array.add(account.serialize()));

@@ -25,6 +25,7 @@ package io.github.axolotlclient.modules.auth;
 import com.mojang.authlib.exceptions.AuthenticationException;
 import com.mojang.authlib.minecraft.UserApiService;
 import com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService;
+import com.mojang.blaze3d.texture.NativeImage;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.GenericOption;
@@ -37,12 +38,16 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.multiplayer.report.chat.ChatReportingContext;
 import net.minecraft.client.mutliplayer.report.ReportEnvironment;
 import net.minecraft.client.network.SocialInteractionsManager;
+import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.client.toast.SystemToast;
 import net.minecraft.client.util.PlayerKeyPairManager;
 import net.minecraft.client.util.Session;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import org.quiltmc.loader.api.QuiltLoader;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -61,7 +66,9 @@ public class Auth extends Accounts implements Module {
         this.auth = new MSAuth(AxolotlClient.LOGGER, this);
         if(isContained(client.getSession().getUuid())){
             current = getAccounts().stream().filter(account -> account.getUuid().equals(client.getSession().getUuid())).toList().get(0);
-            current.refresh(auth, ()->{});
+            if(current.isExpired()) {
+                current.refresh(auth, () -> {});
+            }
         } else {
             current = new MSAccount(client.getSession().getUsername(), client.getSession().getUuid(), client.getSession().getAccessToken());
         }
@@ -105,4 +112,15 @@ public class Auth extends Accounts implements Module {
         return AxolotlClient.LOGGER;
     }
 
+    public void loadSkinFile(Identifier skinId, MSAccount account){
+        if(MinecraftClient.getInstance().getTextureManager().getOrDefault(skinId, null) == null) {
+            try {
+                MinecraftClient.getInstance().getTextureManager().registerTexture(skinId,
+                        new NativeImageBackedTexture(NativeImage.read(Files.newInputStream(getSkinFile(account).toPath()))));
+                AxolotlClient.LOGGER.debug("Loaded skin file for "+ account.getName());
+            } catch (IOException e) {
+                AxolotlClient.LOGGER.warn("Couldn't load skin file for " + account.getName());
+            }
+        }
+    }
 }
