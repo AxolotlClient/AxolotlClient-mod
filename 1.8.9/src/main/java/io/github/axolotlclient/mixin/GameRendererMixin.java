@@ -25,6 +25,7 @@ package io.github.axolotlclient.mixin;
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.modules.auth.Auth;
 import io.github.axolotlclient.modules.blur.MenuBlur;
 import io.github.axolotlclient.modules.blur.MotionBlur;
 import io.github.axolotlclient.modules.freelook.Freelook;
@@ -219,11 +220,14 @@ public abstract class GameRendererMixin {
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/Framebuffer;bind(Z)V", shift = Shift.BEFORE))
     public void axolotlclient$worldMotionBlur(float tickDelta, long nanoTime, CallbackInfo ci) {
         MenuBlur.getInstance().updateBlur();
-        axolotlclient$motionBlur(tickDelta, nanoTime, null);
+        axolotlclient$postRender(tickDelta, nanoTime, null);
     }
 
     @Inject(method = "render", at = @At("TAIL"))
-    public void axolotlclient$motionBlur(float tickDelta, long nanoTime, CallbackInfo ci) {
+    public void axolotlclient$postRender(float tickDelta, long nanoTime, CallbackInfo ci) {
+
+        Auth.Notifications.getInstance().renderStatus();
+
         if ((ci == null) == MotionBlur.getInstance().inGuis.get()) {
             return;
         }
