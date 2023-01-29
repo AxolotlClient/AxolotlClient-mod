@@ -22,12 +22,14 @@
 
 package io.github.axolotlclient.modules.auth;
 
+import com.google.common.io.Files;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.sun.net.httpserver.HttpServer;
 import io.github.axolotlclient.util.Logger;
 import io.github.axolotlclient.util.NetworkUtil;
 import io.github.axolotlclient.util.OSUtil;
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.RequestBuilder;
@@ -35,6 +37,7 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -198,9 +201,21 @@ public class MSAuth {
     }
 
     public JsonObject getMCProfile(String accessToken) throws IOException {
-        return NetworkUtil.request(RequestBuilder.get()
+        JsonObject profile = NetworkUtil.request(RequestBuilder.get()
                 .setUri("https://api.minecraftservices.com/minecraft/profile")
                 .addHeader("Authorization", "Bearer " + accessToken).build(), getHttpClient(), true);
+        saveSkinFile(profile.get("skins").getAsJsonArray().get(0).getAsJsonObject().get("url").getAsString(), profile.get("id").getAsString());
+        return profile;
+    }
+
+    public void saveSkinFile(String url, String uuid) throws IOException {
+        RequestBuilder requestBuilder = RequestBuilder.get().setUri(url);
+        try (CloseableHttpClient client = getHttpClient()) {
+            HttpResponse response = client.execute(requestBuilder.build());
+            //noinspection UnstableApiUsage
+            Files.write(EntityUtils.toByteArray(response.getEntity()), accounts.getSkinFile(uuid));
+        }
+
     }
 
     private CloseableHttpClient getHttpClient() {

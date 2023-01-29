@@ -23,14 +23,20 @@
 package io.github.axolotlclient.modules.auth;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import io.github.axolotlclient.AxolotlClient;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
+import net.minecraft.client.texture.NativeImage;
+import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 
 public class AccountsListWidget extends AlwaysSelectedEntryListWidget<AccountsListWidget.Entry> {
@@ -67,6 +73,8 @@ public class AccountsListWidget extends AlwaysSelectedEntryListWidget<AccountsLi
         private static final Identifier checkmark = new Identifier("axolotlclient", "textures/check.png");
         private static final Identifier warningSign = new Identifier("axolotlclient", "textures/warning.png");
 
+        private final Identifier skin;
+
         private final AccountsScreen screen;
         private final MSAccount account;
         private final MinecraftClient client;
@@ -76,6 +84,14 @@ public class AccountsListWidget extends AlwaysSelectedEntryListWidget<AccountsLi
             this.screen = screen;
             this.account = account;
             this.client = MinecraftClient.getInstance();
+            this.skin = new Identifier("accounts_"+account.getUuid());
+            if(client.getTextureManager().getTexture(skin) == null) {
+                try {
+                    client.getTextureManager().registerTexture(skin, new NativeImageBackedTexture(NativeImage.read(Files.newInputStream(Auth.getInstance().getSkinFile(account).toPath()))));
+                } catch (IOException e) {
+                    AxolotlClient.LOGGER.warn("Couldn't load skin file for " + account.getName());
+                }
+            }
         }
 
         @Override
@@ -88,8 +104,12 @@ public class AccountsListWidget extends AlwaysSelectedEntryListWidget<AccountsLi
                 client.getTextureManager().bindTexture(warningSign);
                 drawTexture(matrices, x - 35, y+1, 0, 0, 25, 25, 25, 25);
             }
-            client.textRenderer.draw(matrices, account.getName(), x + 3, y + 1, -1);
-            client.textRenderer.draw(matrices, account.getUuid(), x + 3, y + 12, 8421504);
+            client.getTextureManager().bindTexture(skin);
+            RenderSystem.enableBlend();
+            drawTexture(matrices, x-1, y-1, 33, 33, 8, 8, 8, 8, 64, 64);
+            RenderSystem.disableBlend();
+            client.textRenderer.draw(matrices, account.getName(), x + 3 + 33, y + 1, -1);
+            client.textRenderer.draw(matrices, account.getUuid(), x + 3 + 33, y + 12, 8421504);
         }
 
         @Override

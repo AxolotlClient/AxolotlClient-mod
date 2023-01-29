@@ -25,6 +25,7 @@ package io.github.axolotlclient.modules.auth;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
@@ -32,7 +33,7 @@ import java.util.Map;
 public class MSAccount {
 
     private final String uuid;
-    private final String name;
+    private String name;
 
     private String authToken;
     private String refreshToken;
@@ -67,6 +68,10 @@ public class MSAccount {
                 authToken = tokens.getKey();
                 refreshToken = tokens.getValue();
                 expiration = Instant.now().plus(1, ChronoUnit.DAYS);
+                try {
+                    JsonObject object = auth.getMCProfile(authToken);
+                    name = object.get("name").getAsString();
+                } catch (IOException ignored) {}
             }
             runAfter.run();
         }).start();

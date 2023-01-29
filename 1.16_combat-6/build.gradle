@@ -88,7 +88,7 @@ modrinth {
 	versionNumber = "${project.version}"
 	versionType = "release"
 	uploadFile = remapJar
-	gameVersions = ["${project.minecraft_1192}"]
+	gameVersions = ["${project.minecraft_cts8}"]
 	loaders = ["fabric"]
 	additionalFiles = [remapSourcesJar]
 	dependencies {

@@ -27,6 +27,7 @@ import com.google.gson.JsonObject;
 import io.github.axolotlclient.util.GsonHelper;
 import io.github.axolotlclient.util.Logger;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -86,7 +87,33 @@ public abstract class Accounts {
 
     public void removeAccount(MSAccount account) {
         accounts.remove(account);
+        removeSkinFile(account);
         save();
+    }
+
+    public File getSkinFile(MSAccount account){
+        return getSkinFile(account.getUuid());
+    }
+
+    public File getSkinFile(String uuid){
+        File f = getConfigDir().resolve("skins").resolve(uuid).toFile();
+        if(!f.exists()){
+            try {
+                f.getParentFile().mkdirs();
+                f.createNewFile();
+            } catch (IOException e) {
+                getLogger().error("Couldn't create skin file for "+uuid);
+            }
+        }
+        return f;
+    }
+
+    public void removeSkinFile(MSAccount account){
+        try {
+            Files.delete(getSkinFile(account).toPath());
+        } catch (IOException e) {
+            getLogger().error("Failed to clean up skin file for "+account.getName());
+        }
     }
 
     public void save() {
