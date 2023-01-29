@@ -25,7 +25,6 @@ package io.github.axolotlclient.mixin;
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.modules.auth.Auth;
 import io.github.axolotlclient.modules.blur.MenuBlur;
 import io.github.axolotlclient.modules.blur.MotionBlur;
 import io.github.axolotlclient.modules.freelook.Freelook;
@@ -35,6 +34,7 @@ import io.github.axolotlclient.modules.hypixel.skyblock.Skyblock;
 import io.github.axolotlclient.modules.sky.SkyboxManager;
 import io.github.axolotlclient.modules.unfocusedFpsLimiter.UnfocusedFpsLimiter;
 import io.github.axolotlclient.modules.zoom.Zoom;
+import io.github.axolotlclient.util.notifications.Notifications;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.MinecraftClient;
@@ -226,7 +226,7 @@ public abstract class GameRendererMixin {
     @Inject(method = "render", at = @At("TAIL"))
     public void axolotlclient$postRender(float tickDelta, long nanoTime, CallbackInfo ci) {
 
-        Auth.Notifications.getInstance().renderStatus();
+        Notifications.getInstance().renderStatus();
 
         if ((ci == null) == MotionBlur.getInstance().inGuis.get()) {
             return;

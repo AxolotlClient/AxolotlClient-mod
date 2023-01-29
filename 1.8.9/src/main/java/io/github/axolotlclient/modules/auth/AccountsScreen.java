@@ -47,7 +47,6 @@ public class AccountsScreen extends Screen {
     public void init() {
 
         accountsListWidget = new AccountsListWidget(this, client, width, height, 32, height - 64, 35);
-        //addChild(accountsListWidget);
 
         accountsListWidget.setAccounts(Auth.getInstance().getAccounts());
 

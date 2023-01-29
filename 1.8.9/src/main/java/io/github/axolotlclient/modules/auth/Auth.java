@@ -29,15 +29,12 @@ import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.mixin.MinecraftClientAccessor;
 import io.github.axolotlclient.modules.Module;
 import io.github.axolotlclient.util.Logger;
-import io.github.axolotlclient.util.Util;
+import io.github.axolotlclient.util.notifications.Notifications;
 import lombok.Getter;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.resource.language.I18n;
-import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.Session;
-import net.minecraft.util.Identifier;
 
 import java.nio.file.Path;
 import java.util.stream.Collectors;
@@ -45,7 +42,8 @@ import java.util.stream.Collectors;
 public class Auth extends Accounts implements Module {
 
     @Getter
-    private final static Auth Instance = new Auth();
+    private static final Auth Instance = new Auth();
+
     public final BooleanOption showButton = new BooleanOption("auth.showButton", false);
     private final MinecraftClient client = MinecraftClient.getInstance();
     private final GenericOption viewAccounts = new GenericOption("viewAccounts", "clickToOpen", (x, y) -> client.openScreen(new AccountsScreen(client.currentScreen)));
@@ -81,11 +79,11 @@ public class Auth extends Accounts implements Module {
             ((MinecraftClientAccessor) client).setSession(new Session(account.getName(), account.getUuid(), account.getAuthToken(), Session.AccountType.MOJANG.name()));
             save();
             current = account;
-            Notifications.getInstance().setStatus(I18n.translate("auth.notif.login.successful").replace("%s", current.getName()));
+            Notifications.getInstance().addStatus(I18n.translate("auth.notif.title"), I18n.translate("auth.notif.login.successful").replace("%s", current.getName()));
             AxolotlClient.LOGGER.info("Successfully logged in as " + current.getName());
         } catch (Exception e) {
             AxolotlClient.LOGGER.error("Failed to log in! ", e);
-            Notifications.getInstance().setStatus(I18n.translate("auth.notif.login.failed"));
+            Notifications.getInstance().addStatus(I18n.translate("auth.notif.title"), I18n.translate("auth.notif.login.failed"));
         }
 
     }
@@ -96,45 +94,4 @@ public class Auth extends Accounts implements Module {
     }
 
 
-    // ---------------------- Basic Notification System because 1.8.9 has none by itself (except Achievements which only work in worlds) --------------------------
-    public static class Notifications {
-
-        @Getter
-        private static final Notifications Instance = new Notifications();
-        private final MinecraftClient client = MinecraftClient.getInstance();
-        private String currentStatus;
-        private long statusCreationTime;
-        private int lastX;
-        private boolean fading;
-
-        private void setStatus(String status) {
-            currentStatus = status;
-            statusCreationTime = MinecraftClient.getTime();
-            lastX = Util.getWindow().getWidth();
-            fading = false;
-            client.getSoundManager().play(new PositionedSoundInstance(new Identifier("random.bow"), 0.5F, 0.4F / (0.5F + 0.8F), 1, 0, 0));
-        }
-
-        public void renderStatus() {
-            if (currentStatus != null && !currentStatus.isEmpty()) {
-                int width = client.textRenderer.getStringWidth(currentStatus);
-                int x = lastX;
-                x -= width + 10;
-                if (MinecraftClient.getTime() - statusCreationTime < 100) {
-                    lastX -= lastX / 45;
-                } else if (MinecraftClient.getTime() - statusCreationTime > 2000) {
-                    if (!fading) {
-                        client.getSoundManager().play(new PositionedSoundInstance(new Identifier("random.bow"), 0.5F, 0.4F / (0.5F + 0.8F), 1, 0, 0));
-                    }
-                    fading = true;
-                    lastX += lastX / 40;
-                }
-                DrawableHelper.fill(x - 5, 0, Util.getWindow().getWidth(), 30, 0xFF00CFFF);
-                client.textRenderer.draw(currentStatus, x, 10, -1, true);
-                if (x > Util.getWindow().getWidth() + 10) {
-                    currentStatus = null;
-                }
-            }
-        }
-    }
 }
