@@ -362,8 +362,9 @@
   "viewAccounts": "View Accounts",
   "clickToOpen": "Click to View",
   "auth.notif.title": "Authentication",
-  "auth.notif.login.successful": "Logged in as %s",
+  "auth.notif.login.successful": "Successfully logged in as %s!",
   "auth.notif.login.failed": "Failed to log in!",
   "auth.showButton": "Modify Title screen",
-  "auth.showButton.tooltip": "Whether to show the current user on the Title Screen. <br>Also doubles as a shortcut to view saved accounts."
+  "auth.showButton.tooltip": "Whether to show the current user on the Title Screen. <br>Also doubles as a shortcut to view saved accounts.",
+  "auth.notif.refreshing": "Refreshing tokens for %s!"
 }

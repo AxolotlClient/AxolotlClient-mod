@@ -61,8 +61,14 @@ public class TranslationProvider {
         }
     }
 
-    public static String translate(String key) {
-        return TRANSLATIONS.getOrDefault(key, "axolotlclient." + key);
+    public static String translate(String key, Object... args) {
+        String translated = TRANSLATIONS.getOrDefault(key, "axolotlclient." + key);
+        if(translated.contains("%s")) {
+            for (Object arg : args) {
+                translated = translated.replaceFirst("%s", arg.toString());
+            }
+        }
+        return translated;
     }
 
     public static boolean hasTranslation(String key) {

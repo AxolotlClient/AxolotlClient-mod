@@ -24,7 +24,6 @@ package io.github.axolotlclient.util.notifications;
 
 import io.github.axolotlclient.util.Util;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.sound.PositionedSoundInstance;
@@ -64,22 +63,23 @@ public class Notifications {
 
     public void renderStatus() {
         if (currentStatus != null) {
-            int width = client.textRenderer.getStringWidth(currentStatus.getDescription());
             int x = lastX;
-            x -= width + 5;
+            x -= currentStatus.getWidth() + 5;
             if (MinecraftClient.getTime() - statusCreationTime < 100) {
                 lastX -= lastX / 45;
-            } else if (MinecraftClient.getTime() - statusCreationTime > 2000) {
+            } else if (MinecraftClient.getTime() - statusCreationTime > 5000) {
                 if (!fading) {
                     client.getSoundManager().play(new PositionedSoundInstance(new Identifier("random.bow"), 0.5F, 0.4F / (0.5F + 0.8F), 1, 0, 0));
                 }
                 fading = true;
-                lastX += lastX / 40;
+                lastX += lastX / 45;
             }
-            DrawableHelper.fill(x-5-1, 0, Util.getWindow().getWidth(), 30+1, 0xFF0055FF);
-            DrawableHelper.fill(x - 5, 0, Util.getWindow().getWidth(), 30, 0xFF00CFFF);
-            client.textRenderer.draw(currentStatus.getTitle(), x, 5, -1, true);
-            client.textRenderer.draw(currentStatus.getDescription(), x+2, 17, 0xFFCCCCCC, true);
+            DrawableHelper.fill(x-5-1, 0, Util.getWindow().getWidth(), 20 + currentStatus.getDescription().size()*12 +1, 0xFF0055FF);
+            DrawableHelper.fill(x - 5, 0, Util.getWindow().getWidth(), 20 + currentStatus.getDescription().size()*12, 0xFF00CFFF);
+            client.textRenderer.draw(currentStatus.getTitle(), x, 7, -256, true);
+            for(int i=0;i<currentStatus.getDescription().size();i++) {
+                client.textRenderer.draw(currentStatus.getDescription().get(i), x, 18 + i * 12, -1, true);
+            }
             if (x > Util.getWindow().getWidth() + 20) {
                 currentStatus = null;
                 if (!statusQueue.isEmpty()) {
@@ -91,10 +91,24 @@ public class Notifications {
         }
     }
 
-    @RequiredArgsConstructor
+
     private static class Status {
         @Getter
-        private final String title, description;
+        private final String title;
+        @Getter
+        private final List<String> description;
+        @Getter
+        private final int width;
+
+        public Status(String title, String description){
+            this.title = title;
+            width = Math.max(
+                    160,
+                    Math.max(MinecraftClient.getInstance().textRenderer.getStringWidth(title),
+                            description == null ? 0 : MinecraftClient.getInstance().textRenderer.getStringWidth(description)));
+            //this.width = description.stream().mapToInt(MinecraftClient.getInstance().textRenderer::getStringWidth).max().orElse(200);
+            this.description = MinecraftClient.getInstance().textRenderer.wrapLines(description, width);
+        }
     }
 }
 

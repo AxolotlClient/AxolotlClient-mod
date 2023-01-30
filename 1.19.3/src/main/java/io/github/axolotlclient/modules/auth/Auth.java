@@ -87,23 +87,32 @@ public class Auth extends Accounts implements Module {
         if(client.world != null){
             return;
         }
-        try {
-            ((MinecraftClientAccessor) client).setSession(new Session(account.getName(), account.getUuid(), account.getAuthToken(),
-                            Optional.empty(), Optional.empty(),
-                            Session.AccountType.MSA));
-            UserApiService service = ((YggdrasilMinecraftSessionService)MinecraftClient.getInstance().getSessionService()).getAuthenticationService().createUserApiService(client.getSession().getAccessToken());
-            ((MinecraftClientAccessor) client).setUserApiService(service);
-            ((MinecraftClientAccessor) client).setSocialInteractionsManager(new SocialInteractionsManager(client, service));
-            ((MinecraftClientAccessor) client).setPlayerKeyPairManager(PlayerKeyPairManager.m_fgoaidjm(service, client.getSession(), client.runDirectory.toPath()));
-            ((MinecraftClientAccessor) client).setChatReportingContext(ChatReportingContext.m_ddscuhgw(ReportEnvironment.createLocal(), service));
-            save();
-            current = account;
-            client.getToastManager().add(new SystemToast(SystemToast.Type.TUTORIAL_HINT, Text.translatable("auth.notif.title"), Text.translatable("auth.notif.login.successful", current.getName())));
-        } catch (AuthenticationException e) {
-            e.printStackTrace();
-            client.getToastManager().add(new SystemToast(SystemToast.Type.TUTORIAL_HINT, Text.translatable("auth.notif.title"), Text.translatable("auth.notif.login.failed")));
-        }
 
+        Runnable runnable = () -> {
+            try {
+                ((MinecraftClientAccessor) client).setSession(new Session(account.getName(), account.getUuid(), account.getAuthToken(),
+                        Optional.empty(), Optional.empty(),
+                        Session.AccountType.MSA));
+                UserApiService service = ((YggdrasilMinecraftSessionService) MinecraftClient.getInstance().getSessionService()).getAuthenticationService().createUserApiService(client.getSession().getAccessToken());
+                ((MinecraftClientAccessor) client).setUserApiService(service);
+                ((MinecraftClientAccessor) client).setSocialInteractionsManager(new SocialInteractionsManager(client, service));
+                ((MinecraftClientAccessor) client).setPlayerKeyPairManager(PlayerKeyPairManager.m_fgoaidjm(service, client.getSession(), client.runDirectory.toPath()));
+                ((MinecraftClientAccessor) client).setChatReportingContext(ChatReportingContext.m_ddscuhgw(ReportEnvironment.createLocal(), service));
+                save();
+                current = account;
+                client.getToastManager().add(new SystemToast(SystemToast.Type.TUTORIAL_HINT, Text.translatable("auth.notif.title"), Text.translatable("auth.notif.login.successful", current.getName())));
+            } catch (AuthenticationException e) {
+                e.printStackTrace();
+                client.getToastManager().add(new SystemToast(SystemToast.Type.TUTORIAL_HINT, Text.translatable("auth.notif.title"), Text.translatable("auth.notif.login.failed")));
+            }
+        };
+
+        if(account.isExpired()){
+            client.getToastManager().add(new SystemToast(SystemToast.Type.TUTORIAL_HINT, Text.translatable("auth.notif.title"), Text.translatable("auth.notif.refreshing", account.getName())));
+            account.refresh(auth, runnable);
+        } else {
+            runnable.run();
+        }
     }
 
     @Override

@@ -109,3 +109,5 @@
 ### 3.0.1
 
 - add in-game Authentication
+- fix running 1.16 versions with Java 8
+- add a notification system to 1.8.9

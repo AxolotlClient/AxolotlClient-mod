@@ -40,8 +40,9 @@ public class iconHud extends BoxHudEntry {
     public void renderComponent(float delta) {
         GlStateManager.color4f(1, 1, 1, 1);
         MinecraftClient.getInstance().getTextureManager().bindTexture(AxolotlClient.badgeIcon);
-
+        GlStateManager.enableBlend();
         drawTexture(getX(), getY(), 0, 0, width, height, width, height);
+        GlStateManager.disableBlend();
     }
 
     @Override

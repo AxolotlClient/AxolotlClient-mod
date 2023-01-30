@@ -80,16 +80,25 @@ public class Auth extends Accounts implements Module {
         if(client.world != null){
             return;
         }
-        try {
-            ((MinecraftClientAccessor) client).setSession(new Session(account.getName(), account.getUuid(), account.getAuthToken(), Session.AccountType.MOJANG.name()));
-            save();
-            current = account;
-            client.getToastManager().add(new SystemToast(SystemToast.Type.TUTORIAL_HINT, new TranslatableText("auth.notif.title"), new TranslatableText("auth.notif.login.successful", current.getName())));
-        } catch (Exception e) {
-            e.printStackTrace();
-            client.getToastManager().add(new SystemToast(SystemToast.Type.TUTORIAL_HINT, new TranslatableText("auth.notif.title"), new TranslatableText("auth.notif.login.failed")));
-        }
 
+        Runnable runnable = () -> {
+            try {
+                ((MinecraftClientAccessor) client).setSession(new Session(account.getName(), account.getUuid(), account.getAuthToken(), Session.AccountType.MOJANG.name()));
+                save();
+                current = account;
+                client.getToastManager().add(new SystemToast(SystemToast.Type.TUTORIAL_HINT, new TranslatableText("auth.notif.title"), new TranslatableText("auth.notif.login.successful", current.getName())));
+            } catch (Exception e) {
+                e.printStackTrace();
+                client.getToastManager().add(new SystemToast(SystemToast.Type.TUTORIAL_HINT, new TranslatableText("auth.notif.title"), new TranslatableText("auth.notif.login.failed")));
+            }
+        };
+
+        if(account.isExpired()){
+            client.getToastManager().add(new SystemToast(SystemToast.Type.TUTORIAL_HINT, new TranslatableText("auth.notif.title"), new TranslatableText("auth.notif.refreshing", account.getName())));
+            account.refresh(auth, runnable);
+        } else {
+            runnable.run();
+        }
     }
 
     @Override

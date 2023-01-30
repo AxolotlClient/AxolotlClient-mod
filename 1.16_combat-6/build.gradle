@@ -92,7 +92,7 @@ modrinth {
 	loaders = ["fabric"]
 	additionalFiles = [remapSourcesJar]
 	dependencies {
-		required.project "fabric-api"
+		required.version "IQ3UGSc2"
 	}
 
 	// Changelog fetching: Credit LambdAurora.

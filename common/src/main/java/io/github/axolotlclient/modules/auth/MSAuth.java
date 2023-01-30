@@ -132,7 +132,6 @@ public class MSAuth {
             }
         } catch (Exception e) {
             logger.error("Failed to authenticate!", e);
-            e.printStackTrace();
         }
     }
 
@@ -154,11 +153,11 @@ public class MSAuth {
 
     public String authXbl(String code) throws IOException {
         JsonObject object = new JsonObject();
-        JsonObject properies = new JsonObject();
-        properies.add("AuthMethod", new JsonPrimitive("RPS"));
-        properies.add("SiteName", new JsonPrimitive("user.auth.xboxlive.com"));
-        properies.add("RpsTicket", new JsonPrimitive("d="+code));
-        object.add("Properties", properies);
+        JsonObject properties = new JsonObject();
+        properties.add("AuthMethod", new JsonPrimitive("RPS"));
+        properties.add("SiteName", new JsonPrimitive("user.auth.xboxlive.com"));
+        properties.add("RpsTicket", new JsonPrimitive("d="+code));
+        object.add("Properties", properties);
         object.add("RelyingParty", new JsonPrimitive("http://auth.xboxlive.com"));
         object.add("TokenType", new JsonPrimitive("JWT"));
         RequestBuilder requestBuilder = RequestBuilder.post()

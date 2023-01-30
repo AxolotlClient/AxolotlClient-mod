@@ -40,7 +40,7 @@ public abstract class I18nMixin {
             callback.setReturnValue(TranslationProvider
                     .format(TranslationProvider.translate(key.substring(KEY_PREFIX.length())), args));
         } else if(TranslationProvider.hasTranslation(key)){
-            callback.setReturnValue(TranslationProvider.translate(key));
+            callback.setReturnValue(TranslationProvider.translate(key, args));
         }
     }
 }

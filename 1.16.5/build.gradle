@@ -80,11 +80,11 @@ modrinth {
 	versionNumber = "${project.version}"
 	versionType = "release"
 	uploadFile = remapJar
-	gameVersions = ["${project.minecraft_1192}"]
+	gameVersions = ["${project.minecraft_1165}"]
 	loaders = ["fabric"]
 	additionalFiles = [remapSourcesJar]
 	dependencies {
-		required.project "fabric-api"
+		required.version "IQ3UGSc2"
 	}
 
 	// Changelog fetching: Credit LambdAurora.

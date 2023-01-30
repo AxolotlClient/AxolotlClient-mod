@@ -41,7 +41,6 @@ import net.minecraft.util.Identifier;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Collectors;
 
@@ -82,17 +81,26 @@ public class Auth extends Accounts implements Module {
         if (client.world != null) {
             return;
         }
-        try {
-            ((MinecraftClientAccessor) client).setSession(new Session(account.getName(), account.getUuid(), account.getAuthToken(), Session.AccountType.MOJANG.name()));
-            save();
-            current = account;
-            Notifications.getInstance().addStatus(I18n.translate("auth.notif.title"), I18n.translate("auth.notif.login.successful").replace("%s", current.getName()));
-            AxolotlClient.LOGGER.info("Successfully logged in as " + current.getName());
-        } catch (Exception e) {
-            AxolotlClient.LOGGER.error("Failed to log in! ", e);
-            Notifications.getInstance().addStatus(I18n.translate("auth.notif.title"), I18n.translate("auth.notif.login.failed"));
-        }
 
+        Runnable runnable = () -> {
+            try {
+                ((MinecraftClientAccessor) client).setSession(new Session(account.getName(), account.getUuid(), account.getAuthToken(), Session.AccountType.MOJANG.name()));
+                save();
+                current = account;
+                Notifications.getInstance().addStatus(I18n.translate("auth.notif.title"), I18n.translate("auth.notif.login.successful", current.getName()));
+                AxolotlClient.LOGGER.info("Successfully logged in as " + current.getName());
+            } catch (Exception e) {
+                AxolotlClient.LOGGER.error("Failed to log in! ", e);
+                Notifications.getInstance().addStatus(I18n.translate("auth.notif.title"), I18n.translate("auth.notif.login.failed"));
+            }
+        };
+
+        if(account.isExpired()){
+            Notifications.getInstance().addStatus(I18n.translate("auth.notif.title"), I18n.translate("auth.notif.refreshing", current.getName()));
+            account.refresh(auth, runnable);
+        } else {
+            runnable.run();
+        }
     }
 
     @Override
