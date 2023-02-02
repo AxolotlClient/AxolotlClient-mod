@@ -58,7 +58,7 @@ public class HotbarHUD extends TextHudEntry {
             return;
         }
         DrawPosition pos = getPos();
-        GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.enableBlend();
         this.client.getTextureManager().bindTexture(WIDGETS_TEXTURE);
 

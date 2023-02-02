@@ -131,7 +131,7 @@ public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
 
     public void scale() {
         float scale = getScale();
-        GlStateManager.scalef(scale, scale, 1);
+        GlStateManager.scale(scale, scale, 1);
     }
 
     @Override

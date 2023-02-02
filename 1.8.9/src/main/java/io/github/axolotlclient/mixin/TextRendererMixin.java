@@ -71,14 +71,14 @@ public abstract class TextRendererMixin {
             MinecraftClient.getInstance().getTextureManager().bindTexture(texture_g);
 
             if (!bl || shouldHaveShadow) {
-                GlStateManager.color4f(this.red / 4, this.green / 4, this.blue / 4, this.alpha);
+                GlStateManager.color(this.red / 4, this.green / 4, this.blue / 4, this.alpha);
                 drawTexture(this.x + 1, this.y - this.fontHeight + 7);
             }
 
-            GlStateManager.color4f(this.red, this.green, this.blue, this.alpha);
+            GlStateManager.color(this.red, this.green, this.blue, this.alpha);
             drawTexture(this.x, this.y - this.fontHeight + 6);
 
-            GlStateManager.color4f(this.red, this.green, this.blue, this.alpha);
+            GlStateManager.color(this.red, this.green, this.blue, this.alpha);
             cir.setReturnValue(7.0F);
         }
     }

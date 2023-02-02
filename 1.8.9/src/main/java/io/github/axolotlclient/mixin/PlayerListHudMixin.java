@@ -60,7 +60,7 @@ public abstract class PlayerListHudMixin extends DrawableHelper {
         }
     }
 
-    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;getPlayerName(Lnet/minecraft/client/network/PlayerListEntry;)Ljava/lang/String;"))
+    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;getPlayerName(Lnet/minecraft/client/network/PlayerListEntry;)Ljava/lang/String;", ordinal = 1))
     public PlayerListEntry axolotlclient$getPlayer(PlayerListEntry playerEntry) {
         playerListEntry = playerEntry;
         return playerEntry;

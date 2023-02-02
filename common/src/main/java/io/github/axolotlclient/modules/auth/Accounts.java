@@ -95,6 +95,7 @@ public abstract class Accounts {
         return getSkinFile(account.getUuid());
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public File getSkinFile(String uuid){
         File f = getConfigDir().resolve("skins").resolve(uuid).toFile();
         if(!f.exists()){
@@ -136,5 +137,9 @@ public abstract class Accounts {
 
     protected boolean isContained(String uuid) {
         return accounts.stream().anyMatch(account -> account.getUuid().equals(uuid));
+    }
+
+    public boolean allowOfflineAccounts(){
+        return accounts.size() > 0 && !accounts.stream().allMatch(MSAccount::isOffline);
     }
 }

@@ -54,7 +54,7 @@ public abstract class PlayerListHudMixin {
 
     private GameProfile cachedPlayer;
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/PlayerListEntry;getProfile()Lcom/mojang/authlib/GameProfile;"))
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/PlayerListEntry;getProfile()Lcom/mojang/authlib/GameProfile;", ordinal = 1))
     public GameProfile axolotlclient$getPlayerGameProfile(PlayerListEntry instance) {
         cachedPlayer = instance.getProfile();
         return instance.getProfile();
@@ -65,8 +65,6 @@ public abstract class PlayerListHudMixin {
 
     @Shadow
     protected abstract Text method_27538(PlayerListEntry par1, MutableText par2);
-
-    MinecraftClient client = MinecraftClient.getInstance();
 
     private PlayerListEntry playerListEntry;
 
@@ -90,7 +88,7 @@ public abstract class PlayerListHudMixin {
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;getWidth(Lnet/minecraft/text/StringVisitable;)I"))
     public int axolotlclient$moveName(TextRenderer instance, StringVisitable text) {
-        if (AxolotlClient.CONFIG.showBadges.get() && AxolotlClient.isUsingClient(playerListEntry.getProfile().getId()))
+        if (AxolotlClient.CONFIG.showBadges.get() && AxolotlClient.isUsingClient(cachedPlayer.getId()))
             return instance.getWidth(text) + 10;
         return instance.getWidth(text);
     }

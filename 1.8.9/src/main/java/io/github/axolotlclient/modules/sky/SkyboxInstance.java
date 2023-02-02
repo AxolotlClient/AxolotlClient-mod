@@ -228,7 +228,7 @@ public abstract class SkyboxInstance {
                 GlStateManager.disableBlend();
                 break;
         }
-        GlStateManager.color4f(1.0F, 1.0F, 1.0F, brightness);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, brightness);
 
         GlStateManager.enableTexture();
     }
@@ -237,23 +237,23 @@ public abstract class SkyboxInstance {
         GlStateManager.disableAlphaTest();
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(0, 1);
-        GlStateManager.color4f(1.0F, 1.0F, 1.0F, brightness);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, brightness);
     }
 
     protected void setupRotate(float delta, float brightness) {
-        GlStateManager.rotatef(0, rotationStatic[0], rotationStatic[1], rotationStatic[2]);
+        GlStateManager.rotate(0, rotationStatic[0], rotationStatic[1], rotationStatic[2]);
         if (rotate) {
-            GlStateManager.rotatef(0, rotationAxis[0], rotationAxis[1], rotationAxis[2]);
-            GlStateManager.color4f(1.0F, 1.0F, 1.0F, brightness);
+            GlStateManager.rotate(0, rotationAxis[0], rotationAxis[1], rotationAxis[2]);
+            GlStateManager.color(1.0F, 1.0F, 1.0F, brightness);
             //GlStateManager.rotatef(-90.0F, 0.0F, 1.0F, 0.0F);
-            GlStateManager.rotatef(MinecraftClient.getInstance().world.getSkyAngle(delta) * rotationSpeed, 0.0F, 1.0F,
+            GlStateManager.rotate(MinecraftClient.getInstance().world.getSkyAngle(delta) * rotationSpeed, 0.0F, 1.0F,
                     0.0F);
-            GlStateManager.rotatef(0, -rotationAxis[0], -rotationAxis[1], -rotationAxis[2]);
+            GlStateManager.rotate(0, -rotationAxis[0], -rotationAxis[1], -rotationAxis[2]);
         }
     }
 
     protected void clearRotate() {
-        GlStateManager.rotatef(0, -rotationStatic[0], -rotationStatic[1], -rotationStatic[2]);
+        GlStateManager.rotate(0, -rotationStatic[0], -rotationStatic[1], -rotationStatic[2]);
     }
 
     public void render(float delta, float brightness) {
@@ -278,9 +278,9 @@ public abstract class SkyboxInstance {
         GlStateManager.enableBlend();
         GlStateManager.blendFuncSeparate(770, 1, 1, 0);
         GlStateManager.pushMatrix();
-        GlStateManager.color4f(1.0F, 1.0F, 1.0F, brightness);
-        GlStateManager.rotatef(-90.0F, 0.0F, 1.0F, 0.0F);
-        GlStateManager.rotatef(MinecraftClient.getInstance().world.getSkyAngle(delta) * 360.0F, 1.0F, 0.0F, 0.0F);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, brightness);
+        GlStateManager.rotate(-90.0F, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate(MinecraftClient.getInstance().world.getSkyAngle(delta) * 360.0F, 1.0F, 0.0F, 0.0F);
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
@@ -316,7 +316,7 @@ public abstract class SkyboxInstance {
             GlStateManager.disableTexture();
             float z = MinecraftClient.getInstance().world.method_3707(delta) * brightness;
             if (z > 0.0F) {
-                GlStateManager.color4f(z, z, z, z);
+                GlStateManager.color(z, z, z, z);
                 if (((WorldRendererAccessor) MinecraftClient.getInstance().worldRenderer).getVbo()) {
                     VertexBuffer starsBuffer = ((WorldRendererAccessor) MinecraftClient.getInstance().worldRenderer)
                             .getStarsBuffer();

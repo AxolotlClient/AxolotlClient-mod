@@ -23,19 +23,14 @@
 package io.github.axolotlclient.modules.auth;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.texture.NativeImage;
-import io.github.axolotlclient.AxolotlClient;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
-import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import org.quiltmc.loader.api.minecraft.ClientOnly;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.List;
 
 public class AccountsListWidget extends AlwaysSelectedEntryListWidget<AccountsListWidget.Entry> {
@@ -101,11 +96,13 @@ public class AccountsListWidget extends AlwaysSelectedEntryListWidget<AccountsLi
                 RenderSystem.setShaderTexture(0, warningSign);
                 drawTexture(matrices, x - 35, y+1, 0, 0, 25, 25, 25, 25);
             }
-            RenderSystem.setShaderTexture(0, skin);
-            RenderSystem.enableBlend();
-            drawTexture(matrices, x-1, y-1, 33, 33, 8, 8, 8, 8, 64, 64);
-            drawTexture(matrices, x-1, y-1, 33, 33, 40, 8, 8, 8, 64, 64);
-            RenderSystem.disableBlend();
+            if(!account.isOffline()) {
+                RenderSystem.setShaderTexture(0, skin);
+                RenderSystem.enableBlend();
+                drawTexture(matrices, x - 1, y - 1, 33, 33, 8, 8, 8, 8, 64, 64);
+                drawTexture(matrices, x - 1, y - 1, 33, 33, 40, 8, 8, 8, 64, 64);
+                RenderSystem.disableBlend();
+            }
             client.textRenderer.draw(matrices, account.getName(), x + 3 + 33, y + 1, -1);
             client.textRenderer.draw(matrices, account.getUuid(), x + 3 + 33, y + 12, 8421504);
         }

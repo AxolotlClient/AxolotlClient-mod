@@ -108,7 +108,7 @@ public class ChatHud extends TextHudEntry {
 
                 if (isChatFocused()) {
                     int m = getFontHeight();
-                    GlStateManager.translatef(-3.0F, 0.0F, 0.0F);
+                    GlStateManager.translate(-3.0F, 0.0F, 0.0F);
                     int r = k * m + k;
                     int n = j * m + j;
                     int y = (pos.y + getHeight()) - scrolledLines * n / k;

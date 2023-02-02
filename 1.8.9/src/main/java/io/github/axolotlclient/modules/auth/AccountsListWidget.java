@@ -23,18 +23,13 @@
 package io.github.axolotlclient.modules.auth;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.EntryListWidget;
-import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.util.Identifier;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -123,7 +118,7 @@ public class AccountsListWidget extends EntryListWidget {
         public void render(int index, int x, int y, int rowWidth, int rowHeight, int mouseX, int mouseY, boolean hovered) {
             client.textRenderer.draw(account.getName(), x + 3 + 33, y + 1, -1);
             client.textRenderer.draw(account.getUuid(), x + 3 + 33, y + 12, 8421504);
-            GlStateManager.color4f(1, 1, 1, 1);
+            GlStateManager.color(1, 1, 1, 1);
             if(Auth.getInstance().getCurrent().equals(account)){
                 client.getTextureManager().bindTexture(checkmark);
                 drawTexture(x - 35, y+1, 0, 0, 25, 25, 25, 25);
@@ -131,12 +126,14 @@ public class AccountsListWidget extends EntryListWidget {
                 client.getTextureManager().bindTexture(warningSign);
                 drawTexture(x - 35, y+1, 0, 0, 25, 25, 25, 25);
             }
-            GlStateManager.color4f(1, 1, 1, 1);
-            client.getTextureManager().bindTexture(skin);
-            GlStateManager.enableBlend();
-            drawTexture(x-1, y-1, 8, 8, 8, 8, 33, 33, 64, 64);
-            drawTexture(x-1, y-1, 40, 8, 8, 8, 33, 33, 64, 64);
-            GlStateManager.disableBlend();
+            if(!account.isOffline()) {
+                GlStateManager.color(1, 1, 1, 1);
+                client.getTextureManager().bindTexture(skin);
+                GlStateManager.enableBlend();
+                drawTexture(x - 1, y - 1, 8, 8, 8, 8, 33, 33, 64, 64);
+                drawTexture(x - 1, y - 1, 40, 8, 8, 8, 33, 33, 64, 64);
+                GlStateManager.disableBlend();
+            }
         }
 
         @Override

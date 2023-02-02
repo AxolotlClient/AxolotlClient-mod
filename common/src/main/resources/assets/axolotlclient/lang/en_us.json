@@ -366,5 +366,9 @@
   "auth.notif.login.failed": "Failed to log in!",
   "auth.showButton": "Modify Title screen",
   "auth.showButton.tooltip": "Whether to show the current user on the Title Screen. <br>Also doubles as a shortcut to view saved accounts.",
-  "auth.notif.refreshing": "Refreshing tokens for %s!"
+  "auth.notif.refreshing": "Refreshing tokens for %s!",
+  "auth.add.choose": "Choose Account Type to add",
+  "auth.add.offline": "Add Offline Account",
+  "auth.add.ms": "Add Microsoft Account",
+  "auth.add.offline.name": "Enter name for the new account..."
 }

@@ -29,7 +29,7 @@ import io.github.axolotlclient.modules.hud.gui.entry.SimpleTextHudEntry;
 import lombok.Getter;
 import net.legacyfabric.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.options.KeyBinding;
+import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.util.Identifier;
 import org.lwjgl.input.Keyboard;
@@ -126,10 +126,10 @@ public class ToggleSprintHud extends SimpleTextHudEntry {
 
     @Override
     public String getValue() {
-        if (client.options.keySneak.isPressed()) {
+        if (client.options.sneakKey.isPressed()) {
             return I18n.translate("sneaking_pressed");
         }
-        if (client.options.keySprint.isPressed()) {
+        if (client.options.sprintKey.isPressed()) {
             return I18n.translate("sprinting_pressed");
         }
 

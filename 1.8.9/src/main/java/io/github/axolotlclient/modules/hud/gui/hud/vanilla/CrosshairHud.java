@@ -131,7 +131,7 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
         GlStateManager.pushMatrix();
         scale();
         Color color = getColor();
-        GlStateManager.color4f((float) color.getRed() / 255, (float) color.getGreen() / 255,
+        GlStateManager.color((float) color.getRed() / 255, (float) color.getGreen() / 255,
                 (float) color.getBlue() / 255, 1F);
         if (color == defaultColor.get() && applyBlend.get()) {
             GlStateManager.enableBlend();
@@ -157,7 +157,7 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
             customTextureGraphics.bindTexture();
             drawTexture(x+(width/2) - (15/2), y+height/2 - 15/2 -1, 0, 0, 15, 15, 15, 15);
         }
-        GlStateManager.color4f(1, 1, 1, 1);
+        GlStateManager.color(1, 1, 1, 1);
         GlStateManager.blendFuncSeparate(770, 771, 1, 0);
         GlStateManager.disableBlend();
         GlStateManager.popMatrix();

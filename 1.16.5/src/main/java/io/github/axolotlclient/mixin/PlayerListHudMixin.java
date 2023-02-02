@@ -66,8 +66,6 @@ public abstract class PlayerListHudMixin {
     @Shadow
     protected abstract Text applyGameModeFormatting(PlayerListEntry par1, MutableText par2);
 
-    MinecraftClient client = MinecraftClient.getInstance();
-
     private PlayerListEntry playerListEntry;
 
     @Inject(method = "getPlayerName", at = @At("HEAD"), cancellable = true)
@@ -82,7 +80,7 @@ public abstract class PlayerListHudMixin {
         }
     }
 
-    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;getPlayerName(Lnet/minecraft/client/network/PlayerListEntry;)Lnet/minecraft/text/Text;"))
+    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;getPlayerName(Lnet/minecraft/client/network/PlayerListEntry;)Lnet/minecraft/text/Text;", ordinal = 1))
     public PlayerListEntry axolotlclient$getPlayer(PlayerListEntry playerEntry) {
         playerListEntry = playerEntry;
         return playerEntry;

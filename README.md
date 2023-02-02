@@ -67,6 +67,7 @@ A Complete (nearly) mod to have various features on various Minecraft versions
 [![modrinth](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@2/assets/cozy/available/modrinth_64h.png)](https://modrinth.com/mod/axolotlclient)
 [![github](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@2/assets/cozy/available/github_64h.png)](https://github.com/AxolotlClient/AxolotlClient-mod/releases)
 [![discord-plural](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/social/discord-plural_64h.png)](https://discord.gg/WyMjeX3vka)
+
 ### Contributing
 
 - feel free to join the discord to discuss new features

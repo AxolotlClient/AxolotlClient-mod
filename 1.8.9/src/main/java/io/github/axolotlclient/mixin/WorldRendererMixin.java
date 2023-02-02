@@ -83,7 +83,7 @@ public abstract class WorldRendererMixin {
         return width;
     }
 
-    @Inject(method = "drawBlockOutline", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;color4f(FFFF)V", shift = At.Shift.AFTER))
+    @Inject(method = "drawBlockOutline", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;color(FFFF)V", shift = At.Shift.AFTER))
     public void axolotlclient$customOutlineColor(PlayerEntity playerEntity, BlockHitResult blockHitResult, int i, float f,
             CallbackInfo ci) {
         if (AxolotlClient.CONFIG.enableCustomOutlines.get()) {
@@ -94,7 +94,7 @@ public abstract class WorldRendererMixin {
             float r = (float) (color >> 16 & 0xFF) / 255.0F;
             float g = (float) (color >> 8 & 0xFF) / 255.0F;
             float b = (float) (color & 0xFF) / 255.0F;
-            GlStateManager.color4f(r, g, b, a);
+            GlStateManager.color(r, g, b, a);
         }
     }
 }

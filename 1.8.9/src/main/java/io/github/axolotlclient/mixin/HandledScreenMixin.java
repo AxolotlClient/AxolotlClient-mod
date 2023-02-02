@@ -53,7 +53,7 @@ public abstract class HandledScreenMixin {
 
     @Inject(method = "mouseClicked", at = @At("HEAD"), cancellable = true)
     private void axolotlclient$mouseClickedHead(int mouseX, int mouseY, int mouseButton, CallbackInfo ci) {
-        if (mouseButton - 100 == MinecraftClient.getInstance().options.keyInventory.getCode()) {
+        if (mouseButton - 100 == MinecraftClient.getInstance().options.inventoryKey.getCode()) {
             MinecraftClient.getInstance().closeScreen();
             ci.cancel();
         }

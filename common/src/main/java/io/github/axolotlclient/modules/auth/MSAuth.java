@@ -29,6 +29,7 @@ import com.sun.net.httpserver.HttpServer;
 import io.github.axolotlclient.util.Logger;
 import io.github.axolotlclient.util.NetworkUtil;
 import io.github.axolotlclient.util.OSUtil;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -40,7 +41,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -56,7 +57,7 @@ public class MSAuth {
 
     private static final String CLIENT_ID = "938592fc-8e01-4c6d-b56d-428c7d9cf5ea"; // AxolotlClient MSA ClientID
     private static final int PORT = 59281;
-    private static final String RESPONSE = "You may now close this tab.";
+    private static final String FALLBACK_RESPONSE = "You may now close this tab.";
 
     private final Logger logger;
     private final Accounts accounts;
@@ -86,14 +87,21 @@ public class MSAuth {
             server = HttpServer.create(new InetSocketAddress("localhost", PORT), 0);
             server.createContext("/", ex -> {
                 logger.debug("Microsoft authentication callback request: " + ex.getRemoteAddress());
-                byte[] b = RESPONSE.getBytes(StandardCharsets.UTF_8);
-                ex.getResponseHeaders().add("Content-Type", "text/html; charset=UTF-8");
-                ex.sendResponseHeaders(307, b.length);
-                try (OutputStream os = ex.getResponseBody()) {
-                    os.write(b);
+                byte[] b = null;
+                try (InputStream in = this.getClass().getResourceAsStream("/assets/axolotlclient/redirect.html")){
+                    if(in != null) {
+                        b = IOUtils.toByteArray(in);
+                    }
                 }
+                if(b ==null){
+                    b = FALLBACK_RESPONSE.getBytes(StandardCharsets.UTF_8);
+                }
+                ex.getResponseHeaders().add("Content-Type", "text/html");
+                ex.sendResponseHeaders(307, b.length);
+                ex.getResponseBody().write(b);
+                String query = ex.getRequestURI().getQuery();
                 close();
-                authenticate(ex.getRequestURI().getQuery(), whenFinished);
+                authenticate(query, whenFinished);
             });
             server.start();
         } catch (Throwable t) {
@@ -146,7 +154,7 @@ public class MSAuth {
                 .setUri("https://login.microsoftonline.com/consumers/oauth2/v2.0/token")
                 .addHeader("ContentType", "application/x-www-form-urlencoded")
                 .setEntity(new UrlEncodedFormEntity(form, StandardCharsets.UTF_8));
-        JsonObject response = NetworkUtil.request(requestBuilder.build(), getHttpClient(), true);
+        JsonObject response = NetworkUtil.request(requestBuilder.build(), getHttpClient(), true).getAsJsonObject();
 
         return new AbstractMap.SimpleImmutableEntry<>(response.get("access_token").getAsString(), response.get("refresh_token").getAsString());
     }
@@ -166,7 +174,7 @@ public class MSAuth {
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Accept", "application/json");
 
-        JsonObject response = NetworkUtil.request(requestBuilder.build(), getHttpClient(), true);
+        JsonObject response = NetworkUtil.request(requestBuilder.build(), getHttpClient(), true).getAsJsonObject();
         return response.get("Token").getAsString();
     }
 
@@ -181,20 +189,20 @@ public class MSAuth {
                 "    \"RelyingParty\": \"rp://api.minecraftservices.com/\"," +
                 "    \"TokenType\": \"JWT\"" +
                 " }";
-        JsonObject response = NetworkUtil.postRequest("https://xsts.auth.xboxlive.com/xsts/authorize", body, getHttpClient(), true);
+        JsonObject response = NetworkUtil.postRequest("https://xsts.auth.xboxlive.com/xsts/authorize", body, getHttpClient(), true).getAsJsonObject();
         return new AbstractMap.SimpleImmutableEntry<>(response.get("Token").getAsString(), response.get("DisplayClaims").getAsJsonObject().get("xui").getAsJsonArray().get(0).getAsJsonObject().get("uhs").getAsString());
     }
 
     public String authMC(String userhash, String xsts) throws IOException {
         return NetworkUtil.postRequest("https://api.minecraftservices.com/authentication/login_with_xbox",
                 "{\"identityToken\": \"XBL3.0 x=" + userhash + ";" + xsts + "\"\n}",
-                getHttpClient(), true).get("access_token").getAsString();
+                getHttpClient(), true).getAsJsonObject().get("access_token").getAsString();
     }
 
     public boolean checkOwnership(String accessToken) throws IOException {
         JsonObject response = NetworkUtil.request(RequestBuilder.get()
                 .setUri("https://api.minecraftservices.com/entitlements/mcstore")
-                .addHeader("Authorization", "Bearer " + accessToken).build(), getHttpClient(), true);
+                .addHeader("Authorization", "Bearer " + accessToken).build(), getHttpClient(), true).getAsJsonObject();
 
         return response.get("items").getAsJsonArray().size() != 0;
     }
@@ -202,7 +210,7 @@ public class MSAuth {
     public JsonObject getMCProfile(String accessToken) throws IOException {
         JsonObject profile = NetworkUtil.request(RequestBuilder.get()
                 .setUri("https://api.minecraftservices.com/minecraft/profile")
-                .addHeader("Authorization", "Bearer " + accessToken).build(), getHttpClient(), true);
+                .addHeader("Authorization", "Bearer " + accessToken).build(), getHttpClient(), true).getAsJsonObject();
         saveSkinFile(profile.get("skins").getAsJsonArray().get(0).getAsJsonObject().get("url").getAsString(), profile.get("id").getAsString());
         return profile;
     }
@@ -235,7 +243,7 @@ public class MSAuth {
                     .setEntity(new UrlEncodedFormEntity(form))
                     .addHeader("Accept", "application/json");
 
-            JsonObject response = NetworkUtil.request(requestBuilder.build(), getHttpClient(), true);
+            JsonObject response = NetworkUtil.request(requestBuilder.build(), getHttpClient(), true).getAsJsonObject();
             String refreshToken = response.get("refresh_token").getAsString();
 
             logger.debug("getting xbl token... ");
@@ -254,5 +262,4 @@ public class MSAuth {
         }
         return new AbstractMap.SimpleImmutableEntry<>(null, null);
     }
-
 }

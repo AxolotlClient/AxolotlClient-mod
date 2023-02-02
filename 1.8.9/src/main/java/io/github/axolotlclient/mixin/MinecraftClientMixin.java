@@ -33,8 +33,8 @@ import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.options.GameOptions;
-import net.minecraft.client.options.KeyBinding;
+import net.minecraft.client.option.GameOptions;
+import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.texture.TextureManager;
 import net.minecraft.client.util.Window;
@@ -94,7 +94,7 @@ public abstract class MinecraftClientMixin {
         }
     }
 
-    @Redirect(method = "handleKeyInput", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/options/KeyBinding;getCode()I", ordinal = 5))
+    @Redirect(method = "handleKeyInput", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/KeyBinding;getCode()I", ordinal = 5))
     // Fix taking a screenshot when pressing '<' (Because it has the same keyCode as F2)
     public int axolotlclient$iTryToFixTheScreenshotKey(KeyBinding instance) {
         if (Keyboard.getEventCharacter() != '<') {
@@ -173,7 +173,7 @@ public abstract class MinecraftClientMixin {
         HudManager.getInstance().refreshAllBounds();
     }
 
-    @Inject(method = "openScreen", at = @At("HEAD"))
+    @Inject(method = "setScreen", at = @At("HEAD"))
     private void axolotlclient$onScreenOpen(Screen screen, CallbackInfo ci){
         if(MinecraftClient.getInstance().currentScreen == null) {
             MenuBlur.getInstance().onScreenOpen();

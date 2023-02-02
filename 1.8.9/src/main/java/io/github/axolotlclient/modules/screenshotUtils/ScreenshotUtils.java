@@ -54,7 +54,7 @@ public class ScreenshotUtils extends AbstractModule {
     public final StringOption shareUrl = new StringOption("shareUrl", "https://bin.gart.sh");
 
     private final GenericOption openViewer = new GenericOption("imageViewer", "openViewer", (m1, m2) -> {
-        MinecraftClient.getInstance().openScreen(new ImageViewerScreen(MinecraftClient.getInstance().currentScreen));
+        MinecraftClient.getInstance().setScreen(new ImageViewerScreen(MinecraftClient.getInstance().currentScreen));
     });
 
     private final List<Action> actions = new ArrayList<>();

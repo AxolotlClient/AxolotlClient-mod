@@ -44,7 +44,7 @@ import java.util.concurrent.Executor;
 @Mixin(ReloadableResourceManagerImpl.class)
 public abstract class ReloadableResourceManagerMixin {
 
-    @Inject(method = "beginMonitoredReload", at = @At("TAIL"))
+    @Inject(method = "beginMonitoredReload", at = @At(value = "INVOKE", target = "Lnet/minecraft/resource/ReloadableResourceManagerImpl;beginReloadInner(Ljava/util/concurrent/Executor;Ljava/util/concurrent/Executor;Ljava/util/List;Ljava/util/concurrent/CompletableFuture;)Lnet/minecraft/resource/ResourceReloadMonitor;"))
     public void axolotlclient$reload(Executor prepareExecutor, Executor applyExecutor, CompletableFuture<Unit> initialStage,
                                      List<ResourcePack> packs, CallbackInfoReturnable<ResourceReloadMonitor> cir) {
         HypixelAbstractionLayer.clearPlayerData();

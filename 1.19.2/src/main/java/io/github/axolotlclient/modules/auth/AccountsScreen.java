@@ -22,7 +22,7 @@
 
 package io.github.axolotlclient.modules.auth;
 
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
@@ -53,7 +53,20 @@ public class AccountsScreen extends Screen {
                 buttonWidget -> login()));
 
         this.addDrawableChild(new ButtonWidget(this.width / 2 + 4, this.height - 52, 150, 20, Text.translatable("auth.add"),
-                button -> Auth.getInstance().getAuth().startAuth(() -> MinecraftClient.getInstance().execute(this::refresh))));
+                button -> {
+                    if (!Auth.getInstance().allowOfflineAccounts()) {
+                        initMSAuth();
+                    } else {
+                        client.setScreen(new ConfirmScreen(result -> {
+                            if (!result) {
+                                initMSAuth();
+                                client.setScreen(this);
+                            } else {
+                                client.setScreen(new AddOfflineScreen(this));
+                            }
+                        }, Text.translatable("auth.add.choose"), Text.empty(), Text.translatable("auth.add.offline"), Text.translatable("auth.add.ms")));
+                    }
+                }));
 
         this.deleteButton = this.addDrawableChild(new ButtonWidget(this.width / 2 - 50, this.height - 28, 100, 20, Text.translatable("selectServer.delete"), button -> {
             AccountsListWidget.Entry entry = this.accountsListWidget.getSelectedOrNull();
@@ -80,6 +93,15 @@ public class AccountsScreen extends Screen {
                 refresh();
             }));
         }
+    }
+
+    private void initMSAuth() {
+        Auth.getInstance().getAuth().startAuth(() -> client.execute(this::refresh));
+    }
+
+    @Override
+    public void removed() {
+        Auth.getInstance().save();
     }
 
     @Override

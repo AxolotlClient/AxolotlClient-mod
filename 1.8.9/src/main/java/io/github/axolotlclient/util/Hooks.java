@@ -24,7 +24,7 @@ package io.github.axolotlclient.util;
 
 import net.legacyfabric.fabric.api.event.Event;
 import net.legacyfabric.fabric.api.event.EventFactory;
-import net.minecraft.client.options.KeyBinding;
+import net.minecraft.client.option.KeyBinding;
 
 /**
  * This implementation of Hud modules is based on KronHUD.

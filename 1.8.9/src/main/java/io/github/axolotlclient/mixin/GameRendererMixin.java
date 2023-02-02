@@ -39,7 +39,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.MouseInput;
-import net.minecraft.client.options.GameOptions;
+import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -123,7 +123,7 @@ public abstract class GameRendererMixin {
 
             GL11.glFog(2918, this.updateFogColorBuffer(this.fogRed, this.fogGreen, this.fogBlue, 1.0F));
             GL11.glNormal3f(0.0F, -1.0F, 0.0F);
-            GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             Block block = Camera.getSubmergedBlock(this.client.world, entity, tickDelta);
             if (entity instanceof LivingEntity && ((LivingEntity) entity).hasStatusEffect(StatusEffect.BLINDNESS)) {
                 float f = 5.0F;
@@ -203,7 +203,7 @@ public abstract class GameRendererMixin {
         cir.setReturnValue(returnValue);
     }
 
-    @Redirect(method = "updateLightmap", at = @At(value = "FIELD", target = "Lnet/minecraft/client/options/GameOptions;gamma:F", opcode = Opcodes.GETFIELD))
+    @Redirect(method = "updateLightmap", at = @At(value = "FIELD", target = "Lnet/minecraft/client/option/GameOptions;gamma:F", opcode = Opcodes.GETFIELD))
     public float axolotlclient$setGamma(GameOptions instance) {
         if (AxolotlClient.CONFIG.fullBright.get())
             return 15F;
@@ -289,14 +289,14 @@ public abstract class GameRendererMixin {
         }
     }
 
-    @Inject(method = "bobView", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;translatef(FFF)V"), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
+    @Inject(method = "bobView", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;translate(FFF)V"), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
     private void axolotlclient$minimalViewBob(float f, CallbackInfo ci, PlayerEntity entity, float g, float h, float i, float j){
         h/=2;
         i/=2;
         j/=2;
-        GlStateManager.translatef(MathHelper.sin(h * (float) Math.PI) * i * 0.5F, -Math.abs(MathHelper.cos(h * (float) Math.PI) * i), 0.0F);
-        GlStateManager.rotatef(MathHelper.sin(h * (float) Math.PI) * i * 3.0F, 0.0F, 0.0F, 1.0F);
-        GlStateManager.rotatef(Math.abs(MathHelper.cos(h * (float) Math.PI - 0.2F) * i) * 5.0F, 1.0F, 0.0F, 0.0F);
-        GlStateManager.rotatef(j, 1.0F, 0.0F, 0.0F);
+        GlStateManager.translate(MathHelper.sin(h * (float) Math.PI) * i * 0.5F, -Math.abs(MathHelper.cos(h * (float) Math.PI) * i), 0.0F);
+        GlStateManager.rotate(MathHelper.sin(h * (float) Math.PI) * i * 3.0F, 0.0F, 0.0F, 1.0F);
+        GlStateManager.rotate(Math.abs(MathHelper.cos(h * (float) Math.PI - 0.2F) * i) * 5.0F, 1.0F, 0.0F, 0.0F);
+        GlStateManager.rotate(j, 1.0F, 0.0F, 0.0F);
     }
 }

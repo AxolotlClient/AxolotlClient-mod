@@ -41,7 +41,7 @@ public class AuthWidget extends ButtonWidget {
     public void render(MinecraftClient minecraftClient, int i, int j) {
         Auth.getInstance().loadSkinFile(skinId, Auth.getInstance().getCurrent());
         super.render(minecraftClient, i, j);
-        GlStateManager.color4f(1, 1, 1, 1);
+        GlStateManager.color(1, 1, 1, 1);
         MinecraftClient.getInstance().getTextureManager().bindTexture(skinId);
         GlStateManager.enableBlend();
         drawTexture(x+1, y+1, 8, 8, 8, 8, height - 2, height - 2, 64, 64);

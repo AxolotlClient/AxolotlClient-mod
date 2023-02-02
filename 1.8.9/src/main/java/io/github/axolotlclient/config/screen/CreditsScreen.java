@@ -108,7 +108,7 @@ public class CreditsScreen extends Screen {
     protected void buttonClicked(ButtonWidget button) {
         if (button.id == 0) {
             if (creditOverlay == null) {
-                client.openScreen(parent);
+                client.setScreen(parent);
                 stopBGM();
             } else {
                 creditOverlay = null;
@@ -186,7 +186,7 @@ public class CreditsScreen extends Screen {
                 if (this.visible) {
                     GlStateManager.enableDepthTest();
                     GlStateManager.pushMatrix();
-                    GlStateManager.translatef(0, 0, 1F);
+                    GlStateManager.translate(0, 0, 1F);
                     this.lastMouseX = mouseX;
                     this.lastMouseY = mouseY;
                     int i = this.getScrollbarPosition();
@@ -285,7 +285,7 @@ public class CreditsScreen extends Screen {
     protected void keyPressed(char character, int code) {
         if (code == 1) {
             stopBGM();
-            this.client.openScreen(null);
+            this.client.setScreen(null);
             if (this.client.currentScreen == null) {
                 this.client.closeScreen();
             }

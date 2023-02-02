@@ -26,7 +26,7 @@ import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hud.gui.hud.simple.ToggleSprintHud;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.input.KeyboardInput;
-import net.minecraft.client.options.KeyBinding;
+import net.minecraft.client.option.KeyBinding;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -39,7 +39,7 @@ public abstract class KeyboardInputMixin {
      * @param instance The sneak key
      * @return boolean whether the player should be sneaking or not
      */
-    @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/options/KeyBinding;isPressed()Z", ordinal = 5))
+    @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/KeyBinding;isPressed()Z", ordinal = 5))
     public boolean axolotlclient$toggleSneak(KeyBinding instance) {
         ToggleSprintHud hud = (ToggleSprintHud) HudManager.getInstance().get(ToggleSprintHud.ID);
         return hud.isEnabled() && hud.getSneakToggled().get() && MinecraftClient.getInstance().currentScreen == null

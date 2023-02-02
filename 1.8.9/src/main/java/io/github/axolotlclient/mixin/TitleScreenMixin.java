@@ -76,9 +76,9 @@ public abstract class TitleScreenMixin extends Screen {
     @Inject(method = "buttonClicked", at = @At("TAIL"))
     public void axolotlclient$onClick(ButtonWidget button, CallbackInfo ci) {
         if (button.id == 192)
-            MinecraftClient.getInstance().openScreen(new HudEditScreen(this));
+            MinecraftClient.getInstance().setScreen(new HudEditScreen(this));
         else if(button.id == 242)
-            MinecraftClient.getInstance().openScreen(new AccountsScreen(MinecraftClient.getInstance().currentScreen));
+            MinecraftClient.getInstance().setScreen(new AccountsScreen(MinecraftClient.getInstance().currentScreen));
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;drawWithShadow(Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V", ordinal = 0))

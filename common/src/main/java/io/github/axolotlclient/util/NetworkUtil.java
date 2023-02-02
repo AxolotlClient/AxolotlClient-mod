@@ -22,7 +22,7 @@
 
 package io.github.axolotlclient.util;
 
-import com.google.gson.JsonObject;
+import com.google.gson.JsonElement;
 import lombok.experimental.UtilityClass;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -38,15 +38,15 @@ import java.io.IOException;
 @UtilityClass
 public class NetworkUtil {
 
-    public JsonObject getRequest(String url, CloseableHttpClient client) throws IOException {
+    public JsonElement getRequest(String url, CloseableHttpClient client) throws IOException {
         return request(new HttpGet(url), client);
     }
 
-    public JsonObject request(HttpUriRequest request, CloseableHttpClient client) throws IOException {
+    public JsonElement request(HttpUriRequest request, CloseableHttpClient client) throws IOException {
         return request(request, client, false);
     }
 
-    public JsonObject request(HttpUriRequest request, CloseableHttpClient client, boolean ignoreStatus) throws IOException {
+    public JsonElement request(HttpUriRequest request, CloseableHttpClient client, boolean ignoreStatus) throws IOException {
         HttpResponse response = client.execute(request);
 
         if(!ignoreStatus) {
@@ -57,14 +57,14 @@ public class NetworkUtil {
         }
 
         String responseBody = EntityUtils.toString(response.getEntity());
-        return GsonHelper.GSON.fromJson(responseBody, JsonObject.class);
+        return GsonHelper.GSON.fromJson(responseBody, JsonElement.class);
     }
 
-    public JsonObject postRequest(String url, String body, CloseableHttpClient client) throws IOException {
+    public JsonElement postRequest(String url, String body, CloseableHttpClient client) throws IOException {
         return postRequest(url, body, client, false);
     }
 
-    public JsonObject postRequest(String url, String body, CloseableHttpClient client, boolean ignoreStatus) throws IOException {
+    public JsonElement postRequest(String url, String body, CloseableHttpClient client, boolean ignoreStatus) throws IOException {
         RequestBuilder requestBuilder = RequestBuilder.post().setUri(url);
         requestBuilder.setHeader("Content-Type", "application/json");
         requestBuilder.setHeader("Accept", "application/json");
@@ -72,7 +72,7 @@ public class NetworkUtil {
         return request(requestBuilder.build(), client, ignoreStatus);
     }
 
-    public JsonObject deleteRequest(String url, String body, CloseableHttpClient client) throws IOException {
+    public JsonElement deleteRequest(String url, String body, CloseableHttpClient client) throws IOException {
         RequestBuilder requestBuilder = RequestBuilder.delete().setUri(url);
         requestBuilder.setHeader("Content-Type", "application/json");
         requestBuilder.setEntity(new StringEntity(body));

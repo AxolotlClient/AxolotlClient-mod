@@ -117,7 +117,7 @@ public class ImageViewerScreen extends Screen {
             @Override
             public void render(MinecraftClient client, int mouseX, int mouseY) {
                 client.getTextureManager().bindTexture(WIDGETS_LOCATION);
-                GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+                GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
                 this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
                 int i = this.getYImage(this.hovered);
                 GlStateManager.enableBlend();
@@ -167,7 +167,7 @@ public class ImageViewerScreen extends Screen {
                 init(MinecraftClient.getInstance(), width, height);
                 break;
             case 25:
-                MinecraftClient.getInstance().openScreen(parent);
+                MinecraftClient.getInstance().setScreen(parent);
                 break;
             case 26:
                 try {

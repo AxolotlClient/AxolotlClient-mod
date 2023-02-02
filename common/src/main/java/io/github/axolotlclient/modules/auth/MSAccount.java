@@ -32,6 +32,8 @@ import java.util.Map;
 
 public class MSAccount {
 
+    public static final String OFFLINE_TOKEN = "AxolotlClient/Offline";
+
     private final String uuid;
     private String name;
 
@@ -43,6 +45,8 @@ public class MSAccount {
         this.name = name;
         this.uuid = uuid.replace("-", "");
         this.authToken = accessToken;
+        expiration = Instant.EPOCH;
+        refreshToken = "";
     }
 
     public MSAccount(JsonObject profile, String authToken, String refreshToken){
@@ -75,6 +79,10 @@ public class MSAccount {
             }
             runAfter.run();
         }).start();
+    }
+
+    public boolean isOffline(){
+        return authToken.equals(OFFLINE_TOKEN);
     }
 
     public JsonObject serialize(){

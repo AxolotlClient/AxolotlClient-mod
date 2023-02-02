@@ -113,7 +113,7 @@ public class Auth extends Accounts implements Module {
     }
 
     public void loadSkinFile(Identifier skinId, MSAccount account){
-        if(MinecraftClient.getInstance().getTextureManager().getTexture(skinId) == null) {
+        if(!account.isOffline() && MinecraftClient.getInstance().getTextureManager().getTexture(skinId) == null) {
             try {
                 MinecraftClient.getInstance().getTextureManager().registerTexture(skinId,
                         new NativeImageBackedTexture(NativeImage.read(Files.newInputStream(getSkinFile(account).toPath()))));

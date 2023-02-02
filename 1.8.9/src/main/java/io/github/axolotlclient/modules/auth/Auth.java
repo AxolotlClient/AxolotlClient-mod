@@ -51,7 +51,7 @@ public class Auth extends Accounts implements Module {
 
     public final BooleanOption showButton = new BooleanOption("auth.showButton", false);
     private final MinecraftClient client = MinecraftClient.getInstance();
-    private final GenericOption viewAccounts = new GenericOption("viewAccounts", "clickToOpen", (x, y) -> client.openScreen(new AccountsScreen(client.currentScreen)));
+    private final GenericOption viewAccounts = new GenericOption("viewAccounts", "clickToOpen", (x, y) -> client.setScreen(new AccountsScreen(client.currentScreen)));
 
     @Override
     public void init() {
@@ -109,7 +109,7 @@ public class Auth extends Accounts implements Module {
     }
 
     public void loadSkinFile(Identifier skinId, MSAccount account){
-        if(MinecraftClient.getInstance().getTextureManager().getTexture(skinId) == null) {
+        if(!account.isOffline() && MinecraftClient.getInstance().getTextureManager().getTexture(skinId) == null) {
             try {
                 BufferedImage image = ImageIO.read(Auth.getInstance().getSkinFile(account));
                 if (image != null) {

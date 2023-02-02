@@ -93,7 +93,12 @@ public class Auth extends Accounts implements Module {
                 ((MinecraftClientAccessor) client).setSession(new Session(account.getName(), account.getUuid(), account.getAuthToken(),
                         Optional.empty(), Optional.empty(),
                         Session.AccountType.MSA));
-                UserApiService service = ((YggdrasilMinecraftSessionService) MinecraftClient.getInstance().getSessionService()).getAuthenticationService().createUserApiService(client.getSession().getAccessToken());
+                UserApiService service;
+                if(account.isOffline()){
+                    service = UserApiService.OFFLINE;
+                } else {
+                    service = ((YggdrasilMinecraftSessionService) MinecraftClient.getInstance().getSessionService()).getAuthenticationService().createUserApiService(client.getSession().getAccessToken());
+                }
                 ((MinecraftClientAccessor) client).setUserApiService(service);
                 ((MinecraftClientAccessor) client).setSocialInteractionsManager(new SocialInteractionsManager(client, service));
                 ((MinecraftClientAccessor) client).setPlayerKeyPairManager(new PlayerKeyPairManager(service, client.getSession().getProfile().getId(), client.runDirectory.toPath()));
@@ -107,7 +112,7 @@ public class Auth extends Accounts implements Module {
             }
         };
 
-        if(account.isExpired()){
+        if(account.isExpired() && !account.isOffline()){
             client.getToastManager().add(new SystemToast(SystemToast.Type.TUTORIAL_HINT, Text.translatable("auth.notif.title"), Text.translatable("auth.notif.refreshing", account.getName())));
             account.refresh(auth, runnable);
         } else {
@@ -121,7 +126,7 @@ public class Auth extends Accounts implements Module {
     }
 
     public void loadSkinFile(Identifier skinId, MSAccount account){
-        if(MinecraftClient.getInstance().getTextureManager().getOrDefault(skinId, null) == null) {
+        if(!account.isOffline() && MinecraftClient.getInstance().getTextureManager().getOrDefault(skinId, null) == null) {
             try {
                 MinecraftClient.getInstance().getTextureManager().registerTexture(skinId,
                         new NativeImageBackedTexture(NativeImage.read(Files.newInputStream(getSkinFile(account).toPath()))));

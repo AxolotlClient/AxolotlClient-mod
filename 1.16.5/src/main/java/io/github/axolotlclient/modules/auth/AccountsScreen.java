@@ -22,11 +22,12 @@
 
 package io.github.axolotlclient.modules.auth;
 
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ScreenTexts;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
 
 public class AccountsScreen extends Screen {
@@ -42,77 +43,11 @@ public class AccountsScreen extends Screen {
     }
 
     @Override
-    public void init() {
-
-        accountsListWidget = new AccountsListWidget(this, client, width, height, 32, height-64, 35);
-        addChild(accountsListWidget);
-
-        accountsListWidget.setAccounts(Auth.getInstance().getAccounts());
-
-        addButton(loginButton = new ButtonWidget(this.width / 2 - 154, this.height - 52, 150, 20, new TranslatableText("auth.login"),
-                buttonWidget -> login()));
-
-        this.addButton(new ButtonWidget(this.width / 2 + 4, this.height - 52, 150, 20, new TranslatableText("auth.add"),
-                button -> Auth.getInstance().getAuth().startAuth(() -> MinecraftClient.getInstance().execute(this::refresh))));
-
-        this.deleteButton = this.addButton(new ButtonWidget(this.width / 2 - 50, this.height - 28, 100, 20, new TranslatableText("selectServer.delete"), button -> {
-            AccountsListWidget.Entry entry = this.accountsListWidget.getSelected();
-            if (entry != null) {
-                Auth.getInstance().removeAccount(entry.getAccount());
-                refresh();
-            }
-        }));
-
-
-        this.addButton(refreshButton = new ButtonWidget(this.width / 2 - 154, this.height - 28, 100, 20,
-                new TranslatableText("auth.refresh"), button -> refreshAccount()));
-
-        this.addButton(new ButtonWidget(this.width / 2 + 4 + 50, this.height - 28, 100, 20,
-                ScreenTexts.BACK, button -> this.client.openScreen(this.parent)));
-        updateButtonActivationStates();
-    }
-
-    private void refreshAccount() {
-        AccountsListWidget.Entry entry = accountsListWidget.getSelected();
-        if(entry != null){
-            entry.getAccount().refresh(Auth.getInstance().getAuth(), () -> client.execute(() -> {
-                Auth.getInstance().save();
-                refresh();
-            }));
-        }
-    }
-
-    @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
         this.accountsListWidget.render(matrices, mouseX, mouseY, delta);
         drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 20, 16777215);
         super.render(matrices, mouseX, mouseY, delta);
-    }
-
-    private void refresh() {
-        this.client.openScreen(new AccountsScreen(this.parent));
-    }
-
-    private void login(){
-        AccountsListWidget.Entry entry = accountsListWidget.getSelected();
-        if(entry != null){
-            Auth.getInstance().login(entry.getAccount());
-        }
-    }
-
-    public void select(AccountsListWidget.Entry entry) {
-        this.accountsListWidget.setSelected(entry);
-        this.updateButtonActivationStates();
-    }
-
-    private void updateButtonActivationStates() {
-        AccountsListWidget.Entry entry = accountsListWidget.getSelected();
-        if(client.world == null && entry != null){
-            loginButton.active = deleteButton.active = refreshButton.active = true;
-        } else {
-            loginButton.active = deleteButton.active = refreshButton.active = false;
-        }
     }
 
     @Override
@@ -132,5 +67,93 @@ public class AccountsScreen extends Screen {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public void init() {
+
+        accountsListWidget = new AccountsListWidget(this, client, width, height, 32, height - 64, 35);
+        addChild(accountsListWidget);
+
+        accountsListWidget.setAccounts(Auth.getInstance().getAccounts());
+
+        addButton(loginButton = new ButtonWidget(this.width / 2 - 154, this.height - 52, 150, 20, new TranslatableText("auth.login"),
+                buttonWidget -> login()));
+
+        this.addButton(new ButtonWidget(this.width / 2 + 4, this.height - 52, 150, 20, new TranslatableText("auth.add"),
+                button -> {
+                    if (!Auth.getInstance().allowOfflineAccounts()) {
+                        initMSAuth();
+                    } else {
+                        client.openScreen(new ConfirmScreen(result -> {
+                            if (!result) {
+                                initMSAuth();
+                                client.openScreen(this);
+                            } else {
+                                client.openScreen(new AddOfflineScreen(this));
+                            }
+                        }, new TranslatableText("auth.add.choose"), LiteralText.EMPTY, new TranslatableText("auth.add.offline"), new TranslatableText("auth.add.ms")));
+                    }
+                }));
+
+        this.deleteButton = this.addButton(new ButtonWidget(this.width / 2 - 50, this.height - 28, 100, 20, new TranslatableText("selectServer.delete"), button -> {
+            AccountsListWidget.Entry entry = this.accountsListWidget.getSelected();
+            if (entry != null) {
+                Auth.getInstance().removeAccount(entry.getAccount());
+                refresh();
+            }
+        }));
+
+
+        this.addButton(refreshButton = new ButtonWidget(this.width / 2 - 154, this.height - 28, 100, 20,
+                new TranslatableText("auth.refresh"), button -> refreshAccount()));
+
+        this.addButton(new ButtonWidget(this.width / 2 + 4 + 50, this.height - 28, 100, 20,
+                ScreenTexts.BACK, button -> this.client.openScreen(this.parent)));
+        updateButtonActivationStates();
+    }
+
+    @Override
+    public void removed() {
+        Auth.getInstance().save();
+    }
+
+    private void login() {
+        AccountsListWidget.Entry entry = accountsListWidget.getSelected();
+        if (entry != null) {
+            Auth.getInstance().login(entry.getAccount());
+        }
+    }
+
+    private void initMSAuth() {
+        Auth.getInstance().getAuth().startAuth(() -> client.execute(this::refresh));
+    }
+
+    private void refresh() {
+        this.client.openScreen(new AccountsScreen(this.parent));
+    }
+
+    private void refreshAccount() {
+        AccountsListWidget.Entry entry = accountsListWidget.getSelected();
+        if (entry != null) {
+            entry.getAccount().refresh(Auth.getInstance().getAuth(), () -> client.execute(() -> {
+                Auth.getInstance().save();
+                refresh();
+            }));
+        }
+    }
+
+    private void updateButtonActivationStates() {
+        AccountsListWidget.Entry entry = accountsListWidget.getSelected();
+        if (client.world == null && entry != null) {
+            loginButton.active = deleteButton.active = refreshButton.active = true;
+        } else {
+            loginButton.active = deleteButton.active = refreshButton.active = false;
+        }
+    }
+
+    public void select(AccountsListWidget.Entry entry) {
+        this.accountsListWidget.setSelected(entry);
+        this.updateButtonActivationStates();
     }
 }

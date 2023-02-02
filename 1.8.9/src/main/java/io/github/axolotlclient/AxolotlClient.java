@@ -188,7 +188,7 @@ public class AxolotlClient implements ClientModInitializer {
                         + (AxolotlClient.CONFIG.customBadge.get() ? MinecraftClient.getInstance().textRenderer
                                 .getStringWidth(" " + AxolotlClient.CONFIG.badgeText.get()) : 10));
 
-                GlStateManager.color4f(1, 1, 1, 1);
+                GlStateManager.color(1, 1, 1, 1);
 
                 if (AxolotlClient.CONFIG.customBadge.get())
                     MinecraftClient.getInstance().textRenderer.draw(AxolotlClient.CONFIG.badgeText.get(), x, 0, -1,

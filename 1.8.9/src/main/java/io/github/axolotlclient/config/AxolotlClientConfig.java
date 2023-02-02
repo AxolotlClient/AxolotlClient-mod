@@ -72,7 +72,7 @@ public class AxolotlClientConfig extends ConfigHolder {
     public final BooleanOption debugLogOutput = new BooleanOption("debugLogOutput", false);
     public final GenericOption openCredits = new GenericOption("Credits", "Open Credits",
             (mouseX, mouseY) -> MinecraftClient.getInstance()
-                    .openScreen(new CreditsScreen(MinecraftClient.getInstance().currentScreen)));
+                    .setScreen(new CreditsScreen(MinecraftClient.getInstance().currentScreen)));
     public final BooleanOption creditsBGM = new BooleanOption("creditsBGM", true);
     public final BooleanOption customWindowTitle = new BooleanOption("customWindowTitle", true);
 

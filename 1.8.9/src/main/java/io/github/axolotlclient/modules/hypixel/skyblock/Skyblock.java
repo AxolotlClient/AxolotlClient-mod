@@ -27,7 +27,7 @@ import io.github.axolotlclient.AxolotlClientConfig.options.KeyBindOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.hypixel.AbstractHypixelMod;
 import lombok.Getter;
-import net.minecraft.client.options.KeyBinding;
+import net.minecraft.client.option.KeyBinding;
 
 public class Skyblock implements AbstractHypixelMod {
 

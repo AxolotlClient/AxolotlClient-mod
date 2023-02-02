@@ -193,7 +193,7 @@ public class RenderUtil {
     }
 
     public int colorPreRender(Color color) {
-        GlStateManager.color4f(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f,
+        GlStateManager.color(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f,
                 color.getAlpha() / 255f);
         GlStateManager.enableBlend();
         GlStateManager.disableTexture();
@@ -206,6 +206,6 @@ public class RenderUtil {
     public void colorPostRender(Color color) {
         GlStateManager.enableTexture();
         GlStateManager.disableBlend();
-        GlStateManager.color4f(1, 1, 1, 1);
+        GlStateManager.color(1, 1, 1, 1);
     }
 }

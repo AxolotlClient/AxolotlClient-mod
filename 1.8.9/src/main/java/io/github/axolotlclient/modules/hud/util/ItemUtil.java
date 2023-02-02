@@ -174,7 +174,7 @@ public class ItemUtil {
             int textColor, boolean shadow) {
         DiffuseLighting.enable();
         GlStateManager.pushMatrix();
-        GlStateManager.color4f(textColor >> 24 & 0xff, textColor >> 16 & 0xff, textColor >> 8 & 0xff, textColor & 0xff);
+        GlStateManager.color(textColor >> 24 & 0xff, textColor >> 16 & 0xff, textColor >> 8 & 0xff, textColor & 0xff);
         if (stack != null) {
             if (stack.count != 1 || countLabel != null) {
                 String string = countLabel == null ? String.valueOf(stack.count) : countLabel;
