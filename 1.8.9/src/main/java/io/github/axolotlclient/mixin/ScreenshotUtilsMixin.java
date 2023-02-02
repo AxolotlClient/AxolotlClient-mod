@@ -46,7 +46,7 @@ public abstract class ScreenshotUtilsMixin {
 
     @Inject(method = "saveScreenshot(Ljava/io/File;Ljava/lang/String;IILnet/minecraft/client/gl/Framebuffer;)Lnet/minecraft/text/Text;", at = @At(value = "RETURN", ordinal = 0), cancellable = true)
     private static void axolotlclient$onScreenshotSaveSuccess(File parent, String name, int textureWidth, int textureHeight,
-            Framebuffer buffer, CallbackInfoReturnable<Text> cir) {
+                                                              Framebuffer buffer, CallbackInfoReturnable<Text> cir) {
         cir.setReturnValue(io.github.axolotlclient.modules.screenshotUtils.ScreenshotUtils.getInstance()
                 .onScreenshotTaken(cir.getReturnValue(), currentFile));
     }

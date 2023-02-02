@@ -74,10 +74,10 @@ public class Notifications {
                 fading = true;
                 lastX += lastX / 45;
             }
-            DrawableHelper.fill(x-5-1, 0, Util.getWindow().getWidth(), 20 + currentStatus.getDescription().size()*12 +1, 0xFF0055FF);
-            DrawableHelper.fill(x - 5, 0, Util.getWindow().getWidth(), 20 + currentStatus.getDescription().size()*12, 0xFF00CFFF);
+            DrawableHelper.fill(x - 5 - 1, 0, Util.getWindow().getWidth(), 20 + currentStatus.getDescription().size() * 12 + 1, 0xFF0055FF);
+            DrawableHelper.fill(x - 5, 0, Util.getWindow().getWidth(), 20 + currentStatus.getDescription().size() * 12, 0xFF00CFFF);
             client.textRenderer.draw(currentStatus.getTitle(), x, 7, -256, true);
-            for(int i=0;i<currentStatus.getDescription().size();i++) {
+            for (int i = 0; i < currentStatus.getDescription().size(); i++) {
                 client.textRenderer.draw(currentStatus.getDescription().get(i), x, 18 + i * 12, -1, true);
             }
             if (x > Util.getWindow().getWidth() + 20) {
@@ -100,7 +100,7 @@ public class Notifications {
         @Getter
         private final int width;
 
-        public Status(String title, String description){
+        public Status(String title, String description) {
             this.title = title;
             width = Math.max(
                     160,

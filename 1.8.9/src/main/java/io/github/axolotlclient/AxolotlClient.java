@@ -181,12 +181,12 @@ public class AxolotlClient implements ClientModInitializer {
                 int x = -(MinecraftClient.getInstance().textRenderer
                         .getStringWidth(entity.getUuid() == MinecraftClient.getInstance().player.getUuid()
                                 ? (NickHider.getInstance().hideOwnName.get() ? NickHider.getInstance().hiddenNameSelf.get()
-                                        : entity.getName().asFormattedString())
+                                : entity.getName().asFormattedString())
                                 : (NickHider.getInstance().hideOtherNames.get() ? NickHider.getInstance().hiddenNameOthers.get()
-                                        : entity.getName().asFormattedString()))
+                                : entity.getName().asFormattedString()))
                         / 2
                         + (AxolotlClient.CONFIG.customBadge.get() ? MinecraftClient.getInstance().textRenderer
-                                .getStringWidth(" " + AxolotlClient.CONFIG.badgeText.get()) : 10));
+                        .getStringWidth(" " + AxolotlClient.CONFIG.badgeText.get()) : 10));
 
                 GlStateManager.color(1, 1, 1, 1);
 

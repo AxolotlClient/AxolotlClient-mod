@@ -31,6 +31,7 @@ import net.minecraft.client.util.math.MatrixStack;
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ *
  * @license GPL-3.0
  */
 
@@ -60,12 +61,12 @@ public class DrawUtil extends DrawableHelper {
     }
 
     public static void drawCenteredString(MatrixStack matrices, TextRenderer renderer, String text, int x, int y,
-            Color color, boolean shadow) {
+                                          Color color, boolean shadow) {
         drawCenteredString(matrices, renderer, text, x, y, color.getAsInt(), shadow);
     }
 
     public static void drawCenteredString(MatrixStack matrices, TextRenderer renderer, String text, int x, int y,
-            int color, boolean shadow) {
+                                          int color, boolean shadow) {
         drawString(matrices, text, (float) (x - renderer.getWidth(text) / 2), (float) y, color, shadow);
     }
 
@@ -74,7 +75,7 @@ public class DrawUtil extends DrawableHelper {
     }
 
     public static void drawString(MatrixStack matrices, TextRenderer textRenderer, String text, float x, float y,
-            int color, boolean shadow) {
+                                  int color, boolean shadow) {
         drawString(matrices, text, x, y, color, shadow);
     }
 

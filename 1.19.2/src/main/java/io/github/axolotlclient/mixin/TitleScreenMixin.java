@@ -61,15 +61,15 @@ public abstract class TitleScreenMixin extends Screen {
             MinecraftClient.getInstance().options.saveToolbarActivatorKey.setBoundKey(InputUtil.UNKNOWN_KEY);
             AxolotlClient.LOGGER.info("Unbound \"Save Toolbar Activator\" to resolve conflict with the zoom key!");
         }
-        if(Auth.getInstance().showButton.get()) {
+        if (Auth.getInstance().showButton.get()) {
             addDrawableChild(new AuthWidget());
         }
     }
 
     @ModifyArgs(method = "initWidgetsNormal", at =
-        @At(value = "INVOKE",
-                target = "Lnet/minecraft/client/gui/widget/ButtonWidget;<init>(IIIILnet/minecraft/text/Text;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;Lnet/minecraft/client/gui/widget/ButtonWidget$TooltipSupplier;)V",
-                ordinal = 1))
+    @At(value = "INVOKE",
+            target = "Lnet/minecraft/client/gui/widget/ButtonWidget;<init>(IIIILnet/minecraft/text/Text;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;Lnet/minecraft/client/gui/widget/ButtonWidget$TooltipSupplier;)V",
+            ordinal = 1))
     public void axolotlclient$noRealmsbutOptionsButton(Args args) {
         if (!QuiltLoader.isModLoaded("modmenu")) {
             args.set(4, Text.translatable("config"));
@@ -82,8 +82,8 @@ public abstract class TitleScreenMixin extends Screen {
     public String axolotlclient$setVersionText(String s) {
         return "Minecraft " + SharedConstants.getGameVersion().getName() + "/AxolotlClient "
                 + (QuiltLoader.getModContainer("axolotlclient").isPresent()
-                        ? QuiltLoader.getModContainer("axolotlclient").get().metadata().version().raw()
-                        : "");
+                ? QuiltLoader.getModContainer("axolotlclient").get().metadata().version().raw()
+                : "");
     }
 
     @Inject(method = "areRealmsNotificationsEnabled", at = @At("HEAD"), cancellable = true)

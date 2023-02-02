@@ -41,6 +41,7 @@ import java.util.stream.Collectors;
 /**
  * This implementation of custom skies is based on the FabricSkyBoxes mod by AMereBagatelle
  * <a href="https://github.com/AMereBagatelle/FabricSkyBoxes">Github Link.</a>
+ *
  * @license MIT
  **/
 
@@ -81,7 +82,8 @@ public class SkyResourceManager extends AbstractModule implements SimpleSynchron
                     object.addProperty(option[0], option[1]);
                 }
             }
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         return object;
     }
 
@@ -106,7 +108,8 @@ public class SkyResourceManager extends AbstractModule implements SimpleSynchron
                 SkyboxManager.getInstance().addSkybox(new FSBSkyboxInstance(
                         gson.fromJson(reader.lines().collect(Collectors.joining("\n")), JsonObject.class)));
                 AxolotlClient.LOGGER.debug("Loaded FSB sky from " + entry.getKey());
-            } catch (IOException ignored) {}
+            } catch (IOException ignored) {
+            }
         }
 
         for (Map.Entry<Identifier, Resource> entry : manager

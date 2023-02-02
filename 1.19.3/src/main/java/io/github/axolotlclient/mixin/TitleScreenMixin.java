@@ -61,7 +61,7 @@ public abstract class TitleScreenMixin extends Screen {
             MinecraftClient.getInstance().options.saveToolbarActivatorKey.setBoundKey(InputUtil.UNKNOWN_KEY);
             AxolotlClient.LOGGER.info("Unbound \"Save Toolbar Activator\" to resolve conflict with the zoom key!");
         }
-        if(Auth.getInstance().showButton.get()) {
+        if (Auth.getInstance().showButton.get()) {
             addDrawableChild(new AuthWidget());
         }
     }
@@ -81,8 +81,8 @@ public abstract class TitleScreenMixin extends Screen {
     public String axolotlclient$setVersionText(String s) {
         return "Minecraft " + SharedConstants.getGameVersion().getName() + "/AxolotlClient "
                 + (QuiltLoader.getModContainer("axolotlclient").isPresent()
-                        ? QuiltLoader.getModContainer("axolotlclient").get().metadata().version().raw()
-                        : "");
+                ? QuiltLoader.getModContainer("axolotlclient").get().metadata().version().raw()
+                : "");
     }
 
     @Inject(method = "areRealmsNotificationsEnabled", at = @At("HEAD"), cancellable = true)

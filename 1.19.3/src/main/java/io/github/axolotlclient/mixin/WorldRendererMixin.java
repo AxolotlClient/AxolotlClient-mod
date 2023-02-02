@@ -44,6 +44,7 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 /**
  * This implementation of custom skies is based on the FabricSkyBoxes mod by AMereBagatelle
  * <a href="https://github.com/AMereBagatelle/FabricSkyBoxes">Github Link.</a>
+ *
  * @license MIT
  **/
 
@@ -56,7 +57,7 @@ public abstract class WorldRendererMixin {
 
     @Inject(method = "renderSky", at = @At("HEAD"), cancellable = true)
     public void axolotlclient$renderSky(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Camera preStep, boolean bl,
-                          Runnable runnable, CallbackInfo ci) {
+                                        Runnable runnable, CallbackInfo ci) {
         runnable.run();
         if (AxolotlClient.CONFIG.customSky.get() && SkyboxManager.getInstance().hasSkyBoxes()
                 && !QuiltLoader.isModLoaded("fabricskyboxes")) {
@@ -86,8 +87,8 @@ public abstract class WorldRendererMixin {
     }
 
     @Inject(method = "renderWeather", at = @At("HEAD"), cancellable = true)
-    private void axolotlclient$changeWeather(LightmapTextureManager manager, float tickDelta, double cameraX, double cameraY, double cameraZ, CallbackInfo ci){
-        if(AxolotlClient.CONFIG.noRain.get()){
+    private void axolotlclient$changeWeather(LightmapTextureManager manager, float tickDelta, double cameraX, double cameraY, double cameraZ, CallbackInfo ci) {
+        if (AxolotlClient.CONFIG.noRain.get()) {
             ci.cancel();
         }
     }

@@ -110,13 +110,13 @@ public class Particles extends AbstractModule {
     public boolean getAlwaysOn(ParticleType type) {
         return enabled.get()
                 && ((BooleanOption) Particles.getInstance().particleOptions.get(type).get("alwaysCrit"))
-                        .get();
+                .get();
     }
 
     public boolean getShowParticle(ParticleType type) {
         return enabled.get()
                 ? ((BooleanOption) Particles.getInstance().particleOptions.get(type).get("showParticle"))
-                        .get()
+                .get()
                 : true;
     }
 
@@ -126,7 +126,7 @@ public class Particles extends AbstractModule {
         public int compare(ParticleType s1, ParticleType s2) {
             if (s1.getName().equals(s2.getName()))
                 return 0;
-            String[] strings = { s1.getName(), s2.getName() };
+            String[] strings = {s1.getName(), s2.getName()};
             Arrays.sort(strings, Collections.reverseOrder());
 
             if (strings[0].equals(s1.getName()))

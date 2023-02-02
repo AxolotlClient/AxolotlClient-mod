@@ -57,7 +57,7 @@ public class ReachHud extends SimpleTextHudEntry {
     @Override
     public String getValue() {
         if (currentDist == null) {
-            return "0 "+ I18n.translate("blocks");
+            return "0 " + I18n.translate("blocks");
         } else if (lastTime + 2000 < MinecraftClient.getTime()) {
             currentDist = null;
             return "0 " + I18n.translate("blocks");
@@ -126,7 +126,7 @@ public class ReachHud extends SimpleTextHudEntry {
         }
         DecimalFormat formatter = new DecimalFormat(format.toString());
         formatter.setRoundingMode(RoundingMode.HALF_UP);
-        currentDist = formatter.format(distance) +" " + I18n.translate("blocks");
+        currentDist = formatter.format(distance) + " " + I18n.translate("blocks");
         lastTime = MinecraftClient.getTime();
     }
 

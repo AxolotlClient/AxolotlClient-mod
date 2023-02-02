@@ -49,7 +49,7 @@ public class NetworkUtil {
     public JsonElement request(HttpUriRequest request, CloseableHttpClient client, boolean ignoreStatus) throws IOException {
         HttpResponse response = client.execute(request);
 
-        if(!ignoreStatus) {
+        if (!ignoreStatus) {
             int status = response.getStatusLine().getStatusCode();
             if (status != 200) {
                 throw new IOException("API request failed, status code " + status + "\nBody: " + EntityUtils.toString(response.getEntity()));
@@ -80,6 +80,6 @@ public class NetworkUtil {
     }
 
     public CloseableHttpClient createHttpClient(String id) {
-        return HttpClients.custom().setUserAgent("AxolotlClient/"+id).build();
+        return HttpClients.custom().setUserAgent("AxolotlClient/" + id).build();
     }
 }

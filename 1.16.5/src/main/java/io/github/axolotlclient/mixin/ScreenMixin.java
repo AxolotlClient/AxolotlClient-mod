@@ -66,8 +66,8 @@ public abstract class ScreenMixin {
     }
 
     @Inject(method = "renderBackground(Lnet/minecraft/client/util/math/MatrixStack;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;fillGradient(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V"), cancellable = true)
-    private void axolotlclient$menuBlur(MatrixStack matrices, int vOffset, CallbackInfo ci){
-        if(MenuBlur.getInstance().renderScreen(matrices)){
+    private void axolotlclient$menuBlur(MatrixStack matrices, int vOffset, CallbackInfo ci) {
+        if (MenuBlur.getInstance().renderScreen(matrices)) {
             ci.cancel();
         }
     }

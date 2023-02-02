@@ -44,7 +44,7 @@ public class AccountsScreen extends Screen {
     @Override
     public void init() {
 
-        accountsListWidget = new AccountsListWidget(this, client, width, height, 32, height-64, 35);
+        accountsListWidget = new AccountsListWidget(this, client, width, height, 32, height - 64, 35);
         addSelectableChild(accountsListWidget);
 
         accountsListWidget.setAccounts(Auth.getInstance().getAccounts());
@@ -87,7 +87,7 @@ public class AccountsScreen extends Screen {
 
     private void refreshAccount() {
         AccountsListWidget.Entry entry = accountsListWidget.getSelectedOrNull();
-        if(entry != null){
+        if (entry != null) {
             entry.getAccount().refresh(Auth.getInstance().getAuth(), () -> client.execute(() -> {
                 Auth.getInstance().save();
                 refresh();
@@ -116,9 +116,9 @@ public class AccountsScreen extends Screen {
         this.client.setScreen(new AccountsScreen(this.parent));
     }
 
-    private void login(){
+    private void login() {
         AccountsListWidget.Entry entry = accountsListWidget.getSelectedOrNull();
-        if(entry != null){
+        if (entry != null) {
             Auth.getInstance().login(entry.getAccount());
         }
     }
@@ -130,7 +130,7 @@ public class AccountsScreen extends Screen {
 
     private void updateButtonActivationStates() {
         AccountsListWidget.Entry entry = accountsListWidget.getSelectedOrNull();
-        if(client.world == null && entry != null){
+        if (client.world == null && entry != null) {
             loginButton.active = deleteButton.active = refreshButton.active = true;
         } else {
             loginButton.active = deleteButton.active = refreshButton.active = false;

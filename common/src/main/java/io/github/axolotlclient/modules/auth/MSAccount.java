@@ -41,7 +41,7 @@ public class MSAccount {
     private String refreshToken;
     private Instant expiration;
 
-    public MSAccount(String name, String uuid, String accessToken){
+    public MSAccount(String name, String uuid, String accessToken) {
         this.name = name;
         this.uuid = uuid.replace("-", "");
         this.authToken = accessToken;
@@ -49,7 +49,7 @@ public class MSAccount {
         refreshToken = "";
     }
 
-    public MSAccount(JsonObject profile, String authToken, String refreshToken){
+    public MSAccount(JsonObject profile, String authToken, String refreshToken) {
         uuid = profile.get("id").getAsString();
         name = profile.get("name").getAsString();
         this.authToken = authToken;
@@ -57,7 +57,7 @@ public class MSAccount {
         expiration = Instant.now().plus(1, ChronoUnit.DAYS);
     }
 
-    private MSAccount(String uuid, String name, String authToken, String refreshToken, long expiration){
+    private MSAccount(String uuid, String name, String authToken, String refreshToken, long expiration) {
         this.uuid = uuid;
         this.name = name;
         this.authToken = authToken;
@@ -65,8 +65,8 @@ public class MSAccount {
         this.expiration = Instant.ofEpochSecond(expiration);
     }
 
-    public void refresh(MSAuth auth, Runnable runAfter){
-        new Thread(()-> {
+    public void refresh(MSAuth auth, Runnable runAfter) {
+        new Thread(() -> {
             Map.Entry<String, String> tokens = auth.refreshToken(refreshToken, name);
             if (tokens.getKey() != null) {
                 authToken = tokens.getKey();
@@ -75,17 +75,18 @@ public class MSAccount {
                 try {
                     JsonObject object = auth.getMCProfile(authToken);
                     name = object.get("name").getAsString();
-                } catch (IOException ignored) {}
+                } catch (IOException ignored) {
+                }
             }
             runAfter.run();
         }).start();
     }
 
-    public boolean isOffline(){
+    public boolean isOffline() {
         return authToken.equals(OFFLINE_TOKEN);
     }
 
-    public JsonObject serialize(){
+    public JsonObject serialize() {
         JsonObject object = new JsonObject();
         object.add("uuid", new JsonPrimitive(uuid));
         object.add("name", new JsonPrimitive(name));
@@ -95,7 +96,7 @@ public class MSAccount {
         return object;
     }
 
-    public static MSAccount deserialize(JsonObject object){
+    public static MSAccount deserialize(JsonObject object) {
         String uuid = object.get("uuid").getAsString();
         String name = object.get("name").getAsString();
         String authToken = object.get("authToken").getAsString();
@@ -104,7 +105,7 @@ public class MSAccount {
         return new MSAccount(uuid, name, authToken, refreshToken, expiration);
     }
 
-    public boolean isExpired(){
+    public boolean isExpired() {
         return expiration.isBefore(Instant.now());
     }
 
@@ -122,7 +123,7 @@ public class MSAccount {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof MSAccount){
+        if (obj instanceof MSAccount) {
             MSAccount other = (MSAccount) obj;
             return name.equals(other.name) &&
                     uuid.equals(other.uuid);

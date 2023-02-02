@@ -47,7 +47,7 @@ public class ImageNetworking {
     public String upload(String data, String url, CloseableHttpClient client, Logger logger) throws IOException {
 
         JsonElement el = NetworkUtil.getRequest(url, client);
-        if(el != null) {
+        if (el != null) {
             JsonObject initGet = el.getAsJsonObject();
             String tempId = initGet.get("id").getAsString();
             int chunkSize = initGet.get("chunkSize").getAsInt();
@@ -62,7 +62,7 @@ public class ImageNetworking {
             List<String> chunks = new ArrayList<>();
             Lists.partition(dataList, chunkSize).forEach(list -> chunks.add(String.join("", list)));
 
-            if(chunks.size() > maxChunks){
+            if (chunks.size() > maxChunks) {
                 throw new IllegalStateException("Too much Data!");
             }
 
@@ -71,14 +71,14 @@ public class ImageNetworking {
                 RequestBuilder requestBuilder = RequestBuilder.post().setUri(url + "/" + tempId);
                 requestBuilder.setHeader("Content-Type", "application/json");
                 requestBuilder.setEntity(new StringEntity("{" +
-                        "\"index\":"+index+"," +
+                        "\"index\":" + index + "," +
                         "  \"content\": \"" + content + "\"" +
                         "}"));
                 logger.debug(EntityUtils.toString(client.execute(requestBuilder.build()).getEntity()));
                 index += content.getBytes(StandardCharsets.UTF_8).length;
             }
 
-            logger.debug("Finishing Stream... tempId was: "+tempId);
+            logger.debug("Finishing Stream... tempId was: " + tempId);
 
             RequestBuilder requestBuilder = RequestBuilder.post().setUri(url + "/" + tempId + "/end");
             requestBuilder.setHeader("Content-Type", "application/json");

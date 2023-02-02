@@ -37,7 +37,7 @@ public class AddOfflineScreen extends Screen {
     private TextFieldWidget nameInput;
     private final Screen parent;
 
-    public AddOfflineScreen(Screen parent){
+    public AddOfflineScreen(Screen parent) {
         super(new TranslatableText("auth.add.offline"));
         this.parent = parent;
     }
@@ -61,17 +61,17 @@ public class AddOfflineScreen extends Screen {
     public void render(MatrixStack matrices, int i, int j, float f) {
         renderBackground(matrices);
         super.render(matrices, i, j, f);
-        textRenderer.drawWithShadow(matrices, new TranslatableText("auth.add.offline.name"), width/2F-100, height/2f-20, -1);
+        textRenderer.drawWithShadow(matrices, new TranslatableText("auth.add.offline.name"), width / 2F - 100, height / 2f - 20, -1);
         drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 20, 16777215);
         nameInput.render(matrices, i, j, f);
     }
 
     @Override
     public void init() {
-        addChild(nameInput = new TextFieldWidget(textRenderer, width/2-100, height/2-10, 200, 20, LiteralText.EMPTY));
+        addChild(nameInput = new TextFieldWidget(textRenderer, width / 2 - 100, height / 2 - 10, 200, 20, LiteralText.EMPTY));
 
-        addButton(new ButtonWidget(width/2-155, height-50, 150, 20, ScreenTexts.CANCEL, button -> client.openScreen(parent)));
-        addButton(new ButtonWidget(width/2+5, height-50, 150, 20, ScreenTexts.DONE, button -> {
+        addButton(new ButtonWidget(width / 2 - 155, height - 50, 150, 20, ScreenTexts.CANCEL, button -> client.openScreen(parent)));
+        addButton(new ButtonWidget(width / 2 + 5, height - 50, 150, 20, ScreenTexts.DONE, button -> {
             Auth.getInstance().addAccount(new MSAccount(nameInput.getText(), UUID.randomUUID().toString(), MSAccount.OFFLINE_TOKEN));
             client.openScreen(parent);
         }));

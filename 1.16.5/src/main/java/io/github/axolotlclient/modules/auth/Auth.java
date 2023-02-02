@@ -59,10 +59,11 @@ public class Auth extends Accounts implements Module {
     public void init() {
         load();
         this.auth = new MSAuth(AxolotlClient.LOGGER, this);
-        if(isContained(client.getSession().getUuid())){
+        if (isContained(client.getSession().getUuid())) {
             current = getAccounts().stream().filter(account -> account.getUuid().equals(client.getSession().getUuid())).collect(Collectors.toList()).get(0);
-            if(current.isExpired()) {
-                current.refresh(auth, () -> {});
+            if (current.isExpired()) {
+                current.refresh(auth, () -> {
+                });
             }
         } else {
             current = new MSAccount(client.getSession().getUsername(), client.getSession().getUuid(), client.getSession().getAccessToken());
@@ -80,7 +81,7 @@ public class Auth extends Accounts implements Module {
 
     @Override
     protected void login(MSAccount account) {
-        if(client.world != null){
+        if (client.world != null) {
             return;
         }
 
@@ -99,7 +100,7 @@ public class Auth extends Accounts implements Module {
             }
         };
 
-        if(account.isExpired()){
+        if (account.isExpired()) {
             client.getToastManager().add(new SystemToast(SystemToast.Type.TUTORIAL_HINT, new TranslatableText("auth.notif.title"), new TranslatableText("auth.notif.refreshing", account.getName())));
             account.refresh(auth, runnable);
         } else {
@@ -112,12 +113,12 @@ public class Auth extends Accounts implements Module {
         return AxolotlClient.LOGGER;
     }
 
-    public void loadSkinFile(Identifier skinId, MSAccount account){
-        if(!account.isOffline() && MinecraftClient.getInstance().getTextureManager().getTexture(skinId) == null) {
+    public void loadSkinFile(Identifier skinId, MSAccount account) {
+        if (!account.isOffline() && MinecraftClient.getInstance().getTextureManager().getTexture(skinId) == null) {
             try {
                 MinecraftClient.getInstance().getTextureManager().registerTexture(skinId,
                         new NativeImageBackedTexture(NativeImage.read(Files.newInputStream(getSkinFile(account).toPath()))));
-                AxolotlClient.LOGGER.debug("Loaded skin file for "+ account.getName());
+                AxolotlClient.LOGGER.debug("Loaded skin file for " + account.getName());
             } catch (IOException e) {
                 AxolotlClient.LOGGER.warn("Couldn't load skin file for " + account.getName());
             }

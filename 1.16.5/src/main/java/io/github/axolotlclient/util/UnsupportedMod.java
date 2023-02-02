@@ -28,7 +28,7 @@ public class UnsupportedMod {
 
     private final UnsupportedReason[] reason;
 
-    public UnsupportedMod(String name, io.github.axolotlclient.util.UnsupportedMod.UnsupportedReason... reason){
+    public UnsupportedMod(String name, io.github.axolotlclient.util.UnsupportedMod.UnsupportedReason... reason) {
         this.name = name;
         this.reason = reason;
     }

@@ -61,11 +61,13 @@ public class MCPSkyboxInstance extends SkyboxInstance {
             for (int i = 0; i < axis.length; i++) {
                 this.rotationStatic[i] = Float.parseFloat(axis[i]);
             }
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         try {
             this.blendMode = parseBlend(json.get("blend").getAsString());
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         showMoon = true;
         showSun = true;
     }

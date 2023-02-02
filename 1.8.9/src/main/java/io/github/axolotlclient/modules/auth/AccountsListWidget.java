@@ -81,8 +81,8 @@ public class AccountsListWidget extends EntryListWidget {
         return this.selectedEntry;
     }
 
-    public Entry getSelectedEntry(){
-        if(getSelected() < 0){
+    public Entry getSelectedEntry() {
+        if (getSelected() < 0) {
             return null;
         }
         return entries.get(getSelected());
@@ -119,14 +119,14 @@ public class AccountsListWidget extends EntryListWidget {
             client.textRenderer.draw(account.getName(), x + 3 + 33, y + 1, -1);
             client.textRenderer.draw(account.getUuid(), x + 3 + 33, y + 12, 8421504);
             GlStateManager.color(1, 1, 1, 1);
-            if(Auth.getInstance().getCurrent().equals(account)){
+            if (Auth.getInstance().getCurrent().equals(account)) {
                 client.getTextureManager().bindTexture(checkmark);
-                drawTexture(x - 35, y+1, 0, 0, 25, 25, 25, 25);
-            } else if (account.isExpired()){
+                drawTexture(x - 35, y + 1, 0, 0, 25, 25, 25, 25);
+            } else if (account.isExpired()) {
                 client.getTextureManager().bindTexture(warningSign);
-                drawTexture(x - 35, y+1, 0, 0, 25, 25, 25, 25);
+                drawTexture(x - 35, y + 1, 0, 0, 25, 25, 25, 25);
             }
-            if(!account.isOffline()) {
+            if (!account.isOffline()) {
                 GlStateManager.color(1, 1, 1, 1);
                 client.getTextureManager().bindTexture(skin);
                 GlStateManager.enableBlend();

@@ -47,6 +47,7 @@ import java.util.Optional;
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ *
  * @license GPL-3.0
  */
 
@@ -174,7 +175,7 @@ public class KeystrokeHud extends TextHudEntry {
 
             GlStateManager.color(1, 1, 1);
             mouseMovementIndicatorInner.bindTexture();
-            drawTexture(spaceX + (width/2) - 7/2 -1, spaceY + 17 - (7/2), 0, 0, 7, 7, 7, 7);
+            drawTexture(spaceX + (width / 2) - 7 / 2 - 1, spaceY + 17 - (7 / 2), 0, 0, 7, 7, 7, 7);
 
             GlStateManager.translate(calculatedMouseX, calculatedMouseY, 0); // Woah KodeToad, good use of translate
 

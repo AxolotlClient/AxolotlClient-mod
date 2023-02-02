@@ -64,7 +64,8 @@ public class PackDisplayHud extends TextHudEntry {
                         widgets.add(new PackWidget(pack));
                     }
                 }
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         });
 
         AtomicInteger w = new AtomicInteger(20);

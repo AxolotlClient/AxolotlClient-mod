@@ -34,7 +34,7 @@ public class AddOfflineScreen extends Screen {
     private TextFieldWidget nameInput;
     private final Screen parent;
 
-    public AddOfflineScreen(Screen parent){
+    public AddOfflineScreen(Screen parent) {
         this.parent = parent;
     }
 
@@ -43,7 +43,7 @@ public class AddOfflineScreen extends Screen {
     public void render(int i, int j, float f) {
         renderBackground();
         super.render(i, j, f);
-        textRenderer.drawWithShadow(I18n.translate("auth.add.offline.name"), width/2F-100, height/2f-20, -1);
+        textRenderer.drawWithShadow(I18n.translate("auth.add.offline.name"), width / 2F - 100, height / 2f - 20, -1);
         drawCenteredString(this.textRenderer, I18n.translate("auth.add.offline"), this.width / 2, 20, 16777215);
         nameInput.render();
     }
@@ -61,9 +61,9 @@ public class AddOfflineScreen extends Screen {
 
     @Override
     protected void buttonClicked(ButtonWidget buttonWidget) {
-        if(buttonWidget.id == 1){
+        if (buttonWidget.id == 1) {
             client.setScreen(parent);
-        } else if (buttonWidget.id == 2){
+        } else if (buttonWidget.id == 2) {
             Auth.getInstance().addAccount(new MSAccount(nameInput.getText(), UUID.randomUUID().toString(), MSAccount.OFFLINE_TOKEN));
             client.setScreen(parent);
         }
@@ -71,10 +71,10 @@ public class AddOfflineScreen extends Screen {
 
     @Override
     public void init() {
-        nameInput = new TextFieldWidget(0, textRenderer, width/2-100, height/2-10, 200, 20);
+        nameInput = new TextFieldWidget(0, textRenderer, width / 2 - 100, height / 2 - 10, 200, 20);
 
-        buttons.add(new ButtonWidget(1, width/2-155, height-50, 150, 20, I18n.translate("gui.cancel")));
-        buttons.add(new ButtonWidget(2, width/2+5, height-50, 150, 20, I18n.translate("gui.done")));
+        buttons.add(new ButtonWidget(1, width / 2 - 155, height - 50, 150, 20, I18n.translate("gui.cancel")));
+        buttons.add(new ButtonWidget(2, width / 2 + 5, height - 50, 150, 20, I18n.translate("gui.done")));
     }
 
     @Override

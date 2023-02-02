@@ -40,8 +40,9 @@ import java.util.zip.ZipInputStream;
 
 /**
  * This DiscordRPC module is derived from <a href="https://github.com/DeDiamondPro/HyCord">HyCord</a>.
- * @license GPL-3.0
+ *
  * @author DeDiamondPro
+ * @license GPL-3.0
  */
 
 public class GameSdkDownloader {
@@ -127,11 +128,11 @@ public class GameSdkDownloader {
 
         String path = "/native/"
                 + (OSUtil.getOS() == OSUtil.OperatingSystem.WINDOWS ? "windows"
-                        : (OSUtil.getOS() == OSUtil.OperatingSystem.MAC ? "macos" : "linux"))
+                : (OSUtil.getOS() == OSUtil.OperatingSystem.MAC ? "macos" : "linux"))
                 + "/" + arch + "/"
                 + (OSUtil.getOS() == OSUtil.OperatingSystem.WINDOWS ? "discord_game_sdk_jni.dll"
-                        : "libdiscord_game_sdk_jni"
-                                + (OSUtil.getOS() == OSUtil.OperatingSystem.MAC ? ".dylib" : ".so"));
+                : "libdiscord_game_sdk_jni"
+                + (OSUtil.getOS() == OSUtil.OperatingSystem.MAC ? ".dylib" : ".so"));
 
         InputStream in = GameSdkDownloader.class.getResourceAsStream(path);
         if (in != null) {
@@ -155,8 +156,8 @@ public class GameSdkDownloader {
                 System.load(sdk.getAbsolutePath());
             }
 
-            if(jni.getAbsolutePath().contains(" ")){
-                throw new IllegalStateException("JNI Path: <"+jni.getAbsolutePath()+"> contains spaces!");
+            if (jni.getAbsolutePath().contains(" ")) {
+                throw new IllegalStateException("JNI Path: <" + jni.getAbsolutePath() + "> contains spaces!");
             }
 
             System.load(jni.getAbsolutePath()); // it WILL crash if your path contains spaces. No, escaping them does not help.

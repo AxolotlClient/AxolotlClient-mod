@@ -74,14 +74,16 @@ public abstract class MinecraftClientMixin {
     private TextureManager textureManager;
 
     @Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;info(Ljava/lang/String;)V", ordinal = 1), remap = false)
-    public void axolotlclient$noSessionIDLeak(Logger instance, String s) {}
+    public void axolotlclient$noSessionIDLeak(Logger instance, String s) {
+    }
 
     /**
      * @author TheKodeToad & Sk1erLLC (initially created this fix).
      * @reason unnecessary garbage collection
      */
     @Redirect(method = "connect(Lnet/minecraft/client/world/ClientWorld;Ljava/lang/String;)V", at = @At(value = "INVOKE", target = "Ljava/lang/System;gc()V"))
-    public void axolotlclient$noWorldGC() {}
+    public void axolotlclient$noWorldGC() {
+    }
 
     /**
      * @author moehreag
@@ -89,7 +91,7 @@ public abstract class MinecraftClientMixin {
      */
     @Inject(method = "setPixelFormat", at = @At("TAIL"))
     public void axolotlclient$setWindowTitle(CallbackInfo ci) {
-        if(AxolotlClient.CONFIG.customWindowTitle.get()) {
+        if (AxolotlClient.CONFIG.customWindowTitle.get()) {
             Display.setTitle("AxolotlClient " + this.gameVersion);
         }
     }
@@ -174,8 +176,8 @@ public abstract class MinecraftClientMixin {
     }
 
     @Inject(method = "setScreen", at = @At("HEAD"))
-    private void axolotlclient$onScreenOpen(Screen screen, CallbackInfo ci){
-        if(MinecraftClient.getInstance().currentScreen == null) {
+    private void axolotlclient$onScreenOpen(Screen screen, CallbackInfo ci) {
+        if (MinecraftClient.getInstance().currentScreen == null) {
             MenuBlur.getInstance().onScreenOpen();
         }
     }

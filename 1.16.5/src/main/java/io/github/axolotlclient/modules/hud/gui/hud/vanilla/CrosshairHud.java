@@ -169,7 +169,7 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
             RenderUtil.fillBlend(matrices, x + (getWidth() / 2) - 1, y + (getHeight() / 2), 1, 5, color);
         } else if (type.get().equals(Crosshair.DIRECTION.toString())) {
             RenderSystem.pushMatrix();
-            RenderSystem.translatef(client.getWindow().getScaledWidth() / 2F, client.getWindow().getScaledHeight() / 2F, (float)this.getZOffset());
+            RenderSystem.translatef(client.getWindow().getScaledWidth() / 2F, client.getWindow().getScaledHeight() / 2F, (float) this.getZOffset());
             Camera camera = this.client.gameRenderer.getCamera();
             RenderSystem.rotatef(camera.getPitch(), -1.0F, 0.0F, 0.0F);
             RenderSystem.rotatef(camera.getYaw(), 0.0F, 1.0F, 0.0F);
@@ -215,14 +215,14 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
                 if (bl) {
                     this.drawTexture(matrices, k, j, 68, 94, 16, 16);
                 } else if (f < 1.0F) {
-                    int l = (int)(f * 17.0F);
+                    int l = (int) (f * 17.0F);
                     this.drawTexture(matrices, k, j, 36, 94, 16, 4);
                     this.drawTexture(matrices, k, j, 52, 94, l, 4);
                 }
             }
         }
         if (indicator == AttackIndicator.CROSSHAIR && !type.get().equals(Crosshair.TEXTURE.toString()) && !type.get().equals(Crosshair.CUSTOM.toString())) {
-            float progress = this.client.player.getAttackCooldownProgress(0.0F)/2;
+            float progress = this.client.player.getAttackCooldownProgress(0.0F) / 2;
             if (progress != 1.0F) {
                 RenderUtil.drawRectangle(matrices, getRawX() + (getWidth() / 2) - 6, getRawY() + (getHeight() / 2) + 9,
                         11, 1, attackIndicatorBackgroundColor.get());

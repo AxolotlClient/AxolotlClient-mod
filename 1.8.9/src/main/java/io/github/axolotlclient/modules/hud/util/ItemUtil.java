@@ -42,6 +42,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ *
  * @license GPL-3.0
  */
 
@@ -109,7 +110,7 @@ public class ItemUtil {
     }
 
     public static Optional<ItemUtil.TimedItemStorage> getTimedItemFromItem(ItemStack item,
-            List<ItemUtil.TimedItemStorage> list) {
+                                                                           List<ItemUtil.TimedItemStorage> list) {
         ItemStack compare = item.copy();
         compare.count = 1;
         for (ItemUtil.TimedItemStorage storage : list) {
@@ -171,7 +172,7 @@ public class ItemUtil {
     }
 
     public static void renderGuiItemOverlay(TextRenderer renderer, ItemStack stack, int x, int y, String countLabel,
-            int textColor, boolean shadow) {
+                                            int textColor, boolean shadow) {
         DiffuseLighting.enable();
         GlStateManager.pushMatrix();
         GlStateManager.color(textColor >> 24 & 0xff, textColor >> 16 & 0xff, textColor >> 8 & 0xff, textColor & 0xff);
@@ -217,7 +218,7 @@ public class ItemUtil {
     }
 
     private static void renderGuiQuad(BufferBuilder buffer, int x, int y, int width, int height, int red, int green,
-            int blue, int alpha) {
+                                      int blue, int alpha) {
         buffer.begin(7, VertexFormats.POSITION_COLOR);
         buffer.vertex(x, y, 0.0).color(red, green, blue, alpha).next();
         buffer.vertex(x, y + height, 0.0).color(red, green, blue, alpha).next();

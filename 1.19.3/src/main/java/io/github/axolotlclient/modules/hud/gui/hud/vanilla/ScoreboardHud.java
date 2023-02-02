@@ -46,6 +46,7 @@ import java.util.stream.Collectors;
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ *
  * @license GPL-3.0
  */
 
@@ -138,7 +139,7 @@ public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionab
         MutableText formattedText;
         for (Iterator<ScoreboardPlayerScore> scoresIterator = scores.iterator(); scoresIterator
                 .hasNext(); maxWidth = Math.max(maxWidth, client.textRenderer.getWidth(formattedText) + spacerWidth
-                        + client.textRenderer.getWidth(Integer.toString(scoreboardPlayerScore.getScore())))) {
+                + client.textRenderer.getWidth(Integer.toString(scoreboardPlayerScore.getScore())))) {
             scoreboardPlayerScore = scoresIterator.next();
             Team team = scoreboard.getPlayerTeam(scoreboardPlayerScore.getPlayerName());
             formattedText = Team.decorateName(team, Text.literal(scoreboardPlayerScore.getPlayerName()));

@@ -86,14 +86,14 @@ public class AccountsListWidget extends AlwaysSelectedEntryListWidget<AccountsLi
         @Override
         public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
             GlStateManager.color4f(1, 1, 1, 1);
-            if(Auth.getInstance().getCurrent().equals(account)){
+            if (Auth.getInstance().getCurrent().equals(account)) {
                 client.getTextureManager().bindTexture(checkmark);
-                drawTexture(matrices, x - 35, y+1, 0, 0, 25, 25, 25, 25);
-            } else if (account.isExpired()){
+                drawTexture(matrices, x - 35, y + 1, 0, 0, 25, 25, 25, 25);
+            } else if (account.isExpired()) {
                 client.getTextureManager().bindTexture(warningSign);
-                drawTexture(matrices, x - 35, y+1, 0, 0, 25, 25, 25, 25);
+                drawTexture(matrices, x - 35, y + 1, 0, 0, 25, 25, 25, 25);
             }
-            if(!account.isOffline()) {
+            if (!account.isOffline()) {
                 client.getTextureManager().bindTexture(skin);
                 RenderSystem.enableBlend();
                 drawTexture(matrices, x - 1, y - 1, 33, 33, 8, 8, 8, 8, 64, 64);

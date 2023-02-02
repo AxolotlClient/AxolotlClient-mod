@@ -39,6 +39,7 @@ import java.util.List;
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ *
  * @license GPL-3.0
  */
 
@@ -93,9 +94,9 @@ public class ArmorHud extends TextHudEntry {
                 shadow.get());
     }
 
-    private final ItemStack[] placeholderStacks = new ItemStack[] { new ItemStack(Items.IRON_BOOTS),
+    private final ItemStack[] placeholderStacks = new ItemStack[]{new ItemStack(Items.IRON_BOOTS),
             new ItemStack(Items.IRON_LEGGINGS), new ItemStack(Items.IRON_CHESTPLATE), new ItemStack(Items.IRON_HELMET),
-            new ItemStack(Items.IRON_SWORD) };
+            new ItemStack(Items.IRON_SWORD)};
 
     @Override
     public void renderPlaceholderComponent(MatrixStack matrices, float delta) {

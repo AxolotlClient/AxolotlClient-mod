@@ -36,6 +36,7 @@ import java.util.List;
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ *
  * @license GPL-3.0
  */
 
@@ -62,7 +63,7 @@ public class SpeedHud extends SimpleTextHudEntry {
         }
         double speed;
         if (horizontal.get()) {
-            speed = Math.sqrt(vec.getX()*vec.getX()*vec.getZ()*vec.getZ());
+            speed = Math.sqrt(vec.getX() * vec.getX() * vec.getZ() * vec.getZ());
         } else {
             speed = vec.length();
         }

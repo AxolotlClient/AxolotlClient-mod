@@ -35,7 +35,7 @@ public class AuthWidget extends ButtonWidget {
     public AuthWidget() {
         super(10, 10,
                 MinecraftClient.getInstance().textRenderer.getWidth(Auth.getInstance().getCurrent().getName()) + 28,
-                20, Text.of("    "+Auth.getInstance().getCurrent().getName()), buttonWidget -> MinecraftClient.getInstance().openScreen(new AccountsScreen(MinecraftClient.getInstance().currentScreen)));
+                20, Text.of("    " + Auth.getInstance().getCurrent().getName()), buttonWidget -> MinecraftClient.getInstance().openScreen(new AccountsScreen(MinecraftClient.getInstance().currentScreen)));
         skinId = new Identifier(Auth.getInstance().getSkinTextureId(Auth.getInstance().getCurrent()));
     }
 
@@ -45,8 +45,8 @@ public class AuthWidget extends ButtonWidget {
         super.renderButton(matrices, mouseX, mouseY, delta);
         MinecraftClient.getInstance().getTextureManager().bindTexture(skinId);
         RenderSystem.enableBlend();
-        drawTexture(matrices, x+1, y+1, getHeight()-2, getHeight()-2, 8, 8, 8, 8, 64, 64);
-        drawTexture(matrices, x+1, y+1, getHeight()-2, getHeight()-2, 40, 8, 8, 8, 64, 64);
+        drawTexture(matrices, x + 1, y + 1, getHeight() - 2, getHeight() - 2, 8, 8, 8, 8, 64, 64);
+        drawTexture(matrices, x + 1, y + 1, getHeight() - 2, getHeight() - 2, 40, 8, 8, 8, 64, 64);
         RenderSystem.disableBlend();
     }
 }

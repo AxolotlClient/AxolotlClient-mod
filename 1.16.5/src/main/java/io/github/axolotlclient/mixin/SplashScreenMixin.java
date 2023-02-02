@@ -32,7 +32,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public abstract class SplashScreenMixin {
 
     @Redirect(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/screen/SplashScreen;BRAND_RGB:I"))
-    private int axolotlclient$customBackgroundColor(){
+    private int axolotlclient$customBackgroundColor() {
         return AxolotlClient.CONFIG.loadingScreenColor.get().getAsInt() & 16777215;
     }
 }

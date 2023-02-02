@@ -91,34 +91,34 @@ public abstract class Accounts {
         save();
     }
 
-    public File getSkinFile(MSAccount account){
+    public File getSkinFile(MSAccount account) {
         return getSkinFile(account.getUuid());
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    public File getSkinFile(String uuid){
+    public File getSkinFile(String uuid) {
         File f = getConfigDir().resolve("skins").resolve(uuid).toFile();
-        if(!f.exists()){
+        if (!f.exists()) {
             try {
                 f.getParentFile().mkdirs();
                 f.createNewFile();
             } catch (IOException e) {
-                getLogger().error("Couldn't create skin file for "+uuid);
+                getLogger().error("Couldn't create skin file for " + uuid);
             }
         }
         return f;
     }
 
-    public void removeSkinFile(MSAccount account){
+    public void removeSkinFile(MSAccount account) {
         try {
             Files.delete(getSkinFile(account).toPath());
         } catch (IOException e) {
-            getLogger().error("Failed to clean up skin file for "+account.getName());
+            getLogger().error("Failed to clean up skin file for " + account.getName());
         }
     }
 
-    public String getSkinTextureId(MSAccount account){
-        return "accounts_"+account.getUuid();
+    public String getSkinTextureId(MSAccount account) {
+        return "accounts_" + account.getUuid();
     }
 
     public void save() {
@@ -139,7 +139,7 @@ public abstract class Accounts {
         return accounts.stream().anyMatch(account -> account.getUuid().equals(uuid));
     }
 
-    public boolean allowOfflineAccounts(){
+    public boolean allowOfflineAccounts() {
         return accounts.size() > 0 && !accounts.stream().allMatch(MSAccount::isOffline);
     }
 }

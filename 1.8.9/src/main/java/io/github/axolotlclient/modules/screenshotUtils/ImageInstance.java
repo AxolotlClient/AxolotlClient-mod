@@ -28,7 +28,8 @@ public class ImageInstance {
 
     private final BufferedImage image;
     private final String fileName;
-    public ImageInstance(BufferedImage image, String name){
+
+    public ImageInstance(BufferedImage image, String name) {
         this.image = image;
         this.fileName = name;
     }

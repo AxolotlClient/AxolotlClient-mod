@@ -88,12 +88,12 @@ public class MSAuth {
             server.createContext("/", ex -> {
                 logger.debug("Microsoft authentication callback request: " + ex.getRemoteAddress());
                 byte[] b = null;
-                try (InputStream in = this.getClass().getResourceAsStream("/assets/axolotlclient/redirect.html")){
-                    if(in != null) {
+                try (InputStream in = this.getClass().getResourceAsStream("/assets/axolotlclient/redirect.html")) {
+                    if (in != null) {
                         b = IOUtils.toByteArray(in);
                     }
                 }
-                if(b ==null){
+                if (b == null) {
                     b = FALLBACK_RESPONSE.getBytes(StandardCharsets.UTF_8);
                 }
                 ex.getResponseHeaders().add("Content-Type", "text/html");
@@ -129,7 +129,7 @@ public class MSAuth {
             if (checkOwnership(accessToken)) {
                 logger.debug("finished auth flow!");
                 MSAccount account = new MSAccount(getMCProfile(accessToken), accessToken, msTokens.getValue());
-                if(accounts.isContained(account.getUuid())){
+                if (accounts.isContained(account.getUuid())) {
                     accounts.getAccounts().removeAll(accounts.getAccounts().stream().filter(acc -> acc.getUuid().equals(account.getUuid())).collect(Collectors.toList()));
                 }
                 accounts.addAccount(account);
@@ -164,7 +164,7 @@ public class MSAuth {
         JsonObject properties = new JsonObject();
         properties.add("AuthMethod", new JsonPrimitive("RPS"));
         properties.add("SiteName", new JsonPrimitive("user.auth.xboxlive.com"));
-        properties.add("RpsTicket", new JsonPrimitive("d="+code));
+        properties.add("RpsTicket", new JsonPrimitive("d=" + code));
         object.add("Properties", properties);
         object.add("RelyingParty", new JsonPrimitive("http://auth.xboxlive.com"));
         object.add("TokenType", new JsonPrimitive("JWT"));
@@ -253,7 +253,7 @@ public class MSAuth {
             logger.debug("getting mc auth token...");
             String accessToken = authMC(xsts.getValue(), xsts.getKey());
             if (checkOwnership(accessToken)) {
-                logger.info("Successfully refreshed token for "+name+"!");
+                logger.info("Successfully refreshed token for " + name + "!");
 
                 return new AbstractMap.SimpleImmutableEntry<>(accessToken, refreshToken);
             }

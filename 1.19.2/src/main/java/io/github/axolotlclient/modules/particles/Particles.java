@@ -126,7 +126,7 @@ public class Particles extends AbstractModule {
         public int compare(ParticleType<?> s1, ParticleType<?> s2) {
             if (getName(s1).equals(getName(s2)))
                 return 0;
-            String[] strings = { getName(s1), getName(s2) };
+            String[] strings = {getName(s1), getName(s2)};
             Arrays.sort(strings, Collections.reverseOrder());
 
             if (strings[0].equals(getName(s1)))

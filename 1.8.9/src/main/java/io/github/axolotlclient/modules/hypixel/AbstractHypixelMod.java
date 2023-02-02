@@ -30,7 +30,8 @@ public interface AbstractHypixelMod {
 
     OptionCategory getCategory();
 
-    default void tick() {}
+    default void tick() {
+    }
 
     default boolean tickable() {
         return false;

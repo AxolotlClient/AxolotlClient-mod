@@ -43,6 +43,7 @@ import java.util.Objects;
 /**
  * This implementation of custom skies is based on the FabricSkyBoxes mod by AMereBagatelle
  * <a href="https://github.com/AMereBagatelle/FabricSkyBoxes">Github Link.</a>
+ *
  * @license MIT
  **/
 
@@ -66,8 +67,8 @@ public abstract class SkyboxInstance {
     protected int blendEquation;
     protected boolean rotate = false;
     protected float rotationSpeed = 1F;
-    protected float[] rotationStatic = new float[] { 0, 0, 0 };
-    protected float[] rotationAxis = new float[] { 0, 0, 0 };
+    protected float[] rotationStatic = new float[]{0, 0, 0};
+    protected float[] rotationAxis = new float[]{0, 0, 0};
 
     protected boolean showSun = true;
     protected boolean showMoon = true;
@@ -342,7 +343,8 @@ public abstract class SkyboxInstance {
         for (Identifier id : textures) {
             try {
                 MinecraftClient.getInstance().getTextureManager().close(id);
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         }
     }
 

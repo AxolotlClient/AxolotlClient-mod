@@ -60,8 +60,10 @@ public abstract class PlayerListHudMixin {
         return instance.getProfile();
     }
 
-    @Shadow private Text header;
-    @Shadow private Text footer;
+    @Shadow
+    private Text header;
+    @Shadow
+    private Text footer;
 
     @Shadow
     protected abstract Text applyGameModeFormatting(PlayerListEntry par1, MutableText par2);
@@ -119,8 +121,8 @@ public abstract class PlayerListHudMixin {
     }
 
     @Inject(method = "renderLatencyIcon", at = @At("HEAD"), cancellable = true)
-    private void axolotlclient$numericalPing(MatrixStack matrices, int width, int x, int y, PlayerListEntry entry, CallbackInfo ci){
-        if(Tablist.getInstance().renderNumericPing(matrices, width, x, y, entry)){
+    private void axolotlclient$numericalPing(MatrixStack matrices, int width, int x, int y, PlayerListEntry entry, CallbackInfo ci) {
+        if (Tablist.getInstance().renderNumericPing(matrices, width, x, y, entry)) {
             ci.cancel();
         }
     }
@@ -142,11 +144,11 @@ public abstract class PlayerListHudMixin {
     }
 
     @Inject(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;header:Lnet/minecraft/text/Text;"))
-    private void axolotlclient$setRenderHeaderFooter(MatrixStack matrices, int scaledWindowWidth, Scoreboard scoreboard, ScoreboardObjective objective, CallbackInfo ci){
-        if(!Tablist.getInstance().showHeader.get()){
+    private void axolotlclient$setRenderHeaderFooter(MatrixStack matrices, int scaledWindowWidth, Scoreboard scoreboard, ScoreboardObjective objective, CallbackInfo ci) {
+        if (!Tablist.getInstance().showHeader.get()) {
             header = null;
         }
-        if(!Tablist.getInstance().showFooter.get()){
+        if (!Tablist.getInstance().showFooter.get()) {
             footer = null;
         }
     }

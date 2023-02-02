@@ -46,6 +46,7 @@ import java.util.List;
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ *
  * @license GPL-3.0
  */
 
@@ -143,13 +144,14 @@ public class PingHud extends SimpleTextHudEntry {
 
                     @Override
                     public ClientConnection getConnection() {
-                            return manager;
-                        }
+                        return manager;
+                    }
                 });
                 manager.send(new HandshakeC2SPacket(address.getAddress(), address.getPort(), NetworkState.STATUS));
                 manager.send(new QueryRequestC2SPacket());
 
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         });
     }
 }

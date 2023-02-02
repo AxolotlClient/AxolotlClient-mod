@@ -16,42 +16,42 @@ A Complete (nearly) mod to have various features on various Minecraft versions
 - Screenshot Utils
 - Zoom
 - Various Hud Modules (port of [KronHUD](https://github.com/DarkKronicle/KronHUD), but with additions)
-  - including, but not limited to:
-    - Ping
-    - FPS
-    - CPS
-    - Armor
-    - Potions
-    - Keystrokes
-    - ToggleModifiers
-    - Server IP
-    - Icon
-    - Speed
-    - Scoreboard
-    - Crosshair
-    - Coordinates
-    - ActionBar
-    - BossBar
-    - Arrow
-    - Item Update
-    - Pack Display
-    - Real Time
-    - Reach
-    - Hotbar
-    - Memory
-    - PlayerCount
-    - Compass
-    - TPS (Ticks per second)
-    - Combo
-    - Player
-    - Chat
+    - including, but not limited to:
+        - Ping
+        - FPS
+        - CPS
+        - Armor
+        - Potions
+        - Keystrokes
+        - ToggleModifiers
+        - Server IP
+        - Icon
+        - Speed
+        - Scoreboard
+        - Crosshair
+        - Coordinates
+        - ActionBar
+        - BossBar
+        - Arrow
+        - Item Update
+        - Pack Display
+        - Real Time
+        - Reach
+        - Hotbar
+        - Memory
+        - PlayerCount
+        - Compass
+        - TPS (Ticks per second)
+        - Combo
+        - Player
+        - Chat
 - Hypixel Features
-  - AutoGG / GF / GLHF
-  - LevelHead
-  - Nick Hider
-  - Skyblock
-  - AutoTip
-  - AutoBoop
+    - AutoGG / GF / GLHF
+    - LevelHead
+    - Nick Hider
+    - Skyblock
+    - AutoTip
+    - AutoBoop
 - Custom Block Outlines
 - Time Changer
 - Fullbright
@@ -77,6 +77,7 @@ A Complete (nearly) mod to have various features on various Minecraft versions
 ### Licensing
 
 - This mod is licensed under the LGPL-3.0 License.
+
 ```
 AxolotlClient-mod
 Copyright (C) 2021-present moehreag + Contributors
@@ -95,4 +96,5 @@ You should have received a copy of the GNU Lesser General Public License
 along with this program; if not, write to the Free Software Foundation,
 Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 ```
+
 - For more information see the [LICENSE](LICENSE) file.

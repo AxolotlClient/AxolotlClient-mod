@@ -46,6 +46,7 @@ import java.util.List;
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ *
  * @license GPL-3.0
  */
 
@@ -93,7 +94,7 @@ public class PlayerHud extends BoxHudEntry {
             } else if (hide == -1) {
                 hide = System.currentTimeMillis();
             }
-    
+
             if (hide != -1 && System.currentTimeMillis() - hide > 500) {
                 return;
             }

@@ -44,8 +44,8 @@ public class AuthWidget extends ButtonWidget {
         GlStateManager.color(1, 1, 1, 1);
         MinecraftClient.getInstance().getTextureManager().bindTexture(skinId);
         GlStateManager.enableBlend();
-        drawTexture(x+1, y+1, 8, 8, 8, 8, height - 2, height - 2, 64, 64);
-        drawTexture(x+1, y+1, 40, 8, 8, 8, height - 2, height - 2, 64, 64);
+        drawTexture(x + 1, y + 1, 8, 8, 8, 8, height - 2, height - 2, 64, 64);
+        drawTexture(x + 1, y + 1, 40, 8, 8, 8, height - 2, height - 2, 64, 64);
         GlStateManager.disableBlend();
     }
 }

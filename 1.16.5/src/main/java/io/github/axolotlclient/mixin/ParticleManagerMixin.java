@@ -53,7 +53,7 @@ public abstract class ParticleManagerMixin {
 
     @Inject(method = "addParticle(Lnet/minecraft/particle/ParticleEffect;DDDDDD)Lnet/minecraft/client/particle/Particle;", at = @At(value = "HEAD"), cancellable = true)
     public void axolotlclient$afterCreation(ParticleEffect parameters, double x, double y, double z, double velocityX,
-            double velocityY, double velocityZ, CallbackInfoReturnable<Particle> cir) {
+                                            double velocityY, double velocityZ, CallbackInfoReturnable<Particle> cir) {
         cachedType = parameters.getType();
 
         if (!Particles.getInstance().getShowParticle(cachedType)) {

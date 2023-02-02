@@ -311,11 +311,12 @@ public class CreditsScreen extends Screen {
         }
 
         @Override
-        public void updatePosition(int index, int x, int y) {}
+        public void updatePosition(int index, int x, int y) {
+        }
 
         @Override
         public void render(int index, int x, int y, int rowWidth, int rowHeight, int mouseX, int mouseY,
-                boolean hovered) {
+                           boolean hovered) {
             if (hovered) {
                 drawVerticalLine(x - 100, y, y + 20,
                         io.github.axolotlclient.AxolotlClientConfig.Color.ERROR.getAsInt());
@@ -341,7 +342,8 @@ public class CreditsScreen extends Screen {
         }
 
         @Override
-        public void mouseReleased(int index, int mouseX, int mouseY, int button, int x, int y) {}
+        public void mouseReleased(int index, int mouseX, int mouseY, int button, int x, int y) {
+        }
     }
 
     private class Overlay extends DrawUtil {
@@ -426,7 +428,7 @@ public class CreditsScreen extends Screen {
 
         @Override
         public void render(int index, int x, int y, int rowWidth, int rowHeight, int mouseX, int mouseY,
-                boolean hovered) {
+                           boolean hovered) {
             drawCenteredString(MinecraftClient.getInstance().textRenderer, super.name, x, y, -128374);
         }
 

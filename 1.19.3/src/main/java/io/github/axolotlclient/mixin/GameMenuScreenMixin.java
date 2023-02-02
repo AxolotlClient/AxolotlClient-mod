@@ -41,15 +41,16 @@ import java.util.function.Supplier;
 @Mixin(GameMenuScreen.class)
 public abstract class GameMenuScreenMixin {
 
-    @Shadow protected abstract ButtonWidget m_cqzqwlun(Text text, Supplier<Screen> supplier);
+    @Shadow
+    protected abstract ButtonWidget m_cqzqwlun(Text text, Supplier<Screen> supplier);
 
     @Redirect(method = "initWidgets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/GameMenuScreen;m_rkfzqxdi(Lnet/minecraft/text/Text;Ljava/lang/String;)Lnet/minecraft/client/gui/widget/ButtonWidget;", ordinal = 1))
-    private ButtonWidget axolotlclient$addClientOptionsButton(GameMenuScreen instance, Text text, String string){
+    private ButtonWidget axolotlclient$addClientOptionsButton(GameMenuScreen instance, Text text, String string) {
         return m_cqzqwlun(Text.translatable("title_short"), () -> new HudEditScreen(((GameMenuScreen) (Object) this)));
     }
 
     @ModifyArg(method = "initWidgets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget;builder(Lnet/minecraft/text/Text;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;)Lnet/minecraft/client/gui/widget/ButtonWidget$Builder;", ordinal = 1), index = 1)
-    private ButtonWidget.PressAction axolotlclient$clearFeatureRestrictions(ButtonWidget.PressAction onPress){
+    private ButtonWidget.PressAction axolotlclient$clearFeatureRestrictions(ButtonWidget.PressAction onPress) {
         return (buttonWidget) -> {
             if (Objects.equals(HypixelMods.getInstance().cacheMode.get(),
                     HypixelMods.HypixelCacheMode.ON_CLIENT_DISCONNECT.toString())) {

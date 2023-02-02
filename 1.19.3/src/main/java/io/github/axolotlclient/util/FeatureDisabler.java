@@ -45,7 +45,7 @@ public class FeatureDisabler {
     private static final HashMap<BooleanOption, String[]> disabledServers = new HashMap<>();
     private static final HashMap<BooleanOption, Supplier<Boolean>> conditions = new HashMap<>();
 
-    private static final Supplier<Boolean> NONE = ()-> true;
+    private static final Supplier<Boolean> NONE = () -> true;
 
     private static String currentAddress;
 
@@ -53,7 +53,7 @@ public class FeatureDisabler {
 
     // Features that can be disabled on the server's behalf
     // If something should be added here, feel free to ping us via your favorite way.
-    private static final HashMap<String, BooleanOption> features = Util.make(()->{
+    private static final HashMap<String, BooleanOption> features = Util.make(() -> {
         HashMap<String, BooleanOption> features = new HashMap<>();
         features.put("freelook", Freelook.getInstance().enabled);
         features.put("timechanger", AxolotlClient.CONFIG.timeChangerEnabled);
@@ -69,7 +69,7 @@ public class FeatureDisabler {
         setServers(((ToggleSprintHud) HudManager.getInstance().get(ToggleSprintHud.ID)).toggleSneak, NONE, "hypixel");
 
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
-            if(handler.m_uccwwurs() != null) {
+            if (handler.m_uccwwurs() != null) {
                 onServerJoin(Objects.requireNonNull(handler.m_uccwwurs()).address);
             }
         });
@@ -118,7 +118,7 @@ public class FeatureDisabler {
         conditions.put(option, condition);
     }
 
-    public static void update(){
+    public static void update() {
         disabledServers.forEach((option, strings) -> disableOption(option, strings, currentAddress));
     }
 }

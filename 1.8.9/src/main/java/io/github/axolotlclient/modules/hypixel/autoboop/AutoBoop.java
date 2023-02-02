@@ -53,7 +53,7 @@ public class AutoBoop implements AbstractHypixelMod {
             String player = message.asUnformattedString().substring(message.asFormattedString().indexOf(">"),
                     message.asUnformattedString().lastIndexOf(" "));
             Util.sendChatMessage("/boop " + player);
-            System.out.println("Booped "+player);
+            System.out.println("Booped " + player);
         }
     }
 }

@@ -45,6 +45,7 @@ import java.util.Optional;
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ *
  * @license GPL-3.0
  */
 
@@ -164,12 +165,12 @@ public class HudEditScreen extends Screen {
     public void init() {
         this.addButton(new ButtonWidget(width / 2 - 50, height / 2 + 12, 100, 20, new TranslatableText("hud.snapping").append(": ")
                 .append(new TranslatableText(snapping.get() ? "options.on" : "options.off")),
-                        buttonWidget -> {
-                            snapping.toggle();
-                            buttonWidget.setMessage(new TranslatableText("hud.snapping").append(": ")
-                                    .append(new TranslatableText(snapping.get() ? "options.on" : "options.off")));
-                            AxolotlClient.configManager.save();
-                        }));
+                buttonWidget -> {
+                    snapping.toggle();
+                    buttonWidget.setMessage(new TranslatableText("hud.snapping").append(": ")
+                            .append(new TranslatableText(snapping.get() ? "options.on" : "options.off")));
+                    AxolotlClient.configManager.save();
+                }));
 
         this.addButton(new ButtonWidget(width / 2 - 75, height / 2 - 10, 150, 20, new TranslatableText("hud.clientOptions"),
                 buttonWidget -> MinecraftClient.getInstance().openScreen(new OptionsScreenBuilder(this,
@@ -178,7 +179,7 @@ public class HudEditScreen extends Screen {
 
         if (parent != null)
             addButton(new ButtonWidget(width / 2 - 75, height - 50 + 22, 150, 20, ScreenTexts.BACK,
-                            buttonWidget -> MinecraftClient.getInstance().openScreen(parent)));
+                    buttonWidget -> MinecraftClient.getInstance().openScreen(parent)));
         else
             addButton(new ButtonWidget(width / 2 - 75, height - 50 + 22, 150, 20, new TranslatableText("close"),
                     buttonWidget -> MinecraftClient.getInstance().openScreen(null)));

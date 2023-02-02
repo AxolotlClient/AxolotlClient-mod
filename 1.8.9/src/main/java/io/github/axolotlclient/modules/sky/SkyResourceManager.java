@@ -43,6 +43,7 @@ import java.util.stream.Collectors;
 /**
  * This implementation of custom skies is based on the FabricSkyBoxes mod by AMereBagatelle
  * <a href="https://github.com/AMereBagatelle/FabricSkyBoxes">Github Link.</a>
+ *
  * @license MIT
  **/
 
@@ -88,11 +89,13 @@ public class SkyResourceManager extends AbstractModule implements IdentifiableRe
 
                         object.addProperty(option[0], option[1]);
                     }
-                } catch (Exception ignored) {}
+                } catch (Exception ignored) {
+                }
             }
 
             SkyboxManager.getInstance().addSkybox(new MCPSkyboxInstance(object));
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
     }
 
     @Override

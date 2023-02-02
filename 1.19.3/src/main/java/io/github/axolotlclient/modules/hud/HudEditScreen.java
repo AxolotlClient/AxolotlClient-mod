@@ -44,6 +44,7 @@ import java.util.Optional;
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ *
  * @license GPL-3.0
  */
 
@@ -163,12 +164,12 @@ public class HudEditScreen extends Screen {
     public void init() {
         this.addDrawableChild(new ButtonWidget.Builder(Text.translatable("hud.snapping").append(": ")
                 .append(Text.translatable(snapping.get() ? "options.on" : "options.off")),
-                        buttonWidget -> {
-                            snapping.toggle();
-                            buttonWidget.setMessage(Text.translatable("hud.snapping").append(": ")
-                                    .append(Text.translatable(snapping.get() ? "options.on" : "options.off")));
-                            AxolotlClient.configManager.save();
-                        }).positionAndSize(width / 2 - 50, height / 2 + 12, 100, 20).build());
+                buttonWidget -> {
+                    snapping.toggle();
+                    buttonWidget.setMessage(Text.translatable("hud.snapping").append(": ")
+                            .append(Text.translatable(snapping.get() ? "options.on" : "options.off")));
+                    AxolotlClient.configManager.save();
+                }).positionAndSize(width / 2 - 50, height / 2 + 12, 100, 20).build());
 
         this.addDrawableChild(new ButtonWidget.Builder(Text.translatable("hud.clientOptions"),
                 buttonWidget -> MinecraftClient.getInstance().setScreen(new OptionsScreenBuilder(this,

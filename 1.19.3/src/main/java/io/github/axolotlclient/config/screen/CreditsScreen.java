@@ -219,7 +219,7 @@ public class CreditsScreen extends Screen {
     private class CreditsList extends ElementListWidget<Credit> {
 
         public CreditsList(MinecraftClient minecraftClient, int width, int height, int top, int bottom,
-                int entryHeight) {
+                           int entryHeight) {
             super(minecraftClient, width, height, top, bottom, entryHeight);
 
             this.setRenderBackground(false);
@@ -283,7 +283,7 @@ public class CreditsScreen extends Screen {
 
         @Override
         public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX,
-                int mouseY, boolean hovered, float tickDelta) {
+                           int mouseY, boolean hovered, float tickDelta) {
             if (hovered || c.isFocused()) {
                 drawVerticalLine(matrices, x - 100, y, y + 20,
                         io.github.axolotlclient.AxolotlClientConfig.Color.ERROR.getAsInt());
@@ -404,7 +404,7 @@ public class CreditsScreen extends Screen {
 
         @Override
         public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX,
-                int mouseY, boolean hovered, float tickDelta) {
+                           int mouseY, boolean hovered, float tickDelta) {
             DrawUtil.drawCenteredString(matrices, MinecraftClient.getInstance().textRenderer, super.name, x, y, -128374,
                     true);
         }

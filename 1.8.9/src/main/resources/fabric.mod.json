@@ -7,7 +7,7 @@
   "authors": [
     "moehreag"
   ],
-  "contributors":[
+  "contributors": [
     "YakisikliBaran",
     "DragonEggBedrockBreaking",
     "TheKodeToad",
@@ -19,7 +19,7 @@
   },
   "license": "LGPL-3.0-or-later",
   "icon": "assets/axolotlclient/icon.png",
-  "accessWidener" : "axolotlclient.accesswidener",
+  "accessWidener": "axolotlclient.accesswidener",
   "environment": "client",
   "entrypoints": {
     "client": [

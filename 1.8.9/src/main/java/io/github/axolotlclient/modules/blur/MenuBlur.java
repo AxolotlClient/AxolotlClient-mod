@@ -49,6 +49,7 @@ import java.io.InputStream;
 /**
  * Totally not stolen from Sol.
  * License: GPL-3.0
+ *
  * @author TheKodeToad
  * @author tterag1098
  */
@@ -93,8 +94,8 @@ public class MenuBlur extends AbstractModule {
         return false;
     }
 
-    public void renderBlur(){
-        shader.render(((MinecraftClientAccessor)MinecraftClient.getInstance()).getTicker().tickDelta);
+    public void renderBlur() {
+        shader.render(((MinecraftClientAccessor) MinecraftClient.getInstance()).getTicker().tickDelta);
     }
 
     private float getProgress() {

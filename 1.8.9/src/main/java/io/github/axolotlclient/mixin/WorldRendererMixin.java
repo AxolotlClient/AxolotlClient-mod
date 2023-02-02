@@ -43,6 +43,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 /**
  * This implementation of custom skies is based on the FabricSkyBoxes mod by AMereBagatelle
  * <a href="https://github.com/AMereBagatelle/FabricSkyBoxes">Github Link.</a>
+ *
  * @license MIT
  **/
 
@@ -85,7 +86,7 @@ public abstract class WorldRendererMixin {
 
     @Inject(method = "drawBlockOutline", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;color(FFFF)V", shift = At.Shift.AFTER))
     public void axolotlclient$customOutlineColor(PlayerEntity playerEntity, BlockHitResult blockHitResult, int i, float f,
-            CallbackInfo ci) {
+                                                 CallbackInfo ci) {
         if (AxolotlClient.CONFIG.enableCustomOutlines.get()) {
             GlStateManager.clearColor();
 

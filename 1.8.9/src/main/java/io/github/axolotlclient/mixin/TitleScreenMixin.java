@@ -47,27 +47,27 @@ public abstract class TitleScreenMixin extends Screen {
     public abstract void render(int par1, int par2, float par3);
 
     @ModifyArgs(method = "initWidgetsNormal", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget;<init>(IIILjava/lang/String;)V", ordinal = 2))
-    private void axolotlclient$replaceRealmsButton(Args args){
-        if(!axolotlclient$alternateLayout()){
+    private void axolotlclient$replaceRealmsButton(Args args) {
+        if (!axolotlclient$alternateLayout()) {
 
             args.set(0, 192);
             args.set(3, I18n.translate("config") + "...");
         }
-        if(Auth.getInstance().showButton.get()) {
+        if (Auth.getInstance().showButton.get()) {
             buttons.add(new AuthWidget());
         }
     }
 
     @Inject(method = "initWidgetsNormal", at = @At("TAIL"))
-    private void axolotlclient$addOptionsButton(int y, int spacingY, CallbackInfo ci){
-        if(axolotlclient$alternateLayout()){
-            buttons.add(new ButtonWidget(192, this.width / 2 - 100, y+spacingY*3, I18n.translate("config") + "..."));
+    private void axolotlclient$addOptionsButton(int y, int spacingY, CallbackInfo ci) {
+        if (axolotlclient$alternateLayout()) {
+            buttons.add(new ButtonWidget(192, this.width / 2 - 100, y + spacingY * 3, I18n.translate("config") + "..."));
         }
     }
 
     @ModifyConstant(method = "init", constant = @Constant(intValue = 72))
-    private int axolotlclient$moveButtons(int constant){
-        if(axolotlclient$alternateLayout()){
+    private int axolotlclient$moveButtons(int constant) {
+        if (axolotlclient$alternateLayout()) {
             return constant + 25;
         }
         return constant;
@@ -77,7 +77,7 @@ public abstract class TitleScreenMixin extends Screen {
     public void axolotlclient$onClick(ButtonWidget button, CallbackInfo ci) {
         if (button.id == 192)
             MinecraftClient.getInstance().setScreen(new HudEditScreen(this));
-        else if(button.id == 242)
+        else if (button.id == 242)
             MinecraftClient.getInstance().setScreen(new AccountsScreen(MinecraftClient.getInstance().currentScreen));
     }
 
@@ -93,7 +93,7 @@ public abstract class TitleScreenMixin extends Screen {
         }
     }
 
-    private boolean axolotlclient$alternateLayout(){
+    private boolean axolotlclient$alternateLayout() {
         return FabricLoader.getInstance().isModLoaded("modmenu") && !FabricLoader.getInstance().isModLoaded("axolotlclient-modmenu");
     }
 }

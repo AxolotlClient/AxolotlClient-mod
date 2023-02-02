@@ -66,9 +66,9 @@ public class UnfocusedFpsLimiter extends AbstractModule {
     private boolean isFocused, isVisible, isHovered;
     private long lastRender;
 
-    public boolean checkForRender(){
+    public boolean checkForRender() {
 
-        if(!enabled.get()){
+        if (!enabled.get()) {
             return true;
         }
 
@@ -150,6 +150,7 @@ public class UnfocusedFpsLimiter extends AbstractModule {
     // we always render one last frame before actually reducing FPS, so the hud text shows up instantly when forcing low fps.
     // additionally, this would enable mods which render differently while mc is inactive.
     private boolean hasRenderedLastFrame = false;
+
     private boolean checkForRender(long timeSinceLastRender) {
         Integer fpsOverride = fpsOverride();
         if (fpsOverride == null) {
@@ -177,7 +178,7 @@ public class UnfocusedFpsLimiter extends AbstractModule {
     }
 
     /**
-     force minecraft to idle because otherwise we'll be busy checking for render again and again
+     * force minecraft to idle because otherwise we'll be busy checking for render again and again
      */
     private void idle(long waitMillis) {
         // cap at 30 ms before we check again so user doesn't have to wait long after tabbing back in

@@ -47,7 +47,8 @@ public class Freelook extends AbstractModule {
 
     private final OptionCategory category = new OptionCategory("freelook");
     public final BooleanOption enabled = new BooleanOption("enabled", false);
-    private final KeyBindOption keyOption = new KeyBindOption("key.freelook", KEY = new KeyBinding("key.freelook", GLFW.GLFW_KEY_V, "category.axolotlclient"), (key)->{});
+    private final KeyBindOption keyOption = new KeyBindOption("key.freelook", KEY = new KeyBinding("key.freelook", GLFW.GLFW_KEY_V, "category.axolotlclient"), (key) -> {
+    });
     private final EnumOption mode = new EnumOption("mode",
             value -> FeatureDisabler.update(),
             new String[]{"snap_perspective", "freelook"},
@@ -161,7 +162,7 @@ public class Freelook extends AbstractModule {
         MinecraftClient.getInstance().options.setPerspective(perspective);
     }
 
-    public boolean needsDisabling(){
+    public boolean needsDisabling() {
         return mode.get().equals("freelook");
     }
 }

@@ -79,7 +79,7 @@ public abstract class GameMenuScreenMixin extends Screen {
     public void axolotlclient$customButtons(ButtonWidget button, CallbackInfo ci) {
         if (button.id == 20) {
             MinecraftClient.getInstance().setScreen(new HudEditScreen((GameMenuScreen) (Object) this));
-        } else if(button.id == 1){
+        } else if (button.id == 1) {
             FeatureDisabler.clear();
             if (HypixelMods.getInstance().cacheMode.get() != null
                     && Objects.equals(HypixelMods.getInstance().cacheMode.get(),
@@ -89,7 +89,7 @@ public abstract class GameMenuScreenMixin extends Screen {
         }
     }
 
-    private boolean axolotlclient$alternateLayout(){
+    private boolean axolotlclient$alternateLayout() {
         return FabricLoader.getInstance().isModLoaded("modmenu") && !FabricLoader.getInstance().isModLoaded("axolotlclient-modmenu");
     }
 }
