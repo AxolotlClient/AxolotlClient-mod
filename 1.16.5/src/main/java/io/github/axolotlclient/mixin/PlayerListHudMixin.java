@@ -57,20 +57,20 @@ public abstract class PlayerListHudMixin {
     @Shadow
     private Text footer;
 
-	private GameProfile profile;
-
 	@Shadow
-	protected abstract Text method_27538(PlayerListEntry par1, MutableText par2);
+	protected abstract Text applyGameModeFormatting(PlayerListEntry par1, MutableText par2);
+
+	private GameProfile profile;
 
 	@Inject(method = "getPlayerName", at = @At("HEAD"), cancellable = true)
 	public void axolotlclient$nickHider(PlayerListEntry playerEntry, CallbackInfoReturnable<Text> cir) {
 		assert MinecraftClient.getInstance().player != null;
 		if (playerEntry.getProfile().equals(MinecraftClient.getInstance().player.getGameProfile())
 				&& NickHider.getInstance().hideOwnName.get()) {
-			cir.setReturnValue(this.method_27538(playerEntry, new LiteralText(NickHider.getInstance().hiddenNameSelf.get())));
+			cir.setReturnValue(this.applyGameModeFormatting(playerEntry, new LiteralText(NickHider.getInstance().hiddenNameSelf.get())));
 		} else if (!playerEntry.getProfile().equals(MinecraftClient.getInstance().player.getGameProfile())
 				&& NickHider.getInstance().hideOtherNames.get()) {
-			cir.setReturnValue(this.method_27538(playerEntry, new LiteralText(NickHider.getInstance().hiddenNameOthers.get())));
+			cir.setReturnValue(this.applyGameModeFormatting(playerEntry, new LiteralText(NickHider.getInstance().hiddenNameOthers.get())));
 		}
 	}
 
