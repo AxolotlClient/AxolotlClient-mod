@@ -109,5 +109,9 @@
 ### 3.0.1
 
 - add in-game Authentication
+  - Supports both Microsoft- & Offline-Accounts
+  - Offline accounts can only be added after at least one Microsoft-Account is added
 - fix running 1.16 versions with Java 8
+- fix resourcepacks on 1.16 versions
 - add a notification system to 1.8.9
+- fix more bugs
