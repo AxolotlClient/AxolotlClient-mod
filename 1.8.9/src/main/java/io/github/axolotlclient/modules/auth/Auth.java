@@ -96,7 +96,7 @@ public class Auth extends Accounts implements Module {
             }
         };
 
-        if (account.isExpired()) {
+        if (account.isExpired() && !account.isOffline()) {
             Notifications.getInstance().addStatus(I18n.translate("auth.notif.title"), I18n.translate("auth.notif.refreshing", account.getName()));
             account.refresh(auth, runnable);
         } else {

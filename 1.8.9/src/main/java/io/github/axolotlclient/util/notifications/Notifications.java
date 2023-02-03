@@ -67,7 +67,7 @@ public class Notifications {
             x -= currentStatus.getWidth() + 5;
             if (MinecraftClient.getTime() - statusCreationTime < 100) {
                 lastX -= lastX / 45;
-            } else if (MinecraftClient.getTime() - statusCreationTime > 5000) {
+            } else if (MinecraftClient.getTime() - statusCreationTime > 2000) {
                 if (!fading) {
                     client.getSoundManager().play(new PositionedSoundInstance(new Identifier("random.bow"), 0.5F, 0.4F / (0.5F + 0.8F), 1, 0, 0));
                 }

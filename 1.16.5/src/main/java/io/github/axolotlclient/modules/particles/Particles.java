@@ -59,7 +59,7 @@ public class Particles extends AbstractModule {
     }
 
     private void addParticleOptions() {
-        for (ParticleType<?> type : Registry.PARTICLE_TYPE.stream().sorted(new AlphabeticalComparator()).toList()) {
+        for (ParticleType<?> type : Registry.PARTICLE_TYPE.stream().sorted(new AlphabeticalComparator()).collect(Collectors.toList())) {
             if (Registry.PARTICLE_TYPE.getId(type) != null) {
                 OptionCategory category = new OptionCategory(
                         Arrays.stream(Registry.PARTICLE_TYPE.getId(type).getPath().split("_"))

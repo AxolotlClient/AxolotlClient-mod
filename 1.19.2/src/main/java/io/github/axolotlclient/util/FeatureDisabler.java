@@ -47,7 +47,7 @@ public class FeatureDisabler {
 
     private static final Supplier<Boolean> NONE = () -> true;
 
-    private static String currentAddress;
+    private static String currentAddress = "";
 
     private static final Identifier channelName = new Identifier("axolotlclient", "block_mods");
 

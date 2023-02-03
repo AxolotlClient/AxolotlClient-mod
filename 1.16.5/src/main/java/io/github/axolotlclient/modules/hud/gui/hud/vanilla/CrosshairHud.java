@@ -202,8 +202,8 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
             RenderSystem.color4f(1, 1, 1, 1);
 
             // Draw attack indicator
-            int j = this.client.getWindow().getScaledHeight() / 2 - 7 + 16;
-            int k = this.client.getWindow().getScaledWidth() / 2 - 8;
+			int k = (int) ((client.getWindow().getScaledWidth() / getScale()) / 2 - 8);
+			int j = (int) ((client.getWindow().getScaledHeight() / getScale()) / 2 - 7 + 16);
             if (this.client.options.attackIndicator == AttackIndicator.CROSSHAIR) {
                 float f = this.client.player.getAttackCooldownProgress(0.0F);
                 boolean bl = false;

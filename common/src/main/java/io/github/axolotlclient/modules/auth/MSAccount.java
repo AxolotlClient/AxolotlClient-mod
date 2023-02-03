@@ -83,7 +83,7 @@ public class MSAccount {
     }
 
     public boolean isOffline() {
-        return authToken.equals(OFFLINE_TOKEN);
+        return authToken.equals(OFFLINE_TOKEN) || authToken.length() < 400;
     }
 
     public JsonObject serialize() {
