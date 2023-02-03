@@ -48,7 +48,7 @@ public abstract class GameMenuScreenMixin extends Screen {
     public void axolotlclient$addConfigButton(CallbackInfo ci) {
         if (MinecraftClient.getInstance().isInSingleplayer() && !this.client.getServer().isPublished()) {
             buttons.add(new ButtonWidget(20, width / 2 - 100,
-                    height / 4 + (axolotlclient$alternateLayout() ? 82 : 80),
+                    height / 4 + (!axolotlclient$alternateLayout() ? 82 : 80),
                     I18n.translate("config")));
             for (ButtonWidget button : buttons) {
                 if (button.y >= this.height / 4 - 16 + 24 * 4 - 1 && !(button.id == 20)) {

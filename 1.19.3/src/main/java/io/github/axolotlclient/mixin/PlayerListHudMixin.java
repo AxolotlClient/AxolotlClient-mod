@@ -73,7 +73,7 @@ public abstract class PlayerListHudMixin {
         }
     }
 
-    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;getPlayerName(Lnet/minecraft/client/network/PlayerListEntry;)Lnet/minecraft/text/Text;", ordinal = 1))
+    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;getPlayerName(Lnet/minecraft/client/network/PlayerListEntry;)Lnet/minecraft/text/Text;"))
     public PlayerListEntry axolotlclient$getPlayer(PlayerListEntry playerEntry) {
         profile = playerEntry.getProfile();
         return playerEntry;
