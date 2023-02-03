@@ -56,7 +56,7 @@ public class NetworkHelper {
 
     public static void getUser(UUID uuid) {
         try {
-            String body = NetworkUtil.getRequest("https://moehreag.duckdns.org/axolotlclient-api/?uuid=" + uuid.toString(), HttpClients.createMinimal()).getAsString();
+            String body = NetworkUtil.getRequest("https://moehreag.duckdns.org/axolotlclient-api/?uuid=" + uuid.toString(), HttpClients.createMinimal()).toString();
             if (body.contains("true")) {
                 AxolotlClient.playerCache.put(uuid, true);
             } else {
@@ -79,7 +79,7 @@ public class NetworkHelper {
 
         if (uuid != null) {
             try {
-                String body = NetworkUtil.postRequest("https://moehreag.duckdns.org/axolotlclient-api/", "{\n\t\"uuid\": \"" + uuid + "\",\n\t\"online\": true\n}", HttpClients.createMinimal()).getAsString();
+                String body = NetworkUtil.postRequest("https://moehreag.duckdns.org/axolotlclient-api/", "{\n\t\"uuid\": \"" + uuid + "\",\n\t\"online\": true\n}", HttpClients.createMinimal()).toString();
                 if (body.contains("Success!")) {
                     AxolotlClient.LOGGER.info("Sucessfully logged in at AxolotlClient!");
                     loggedIn = true;
@@ -94,7 +94,7 @@ public class NetworkHelper {
         if (loggedIn) {
             try {
                 AxolotlClient.LOGGER.info("Logging off..");
-                String body = NetworkUtil.deleteRequest("https://moehreag.duckdns.org/axolotlclient-api/?uuid=" + uuid.toString(), "", HttpClients.createMinimal()).getAsString();
+                String body = NetworkUtil.deleteRequest("https://moehreag.duckdns.org/axolotlclient-api/?uuid=" + uuid.toString(), "", HttpClients.createMinimal()).toString();
                 if (body.contains("Success!")) {
                     AxolotlClient.LOGGER.info("Successfully logged off!");
                 } else {

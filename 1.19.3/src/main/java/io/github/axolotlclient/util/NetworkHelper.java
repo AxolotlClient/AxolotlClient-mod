@@ -94,7 +94,7 @@ public class NetworkHelper {
         if (loggedIn) {
             try {
                 AxolotlClient.LOGGER.info("Logging off..");
-                String body = NetworkUtil.deleteRequest("https://moehreag.duckdns.org/axolotlclient-api/?uuid=" + uuid.toString(), "", HttpClients.createMinimal()).getAsString();
+                String body = NetworkUtil.deleteRequest("https://moehreag.duckdns.org/axolotlclient-api/?uuid=" + uuid.toString(), "", HttpClients.createMinimal()).toString();
                 if (body.contains("Success!")) {
                     AxolotlClient.LOGGER.info("Successfully logged off!");
                 } else {

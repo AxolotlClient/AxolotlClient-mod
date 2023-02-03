@@ -26,6 +26,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.BufferRenderer;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
@@ -105,10 +106,6 @@ public class RenderUtil {
         fill(matrices.peek().getModel(), x1, y1, x2, y2, color);
     }
 
-    public void fill(Matrix4f matrix, int x1, int y1, int x2, int y2, int color) {
-        fill(matrix, x1, y1, x2, y2, color);
-    }
-
     public void drawRectangle(MatrixStack matrices, int x, int y, int width, int height, Color color) {
         fill(matrices, x, y, x + width, y + height, color);
     }
@@ -158,6 +155,36 @@ public class RenderUtil {
         Tessellator.getInstance().draw();
         colorPostRender(color);
     }
+
+	public void fill(Matrix4f matrix, int x1, int y1, int x2, int y2, int color) {
+		int i;
+		if (x1 < x2) {
+			i = x1;
+			x1 = x2;
+			x2 = i;
+		}
+		if (y1 < y2) {
+			i = y1;
+			y1 = y2;
+			y2 = i;
+		}
+		float a = (float) (color >> 24 & 0xFF) / 255.0f;
+		float r = (float) (color >> 16 & 0xFF) / 255.0f;
+		float g = (float) (color >> 8 & 0xFF) / 255.0f;
+		float b = (float) (color & 0xFF) / 255.0f;
+		BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+		RenderSystem.enableBlend();
+		RenderSystem.disableTexture();
+		RenderSystem.defaultBlendFunc();
+		bufferBuilder.begin(7, VertexFormats.POSITION_COLOR);
+		bufferBuilder.vertex(matrix, x1, y2, 0.0f).color(r, g, b, a).next();
+		bufferBuilder.vertex(matrix, x2, y2, 0.0f).color(r, g, b, a).next();
+		bufferBuilder.vertex(matrix, x2, y1, 0.0f).color(r, g, b, a).next();
+		bufferBuilder.vertex(matrix, x1, y1, 0.0f).color(r, g, b, a).next();
+		Tessellator.getInstance().draw();
+		RenderSystem.enableTexture();
+		RenderSystem.disableBlend();
+	}
 
     public int colorPreRender(Color color) {
         RenderSystem.color4f(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f,
