@@ -59,7 +59,7 @@ public abstract class MouseMixin {
         return scrollAmount;
     }
 
-    @Inject(method = "method_30134", at = @At(value = "HEAD"))
+    @Inject(method = "onResolutionChanged", at = @At(value = "HEAD"))
     private void axolotlclient$onResolutionChanged(CallbackInfo ci) {
         // Resize and rebuild!
         HudManager.getInstance().refreshAllBounds();
