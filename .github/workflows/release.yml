@@ -28,4 +28,5 @@ jobs:
         with:
           repo_token: "${{ secrets.GH_TOKEN }}"
           prerelease: false
+          draft: true
           files: 1.*/build/libs/*
