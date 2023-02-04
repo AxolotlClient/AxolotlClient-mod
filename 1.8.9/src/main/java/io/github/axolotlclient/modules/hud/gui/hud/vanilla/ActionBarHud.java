@@ -116,10 +116,8 @@ public class ActionBarHud extends TextHudEntry {
     @Override
     public List<Option<?>> getConfigurationOptions() {
         List<Option<?>> options = super.getConfigurationOptions();
-        options.add(shadow);
         options.add(timeShown);
         options.add(customTextColor);
-        options.add(textColor);
         return options;
     }
 }
