@@ -63,7 +63,7 @@ public class SpeedHud extends SimpleTextHudEntry {
         }
         double speed;
         if (horizontal.get()) {
-            speed = Math.sqrt(vec.getX() * vec.getX() * vec.getZ() * vec.getZ());
+            speed = Math.sqrt(vec.getX() * vec.getX() + vec.getZ() * vec.getZ());
         } else {
             speed = vec.length();
         }
