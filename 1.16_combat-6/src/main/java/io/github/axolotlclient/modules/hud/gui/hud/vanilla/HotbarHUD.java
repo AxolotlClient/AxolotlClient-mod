@@ -77,14 +77,10 @@ public class HotbarHUD extends TextHudEntry {
             }
 
             this.setZOffset(j);
-            RenderSystem.enableBlend();
-            RenderSystem.defaultBlendFunc();
 
             for (int n = 0; n < 9; ++n) {
                 int k = pos.x + n * 20 + 3;
                 int l = pos.y + 3;
-                MinecraftClient.getInstance().getItemRenderer()
-                        .renderGuiItemIcon(playerEntity.inventory.main.get(n), k, l);
                 ItemUtil.renderGuiItemModel(getScale(), playerEntity.inventory.main.get(n), k, l);
                 ItemUtil.renderGuiItemOverlay(matrices, client.textRenderer, playerEntity.inventory.main.get(n), k,
                         l, null, -1, true);
