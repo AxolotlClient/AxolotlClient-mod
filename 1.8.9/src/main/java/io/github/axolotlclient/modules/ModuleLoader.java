@@ -34,7 +34,7 @@ public class ModuleLoader {
 
     public static List<AbstractModule> loadExternalModules() {
         ArrayList<AbstractModule> modules = new ArrayList<>();
-        FabricLoader.getInstance().getEntrypointContainers("module", AbstractModule.class)
+        FabricLoader.getInstance().getEntrypointContainers("axolotlclient.module", AbstractModule.class)
                 .forEach(entrypoint -> {
                     try {
                         AbstractModule module = entrypoint.getEntrypoint();
