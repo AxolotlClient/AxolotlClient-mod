@@ -36,7 +36,7 @@ import io.github.axolotlclient.modules.hud.gui.hud.vanilla.*;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.legacyfabric.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.options.KeyBinding;
+import net.minecraft.client.option.KeyBinding;
 import net.minecraft.util.Identifier;
 import org.lwjgl.input.Keyboard;
 
@@ -46,6 +46,7 @@ import java.util.stream.Collectors;
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ *
  * @license GPL-3.0
  */
 
@@ -113,7 +114,7 @@ public class HudManager extends AbstractModule {
 
     public void tick() {
         if (key.isPressed())
-            MinecraftClient.getInstance().openScreen(new HudEditScreen());
+            MinecraftClient.getInstance().setScreen(new HudEditScreen());
         entries.values().stream().filter(hudEntry -> hudEntry.isEnabled() && hudEntry.tickable())
                 .forEach(HudEntry::tick);
     }

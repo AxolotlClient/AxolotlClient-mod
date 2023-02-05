@@ -70,22 +70,22 @@ public abstract class LivingEntityRendererMixin {
     }
 
     @ModifyConstant(method = "method_10252", constant = @Constant(floatValue = 1.0f, ordinal = 0))
-    private float axolotlclient$customHitColorRed(float constant){
-        return AxolotlClient.CONFIG.hitColor.get().getRed()/255F;
+    private float axolotlclient$customHitColorRed(float constant) {
+        return AxolotlClient.CONFIG.hitColor.get().getRed() / 255F;
     }
 
     @ModifyConstant(method = "method_10252", constant = @Constant(floatValue = 0.0f, ordinal = 0))
-    private float axolotlclient$customHitColorGreen(float constant){
-        return AxolotlClient.CONFIG.hitColor.get().getGreen()/255F;
+    private float axolotlclient$customHitColorGreen(float constant) {
+        return AxolotlClient.CONFIG.hitColor.get().getGreen() / 255F;
     }
 
     @ModifyConstant(method = "method_10252", constant = @Constant(floatValue = 0.0f, ordinal = 1))
-    private float axolotlclient$customHitColorBlue(float constant){
-        return AxolotlClient.CONFIG.hitColor.get().getBlue()/255F;
+    private float axolotlclient$customHitColorBlue(float constant) {
+        return AxolotlClient.CONFIG.hitColor.get().getBlue() / 255F;
     }
 
     @ModifyConstant(method = "method_10252", constant = @Constant(floatValue = 0.3f, ordinal = 0))
-    private float axolotlclient$customHitColorAlpha(float constant){
-        return AxolotlClient.CONFIG.hitColor.get().getAlpha()/255F;
+    private float axolotlclient$customHitColorAlpha(float constant) {
+        return AxolotlClient.CONFIG.hitColor.get().getAlpha() / 255F;
     }
 }

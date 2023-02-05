@@ -52,7 +52,6 @@ public class Util {
      * @param start The start of the time you wish to measure
      * @param end   The end of the time you wish to measure
      * @return The amount of ticks in between start and end
-     *
      */
     public static int getTicksBetween(int start, int end) {
         if (end < start)
@@ -67,7 +66,7 @@ public class Util {
             game = "";
         else if (MinecraftClient.getInstance().getCurrentServerEntry() != null
                 && MinecraftClient.getInstance().getCurrentServerEntry().address.toLowerCase()
-                        .contains(sidebar.get(0).toLowerCase())) {
+                .contains(sidebar.get(0).toLowerCase())) {
             if (sidebar.get(sidebar.size() - 1).toLowerCase(Locale.ROOT)
                     .contains(MinecraftClient.getInstance().getCurrentServerEntry().address.toLowerCase(Locale.ROOT))
                     || sidebar.get(sidebar.size() - 1).contains("Playtime")) {
@@ -152,7 +151,7 @@ public class Util {
 
         Collection<ScoreboardPlayerScore> scores = scoreboard.getAllPlayerScores(sidebar);
         List<ScoreboardPlayerScore> list = scores.stream().filter(
-                input -> input != null && input.getPlayerName() != null && !input.getPlayerName().startsWith("#"))
+                        input -> input != null && input.getPlayerName() != null && !input.getPlayerName().startsWith("#"))
                 .collect(Collectors.toList());
 
         if (list.size() > 15) {
@@ -183,7 +182,8 @@ public class Util {
         public float blue = 1.0F;
         public float alpha = 1.0F;
 
-        public Color() {}
+        public Color() {
+        }
 
         public Color(float red, float green, float blue, float alpha) {
             this.red = red;

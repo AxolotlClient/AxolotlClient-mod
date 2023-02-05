@@ -31,6 +31,7 @@ import net.minecraft.client.gui.DrawableHelper;
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ *
  * @license GPL-3.0
  */
 
@@ -60,7 +61,7 @@ public class DrawUtil extends DrawableHelper {
     }
 
     public static void drawCenteredString(TextRenderer renderer, String text, int x, int y, Color color,
-            boolean shadow) {
+                                          boolean shadow) {
         drawCenteredString(renderer, text, x, y, color.getAsInt(), shadow);
     }
 

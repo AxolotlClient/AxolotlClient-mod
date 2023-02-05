@@ -124,7 +124,9 @@ public class ReachHud extends SimpleTextHudEntry {
         StringBuilder format = new StringBuilder("0");
         if (decimalPlaces.get() > 0) {
             format.append(".");
-            format.append("0".repeat(Math.max(0, decimalPlaces.get())));
+			for (int i = 0; i < decimalPlaces.get(); i++) {
+				format.append("0");
+			}
         }
         DecimalFormat formatter = new DecimalFormat(format.toString());
         formatter.setRoundingMode(RoundingMode.HALF_UP);

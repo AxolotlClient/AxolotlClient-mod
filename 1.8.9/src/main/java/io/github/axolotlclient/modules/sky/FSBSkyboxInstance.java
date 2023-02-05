@@ -35,6 +35,7 @@ import net.minecraft.util.Identifier;
 /**
  * This implementation of custom skies is based on the FabricSkyBoxes mod by AMereBagatelle
  * <a href="https://github.com/AMereBagatelle/FabricSkyBoxes">Github Link.</a>
+ *
  * @license MIT
  **/
 
@@ -70,7 +71,8 @@ public class FSBSkyboxInstance extends SkyboxInstance {
             for (int i = 0; i < staticRotation.size(); i++) {
                 this.rotationStatic[i] = staticRotation.get(i).getAsFloat();
             }
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         try {
             JsonObject jsonBlend = json.get("blend").getAsJsonObject();
@@ -95,11 +97,12 @@ public class FSBSkyboxInstance extends SkyboxInstance {
             this.showMoon = decorations.get("showMoon").getAsBoolean();
             this.showSun = decorations.get("showSun").getAsBoolean();
             this.showStars = decorations.get("showStars").getAsBoolean();
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
     }
 
     public void renderSkybox() {
-        GlStateManager.color3f(1, 1, 1);
+        GlStateManager.color(1, 1, 1);
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
@@ -109,23 +112,23 @@ public class FSBSkyboxInstance extends SkyboxInstance {
             GlStateManager.pushMatrix();
 
             if (i == 1) {
-                GlStateManager.rotatef(90.0F, 1.0F, 0.0F, 0.0F);
+                GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
             }
             if (i == 2) {
-                GlStateManager.rotatef(-90.0F, 1.0F, 0.0F, 0.0F);
-                GlStateManager.rotatef(180, 0, 1, 0);
+                GlStateManager.rotate(-90.0F, 1.0F, 0.0F, 0.0F);
+                GlStateManager.rotate(180, 0, 1, 0);
             }
             if (i == 3) {
-                GlStateManager.rotatef(180.0F, 1.0F, 0.0F, 0.0F);
-                GlStateManager.rotatef(90F, 0, 1, 0);
+                GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
+                GlStateManager.rotate(90F, 0, 1, 0);
             }
             if (i == 4) {
-                GlStateManager.rotatef(90.0F, 0.0F, 0.0F, 1.0F);
-                GlStateManager.rotatef(-90, 0, 1, 0);
+                GlStateManager.rotate(90.0F, 0.0F, 0.0F, 1.0F);
+                GlStateManager.rotate(-90, 0, 1, 0);
             }
             if (i == 5) {
-                GlStateManager.rotatef(-90.0F, 0.0F, 0.0F, 1.0F);
-                GlStateManager.rotatef(90, 0, 1, 0);
+                GlStateManager.rotate(-90.0F, 0.0F, 0.0F, 1.0F);
+                GlStateManager.rotate(90, 0, 1, 0);
             }
             bufferBuilder.begin(7, VertexFormats.POSITION_TEXTURE_COLOR);
             bufferBuilder.vertex(-100, -100, -100).texture(0.0, 0.0).color(1F, 1F, 1F, alpha).next();

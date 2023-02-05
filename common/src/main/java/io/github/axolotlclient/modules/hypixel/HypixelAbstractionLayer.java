@@ -41,8 +41,8 @@ import java.util.function.Supplier;
 /**
  * Based on Osmium by Intro-Dev
  * (<a href="https://github.com/Intro-Dev/Osmium">Github</a>)
- * @license CC0-1.0
  *
+ * @license CC0-1.0
  * @implNote Provides a layer between the hypixel api and the client to obtain information with minimal api calls
  */
 
@@ -59,7 +59,7 @@ public class HypixelAbstractionLayer {
 
     private static final AtomicInteger hypixelApiCalls = new AtomicInteger(0);
 
-    public static void setApiKeySupplier(Supplier<String> supplier){
+    public static void setApiKeySupplier(Supplier<String> supplier) {
         keySupplier = supplier;
     }
 

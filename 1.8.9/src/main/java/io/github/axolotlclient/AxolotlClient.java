@@ -31,6 +31,7 @@ import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.config.AxolotlClientConfig;
 import io.github.axolotlclient.modules.Module;
 import io.github.axolotlclient.modules.ModuleLoader;
+import io.github.axolotlclient.modules.auth.Auth;
 import io.github.axolotlclient.modules.blur.MenuBlur;
 import io.github.axolotlclient.modules.blur.MotionBlur;
 import io.github.axolotlclient.modules.freelook.Freelook;
@@ -136,6 +137,7 @@ public class AxolotlClient implements ClientModInitializer {
         modules.add(BeaconBeam.getInstance());
         modules.add(UnfocusedFpsLimiter.getInstance());
         modules.add(Tablist.getInstance());
+        modules.add(Auth.getInstance());
     }
 
     private static void addExternalModules() {
@@ -179,14 +181,14 @@ public class AxolotlClient implements ClientModInitializer {
                 int x = -(MinecraftClient.getInstance().textRenderer
                         .getStringWidth(entity.getUuid() == MinecraftClient.getInstance().player.getUuid()
                                 ? (NickHider.getInstance().hideOwnName.get() ? NickHider.getInstance().hiddenNameSelf.get()
-                                        : entity.getName().asFormattedString())
+                                : entity.getName().asFormattedString())
                                 : (NickHider.getInstance().hideOtherNames.get() ? NickHider.getInstance().hiddenNameOthers.get()
-                                        : entity.getName().asFormattedString()))
+                                : entity.getName().asFormattedString()))
                         / 2
                         + (AxolotlClient.CONFIG.customBadge.get() ? MinecraftClient.getInstance().textRenderer
-                                .getStringWidth(" " + AxolotlClient.CONFIG.badgeText.get()) : 10));
+                        .getStringWidth(" " + AxolotlClient.CONFIG.badgeText.get()) : 10));
 
-                GlStateManager.color4f(1, 1, 1, 1);
+                GlStateManager.color(1, 1, 1, 1);
 
                 if (AxolotlClient.CONFIG.customBadge.get())
                     MinecraftClient.getInstance().textRenderer.draw(AxolotlClient.CONFIG.badgeText.get(), x, 0, -1,

@@ -40,6 +40,7 @@ import java.util.List;
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ *
  * @license GPL-3.0
  */
 
@@ -50,8 +51,8 @@ public class ArrowHud extends TextHudEntry {
     private final BooleanOption dynamic = new BooleanOption("dynamic", false);
     private final BooleanOption allArrowTypes = new BooleanOption("allArrowTypes", false);
 
-    private final ItemStack[] arrowTypes = new ItemStack[] { new ItemStack(Items.ARROW),
-            new ItemStack(Items.TIPPED_ARROW), new ItemStack(Items.SPECTRAL_ARROW) };
+    private final ItemStack[] arrowTypes = new ItemStack[]{new ItemStack(Items.ARROW),
+            new ItemStack(Items.TIPPED_ARROW), new ItemStack(Items.SPECTRAL_ARROW)};
     private ItemStack currentArrow = arrowTypes[0];
 
     public ArrowHud() {

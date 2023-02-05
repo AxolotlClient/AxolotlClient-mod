@@ -27,6 +27,7 @@ repositories {
 	}
 
 	mavenLocal()
+	mavenCentral()
 	maven { url 'https://jitpack.io' }
 }
 
@@ -39,6 +40,7 @@ dependencies {
 	compileOnly("com.google.guava:guava:17.0")
 	compileOnly("org.apache.httpcomponents:httpclient:4.3.3")
 	compileOnly("com.google.code.gson:gson:2.2.4")
+	compileOnly("commons-io:commons-io:2.4")
 
 	shadow(implementation("net.hypixel:hypixel-api-core:4.1") {
 		exclude group: "com.google.code.gson", module: "gson"
@@ -95,3 +97,5 @@ publishing {
 		}
 	}
 }
+
+tasks.modrinth.enabled = false

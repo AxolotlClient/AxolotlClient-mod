@@ -61,6 +61,7 @@ public class HotbarHUD extends TextHudEntry {
 
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
+			RenderSystem.enableBlend();
             RenderSystem.setShaderTexture(0, WIDGETS_TEXTURE);
             ItemStack itemStack = playerEntity.getOffHandStack();
             Arm arm = playerEntity.getMainArm().getOpposite();

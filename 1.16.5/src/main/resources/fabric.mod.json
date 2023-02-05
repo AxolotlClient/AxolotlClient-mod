@@ -29,8 +29,9 @@
     "axolotlclient.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.14.7",
+    "fabricloader": ">=0.12.0",
     "minecraft": "1.16.5",
-    "fabric": "0.42.0+1.16"
+	  "fabric-resource-loader-v0": "*",
+	  "axolotlclientconfig": "*"
   }
 }

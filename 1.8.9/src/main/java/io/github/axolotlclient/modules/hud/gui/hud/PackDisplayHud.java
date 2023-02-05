@@ -64,7 +64,8 @@ public class PackDisplayHud extends TextHudEntry {
                         widgets.add(new PackWidget(pack));
                     }
                 }
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         });
 
         AtomicInteger w = new AtomicInteger(20);
@@ -158,7 +159,7 @@ public class PackDisplayHud extends TextHudEntry {
 
         public void render(int x, int y) {
             if (!iconsOnly.get()) {
-                GlStateManager.color4f(1, 1, 1, 1F);
+                GlStateManager.color(1, 1, 1, 1F);
                 GlStateManager.bindTexture(texture);
                 DrawableHelper.drawTexture(x, y, 0, 0, 16, 16, 16, 16);
             }

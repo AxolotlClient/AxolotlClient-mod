@@ -49,14 +49,16 @@ public class ImageShare {
 
     @Getter
     private static final ImageShare Instance = new ImageShare();
-    private ImageShare(){}
 
-    private CloseableHttpClient createHttpClient(){
-        String modVer = QuiltLoader.getModContainer("axolotlclient").orElseThrow(RuntimeException::new).metadata().version().raw();
-        return HttpClients.custom().setUserAgent("AxolotlClient/"+modVer+" ImageShare").build();
+    private ImageShare() {
     }
 
-    public void uploadImage(String url, File file){
+    private CloseableHttpClient createHttpClient() {
+        String modVer = QuiltLoader.getModContainer("axolotlclient").orElseThrow(RuntimeException::new).metadata().version().raw();
+        return HttpClients.custom().setUserAgent("AxolotlClient/" + modVer + " ImageShare").build();
+    }
+
+    public void uploadImage(String url, File file) {
         Util.sendChatMessage(Text.translatable("imageUploadStarted"));
         String downloadUrl = upload(url + "/api/stream", file);
 
@@ -72,36 +74,36 @@ public class ImageShare {
         }
     }
 
-    public String upload(String url, File file){
+    public String upload(String url, File file) {
 
-        try (CloseableHttpClient client = createHttpClient()){
+        try (CloseableHttpClient client = createHttpClient()) {
 
-            AxolotlClient.LOGGER.info("Uploading image "+file.getName());
+            AxolotlClient.LOGGER.info("Uploading image " + file.getName());
 
             return ImageNetworking.upload(encodeB64(file), url, client, AxolotlClient.LOGGER);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return "";
     }
 
-    public ImageInstance downloadImage(String id){
-        if(id.contains(ScreenshotUtils.getInstance().shareUrl.get()+"/api/")) {
+    public ImageInstance downloadImage(String id) {
+        if (id.contains(ScreenshotUtils.getInstance().shareUrl.get() + "/api/")) {
             return download(id);
-        } else if(id.contains(ScreenshotUtils.getInstance().shareUrl.get()) && !id.contains("api")) {
-            return downloadImage(id.substring(id.lastIndexOf("/")+1));
-        } else if(id.startsWith("https://") && id.contains("api")) {
+        } else if (id.contains(ScreenshotUtils.getInstance().shareUrl.get()) && !id.contains("api")) {
+            return downloadImage(id.substring(id.lastIndexOf("/") + 1));
+        } else if (id.startsWith("https://") && id.contains("api")) {
             download(id);
         }
-        return download(ScreenshotUtils.getInstance().shareUrl.get()+"/api/"+id);
+        return download(ScreenshotUtils.getInstance().shareUrl.get() + "/api/" + id);
     }
 
-    public ImageInstance download(String url){
+    public ImageInstance download(String url) {
 
-        if(!url.isEmpty()) {
+        if (!url.isEmpty()) {
             JsonElement element = NetworkHelper.getRequest(url, createHttpClient());
-            if(element != null) {
+            if (element != null) {
                 JsonObject response = element.getAsJsonObject();
                 String content = response.get("content").getAsString();
 
@@ -111,20 +113,22 @@ public class ImageShare {
         return null;
     }
 
-    private String encodeB64(File file){
+    private String encodeB64(File file) {
         try {
             return file.getName() + separator + Base64.getEncoder().encodeToString(Files.readAllBytes(file.toPath()));
-        } catch (Exception ignored){};
+        } catch (Exception ignored) {
+        }
+        ;
 
         return "Encoding failed!";
     }
 
-    private ImageInstance decodeB64(String data){
+    private ImageInstance decodeB64(String data) {
         try {
             String[] info = data.split(separator);
-            byte[] bytes = Base64.getDecoder().decode(info[info.length-1]);
+            byte[] bytes = Base64.getDecoder().decode(info[info.length - 1]);
             return new ImageInstance(NativeImage.read(new ByteArrayInputStream(bytes)), info[0]);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;

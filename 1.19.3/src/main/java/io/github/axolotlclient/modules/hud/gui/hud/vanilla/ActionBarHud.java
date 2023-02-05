@@ -37,6 +37,7 @@ import java.util.List;
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ *
  * @license GPL-3.0
  */
 
@@ -77,9 +78,9 @@ public class ActionBarHud extends TextHudEntry {
                                 (float) getPos().y() + 3,
                                 customTextColor.get()
                                         ? (textColor.get().getAlpha() == 255
-                                                ? new Color(textColor.get().getRed(), textColor.get().getGreen(),
-                                                        textColor.get().getBlue(), vanillaColor.getAlpha()).getAsInt()
-                                                : textColor.get().getAsInt())
+                                        ? new Color(textColor.get().getRed(), textColor.get().getGreen(),
+                                        textColor.get().getBlue(), vanillaColor.getAlpha()).getAsInt()
+                                        : textColor.get().getAsInt())
                                         : color);
             } else {
                 client.textRenderer
@@ -89,9 +90,9 @@ public class ActionBarHud extends TextHudEntry {
                                 (float) getPos().y() + 3,
                                 customTextColor.get()
                                         ? (textColor.get().getAlpha() == 255
-                                                ? new Color(textColor.get().getRed(), textColor.get().getGreen(),
-                                                        textColor.get().getBlue(), vanillaColor.getAlpha()).getAsInt()
-                                                : textColor.get().getAsInt())
+                                        ? new Color(textColor.get().getRed(), textColor.get().getGreen(),
+                                        textColor.get().getBlue(), vanillaColor.getAlpha()).getAsInt()
+                                        : textColor.get().getAsInt())
                                         : color);
             }
             ticksShown++;
@@ -114,10 +115,8 @@ public class ActionBarHud extends TextHudEntry {
     @Override
     public List<Option<?>> getConfigurationOptions() {
         List<Option<?>> options = super.getConfigurationOptions();
-        options.add(shadow);
         options.add(timeShown);
         options.add(customTextColor);
-        options.add(textColor);
         return options;
     }
 }

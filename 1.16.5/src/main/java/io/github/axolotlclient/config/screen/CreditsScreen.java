@@ -225,7 +225,7 @@ public class CreditsScreen extends Screen {
     private class CreditsList extends ElementListWidget<Credit> {
 
         public CreditsList(MinecraftClient minecraftClient, int width, int height, int top, int bottom,
-                int entryHeight) {
+                           int entryHeight) {
             super(minecraftClient, width, height, top, bottom, entryHeight);
 
             this.setRenderHeader(false, 0);
@@ -242,16 +242,16 @@ public class CreditsScreen extends Screen {
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder bufferBuilder = tessellator.getBuffer();
             int k = this.getRowLeft();
-            int l = this.top + 4 - (int)this.getScrollAmount();
+            int l = this.top + 4 - (int) this.getScrollAmount();
             this.renderList(matrices, k, l, mouseX, mouseY, delta);
             RenderSystem.disableAlphaTest();
             RenderSystem.shadeModel(7425);
             RenderSystem.disableTexture();
             int o = Math.max(0, this.getMaxPosition() - (this.bottom - this.top - 4));
             if (o > 0) {
-                int p = (int)((float)((this.bottom - this.top) * (this.bottom - this.top)) / (float)this.getMaxPosition());
+                int p = (int) ((float) ((this.bottom - this.top) * (this.bottom - this.top)) / (float) this.getMaxPosition());
                 p = MathHelper.clamp(p, 32, this.bottom - this.top - 8);
-                int q = (int)this.getScrollAmount() * (this.bottom - this.top - p) / o + this.top;
+                int q = (int) this.getScrollAmount() * (this.bottom - this.top - p) / o + this.top;
                 if (q < this.top) {
                     q = this.top;
                 }
@@ -331,7 +331,7 @@ public class CreditsScreen extends Screen {
 
         @Override
         public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX,
-                int mouseY, boolean hovered, float tickDelta) {
+                           int mouseY, boolean hovered, float tickDelta) {
             if (hovered || c.isFocused()) {
                 drawVerticalLine(matrices, x - 100, y, y + 20,
                         io.github.axolotlclient.AxolotlClientConfig.Color.ERROR.getAsInt());
@@ -447,7 +447,7 @@ public class CreditsScreen extends Screen {
 
         @Override
         public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX,
-                int mouseY, boolean hovered, float tickDelta) {
+                           int mouseY, boolean hovered, float tickDelta) {
             DrawUtil.drawCenteredString(matrices, MinecraftClient.getInstance().textRenderer, super.name, x, y, -128374,
                     true);
         }

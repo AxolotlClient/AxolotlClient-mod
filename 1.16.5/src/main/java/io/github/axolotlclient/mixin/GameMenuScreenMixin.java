@@ -48,7 +48,7 @@ public abstract class GameMenuScreenMixin {
     }
 
     @ModifyArg(method = "initWidgets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget;<init>(IIIILnet/minecraft/text/Text;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;)V", ordinal = 1), index = 5)
-    private ButtonWidget.PressAction axolotlclient$clearFeatureRestrictions(ButtonWidget.PressAction onPress){
+    private ButtonWidget.PressAction axolotlclient$clearFeatureRestrictions(ButtonWidget.PressAction onPress) {
         return (buttonWidget) -> {
             if (Objects.equals(HypixelMods.getInstance().cacheMode.get(),
                     HypixelMods.HypixelCacheMode.ON_CLIENT_DISCONNECT.toString())) {

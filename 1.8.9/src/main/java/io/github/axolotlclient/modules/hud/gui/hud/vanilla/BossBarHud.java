@@ -43,6 +43,7 @@ import java.util.List;
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ *
  * @license GPL-3.0
  */
 
@@ -78,7 +79,7 @@ public class BossBarHud extends TextHudEntry implements DynamicallyPositionable 
                 }
             }
 
-            GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             if (text.get()) {
                 String string = BossBar.name;
                 client.textRenderer.draw(string,
@@ -123,11 +124,11 @@ public class BossBarHud extends TextHudEntry implements DynamicallyPositionable 
             GlStateManager.enableTexture();
             if (bar.get()) {
                 MinecraftClient.getInstance().getTextureManager().bindTexture(BARS_TEXTURE);
-                GlStateManager.color4f(barColor.getRed(), barColor.getGreen(), barColor.getBlue(), barColor.getAlpha());
+                GlStateManager.color(barColor.getRed(), barColor.getGreen(), barColor.getBlue(), barColor.getAlpha());
                 this.drawTexture(x + 1, y, 0, 79, width, 5);
             }
 
-            GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             if (text.get()) {
                 client.textRenderer.draw(name, (float) ((x + width / 2) - client.textRenderer.getStringWidth(name) / 2),
                         (float) (y - 10), textColor.get().getAsInt(), shadow.get());

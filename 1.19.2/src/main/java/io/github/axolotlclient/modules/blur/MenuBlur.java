@@ -46,6 +46,7 @@ import java.io.IOException;
 /**
  * Totally not stolen from Sol.
  * License: GPL-3.0
+ *
  * @author TheKodeToad
  * @author tterag1098
  */
@@ -90,7 +91,7 @@ public class MenuBlur extends AbstractModule {
         return false;
     }
 
-    public void renderBlur(){
+    public void renderBlur() {
         shader.render(MinecraftClient.getInstance().getTickDelta());
     }
 
@@ -102,7 +103,7 @@ public class MenuBlur extends AbstractModule {
         if (enabled.get() && MinecraftClient.getInstance().currentScreen != null && !(MinecraftClient.getInstance().currentScreen instanceof ChatScreen)) {
             if ((shader == null || MinecraftClient.getInstance().getWindow().getWidth() != lastWidth
                     || MinecraftClient.getInstance().getWindow().getHeight() != lastHeight)
-                && MinecraftClient.getInstance().getWindow().getWidth() > 0
+                    && MinecraftClient.getInstance().getWindow().getWidth() > 0
                     && MinecraftClient.getInstance().getWindow().getHeight() > 0) {
                 try {
                     shader = new ShaderEffect(client.getTextureManager(), client.getResourceManager(),

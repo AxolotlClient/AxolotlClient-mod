@@ -44,6 +44,7 @@ import java.util.List;
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ *
  * @license GPL-3.0
  */
 
@@ -83,7 +84,8 @@ public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
         return MathHelper.clamp((float) (current) / (max - offset), 0, 1);
     }
 
-    public void init() {}
+    public void init() {
+    }
 
     public void renderPlaceholderBackground(MatrixStack matrices) {
         if (hovered) {

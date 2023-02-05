@@ -50,7 +50,7 @@ public abstract class MinecraftClientMixin {
      */
     @Inject(method = "getWindowTitle", at = @At("HEAD"), cancellable = true)
     private void axolotlclient$getWindowTitle(CallbackInfoReturnable<String> cir) {
-        if(AxolotlClient.CONFIG.customWindowTitle.get()) {
+        if (AxolotlClient.CONFIG.customWindowTitle.get()) {
             cir.setReturnValue("AxolotlClient" + " " + SharedConstants.getGameVersion().getName());
         }
     }
@@ -77,8 +77,8 @@ public abstract class MinecraftClientMixin {
     }
 
     @Inject(method = "setScreen", at = @At("HEAD"))
-    private void axolotlclient$onScreenOpen(Screen screen, CallbackInfo ci){
-        if(MinecraftClient.getInstance().currentScreen == null) {
+    private void axolotlclient$onScreenOpen(Screen screen, CallbackInfo ci) {
+        if (MinecraftClient.getInstance().currentScreen == null) {
             MenuBlur.getInstance().onScreenOpen();
         }
     }

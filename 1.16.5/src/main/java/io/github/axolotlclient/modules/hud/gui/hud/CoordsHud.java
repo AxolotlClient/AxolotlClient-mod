@@ -39,6 +39,7 @@ import java.util.List;
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ *
  * @license GPL-3.0
  */
 
@@ -103,7 +104,7 @@ public class CoordsHud extends TextHudEntry implements DynamicallyPositionable {
         if (yaw < 0) {
             yaw += 360;
         }
-        int[] directions = { 0, 23, 68, 113, 158, 203, 248, 293, 338, 360 };
+        int[] directions = {0, 23, 68, 113, 158, 203, 248, 293, 338, 360};
         for (int i = 0; i < directions.length; i++) {
             int min = directions[i];
             int max;

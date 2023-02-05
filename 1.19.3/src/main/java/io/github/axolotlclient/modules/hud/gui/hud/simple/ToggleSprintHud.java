@@ -45,6 +45,7 @@ import java.util.Random;
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ *
  * @license GPL-3.0
  */
 
@@ -57,9 +58,11 @@ public class ToggleSprintHud extends SimpleTextHudEntry {
     private final StringOption placeholder = new StringOption("placeholder", ID.getPath(), "No keys pressed");
 
     private final KeyBind sprintToggle = new KeyBind("key.toggleSprint", GLFW.GLFW_KEY_K, "category.axolotlclient");
-    private final KeyBindOption sprintKey = new KeyBindOption("key.toggleSprint", sprintToggle, (key)->{});
+    private final KeyBindOption sprintKey = new KeyBindOption("key.toggleSprint", sprintToggle, (key) -> {
+    });
     private final KeyBind sneakToggle = new KeyBind("key.toggleSneak", GLFW.GLFW_KEY_I, "category.axolotlclient");
-    private final KeyBindOption sneakKey = new KeyBindOption("key.toggleSneak", sneakToggle, (key)->{});
+    private final KeyBindOption sneakKey = new KeyBindOption("key.toggleSneak", sneakToggle, (key) -> {
+    });
 
     @Getter
     private final BooleanOption sprintToggled = new BooleanOption("sprintToggled", ID.getPath(), false);

@@ -22,8 +22,14 @@
 
 package io.github.axolotlclient.mixin;
 
+import com.mojang.authlib.minecraft.UserApiService;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.multiplayer.report.chat.ChatReportingContext;
+import net.minecraft.client.network.SocialInteractionsManager;
+import net.minecraft.client.util.PlayerKeyPairManager;
+import net.minecraft.client.util.Session;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(MinecraftClient.class)
@@ -33,4 +39,24 @@ public interface MinecraftClientAccessor {
     static int getCurrentFps() {
         return 0;
     }
+
+    @Accessor
+    @Mutable
+    void setSession(Session session);
+
+    @Accessor
+    @Mutable
+    void setSocialInteractionsManager(SocialInteractionsManager manager);
+
+    @Accessor
+    @Mutable
+    void setPlayerKeyPairManager(PlayerKeyPairManager manager);
+
+    @Accessor("f_onushnfp")
+    @Mutable
+    void setChatReportingContext(ChatReportingContext context);
+
+    @Accessor
+    @Mutable
+    void setUserApiService(UserApiService service);
 }

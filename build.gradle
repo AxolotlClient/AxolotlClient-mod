@@ -2,7 +2,7 @@ plugins {
 	id 'java'
 	id 'maven-publish'
 	id "io.freefair.lombok" version '6.6.+' apply false
-	id 'com.modrinth.minotaur' version '2.+'
+	id 'com.modrinth.minotaur' version '2.+' apply false
 	id 'org.quiltmc.gradle.licenser' version '1.+'
 }
 

@@ -30,7 +30,7 @@ import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.util.FeatureDisabler;
 import net.legacyfabric.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.options.KeyBinding;
+import net.minecraft.client.option.KeyBinding;
 import net.minecraft.entity.Entity;
 import org.lwjgl.input.Keyboard;
 
@@ -75,7 +75,7 @@ public class Freelook extends AbstractModule {
         if (!enabled.get())
             return;
 
-        if(toggle.get()){
+        if (toggle.get()) {
             if (KEY.wasPressed()) {
                 if (active) {
                     stop();
@@ -151,7 +151,7 @@ public class Freelook extends AbstractModule {
         return pitch;
     }
 
-    public boolean needsDisabling(){
+    public boolean needsDisabling() {
         return mode.get().equals("freelook");
     }
 }

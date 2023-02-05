@@ -9,19 +9,19 @@ Legacy Fabric 1.8.9'da çeşitli özelliklere sahip olmak için tamamlanmış (n
 - Bir Özel Gökyüzü uygulanımı
 - Zoom tuşu
 - çeşitli Arayüz modülleri ([KronHUD](https://github.com/DarkKronicle/KronHUD)'un bir alınımı)
-  - bunları içerir, ama bunlarla limitli değil:
-    - Sohbet
-    - Skor Tahtası
-    - CPS
-    - FPS
-    - Gecikme
-    - Can Barı Arayüzü
-    - Koordinatlar
-    - ve başka!
+    - bunları içerir, ama bunlarla limitli değil:
+        - Sohbet
+        - Skor Tahtası
+        - CPS
+        - FPS
+        - Gecikme
+        - Can Barı Arayüzü
+        - Koordinatlar
+        - ve başka!
 - Hypixel Modları
-  - OtomatikGG / GF / GLHF
-  - Seviye Etiketi
-  - Otomatik Bağış
+    - OtomatikGG / GF / GLHF
+    - Seviye Etiketi
+    - Otomatik Bağış
 - Özel Blok Anahatları
 - Discord RPC
 - Mod'u kullanan oyuncular için rozetler
@@ -42,13 +42,15 @@ Legacy Fabric 1.8.9'da çeşitli özelliklere sahip olmak için tamamlanmış (n
 
 - Bu mod LGPL-3.0 Lisansı altında lisanslanmıştır.
 
-NOT! Aşağıdaki gri kutunun içinde yazılan yazı gerçek lisansın bir Türkçe çevirisidir,yasal durumlarda bu lisansın sadece İngilizce hali geçerlidir.
+NOT! Aşağıdaki gri kutunun içinde yazılan yazı gerçek lisansın bir Türkçe çevirisidir,yasal durumlarda bu lisansın
+sadece İngilizce hali geçerlidir.
+
 ```
 AxolotlClient-mod
 Telif hakkı (C) 2021-günümüz moehreag + Katılımcılar
 
 Bu program özgür bir yazılımdır; bunu yeniden yayınlayabilir ve/ya da
-Özgür Yazılım Kurumunun yayınladığı GNU Daha Az Genel Herkese Açık Lisansının koşulları altında modifiye edebilirsiniz; 
+Özgür Yazılım Kurumunun yayınladığı GNU Daha Az Genel Herkese Açık Lisansının koşulları altında modifiye edebilirsiniz;
 Lisansın üçüncü sürümüne, ya da (sizin kararınızda) herhangi sonraki bir sürüme göre.
 
 Bu program yararlı olması umuduyla yayınlanmıştır,
@@ -59,4 +61,5 @@ Bu program ile GNU Daha Az Genel Herkese Açık Lisasnsının
 bir kopyasını almış olmanız gerekiyor; eğer almadıysanız, Özgür Yazılım Kurumuna yazın,
 Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 ```
+
 - Daha fazla bilgi için [LICENSE](../LICENSE) dosyasını görün.

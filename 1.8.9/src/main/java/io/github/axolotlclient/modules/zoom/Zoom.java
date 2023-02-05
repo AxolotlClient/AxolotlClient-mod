@@ -30,7 +30,7 @@ import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.util.Util;
 import net.legacyfabric.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.options.KeyBinding;
+import net.minecraft.client.option.KeyBinding;
 
 /**
  * Based on

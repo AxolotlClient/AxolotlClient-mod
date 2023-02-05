@@ -36,13 +36,13 @@ public abstract class PlayerEntityModelMixin {
 
     @Inject(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/render/entity/model/PlayerEntityModel;child:Z"))
     public void axolotlclient$translucencyStart(Entity entity, float f, float g, float h, float i, float j, float scale,
-            CallbackInfo ci) {
+                                                CallbackInfo ci) {
         startTranslucency();
     }
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;popMatrix()V"))
     public void axolotlclient$translucencyStop(Entity entity, float f, float g, float h, float i, float j, float scale,
-            CallbackInfo ci) {
+                                               CallbackInfo ci) {
         stopTranslucency();
     }
 

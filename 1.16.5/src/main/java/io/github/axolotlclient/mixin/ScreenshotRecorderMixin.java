@@ -41,13 +41,13 @@ public abstract class ScreenshotRecorderMixin {
     private static File currentFile;
 
     @Inject(method = "method_1661", at = @At("HEAD"))
-    private static void axolotlclient$getFile(NativeImage nativeImage, File file, Consumer<Text> consumer, CallbackInfo ci){
+    private static void axolotlclient$getFile(NativeImage nativeImage, File file, Consumer<Text> consumer, CallbackInfo ci) {
         currentFile = file;
     }
 
     @SuppressWarnings("unchecked")
     @ModifyArg(method = "method_1661", at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V"))
-    private static <T> T axolotlclient$onScreenShotTaken(T t){
+    private static <T> T axolotlclient$onScreenShotTaken(T t) {
         return (T) ScreenshotUtils.getInstance().onScreenshotTaken((MutableText) t, currentFile);
     }
 }

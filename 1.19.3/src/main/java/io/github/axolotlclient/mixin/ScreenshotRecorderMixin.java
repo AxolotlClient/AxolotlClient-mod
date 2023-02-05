@@ -54,7 +54,7 @@ public abstract class ScreenshotRecorderMixin {
 
     @Inject(method = "saveScreenshotInner", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Util;getIoWorkerExecutor()Ljava/util/concurrent/ExecutorService;"), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
     private static void axolotlclient$getImageFile(File gameDirectory, @Nullable String fileName, Framebuffer framebuffer,
-            Consumer<Text> messageReceiver, CallbackInfo ci, NativeImage nativeImage, File file, File file2) {
+                                                   Consumer<Text> messageReceiver, CallbackInfo ci, NativeImage nativeImage, File file, File file2) {
         currentFile = file2;
         image = nativeImage;
     }
@@ -62,7 +62,7 @@ public abstract class ScreenshotRecorderMixin {
     // Yes. This is not nice. If you know a better way t achieve this please lmk!
     @Inject(method = "saveScreenshotInner", at = @At(value = "INVOKE", target = "Ljava/util/concurrent/ExecutorService;execute(Ljava/lang/Runnable;)V"), cancellable = true)
     private static void axolotlclient$onScreenshotSaveSuccess(File gameDirectory, @Nullable String fileName, Framebuffer framebuffer,
-            Consumer<Text> messageReceiver, CallbackInfo ci) {
+                                                              Consumer<Text> messageReceiver, CallbackInfo ci) {
         Util.getIoWorkerExecutor().execute(() -> {
             try {
                 image.writeFile(currentFile);

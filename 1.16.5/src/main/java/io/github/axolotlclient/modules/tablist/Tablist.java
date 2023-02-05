@@ -62,8 +62,8 @@ public class Tablist extends AbstractModule {
         AxolotlClient.CONFIG.rendering.add(tablist);
     }
 
-    public boolean renderNumericPing(MatrixStack matrices, int width, int x, int y, PlayerListEntry entry){
-        if(numericalPing.get()){
+    public boolean renderNumericPing(MatrixStack matrices, int width, int x, int y, PlayerListEntry entry) {
+        if (numericalPing.get()) {
             Color current;
             if (entry.getLatency() < 0) {
                 current = pingColor0.get();
@@ -81,7 +81,7 @@ public class Tablist extends AbstractModule {
 
             DrawUtil.drawString(matrices,
                     String.valueOf(entry.getLatency()),
-                    x+width - 1 - MinecraftClient.getInstance().textRenderer.getWidth(String.valueOf(entry.getLatency())),
+                    x + width - 1 - MinecraftClient.getInstance().textRenderer.getWidth(String.valueOf(entry.getLatency())),
                     y, current, shadow.get());
             return true;
         }

@@ -39,6 +39,7 @@ import java.util.*;
  * This file is derived from <a href="https://github.com/Sol-Client/Client">Sol Client</a>.
  * <p>
  * License: GPL-3.0
+ *
  * @author TheKodeToad
  */
 
@@ -61,8 +62,14 @@ public class TranslationProvider {
         }
     }
 
-    public static String translate(String key) {
-        return TRANSLATIONS.getOrDefault(key, "axolotlclient." + key);
+    public static String translate(String key, Object... args) {
+        String translated = TRANSLATIONS.getOrDefault(key, "axolotlclient." + key);
+        if (translated.contains("%s")) {
+            for (Object arg : args) {
+                translated = translated.replaceFirst("%s", arg.toString());
+            }
+        }
+        return translated;
     }
 
     public static boolean hasTranslation(String key) {
@@ -91,12 +98,14 @@ public class TranslationProvider {
                     accept(in);
                 }
             }
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
     }
 
     /**
      * A version of {@link String#format(String, Object...)} that doesn't allocate an object if there are no arguments passed.
-     * @param fmt The format.
+     *
+     * @param fmt  The format.
      * @param args The args.
      * @return The formatted string.
      */

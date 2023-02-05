@@ -35,9 +35,9 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public abstract class KeyboardInputMixin {
 
     /**
-     * @author moehreag
      * @param instance The sneak key
      * @return boolean whether the player should be sneaking or not
+     * @author moehreag
      */
     @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/KeyBind;isPressed()Z", ordinal = 5))
     public boolean axolotlclient$toggleSneak(KeyBind instance) {

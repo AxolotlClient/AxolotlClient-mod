@@ -47,6 +47,7 @@ import java.util.stream.Collectors;
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ *
  * @license GPL-3.0
  */
 
@@ -71,7 +72,7 @@ public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionab
     });
 
     private final ColorOption backgroundColor = new ColorOption("backgroundcolor", 0x4C000000);
-    private final ColorOption topColor = new ColorOption("topbackgroundcolor", 0xBB000000);
+    private final ColorOption topColor = new ColorOption("topbackgroundcolor", 0x66000000);
     private final IntegerOption topPadding = new IntegerOption("toppadding", ID.getPath(), 0, 0, 4);
     private final BooleanOption scores = new BooleanOption("scores", true);
     private final ColorOption scoreColor = new ColorOption("scorecolor", 0xFFFF5555);
@@ -139,7 +140,7 @@ public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionab
         MutableText formattedText;
         for (Iterator<ScoreboardPlayerScore> scoresIterator = scores.iterator(); scoresIterator
                 .hasNext(); maxWidth = Math.max(maxWidth, client.textRenderer.getWidth(formattedText) + spacerWidth
-                        + client.textRenderer.getWidth(Integer.toString(scoreboardPlayerScore.getScore())))) {
+                + client.textRenderer.getWidth(Integer.toString(scoreboardPlayerScore.getScore())))) {
             scoreboardPlayerScore = scoresIterator.next();
             Team team = scoreboard.getPlayerTeam(scoreboardPlayerScore.getPlayerName());
             formattedText = Team.decorateName(team, new LiteralText(scoreboardPlayerScore.getPlayerName()));
@@ -220,7 +221,7 @@ public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionab
         }
 
         if (outline.get() && outlineColor.get().getAlpha() > 0) {
-            RenderUtil.drawOutline(matrices, textOffset, bounds.y(), maxWidth, fullHeight + 2, outlineColor.get());
+			RenderUtil.drawOutline(matrices, textOffset-1, bounds.y(), maxWidth+1, fullHeight + 1, outlineColor.get());
         }
     }
 

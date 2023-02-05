@@ -45,7 +45,7 @@ public abstract class InGameHudMixin {
     @Shadow
     protected abstract boolean showCrosshair();
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;color4f(FFFF)V", ordinal = 0))
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;color(FFFF)V", ordinal = 0))
     private void axolotlclient$onHudRender(float tickDelta, CallbackInfo ci) {
         HudManager.getInstance().render(MinecraftClient.getInstance(), tickDelta);
     }

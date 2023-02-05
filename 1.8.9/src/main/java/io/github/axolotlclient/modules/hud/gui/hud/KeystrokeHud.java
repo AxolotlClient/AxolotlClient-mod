@@ -35,8 +35,8 @@ import io.github.axolotlclient.modules.hud.util.Rectangle;
 import io.github.axolotlclient.util.Hooks;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.options.GameOptions;
-import net.minecraft.client.options.KeyBinding;
+import net.minecraft.client.option.GameOptions;
+import net.minecraft.client.option.KeyBinding;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
@@ -47,6 +47,7 @@ import java.util.Optional;
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ *
  * @license GPL-3.0
  */
 
@@ -95,11 +96,11 @@ public class KeystrokeHud extends TextHudEntry {
     }
 
     public static Optional<String> getMouseKeyBindName(KeyBinding keyBinding) {
-        if (keyBinding.getTranslationKey().equalsIgnoreCase(client.options.keyAttack.getTranslationKey())) {
+        if (keyBinding.getTranslationKey().equalsIgnoreCase(client.options.attackKey.getTranslationKey())) {
             return Optional.of("LMB");
-        } else if (keyBinding.getTranslationKey().equalsIgnoreCase(client.options.keyUse.getTranslationKey())) {
+        } else if (keyBinding.getTranslationKey().equalsIgnoreCase(client.options.useKey.getTranslationKey())) {
             return Optional.of("RMB");
-        } else if (keyBinding.getTranslationKey().equalsIgnoreCase(client.options.keyPickItem.getTranslationKey())) {
+        } else if (keyBinding.getTranslationKey().equalsIgnoreCase(client.options.pickItemKey.getTranslationKey())) {
             return Optional.of("MMB");
         }
         return Optional.empty();
@@ -114,20 +115,20 @@ public class KeystrokeHud extends TextHudEntry {
         keystrokes = new ArrayList<>();
         DrawPosition pos = getPos();
         // LMB
-        keystrokes.add(createFromKey(new Rectangle(0, 36, 26, 17), pos, client.options.keyAttack));
+        keystrokes.add(createFromKey(new Rectangle(0, 36, 26, 17), pos, client.options.attackKey));
         // RMB
-        keystrokes.add(createFromKey(new Rectangle(27, 36, 26, 17), pos, client.options.keyUse));
+        keystrokes.add(createFromKey(new Rectangle(27, 36, 26, 17), pos, client.options.useKey));
         // W
-        keystrokes.add(createFromKey(new Rectangle(18, 0, 17, 17), pos, client.options.keyForward));
+        keystrokes.add(createFromKey(new Rectangle(18, 0, 17, 17), pos, client.options.forwardKey));
         // A
-        keystrokes.add(createFromKey(new Rectangle(0, 18, 17, 17), pos, client.options.keyLeft));
+        keystrokes.add(createFromKey(new Rectangle(0, 18, 17, 17), pos, client.options.leftKey));
         // S
-        keystrokes.add(createFromKey(new Rectangle(18, 18, 17, 17), pos, client.options.keyBack));
+        keystrokes.add(createFromKey(new Rectangle(18, 18, 17, 17), pos, client.options.backKey));
         // D
-        keystrokes.add(createFromKey(new Rectangle(36, 18, 17, 17), pos, client.options.keyRight));
+        keystrokes.add(createFromKey(new Rectangle(36, 18, 17, 17), pos, client.options.rightKey));
 
         // Space
-        keystrokes.add(new Keystroke(new Rectangle(0, 54, 53, 7), pos, client.options.keyJump, (stroke) -> {
+        keystrokes.add(new Keystroke(new Rectangle(0, 54, 53, 7), pos, client.options.jumpKey, (stroke) -> {
             Rectangle bounds = stroke.bounds;
             Rectangle spaceBounds = new Rectangle(bounds.x() + stroke.offset.x() + 4,
                     bounds.y() + stroke.offset.y() + 2, bounds.width() - 8, 1);
@@ -172,11 +173,11 @@ public class KeystrokeHud extends TextHudEntry {
             float calculatedMouseX = (lastMouseX + ((mouseX - lastMouseX) * delta)) - 5;
             float calculatedMouseY = (lastMouseY + ((mouseY - lastMouseY) * delta)) - 5;
 
-            GlStateManager.color3f(1, 1, 1);
+            GlStateManager.color(1, 1, 1);
             mouseMovementIndicatorInner.bindTexture();
-            drawTexture(spaceX + (width/2) - 7/2 -1, spaceY + 17 - (7/2), 0, 0, 7, 7, 7, 7);
+            drawTexture(spaceX + (width / 2) - 7 / 2 - 1, spaceY + 17 - (7 / 2), 0, 0, 7, 7, 7, 7);
 
-            GlStateManager.translatef(calculatedMouseX, calculatedMouseY, 0); // Woah KodeToad, good use of translate
+            GlStateManager.translate(calculatedMouseX, calculatedMouseY, 0); // Woah KodeToad, good use of translate
 
             mouseMovementIndicatorOuter.bindTexture();
             drawTexture(spaceX + (width / 2) - 1, spaceY + 17, 0, 0, 11, 11, 11, 11);

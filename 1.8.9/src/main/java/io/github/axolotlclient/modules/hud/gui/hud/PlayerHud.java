@@ -41,6 +41,7 @@ import java.util.List;
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ *
  * @license GPL-3.0
  */
 
@@ -96,17 +97,17 @@ public class PlayerHud extends BoxHudEntry {
 
         float lerpY = (lastYOffset + ((yOffset - lastYOffset) * delta));
 
-        GlStateManager.color4f(1, 1, 1, 1);
+        GlStateManager.color(1, 1, 1, 1);
         GlStateManager.enableColorMaterial();
         GlStateManager.pushMatrix();
-        GlStateManager.translated(x, y - lerpY, 1050);
-        GlStateManager.scalef(1, 1, -1);
+        GlStateManager.translate(x, y - lerpY, 1050);
+        GlStateManager.scale(1, 1, -1);
 
-        GlStateManager.translatef(0, 0, 1000);
+        GlStateManager.translate(0, 0, 1000);
         float scale = getScale() * 40;
-        GlStateManager.scalef(scale, scale, scale);
+        GlStateManager.scale(scale, scale, scale);
 
-        GlStateManager.rotatef(180, 0, 0, 1);
+        GlStateManager.rotate(180, 0, 0, 1);
 
         // Rotate to whatever is wanted. Also make sure to offset the yaw
         float deltaYaw = client.player.yaw;
@@ -124,7 +125,7 @@ public class PlayerHud extends BoxHudEntry {
         client.player.headYaw = client.player.yaw;
         client.player.prevHeadYaw = client.player.yaw;
 
-        GlStateManager.rotatef(deltaYaw - 180 + rotation.get().floatValue(), 0, 1, 0);
+        GlStateManager.rotate(deltaYaw - 180 + rotation.get().floatValue(), 0, 1, 0);
         DiffuseLighting.enableNormally();
         EntityRenderDispatcher renderer = client.getEntityRenderManager();
         renderer.setYaw(180);

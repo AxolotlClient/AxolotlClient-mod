@@ -34,11 +34,12 @@ import io.github.axolotlclient.modules.hypixel.skyblock.Skyblock;
 import io.github.axolotlclient.modules.sky.SkyboxManager;
 import io.github.axolotlclient.modules.unfocusedFpsLimiter.UnfocusedFpsLimiter;
 import io.github.axolotlclient.modules.zoom.Zoom;
+import io.github.axolotlclient.util.notifications.Notifications;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.MouseInput;
-import net.minecraft.client.options.GameOptions;
+import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -46,6 +47,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.player.ClientPlayerEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 import org.objectweb.asm.Opcodes;
@@ -120,7 +123,7 @@ public abstract class GameRendererMixin {
 
             GL11.glFog(2918, this.updateFogColorBuffer(this.fogRed, this.fogGreen, this.fogBlue, 1.0F));
             GL11.glNormal3f(0.0F, -1.0F, 0.0F);
-            GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             Block block = Camera.getSubmergedBlock(this.client.world, entity, tickDelta);
             if (entity instanceof LivingEntity && ((LivingEntity) entity).hasStatusEffect(StatusEffect.BLINDNESS)) {
                 float f = 5.0F;
@@ -200,7 +203,7 @@ public abstract class GameRendererMixin {
         cir.setReturnValue(returnValue);
     }
 
-    @Redirect(method = "updateLightmap", at = @At(value = "FIELD", target = "Lnet/minecraft/client/options/GameOptions;gamma:F", opcode = Opcodes.GETFIELD))
+    @Redirect(method = "updateLightmap", at = @At(value = "FIELD", target = "Lnet/minecraft/client/option/GameOptions;gamma:F", opcode = Opcodes.GETFIELD))
     public float axolotlclient$setGamma(GameOptions instance) {
         if (AxolotlClient.CONFIG.fullBright.get())
             return 15F;
@@ -219,11 +222,14 @@ public abstract class GameRendererMixin {
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/Framebuffer;bind(Z)V", shift = Shift.BEFORE))
     public void axolotlclient$worldMotionBlur(float tickDelta, long nanoTime, CallbackInfo ci) {
         MenuBlur.getInstance().updateBlur();
-        axolotlclient$motionBlur(tickDelta, nanoTime, null);
+        axolotlclient$postRender(tickDelta, nanoTime, null);
     }
 
     @Inject(method = "render", at = @At("TAIL"))
-    public void axolotlclient$motionBlur(float tickDelta, long nanoTime, CallbackInfo ci) {
+    public void axolotlclient$postRender(float tickDelta, long nanoTime, CallbackInfo ci) {
+
+        Notifications.getInstance().renderStatus();
+
         if ((ci == null) == MotionBlur.getInstance().inGuis.get()) {
             return;
         }
@@ -281,5 +287,16 @@ public abstract class GameRendererMixin {
         if (AxolotlClient.CONFIG.noRain.get()) {
             ci.cancel();
         }
+    }
+
+    @Inject(method = "bobView", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;translate(FFF)V"), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
+    private void axolotlclient$minimalViewBob(float f, CallbackInfo ci, PlayerEntity entity, float g, float h, float i, float j) {
+        h /= 2;
+        i /= 2;
+        j /= 2;
+        GlStateManager.translate(MathHelper.sin(h * (float) Math.PI) * i * 0.5F, -Math.abs(MathHelper.cos(h * (float) Math.PI) * i), 0.0F);
+        GlStateManager.rotate(MathHelper.sin(h * (float) Math.PI) * i * 3.0F, 0.0F, 0.0F, 1.0F);
+        GlStateManager.rotate(Math.abs(MathHelper.cos(h * (float) Math.PI - 0.2F) * i) * 5.0F, 1.0F, 0.0F, 0.0F);
+        GlStateManager.rotate(j, 1.0F, 0.0F, 0.0F);
     }
 }

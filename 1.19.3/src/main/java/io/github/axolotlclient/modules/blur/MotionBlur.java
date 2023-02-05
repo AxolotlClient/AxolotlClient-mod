@@ -106,17 +106,17 @@ public class MotionBlur extends AbstractModule {
 
         public MotionBlurShader() {
             super(MinecraftClient.getInstance().m_iuvifafs(), () -> IOUtils.toInputStream(String.format("{" + "    \"targets\": [" + "        \"swap\","
-                    + "        \"previous\"" + "    ]," + "    \"passes\": [" + "        {"
-                    + "            \"name\": \"motion_blur\"," + "            \"intarget\": \"minecraft:main\","
-                    + "            \"outtarget\": \"swap\"," + "            \"auxtargets\": [" + "                {"
-                    + "                    \"name\": \"PrevSampler\"," + "                    \"id\": \"previous\""
-                    + "                }" + "            ]," + "            \"uniforms\": [" + "                {"
-                    + "                    \"name\": \"BlendFactor\"," + "                    \"values\": [ %s ]"
-                    + "                }" + "            ]" + "        }," + "        {"
-                    + "            \"name\": \"blit\"," + "            \"intarget\": \"swap\","
-                    + "            \"outtarget\": \"previous\"" + "        }," + "        {"
-                    + "            \"name\": \"blit\"," + "            \"intarget\": \"swap\","
-                    + "            \"outtarget\": \"minecraft:main\"" + "        }" + "    ]" + "}", getBlur()),
+                            + "        \"previous\"" + "    ]," + "    \"passes\": [" + "        {"
+                            + "            \"name\": \"motion_blur\"," + "            \"intarget\": \"minecraft:main\","
+                            + "            \"outtarget\": \"swap\"," + "            \"auxtargets\": [" + "                {"
+                            + "                    \"name\": \"PrevSampler\"," + "                    \"id\": \"previous\""
+                            + "                }" + "            ]," + "            \"uniforms\": [" + "                {"
+                            + "                    \"name\": \"BlendFactor\"," + "                    \"values\": [ %s ]"
+                            + "                }" + "            ]" + "        }," + "        {"
+                            + "            \"name\": \"blit\"," + "            \"intarget\": \"swap\","
+                            + "            \"outtarget\": \"previous\"" + "        }," + "        {"
+                            + "            \"name\": \"blit\"," + "            \"intarget\": \"swap\","
+                            + "            \"outtarget\": \"minecraft:main\"" + "        }" + "    ]" + "}", getBlur()),
                     "utf-8"));
         }
     }

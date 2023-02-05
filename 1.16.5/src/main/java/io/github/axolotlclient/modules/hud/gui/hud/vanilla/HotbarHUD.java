@@ -60,6 +60,7 @@ public class HotbarHUD extends TextHudEntry {
 
             RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
             MinecraftClient.getInstance().getTextureManager().bindTexture(WIDGETS_TEXTURE);
+			RenderSystem.enableBlend();
             ItemStack itemStack = playerEntity.getOffHandStack();
             Arm arm = playerEntity.getMainArm().getOpposite();
             int j = this.getZOffset();

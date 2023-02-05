@@ -174,7 +174,7 @@ public class Util {
     }
 
     public static BlockHitResult raycast(Entity entity, Vec3d vec3d, Vec3d vec3d3, Box box, Predicate<Entity> predicate,
-            double d) {
+                                         double d) {
         Entity targetedEntity = null;
         Vec3d vec3d4 = null;
         float f = 1.0F;
@@ -266,7 +266,7 @@ public class Util {
 
         Collection<ScoreboardPlayerScore> scores = scoreboard.getAllPlayerScores(sidebar);
         List<ScoreboardPlayerScore> list = scores.stream().filter(
-                input -> input != null && input.getPlayerName() != null && !input.getPlayerName().startsWith("#"))
+                        input -> input != null && input.getPlayerName() != null && !input.getPlayerName().startsWith("#"))
                 .collect(Collectors.toList());
 
         if (list.size() > 15) {
@@ -297,7 +297,8 @@ public class Util {
         public float blue = 1.0F;
         public float alpha = 1.0F;
 
-        public Color() {}
+        public Color() {
+        }
 
         public Color(float red, float green, float blue, float alpha) {
             this.red = red;

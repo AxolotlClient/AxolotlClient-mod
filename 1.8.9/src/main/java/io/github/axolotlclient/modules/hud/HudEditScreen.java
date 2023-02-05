@@ -43,6 +43,7 @@ import java.util.Optional;
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ *
  * @license GPL-3.0
  */
 
@@ -108,7 +109,7 @@ public class HudEditScreen extends Screen {
                 current = null;
             }
         } else if (button == 1) {
-            entry.ifPresent(abstractHudEntry -> MinecraftClient.getInstance().openScreen(
+            entry.ifPresent(abstractHudEntry -> MinecraftClient.getInstance().setScreen(
                     new OptionsScreenBuilder(this, abstractHudEntry.getOptionsAsCategory(), AxolotlClient.modid)));
         }
     }
@@ -179,15 +180,15 @@ public class HudEditScreen extends Screen {
                 AxolotlClient.configManager.save();
                 break;
             case 1:
-                MinecraftClient.getInstance().openScreen(new OptionsScreenBuilder(this,
+                MinecraftClient.getInstance().setScreen(new OptionsScreenBuilder(this,
                         (OptionCategory) new OptionCategory("config", false).addSubCategories(AxolotlClient.CONFIG.getCategories()),
                         AxolotlClient.modid));
                 break;
             case 0:
-                MinecraftClient.getInstance().openScreen(parent);
+                MinecraftClient.getInstance().setScreen(parent);
                 break;
             case 2:
-                MinecraftClient.getInstance().openScreen(null);
+                MinecraftClient.getInstance().setScreen(null);
                 break;
         }
     }

@@ -39,6 +39,7 @@ import net.minecraft.util.math.Vec3f;
 /**
  * This implementation of custom skies is based on the FabricSkyBoxes mod by AMereBagatelle
  * <a href="https://github.com/AMereBagatelle/FabricSkyBoxes">Github Link.</a>
+ *
  * @license MIT
  **/
 
@@ -74,7 +75,8 @@ public class FSBSkyboxInstance extends SkyboxInstance {
             for (int i = 0; i < staticRotation.size(); i++) {
                 this.rotationStatic[i] = staticRotation.get(i).getAsFloat();
             }
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         try {
             JsonObject jsonBlend = json.get("blend").getAsJsonObject();
@@ -99,7 +101,8 @@ public class FSBSkyboxInstance extends SkyboxInstance {
             this.showMoon = decorations.get("showMoon").getAsBoolean();
             this.showSun = decorations.get("showSun").getAsBoolean();
             this.showStars = decorations.get("showStars").getAsBoolean();
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
     }
 
     @Override

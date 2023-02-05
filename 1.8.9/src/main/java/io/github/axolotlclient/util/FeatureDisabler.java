@@ -46,13 +46,13 @@ public class FeatureDisabler {
 
     private static final Supplier<Boolean> NONE = () -> true;
 
-    private static String currentAddress;
+    private static String currentAddress = "";
 
     private static final Identifier channelName = new Identifier("axolotlclient", "block_mods");
 
     // Features that can be disabled on the server's behalf
     // If something should be added here, feel free to ping us via your favorite way.
-    private static final HashMap<String, BooleanOption> features = Util.make(()->{
+    private static final HashMap<String, BooleanOption> features = Util.make(() -> {
         HashMap<String, BooleanOption> features = new HashMap<>();
         features.put("freelook", Freelook.getInstance().enabled);
         features.put("timechanger", AxolotlClient.CONFIG.timeChangerEnabled);
@@ -68,16 +68,16 @@ public class FeatureDisabler {
         setServers(((ToggleSprintHud) HudManager.getInstance().get(ToggleSprintHud.ID)).toggleSneak, NONE, "hypixel");
 
         ClientPlayConnectionEvents.INIT.register((handler0, client0) ->
-                        ClientPlayNetworking.registerGlobalReceiver(channelName.toString(), (client, handler, buf, responseSender) -> {
-                            JsonArray array = new JsonParser().parse(buf.readString(32767)).getAsJsonArray();
-                            for (JsonElement element : array) {
-                                try {
-                                    features.get(element.getAsString()).setForceOff(true, "ban_reason");
-                                } catch (Exception e) {
-                                    AxolotlClient.LOGGER.error("Failed to disable " + element.getAsString() + "!");
-                                }
-                            }
-                        })
+                ClientPlayNetworking.registerGlobalReceiver(channelName.toString(), (client, handler, buf, responseSender) -> {
+                    JsonArray array = new JsonParser().parse(buf.readString(32767)).getAsJsonArray();
+                    for (JsonElement element : array) {
+                        try {
+                            features.get(element.getAsString()).setForceOff(true, "ban_reason");
+                        } catch (Exception e) {
+                            AxolotlClient.LOGGER.error("Failed to disable " + element.getAsString() + "!");
+                        }
+                    }
+                })
         );
     }
 
@@ -110,7 +110,7 @@ public class FeatureDisabler {
         conditions.put(option, condition);
     }
 
-    public static void update(){
+    public static void update() {
         disabledServers.forEach((option, strings) -> disableOption(option, strings, currentAddress));
     }
 }

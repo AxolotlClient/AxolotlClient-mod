@@ -53,18 +53,16 @@ public class OSUtil {
     public enum OperatingSystem {
 
         WINDOWS("win") {
-
             @Override
             protected String[] getURLOpenCommand(URL url) {
-                return new String[] { "rundll32", "url.dll,FileProtocolHandler", url.toString() };
+                return new String[]{"rundll32", "url.dll,FileProtocolHandler", url.toString()};
             }
         },
         LINUX("nix", "nux", "aix"),
         MAC("mac") {
-
             @Override
             protected String[] getURLOpenCommand(URL url) {
-                return new String[] { "open", url.toString() };
+                return new String[]{"open", url.toString()};
             }
         },
         OTHER();
@@ -104,7 +102,7 @@ public class OSUtil {
                 string = string.replace("file:", "file://");
             }
 
-            return new String[] { "xdg-open", string };
+            return new String[]{"xdg-open", string};
         }
     }
 }

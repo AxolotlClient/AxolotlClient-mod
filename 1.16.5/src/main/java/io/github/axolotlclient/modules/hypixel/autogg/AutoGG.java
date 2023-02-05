@@ -34,9 +34,11 @@ import net.minecraft.text.Text;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Based on <a href="https://github.com/DragonEggBedrockBreaking/AutoGG/blob/trunk/src/main/java/uk/debb/autogg/mixin/MixinChatHud.java">DragonEggBedrockBreaking's AutoGG Mod</a>
+ *
  * @license MPL-2.0
  */
 
@@ -114,7 +116,7 @@ public class AutoGG implements AbstractHypixelMod {
 
     private void populateGGStrings() {
         ggStrings.put("hypixel.net", addToList(
-                "1st Killer -",
+                        "1st Killer -",
                         "1st Place -",
                         "Winner:",
                         " - Damage Dealt -",
@@ -171,24 +173,24 @@ public class AutoGG implements AbstractHypixelMod {
         glhfStrings.put("minemen.club", addToList("1..."));
     }
 
-    private List<String> addToList(String... strings){
-        return Arrays.stream(strings).toList();
+    private List<String> addToList(String... strings) {
+        return Arrays.stream(strings).collect(Collectors.toList());
     }
 
     public void onMessage(Text message) {
         if (client.getCurrentServerEntry() != null) {
             serverMap.keySet().forEach(s -> {
-               if(serverMap.get(s).get() && client.getCurrentServerEntry().address.contains(s)){
-                   if(gf.get()){
-                       processChat(message, gfStrings.get(s), gfString.get());
-                   }
-                   if(gg.get()){
-                       processChat(message, ggStrings.get(s), ggString.get());
-                   }
-                   if(glhf.get()){
-                       processChat(message, glhfStrings.get(s), glhfString.get());
-                   }
-               }
+                if (serverMap.get(s).get() && client.getCurrentServerEntry().address.contains(s)) {
+                    if (gf.get()) {
+                        processChat(message, gfStrings.get(s), gfString.get());
+                    }
+                    if (gg.get()) {
+                        processChat(message, ggStrings.get(s), ggString.get());
+                    }
+                    if (glhf.get()) {
+                        processChat(message, glhfStrings.get(s), glhfString.get());
+                    }
+                }
             });
         }
     }

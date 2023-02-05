@@ -22,7 +22,7 @@ dependencies {
 
 	modImplementation "net.fabricmc:fabric-loader:${fabric_loader}"
 
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_1165}"
+	modImplementation include("net.fabricmc.fabric-api:fabric-networking-api-v1:1.0.5+3cc0f0907d")
 
 	modImplementation ("io.github.axolotlclient:AxolotlClient-config:${project.config}+1.16") {
 		exclude group: "com.terraformersmc"
@@ -80,11 +80,11 @@ modrinth {
 	versionNumber = "${project.version}"
 	versionType = "release"
 	uploadFile = remapJar
-	gameVersions = ["${project.minecraft_1192}"]
+	gameVersions = ["${project.minecraft_1165}"]
 	loaders = ["fabric"]
 	additionalFiles = [remapSourcesJar]
 	dependencies {
-		required.project "fabric-api"
+		required.version "IQ3UGSc2"
 	}
 
 	// Changelog fetching: Credit LambdAurora.

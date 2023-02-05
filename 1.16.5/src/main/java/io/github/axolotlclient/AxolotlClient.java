@@ -31,6 +31,7 @@ import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.config.AxolotlClientConfig;
 import io.github.axolotlclient.modules.Module;
 import io.github.axolotlclient.modules.ModuleLoader;
+import io.github.axolotlclient.modules.auth.Auth;
 import io.github.axolotlclient.modules.blur.MenuBlur;
 import io.github.axolotlclient.modules.blur.MotionBlur;
 import io.github.axolotlclient.modules.freelook.Freelook;
@@ -159,6 +160,7 @@ public class AxolotlClient implements ClientModInitializer {
         modules.add(ScreenshotUtils.getInstance());
         modules.add(BeaconBeam.getInstance());
         modules.add(Tablist.getInstance());
+        modules.add(Auth.getInstance());
     }
 
     private static void addExternalModules() {
@@ -198,16 +200,16 @@ public class AxolotlClient implements ClientModInitializer {
                         .getWidth(
                                 entity.getUuid() == MinecraftClient.getInstance().player.getUuid()
                                         ? (NickHider.getInstance().hideOwnName.get()
-                                                ? NickHider.getInstance().hiddenNameSelf.get()
-                                                : Team.decorateName(entity.getScoreboardTeam(), entity.getName())
-                                                        .getString())
+                                        ? NickHider.getInstance().hiddenNameSelf.get()
+                                        : Team.decorateName(entity.getScoreboardTeam(), entity.getName())
+                                        .getString())
                                         : (NickHider.getInstance().hideOtherNames.get()
-                                                ? NickHider.getInstance().hiddenNameOthers.get()
-                                                : Team.decorateName(entity.getScoreboardTeam(), entity.getName())
-                                                        .getString()))
+                                        ? NickHider.getInstance().hiddenNameOthers.get()
+                                        : Team.decorateName(entity.getScoreboardTeam(), entity.getName())
+                                        .getString()))
                         / 2
                         + (AxolotlClient.CONFIG.customBadge.get() ? MinecraftClient.getInstance().textRenderer
-                                .getWidth(" " + Formatting.strip(AxolotlClient.CONFIG.badgeText.get())) : 10));
+                        .getWidth(" " + Formatting.strip(AxolotlClient.CONFIG.badgeText.get())) : 10));
 
                 RenderSystem.color4f(1, 1, 1, 1);
 

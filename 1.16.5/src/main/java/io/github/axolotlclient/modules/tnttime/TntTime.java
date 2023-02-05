@@ -60,7 +60,9 @@ public class TntTime extends AbstractModule {
             StringBuilder string = new StringBuilder("#0");
             if (decimalPlaces.get() > 0) {
                 string.append(".");
-                string.append("0".repeat(Math.max(0, decimalPlaces.get())));
+				for (int i = 0; i < decimalPlaces.get(); i++) {
+					string.append("0");
+				}
             }
             format = new DecimalFormat(string.toString());
             decimals = decimalPlaces.get();

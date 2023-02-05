@@ -34,6 +34,7 @@ import net.minecraft.text.Text;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Based on <a href="https://github.com/DragonEggBedrockBreaking/AutoGG/blob/trunk/src/main/java/uk/debb/autogg/mixin/MixinChatHud.java">DragonEggBedrockBreaking's AutoGG Mod</a>
@@ -172,7 +173,7 @@ public class AutoGG implements AbstractHypixelMod {
     }
 
     private List<String> addToList(String... strings){
-        return Arrays.stream(strings).toList();
+        return Arrays.stream(strings).collect(Collectors.toList());
     }
 
     public void onMessage(Text message) {

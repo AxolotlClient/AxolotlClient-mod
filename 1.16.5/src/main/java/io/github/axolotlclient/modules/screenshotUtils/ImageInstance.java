@@ -28,7 +28,8 @@ public class ImageInstance {
 
     private final NativeImage image;
     private final String fileName;
-    public ImageInstance(NativeImage image, String name){
+
+    public ImageInstance(NativeImage image, String name) {
         this.image = image;
         this.fileName = name;
     }

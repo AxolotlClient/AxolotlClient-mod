@@ -69,7 +69,8 @@ public class PackDisplayHud extends TextHudEntry {
                     widgets.add(createWidget(profile.getDisplayName(), pack));
                 }
 
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         });
 
         AtomicInteger w = new AtomicInteger(20);
@@ -138,7 +139,8 @@ public class PackDisplayHud extends TextHudEntry {
         if (placeholder == null) {
             try (ResourcePack defaultPack = MinecraftClient.getInstance().m_iuvifafs()) {
                 placeholder = createWidget(defaultPack.getDisplayName(), defaultPack);
-            } catch (Exception ignored){}
+            } catch (Exception ignored) {
+            }
         } else {
             placeholder.render(matrices, getPos().x + 1, getPos().y + 1);
         }

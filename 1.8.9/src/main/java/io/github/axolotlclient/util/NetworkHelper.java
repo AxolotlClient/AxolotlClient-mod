@@ -69,14 +69,15 @@ public class NetworkHelper {
 
     public static void setOnline() {
 
-        if(uuid == null){
+        if (uuid == null) {
             try {
 
                 uuid = MinecraftClient.getInstance().player.getUuid();
-            } catch (NullPointerException ignored){}
+            } catch (NullPointerException ignored) {
+            }
         }
 
-        if(uuid != null) {
+        if (uuid != null) {
             try {
                 String body = NetworkUtil.postRequest("https://moehreag.duckdns.org/axolotlclient-api/", "{\n\t\"uuid\": \"" + uuid + "\",\n\t\"online\": true\n}", HttpClients.createMinimal()).toString();
                 if (body.contains("Success!")) {
@@ -93,7 +94,7 @@ public class NetworkHelper {
         if (loggedIn) {
             try {
                 AxolotlClient.LOGGER.info("Logging off..");
-                String body = NetworkUtil.deleteRequest("https://moehreag.duckdns.org/axolotlclient-api/?uuid=" + uuid.toString(), "", HttpClients.createMinimal()).getAsString();
+                String body = NetworkUtil.deleteRequest("https://moehreag.duckdns.org/axolotlclient-api/?uuid=" + uuid.toString(), "", HttpClients.createMinimal()).toString();
                 if (body.contains("Success!")) {
                     AxolotlClient.LOGGER.info("Successfully logged off!");
                 } else {
@@ -111,7 +112,7 @@ public class NetworkHelper {
         return getRequest(site, HttpClients.custom().disableAutomaticRetries().build());
     }
 
-    public static JsonElement getRequest(String url, CloseableHttpClient client){
+    public static JsonElement getRequest(String url, CloseableHttpClient client) {
         try {
             return NetworkUtil.getRequest(url, client);
         } catch (IOException e) {

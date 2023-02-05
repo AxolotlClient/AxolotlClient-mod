@@ -71,7 +71,8 @@ public class Zoom extends AbstractModule {
         zoom.add(zoomScrolling);
         zoom.add(decreaseSensitivity);
         zoom.add(smoothCamera);
-        zoom.add(new KeyBindOption("key.zoom", keyBinding, keyBind -> {}));
+        zoom.add(new KeyBindOption("key.zoom", keyBinding, keyBind -> {
+        }));
 
         AxolotlClient.CONFIG.rendering.addSubCategory(zoom);
 

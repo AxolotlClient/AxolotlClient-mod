@@ -43,6 +43,7 @@ import java.util.List;
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ *
  * @license GPL-3.0
  */
 
@@ -139,7 +140,7 @@ public class PotionsHud extends TextHudEntry implements DynamicallyPositionable 
 
     private void renderPotion(StatusEffectInstance effect, int x, int y) {
         StatusEffect type = StatusEffect.STATUS_EFFECTS[effect.getEffectId()];
-        GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         this.client.getTextureManager().bindTexture(INVENTORY_TEXTURE);
         int m = type.getIconLevel();
         this.drawTexture(x, y, m % 8 * 18, 198 + m / 8 * 18, 18, 18);

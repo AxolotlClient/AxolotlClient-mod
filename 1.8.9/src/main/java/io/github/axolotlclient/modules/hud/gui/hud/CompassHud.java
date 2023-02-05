@@ -41,6 +41,7 @@ import java.util.List;
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ *
  * @license GPL-3.0
  */
 
@@ -116,7 +117,7 @@ public class CompassHud extends TextHudEntry implements DynamicallyPositionable 
         if (invert.get()) {
             shift = dist - shift;
         }
-        GlStateManager.translatef(shift, 0, 0);
+        GlStateManager.translate(shift, 0, 0);
         for (int i = 0; i < amount; i++) {
             int d;
             if (invert.get()) {
@@ -136,7 +137,7 @@ public class CompassHud extends TextHudEntry implements DynamicallyPositionable 
 
             float targetOpacity = 1 - Math.abs((halfWidth - trueDist)) / halfWidth;
             //System.out.println(targetOpacity);
-            GlStateManager.color4f(1, 1, 1, targetOpacity);
+            GlStateManager.color(1, 1, 1, targetOpacity);
             if (indicator == Indicator.CARDINAL) {
                 // We have to call .color() here so that transparency stays
                 RenderUtil.drawRectangle(innerX, y, 1, 9, majorIndicatorColor.get()
@@ -160,8 +161,8 @@ public class CompassHud extends TextHudEntry implements DynamicallyPositionable 
                         .withAlpha((int) (minorIndicatorColor.get().getAlpha() * targetOpacity)).getAsInt());
             }
         }
-        GlStateManager.color4f(1, 1, 1, 1);
-        GlStateManager.translatef(-shift, 0, 0);
+        GlStateManager.color(1, 1, 1, 1);
+        GlStateManager.translate(-shift, 0, 0);
     }
 
     private static Indicator getIndicator(int degrees) {

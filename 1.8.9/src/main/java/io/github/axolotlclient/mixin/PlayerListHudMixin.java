@@ -44,8 +44,10 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 @Mixin(PlayerListHud.class)
 public abstract class PlayerListHudMixin extends DrawableHelper {
 
-    @Shadow private Text header;
-    @Shadow private Text footer;
+    @Shadow
+    private Text header;
+    @Shadow
+    private Text footer;
     MinecraftClient client = MinecraftClient.getInstance();
     private PlayerListEntry playerListEntry;
 
@@ -121,11 +123,11 @@ public abstract class PlayerListHudMixin extends DrawableHelper {
     }
 
     @Inject(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;header:Lnet/minecraft/text/Text;"))
-    private void axolotlclient$setRenderHeaderFooter(int width, Scoreboard scoreboard, ScoreboardObjective playerListScoreboardObjective, CallbackInfo ci){
-        if(!Tablist.getInstance().showHeader.get()){
+    private void axolotlclient$setRenderHeaderFooter(int width, Scoreboard scoreboard, ScoreboardObjective playerListScoreboardObjective, CallbackInfo ci) {
+        if (!Tablist.getInstance().showHeader.get()) {
             header = null;
         }
-        if(!Tablist.getInstance().showFooter.get()){
+        if (!Tablist.getInstance().showFooter.get()) {
             footer = null;
         }
     }

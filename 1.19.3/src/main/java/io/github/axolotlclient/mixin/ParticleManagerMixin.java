@@ -57,7 +57,7 @@ public abstract class ParticleManagerMixin {
 
     @Inject(method = "addParticle(Lnet/minecraft/particle/ParticleEffect;DDDDDD)Lnet/minecraft/client/particle/Particle;", at = @At(value = "HEAD"), cancellable = true)
     public void axolotlclient$afterCreation(ParticleEffect parameters, double x, double y, double z, double velocityX,
-            double velocityY, double velocityZ, CallbackInfoReturnable<Particle> cir) {
+                                            double velocityY, double velocityZ, CallbackInfoReturnable<Particle> cir) {
         cachedType = parameters.getType();
 
         if (!Particles.getInstance().getShowParticle(cachedType)) {
@@ -91,10 +91,10 @@ public abstract class ParticleManagerMixin {
 
     @Inject(method = "renderParticles", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/particle/Particle;buildGeometry(Lcom/mojang/blaze3d/vertex/VertexConsumer;Lnet/minecraft/client/render/Camera;F)V"), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
     private void axolotlclient$applyOptions(MatrixStack matrices, VertexConsumerProvider.Immediate immediate,
-            LightmapTextureManager lightmapTextureManager, Camera camera, float f, CallbackInfo ci,
-            MatrixStack matrixStack, Iterator<Particle> var7, ParticleTextureSheet particleTextureSheet,
-            Iterable<Particle> iterable, Tessellator tessellator, BufferBuilder bufferBuilder, Iterator<Particle> var12,
-            Particle particle) {
+                                            LightmapTextureManager lightmapTextureManager, Camera camera, float f, CallbackInfo ci,
+                                            MatrixStack matrixStack, Iterator<Particle> var7, ParticleTextureSheet particleTextureSheet,
+                                            Iterable<Particle> iterable, Tessellator tessellator, BufferBuilder bufferBuilder, Iterator<Particle> var12,
+                                            Particle particle) {
         if (Particles.getInstance().particleMap.containsKey(particle)) {
             Particles.getInstance().applyOptions(particle);
         }

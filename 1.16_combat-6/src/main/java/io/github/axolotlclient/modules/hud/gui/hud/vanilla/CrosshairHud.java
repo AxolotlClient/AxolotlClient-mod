@@ -188,7 +188,7 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
                 // Draw crosshair
                 RenderSystem.color4f((float) color.getRed() / 255, (float) color.getGreen() / 255,
                         (float) color.getBlue() / 255, (float) color.getAlpha() / 255);
-                client.inGameHud.drawTexture(matrices,
+                drawTexture(matrices,
                         (int) (((client.getWindow().getScaledWidth() / getScale()) - 15) / 2),
                         (int) (((client.getWindow().getScaledHeight() / getScale()) - 15) / 2), 0, 0, 15, 15);
             } else {
@@ -207,14 +207,14 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
             RenderSystem.color4f(1, 1, 1, 1);
 
             // Draw attack indicator
-            int j = this.client.getWindow().getScaledHeight() / 2 - 7 + 16;
-            int k = this.client.getWindow().getScaledWidth() / 2 - 8;
+			x = (int) ((client.getWindow().getScaledWidth() / getScale()) / 2 - 8);
+			y = (int) ((client.getWindow().getScaledHeight() / getScale()) / 2 - 7 + 16);
             ItemStack itemStack = this.client.player.getStackInHand(Hand.OFF_HAND);
             boolean bl = this.client.options.field_26808 == class_5512.field_26811;
             if (bl && itemStack.getItem() == Items.SHIELD && this.client.player.method_31233(itemStack)) {
-                this.drawTexture(matrices, k, j, 52, 112, 16, 16);
+                this.drawTexture(matrices, x, y, 52, 112, 16, 16);
             } else if (bl && this.client.player.isBlocking()) {
-                this.drawTexture(matrices, k, j, 36, 112, 16, 16);
+                this.drawTexture(matrices, x, y, 36, 112, 16, 16);
             } else if (this.client.options.attackIndicator == AttackIndicator.CROSSHAIR) {
                 float f = this.client.player.getAttackCooldownProgress(0.0F);
                 boolean bl2 = false;
@@ -224,12 +224,12 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
                 }
 
                 if (bl2) {
-                    this.drawTexture(matrices, k, j, 68, 94, 16, 16);
+                    this.drawTexture(matrices, x, y, 68, 94, 16, 16);
                 } else if (f > 1.3F && f < 2.0F) {
                     float h = (f - 1.0F);
                     int l = (int)(h * 17.0F);
-                    this.drawTexture(matrices, k, j, 36, 94, 16, 4);
-                    this.drawTexture(matrices, k, j, 52, 94, l, 4);
+                    this.drawTexture(matrices, x, y, 36, 94, 16, 4);
+                    this.drawTexture(matrices, x, y, 52, 94, l, 4);
                 }
             }
         }
@@ -250,7 +250,7 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
         HitResult hit = client.crosshairTarget;
         if (hit == null || hit.getType() == null) {
             return defaultColor.get();
-        } else if (hit.getType() == HitResult.Type.ENTITY) {
+        } else if (hit.getType() == HitResult.Type.ENTITY && ((EntityHitResult)this.client.crosshairTarget).method_31252() <= this.client.player.method_31239(0.0F)) {
             return entityColor.get();
         } else if (hit.getType() == HitResult.Type.BLOCK) {
             BlockPos blockPos = ((BlockHitResult) hit).getBlockPos();

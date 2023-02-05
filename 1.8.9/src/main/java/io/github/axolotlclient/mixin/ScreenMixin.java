@@ -53,7 +53,7 @@ public abstract class ScreenMixin {
         if (ScrollableTooltips.getInstance().enabled.get()) {
             if ((MinecraftClient.getInstance().currentScreen instanceof CreativeInventoryScreen)
                     && ((CreativeInventoryScreen) MinecraftClient.getInstance().currentScreen)
-                            .getSelectedTab() != ItemGroup.INVENTORY.getIndex()) {
+                    .getSelectedTab() != ItemGroup.INVENTORY.getIndex()) {
                 return;
             }
 
@@ -84,8 +84,8 @@ public abstract class ScreenMixin {
     }
 
     @Inject(method = "renderBackground(I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;fillGradient(IIIIII)V"), cancellable = true)
-    private void axolotlclient$menuBlur(int alpha, CallbackInfo ci){
-        if(MenuBlur.getInstance().renderScreen()){
+    private void axolotlclient$menuBlur(int alpha, CallbackInfo ci) {
+        if (MenuBlur.getInstance().renderScreen()) {
             ci.cancel();
         }
     }

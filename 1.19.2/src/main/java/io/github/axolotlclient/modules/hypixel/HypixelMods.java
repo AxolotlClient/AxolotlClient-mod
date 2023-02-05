@@ -78,7 +78,7 @@ public class HypixelMods extends AbstractModule {
 
     @Override
     public void lateInit() {
-        HypixelAbstractionLayer.setApiKeySupplier(()-> hypixel_api_key.get());
+        HypixelAbstractionLayer.setApiKeySupplier(() -> hypixel_api_key.get());
         HypixelAbstractionLayer.loadApiKey();
     }
 

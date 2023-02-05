@@ -45,6 +45,7 @@ import java.util.List;
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ *
  * @license GPL-3.0
  */
 
@@ -61,22 +62,22 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
     private final ColorOption containerColor = new ColorOption("blockcolor", Color.SELECTOR_BLUE);
 
     private final GraphicsOption customTextureGraphics = new GraphicsOption("customTextureGraphics",
-            new int[][] {
-                    new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                    new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                    new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                    new int[] { 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0 },
-                    new int[] { 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0 },
-                    new int[] { 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0 },
-                    new int[] { 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0 },
-                    new int[] { 0, 0, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 0, 0 },
-                    new int[] { 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0 },
-                    new int[] { 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0 },
-                    new int[] { 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0 },
-                    new int[] { 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0 },
-                    new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                    new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                    new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, }, true);
+            new int[][]{
+                    new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    new int[]{0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0},
+                    new int[]{0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0},
+                    new int[]{0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0},
+                    new int[]{0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0},
+                    new int[]{0, 0, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 0, 0},
+                    new int[]{0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0},
+                    new int[]{0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0},
+                    new int[]{0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0},
+                    new int[]{0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0},
+                    new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},}, true);
 
     public CrosshairHud() {
         super(15, 15);
@@ -131,7 +132,7 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
         GlStateManager.pushMatrix();
         scale();
         Color color = getColor();
-        GlStateManager.color4f((float) color.getRed() / 255, (float) color.getGreen() / 255,
+        GlStateManager.color((float) color.getRed() / 255, (float) color.getGreen() / 255,
                 (float) color.getBlue() / 255, 1F);
         if (color == defaultColor.get() && applyBlend.get()) {
             GlStateManager.enableBlend();
@@ -155,9 +156,9 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
                     (int) (((Util.getWindow().getScaledHeight() / getScale()) - 14) / 2), 0, 0, 16, 16);
         } else if (type.get().equals(Crosshair.CUSTOM.toString())) {
             customTextureGraphics.bindTexture();
-            drawTexture(x+(width/2) - (15/2), y+height/2 - 15/2 -1, 0, 0, 15, 15, 15, 15);
+            drawTexture(x + (width / 2) - (15 / 2), y + height / 2 - 15 / 2 - 1, 0, 0, 15, 15, 15, 15);
         }
-        GlStateManager.color4f(1, 1, 1, 1);
+        GlStateManager.color(1, 1, 1, 1);
         GlStateManager.blendFuncSeparate(770, 771, 1, 0);
         GlStateManager.disableBlend();
         GlStateManager.popMatrix();
@@ -175,8 +176,8 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
             World world = this.client.world;
             if (world.getBlockState(blockPos).getBlock() != null
                     && (world.getBlockState(blockPos).getBlock() instanceof ChestBlock
-                            || world.getBlockState(blockPos).getBlock() instanceof EnderChestBlock
-                            || world.getBlockState(blockPos).getBlock() instanceof HopperBlock)) {
+                    || world.getBlockState(blockPos).getBlock() instanceof EnderChestBlock
+                    || world.getBlockState(blockPos).getBlock() instanceof HopperBlock)) {
                 return containerColor.get();
             }
         }

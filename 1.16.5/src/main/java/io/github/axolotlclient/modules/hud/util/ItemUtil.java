@@ -47,6 +47,7 @@ import java.util.Optional;
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ *
  * @license GPL-3.0
  */
 
@@ -111,7 +112,7 @@ public class ItemUtil {
     }
 
     public static Optional<ItemUtil.TimedItemStorage> getTimedItemFromItem(ItemStack item,
-            List<ItemUtil.TimedItemStorage> list) {
+                                                                           List<ItemUtil.TimedItemStorage> list) {
         ItemStack compare = item.copy();
         compare.setCount(1);
         for (ItemUtil.TimedItemStorage storage : list) {
@@ -194,7 +195,7 @@ public class ItemUtil {
     }
 
     public static void renderGuiItemOverlay(MatrixStack matrices, TextRenderer renderer, ItemStack stack, int x, int y,
-            String countLabel, int textColor, boolean shadow) {
+                                            String countLabel, int textColor, boolean shadow) {
         MinecraftClient client = MinecraftClient.getInstance();
         if (stack.isEmpty()) {
             return;
@@ -211,8 +212,8 @@ public class ItemUtil {
             RenderSystem.disableDepthTest();
             RenderSystem.disableTexture();
             RenderSystem.disableBlend();
-            float f = (float)stack.getDamage();
-            float g = (float)stack.getMaxDamage();
+            float f = (float) stack.getDamage();
+            float g = (float) stack.getMaxDamage();
             float h = Math.max(0.0F, (g - f) / g);
             int i = Math.round(13.0F - f * 13.0F / g);
             int j = MathHelper.hsvToRgb(h / 3.0F, 1.0F, 1.0F);
@@ -227,7 +228,7 @@ public class ItemUtil {
         ClientPlayerEntity clientPlayerEntity = MinecraftClient.getInstance().player;
         float f = clientPlayerEntity == null ? 0.0F
                 : clientPlayerEntity.getItemCooldownManager().getCooldownProgress(stack.getItem(),
-                        MinecraftClient.getInstance().getTickDelta());
+                MinecraftClient.getInstance().getTickDelta());
         if (f > 0.0F) {
             RenderSystem.disableDepthTest();
             RenderSystem.disableTexture();

@@ -61,11 +61,13 @@ public class MCPSkyboxInstance extends SkyboxInstance {
             for (int i = 0; i < axis.length; i++) {
                 this.rotationStatic[i] = Float.parseFloat(axis[i]);
             }
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         try {
             this.blendMode = parseBlend(json.get("blend").getAsString());
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         showMoon = true;
         showSun = true;
     }
@@ -86,26 +88,26 @@ public class MCPSkyboxInstance extends SkyboxInstance {
                 u = 0;
                 v = 0;
             } else if (i == 1) {
-                GlStateManager.rotatef(90.0F, 1.0F, 0.0F, 0.0F);
+                GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
                 u = 1 / 3D;
                 v = 0.5D;
             } else if (i == 2) {
-                GlStateManager.rotatef(-90.0F, 1.0F, 0.0F, 0.0F);
-                GlStateManager.rotatef(180, 0, 1, 0);
+                GlStateManager.rotate(-90.0F, 1.0F, 0.0F, 0.0F);
+                GlStateManager.rotate(180, 0, 1, 0);
                 u = 2 / 3D;
                 v = 0F;
             } else if (i == 3) {
-                GlStateManager.rotatef(180.0F, 1.0F, 0.0F, 0.0F);
+                GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
                 u = 1 / 3D;
                 v = 0F;
             } else if (i == 4) {
-                GlStateManager.rotatef(90.0F, 0.0F, 0.0F, 1.0F);
-                GlStateManager.rotatef(-90, 0, 1, 0);
+                GlStateManager.rotate(90.0F, 0.0F, 0.0F, 1.0F);
+                GlStateManager.rotate(-90, 0, 1, 0);
                 u = 2 / 3D;
                 v = 0.5D;
             } else {
-                GlStateManager.rotatef(-90.0F, 0.0F, 0.0F, 1.0F);
-                GlStateManager.rotatef(90, 0, 1, 0);
+                GlStateManager.rotate(-90.0F, 0.0F, 0.0F, 1.0F);
+                GlStateManager.rotate(90, 0, 1, 0);
                 v = 0.5D;
                 u = 0;
             }
