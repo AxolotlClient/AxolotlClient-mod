@@ -115,7 +115,7 @@ public abstract class PlayerListHudMixin extends DrawableHelper {
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ClientConnection;isEncrypted()Z"))
-    private boolean axolotlclient$showPlayerHeads$1(ClientConnection instance) {
+    private boolean axolotlclient$showPlayerHeads$2(ClientConnection instance) {
         if (Tablist.getInstance().showPlayerHeads.get()) {
             return instance.isEncrypted();
         }

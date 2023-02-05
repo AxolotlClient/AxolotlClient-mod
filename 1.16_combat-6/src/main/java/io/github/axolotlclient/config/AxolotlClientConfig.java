@@ -91,6 +91,7 @@ public class AxolotlClientConfig extends ConfigHolder {
                 } catch (Exception ignored){}
             },
             new Color(255, 0, 0, 77));
+	public final BooleanOption minimalViewBob = new BooleanOption("minimalViewBob", false);
 
     public final ColorOption loadingScreenColor = new ColorOption("loadingBgColor", new Color(239, 50, 61, 255));
     public final BooleanOption nightMode = new BooleanOption("nightMode", false);
@@ -179,7 +180,8 @@ public class AxolotlClientConfig extends ConfigHolder {
                 fullBright,
                 lowFire,
                 lowShield,
-                hitColor);
+                hitColor,
+				minimalViewBob);
 
 		timeChanger.add(timeChangerEnabled);
 		timeChanger.add(customTime);

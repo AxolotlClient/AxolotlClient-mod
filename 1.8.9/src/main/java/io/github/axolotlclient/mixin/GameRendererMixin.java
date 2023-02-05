@@ -289,14 +289,17 @@ public abstract class GameRendererMixin {
         }
     }
 
-    @Inject(method = "bobView", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;translate(FFF)V"), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
+    @Inject(method = "bobView", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;translate(FFF)V"), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
     private void axolotlclient$minimalViewBob(float f, CallbackInfo ci, PlayerEntity entity, float g, float h, float i, float j) {
-        h /= 2;
-        i /= 2;
-        j /= 2;
-        GlStateManager.translate(MathHelper.sin(h * (float) Math.PI) * i * 0.5F, -Math.abs(MathHelper.cos(h * (float) Math.PI) * i), 0.0F);
-        GlStateManager.rotate(MathHelper.sin(h * (float) Math.PI) * i * 3.0F, 0.0F, 0.0F, 1.0F);
-        GlStateManager.rotate(Math.abs(MathHelper.cos(h * (float) Math.PI - 0.2F) * i) * 5.0F, 1.0F, 0.0F, 0.0F);
-        GlStateManager.rotate(j, 1.0F, 0.0F, 0.0F);
+        if(AxolotlClient.CONFIG.minimalViewBob.get()){
+			h/=2;
+			i/=2;
+			j/=2;
+			GlStateManager.translate(MathHelper.sin(h * (float) Math.PI) * i * 0.5F, -Math.abs(MathHelper.cos(h * (float) Math.PI) * i), 0.0F);
+			GlStateManager.rotate(MathHelper.sin(h * (float) Math.PI) * i * 3.0F, 0.0F, 0.0F, 1.0F);
+			GlStateManager.rotate(Math.abs(MathHelper.cos(h * (float) Math.PI - 0.2F) * i) * 5.0F, 1.0F, 0.0F, 0.0F);
+			GlStateManager.rotate(j, 1.0F, 0.0F, 0.0F);
+			ci.cancel();
+		}
     }
 }
