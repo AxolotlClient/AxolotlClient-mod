@@ -41,6 +41,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
+import java.util.UUID;
+
 @Mixin(PlayerListHud.class)
 public abstract class PlayerListHudMixin extends DrawableHelper {
 
@@ -131,4 +133,9 @@ public abstract class PlayerListHudMixin extends DrawableHelper {
             footer = null;
         }
     }
+
+	@ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;getPlayerByUuid(Ljava/util/UUID;)Lnet/minecraft/entity/player/PlayerEntity;"))
+	private UUID makeStuff(UUID par1){
+		return Tablist.getInstance().alwaysShowHeadLayer.get() ? MinecraftClient.getInstance().player.getUuid() : par1;
+	}
 }

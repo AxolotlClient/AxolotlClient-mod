@@ -32,7 +32,9 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.PlayerListHud;
 import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.client.render.entity.PlayerModelPart;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardObjective;
@@ -142,4 +144,9 @@ public abstract class PlayerListHudMixin {
             footer = null;
         }
     }
+
+	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;isPartVisible(Lnet/minecraft/client/render/entity/PlayerModelPart;)Z", ordinal = 1))
+	private boolean axolotlclient$alwaysShowHeadLayer(PlayerEntity instance, PlayerModelPart modelPart){
+		return Tablist.getInstance().alwaysShowHeadLayer.get() || instance.isPartVisible(modelPart);
+	}
 }

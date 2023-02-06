@@ -49,6 +49,7 @@
   "allocated": "Allocated",
   "alwaysCrit": "Always Show",
   "alwaysCrit.tooltip": "Whether to always emit these particles when hitting.",
+  "alwaysShowHatLayer": "Always show Hat Layer",
   "anchorpoint": "Anchorpoint",
   "applyBlend": "Apply Blending",
   "armorhud": "Armor HUD",
@@ -222,6 +223,7 @@
   "memoryhud": "Memory HUD",
   "menublur": "Menu Blur",
   "minimal": "Minimal",
+  "minimalViewBob": "Minimal View Bobbing",
   "minorindicator": "Minor Indicator Color",
   "minwidth": "Minimum Width",
   "mode": "Mode",
@@ -370,6 +372,5 @@
   "zoomScrollStep": "Scroll Step",
   "zoomScrolling": "Zoom Scrolling",
   "zoomScrolling.tooltip": "Whether to allow scrolling to modify the zoom factor.",
-  "zoomSpeed": "Animation Speed",
-  "minimalViewBob": "Minimal View Bobbing"
+  "zoomSpeed": "Animation Speed"
 }

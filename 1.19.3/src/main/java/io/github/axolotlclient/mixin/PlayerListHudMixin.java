@@ -143,4 +143,9 @@ public abstract class PlayerListHudMixin {
             footer = null;
         }
     }
+
+	@ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/PlayerFaceRenderer;draw(Lnet/minecraft/client/util/math/MatrixStack;IIIZZ)V"), index = 4)
+	private boolean axolotlclient$renderHatLayer(boolean drawHat){
+		return Tablist.getInstance().alwaysShowHeadLayer.get() || drawHat;
+	}
 }
