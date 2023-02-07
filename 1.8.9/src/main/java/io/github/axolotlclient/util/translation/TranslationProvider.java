@@ -45,71 +45,71 @@ import java.util.*;
 
 public class TranslationProvider {
 
-    private static final JsonParser parser = new JsonParser();
+	private static final JsonParser parser = new JsonParser();
 
-    private static final Map<String, String> TRANSLATIONS = new HashMap<>();
+	private static final Map<String, String> TRANSLATIONS = new HashMap<>();
 
-    public static void clear() {
-        TRANSLATIONS.clear();
-    }
+	public static void clear() {
+		TRANSLATIONS.clear();
+	}
 
-    public static void accept(InputStream json) {
-        JsonObject obj = parser.parse(new InputStreamReader(json)).getAsJsonObject();
-        for (Map.Entry<String, JsonElement> entry : obj.entrySet()) {
-            String key = entry.getKey();
-            String value = entry.getValue().getAsString();
-            TRANSLATIONS.put(key, value);
-        }
-    }
+	public static void accept(InputStream json) {
+		JsonObject obj = parser.parse(new InputStreamReader(json)).getAsJsonObject();
+		for (Map.Entry<String, JsonElement> entry : obj.entrySet()) {
+			String key = entry.getKey();
+			String value = entry.getValue().getAsString();
+			TRANSLATIONS.put(key, value);
+		}
+	}
 
-    public static String translate(String key, Object... args) {
-        String translated = TRANSLATIONS.getOrDefault(key, "axolotlclient." + key);
-        if (translated.contains("%s")) {
-            for (Object arg : args) {
-                translated = translated.replaceFirst("%s", arg.toString());
-            }
-        }
-        return translated;
-    }
+	public static String translate(String key, Object... args) {
+		String translated = TRANSLATIONS.getOrDefault(key, "axolotlclient." + key);
+		if (translated.contains("%s")) {
+			for (Object arg : args) {
+				translated = translated.replaceFirst("%s", arg.toString());
+			}
+		}
+		return translated;
+	}
 
-    public static boolean hasTranslation(String key) {
-        return TRANSLATIONS.containsKey(key);
-    }
+	public static boolean hasTranslation(String key) {
+		return TRANSLATIONS.containsKey(key);
+	}
 
-    public static Identifier getLanguageId(String id) {
-        return new Identifier("axolotlclient", "lang/" + id + ".json");
-    }
+	public static Identifier getLanguageId(String id) {
+		return new Identifier("axolotlclient", "lang/" + id + ".json");
+	}
 
-    public static void load() {
-        clear();
+	public static void load() {
+		clear();
 
-        try {
-            MinecraftClient mc = MinecraftClient.getInstance();
-            ResourceManager resourceManager = mc.getResourceManager();
+		try {
+			MinecraftClient mc = MinecraftClient.getInstance();
+			ResourceManager resourceManager = mc.getResourceManager();
 
-            List<Resource> resources = new ArrayList<>();
+			List<Resource> resources = new ArrayList<>();
 
-            resources.addAll(resourceManager.getAllResources(new Identifier("axolotlclient", "lang/en_us.json")));
-            resources.addAll(resourceManager.getAllResources(
-                    new Identifier("axolotlclient", "lang/" + mc.options.language.toLowerCase(Locale.ROOT) + ".json")));
+			resources.addAll(resourceManager.getAllResources(new Identifier("axolotlclient", "lang/en_us.json")));
+			resources.addAll(resourceManager.getAllResources(
+					new Identifier("axolotlclient", "lang/" + mc.options.language.toLowerCase(Locale.ROOT) + ".json")));
 
-            for (Resource resource : resources) {
-                try (InputStream in = resource.getInputStream()) {
-                    accept(in);
-                }
-            }
-        } catch (IOException ignored) {
-        }
-    }
+			for (Resource resource : resources) {
+				try (InputStream in = resource.getInputStream()) {
+					accept(in);
+				}
+			}
+		} catch (IOException ignored) {
+		}
+	}
 
-    /**
-     * A version of {@link String#format(String, Object...)} that doesn't allocate an object if there are no arguments passed.
-     *
-     * @param fmt  The format.
-     * @param args The args.
-     * @return The formatted string.
-     */
-    public static String format(String fmt, Object... args) {
-        return args.length == 0 ? fmt : String.format(fmt, args);
-    }
+	/**
+	 * A version of {@link String#format(String, Object...)} that doesn't allocate an object if there are no arguments passed.
+	 *
+	 * @param fmt  The format.
+	 * @param args The args.
+	 * @return The formatted string.
+	 */
+	public static String format(String fmt, Object... args) {
+		return args.length == 0 ? fmt : String.format(fmt, args);
+	}
 }

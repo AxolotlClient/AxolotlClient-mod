@@ -45,141 +45,144 @@ import java.util.Random;
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ *
  * @license GPL-3.0
  */
 
 public class ToggleSprintHud extends SimpleTextHudEntry {
 
-    public static final Identifier ID = new Identifier("kronhud", "togglesprint");
-    private final BooleanOption toggleSprint = new BooleanOption("toggleSprint", ID.getPath(), false);
-    public final BooleanOption toggleSneak = new BooleanOption("toggleSneak", ID.getPath(), false);
-    private final BooleanOption randomPlaceholder = new BooleanOption("randomPlaceholder", ID.getPath(), false);
-    private final StringOption placeholder = new StringOption("placeholder", ID.getPath(), "No keys pressed");
+	public static final Identifier ID = new Identifier("kronhud", "togglesprint");
+	private final BooleanOption toggleSprint = new BooleanOption("toggleSprint", ID.getPath(), false);
+	public final BooleanOption toggleSneak = new BooleanOption("toggleSneak", ID.getPath(), false);
+	private final BooleanOption randomPlaceholder = new BooleanOption("randomPlaceholder", ID.getPath(), false);
+	private final StringOption placeholder = new StringOption("placeholder", ID.getPath(), "No keys pressed");
 
-    private final KeyBinding sprintToggle = new KeyBinding("key.toggleSprint", GLFW.GLFW_KEY_K, "category.axolotlclient");
-    private final KeyBindOption sprintKey = new KeyBindOption("key.toggleSprint", sprintToggle, (key)->{});
-    private final KeyBinding sneakToggle = new KeyBinding("key.toggleSneak", GLFW.GLFW_KEY_I, "category.axolotlclient");
-    private final KeyBindOption sneakKey = new KeyBindOption("key.toggleSneak", sneakToggle, (key)->{});
+	private final KeyBinding sprintToggle = new KeyBinding("key.toggleSprint", GLFW.GLFW_KEY_K, "category.axolotlclient");
+	private final KeyBindOption sprintKey = new KeyBindOption("key.toggleSprint", sprintToggle, (key) -> {
+	});
+	private final KeyBinding sneakToggle = new KeyBinding("key.toggleSneak", GLFW.GLFW_KEY_I, "category.axolotlclient");
+	private final KeyBindOption sneakKey = new KeyBindOption("key.toggleSneak", sneakToggle, (key) -> {
+	});
 
-    @Getter
-    private final BooleanOption sprintToggled = new BooleanOption("sprintToggled", ID.getPath(), false);
-    private boolean sprintWasPressed = false;
-    @Getter
-    private final BooleanOption sneakToggled = new BooleanOption("sneakToggled", ID.getPath(), false);
-    private boolean sneakWasPressed = false;
+	@Getter
+	private final BooleanOption sprintToggled = new BooleanOption("sprintToggled", ID.getPath(), false);
+	private boolean sprintWasPressed = false;
+	@Getter
+	private final BooleanOption sneakToggled = new BooleanOption("sneakToggled", ID.getPath(), false);
+	private boolean sneakWasPressed = false;
 
-    private final List<String> texts = new ArrayList<>();
-    private String text = "";
+	private final List<String> texts = new ArrayList<>();
+	private String text = "";
 
-    public ToggleSprintHud() {
-        super(100, 20, false);
-    }
+	public ToggleSprintHud() {
+		super(100, 20, false);
+	}
 
-    @Override
-    public void init() {
-        //KeyBindingHelper.registerKeyBinding(sprintToggle);
-        //KeyBindingHelper.registerKeyBinding(sneakToggle);
-    }
+	@Override
+	public void init() {
+		//KeyBindingHelper.registerKeyBinding(sprintToggle);
+		//KeyBindingHelper.registerKeyBinding(sneakToggle);
+	}
 
-    private void loadRandomPlaceholder() {
-        try {
-            BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(
-                            MinecraftClient.getInstance().getResourceManager()
-                                    .getResource(new Identifier("texts/splashes.txt")).getInputStream(),
-                            StandardCharsets.UTF_8));
-            String string;
-            while ((string = bufferedReader.readLine()) != null) {
-                string = string.trim();
-                if (!string.isEmpty()) {
-                    texts.add(string);
-                }
-            }
+	private void loadRandomPlaceholder() {
+		try {
+			BufferedReader bufferedReader = new BufferedReader(
+					new InputStreamReader(
+							MinecraftClient.getInstance().getResourceManager()
+									.getResource(new Identifier("texts/splashes.txt")).getInputStream(),
+							StandardCharsets.UTF_8));
+			String string;
+			while ((string = bufferedReader.readLine()) != null) {
+				string = string.trim();
+				if (!string.isEmpty()) {
+					texts.add(string);
+				}
+			}
 
-            text = texts.get(new Random().nextInt(texts.size()));
-        } catch (Exception e) {
-            text = "";
-        }
-    }
+			text = texts.get(new Random().nextInt(texts.size()));
+		} catch (Exception e) {
+			text = "";
+		}
+	}
 
-    private String getRandomPlaceholder() {
-        if (Objects.equals(text, "")) {
-            loadRandomPlaceholder();
-        }
-        return text;
-    }
+	private String getRandomPlaceholder() {
+		if (Objects.equals(text, "")) {
+			loadRandomPlaceholder();
+		}
+		return text;
+	}
 
-    @Override
-    public String getPlaceholder() {
-        return randomPlaceholder.get() ? getRandomPlaceholder() : placeholder.get();
-    }
+	@Override
+	public String getPlaceholder() {
+		return randomPlaceholder.get() ? getRandomPlaceholder() : placeholder.get();
+	}
 
-    @Override
-    public Identifier getId() {
-        return ID;
-    }
+	@Override
+	public Identifier getId() {
+		return ID;
+	}
 
-    @Override
-    public boolean movable() {
-        return true;
-    }
+	@Override
+	public boolean movable() {
+		return true;
+	}
 
-    @Override
-    public String getValue() {
-        if (client.options.keySneak.isPressed()) {
-            return I18n.translate("sneaking_pressed");
-        }
-        if (client.options.keySprint.isPressed()) {
-            return I18n.translate("sprinting_pressed");
-        }
+	@Override
+	public String getValue() {
+		if (client.options.keySneak.isPressed()) {
+			return I18n.translate("sneaking_pressed");
+		}
+		if (client.options.keySprint.isPressed()) {
+			return I18n.translate("sprinting_pressed");
+		}
 
-        if (toggleSneak.get() && sneakToggled.get()) {
-            return I18n.translate("sneaking_toggled");
-        }
-        if (toggleSprint.get() && sprintToggled.get()) {
-            return I18n.translate("sprinting_toggled");
-        }
-        return getPlaceholder();
-    }
+		if (toggleSneak.get() && sneakToggled.get()) {
+			return I18n.translate("sneaking_toggled");
+		}
+		if (toggleSprint.get() && sprintToggled.get()) {
+			return I18n.translate("sprinting_toggled");
+		}
+		return getPlaceholder();
+	}
 
-    @Override
-    public boolean tickable() {
-        return true;
-    }
+	@Override
+	public boolean tickable() {
+		return true;
+	}
 
-    @Override
-    public void tick() {
-        if (sprintToggle.isPressed() != sprintWasPressed && sprintToggle.isPressed() && toggleSprint.get()) {
-            sprintToggled.toggle();
-            sprintWasPressed = sprintToggle.isPressed();
-        } else if (!sprintToggle.isPressed()) {
-            sprintWasPressed = false;
-        }
-        if (sneakToggle.isPressed() != sneakWasPressed && sneakToggle.isPressed() && toggleSneak.get()) {
-            sneakToggled.toggle();
-            sneakWasPressed = sneakToggle.isPressed();
-        } else if (!sneakToggle.isPressed()) {
-            sneakWasPressed = false;
-        }
-    }
+	@Override
+	public void tick() {
+		if (sprintToggle.isPressed() != sprintWasPressed && sprintToggle.isPressed() && toggleSprint.get()) {
+			sprintToggled.toggle();
+			sprintWasPressed = sprintToggle.isPressed();
+		} else if (!sprintToggle.isPressed()) {
+			sprintWasPressed = false;
+		}
+		if (sneakToggle.isPressed() != sneakWasPressed && sneakToggle.isPressed() && toggleSneak.get()) {
+			sneakToggled.toggle();
+			sneakWasPressed = sneakToggle.isPressed();
+		} else if (!sneakToggle.isPressed()) {
+			sneakWasPressed = false;
+		}
+	}
 
-    @Override
-    public List<Option<?>> getConfigurationOptions() {
-        List<Option<?>> options = super.getConfigurationOptions();
-        options.add(toggleSprint);
-        options.add(sprintKey);
-        options.add(toggleSneak);
-        options.add(sneakKey);
-        options.add(randomPlaceholder);
-        options.add(placeholder);
-        return options;
-    }
+	@Override
+	public List<Option<?>> getConfigurationOptions() {
+		List<Option<?>> options = super.getConfigurationOptions();
+		options.add(toggleSprint);
+		options.add(sprintKey);
+		options.add(toggleSneak);
+		options.add(sneakKey);
+		options.add(randomPlaceholder);
+		options.add(placeholder);
+		return options;
+	}
 
-    @Override
-    public List<Option<?>> getSaveOptions() {
-        List<Option<?>> options = super.getSaveOptions();
-        options.add(sprintToggled);
-        options.add(sneakToggled);
-        return options;
-    }
+	@Override
+	public List<Option<?>> getSaveOptions() {
+		List<Option<?>> options = super.getSaveOptions();
+		options.add(sprintToggled);
+		options.add(sneakToggled);
+		return options;
+	}
 }

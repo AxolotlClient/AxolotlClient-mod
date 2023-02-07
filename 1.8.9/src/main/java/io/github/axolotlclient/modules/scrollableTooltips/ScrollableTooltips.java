@@ -35,77 +35,77 @@ import org.lwjgl.input.Mouse;
 
 public class ScrollableTooltips extends AbstractModule {
 
-    public int tooltipOffsetX;
-    public int tooltipOffsetY;
+	public int tooltipOffsetX;
+	public int tooltipOffsetY;
 
-    protected KeyBinding key = new KeyBinding("key.scrollHorizontally", Keyboard.KEY_LSHIFT,
-            "category.axolotlclient");
+	protected KeyBinding key = new KeyBinding("key.scrollHorizontally", Keyboard.KEY_LSHIFT,
+			"category.axolotlclient");
 
-    private static final ScrollableTooltips instance = new ScrollableTooltips();
+	private static final ScrollableTooltips instance = new ScrollableTooltips();
 
-    private final OptionCategory category = new OptionCategory("scrollableTooltips");
+	private final OptionCategory category = new OptionCategory("scrollableTooltips");
 
-    public final BooleanOption enabled = new BooleanOption("enabled", false);
-    public final BooleanOption enableShiftHorizontalScroll = new BooleanOption("shiftHorizontalScroll",
-            true);
-    protected final IntegerOption scrollAmount = new IntegerOption("scrollAmount", 5, 1, 20);
-    protected final BooleanOption inverse = new BooleanOption("inverse", false);
+	public final BooleanOption enabled = new BooleanOption("enabled", false);
+	public final BooleanOption enableShiftHorizontalScroll = new BooleanOption("shiftHorizontalScroll",
+			true);
+	protected final IntegerOption scrollAmount = new IntegerOption("scrollAmount", 5, 1, 20);
+	protected final BooleanOption inverse = new BooleanOption("inverse", false);
 
-    public static ScrollableTooltips getInstance() {
-        return instance;
-    }
+	public static ScrollableTooltips getInstance() {
+		return instance;
+	}
 
-    @Override
-    public void init() {
-        category.add(enabled);
-        category.add(enableShiftHorizontalScroll);
-        category.add(scrollAmount);
-        category.add(inverse);
+	@Override
+	public void init() {
+		category.add(enabled);
+		category.add(enableShiftHorizontalScroll);
+		category.add(scrollAmount);
+		category.add(inverse);
 
-        AxolotlClient.CONFIG.rendering.addSubCategory(category);
+		AxolotlClient.CONFIG.rendering.addSubCategory(category);
 
-        KeyBindingHelper.registerKeyBinding(key);
-    }
+		KeyBindingHelper.registerKeyBinding(key);
+	}
 
-    public void onRenderTooltip() {
-        if (enabled.get()) {
-            int i = Mouse.getDWheel();
-            if (i != 0) {
-                if (i < 0) {
-                    onScroll(applyInverse(false));
-                }
+	public void onRenderTooltip() {
+		if (enabled.get()) {
+			int i = Mouse.getDWheel();
+			if (i != 0) {
+				if (i < 0) {
+					onScroll(applyInverse(false));
+				}
 
-                if (i > 0) {
-                    onScroll(applyInverse(true));
-                }
-            }
-        }
-    }
+				if (i > 0) {
+					onScroll(applyInverse(true));
+				}
+			}
+		}
+	}
 
-    protected boolean applyInverse(boolean value) {
-        if (inverse.get()) {
-            return !value;
-        }
-        return value;
-    }
+	protected boolean applyInverse(boolean value) {
+		if (inverse.get()) {
+			return !value;
+		}
+		return value;
+	}
 
-    public void onScroll(boolean reverse) {
-        if ((Screen.hasShiftDown() && key.getCode() == Keyboard.KEY_LSHIFT) || key.isPressed()) {
-            if (reverse) {
-                tooltipOffsetX -= scrollAmount.get();
-            } else {
-                tooltipOffsetX += scrollAmount.get();
-            }
-        } else {
-            if (reverse) {
-                tooltipOffsetY -= scrollAmount.get();
-            } else {
-                tooltipOffsetY += scrollAmount.get();
-            }
-        }
-    }
+	public void onScroll(boolean reverse) {
+		if ((Screen.hasShiftDown() && key.getCode() == Keyboard.KEY_LSHIFT) || key.isPressed()) {
+			if (reverse) {
+				tooltipOffsetX -= scrollAmount.get();
+			} else {
+				tooltipOffsetX += scrollAmount.get();
+			}
+		} else {
+			if (reverse) {
+				tooltipOffsetY -= scrollAmount.get();
+			} else {
+				tooltipOffsetY += scrollAmount.get();
+			}
+		}
+	}
 
-    public void resetScroll() {
-        tooltipOffsetY = tooltipOffsetX = 0;
-    }
+	public void resetScroll() {
+		tooltipOffsetY = tooltipOffsetX = 0;
+	}
 }

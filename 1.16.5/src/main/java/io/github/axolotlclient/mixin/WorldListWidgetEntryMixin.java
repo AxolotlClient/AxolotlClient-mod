@@ -35,14 +35,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(WorldListWidget.Entry.class)
 public abstract class WorldListWidgetEntryMixin {
 
-    @Shadow
-    @Final
-    private LevelSummary level;
+	@Shadow
+	@Final
+	private LevelSummary level;
 
-    @Inject(method = "play", at = @At("HEAD"))
-    public void axolotlclient$onSPWorldJoin(CallbackInfo ci) {
-        if (!level.isLocked()) {
-            DiscordRPC.setWorld(level.getDisplayName());
-        }
-    }
+	@Inject(method = "play", at = @At("HEAD"))
+	public void axolotlclient$onSPWorldJoin(CallbackInfo ci) {
+		if (!level.isLocked()) {
+			DiscordRPC.setWorld(level.getDisplayName());
+		}
+	}
 }

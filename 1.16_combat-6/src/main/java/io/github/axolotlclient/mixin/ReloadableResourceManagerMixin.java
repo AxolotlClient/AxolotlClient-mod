@@ -44,21 +44,21 @@ import java.util.concurrent.Executor;
 @Mixin(ReloadableResourceManagerImpl.class)
 public abstract class ReloadableResourceManagerMixin {
 
-    @Inject(method = "beginMonitoredReload", at = @At(value = "INVOKE", target = "Lnet/minecraft/resource/ReloadableResourceManagerImpl;beginReloadInner(Ljava/util/concurrent/Executor;Ljava/util/concurrent/Executor;Ljava/util/List;Ljava/util/concurrent/CompletableFuture;)Lnet/minecraft/resource/ResourceReloadMonitor;"))
-    public void axolotlclient$reload(Executor prepareExecutor, Executor applyExecutor, CompletableFuture<Unit> initialStage,
-                                     List<ResourcePack> packs, CallbackInfoReturnable<ResourceReloadMonitor> cir) {
-        HypixelAbstractionLayer.clearPlayerData();
+	@Inject(method = "beginMonitoredReload", at = @At(value = "INVOKE", target = "Lnet/minecraft/resource/ReloadableResourceManagerImpl;beginReloadInner(Ljava/util/concurrent/Executor;Ljava/util/concurrent/Executor;Ljava/util/List;Ljava/util/concurrent/CompletableFuture;)Lnet/minecraft/resource/ResourceReloadMonitor;"))
+	public void axolotlclient$reload(Executor prepareExecutor, Executor applyExecutor, CompletableFuture<Unit> initialStage,
+									 List<ResourcePack> packs, CallbackInfoReturnable<ResourceReloadMonitor> cir) {
+		HypixelAbstractionLayer.clearPlayerData();
 
-        PackDisplayHud hud = (PackDisplayHud) HudManager.getInstance().get(PackDisplayHud.ID);
-        if (hud != null) {
-            hud.update();
-        }
-    }
+		PackDisplayHud hud = (PackDisplayHud) HudManager.getInstance().get(PackDisplayHud.ID);
+		if (hud != null) {
+			hud.update();
+		}
+	}
 
-    @Inject(method = "getResource", at = @At("HEAD"), cancellable = true)
-    public void axolotlclient$getResource(Identifier id, CallbackInfoReturnable<Resource> cir) {
-        if (AxolotlClient.runtimeResources.get(id) != null) {
-            cir.setReturnValue(AxolotlClient.runtimeResources.get(id));
-        }
-    }
+	@Inject(method = "getResource", at = @At("HEAD"), cancellable = true)
+	public void axolotlclient$getResource(Identifier id, CallbackInfoReturnable<Resource> cir) {
+		if (AxolotlClient.runtimeResources.get(id) != null) {
+			cir.setReturnValue(AxolotlClient.runtimeResources.get(id));
+		}
+	}
 }

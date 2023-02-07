@@ -43,162 +43,162 @@ import java.util.List;
 
 public class AxolotlClientConfig extends ConfigHolder {
 
-    public final BooleanOption showOwnNametag = new BooleanOption("showOwnNametag", false);
-    public final BooleanOption useShadows = new BooleanOption("useShadows", false);
-    public final BooleanOption nametagBackground = new BooleanOption("nametagBackground", true);
+	public final BooleanOption showOwnNametag = new BooleanOption("showOwnNametag", false);
+	public final BooleanOption useShadows = new BooleanOption("useShadows", false);
+	public final BooleanOption nametagBackground = new BooleanOption("nametagBackground", true);
 
-    public final BooleanOption showBadges = new BooleanOption("showBadges", value -> {
-        if (value) {
-            NetworkHelper.setOnline();
-        } else {
-            NetworkHelper.setOffline();
-        }
-    }, true);
-    public final BooleanOption customBadge = new BooleanOption("customBadge", false);
-    public final StringOption badgeText = new StringOption("badgeText", "");
+	public final BooleanOption showBadges = new BooleanOption("showBadges", value -> {
+		if (value) {
+			NetworkHelper.setOnline();
+		} else {
+			NetworkHelper.setOffline();
+		}
+	}, true);
+	public final BooleanOption customBadge = new BooleanOption("customBadge", false);
+	public final StringOption badgeText = new StringOption("badgeText", "");
 
-    public final BooleanOption timeChangerEnabled = new BooleanOption("enabled", false);
-    public final IntegerOption customTime = new IntegerOption("time", 0, 0, 24000);
-    public final BooleanOption customSky = new BooleanOption("customSky", true);
-    public final BooleanOption showSunMoon = new BooleanOption("showSunMoon", true);
-    public final BooleanOption dynamicFOV = new BooleanOption("dynamicFov", true);
-    public final BooleanOption fullBright = new BooleanOption("fullBright", false);
-    public final BooleanOption lowFire = new BooleanOption("lowFire", false);
-    public final BooleanOption lowShield = new BooleanOption("lowShield", false);
-    public final ColorOption hitColor = new ColorOption("hitColor",
-            value -> {
-                try { // needed because apparently someone created a bug that makes this be called when the config is loaded. Will be fixed with the next release.
-                    NativeImageBackedTexture texture = ((OverlayTextureAccessor) MinecraftClient.getInstance().gameRenderer.getOverlayTexture()).getTexture();
-                    NativeImage nativeImage = texture.getImage();
-                    if (nativeImage != null) {
-                        int color = 255 - value.getAlpha();
-                        color = (color << 8) + value.getBlue();
-                        color = (color << 8) + value.getGreen();
-                        color = (color << 8) + value.getRed();
+	public final BooleanOption timeChangerEnabled = new BooleanOption("enabled", false);
+	public final IntegerOption customTime = new IntegerOption("time", 0, 0, 24000);
+	public final BooleanOption customSky = new BooleanOption("customSky", true);
+	public final BooleanOption showSunMoon = new BooleanOption("showSunMoon", true);
+	public final BooleanOption dynamicFOV = new BooleanOption("dynamicFov", true);
+	public final BooleanOption fullBright = new BooleanOption("fullBright", false);
+	public final BooleanOption lowFire = new BooleanOption("lowFire", false);
+	public final BooleanOption lowShield = new BooleanOption("lowShield", false);
+	public final ColorOption hitColor = new ColorOption("hitColor",
+			value -> {
+				try { // needed because apparently someone created a bug that makes this be called when the config is loaded. Will be fixed with the next release.
+					NativeImageBackedTexture texture = ((OverlayTextureAccessor) MinecraftClient.getInstance().gameRenderer.getOverlayTexture()).getTexture();
+					NativeImage nativeImage = texture.getImage();
+					if (nativeImage != null) {
+						int color = 255 - value.getAlpha();
+						color = (color << 8) + value.getBlue();
+						color = (color << 8) + value.getGreen();
+						color = (color << 8) + value.getRed();
 
-                        for (int i = 0; i < 8; ++i) {
-                            for (int j = 0; j < 8; ++j) {
-                                nativeImage.setPixelColor(j, i, color);
-                            }
-                        }
+						for (int i = 0; i < 8; ++i) {
+							for (int j = 0; j < 8; ++j) {
+								nativeImage.setPixelColor(j, i, color);
+							}
+						}
 
-                        RenderSystem.activeTexture(33985);
-                        texture.bindTexture();
-                        nativeImage.upload(0, 0, 0, 0, 0,
-                                nativeImage.getWidth(), nativeImage.getHeight(), false, true, false, false);
-                        RenderSystem.activeTexture(33984);
-                    }
-                } catch (Exception ignored) {
-                }
-            },
-            new Color(255, 0, 0, 77));
+						RenderSystem.activeTexture(33985);
+						texture.bindTexture();
+						nativeImage.upload(0, 0, 0, 0, 0,
+								nativeImage.getWidth(), nativeImage.getHeight(), false, true, false, false);
+						RenderSystem.activeTexture(33984);
+					}
+				} catch (Exception ignored) {
+				}
+			},
+			new Color(255, 0, 0, 77));
 	public final BooleanOption minimalViewBob = new BooleanOption("minimalViewBob", false);
 	public final BooleanOption flatItems = new BooleanOption("flatItems", false);
 
-    public final ColorOption loadingScreenColor = new ColorOption("loadingBgColor", new Color(239, 50, 61, 255));
-    public final BooleanOption nightMode = new BooleanOption("nightMode", false);
-    public final BooleanOption customWindowTitle = new BooleanOption("customWindowTitle", true);
+	public final ColorOption loadingScreenColor = new ColorOption("loadingBgColor", new Color(239, 50, 61, 255));
+	public final BooleanOption nightMode = new BooleanOption("nightMode", false);
+	public final BooleanOption customWindowTitle = new BooleanOption("customWindowTitle", true);
 
-    public final BooleanOption enableCustomOutlines = new BooleanOption("enabled", false);
-    public final ColorOption outlineColor = new ColorOption("color", Color.parse("#DD000000"));
-    public final BooleanOption outlineChroma = new BooleanOption("chroma", false);
-    public final DoubleOption outlineWidth = new DoubleOption("outlineWidth", 1, 1, 10);
+	public final BooleanOption enableCustomOutlines = new BooleanOption("enabled", false);
+	public final ColorOption outlineColor = new ColorOption("color", Color.parse("#DD000000"));
+	public final BooleanOption outlineChroma = new BooleanOption("chroma", false);
+	public final DoubleOption outlineWidth = new DoubleOption("outlineWidth", 1, 1, 10);
 
-    public final BooleanOption noRain = new BooleanOption("noRain", false);
+	public final BooleanOption noRain = new BooleanOption("noRain", false);
 
-    public final GenericOption openCredits = new GenericOption("Credits", "Open Credits", (mouseX, mouseY) ->
-            MinecraftClient.getInstance().openScreen(new CreditsScreen(MinecraftClient.getInstance().currentScreen))
-    );
-    public final BooleanOption debugLogOutput = new BooleanOption("debugLogOutput", false);
-    public final BooleanOption creditsBGM = new BooleanOption("creditsBGM", true);
+	public final GenericOption openCredits = new GenericOption("Credits", "Open Credits", (mouseX, mouseY) ->
+			MinecraftClient.getInstance().openScreen(new CreditsScreen(MinecraftClient.getInstance().currentScreen))
+	);
+	public final BooleanOption debugLogOutput = new BooleanOption("debugLogOutput", false);
+	public final BooleanOption creditsBGM = new BooleanOption("creditsBGM", true);
 
-    public final OptionCategory general = new io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory("general");
-    public final OptionCategory nametagOptions = new io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory("nametagOptions");
-    public final OptionCategory rendering = new io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory("rendering");
-    public final OptionCategory outlines = new io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory("blockOutlines");
-    public final OptionCategory timeChanger = new io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory("timeChanger");
-    public final OptionCategory searchFilters = new io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory("searchFilters");
+	public final OptionCategory general = new io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory("general");
+	public final OptionCategory nametagOptions = new io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory("nametagOptions");
+	public final OptionCategory rendering = new io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory("rendering");
+	public final OptionCategory outlines = new io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory("blockOutlines");
+	public final OptionCategory timeChanger = new io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory("timeChanger");
+	public final OptionCategory searchFilters = new io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory("searchFilters");
 
-    private final List<Option<?>> options = new ArrayList<>();
-    private final List<OptionCategory> categories = new ArrayList<>();
+	private final List<Option<?>> options = new ArrayList<>();
+	private final List<OptionCategory> categories = new ArrayList<>();
 
-    @Getter
-    private final List<OptionCategory> config = new ArrayList<>();
+	@Getter
+	private final List<OptionCategory> config = new ArrayList<>();
 
-    public void add(Option<?> option) {
-        options.add(option);
-    }
+	public void add(Option<?> option) {
+		options.add(option);
+	}
 
-    public void addCategory(OptionCategory cat) {
-        categories.add(cat);
-    }
+	public void addCategory(OptionCategory cat) {
+		categories.add(cat);
+	}
 
-    public List<OptionCategory> getCategories() {
-        return categories;
-    }
+	public List<OptionCategory> getCategories() {
+		return categories;
+	}
 
-    public List<Option<?>> getOptions() {
-        return options;
-    }
+	public List<Option<?>> getOptions() {
+		return options;
+	}
 
 
-    public void init() {
+	public void init() {
 
-        categories.add(general);
-        categories.add(nametagOptions);
-        categories.add(rendering);
+		categories.add(general);
+		categories.add(nametagOptions);
+		categories.add(rendering);
 
-        rendering.addSubCategory(outlines);
+		rendering.addSubCategory(outlines);
 
-        categories.forEach(OptionCategory::clearOptions);
+		categories.forEach(OptionCategory::clearOptions);
 
-        nametagOptions.add(showOwnNametag);
-        nametagOptions.add(useShadows);
-        nametagOptions.add(nametagBackground);
+		nametagOptions.add(showOwnNametag);
+		nametagOptions.add(useShadows);
+		nametagOptions.add(nametagBackground);
 
-        nametagOptions.add(showBadges);
-        nametagOptions.add(customBadge);
-        nametagOptions.add(badgeText);
+		nametagOptions.add(showBadges);
+		nametagOptions.add(customBadge);
+		nametagOptions.add(badgeText);
 
-        general.add(loadingScreenColor);
-        general.add(nightMode);
-        general.add(AxolotlClientConfigConfig.showQuickToggles);
-        general.add(AxolotlClientConfigConfig.showOptionTooltips);
-        general.add(AxolotlClientConfigConfig.showCategoryTooltips);
-        general.add(customWindowTitle);
-        general.add(openCredits);
-        general.add(debugLogOutput);
+		general.add(loadingScreenColor);
+		general.add(nightMode);
+		general.add(AxolotlClientConfigConfig.showQuickToggles);
+		general.add(AxolotlClientConfigConfig.showOptionTooltips);
+		general.add(AxolotlClientConfigConfig.showCategoryTooltips);
+		general.add(customWindowTitle);
+		general.add(openCredits);
+		general.add(debugLogOutput);
 
-        searchFilters.add(AxolotlClientConfigConfig.searchIgnoreCase,
-                AxolotlClientConfigConfig.searchForOptions,
-                AxolotlClientConfigConfig.searchSort,
-                AxolotlClientConfigConfig.searchSortOrder);
-        general.addSubCategory(searchFilters);
+		searchFilters.add(AxolotlClientConfigConfig.searchIgnoreCase,
+				AxolotlClientConfigConfig.searchForOptions,
+				AxolotlClientConfigConfig.searchSort,
+				AxolotlClientConfigConfig.searchSortOrder);
+		general.addSubCategory(searchFilters);
 
-        rendering.add(customSky,
-                showSunMoon,
-                AxolotlClientConfigConfig.chromaSpeed,
-                dynamicFOV,
-                fullBright,
-                lowFire,
-                lowShield,
-                hitColor,
+		rendering.add(customSky,
+				showSunMoon,
+				AxolotlClientConfigConfig.chromaSpeed,
+				dynamicFOV,
+				fullBright,
+				lowFire,
+				lowShield,
+				hitColor,
 				minimalViewBob,
 				flatItems);
 
-        timeChanger.add(timeChangerEnabled);
-        timeChanger.add(customTime);
-        rendering.addSubCategory(timeChanger);
+		timeChanger.add(timeChangerEnabled);
+		timeChanger.add(customTime);
+		rendering.addSubCategory(timeChanger);
 
-        outlines.add(enableCustomOutlines);
-        outlines.add(outlineColor);
-        outlines.add(outlineChroma);
-        //outlines.add(outlineWidth); // I could not get this to have an effect.
+		outlines.add(enableCustomOutlines);
+		outlines.add(outlineColor);
+		outlines.add(outlineChroma);
+		//outlines.add(outlineWidth); // I could not get this to have an effect.
 
-        rendering.add(noRain);
+		rendering.add(noRain);
 
-        AxolotlClient.config.add(creditsBGM);
+		AxolotlClient.config.add(creditsBGM);
 
-    }
+	}
 
 }

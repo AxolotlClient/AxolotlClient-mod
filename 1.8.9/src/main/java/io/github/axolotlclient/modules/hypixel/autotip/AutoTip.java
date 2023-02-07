@@ -34,51 +34,51 @@ import java.util.regex.Pattern;
 
 public class AutoTip implements AbstractHypixelMod {
 
-    @Getter
-    private final static AutoTip Instance = new AutoTip();
+	@Getter
+	private final static AutoTip Instance = new AutoTip();
 
-    private final OptionCategory category = new OptionCategory("autotip");
+	private final OptionCategory category = new OptionCategory("autotip");
 
-    private final BooleanOption enabled = new BooleanOption("enabled", false);
-    private final BooleanOption hideMessages = new BooleanOption("hideTipMessages", false);
+	private final BooleanOption enabled = new BooleanOption("enabled", false);
+	private final BooleanOption hideMessages = new BooleanOption("hideTipMessages", false);
 
-    private final Pattern messagePattern = Pattern.compile("^You tipped [0-9]+ players in [0-9]+ different games!$");
-    private final Pattern tippedPattern = Pattern.compile("^You already tipped everyone that has boosters active, so there isn't anybody to be tipped right now!$");
+	private final Pattern messagePattern = Pattern.compile("^You tipped [0-9]+ players in [0-9]+ different games!$");
+	private final Pattern tippedPattern = Pattern.compile("^You already tipped everyone that has boosters active, so there isn't anybody to be tipped right now!$");
 
-    private long lastTime;
-    private boolean init = false;
+	private long lastTime;
+	private boolean init = false;
 
-    @Override
-    public void init() {
-        category.add(enabled, hideMessages);
-        init = true;
-    }
+	@Override
+	public void init() {
+		category.add(enabled, hideMessages);
+		init = true;
+	}
 
-    @Override
-    public OptionCategory getCategory() {
-        return category;
-    }
+	@Override
+	public OptionCategory getCategory() {
+		return category;
+	}
 
-    @Override
-    public void tick() {
-        if (init) {
-            if (System.currentTimeMillis() - lastTime > 1200000 && Util.getCurrentServerAddress() != null
-                    && Util.currentServerAddressContains("hypixel") && enabled.get()) {
-                if (MinecraftClient.getInstance().player != null) {
-                    MinecraftClient.getInstance().player.sendChatMessage("/tip all");
-                    lastTime = System.currentTimeMillis();
-                }
-            }
-        }
-    }
+	@Override
+	public void tick() {
+		if (init) {
+			if (System.currentTimeMillis() - lastTime > 1200000 && Util.getCurrentServerAddress() != null
+					&& Util.currentServerAddressContains("hypixel") && enabled.get()) {
+				if (MinecraftClient.getInstance().player != null) {
+					MinecraftClient.getInstance().player.sendChatMessage("/tip all");
+					lastTime = System.currentTimeMillis();
+				}
+			}
+		}
+	}
 
-    public boolean onChatMessage(Text text) {
-        return enabled.get() && hideMessages.get() &&
-                (messagePattern.matcher(text.asUnformattedString()).matches() || tippedPattern.matcher(text.asUnformattedString()).matches());
-    }
+	public boolean onChatMessage(Text text) {
+		return enabled.get() && hideMessages.get() &&
+				(messagePattern.matcher(text.asUnformattedString()).matches() || tippedPattern.matcher(text.asUnformattedString()).matches());
+	}
 
-    @Override
-    public boolean tickable() {
-        return true;
-    }
+	@Override
+	public boolean tickable() {
+		return true;
+	}
 }

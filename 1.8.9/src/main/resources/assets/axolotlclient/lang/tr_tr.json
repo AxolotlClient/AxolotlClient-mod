@@ -1,10 +1,10 @@
 {
-  "chatHistoryLength": "Sohbet Geçmiş Boyutu",
-  "chatHistoryLength.tooltip": "Sohbet geçmişinin limitini ayarlar. <br>Maximum'a ayarlanınınca sonsuzdur. <br>Sıradan sohbetde'de çalışıyor.",
-  "chathud": "Sohbet Arayüzü",
-  "chathud.background.tooltip": "Sohbet arkaplanını etkinleştirir yada devre dışı bırakır <br>Sıradan sohbetde'de çalışıyor.",
-  "lineSpacing": "Satır Aralaması",
-  "rawMouseInput": "Düz Fare Girişi",
-  "rawMouseInput.tooltip": "Değiştiğinde fare pozisyonuna yapılan hesaplamaları kaldırmaya çalışır.",
-  "scrollbarColor": "Kaydırma-barı Rengi"
+	"chatHistoryLength": "Sohbet Geçmiş Boyutu",
+	"chatHistoryLength.tooltip": "Sohbet geçmişinin limitini ayarlar. <br>Maximum'a ayarlanınınca sonsuzdur. <br>Sıradan sohbetde'de çalışıyor.",
+	"chathud": "Sohbet Arayüzü",
+	"chathud.background.tooltip": "Sohbet arkaplanını etkinleştirir yada devre dışı bırakır <br>Sıradan sohbetde'de çalışıyor.",
+	"lineSpacing": "Satır Aralaması",
+	"rawMouseInput": "Düz Fare Girişi",
+	"rawMouseInput.tooltip": "Değiştiğinde fare pozisyonuna yapılan hesaplamaları kaldırmaya çalışır.",
+	"scrollbarColor": "Kaydırma-barı Rengi"
 }

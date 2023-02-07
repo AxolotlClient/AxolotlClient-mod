@@ -35,91 +35,91 @@ import java.util.List;
 
 public class AccountsListWidget extends AlwaysSelectedEntryListWidget<AccountsListWidget.Entry> {
 
-    private final AccountsScreen screen;
+	private final AccountsScreen screen;
 
-    public AccountsListWidget(AccountsScreen screen, MinecraftClient client, int width, int height, int top, int bottom, int entryHeight) {
-        super(client, width, height, top, bottom, entryHeight);
-        this.screen = screen;
-    }
+	public AccountsListWidget(AccountsScreen screen, MinecraftClient client, int width, int height, int top, int bottom, int entryHeight) {
+		super(client, width, height, top, bottom, entryHeight);
+		this.screen = screen;
+	}
 
-    public void setAccounts(List<MSAccount> accounts) {
-        accounts.forEach(account -> addEntry(new Entry(screen, account)));
-    }
+	public void setAccounts(List<MSAccount> accounts) {
+		accounts.forEach(account -> addEntry(new Entry(screen, account)));
+	}
 
-    @Override
-    public int getRowWidth() {
-        return super.getRowWidth() + 85;
-    }
+	@Override
+	public int getRowWidth() {
+		return super.getRowWidth() + 85;
+	}
 
-    @Override
-    protected int getScrollbarPositionX() {
-        return super.getScrollbarPositionX() + 30;
-    }
+	@Override
+	protected int getScrollbarPositionX() {
+		return super.getScrollbarPositionX() + 30;
+	}
 
-    @Override
-    protected boolean isFocused() {
-        return this.screen.getFocused() == this;
-    }
+	@Override
+	protected boolean isFocused() {
+		return this.screen.getFocused() == this;
+	}
 
-    @ClientOnly
-    public static class Entry extends AlwaysSelectedEntryListWidget.Entry<Entry> {
+	@ClientOnly
+	public static class Entry extends AlwaysSelectedEntryListWidget.Entry<Entry> {
 
-        private static final Identifier checkmark = new Identifier("axolotlclient", "textures/check.png");
-        private static final Identifier warningSign = new Identifier("axolotlclient", "textures/warning.png");
+		private static final Identifier checkmark = new Identifier("axolotlclient", "textures/check.png");
+		private static final Identifier warningSign = new Identifier("axolotlclient", "textures/warning.png");
 
-        private final Identifier skin;
+		private final Identifier skin;
 
-        private final AccountsScreen screen;
-        private final MSAccount account;
-        private final MinecraftClient client;
-        private long time;
+		private final AccountsScreen screen;
+		private final MSAccount account;
+		private final MinecraftClient client;
+		private long time;
 
-        public Entry(AccountsScreen screen, MSAccount account) {
-            this.screen = screen;
-            this.account = account;
-            this.client = MinecraftClient.getInstance();
-            this.skin = new Identifier(Auth.getInstance().getSkinTextureId(account));
-            Auth.getInstance().loadSkinFile(skin, account);
-        }
+		public Entry(AccountsScreen screen, MSAccount account) {
+			this.screen = screen;
+			this.account = account;
+			this.client = MinecraftClient.getInstance();
+			this.skin = new Identifier(Auth.getInstance().getSkinTextureId(account));
+			Auth.getInstance().loadSkinFile(skin, account);
+		}
 
-        @Override
-        public Text getNarration() {
-            return Text.of(account.getName());
-        }
+		@Override
+		public Text getNarration() {
+			return Text.of(account.getName());
+		}
 
-        @Override
-        public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-            if (Auth.getInstance().getCurrent().equals(account)) {
-                RenderSystem.setShaderTexture(0, checkmark);
-                drawTexture(matrices, x - 35, y + 1, 0, 0, 25, 25, 25, 25);
-            } else if (account.isExpired()) {
-                RenderSystem.setShaderTexture(0, warningSign);
-                drawTexture(matrices, x - 35, y + 1, 0, 0, 25, 25, 25, 25);
-            }
-            if (!account.isOffline()) {
-                RenderSystem.setShaderTexture(0, skin);
-                RenderSystem.enableBlend();
-                drawTexture(matrices, x - 1, y - 1, 33, 33, 8, 8, 8, 8, 64, 64);
-                drawTexture(matrices, x - 1, y - 1, 33, 33, 40, 8, 8, 8, 64, 64);
-                RenderSystem.disableBlend();
-            }
-            client.textRenderer.draw(matrices, account.getName(), x + 3 + 33, y + 1, -1);
-            client.textRenderer.draw(matrices, account.getUuid(), x + 3 + 33, y + 12, 8421504);
-        }
+		@Override
+		public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+			if (Auth.getInstance().getCurrent().equals(account)) {
+				RenderSystem.setShaderTexture(0, checkmark);
+				drawTexture(matrices, x - 35, y + 1, 0, 0, 25, 25, 25, 25);
+			} else if (account.isExpired()) {
+				RenderSystem.setShaderTexture(0, warningSign);
+				drawTexture(matrices, x - 35, y + 1, 0, 0, 25, 25, 25, 25);
+			}
+			if (!account.isOffline()) {
+				RenderSystem.setShaderTexture(0, skin);
+				RenderSystem.enableBlend();
+				drawTexture(matrices, x - 1, y - 1, 33, 33, 8, 8, 8, 8, 64, 64);
+				drawTexture(matrices, x - 1, y - 1, 33, 33, 40, 8, 8, 8, 64, 64);
+				RenderSystem.disableBlend();
+			}
+			client.textRenderer.draw(matrices, account.getName(), x + 3 + 33, y + 1, -1);
+			client.textRenderer.draw(matrices, account.getUuid(), x + 3 + 33, y + 12, 8421504);
+		}
 
-        @Override
-        public boolean mouseClicked(double mouseX, double mouseY, int button) {
-            this.screen.select(this);
-            if (Util.getMeasuringTimeMs() - this.time < 250L && client.world == null) {
-                Auth.getInstance().login(account);
-            }
+		@Override
+		public boolean mouseClicked(double mouseX, double mouseY, int button) {
+			this.screen.select(this);
+			if (Util.getMeasuringTimeMs() - this.time < 250L && client.world == null) {
+				Auth.getInstance().login(account);
+			}
 
-            this.time = Util.getMeasuringTimeMs();
-            return false;
-        }
+			this.time = Util.getMeasuringTimeMs();
+			return false;
+		}
 
-        public MSAccount getAccount() {
-            return account;
-        }
-    }
+		public MSAccount getAccount() {
+			return account;
+		}
+	}
 }

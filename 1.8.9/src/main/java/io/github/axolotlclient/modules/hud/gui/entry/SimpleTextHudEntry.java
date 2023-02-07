@@ -45,86 +45,86 @@ import java.util.List;
 
 public abstract class SimpleTextHudEntry extends TextHudEntry implements DynamicallyPositionable {
 
-    protected final EnumOption justification = new EnumOption("justification", Justification.values(),
-            Justification.CENTER.toString());
-    protected final EnumOption anchor = DefaultOptions.getAnchorPoint();
+	protected final EnumOption justification = new EnumOption("justification", Justification.values(),
+			Justification.CENTER.toString());
+	protected final EnumOption anchor = DefaultOptions.getAnchorPoint();
 
-    private final IntegerOption minWidth;
+	private final IntegerOption minWidth;
 
-    public SimpleTextHudEntry() {
-        this(53, 13, true);
-    }
+	public SimpleTextHudEntry() {
+		this(53, 13, true);
+	}
 
-    protected SimpleTextHudEntry(int width, int height) {
-        this(width, height, true);
-    }
+	protected SimpleTextHudEntry(int width, int height) {
+		this(width, height, true);
+	}
 
-    protected SimpleTextHudEntry(int width, int height, boolean backgroundAllowed) {
-        super(width, height, backgroundAllowed);
-        minWidth = new IntegerOption("minwidth", width, 1, 300);
-    }
+	protected SimpleTextHudEntry(int width, int height, boolean backgroundAllowed) {
+		super(width, height, backgroundAllowed);
+		minWidth = new IntegerOption("minwidth", width, 1, 300);
+	}
 
-    @Override
-    public void renderComponent(float delta) {
-        GlStateManager.enableBlend();
-        GlStateManager.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE,
-                GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GlStateManager.disableTexture();
-        DrawPosition pos = getPos();
-        String value = getValue();
+	@Override
+	public void renderComponent(float delta) {
+		GlStateManager.enableBlend();
+		GlStateManager.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE,
+				GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GlStateManager.disableTexture();
+		DrawPosition pos = getPos();
+		String value = getValue();
 
-        int valueWidth = client.textRenderer.getStringWidth(value);
-        int elementWidth = valueWidth + 4;
+		int valueWidth = client.textRenderer.getStringWidth(value);
+		int elementWidth = valueWidth + 4;
 
-        int min = minWidth.get();
-        if (elementWidth < min) {
-            if (width != min) {
-                setWidth(min);
-                onBoundsUpdate();
-            }
-        } else if (elementWidth != width) {
-            setWidth(elementWidth);
-            onBoundsUpdate();
-        }
-        drawString(value,
-                pos.x() + Justification.valueOf(justification.get()).getXOffset(valueWidth, getWidth() - 4) + 2,
-                pos.y() + (Math.round((float) getHeight() / 2)) - 4, getTextColor().getAsInt(), shadow.get());
-        GlStateManager.enableTexture();
-        GlStateManager.disableBlend();
-    }
+		int min = minWidth.get();
+		if (elementWidth < min) {
+			if (width != min) {
+				setWidth(min);
+				onBoundsUpdate();
+			}
+		} else if (elementWidth != width) {
+			setWidth(elementWidth);
+			onBoundsUpdate();
+		}
+		drawString(value,
+				pos.x() + Justification.valueOf(justification.get()).getXOffset(valueWidth, getWidth() - 4) + 2,
+				pos.y() + (Math.round((float) getHeight() / 2)) - 4, getTextColor().getAsInt(), shadow.get());
+		GlStateManager.enableTexture();
+		GlStateManager.disableBlend();
+	}
 
-    public Color getTextColor() {
-        return textColor.get();
-    }
+	public Color getTextColor() {
+		return textColor.get();
+	}
 
-    @Override
-    public void renderPlaceholderComponent(float delta) {
-        DrawPosition pos = getPos();
-        String value = getPlaceholder();
-        drawString(value, pos.x() + Justification.valueOf(justification.get()).getXOffset(value, getWidth() - 4) + 2,
-                pos.y() + (Math.round((float) getHeight() / 2)) - 4, textColor.get().getAsInt(), shadow.get());
-    }
+	@Override
+	public void renderPlaceholderComponent(float delta) {
+		DrawPosition pos = getPos();
+		String value = getPlaceholder();
+		drawString(value, pos.x() + Justification.valueOf(justification.get()).getXOffset(value, getWidth() - 4) + 2,
+				pos.y() + (Math.round((float) getHeight() / 2)) - 4, textColor.get().getAsInt(), shadow.get());
+	}
 
-    @Override
-    public List<Option<?>> getConfigurationOptions() {
-        List<Option<?>> options = super.getConfigurationOptions();
-        options.add(justification);
-        options.add(anchor);
-        options.add(minWidth);
-        return options;
-    }
+	@Override
+	public List<Option<?>> getConfigurationOptions() {
+		List<Option<?>> options = super.getConfigurationOptions();
+		options.add(justification);
+		options.add(anchor);
+		options.add(minWidth);
+		return options;
+	}
 
-    @Override
-    public boolean movable() {
-        return true;
-    }
+	@Override
+	public boolean movable() {
+		return true;
+	}
 
-    public abstract String getValue();
+	public abstract String getValue();
 
-    public abstract String getPlaceholder();
+	public abstract String getPlaceholder();
 
-    @Override
-    public AnchorPoint getAnchor() {
-        return AnchorPoint.valueOf(anchor.get());
-    }
+	@Override
+	public AnchorPoint getAnchor() {
+		return AnchorPoint.valueOf(anchor.get());
+	}
 }

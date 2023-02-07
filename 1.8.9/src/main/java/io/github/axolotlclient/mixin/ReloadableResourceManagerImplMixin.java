@@ -42,22 +42,22 @@ import java.util.List;
 @Mixin(ReloadableResourceManagerImpl.class)
 public abstract class ReloadableResourceManagerImplMixin {
 
-    @Inject(method = "reload", at = @At("TAIL"))
-    public void axolotlclient$onReload(List<ResourcePack> resourcePacks, CallbackInfo ci) {
-        HypixelAbstractionLayer.clearPlayerData();
+	@Inject(method = "reload", at = @At("TAIL"))
+	public void axolotlclient$onReload(List<ResourcePack> resourcePacks, CallbackInfo ci) {
+		HypixelAbstractionLayer.clearPlayerData();
 
-        PackDisplayHud hud = (PackDisplayHud) HudManager.getInstance().get(PackDisplayHud.ID);
-        if (hud != null) {
-            hud.setPacks(resourcePacks);
-        }
+		PackDisplayHud hud = (PackDisplayHud) HudManager.getInstance().get(PackDisplayHud.ID);
+		if (hud != null) {
+			hud.setPacks(resourcePacks);
+		}
 
-        TranslationProvider.load();
-    }
+		TranslationProvider.load();
+	}
 
-    @Inject(method = "getResource", at = @At("HEAD"), cancellable = true)
-    public void axolotlclient$getResource(Identifier id, CallbackInfoReturnable<Resource> cir) {
-        if (AxolotlClient.runtimeResources.get(id) != null) {
-            cir.setReturnValue(AxolotlClient.runtimeResources.get(id));
-        }
-    }
+	@Inject(method = "getResource", at = @At("HEAD"), cancellable = true)
+	public void axolotlclient$getResource(Identifier id, CallbackInfoReturnable<Resource> cir) {
+		if (AxolotlClient.runtimeResources.get(id) != null) {
+			cir.setReturnValue(AxolotlClient.runtimeResources.get(id));
+		}
+	}
 }

@@ -45,182 +45,182 @@ import java.util.stream.Collectors;
 
 public class ScreenshotUtils extends AbstractModule {
 
-    private static final ScreenshotUtils Instance = new ScreenshotUtils();
+	private static final ScreenshotUtils Instance = new ScreenshotUtils();
 
-    private final OptionCategory category = new OptionCategory("screenshotUtils");
+	private final OptionCategory category = new OptionCategory("screenshotUtils");
 
-    private final BooleanOption enabled = new BooleanOption("enabled", false);
+	private final BooleanOption enabled = new BooleanOption("enabled", false);
 
-    public final StringOption shareUrl = new StringOption("shareUrl", "https://bin.gart.sh");
+	public final StringOption shareUrl = new StringOption("shareUrl", "https://bin.gart.sh");
 
-    private final GenericOption openViewer = new GenericOption("imageViewer", "openViewer", (m1, m2) -> {
-        MinecraftClient.getInstance().setScreen(new ImageViewerScreen(MinecraftClient.getInstance().currentScreen));
-    });
+	private final GenericOption openViewer = new GenericOption("imageViewer", "openViewer", (m1, m2) -> {
+		MinecraftClient.getInstance().setScreen(new ImageViewerScreen(MinecraftClient.getInstance().currentScreen));
+	});
 
-    private final List<Action> actions = new ArrayList<>();
+	private final List<Action> actions = new ArrayList<>();
 
-    private EnumOption autoExec;
+	private EnumOption autoExec;
 
-    @Override
-    public void init() {
+	@Override
+	public void init() {
 
-        actions.add(new Action("copyAction",
-                Formatting.AQUA,
-                "copy_image",
-                new CustomClickEvent((file) -> {
-                    FileTransferable selection = new FileTransferable(file);
-                    Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
-                })
-        ));
+		actions.add(new Action("copyAction",
+				Formatting.AQUA,
+				"copy_image",
+				new CustomClickEvent((file) -> {
+					FileTransferable selection = new FileTransferable(file);
+					Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
+				})
+		));
 
-        actions.add(new Action("deleteAction",
-                Formatting.LIGHT_PURPLE,
-                "delete_image",
-                new CustomClickEvent((file) -> {
-                    try {
-                        Files.delete(file.toPath());
-                        Util.sendChatMessage(
-                                new LiteralText(I18n.translate("screenshot_deleted")
-                                        .replace("<name>", file.getName())));
-                    } catch (Exception e) {
-                        AxolotlClient.LOGGER.warn("Couldn't delete Screenshot " + file.getName());
-                    }
-                })
-        ));
+		actions.add(new Action("deleteAction",
+				Formatting.LIGHT_PURPLE,
+				"delete_image",
+				new CustomClickEvent((file) -> {
+					try {
+						Files.delete(file.toPath());
+						Util.sendChatMessage(
+								new LiteralText(I18n.translate("screenshot_deleted")
+										.replace("<name>", file.getName())));
+					} catch (Exception e) {
+						AxolotlClient.LOGGER.warn("Couldn't delete Screenshot " + file.getName());
+					}
+				})
+		));
 
-        actions.add(new Action("openAction",
-                Formatting.WHITE,
-                "open_image",
-                new CustomClickEvent((file) -> OSUtil.getOS().open(file.toURI(), AxolotlClient.LOGGER))
-        ));
+		actions.add(new Action("openAction",
+				Formatting.WHITE,
+				"open_image",
+				new CustomClickEvent((file) -> OSUtil.getOS().open(file.toURI(), AxolotlClient.LOGGER))
+		));
 
-        actions.add(new Action("uploadAction", Formatting.LIGHT_PURPLE,
-                "upload_image",
-                new CustomClickEvent(file -> {
-                    new Thread("Image Uploader") {
-                        @Override
-                        public void run() {
-                            ImageShare.getInstance().uploadImage(shareUrl.get().trim(), file);
-                        }
-                    }.start();
-                })));
+		actions.add(new Action("uploadAction", Formatting.LIGHT_PURPLE,
+				"upload_image",
+				new CustomClickEvent(file -> {
+					new Thread("Image Uploader") {
+						@Override
+						public void run() {
+							ImageShare.getInstance().uploadImage(shareUrl.get().trim(), file);
+						}
+					}.start();
+				})));
 
-        // If you have further ideas to what actions could be added here, please let us know!
+		// If you have further ideas to what actions could be added here, please let us know!
 
-        autoExec = new EnumOption("autoExec", Util.make(() -> {
-            List<String> names = new ArrayList<>();
-            names.add("off");
-            actions.forEach(action -> names.add(action.getName()));
-            return names.toArray(new String[0]);
+		autoExec = new EnumOption("autoExec", Util.make(() -> {
+			List<String> names = new ArrayList<>();
+			names.add("off");
+			actions.forEach(action -> names.add(action.getName()));
+			return names.toArray(new String[0]);
 
-        }), "off");
+		}), "off");
 
-        category.add(enabled, autoExec, shareUrl, openViewer);
+		category.add(enabled, autoExec, shareUrl, openViewer);
 
-        AxolotlClient.CONFIG.general.addSubCategory(category);
-    }
+		AxolotlClient.CONFIG.general.addSubCategory(category);
+	}
 
-    public static ScreenshotUtils getInstance() {
-        return Instance;
-    }
+	public static ScreenshotUtils getInstance() {
+		return Instance;
+	}
 
-    public Text onScreenshotTaken(Text text, File shot) {
-        if (enabled.get()) {
-            Text t = getUtilsText(shot);
-            if (t != null) {
-                return text.append("\n").append(t);
-            }
-        }
-        return text;
-    }
+	public Text onScreenshotTaken(Text text, File shot) {
+		if (enabled.get()) {
+			Text t = getUtilsText(shot);
+			if (t != null) {
+				return text.append("\n").append(t);
+			}
+		}
+		return text;
+	}
 
-    private @Nullable Text getUtilsText(File file) {
+	private @Nullable Text getUtilsText(File file) {
 
-        if (!autoExec.get().equals("off")) {
+		if (!autoExec.get().equals("off")) {
 
-            actions.parallelStream().filter(action -> autoExec.get().equals(action.getName())).collect(Collectors.toList()).get(0).clickEvent.setFile(file).doAction();
-            return null;
-        }
+			actions.parallelStream().filter(action -> autoExec.get().equals(action.getName())).collect(Collectors.toList()).get(0).clickEvent.setFile(file).doAction();
+			return null;
+		}
 
-        Text message = new LiteralText("");
-        actions.parallelStream().map(action -> action.getText(file)).iterator().forEachRemaining(text -> {
-            message.append(text);
-            message.append(" ");
-        });
-        return message;
-    }
+		Text message = new LiteralText("");
+		actions.parallelStream().map(action -> action.getText(file)).iterator().forEachRemaining(text -> {
+			message.append(text);
+			message.append(" ");
+		});
+		return message;
+	}
 
-    @AllArgsConstructor
-    public static class Action {
+	@AllArgsConstructor
+	public static class Action {
 
-        private final String translationKey;
-        private final Formatting formatting;
-        private final String hoverTextKey;
-        private final CustomClickEvent clickEvent;
+		private final String translationKey;
+		private final Formatting formatting;
+		private final String hoverTextKey;
+		private final CustomClickEvent clickEvent;
 
-        public Text getText(File file) {
-            return new LiteralText(I18n.translate(translationKey))
-                    .setStyle(new Style()
-                            .setFormatting(formatting)
-                            .setClickEvent(clickEvent.setFile(file))
-                            .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(I18n.translate(hoverTextKey)))));
-        }
+		public Text getText(File file) {
+			return new LiteralText(I18n.translate(translationKey))
+					.setStyle(new Style()
+							.setFormatting(formatting)
+							.setClickEvent(clickEvent.setFile(file))
+							.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(I18n.translate(hoverTextKey)))));
+		}
 
-        public String getName() {
-            return translationKey;
-        }
-    }
+		public String getName() {
+			return translationKey;
+		}
+	}
 
-    @AllArgsConstructor
-    protected static class FileTransferable implements Transferable {
+	@AllArgsConstructor
+	protected static class FileTransferable implements Transferable {
 
-        private final File file;
+		private final File file;
 
-        @Override
-        public DataFlavor[] getTransferDataFlavors() {
-            return new DataFlavor[]{DataFlavor.javaFileListFlavor};
-        }
+		@Override
+		public DataFlavor[] getTransferDataFlavors() {
+			return new DataFlavor[]{DataFlavor.javaFileListFlavor};
+		}
 
-        @Override
-        public boolean isDataFlavorSupported(DataFlavor flavor) {
-            return DataFlavor.javaFileListFlavor.equals(flavor);
-        }
+		@Override
+		public boolean isDataFlavorSupported(DataFlavor flavor) {
+			return DataFlavor.javaFileListFlavor.equals(flavor);
+		}
 
-        @Override
-        public Object getTransferData(DataFlavor flavor) {
-            final ArrayList<File> files = new ArrayList<>();
-            files.add(file);
-            return files;
-        }
-    }
+		@Override
+		public Object getTransferData(DataFlavor flavor) {
+			final ArrayList<File> files = new ArrayList<>();
+			files.add(file);
+			return files;
+		}
+	}
 
-    public static class CustomClickEvent extends ClickEvent {
+	public static class CustomClickEvent extends ClickEvent {
 
-        private final OnActionCall action;
-        private File file;
+		private final OnActionCall action;
+		private File file;
 
-        public CustomClickEvent(OnActionCall action) {
-            super(Action.byName(""), "");
-            this.action = action;
-        }
+		public CustomClickEvent(OnActionCall action) {
+			super(Action.byName(""), "");
+			this.action = action;
+		}
 
-        public void doAction() {
-            if (file != null) {
-                action.doAction(file);
-            } else {
-                AxolotlClient.LOGGER.warn("How'd you manage to do this? " +
-                        "Now there's a screenshot ClickEvent without a File attached to it!");
-            }
-        }
+		public void doAction() {
+			if (file != null) {
+				action.doAction(file);
+			} else {
+				AxolotlClient.LOGGER.warn("How'd you manage to do this? " +
+						"Now there's a screenshot ClickEvent without a File attached to it!");
+			}
+		}
 
-        public CustomClickEvent setFile(File file) {
-            this.file = file;
-            return this;
-        }
-    }
+		public CustomClickEvent setFile(File file) {
+			this.file = file;
+			return this;
+		}
+	}
 
-    interface OnActionCall {
+	interface OnActionCall {
 
-        void doAction(File file);
-    }
+		void doAction(File file);
+	}
 }

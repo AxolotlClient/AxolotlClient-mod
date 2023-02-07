@@ -43,57 +43,57 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 @Mixin(TitleScreen.class)
 public abstract class TitleScreenMixin extends Screen {
 
-    @Shadow
-    public abstract void render(int par1, int par2, float par3);
+	@Shadow
+	public abstract void render(int par1, int par2, float par3);
 
-    @ModifyArgs(method = "initWidgetsNormal", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget;<init>(IIILjava/lang/String;)V", ordinal = 2))
-    private void axolotlclient$replaceRealmsButton(Args args) {
-        if (!axolotlclient$alternateLayout()) {
+	@ModifyArgs(method = "initWidgetsNormal", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget;<init>(IIILjava/lang/String;)V", ordinal = 2))
+	private void axolotlclient$replaceRealmsButton(Args args) {
+		if (!axolotlclient$alternateLayout()) {
 
-            args.set(0, 192);
-            args.set(3, I18n.translate("config") + "...");
-        }
-        if (Auth.getInstance().showButton.get()) {
-            buttons.add(new AuthWidget());
-        }
-    }
+			args.set(0, 192);
+			args.set(3, I18n.translate("config") + "...");
+		}
+		if (Auth.getInstance().showButton.get()) {
+			buttons.add(new AuthWidget());
+		}
+	}
 
-    @Inject(method = "initWidgetsNormal", at = @At("TAIL"))
-    private void axolotlclient$addOptionsButton(int y, int spacingY, CallbackInfo ci) {
-        if (axolotlclient$alternateLayout()) {
-            buttons.add(new ButtonWidget(192, this.width / 2 - 100, y + spacingY * 3, I18n.translate("config") + "..."));
-        }
-    }
+	@Inject(method = "initWidgetsNormal", at = @At("TAIL"))
+	private void axolotlclient$addOptionsButton(int y, int spacingY, CallbackInfo ci) {
+		if (axolotlclient$alternateLayout()) {
+			buttons.add(new ButtonWidget(192, this.width / 2 - 100, y + spacingY * 3, I18n.translate("config") + "..."));
+		}
+	}
 
-    @ModifyConstant(method = "init", constant = @Constant(intValue = 72))
-    private int axolotlclient$moveButtons(int constant) {
-        if (axolotlclient$alternateLayout()) {
-            return constant + 25;
-        }
-        return constant;
-    }
+	@ModifyConstant(method = "init", constant = @Constant(intValue = 72))
+	private int axolotlclient$moveButtons(int constant) {
+		if (axolotlclient$alternateLayout()) {
+			return constant + 25;
+		}
+		return constant;
+	}
 
-    @Inject(method = "buttonClicked", at = @At("TAIL"))
-    public void axolotlclient$onClick(ButtonWidget button, CallbackInfo ci) {
-        if (button.id == 192)
-            MinecraftClient.getInstance().setScreen(new HudEditScreen(this));
-        else if (button.id == 242)
-            MinecraftClient.getInstance().setScreen(new AccountsScreen(MinecraftClient.getInstance().currentScreen));
-    }
+	@Inject(method = "buttonClicked", at = @At("TAIL"))
+	public void axolotlclient$onClick(ButtonWidget button, CallbackInfo ci) {
+		if (button.id == 192)
+			MinecraftClient.getInstance().setScreen(new HudEditScreen(this));
+		else if (button.id == 242)
+			MinecraftClient.getInstance().setScreen(new AccountsScreen(MinecraftClient.getInstance().currentScreen));
+	}
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;drawWithShadow(Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V", ordinal = 0))
-    public void axolotlclient$customBranding(TitleScreen instance, TextRenderer textRenderer, String s, int x, int y, int color) {
-        if (FabricLoader.getInstance().getModContainer("axolotlclient").isPresent()) {
-            instance.drawWithShadow(textRenderer,
-                    "Minecraft 1.8.9/" + ClientBrandRetriever.getClientModName() + " " + FabricLoader.getInstance()
-                            .getModContainer("axolotlclient").get().getMetadata().getVersion().getFriendlyString(),
-                    x, y, color);
-        } else {
-            instance.drawWithShadow(textRenderer, s, x, y, color);
-        }
-    }
+	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;drawWithShadow(Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V", ordinal = 0))
+	public void axolotlclient$customBranding(TitleScreen instance, TextRenderer textRenderer, String s, int x, int y, int color) {
+		if (FabricLoader.getInstance().getModContainer("axolotlclient").isPresent()) {
+			instance.drawWithShadow(textRenderer,
+					"Minecraft 1.8.9/" + ClientBrandRetriever.getClientModName() + " " + FabricLoader.getInstance()
+							.getModContainer("axolotlclient").get().getMetadata().getVersion().getFriendlyString(),
+					x, y, color);
+		} else {
+			instance.drawWithShadow(textRenderer, s, x, y, color);
+		}
+	}
 
-    private boolean axolotlclient$alternateLayout() {
-        return FabricLoader.getInstance().isModLoaded("modmenu") && !FabricLoader.getInstance().isModLoaded("axolotlclient-modmenu");
-    }
+	private boolean axolotlclient$alternateLayout() {
+		return FabricLoader.getInstance().isModLoaded("modmenu") && !FabricLoader.getInstance().isModLoaded("axolotlclient-modmenu");
+	}
 }

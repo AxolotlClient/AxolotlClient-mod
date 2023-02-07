@@ -49,43 +49,43 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 @Mixin(WorldRenderer.class)
 public abstract class WorldRendererMixin {
 
-    @Shadow
-    @Final
-    private MinecraftClient client;
+	@Shadow
+	@Final
+	private MinecraftClient client;
 
-    @Inject(method = "renderSky", at = @At("HEAD"), cancellable = true)
-    public void axolotlclient$renderSky(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
-        if (AxolotlClient.CONFIG.customSky.get() && SkyboxManager.getInstance().hasSkyBoxes()
-                && !FabricLoader.getInstance().isModLoaded("fabricskyboxes")) {
-            this.client.getProfiler().push("Custom Skies");
+	@Inject(method = "renderSky", at = @At("HEAD"), cancellable = true)
+	public void axolotlclient$renderSky(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
+		if (AxolotlClient.CONFIG.customSky.get() && SkyboxManager.getInstance().hasSkyBoxes()
+				&& !FabricLoader.getInstance().isModLoaded("fabricskyboxes")) {
+			this.client.getProfiler().push("Custom Skies");
 
-            RenderSystem.depthMask(false);
-            SkyboxManager.getInstance().renderSkyboxes(matrices, tickDelta);
-            RenderSystem.depthMask(true);
-            this.client.getProfiler().pop();
-            ci.cancel();
-        }
-    }
+			RenderSystem.depthMask(false);
+			SkyboxManager.getInstance().renderSkyboxes(matrices, tickDelta);
+			RenderSystem.depthMask(true);
+			this.client.getProfiler().pop();
+			ci.cancel();
+		}
+	}
 
-    @ModifyArgs(method = "drawBlockOutline", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/WorldRenderer;drawShapeOutline(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;Lnet/minecraft/util/shape/VoxelShape;DDDFFFF)V"))
-    public void axolotlclient$customOutlineColor(Args args) {
-        if (AxolotlClient.CONFIG.enableCustomOutlines.get()) {
-            int color = AxolotlClient.CONFIG.outlineColor.get().getAsInt();
-            float a = (float) (color >> 24 & 0xFF) / 255.0F;
-            float r = (float) (color >> 16 & 0xFF) / 255.0F;
-            float g = (float) (color >> 8 & 0xFF) / 255.0F;
-            float b = (float) (color & 0xFF) / 255.0F;
-            args.set(6, r);
-            args.set(7, g);
-            args.set(8, b);
-            args.set(9, a);
-        }
-    }
+	@ModifyArgs(method = "drawBlockOutline", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/WorldRenderer;drawShapeOutline(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;Lnet/minecraft/util/shape/VoxelShape;DDDFFFF)V"))
+	public void axolotlclient$customOutlineColor(Args args) {
+		if (AxolotlClient.CONFIG.enableCustomOutlines.get()) {
+			int color = AxolotlClient.CONFIG.outlineColor.get().getAsInt();
+			float a = (float) (color >> 24 & 0xFF) / 255.0F;
+			float r = (float) (color >> 16 & 0xFF) / 255.0F;
+			float g = (float) (color >> 8 & 0xFF) / 255.0F;
+			float b = (float) (color & 0xFF) / 255.0F;
+			args.set(6, r);
+			args.set(7, g);
+			args.set(8, b);
+			args.set(9, a);
+		}
+	}
 
-    @Inject(method = "renderWeather", at = @At("HEAD"), cancellable = true)
-    private void axolotlclient$changeWeather(LightmapTextureManager manager, float tickDelta, double cameraX, double cameraY, double cameraZ, CallbackInfo ci) {
-        if (AxolotlClient.CONFIG.noRain.get()) {
-            ci.cancel();
-        }
-    }
+	@Inject(method = "renderWeather", at = @At("HEAD"), cancellable = true)
+	private void axolotlclient$changeWeather(LightmapTextureManager manager, float tickDelta, double cameraX, double cameraY, double cameraZ, CallbackInfo ci) {
+		if (AxolotlClient.CONFIG.noRain.get()) {
+			ci.cancel();
+		}
+	}
 }

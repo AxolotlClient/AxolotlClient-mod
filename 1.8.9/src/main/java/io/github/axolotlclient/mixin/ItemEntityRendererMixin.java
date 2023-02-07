@@ -39,8 +39,8 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 public class ItemEntityRendererMixin {
 
 	@Inject(method = "method_10221", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;translate(FFF)V"), locals = LocalCapture.CAPTURE_FAILEXCEPTION, cancellable = true)
-	private void axolotlclient$transformItems(ItemEntity itemEntity, double d, double e, double f, float g, BakedModel bakedModel, CallbackInfoReturnable<Integer> cir, ItemStack stack, Item item, boolean bl, int i){
-		if(AxolotlClient.CONFIG.flatItems.get()) {
+	private void axolotlclient$transformItems(ItemEntity itemEntity, double d, double e, double f, float g, BakedModel bakedModel, CallbackInfoReturnable<Integer> cir, ItemStack stack, Item item, boolean bl, int i) {
+		if (AxolotlClient.CONFIG.flatItems.get()) {
 			GlStateManager.translate(d, e + 0.05, f);
 			GlStateManager.rotate(itemEntity.pitch, 0, 0, 1);
 			GlStateManager.rotate(90, 1, 0, 0);

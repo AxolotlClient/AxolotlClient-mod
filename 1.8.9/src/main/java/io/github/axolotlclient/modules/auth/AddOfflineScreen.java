@@ -31,54 +31,54 @@ import java.util.UUID;
 
 public class AddOfflineScreen extends Screen {
 
-    private TextFieldWidget nameInput;
-    private final Screen parent;
+	private TextFieldWidget nameInput;
+	private final Screen parent;
 
-    public AddOfflineScreen(Screen parent) {
-        this.parent = parent;
-    }
+	public AddOfflineScreen(Screen parent) {
+		this.parent = parent;
+	}
 
 
-    @Override
-    public void render(int i, int j, float f) {
-        renderBackground();
-        super.render(i, j, f);
-        textRenderer.drawWithShadow(I18n.translate("auth.add.offline.name"), width / 2F - 100, height / 2f - 20, -1);
-        drawCenteredString(this.textRenderer, I18n.translate("auth.add.offline"), this.width / 2, 20, 16777215);
-        nameInput.render();
-    }
+	@Override
+	public void render(int i, int j, float f) {
+		renderBackground();
+		super.render(i, j, f);
+		textRenderer.drawWithShadow(I18n.translate("auth.add.offline.name"), width / 2F - 100, height / 2f - 20, -1);
+		drawCenteredString(this.textRenderer, I18n.translate("auth.add.offline"), this.width / 2, 20, 16777215);
+		nameInput.render();
+	}
 
-    @Override
-    protected void keyPressed(char c, int i) {
-        nameInput.keyPressed(c, i);
-    }
+	@Override
+	protected void keyPressed(char c, int i) {
+		nameInput.keyPressed(c, i);
+	}
 
-    @Override
-    protected void mouseClicked(int i, int j, int k) {
-        super.mouseClicked(i, j, k);
-        nameInput.mouseClicked(i, j, k);
-    }
+	@Override
+	protected void mouseClicked(int i, int j, int k) {
+		super.mouseClicked(i, j, k);
+		nameInput.mouseClicked(i, j, k);
+	}
 
-    @Override
-    protected void buttonClicked(ButtonWidget buttonWidget) {
-        if (buttonWidget.id == 1) {
-            client.setScreen(parent);
-        } else if (buttonWidget.id == 2) {
-            Auth.getInstance().addAccount(new MSAccount(nameInput.getText(), UUID.randomUUID().toString(), MSAccount.OFFLINE_TOKEN));
-            client.setScreen(parent);
-        }
-    }
+	@Override
+	protected void buttonClicked(ButtonWidget buttonWidget) {
+		if (buttonWidget.id == 1) {
+			client.setScreen(parent);
+		} else if (buttonWidget.id == 2) {
+			Auth.getInstance().addAccount(new MSAccount(nameInput.getText(), UUID.randomUUID().toString(), MSAccount.OFFLINE_TOKEN));
+			client.setScreen(parent);
+		}
+	}
 
-    @Override
-    public void init() {
-        nameInput = new TextFieldWidget(0, textRenderer, width / 2 - 100, height / 2 - 10, 200, 20);
+	@Override
+	public void init() {
+		nameInput = new TextFieldWidget(0, textRenderer, width / 2 - 100, height / 2 - 10, 200, 20);
 
-        buttons.add(new ButtonWidget(1, width / 2 - 155, height - 50, 150, 20, I18n.translate("gui.cancel")));
-        buttons.add(new ButtonWidget(2, width / 2 + 5, height - 50, 150, 20, I18n.translate("gui.done")));
-    }
+		buttons.add(new ButtonWidget(1, width / 2 - 155, height - 50, 150, 20, I18n.translate("gui.cancel")));
+		buttons.add(new ButtonWidget(2, width / 2 + 5, height - 50, 150, 20, I18n.translate("gui.done")));
+	}
 
-    @Override
-    public void tick() {
-        nameInput.tick();
-    }
+	@Override
+	public void tick() {
+		nameInput.tick();
+	}
 }

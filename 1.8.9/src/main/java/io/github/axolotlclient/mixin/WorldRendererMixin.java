@@ -50,52 +50,52 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(WorldRenderer.class)
 public abstract class WorldRendererMixin {
 
-    @Shadow
-    private ClientWorld world;
+	@Shadow
+	private ClientWorld world;
 
-    @Shadow
-    @Final
-    private MinecraftClient client;
+	@Shadow
+	@Final
+	private MinecraftClient client;
 
-    @Inject(method = "renderSky", at = @At("HEAD"), cancellable = true)
-    public void axolotlclient$renderCustomSky(float tickDelta, int anaglyphFilter, CallbackInfo ci) {
-        if (this.world.dimension.canPlayersSleep()) {
-            if (AxolotlClient.CONFIG.customSky.get() && SkyboxManager.getInstance().hasSkyBoxes()) {
-                GlStateManager.depthMask(false);
-                this.client.profiler.push("Custom Skies");
-                SkyboxManager.getInstance().renderSkyboxes(tickDelta, world.getRainGradient(tickDelta));
-                this.client.profiler.pop();
-                GlStateManager.depthMask(true);
-                ci.cancel();
-            }
-        }
-    }
+	@Inject(method = "renderSky", at = @At("HEAD"), cancellable = true)
+	public void axolotlclient$renderCustomSky(float tickDelta, int anaglyphFilter, CallbackInfo ci) {
+		if (this.world.dimension.canPlayersSleep()) {
+			if (AxolotlClient.CONFIG.customSky.get() && SkyboxManager.getInstance().hasSkyBoxes()) {
+				GlStateManager.depthMask(false);
+				this.client.profiler.push("Custom Skies");
+				SkyboxManager.getInstance().renderSkyboxes(tickDelta, world.getRainGradient(tickDelta));
+				this.client.profiler.pop();
+				GlStateManager.depthMask(true);
+				ci.cancel();
+			}
+		}
+	}
 
-    @Redirect(method = "renderClouds", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/dimension/Dimension;getCloudHeight()F"))
-    public float axolotlclient$getCloudHeight(Dimension instance) {
-        return AxolotlClient.CONFIG.cloudHeight.get();
-    }
+	@Redirect(method = "renderClouds", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/dimension/Dimension;getCloudHeight()F"))
+	public float axolotlclient$getCloudHeight(Dimension instance) {
+		return AxolotlClient.CONFIG.cloudHeight.get();
+	}
 
-    @ModifyArg(method = "drawBlockOutline", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/GL11;glLineWidth(F)V"), remap = false)
-    public float axolotlclient$OutlineWidth(float width) {
-        if (AxolotlClient.CONFIG.enableCustomOutlines.get() && AxolotlClient.CONFIG.outlineWidth.get() > 1) {
-            return 1.0F + AxolotlClient.CONFIG.outlineWidth.get();
-        }
-        return width;
-    }
+	@ModifyArg(method = "drawBlockOutline", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/GL11;glLineWidth(F)V"), remap = false)
+	public float axolotlclient$OutlineWidth(float width) {
+		if (AxolotlClient.CONFIG.enableCustomOutlines.get() && AxolotlClient.CONFIG.outlineWidth.get() > 1) {
+			return 1.0F + AxolotlClient.CONFIG.outlineWidth.get();
+		}
+		return width;
+	}
 
-    @Inject(method = "drawBlockOutline", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;color(FFFF)V", shift = At.Shift.AFTER))
-    public void axolotlclient$customOutlineColor(PlayerEntity playerEntity, BlockHitResult blockHitResult, int i, float f,
-                                                 CallbackInfo ci) {
-        if (AxolotlClient.CONFIG.enableCustomOutlines.get()) {
-            GlStateManager.clearColor();
+	@Inject(method = "drawBlockOutline", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;color(FFFF)V", shift = At.Shift.AFTER))
+	public void axolotlclient$customOutlineColor(PlayerEntity playerEntity, BlockHitResult blockHitResult, int i, float f,
+												 CallbackInfo ci) {
+		if (AxolotlClient.CONFIG.enableCustomOutlines.get()) {
+			GlStateManager.clearColor();
 
-            int color = AxolotlClient.CONFIG.outlineColor.get().getAsInt();
-            float a = (float) (color >> 24 & 0xFF) / 255.0F;
-            float r = (float) (color >> 16 & 0xFF) / 255.0F;
-            float g = (float) (color >> 8 & 0xFF) / 255.0F;
-            float b = (float) (color & 0xFF) / 255.0F;
-            GlStateManager.color(r, g, b, a);
-        }
-    }
+			int color = AxolotlClient.CONFIG.outlineColor.get().getAsInt();
+			float a = (float) (color >> 24 & 0xFF) / 255.0F;
+			float r = (float) (color >> 16 & 0xFF) / 255.0F;
+			float g = (float) (color >> 8 & 0xFF) / 255.0F;
+			float b = (float) (color & 0xFF) / 255.0F;
+			GlStateManager.color(r, g, b, a);
+		}
+	}
 }

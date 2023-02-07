@@ -53,86 +53,86 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 @Mixin(TitleScreen.class)
 public abstract class TitleScreenMixin extends Screen {
 
-    protected TitleScreenMixin() {
-        super(Text.of(""));
-    }
+	protected TitleScreenMixin() {
+		super(Text.of(""));
+	}
 
-    @Inject(method = "initWidgetsNormal", at = @At("HEAD"))
-    public void axolotlclient$inMenu(int y, int spacingY, CallbackInfo ci) {
-        if (MinecraftClient.getInstance().options.keySaveToolbarActivator.equals(Zoom.keyBinding)) {
-            MinecraftClient.getInstance().options.keySaveToolbarActivator.setBoundKey(InputUtil.UNKNOWN_KEY);
-            AxolotlClient.LOGGER.info("Unbound \"Save Toolbar Activator\" to resolve conflict with the zoom key!");
-        }
-        if(Auth.getInstance().showButton.get()) {
-            addButton(new AuthWidget());
-        }
-    }
+	@Inject(method = "initWidgetsNormal", at = @At("HEAD"))
+	public void axolotlclient$inMenu(int y, int spacingY, CallbackInfo ci) {
+		if (MinecraftClient.getInstance().options.keySaveToolbarActivator.equals(Zoom.keyBinding)) {
+			MinecraftClient.getInstance().options.keySaveToolbarActivator.setBoundKey(InputUtil.UNKNOWN_KEY);
+			AxolotlClient.LOGGER.info("Unbound \"Save Toolbar Activator\" to resolve conflict with the zoom key!");
+		}
+		if (Auth.getInstance().showButton.get()) {
+			addButton(new AuthWidget());
+		}
+	}
 
-    @ModifyArgs(method = "initWidgetsNormal", at =
-        @At(value = "INVOKE",
-                target = "Lnet/minecraft/client/gui/widget/ButtonWidget;<init>(IIIILnet/minecraft/text/Text;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;Lnet/minecraft/client/gui/widget/ButtonWidget$TooltipSupplier;)V",
-                ordinal = 1))
-    public void axolotlclient$noRealmsbutOptionsButton(Args args) {
-        if (!FabricLoader.getInstance().isModLoaded("modmenu")) {
-            args.set(4, new TranslatableText("config"));
-            args.set(5, (ButtonWidget.PressAction) buttonWidget -> MinecraftClient.getInstance()
-                    .openScreen(new HudEditScreen(this)));
-        }
-    }
+	@ModifyArgs(method = "initWidgetsNormal", at =
+	@At(value = "INVOKE",
+			target = "Lnet/minecraft/client/gui/widget/ButtonWidget;<init>(IIIILnet/minecraft/text/Text;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;Lnet/minecraft/client/gui/widget/ButtonWidget$TooltipSupplier;)V",
+			ordinal = 1))
+	public void axolotlclient$noRealmsbutOptionsButton(Args args) {
+		if (!FabricLoader.getInstance().isModLoaded("modmenu")) {
+			args.set(4, new TranslatableText("config"));
+			args.set(5, (ButtonWidget.PressAction) buttonWidget -> MinecraftClient.getInstance()
+					.openScreen(new HudEditScreen(this)));
+		}
+	}
 
 
-    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;drawStringWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V"), index = 2)
-    public String axolotlclient$setVersionText(String s) {
-        return "Minecraft " + SharedConstants.getGameVersion().getName() + "/AxolotlClient "
-                + (FabricLoader.getInstance().getModContainer("axolotlclient").isPresent()
-                        ? FabricLoader.getInstance().getModContainer("axolotlclient").get().getMetadata().getVersion().getFriendlyString()
-                        : "");
-    }
+	@ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;drawStringWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V"), index = 2)
+	public String axolotlclient$setVersionText(String s) {
+		return "Minecraft " + SharedConstants.getGameVersion().getName() + "/AxolotlClient "
+				+ (FabricLoader.getInstance().getModContainer("axolotlclient").isPresent()
+				? FabricLoader.getInstance().getModContainer("axolotlclient").get().getMetadata().getVersion().getFriendlyString()
+				: "");
+	}
 
-    @Inject(method = "areRealmsNotificationsEnabled", at = @At("HEAD"), cancellable = true)
-    public void axolotlclient$noRealmsIcons(CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(false);
-    }
+	@Inject(method = "areRealmsNotificationsEnabled", at = @At("HEAD"), cancellable = true)
+	public void axolotlclient$noRealmsIcons(CallbackInfoReturnable<Boolean> cir) {
+		cir.setReturnValue(false);
+	}
 
-    @Inject(method = "init", at = @At("HEAD"))
-    public void axolotlclient$showBadModsScreen(CallbackInfo ci) {
-        if (AxolotlClient.showWarning) {
-            StringBuilder description = new StringBuilder();
-            for (int i = 0; i < AxolotlClient.badmod.reason().length; i++) {
-                UnsupportedMod.UnsupportedReason reason = AxolotlClient.badmod.reason()[i];
-                if (i > 0 && i < AxolotlClient.badmod.reason().length - 1) {
-                    description.append(", to ");
-                } else if (i > 0) {
-                    description.append(" and to ");
-                }
-                description.append(reason);
-            }
-            description.append(". ");
+	@Inject(method = "init", at = @At("HEAD"))
+	public void axolotlclient$showBadModsScreen(CallbackInfo ci) {
+		if (AxolotlClient.showWarning) {
+			StringBuilder description = new StringBuilder();
+			for (int i = 0; i < AxolotlClient.badmod.reason().length; i++) {
+				UnsupportedMod.UnsupportedReason reason = AxolotlClient.badmod.reason()[i];
+				if (i > 0 && i < AxolotlClient.badmod.reason().length - 1) {
+					description.append(", to ");
+				} else if (i > 0) {
+					description.append(" and to ");
+				}
+				description.append(reason);
+			}
+			description.append(". ");
 
-            MinecraftClient.getInstance().openScreen(new ConfirmScreen((boolean confirmed) -> {
-                if (confirmed) {
-                    AxolotlClient.showWarning = false;
-                    AxolotlClient.titleDisclaimer = true;
-                    System.out.println("Proceed with Caution!");
-                    MinecraftClient.getInstance().openScreen(new TitleScreen());
-                } else {
-                    MinecraftClient.getInstance().stop();
-                }
-            }, new LiteralText("Axolotlclient warning").formatted(Formatting.RED), new LiteralText("The mod ")
-                    .append(new LiteralText(AxolotlClient.badmod.name()).formatted(Formatting.BOLD, Formatting.DARK_RED))
-                    .append(" is known to ").append(description.toString())
-                    .append("AxolotlClient will not be responsible for any punishment or crashes you will encounter while using it.\n Proceed with Caution!"),
-                    new TranslatableText("gui.proceed"), new TranslatableText("menu.quit")));
-        }
-    }
+			MinecraftClient.getInstance().openScreen(new ConfirmScreen((boolean confirmed) -> {
+				if (confirmed) {
+					AxolotlClient.showWarning = false;
+					AxolotlClient.titleDisclaimer = true;
+					System.out.println("Proceed with Caution!");
+					MinecraftClient.getInstance().openScreen(new TitleScreen());
+				} else {
+					MinecraftClient.getInstance().stop();
+				}
+			}, new LiteralText("Axolotlclient warning").formatted(Formatting.RED), new LiteralText("The mod ")
+					.append(new LiteralText(AxolotlClient.badmod.name()).formatted(Formatting.BOLD, Formatting.DARK_RED))
+					.append(" is known to ").append(description.toString())
+					.append("AxolotlClient will not be responsible for any punishment or crashes you will encounter while using it.\n Proceed with Caution!"),
+					new TranslatableText("gui.proceed"), new TranslatableText("menu.quit")));
+		}
+	}
 
-    @Inject(method = "render", at = @At("TAIL"))
-    public void axolotlclient$addDisclaimer(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        if (AxolotlClient.titleDisclaimer) {
-            TitleScreen.drawCenteredString(matrices, this.textRenderer,
-                    "You are playing at your own risk with unsupported Mods", this.width / 2, 5, 0xFFCC8888);
-            TitleScreen.drawCenteredString(matrices, this.textRenderer, "Things could break!", this.width / 2, 15,
-                    0xFFCC8888);
-        }
-    }
+	@Inject(method = "render", at = @At("TAIL"))
+	public void axolotlclient$addDisclaimer(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+		if (AxolotlClient.titleDisclaimer) {
+			TitleScreen.drawCenteredString(matrices, this.textRenderer,
+					"You are playing at your own risk with unsupported Mods", this.width / 2, 5, 0xFFCC8888);
+			TitleScreen.drawCenteredString(matrices, this.textRenderer, "Things could break!", this.width / 2, 15,
+					0xFFCC8888);
+		}
+	}
 }

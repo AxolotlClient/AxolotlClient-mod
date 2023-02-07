@@ -33,15 +33,15 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(ClientPlayerEntity.class)
 public abstract class ClientPlayerEntityMixin {
 
-    /**
-     * @param sprintKey the sprint key that the user has bound
-     * @return whether or not the user should try to sprint
-     * @author DragonEggBedrockBreaking
-     * @license MPL-2.0
-     */
-    @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/KeyBind;isPressed()Z"))
-    private boolean axolotlclient$alwaysPressed(KeyBind sprintKey) {
-        ToggleSprintHud hud = (ToggleSprintHud) HudManager.getInstance().get(ToggleSprintHud.ID);
-        return hud.getSprintToggled().get() || sprintKey.isPressed();
-    }
+	/**
+	 * @param sprintKey the sprint key that the user has bound
+	 * @return whether or not the user should try to sprint
+	 * @author DragonEggBedrockBreaking
+	 * @license MPL-2.0
+	 */
+	@Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/KeyBind;isPressed()Z"))
+	private boolean axolotlclient$alwaysPressed(KeyBind sprintKey) {
+		ToggleSprintHud hud = (ToggleSprintHud) HudManager.getInstance().get(ToggleSprintHud.ID);
+		return hud.getSprintToggled().get() || sprintKey.isPressed();
+	}
 }

@@ -33,20 +33,20 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 @Mixin(MinecraftClient.class)
 public interface MinecraftClientAccessor {
 
-    @Accessor
-    static int getCurrentFps() {
-        return 0;
-    }
+	@Accessor
+	static int getCurrentFps() {
+		return 0;
+	}
 
-    @Accessor
-    @Mutable
-    void setSession(Session session);
+	@Accessor
+	@Mutable
+	void setSession(Session session);
 
-    @Accessor
-    @Mutable
-    void setSocialInteractionsManager(SocialInteractionsManager manager);
+	@Accessor
+	@Mutable
+	void setSocialInteractionsManager(SocialInteractionsManager manager);
 
-    @Accessor("field_26902")
-    @Mutable
-    void setSocialInteractionsService(SocialInteractionsService service);
+	@Accessor("field_26902")
+	@Mutable
+	void setSocialInteractionsService(SocialInteractionsService service);
 }

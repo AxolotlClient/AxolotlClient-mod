@@ -39,19 +39,19 @@ import java.util.Objects;
 @Mixin(ClientWorld.class)
 public abstract class ClientWorldMixin {
 
-    @Inject(method = "onEntityRemoved", at = @At("HEAD"))
-    public void axolotlclient$onEntityRemoved(Entity entity, CallbackInfo ci) {
-        if (entity instanceof PlayerEntity && Objects.equals(HypixelMods.getInstance().cacheMode.get(),
-                HypixelMods.HypixelApiCacheMode.ON_PLAYER_DISCONNECT.toString())) {
-            HypixelAbstractionLayer.handleDisconnectEvents(entity.getUuid());
-        }
-    }
+	@Inject(method = "onEntityRemoved", at = @At("HEAD"))
+	public void axolotlclient$onEntityRemoved(Entity entity, CallbackInfo ci) {
+		if (entity instanceof PlayerEntity && Objects.equals(HypixelMods.getInstance().cacheMode.get(),
+				HypixelMods.HypixelApiCacheMode.ON_PLAYER_DISCONNECT.toString())) {
+			HypixelAbstractionLayer.handleDisconnectEvents(entity.getUuid());
+		}
+	}
 
-    @ModifyArg(method = "setTimeOfDay", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;setTimeOfDay(J)V"))
-    public long axolotlclient$timeChanger(long time) {
-        if (AxolotlClient.CONFIG.timeChangerEnabled.get()) {
-            return AxolotlClient.CONFIG.customTime.get();
-        }
-        return time;
-    }
+	@ModifyArg(method = "setTimeOfDay", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;setTimeOfDay(J)V"))
+	public long axolotlclient$timeChanger(long time) {
+		if (AxolotlClient.CONFIG.timeChangerEnabled.get()) {
+			return AxolotlClient.CONFIG.customTime.get();
+		}
+		return time;
+	}
 }

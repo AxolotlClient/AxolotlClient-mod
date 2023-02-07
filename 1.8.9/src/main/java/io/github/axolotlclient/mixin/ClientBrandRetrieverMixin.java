@@ -31,8 +31,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ClientBrandRetriever.class)
 public abstract class ClientBrandRetrieverMixin {
 
-    @Inject(method = "getClientModName", at = @At("HEAD"), cancellable = true)
-    private static void axolotlclient$returnClientBrand(CallbackInfoReturnable<String> cir) {
-        cir.setReturnValue("AxolotlClient");
-    }
+	@Inject(method = "getClientModName", at = @At("HEAD"), cancellable = true)
+	private static void axolotlclient$returnClientBrand(CallbackInfoReturnable<String> cir) {
+		cir.setReturnValue("AxolotlClient");
+	}
 }

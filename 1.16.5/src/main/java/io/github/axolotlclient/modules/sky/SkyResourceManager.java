@@ -48,98 +48,98 @@ import java.util.stream.Collectors;
 
 public class SkyResourceManager extends AbstractModule implements SimpleSynchronousResourceReloadListener {
 
-    private final static Gson gson = new GsonBuilder().setPrettyPrinting().create();
+	private final static Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    private final static SkyResourceManager Instance = new SkyResourceManager();
+	private final static SkyResourceManager Instance = new SkyResourceManager();
 
-    public static SkyResourceManager getInstance() {
-        return Instance;
-    }
+	public static SkyResourceManager getInstance() {
+		return Instance;
+	}
 
-    private void loadMCPSky(String loader, Identifier id, Resource resource) {
-        BufferedReader reader = new BufferedReader(
-                new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8));
+	private void loadMCPSky(String loader, Identifier id, Resource resource) {
+		BufferedReader reader = new BufferedReader(
+				new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8));
 
-        JsonObject object = new JsonObject();
-        String string;
-        String[] option;
-        try {
-            while ((string = reader.readLine()) != null) {
-                try {
-                    if (!string.startsWith("#")) {
-                        option = string.split("=");
-                        if (option[0].equals("source")) {
-                            if (option[1].contains(":")) {
-                                option[1] = option[1].split(":")[1];
-                            } else {
-                                if (option[1].startsWith("assets")) {
-                                    option[1] = option[1].replace("./", "").replace("assets/minecraft/", "");
-                                }
-                                if (id.getPath().contains("world")) {
-                                    option[1] = loader + "/sky/world" + id.getPath().split("world")[1].split("/")[0]
-                                            + "/" + option[1].replace("./", "");
-                                }
-                            }
-                        }
-                        if (option[0].equals("startFadeIn") || option[0].equals("endFadeIn")
-                                || option[0].equals("startFadeOut") || option[0].equals("endFadeOut")) {
-                            option[1] = option[1].replace(":", "").replace("\\", "");
-                        }
+		JsonObject object = new JsonObject();
+		String string;
+		String[] option;
+		try {
+			while ((string = reader.readLine()) != null) {
+				try {
+					if (!string.startsWith("#")) {
+						option = string.split("=");
+						if (option[0].equals("source")) {
+							if (option[1].contains(":")) {
+								option[1] = option[1].split(":")[1];
+							} else {
+								if (option[1].startsWith("assets")) {
+									option[1] = option[1].replace("./", "").replace("assets/minecraft/", "");
+								}
+								if (id.getPath().contains("world")) {
+									option[1] = loader + "/sky/world" + id.getPath().split("world")[1].split("/")[0]
+											+ "/" + option[1].replace("./", "");
+								}
+							}
+						}
+						if (option[0].equals("startFadeIn") || option[0].equals("endFadeIn")
+								|| option[0].equals("startFadeOut") || option[0].equals("endFadeOut")) {
+							option[1] = option[1].replace(":", "").replace("\\", "");
+						}
 
-                        object.addProperty(option[0], option[1]);
-                    }
-                } catch (Exception ignored) {
-                }
-            }
+						object.addProperty(option[0], option[1]);
+					}
+				} catch (Exception ignored) {
+				}
+			}
 
-            SkyboxManager.getInstance().addSkybox(new MCPSkyboxInstance(object));
-        } catch (Exception ignored) {
-        }
-    }
+			SkyboxManager.getInstance().addSkybox(new MCPSkyboxInstance(object));
+		} catch (Exception ignored) {
+		}
+	}
 
-    @Override
-    public void init() {
-        ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(this);
-    }
+	@Override
+	public void init() {
+		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(this);
+	}
 
-    @Override
-    public void reload(ResourceManager manager) {
-        try {
-            AxolotlClient.LOGGER.debug("Loading Custom Skies!");
-            SkyboxManager.getInstance().clearSkyboxes();
+	@Override
+	public void reload(ResourceManager manager) {
+		try {
+			AxolotlClient.LOGGER.debug("Loading Custom Skies!");
+			SkyboxManager.getInstance().clearSkyboxes();
 
-            for (Identifier entry : manager
-                    .findResources("sky", identifier -> identifier.endsWith(".json"))) {
-                AxolotlClient.LOGGER.debug("Loading FSB sky from " + entry);
-                SkyboxManager.getInstance().addSkybox(new FSBSkyboxInstance(gson.fromJson(
-                        new BufferedReader(new InputStreamReader(manager.getResource(entry).getInputStream(), StandardCharsets.UTF_8))
-                                .lines().collect(Collectors.joining("\n")),
-                        JsonObject.class)));
-                AxolotlClient.LOGGER.debug("Loaded FSB sky from " + entry);
-            }
+			for (Identifier entry : manager
+					.findResources("sky", identifier -> identifier.endsWith(".json"))) {
+				AxolotlClient.LOGGER.debug("Loading FSB sky from " + entry);
+				SkyboxManager.getInstance().addSkybox(new FSBSkyboxInstance(gson.fromJson(
+						new BufferedReader(new InputStreamReader(manager.getResource(entry).getInputStream(), StandardCharsets.UTF_8))
+								.lines().collect(Collectors.joining("\n")),
+						JsonObject.class)));
+				AxolotlClient.LOGGER.debug("Loaded FSB sky from " + entry);
+			}
 
-            for (Identifier entry : manager
-                    .findResources("mcpatcher/sky", identifier -> identifier.endsWith(".properties"))) {
-                AxolotlClient.LOGGER.debug("Loading MCP sky from " + entry);
-                loadMCPSky("mcpatcher", entry, manager.getResource(entry));
-                AxolotlClient.LOGGER.debug("Loaded MCP sky from " + entry);
-            }
+			for (Identifier entry : manager
+					.findResources("mcpatcher/sky", identifier -> identifier.endsWith(".properties"))) {
+				AxolotlClient.LOGGER.debug("Loading MCP sky from " + entry);
+				loadMCPSky("mcpatcher", entry, manager.getResource(entry));
+				AxolotlClient.LOGGER.debug("Loaded MCP sky from " + entry);
+			}
 
-            for (Identifier entry : manager
-                    .findResources("optifine/sky", identifier -> identifier.endsWith(".properties"))) {
-                AxolotlClient.LOGGER.debug("Loading OF sky from " + entry);
-                loadMCPSky("optifine", entry, manager.getResource(entry));
-                AxolotlClient.LOGGER.debug("Loaded OF sky from " + entry);
-            }
+			for (Identifier entry : manager
+					.findResources("optifine/sky", identifier -> identifier.endsWith(".properties"))) {
+				AxolotlClient.LOGGER.debug("Loading OF sky from " + entry);
+				loadMCPSky("optifine", entry, manager.getResource(entry));
+				AxolotlClient.LOGGER.debug("Loaded OF sky from " + entry);
+			}
 
-            AxolotlClient.LOGGER.debug("Finished Loading Custom Skies!");
-        } catch (Exception e) {
-            AxolotlClient.LOGGER.warn("Failed to load skies!", e);
-        }
-    }
+			AxolotlClient.LOGGER.debug("Finished Loading Custom Skies!");
+		} catch (Exception e) {
+			AxolotlClient.LOGGER.warn("Failed to load skies!", e);
+		}
+	}
 
-    @Override
-    public Identifier getFabricId() {
-        return new Identifier("axolotlclient", "custom_skies");
-    }
+	@Override
+	public Identifier getFabricId() {
+		return new Identifier("axolotlclient", "custom_skies");
+	}
 }

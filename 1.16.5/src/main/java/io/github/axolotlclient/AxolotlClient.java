@@ -69,160 +69,160 @@ import java.util.UUID;
 
 public class AxolotlClient implements ClientModInitializer {
 
-    public static String modid = "AxolotlClient";
+	public static String modid = "AxolotlClient";
 
-    public static AxolotlClientConfig CONFIG;
-    public static ConfigManager configManager;
-    public static HashMap<UUID, Boolean> playerCache = new HashMap<>();
+	public static AxolotlClientConfig CONFIG;
+	public static ConfigManager configManager;
+	public static HashMap<UUID, Boolean> playerCache = new HashMap<>();
 
-    public static HashMap<Identifier, Resource> runtimeResources = new HashMap<>();
+	public static HashMap<Identifier, Resource> runtimeResources = new HashMap<>();
 
-    public static final Identifier badgeIcon = new Identifier("axolotlclient", "textures/badge.png");
+	public static final Identifier badgeIcon = new Identifier("axolotlclient", "textures/badge.png");
 
-    public static final OptionCategory config = new OptionCategory("storedOptions");
-    public static final BooleanOption someNiceBackground = new BooleanOption("defNoSecret", false);
-    public static final List<Module> modules = new ArrayList<>();
+	public static final OptionCategory config = new OptionCategory("storedOptions");
+	public static final BooleanOption someNiceBackground = new BooleanOption("defNoSecret", false);
+	public static final List<Module> modules = new ArrayList<>();
 
-    private static int tickTime = 0;
+	private static int tickTime = 0;
 
-    public static Logger LOGGER = new LoggerImpl();
+	public static Logger LOGGER = new LoggerImpl();
 
-    public static UnsupportedMod badmod;
-    public static boolean titleDisclaimer = false;
-    public static boolean showWarning = true;
+	public static UnsupportedMod badmod;
+	public static boolean titleDisclaimer = false;
+	public static boolean showWarning = true;
 
-    @Override
-    public void onInitializeClient() {
-        if (FabricLoader.getInstance().isModLoaded("ares")) {
-            badmod = new UnsupportedMod("Ares Client", UnsupportedMod.UnsupportedReason.BAN_REASON);
-        } else if (FabricLoader.getInstance().isModLoaded("inertia")) {
-            badmod = new UnsupportedMod("Inertia Client", UnsupportedMod.UnsupportedReason.BAN_REASON);
-        } else if (FabricLoader.getInstance().isModLoaded("meteor-client")) {
-            badmod = new UnsupportedMod("Meteor Client", UnsupportedMod.UnsupportedReason.BAN_REASON);
-        } else if (FabricLoader.getInstance().isModLoaded("wurst")) {
-            badmod = new UnsupportedMod("Wurst Client", UnsupportedMod.UnsupportedReason.BAN_REASON);
-        } else if (FabricLoader.getInstance().isModLoaded("baritone")) {
-            badmod = new UnsupportedMod("Baritone", UnsupportedMod.UnsupportedReason.BAN_REASON);
-        } else if (FabricLoader.getInstance().isModLoaded("xaerominimap")) {
-            badmod = new UnsupportedMod("Xaero's Minimap", UnsupportedMod.UnsupportedReason.UNKNOWN_CONSEQUENSES);
-        } else if (FabricLoader.getInstance().isModLoaded("essential-container")) {
-            badmod = new UnsupportedMod("Essential", UnsupportedMod.UnsupportedReason.MIGHT_CRASH,
-                    UnsupportedMod.UnsupportedReason.UNKNOWN_CONSEQUENSES);
-        } else if (FabricLoader.getInstance().isModLoaded("optifabric")) {
-            badmod = new UnsupportedMod("OptiFine", UnsupportedMod.UnsupportedReason.MIGHT_CRASH,
-                    UnsupportedMod.UnsupportedReason.UNKNOWN_CONSEQUENSES);
-        } else {
-            showWarning = false;
-        }
+	@Override
+	public void onInitializeClient() {
+		if (FabricLoader.getInstance().isModLoaded("ares")) {
+			badmod = new UnsupportedMod("Ares Client", UnsupportedMod.UnsupportedReason.BAN_REASON);
+		} else if (FabricLoader.getInstance().isModLoaded("inertia")) {
+			badmod = new UnsupportedMod("Inertia Client", UnsupportedMod.UnsupportedReason.BAN_REASON);
+		} else if (FabricLoader.getInstance().isModLoaded("meteor-client")) {
+			badmod = new UnsupportedMod("Meteor Client", UnsupportedMod.UnsupportedReason.BAN_REASON);
+		} else if (FabricLoader.getInstance().isModLoaded("wurst")) {
+			badmod = new UnsupportedMod("Wurst Client", UnsupportedMod.UnsupportedReason.BAN_REASON);
+		} else if (FabricLoader.getInstance().isModLoaded("baritone")) {
+			badmod = new UnsupportedMod("Baritone", UnsupportedMod.UnsupportedReason.BAN_REASON);
+		} else if (FabricLoader.getInstance().isModLoaded("xaerominimap")) {
+			badmod = new UnsupportedMod("Xaero's Minimap", UnsupportedMod.UnsupportedReason.UNKNOWN_CONSEQUENSES);
+		} else if (FabricLoader.getInstance().isModLoaded("essential-container")) {
+			badmod = new UnsupportedMod("Essential", UnsupportedMod.UnsupportedReason.MIGHT_CRASH,
+					UnsupportedMod.UnsupportedReason.UNKNOWN_CONSEQUENSES);
+		} else if (FabricLoader.getInstance().isModLoaded("optifabric")) {
+			badmod = new UnsupportedMod("OptiFine", UnsupportedMod.UnsupportedReason.MIGHT_CRASH,
+					UnsupportedMod.UnsupportedReason.UNKNOWN_CONSEQUENSES);
+		} else {
+			showWarning = false;
+		}
 
-        CONFIG = new AxolotlClientConfig();
-        config.add(someNiceBackground);
+		CONFIG = new AxolotlClientConfig();
+		config.add(someNiceBackground);
 
-        getModules();
-        addExternalModules();
+		getModules();
+		addExternalModules();
 
-        CONFIG.init();
-        modules.forEach(Module::init);
+		CONFIG.init();
+		modules.forEach(Module::init);
 
-        CONFIG.getConfig().addAll(CONFIG.getCategories());
-        CONFIG.getConfig().add(config);
+		CONFIG.getConfig().addAll(CONFIG.getCategories());
+		CONFIG.getConfig().add(config);
 
-        AxolotlClientConfigManager.getInstance().registerConfig(modid, CONFIG, configManager = new DefaultConfigManager(modid,
-                FabricLoader.getInstance().getConfigDir().resolve("AxolotlClient.json"), CONFIG.getConfig()));
-        AxolotlClientConfigManager.getInstance().addIgnoredName(modid, "x");
-        AxolotlClientConfigManager.getInstance().addIgnoredName(modid, "y");
+		AxolotlClientConfigManager.getInstance().registerConfig(modid, CONFIG, configManager = new DefaultConfigManager(modid,
+				FabricLoader.getInstance().getConfigDir().resolve("AxolotlClient.json"), CONFIG.getConfig()));
+		AxolotlClientConfigManager.getInstance().addIgnoredName(modid, "x");
+		AxolotlClientConfigManager.getInstance().addIgnoredName(modid, "y");
 
-        modules.forEach(Module::lateInit);
+		modules.forEach(Module::lateInit);
 
         /*ResourceLoader.registerBuiltinResourcePack(new Identifier("axolotlclient", "axolotlclient-ui"), container,
                 ResourcePackActivationType.NORMAL);*/
-        ClientTickEvents.END_CLIENT_TICK.register(client -> tickClient());
+		ClientTickEvents.END_CLIENT_TICK.register(client -> tickClient());
 
-        FeatureDisabler.init();
+		FeatureDisabler.init();
 
-        LOGGER.debug("Debug Output activated, Logs will be more verbose!");
+		LOGGER.debug("Debug Output activated, Logs will be more verbose!");
 
-        LOGGER.info("AxolotlClient Initialized");
-    }
+		LOGGER.info("AxolotlClient Initialized");
+	}
 
-    public static void getModules() {
-        modules.add(SkyResourceManager.getInstance());
-        modules.add(Zoom.getInstance());
-        modules.add(HudManager.getInstance());
-        modules.add(HypixelMods.getInstance());
-        modules.add(MotionBlur.getInstance());
-        modules.add(MenuBlur.getInstance());
-        modules.add(ScrollableTooltips.getInstance());
-        modules.add(DiscordRPC.getInstance());
-        modules.add(Freelook.getInstance());
-        modules.add(TntTime.getInstance());
-        modules.add(Particles.getInstance());
-        modules.add(ScreenshotUtils.getInstance());
-        modules.add(BeaconBeam.getInstance());
-        modules.add(Tablist.getInstance());
-        modules.add(Auth.getInstance());
-    }
+	public static void getModules() {
+		modules.add(SkyResourceManager.getInstance());
+		modules.add(Zoom.getInstance());
+		modules.add(HudManager.getInstance());
+		modules.add(HypixelMods.getInstance());
+		modules.add(MotionBlur.getInstance());
+		modules.add(MenuBlur.getInstance());
+		modules.add(ScrollableTooltips.getInstance());
+		modules.add(DiscordRPC.getInstance());
+		modules.add(Freelook.getInstance());
+		modules.add(TntTime.getInstance());
+		modules.add(Particles.getInstance());
+		modules.add(ScreenshotUtils.getInstance());
+		modules.add(BeaconBeam.getInstance());
+		modules.add(Tablist.getInstance());
+		modules.add(Auth.getInstance());
+	}
 
-    private static void addExternalModules() {
-        modules.addAll(ModuleLoader.loadExternalModules());
-    }
+	private static void addExternalModules() {
+		modules.addAll(ModuleLoader.loadExternalModules());
+	}
 
-    public static boolean isUsingClient(UUID uuid) {
-        assert MinecraftClient.getInstance().player != null;
-        if (uuid == MinecraftClient.getInstance().player.getUuid()) {
-            return true;
-        } else {
-            return NetworkHelper.getOnline(uuid);
-        }
-    }
+	public static boolean isUsingClient(UUID uuid) {
+		assert MinecraftClient.getInstance().player != null;
+		if (uuid == MinecraftClient.getInstance().player.getUuid()) {
+			return true;
+		} else {
+			return NetworkHelper.getOnline(uuid);
+		}
+	}
 
-    public static void tickClient() {
-        modules.forEach(Module::tick);
+	public static void tickClient() {
+		modules.forEach(Module::tick);
 
-        if (tickTime >= 6000) {
-            //System.out.println("Cleared Cache of Other Players!");
-            if (playerCache.values().size() > 500) {
-                playerCache.clear();
-            }
-            tickTime = 0;
-        }
-        tickTime++;
-    }
+		if (tickTime >= 6000) {
+			//System.out.println("Cleared Cache of Other Players!");
+			if (playerCache.values().size() > 500) {
+				playerCache.clear();
+			}
+			tickTime = 0;
+		}
+		tickTime++;
+	}
 
-    public static void addBadge(Entity entity, MatrixStack matrices) {
-        if (entity instanceof PlayerEntity && !entity.isSneaky()) {
-            if (AxolotlClient.CONFIG.showBadges.get() && AxolotlClient.isUsingClient(entity.getUuid())) {
-                RenderSystem.enableDepthTest();
-                MinecraftClient.getInstance().getTextureManager().bindTexture(AxolotlClient.badgeIcon);
+	public static void addBadge(Entity entity, MatrixStack matrices) {
+		if (entity instanceof PlayerEntity && !entity.isSneaky()) {
+			if (AxolotlClient.CONFIG.showBadges.get() && AxolotlClient.isUsingClient(entity.getUuid())) {
+				RenderSystem.enableDepthTest();
+				MinecraftClient.getInstance().getTextureManager().bindTexture(AxolotlClient.badgeIcon);
 
-                assert MinecraftClient.getInstance().player != null;
-                int x = -(MinecraftClient.getInstance().textRenderer
-                        .getWidth(
-                                entity.getUuid() == MinecraftClient.getInstance().player.getUuid()
-                                        ? (NickHider.getInstance().hideOwnName.get()
-                                        ? NickHider.getInstance().hiddenNameSelf.get()
-                                        : Team.decorateName(entity.getScoreboardTeam(), entity.getName())
-                                        .getString())
-                                        : (NickHider.getInstance().hideOtherNames.get()
-                                        ? NickHider.getInstance().hiddenNameOthers.get()
-                                        : Team.decorateName(entity.getScoreboardTeam(), entity.getName())
-                                        .getString()))
-                        / 2
-                        + (AxolotlClient.CONFIG.customBadge.get() ? MinecraftClient.getInstance().textRenderer
-                        .getWidth(" " + Formatting.strip(AxolotlClient.CONFIG.badgeText.get())) : 10));
+				assert MinecraftClient.getInstance().player != null;
+				int x = -(MinecraftClient.getInstance().textRenderer
+						.getWidth(
+								entity.getUuid() == MinecraftClient.getInstance().player.getUuid()
+										? (NickHider.getInstance().hideOwnName.get()
+										? NickHider.getInstance().hiddenNameSelf.get()
+										: Team.decorateName(entity.getScoreboardTeam(), entity.getName())
+										.getString())
+										: (NickHider.getInstance().hideOtherNames.get()
+										? NickHider.getInstance().hiddenNameOthers.get()
+										: Team.decorateName(entity.getScoreboardTeam(), entity.getName())
+										.getString()))
+						/ 2
+						+ (AxolotlClient.CONFIG.customBadge.get() ? MinecraftClient.getInstance().textRenderer
+						.getWidth(" " + Formatting.strip(AxolotlClient.CONFIG.badgeText.get())) : 10));
 
-                RenderSystem.color4f(1, 1, 1, 1);
+				RenderSystem.color4f(1, 1, 1, 1);
 
-                if (AxolotlClient.CONFIG.customBadge.get()) {
-                    Text badgeText = Util.formatFromCodes(AxolotlClient.CONFIG.badgeText.get());
-                    if (AxolotlClient.CONFIG.useShadows.get()) {
-                        MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, badgeText, x, 0, -1);
-                    } else {
-                        MinecraftClient.getInstance().textRenderer.draw(matrices, badgeText, x, 0, -1);
-                    }
-                } else
-                    DrawableHelper.drawTexture(matrices, x, 0, 0, 0, 8, 8, 8, 8);
-            }
-        }
-    }
+				if (AxolotlClient.CONFIG.customBadge.get()) {
+					Text badgeText = Util.formatFromCodes(AxolotlClient.CONFIG.badgeText.get());
+					if (AxolotlClient.CONFIG.useShadows.get()) {
+						MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, badgeText, x, 0, -1);
+					} else {
+						MinecraftClient.getInstance().textRenderer.draw(matrices, badgeText, x, 0, -1);
+					}
+				} else
+					DrawableHelper.drawTexture(matrices, x, 0, 0, 0, 8, 8, 8, 8);
+			}
+		}
+	}
 }

@@ -36,32 +36,32 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Mouse.class)
 public abstract class MouseMixin {
 
-    @Inject(method = "onMouseButton", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/KeyBinding;setKeyPressed(Lnet/minecraft/client/util/InputUtil$Key;Z)V"))
-    private void axolotlclient$onMouseButton(long window, int button, int action, int mods, CallbackInfo ci) {
-        if (action == 1) {
-            Hooks.MOUSE_INPUT.invoker().onMouseButton(window, button, action, mods);
-        }
-    }
+	@Inject(method = "onMouseButton", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/KeyBinding;setKeyPressed(Lnet/minecraft/client/util/InputUtil$Key;Z)V"))
+	private void axolotlclient$onMouseButton(long window, int button, int action, int mods, CallbackInfo ci) {
+		if (action == 1) {
+			Hooks.MOUSE_INPUT.invoker().onMouseButton(window, button, action, mods);
+		}
+	}
 
-    @Inject(method = "onMouseScroll", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;mouseScrolled(DDD)Z"))
-    public void axolotlclient$scrollTooltips(long window, double scrollDeltaX, double scrollDeltaY, CallbackInfo ci) {
-        if (ScrollableTooltips.getInstance().enabled.get() && Math.signum(scrollDeltaY) != 0) {
-            ScrollableTooltips.getInstance().onScroll(Math.signum(scrollDeltaY) > 0);
-        }
-    }
+	@Inject(method = "onMouseScroll", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;mouseScrolled(DDD)Z"))
+	public void axolotlclient$scrollTooltips(long window, double scrollDeltaX, double scrollDeltaY, CallbackInfo ci) {
+		if (ScrollableTooltips.getInstance().enabled.get() && Math.signum(scrollDeltaY) != 0) {
+			ScrollableTooltips.getInstance().onScroll(Math.signum(scrollDeltaY) > 0);
+		}
+	}
 
-    @ModifyArg(method = "onMouseScroll", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerInventory;scrollInHotbar(D)V"))
-    public double axolotlclient$scrollZoom(double scrollAmount) {
-        if (scrollAmount != 0 && Zoom.scroll(scrollAmount)) {
-            return 0;
-        }
+	@ModifyArg(method = "onMouseScroll", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerInventory;scrollInHotbar(D)V"))
+	public double axolotlclient$scrollZoom(double scrollAmount) {
+		if (scrollAmount != 0 && Zoom.scroll(scrollAmount)) {
+			return 0;
+		}
 
-        return scrollAmount;
-    }
+		return scrollAmount;
+	}
 
-    @Inject(method = "onResolutionChanged", at = @At(value = "HEAD"))
-    private void axolotlclient$onResolutionChanged(CallbackInfo ci) {
-        // Resize and rebuild!
-        HudManager.getInstance().refreshAllBounds();
-    }
+	@Inject(method = "onResolutionChanged", at = @At(value = "HEAD"))
+	private void axolotlclient$onResolutionChanged(CallbackInfo ci) {
+		// Resize and rebuild!
+		HudManager.getInstance().refreshAllBounds();
+	}
 }

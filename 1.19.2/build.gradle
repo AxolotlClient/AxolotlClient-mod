@@ -1,5 +1,5 @@
 plugins {
-    id 'java'
+	id 'java'
 	id "org.quiltmc.loom" version "1.0.+"
 }
 
@@ -25,7 +25,7 @@ dependencies {
 	modImplementation include("org.quiltmc.qsl.core:networking:${project.qsl_1192}+${project.minecraft_1192}")
 	modImplementation include("org.quiltmc.qsl.core:resource_loader:${project.qsl_1192}+${project.minecraft_1192}")
 
-	modImplementation ("io.github.axolotlclient:AxolotlClient-config:${project.config}+${project.minecraft_1192}") {
+	modImplementation("io.github.axolotlclient:AxolotlClient-config:${project.config}+${project.minecraft_1192}") {
 		exclude group: "com.terraformersmc"
 	}
 	modCompileOnlyApi("com.terraformersmc:modmenu:4.1.2")
@@ -65,7 +65,7 @@ publishing {
 		maven {
 			name = "owlMaven"
 			def repository = project.version.toString().contains("beta") || project.version.toString().contains("alpha") ? "snapshots" : "releases"
-			url = "https://moehreag.duckdns.org/maven/"+repository
+			url = "https://moehreag.duckdns.org/maven/" + repository
 			credentials(PasswordCredentials)
 			authentication {
 				basic(BasicAuthentication)

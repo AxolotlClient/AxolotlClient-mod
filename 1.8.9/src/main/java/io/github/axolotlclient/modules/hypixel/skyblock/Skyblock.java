@@ -31,23 +31,23 @@ import net.minecraft.client.option.KeyBinding;
 
 public class Skyblock implements AbstractHypixelMod {
 
-    @Getter
-    private final static Skyblock Instance = new Skyblock();
+	@Getter
+	private final static Skyblock Instance = new Skyblock();
 
-    private final OptionCategory category = new OptionCategory("skyblock");
+	private final OptionCategory category = new OptionCategory("skyblock");
 
-    public final BooleanOption rotationLocked = new BooleanOption("rotationLocked", false);
-    private final KeyBindOption lock = new KeyBindOption("lockRotation",
-            new KeyBinding("lockRotation", 25, "category.axolotlclient"),
-            keyBinding -> rotationLocked.toggle());
+	public final BooleanOption rotationLocked = new BooleanOption("rotationLocked", false);
+	private final KeyBindOption lock = new KeyBindOption("lockRotation",
+			new KeyBinding("lockRotation", 25, "category.axolotlclient"),
+			keyBinding -> rotationLocked.toggle());
 
-    @Override
-    public void init() {
-        category.add(rotationLocked, lock);
-    }
+	@Override
+	public void init() {
+		category.add(rotationLocked, lock);
+	}
 
-    @Override
-    public OptionCategory getCategory() {
-        return category;
-    }
+	@Override
+	public OptionCategory getCategory() {
+		return category;
+	}
 }

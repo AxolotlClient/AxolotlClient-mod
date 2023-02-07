@@ -36,31 +36,31 @@ import net.minecraft.util.Identifier;
 
 public class IPHud extends SimpleTextHudEntry {
 
-    public static final Identifier ID = new Identifier("kronhud", "iphud");
+	public static final Identifier ID = new Identifier("kronhud", "iphud");
 
-    public IPHud() {
-        super(115, 13);
-    }
+	public IPHud() {
+		super(115, 13);
+	}
 
-    @Override
-    public Identifier getId() {
-        return ID;
-    }
+	@Override
+	public Identifier getId() {
+		return ID;
+	}
 
-    @Override
-    public String getValue() {
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client.isInSingleplayer()) {
-            return "Singleplayer";
-        }
-        if (Util.getCurrentServerAddress() == null) {
-            return "none";
-        }
-        return Util.getCurrentServerAddress();
-    }
+	@Override
+	public String getValue() {
+		MinecraftClient client = MinecraftClient.getInstance();
+		if (client.isInSingleplayer()) {
+			return "Singleplayer";
+		}
+		if (Util.getCurrentServerAddress() == null) {
+			return "none";
+		}
+		return Util.getCurrentServerAddress();
+	}
 
-    @Override
-    public String getPlaceholder() {
-        return "Singleplayer";
-    }
+	@Override
+	public String getPlaceholder() {
+		return "Singleplayer";
+	}
 }

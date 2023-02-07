@@ -34,20 +34,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(GlStateManager.class)
 public abstract class GlStateManagerMixin {
 
-    @Inject(method = "color4f", at = @At("HEAD"), cancellable = true)
-    private static void axolotlclient$nightMode(float red, float green, float blue, float alpha, CallbackInfo ci) {
-        if (AxolotlClient.CONFIG.nightMode.get()) {
-            if (red != Util.GlColor.red || green != Util.GlColor.green || blue != Util.GlColor.blue
-                    || alpha != Util.GlColor.alpha) {
-                Util.GlColor.red = red;
-                Util.GlColor.green = green;
-                Util.GlColor.blue = blue;
-                Util.GlColor.alpha = alpha;
+	@Inject(method = "color4f", at = @At("HEAD"), cancellable = true)
+	private static void axolotlclient$nightMode(float red, float green, float blue, float alpha, CallbackInfo ci) {
+		if (AxolotlClient.CONFIG.nightMode.get()) {
+			if (red != Util.GlColor.red || green != Util.GlColor.green || blue != Util.GlColor.blue
+					|| alpha != Util.GlColor.alpha) {
+				Util.GlColor.red = red;
+				Util.GlColor.green = green;
+				Util.GlColor.blue = blue;
+				Util.GlColor.alpha = alpha;
 
-                GL11.glColor4f(red, green, blue / 2, alpha);
-            }
+				GL11.glColor4f(red, green, blue / 2, alpha);
+			}
 
-            ci.cancel();
-        }
-    }
+			ci.cancel();
+		}
+	}
 }

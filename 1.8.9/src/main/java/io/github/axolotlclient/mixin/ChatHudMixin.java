@@ -45,67 +45,67 @@ import java.util.List;
 @Mixin(ChatHud.class)
 public abstract class ChatHudMixin {
 
-    @Shadow
-    @Final
-    private List<ChatHudLine> visibleMessages;
+	@Shadow
+	@Final
+	private List<ChatHudLine> visibleMessages;
 
-    @Inject(method = "addMessage(Lnet/minecraft/text/Text;IIZ)V", at = @At("HEAD"), cancellable = true)
-    public void axolotlclient$autoGG(Text message, int messageId, int timestamp, boolean bl, CallbackInfo ci) {
-        AutoGG.getInstance().onMessage(message);
-        AutoBoop.getInstance().onMessage(message);
+	@Inject(method = "addMessage(Lnet/minecraft/text/Text;IIZ)V", at = @At("HEAD"), cancellable = true)
+	public void axolotlclient$autoGG(Text message, int messageId, int timestamp, boolean bl, CallbackInfo ci) {
+		AutoGG.getInstance().onMessage(message);
+		AutoBoop.getInstance().onMessage(message);
 
-        if (AutoTip.getInstance().onChatMessage(message)) {
-            ci.cancel();
-        }
-    }
+		if (AutoTip.getInstance().onChatMessage(message)) {
+			ci.cancel();
+		}
+	}
 
-    @ModifyArg(method = "addMessage(Lnet/minecraft/text/Text;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;addMessage(Lnet/minecraft/text/Text;IIZ)V"))
-    public Text axolotlclient$editChat(Text message) {
-        return NickHider.getInstance().editMessage(message);
-    }
+	@ModifyArg(method = "addMessage(Lnet/minecraft/text/Text;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;addMessage(Lnet/minecraft/text/Text;IIZ)V"))
+	public Text axolotlclient$editChat(Text message) {
+		return NickHider.getInstance().editMessage(message);
+	}
 
-    @ModifyArg(method = "addMessage(Lnet/minecraft/text/Text;I)V", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;info(Ljava/lang/String;)V"), remap = false)
-    public String axolotlclient$noNamesInLogIfHidden(String message) {
-        return axolotlclient$editChat(new LiteralText(message)).asUnformattedString();
-    }
+	@ModifyArg(method = "addMessage(Lnet/minecraft/text/Text;I)V", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;info(Ljava/lang/String;)V"), remap = false)
+	public String axolotlclient$noNamesInLogIfHidden(String message) {
+		return axolotlclient$editChat(new LiteralText(message)).asUnformattedString();
+	}
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;fill(IIIII)V", ordinal = 0))
-    public void axolotlclient$noBg(int x, int y, int x2, int y2, int color) {
-        io.github.axolotlclient.modules.hud.gui.hud.ChatHud hud = (io.github.axolotlclient.modules.hud.gui.hud.ChatHud) HudManager
-                .getInstance().get(io.github.axolotlclient.modules.hud.gui.hud.ChatHud.ID);
-        if (hud.background.get()) {
-            DrawableHelper.fill(x, y, x2, y2, color);
-        }
-    }
+	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;fill(IIIII)V", ordinal = 0))
+	public void axolotlclient$noBg(int x, int y, int x2, int y2, int color) {
+		io.github.axolotlclient.modules.hud.gui.hud.ChatHud hud = (io.github.axolotlclient.modules.hud.gui.hud.ChatHud) HudManager
+				.getInstance().get(io.github.axolotlclient.modules.hud.gui.hud.ChatHud.ID);
+		if (hud.background.get()) {
+			DrawableHelper.fill(x, y, x2, y2, color);
+		}
+	}
 
-    @Inject(method = "render", at = @At("HEAD"), cancellable = true)
-    public void axolotlclient$render(int ticks, CallbackInfo ci) {
-        io.github.axolotlclient.modules.hud.gui.hud.ChatHud hud = (io.github.axolotlclient.modules.hud.gui.hud.ChatHud) HudManager
-                .getInstance().get(io.github.axolotlclient.modules.hud.gui.hud.ChatHud.ID);
-        if (hud.isEnabled()) {
-            hud.ticks = ticks;
-            ci.cancel();
-        }
-    }
+	@Inject(method = "render", at = @At("HEAD"), cancellable = true)
+	public void axolotlclient$render(int ticks, CallbackInfo ci) {
+		io.github.axolotlclient.modules.hud.gui.hud.ChatHud hud = (io.github.axolotlclient.modules.hud.gui.hud.ChatHud) HudManager
+				.getInstance().get(io.github.axolotlclient.modules.hud.gui.hud.ChatHud.ID);
+		if (hud.isEnabled()) {
+			hud.ticks = ticks;
+			ci.cancel();
+		}
+	}
 
-    @Inject(method = "getTextAt", at = @At("HEAD"), cancellable = true)
-    public void axolotlclient$getTextAt(int x, int y, CallbackInfoReturnable<Text> cir) {
-        io.github.axolotlclient.modules.hud.gui.hud.ChatHud hud = (io.github.axolotlclient.modules.hud.gui.hud.ChatHud) HudManager
-                .getInstance().get(io.github.axolotlclient.modules.hud.gui.hud.ChatHud.ID);
-        if (hud != null && hud.isEnabled()) {
-            cir.setReturnValue(hud.getTextAt(Util.toMCCoordsX(x), Util.toMCCoordsY(y)));
-        }
-    }
+	@Inject(method = "getTextAt", at = @At("HEAD"), cancellable = true)
+	public void axolotlclient$getTextAt(int x, int y, CallbackInfoReturnable<Text> cir) {
+		io.github.axolotlclient.modules.hud.gui.hud.ChatHud hud = (io.github.axolotlclient.modules.hud.gui.hud.ChatHud) HudManager
+				.getInstance().get(io.github.axolotlclient.modules.hud.gui.hud.ChatHud.ID);
+		if (hud != null && hud.isEnabled()) {
+			cir.setReturnValue(hud.getTextAt(Util.toMCCoordsX(x), Util.toMCCoordsY(y)));
+		}
+	}
 
-    @ModifyConstant(method = "addMessage(Lnet/minecraft/text/Text;IIZ)V", constant = @Constant(intValue = 100), expect = 2)
-    public int axolotlclient$moreChatHistory(int constant) {
-        io.github.axolotlclient.modules.hud.gui.hud.ChatHud hud = (io.github.axolotlclient.modules.hud.gui.hud.ChatHud) HudManager
-                .getInstance().get(io.github.axolotlclient.modules.hud.gui.hud.ChatHud.ID);
-        int length = hud.chatHistory.get();
+	@ModifyConstant(method = "addMessage(Lnet/minecraft/text/Text;IIZ)V", constant = @Constant(intValue = 100), expect = 2)
+	public int axolotlclient$moreChatHistory(int constant) {
+		io.github.axolotlclient.modules.hud.gui.hud.ChatHud hud = (io.github.axolotlclient.modules.hud.gui.hud.ChatHud) HudManager
+				.getInstance().get(io.github.axolotlclient.modules.hud.gui.hud.ChatHud.ID);
+		int length = hud.chatHistory.get();
 
-        if (length == hud.chatHistory.getMax()) {
-            return visibleMessages.size() + 1;
-        }
-        return length;
-    }
+		if (length == hud.chatHistory.getMax()) {
+			return visibleMessages.size() + 1;
+		}
+		return length;
+	}
 }

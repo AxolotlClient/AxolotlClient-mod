@@ -33,10 +33,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(BeaconBlockEntityRenderer.class)
 public abstract class BeaconBlockEntityRendererMixin {
 
-    @Inject(method = "render(Lnet/minecraft/block/entity/BeaconBlockEntity;DDDFI)V", at = @At("HEAD"), cancellable = true)
-    private void axolotlclient$cancelBeamRendering(BeaconBlockEntity beaconBlockEntity, double d, double e, double f, float g, int i, CallbackInfo ci) {
-        if (!BeaconBeam.getInstance().showBeam()) {
-            ci.cancel();
-        }
-    }
+	@Inject(method = "render(Lnet/minecraft/block/entity/BeaconBlockEntity;DDDFI)V", at = @At("HEAD"), cancellable = true)
+	private void axolotlclient$cancelBeamRendering(BeaconBlockEntity beaconBlockEntity, double d, double e, double f, float g, int i, CallbackInfo ci) {
+		if (!BeaconBeam.getInstance().showBeam()) {
+			ci.cancel();
+		}
+	}
 }

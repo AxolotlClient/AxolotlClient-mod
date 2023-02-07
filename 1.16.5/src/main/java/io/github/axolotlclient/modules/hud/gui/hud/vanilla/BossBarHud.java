@@ -56,122 +56,122 @@ import java.util.UUID;
 
 public class BossBarHud extends TextHudEntry implements DynamicallyPositionable {
 
-    public static final Identifier ID = new Identifier("kronhud", "bossbarhud");
-    private static final Identifier BARS_TEXTURE = new Identifier("textures/gui/bars.png");
-    private final BossBar placeholder = new CustomBossBar(new LiteralText("Boss bar"), BossBar.Color.WHITE,
-            BossBar.Style.PROGRESS);
-    private final BossBar placeholder2 = Util.make(() -> {
-        BossBar boss = new CustomBossBar(new LiteralText("More boss bars..."), BossBar.Color.PURPLE,
-                BossBar.Style.PROGRESS);
-        boss.setPercent(0.45F);
-        return boss;
-    });
+	public static final Identifier ID = new Identifier("kronhud", "bossbarhud");
+	private static final Identifier BARS_TEXTURE = new Identifier("textures/gui/bars.png");
+	private final BossBar placeholder = new CustomBossBar(new LiteralText("Boss bar"), BossBar.Color.WHITE,
+			BossBar.Style.PROGRESS);
+	private final BossBar placeholder2 = Util.make(() -> {
+		BossBar boss = new CustomBossBar(new LiteralText("More boss bars..."), BossBar.Color.PURPLE,
+				BossBar.Style.PROGRESS);
+		boss.setPercent(0.45F);
+		return boss;
+	});
 
-    private Map<UUID, ClientBossBar> bossBars = new HashMap<>();
-    private final BooleanOption text = new BooleanOption("text", true);
-    private final BooleanOption bar = new BooleanOption("bar", true);
-    // TODO custom color
-    private final EnumOption anchor = DefaultOptions.getAnchorPoint();
+	private Map<UUID, ClientBossBar> bossBars = new HashMap<>();
+	private final BooleanOption text = new BooleanOption("text", true);
+	private final BooleanOption bar = new BooleanOption("bar", true);
+	// TODO custom color
+	private final EnumOption anchor = DefaultOptions.getAnchorPoint();
 
-    public BossBarHud() {
-        super(184, 80, false);
-    }
+	public BossBarHud() {
+		super(184, 80, false);
+	}
 
-    public void setBossBars() {
-        int prevLength = bossBars.size();
-        bossBars = ((BossBarHudAccessor) client.inGameHud.getBossBarHud()).getBossBars();
-        if (bossBars != null && bossBars.size() != prevLength) {
-            if (bossBars.size() == 0) {
-                // Just leave it alone, it's not rendering anyway
-                return;
-            }
-            // Update height
-            setHeight(12 + prevLength * 19);
-        }
-    }
+	public void setBossBars() {
+		int prevLength = bossBars.size();
+		bossBars = ((BossBarHudAccessor) client.inGameHud.getBossBarHud()).getBossBars();
+		if (bossBars != null && bossBars.size() != prevLength) {
+			if (bossBars.size() == 0) {
+				// Just leave it alone, it's not rendering anyway
+				return;
+			}
+			// Update height
+			setHeight(12 + prevLength * 19);
+		}
+	}
 
-    @Override
-    public void renderComponent(MatrixStack matrices, float delta) {
-        setBossBars();
-        if (bossBars == null || this.bossBars.isEmpty()) {
-            return;
-        }
-        DrawPosition scaledPos = getPos();
-        int by = 12;
-        for (ClientBossBar bossBar : bossBars.values()) {
-            renderBossBar(matrices, scaledPos.x(), by + scaledPos.y(), bossBar);
-            by = by + 19;
-            if (by > getHeight()) {
-                break;
-            }
-        }
-    }
+	@Override
+	public void renderComponent(MatrixStack matrices, float delta) {
+		setBossBars();
+		if (bossBars == null || this.bossBars.isEmpty()) {
+			return;
+		}
+		DrawPosition scaledPos = getPos();
+		int by = 12;
+		for (ClientBossBar bossBar : bossBars.values()) {
+			renderBossBar(matrices, scaledPos.x(), by + scaledPos.y(), bossBar);
+			by = by + 19;
+			if (by > getHeight()) {
+				break;
+			}
+		}
+	}
 
-    @Override
-    public void renderPlaceholderComponent(MatrixStack matrices, float delta) {
-        DrawPosition pos = getPos();
-        renderBossBar(matrices, pos.x(), pos.y() + 12, placeholder);
-        renderBossBar(matrices, pos.x(), pos.y() + 31, placeholder2);
-    }
+	@Override
+	public void renderPlaceholderComponent(MatrixStack matrices, float delta) {
+		DrawPosition pos = getPos();
+		renderBossBar(matrices, pos.x(), pos.y() + 12, placeholder);
+		renderBossBar(matrices, pos.x(), pos.y() + 31, placeholder2);
+	}
 
-    private void renderBossBar(MatrixStack matrices, int x, int y, BossBar bossBar) {
-        MinecraftClient.getInstance().getTextureManager().bindTexture(BARS_TEXTURE);
-        if (bar.get()) {
-            DrawableHelper.drawTexture(matrices, x, y, 0, bossBar.getColor().ordinal() * 5 * 2, 182, 5, 256, 256);
-            if (bossBar.getStyle() != BossBar.Style.PROGRESS) {
-                DrawableHelper.drawTexture(matrices, x, y, 0, 80 + (bossBar.getStyle().ordinal() - 1) * 5 * 2, 182, 5,
-                        256, 256);
-            }
+	private void renderBossBar(MatrixStack matrices, int x, int y, BossBar bossBar) {
+		MinecraftClient.getInstance().getTextureManager().bindTexture(BARS_TEXTURE);
+		if (bar.get()) {
+			DrawableHelper.drawTexture(matrices, x, y, 0, bossBar.getColor().ordinal() * 5 * 2, 182, 5, 256, 256);
+			if (bossBar.getStyle() != BossBar.Style.PROGRESS) {
+				DrawableHelper.drawTexture(matrices, x, y, 0, 80 + (bossBar.getStyle().ordinal() - 1) * 5 * 2, 182, 5,
+						256, 256);
+			}
 
-            int i = (int) (bossBar.getPercent() * 183.0F);
-            if (i > 0) {
-                DrawableHelper.drawTexture(matrices, x, y, 0, bossBar.getColor().ordinal() * 5 * 2 + 5, i, 5, 256, 256);
-                if (bossBar.getStyle() != BossBar.Style.PROGRESS) {
-                    DrawableHelper.drawTexture(matrices, x, y, 0, 80 + (bossBar.getStyle().ordinal() - 1) * 5 * 2 + 5,
-                            i, 5, 256, 256);
-                }
-            }
-        }
-        if (text.get()) {
-            Text text = bossBar.getName();
-            float textX = x + ((float) getWidth() / 2) - ((float) client.textRenderer.getWidth(text) / 2);
-            float textY = y - 9;
-            if (shadow.get()) {
-                client.textRenderer.drawWithShadow(matrices, text, textX, textY, textColor.get().getAsInt());
-            } else {
-                client.textRenderer.draw(matrices, text, textX, textY, textColor.get().getAsInt());
-            }
-        }
-    }
+			int i = (int) (bossBar.getPercent() * 183.0F);
+			if (i > 0) {
+				DrawableHelper.drawTexture(matrices, x, y, 0, bossBar.getColor().ordinal() * 5 * 2 + 5, i, 5, 256, 256);
+				if (bossBar.getStyle() != BossBar.Style.PROGRESS) {
+					DrawableHelper.drawTexture(matrices, x, y, 0, 80 + (bossBar.getStyle().ordinal() - 1) * 5 * 2 + 5,
+							i, 5, 256, 256);
+				}
+			}
+		}
+		if (text.get()) {
+			Text text = bossBar.getName();
+			float textX = x + ((float) getWidth() / 2) - ((float) client.textRenderer.getWidth(text) / 2);
+			float textY = y - 9;
+			if (shadow.get()) {
+				client.textRenderer.drawWithShadow(matrices, text, textX, textY, textColor.get().getAsInt());
+			} else {
+				client.textRenderer.draw(matrices, text, textX, textY, textColor.get().getAsInt());
+			}
+		}
+	}
 
-    @Override
-    public Identifier getId() {
-        return ID;
-    }
+	@Override
+	public Identifier getId() {
+		return ID;
+	}
 
-    @Override
-    public boolean movable() {
-        return true;
-    }
+	@Override
+	public boolean movable() {
+		return true;
+	}
 
-    @Override
-    public List<Option<?>> getConfigurationOptions() {
-        List<Option<?>> options = super.getConfigurationOptions();
-        options.add(text);
-        options.add(bar);
-        options.add(anchor);
-        return options;
-    }
+	@Override
+	public List<Option<?>> getConfigurationOptions() {
+		List<Option<?>> options = super.getConfigurationOptions();
+		options.add(text);
+		options.add(bar);
+		options.add(anchor);
+		return options;
+	}
 
-    public static class CustomBossBar extends BossBar {
+	public static class CustomBossBar extends BossBar {
 
-        public CustomBossBar(Text name, Color color, Style style) {
-            super(MathHelper.randomUuid(), name, color, style);
-        }
-    }
+		public CustomBossBar(Text name, Color color, Style style) {
+			super(MathHelper.randomUuid(), name, color, style);
+		}
+	}
 
-    @Override
-    public AnchorPoint getAnchor() {
-        return AnchorPoint.valueOf(anchor.get());
-    }
+	@Override
+	public AnchorPoint getAnchor() {
+		return AnchorPoint.valueOf(anchor.get());
+	}
 }

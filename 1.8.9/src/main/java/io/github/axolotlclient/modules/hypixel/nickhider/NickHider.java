@@ -34,51 +34,51 @@ import net.minecraft.text.Text;
 
 public class NickHider implements AbstractHypixelMod {
 
-    @Getter
-    private static final NickHider Instance = new NickHider();
+	@Getter
+	private static final NickHider Instance = new NickHider();
 
-    private final OptionCategory category = new OptionCategory("nickhider");
+	private final OptionCategory category = new OptionCategory("nickhider");
 
-    public StringOption hiddenNameSelf = new StringOption("hiddenNameSelf", "You");
-    public StringOption hiddenNameOthers = new StringOption("hiddenNameOthers", "Player");
-    public BooleanOption hideOwnName = new BooleanOption("hideOwnName", false);
-    public BooleanOption hideOtherNames = new BooleanOption("hideOtherNames", false);
-    public BooleanOption hideOwnSkin = new BooleanOption("hideOwnSkin", false);
-    public BooleanOption hideOtherSkins = new BooleanOption("hideOtherSkins", false);
+	public StringOption hiddenNameSelf = new StringOption("hiddenNameSelf", "You");
+	public StringOption hiddenNameOthers = new StringOption("hiddenNameOthers", "Player");
+	public BooleanOption hideOwnName = new BooleanOption("hideOwnName", false);
+	public BooleanOption hideOtherNames = new BooleanOption("hideOtherNames", false);
+	public BooleanOption hideOwnSkin = new BooleanOption("hideOwnSkin", false);
+	public BooleanOption hideOtherSkins = new BooleanOption("hideOtherSkins", false);
 
-    @Override
-    public void init() {
-        category.add(hiddenNameSelf);
-        category.add(hiddenNameOthers);
-        category.add(hideOwnName);
-        category.add(hideOtherNames);
-        category.add(hideOwnSkin);
-        category.add(hideOtherSkins);
-    }
+	@Override
+	public void init() {
+		category.add(hiddenNameSelf);
+		category.add(hiddenNameOthers);
+		category.add(hideOwnName);
+		category.add(hideOtherNames);
+		category.add(hideOwnSkin);
+		category.add(hideOtherSkins);
+	}
 
-    public Text editMessage(Text message) {
-        if (hideOwnName.get() || hideOtherNames.get()) {
-            String msg = message.asFormattedString();
-            String playerName = MinecraftClient.getInstance().player.getGameProfile().getName();
-            if (hideOwnName.get() && msg.contains(playerName)) {
-                msg = msg.replaceAll(playerName, hiddenNameSelf.get());
-            }
+	public Text editMessage(Text message) {
+		if (hideOwnName.get() || hideOtherNames.get()) {
+			String msg = message.asFormattedString();
+			String playerName = MinecraftClient.getInstance().player.getGameProfile().getName();
+			if (hideOwnName.get() && msg.contains(playerName)) {
+				msg = msg.replaceAll(playerName, hiddenNameSelf.get());
+			}
 
-            if (hideOtherNames.get()) {
-                for (PlayerEntity player : MinecraftClient.getInstance().world.playerEntities) {
-                    if (msg.contains(player.getGameProfile().getName())) {
-                        msg = msg.replaceAll(player.getGameProfile().getName(), hiddenNameOthers.get());
-                    }
-                }
-            }
+			if (hideOtherNames.get()) {
+				for (PlayerEntity player : MinecraftClient.getInstance().world.playerEntities) {
+					if (msg.contains(player.getGameProfile().getName())) {
+						msg = msg.replaceAll(player.getGameProfile().getName(), hiddenNameOthers.get());
+					}
+				}
+			}
 
-            return new LiteralText(msg).setStyle(message.getStyle().deepCopy());
-        }
-        return message;
-    }
+			return new LiteralText(msg).setStyle(message.getStyle().deepCopy());
+		}
+		return message;
+	}
 
-    @Override
-    public OptionCategory getCategory() {
-        return category;
-    }
+	@Override
+	public OptionCategory getCategory() {
+		return category;
+	}
 }

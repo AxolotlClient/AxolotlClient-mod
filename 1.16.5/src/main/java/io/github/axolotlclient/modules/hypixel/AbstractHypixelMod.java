@@ -26,14 +26,14 @@ import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 
 public interface AbstractHypixelMod {
 
-    void init();
+	void init();
 
-    OptionCategory getCategory();
+	OptionCategory getCategory();
 
-    default void tick() {
-    }
+	default void tick() {
+	}
 
-    default boolean tickable() {
-        return false;
-    }
+	default boolean tickable() {
+		return false;
+	}
 }

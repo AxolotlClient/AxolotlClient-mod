@@ -53,285 +53,285 @@ import java.util.Objects;
 
 public abstract class SkyboxInstance {
 
-    JsonObject object;
-    float alpha = 1F;
-    Identifier[] textures = new Identifier[6];
-    int[] fade = new int[4];
+	JsonObject object;
+	float alpha = 1F;
+	Identifier[] textures = new Identifier[6];
+	int[] fade = new int[4];
 
-    protected int blendMode = 1;
+	protected int blendMode = 1;
 
-    // ! These are the options variables.  Do not mess with these.
-    protected boolean alwaysOn;
-    protected float maxAlpha = 1f;
-    protected boolean manualBlend = false;
-    protected int blendSrcFactor = 1;
-    protected int blendDstFactor = 1;
-    protected int blendEquation;
-    protected boolean rotate = false;
-    protected float rotationSpeed = 1F;
-    protected float[] rotationStatic = new float[]{0, 0, 0};
-    protected float[] rotationAxis = new float[]{0, 0, 0};
+	// ! These are the options variables.  Do not mess with these.
+	protected boolean alwaysOn;
+	protected float maxAlpha = 1f;
+	protected boolean manualBlend = false;
+	protected int blendSrcFactor = 1;
+	protected int blendDstFactor = 1;
+	protected int blendEquation;
+	protected boolean rotate = false;
+	protected float rotationSpeed = 1F;
+	protected float[] rotationStatic = new float[]{0, 0, 0};
+	protected float[] rotationAxis = new float[]{0, 0, 0};
 
-    protected boolean showSun = true;
-    protected boolean showMoon = true;
-    protected boolean showStars = true;
+	protected boolean showSun = true;
+	protected boolean showMoon = true;
+	protected boolean showStars = true;
 
-    protected final Identifier MOON_PHASES = new Identifier("textures/environment/moon_phases.png");
-    protected final Identifier SUN = new Identifier("textures/environment/sun.png");
+	protected final Identifier MOON_PHASES = new Identifier("textures/environment/moon_phases.png");
+	protected final Identifier SUN = new Identifier("textures/environment/sun.png");
 
-    public SkyboxInstance(JsonObject json) {
-        this.object = json;
-    }
+	public SkyboxInstance(JsonObject json) {
+		this.object = json;
+	}
 
-    public float getAlpha() {
-        if (alwaysOn) {
-            return 1F;
-        }
+	public float getAlpha() {
+		if (alwaysOn) {
+			return 1F;
+		}
 
-        int currentTime = (int) Objects.requireNonNull(MinecraftClient.getInstance().world).getTimeOfDay() % 24000; // modulo so that it's bound to 24000
-        int durationIn = Util.getTicksBetween(fade[0], fade[1]);
-        int durationOut = Util.getTicksBetween(fade[2], fade[3]);
+		int currentTime = (int) Objects.requireNonNull(MinecraftClient.getInstance().world).getTimeOfDay() % 24000; // modulo so that it's bound to 24000
+		int durationIn = Util.getTicksBetween(fade[0], fade[1]);
+		int durationOut = Util.getTicksBetween(fade[2], fade[3]);
 
-        int startFadeIn = fade[0] % 24000;
-        int endFadeIn = fade[1] % 24000;
+		int startFadeIn = fade[0] % 24000;
+		int endFadeIn = fade[1] % 24000;
 
-        if (endFadeIn < startFadeIn) {
-            endFadeIn += 24000;
-        }
+		if (endFadeIn < startFadeIn) {
+			endFadeIn += 24000;
+		}
 
-        int startFadeOut = fade[2] % 24000;
-        int endFadeOut = fade[3] % 24000;
+		int startFadeOut = fade[2] % 24000;
+		int endFadeOut = fade[3] % 24000;
 
-        if (startFadeOut < endFadeIn) {
-            startFadeOut += 24000;
-        }
+		if (startFadeOut < endFadeIn) {
+			startFadeOut += 24000;
+		}
 
-        if (endFadeOut < startFadeOut) {
-            endFadeOut += 24000;
-        }
+		if (endFadeOut < startFadeOut) {
+			endFadeOut += 24000;
+		}
 
-        int tempInTime = currentTime;
+		int tempInTime = currentTime;
 
-        if (tempInTime < startFadeIn) {
-            tempInTime += 24000;
-        }
+		if (tempInTime < startFadeIn) {
+			tempInTime += 24000;
+		}
 
-        int tempFullTime = currentTime;
+		int tempFullTime = currentTime;
 
-        if (tempFullTime < endFadeIn) {
-            tempFullTime += 24000;
-        }
+		if (tempFullTime < endFadeIn) {
+			tempFullTime += 24000;
+		}
 
-        int tempOutTime = currentTime;
+		int tempOutTime = currentTime;
 
-        if (tempOutTime < startFadeOut) {
-            tempOutTime += 24000;
-        }
+		if (tempOutTime < startFadeOut) {
+			tempOutTime += 24000;
+		}
 
-        float maxPossibleAlpha;
+		float maxPossibleAlpha;
 
-        if (startFadeIn < tempInTime && endFadeIn >= tempInTime) {
-            maxPossibleAlpha = 1f - (((float) (endFadeIn - tempInTime)) / durationIn); // fading in
-        } else if (endFadeIn < tempFullTime && startFadeOut >= tempFullTime) {
-            maxPossibleAlpha = 1f; // fully faded in
-        } else if (startFadeOut < tempOutTime && endFadeOut >= tempOutTime) {
-            maxPossibleAlpha = (float) (endFadeOut - tempOutTime) / durationOut; // fading out
-        } else {
-            maxPossibleAlpha = 0f; // default not showing
-        }
+		if (startFadeIn < tempInTime && endFadeIn >= tempInTime) {
+			maxPossibleAlpha = 1f - (((float) (endFadeIn - tempInTime)) / durationIn); // fading in
+		} else if (endFadeIn < tempFullTime && startFadeOut >= tempFullTime) {
+			maxPossibleAlpha = 1f; // fully faded in
+		} else if (startFadeOut < tempOutTime && endFadeOut >= tempOutTime) {
+			maxPossibleAlpha = (float) (endFadeOut - tempOutTime) / durationOut; // fading out
+		} else {
+			maxPossibleAlpha = 0f; // default not showing
+		}
 
-        return alpha = MathHelper.clamp(maxPossibleAlpha * maxAlpha, 0, 1);
-    }
+		return alpha = MathHelper.clamp(maxPossibleAlpha * maxAlpha, 0, 1);
+	}
 
-    protected int parseBlend(String str) {
-        if (str == null) {
-            return 1;
-        } else {
-            switch (str.toLowerCase(Locale.ENGLISH).trim()) {
-                case "alpha":
-                    return 0;
-                case "add":
-                    return 1;
-                case "subtract":
-                    return 2;
-                case "multiply":
-                    return 3;
-                case "dodge":
-                    return 4;
-                case "burn":
-                    return 5;
-                case "screen":
-                    return 6;
-                case "overlay":
-                    return 7;
-                case "replace":
-                    return 8;
-                default:
-                    AxolotlClient.LOGGER.warn("Unknown blend: " + str);
-                    return 1;
-            }
-        }
-    }
+	protected int parseBlend(String str) {
+		if (str == null) {
+			return 1;
+		} else {
+			switch (str.toLowerCase(Locale.ENGLISH).trim()) {
+				case "alpha":
+					return 0;
+				case "add":
+					return 1;
+				case "subtract":
+					return 2;
+				case "multiply":
+					return 3;
+				case "dodge":
+					return 4;
+				case "burn":
+					return 5;
+				case "screen":
+					return 6;
+				case "overlay":
+					return 7;
+				case "replace":
+					return 8;
+				default:
+					AxolotlClient.LOGGER.warn("Unknown blend: " + str);
+					return 1;
+			}
+		}
+	}
 
-    protected void setupBlend(float brightness) {
-        if (manualBlend) {
-            RenderSystem.enableBlend();
-            RenderSystem.blendFunc(blendSrcFactor, blendDstFactor);
-            GL14.glBlendEquation(blendEquation);
-            RenderSystem.enableTexture();
-            return;
-        }
+	protected void setupBlend(float brightness) {
+		if (manualBlend) {
+			RenderSystem.enableBlend();
+			RenderSystem.blendFunc(blendSrcFactor, blendDstFactor);
+			GL14.glBlendEquation(blendEquation);
+			RenderSystem.enableTexture();
+			return;
+		}
 
-        switch (blendMode) {
-            case 0 -> {
-                RenderSystem.enableBlend();
-                RenderSystem.blendFunc(770, 771);
-            }
-            case 1 -> {
-                RenderSystem.enableBlend();
-                RenderSystem.blendFunc(770, 1);
-            }
-            case 2 -> {
-                RenderSystem.enableBlend();
-                RenderSystem.blendFunc(775, 0);
-            }
-            case 3 -> {
-                RenderSystem.enableBlend();
-                RenderSystem.blendFunc(774, 771);
-            }
-            case 4 -> {
-                RenderSystem.enableBlend();
-                RenderSystem.blendFunc(1, 1);
-            }
-            case 5 -> {
-                RenderSystem.enableBlend();
-                RenderSystem.blendFunc(0, 769);
-            }
-            case 6 -> {
-                RenderSystem.enableBlend();
-                RenderSystem.blendFunc(1, 769);
-            }
-            case 7 -> {
-                RenderSystem.enableBlend();
-                RenderSystem.blendFunc(774, 768);
-            }
-            case 8 -> RenderSystem.disableBlend();
-        }
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, brightness);
+		switch (blendMode) {
+			case 0 -> {
+				RenderSystem.enableBlend();
+				RenderSystem.blendFunc(770, 771);
+			}
+			case 1 -> {
+				RenderSystem.enableBlend();
+				RenderSystem.blendFunc(770, 1);
+			}
+			case 2 -> {
+				RenderSystem.enableBlend();
+				RenderSystem.blendFunc(775, 0);
+			}
+			case 3 -> {
+				RenderSystem.enableBlend();
+				RenderSystem.blendFunc(774, 771);
+			}
+			case 4 -> {
+				RenderSystem.enableBlend();
+				RenderSystem.blendFunc(1, 1);
+			}
+			case 5 -> {
+				RenderSystem.enableBlend();
+				RenderSystem.blendFunc(0, 769);
+			}
+			case 6 -> {
+				RenderSystem.enableBlend();
+				RenderSystem.blendFunc(1, 769);
+			}
+			case 7 -> {
+				RenderSystem.enableBlend();
+				RenderSystem.blendFunc(774, 768);
+			}
+			case 8 -> RenderSystem.disableBlend();
+		}
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, brightness);
 
-        RenderSystem.enableTexture();
-    }
+		RenderSystem.enableTexture();
+	}
 
-    protected void clearBlend(float brightness) {
-        RenderSystem.enableBlend();
-        RenderSystem.blendFunc(770, 1);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, brightness);
-    }
+	protected void clearBlend(float brightness) {
+		RenderSystem.enableBlend();
+		RenderSystem.blendFunc(770, 1);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, brightness);
+	}
 
-    protected void setupRotate(MatrixStack matrices, float delta, float brightness) {
-        matrices.multiply(Axis.X_POSITIVE.rotationDegrees(rotationStatic[0]));
-        matrices.multiply(Axis.Y_POSITIVE.rotationDegrees(rotationStatic[1]));
-        matrices.multiply(Axis.Z_POSITIVE.rotationDegrees(rotationStatic[2]));
-        if (rotate) {
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, brightness);
-            matrices.multiply(Axis.X_POSITIVE.rotationDegrees(rotationAxis[0]));
-            matrices.multiply(Axis.Y_POSITIVE.rotationDegrees(rotationAxis[1]));
-            matrices.multiply(Axis.Z_POSITIVE.rotationDegrees(rotationAxis[2]));
-            matrices.multiply(Axis.Y_POSITIVE.rotationDegrees(-90.0F));
-            matrices.multiply(Axis.X_NEGATIVE.rotationDegrees(
-                    MinecraftClient.getInstance().world.getSkyAngle(delta) * 360F * rotationSpeed));
-            matrices.multiply(Axis.Z_NEGATIVE.rotationDegrees(rotationAxis[0]));
-            matrices.multiply(Axis.Y_NEGATIVE.rotationDegrees(rotationAxis[1]));
-            matrices.multiply(Axis.X_NEGATIVE.rotationDegrees(rotationAxis[2]));
-        }
-    }
+	protected void setupRotate(MatrixStack matrices, float delta, float brightness) {
+		matrices.multiply(Axis.X_POSITIVE.rotationDegrees(rotationStatic[0]));
+		matrices.multiply(Axis.Y_POSITIVE.rotationDegrees(rotationStatic[1]));
+		matrices.multiply(Axis.Z_POSITIVE.rotationDegrees(rotationStatic[2]));
+		if (rotate) {
+			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, brightness);
+			matrices.multiply(Axis.X_POSITIVE.rotationDegrees(rotationAxis[0]));
+			matrices.multiply(Axis.Y_POSITIVE.rotationDegrees(rotationAxis[1]));
+			matrices.multiply(Axis.Z_POSITIVE.rotationDegrees(rotationAxis[2]));
+			matrices.multiply(Axis.Y_POSITIVE.rotationDegrees(-90.0F));
+			matrices.multiply(Axis.X_NEGATIVE.rotationDegrees(
+					MinecraftClient.getInstance().world.getSkyAngle(delta) * 360F * rotationSpeed));
+			matrices.multiply(Axis.Z_NEGATIVE.rotationDegrees(rotationAxis[0]));
+			matrices.multiply(Axis.Y_NEGATIVE.rotationDegrees(rotationAxis[1]));
+			matrices.multiply(Axis.X_NEGATIVE.rotationDegrees(rotationAxis[2]));
+		}
+	}
 
-    protected void clearRotate(MatrixStack matrices) {
-        matrices.multiply(Axis.X_NEGATIVE.rotationDegrees(rotationStatic[0]));
-        matrices.multiply(Axis.Y_NEGATIVE.rotationDegrees(rotationStatic[1]));
-        matrices.multiply(Axis.Z_NEGATIVE.rotationDegrees(rotationStatic[2]));
-    }
+	protected void clearRotate(MatrixStack matrices) {
+		matrices.multiply(Axis.X_NEGATIVE.rotationDegrees(rotationStatic[0]));
+		matrices.multiply(Axis.Y_NEGATIVE.rotationDegrees(rotationStatic[1]));
+		matrices.multiply(Axis.Z_NEGATIVE.rotationDegrees(rotationStatic[2]));
+	}
 
-    public void render(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Runnable runnable) {
-        float brightness = MinecraftClient.getInstance().world.getRainGradient(tickDelta);
-        matrices.push();
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        setupBlend(brightness);
-        setupRotate(matrices, tickDelta, brightness);
-        renderSkybox(matrices);
-        clearBlend(brightness);
-        clearRotate(matrices);
-        matrices.pop();
-        renderDecorations(matrices, projectionMatrix, tickDelta, runnable);
-        RenderSystem.enableTexture();
-    }
+	public void render(MatrixStack matrices, Matrix4f projectionMatrix, float tickDelta, Runnable runnable) {
+		float brightness = MinecraftClient.getInstance().world.getRainGradient(tickDelta);
+		matrices.push();
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		setupBlend(brightness);
+		setupRotate(matrices, tickDelta, brightness);
+		renderSkybox(matrices);
+		clearBlend(brightness);
+		clearRotate(matrices);
+		matrices.pop();
+		renderDecorations(matrices, projectionMatrix, tickDelta, runnable);
+		RenderSystem.enableTexture();
+	}
 
-    protected void renderDecorations(MatrixStack matrices, Matrix4f projectionMatrix, float delta, Runnable runnable) {
-        WorldRendererAccessor worldRendererAccessor = (WorldRendererAccessor) MinecraftClient
-                .getInstance().worldRenderer;
-        RenderSystem.enableTexture();
-        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE,
-                GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+	protected void renderDecorations(MatrixStack matrices, Matrix4f projectionMatrix, float delta, Runnable runnable) {
+		WorldRendererAccessor worldRendererAccessor = (WorldRendererAccessor) MinecraftClient
+				.getInstance().worldRenderer;
+		RenderSystem.enableTexture();
+		RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE,
+				GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 
-        matrices.push();
-        float i = 1.0F - MinecraftClient.getInstance().world.getRainGradient(delta);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, i);
-        matrices.multiply(Axis.Y_POSITIVE.rotationDegrees(-90.0F));
-        matrices.multiply(
-                Axis.X_POSITIVE.rotationDegrees(MinecraftClient.getInstance().world.getSkyAngle(delta) * 360.0F));
-        Matrix4f matrix4f2 = matrices.peek().getModel();
-        float k = 30.0F;
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		matrices.push();
+		float i = 1.0F - MinecraftClient.getInstance().world.getRainGradient(delta);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, i);
+		matrices.multiply(Axis.Y_POSITIVE.rotationDegrees(-90.0F));
+		matrices.multiply(
+				Axis.X_POSITIVE.rotationDegrees(MinecraftClient.getInstance().world.getSkyAngle(delta) * 360.0F));
+		Matrix4f matrix4f2 = matrices.peek().getModel();
+		float k = 30.0F;
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 
-        BufferBuilder bufferBuilder = Tessellator.getInstance().getBufferBuilder();
+		BufferBuilder bufferBuilder = Tessellator.getInstance().getBufferBuilder();
 
-        if (showSun) {
-            RenderSystem.setShaderTexture(0, SUN);
-            bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-            bufferBuilder.vertex(matrix4f2, -k, 100.0F, -k).uv(0.0F, 0.0F).next();
-            bufferBuilder.vertex(matrix4f2, k, 100.0F, -k).uv(1.0F, 0.0F).next();
-            bufferBuilder.vertex(matrix4f2, k, 100.0F, k).uv(1.0F, 1.0F).next();
-            bufferBuilder.vertex(matrix4f2, -k, 100.0F, k).uv(0.0F, 1.0F).next();
-            BufferRenderer.drawWithShader(bufferBuilder.end());
-        }
-        if (showMoon) {
-            k = 20.0F;
-            RenderSystem.setShaderTexture(0, MOON_PHASES);
-            int r = MinecraftClient.getInstance().world.getMoonPhase();
-            int s = r % 4;
-            int m = r / 4 % 2;
-            float t = (float) (s) / 4.0F;
-            float o = (float) (m) / 2.0F;
-            float p = (float) (s + 1) / 4.0F;
-            float q = (float) (m + 1) / 2.0F;
-            bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-            bufferBuilder.vertex(matrix4f2, -k, -100.0F, k).uv(p, q).next();
-            bufferBuilder.vertex(matrix4f2, k, -100.0F, k).uv(t, q).next();
-            bufferBuilder.vertex(matrix4f2, k, -100.0F, -k).uv(t, o).next();
-            bufferBuilder.vertex(matrix4f2, -k, -100.0F, -k).uv(p, o).next();
-            BufferRenderer.drawWithShader(bufferBuilder.end());
-        }
-        if (showStars) {
-            RenderSystem.disableTexture();
-            float u = MinecraftClient.getInstance().world.getStarBrightness(delta) * i;
-            if (u > 0.0F) {
-                RenderSystem.setShaderColor(u, u, u, u);
-                BackgroundRenderer.clearFog();
-                worldRendererAccessor.getStarsBuffer().bind();
-                worldRendererAccessor.getStarsBuffer().draw(matrices.peek().getModel(), projectionMatrix,
-                        GameRenderer.getPositionShader());
-                VertexBuffer.unbind();
-                runnable.run();
-            }
+		if (showSun) {
+			RenderSystem.setShaderTexture(0, SUN);
+			bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+			bufferBuilder.vertex(matrix4f2, -k, 100.0F, -k).uv(0.0F, 0.0F).next();
+			bufferBuilder.vertex(matrix4f2, k, 100.0F, -k).uv(1.0F, 0.0F).next();
+			bufferBuilder.vertex(matrix4f2, k, 100.0F, k).uv(1.0F, 1.0F).next();
+			bufferBuilder.vertex(matrix4f2, -k, 100.0F, k).uv(0.0F, 1.0F).next();
+			BufferRenderer.drawWithShader(bufferBuilder.end());
+		}
+		if (showMoon) {
+			k = 20.0F;
+			RenderSystem.setShaderTexture(0, MOON_PHASES);
+			int r = MinecraftClient.getInstance().world.getMoonPhase();
+			int s = r % 4;
+			int m = r / 4 % 2;
+			float t = (float) (s) / 4.0F;
+			float o = (float) (m) / 2.0F;
+			float p = (float) (s + 1) / 4.0F;
+			float q = (float) (m + 1) / 2.0F;
+			bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+			bufferBuilder.vertex(matrix4f2, -k, -100.0F, k).uv(p, q).next();
+			bufferBuilder.vertex(matrix4f2, k, -100.0F, k).uv(t, q).next();
+			bufferBuilder.vertex(matrix4f2, k, -100.0F, -k).uv(t, o).next();
+			bufferBuilder.vertex(matrix4f2, -k, -100.0F, -k).uv(p, o).next();
+			BufferRenderer.drawWithShader(bufferBuilder.end());
+		}
+		if (showStars) {
+			RenderSystem.disableTexture();
+			float u = MinecraftClient.getInstance().world.getStarBrightness(delta) * i;
+			if (u > 0.0F) {
+				RenderSystem.setShaderColor(u, u, u, u);
+				BackgroundRenderer.clearFog();
+				worldRendererAccessor.getStarsBuffer().bind();
+				worldRendererAccessor.getStarsBuffer().draw(matrices.peek().getModel(), projectionMatrix,
+						GameRenderer.getPositionShader());
+				VertexBuffer.unbind();
+				runnable.run();
+			}
 
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            RenderSystem.disableBlend();
-            matrices.pop();
-        }
+			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+			RenderSystem.disableBlend();
+			matrices.pop();
+		}
 
-        RenderSystem.enableTexture();
-        RenderSystem.depthMask(true);
-    }
+		RenderSystem.enableTexture();
+		RenderSystem.depthMask(true);
+	}
 
-    public abstract void renderSkybox(MatrixStack matrices);
+	public abstract void renderSkybox(MatrixStack matrices);
 }

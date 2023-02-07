@@ -32,13 +32,13 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(Camera.class)
 public abstract class RenderDataMixin {
 
-    @Redirect(method = "update", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerEntity;yaw:F"))
-    private static float axolotlclient$freelook$getYaw(PlayerEntity entity) {
-        return Freelook.getInstance().yaw(entity.yaw);
-    }
+	@Redirect(method = "update", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerEntity;yaw:F"))
+	private static float axolotlclient$freelook$getYaw(PlayerEntity entity) {
+		return Freelook.getInstance().yaw(entity.yaw);
+	}
 
-    @Redirect(method = "update", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerEntity;pitch:F"))
-    private static float axolotlclient$freelook$getPitch(PlayerEntity entity) {
-        return Freelook.getInstance().pitch(entity.pitch);
-    }
+	@Redirect(method = "update", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerEntity;pitch:F"))
+	private static float axolotlclient$freelook$getPitch(PlayerEntity entity) {
+		return Freelook.getInstance().pitch(entity.pitch);
+	}
 }

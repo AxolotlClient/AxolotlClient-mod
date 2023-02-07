@@ -35,90 +35,91 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class NetworkHelper {
 
-    private static boolean loggedIn;
-    private static UUID uuid;
+	private static boolean loggedIn;
+	private static UUID uuid;
 
-    private static final AtomicInteger concurrentCalls = new AtomicInteger(0);
-    private static final int maxCalls = 3;
+	private static final AtomicInteger concurrentCalls = new AtomicInteger(0);
+	private static final int maxCalls = 3;
 
-    public static boolean getOnline(UUID uuid) {
-        if (!AxolotlClient.playerCache.containsKey(uuid)) {
-            if (concurrentCalls.get() <= maxCalls) {
-                concurrentCalls.incrementAndGet();
-                Runnable runnable = () -> getUser(uuid);
-                ThreadExecuter.scheduleTask(runnable);
-                ThreadExecuter.removeTask(runnable);
-                ThreadExecuter.scheduleTask(concurrentCalls::decrementAndGet, 1, TimeUnit.MINUTES);
-            }
-        }
-        return AxolotlClient.playerCache.get(uuid) != null ? AxolotlClient.playerCache.get(uuid) : false;
-    }
+	public static boolean getOnline(UUID uuid) {
+		if (!AxolotlClient.playerCache.containsKey(uuid)) {
+			if (concurrentCalls.get() <= maxCalls) {
+				concurrentCalls.incrementAndGet();
+				Runnable runnable = () -> getUser(uuid);
+				ThreadExecuter.scheduleTask(runnable);
+				ThreadExecuter.removeTask(runnable);
+				ThreadExecuter.scheduleTask(concurrentCalls::decrementAndGet, 1, TimeUnit.MINUTES);
+			}
+		}
+		return AxolotlClient.playerCache.get(uuid) != null ? AxolotlClient.playerCache.get(uuid) : false;
+	}
 
-    public static void getUser(UUID uuid) {
-        try {
-            String body = NetworkUtil.getRequest("https://moehreag.duckdns.org/axolotlclient-api/?uuid=" + uuid.toString(), HttpClients.createMinimal()).toString();
-            if (body.contains("true")) {
-                AxolotlClient.playerCache.put(uuid, true);
-            } else {
-                AxolotlClient.playerCache.put(uuid, false);
-            }
-        } catch (Exception ignored) {
-            AxolotlClient.playerCache.put(uuid, false);
-        }
-    }
+	public static void getUser(UUID uuid) {
+		try {
+			String body = NetworkUtil.getRequest("https://moehreag.duckdns.org/axolotlclient-api/?uuid=" + uuid.toString(), HttpClients.createMinimal()).toString();
+			if (body.contains("true")) {
+				AxolotlClient.playerCache.put(uuid, true);
+			} else {
+				AxolotlClient.playerCache.put(uuid, false);
+			}
+		} catch (Exception ignored) {
+			AxolotlClient.playerCache.put(uuid, false);
+		}
+	}
 
-    public static void setOnline() {
+	public static void setOnline() {
 
-        if(uuid == null){
-            try {
+		if (uuid == null) {
+			try {
 
-                uuid = MinecraftClient.getInstance().player.getUuid();
-            } catch (NullPointerException ignored){}
-        }
+				uuid = MinecraftClient.getInstance().player.getUuid();
+			} catch (NullPointerException ignored) {
+			}
+		}
 
-        if(uuid != null) {
-            try {
-                String body = NetworkUtil.postRequest("https://moehreag.duckdns.org/axolotlclient-api/", "{\n\t\"uuid\": \"" + uuid + "\",\n\t\"online\": true\n}", HttpClients.createMinimal()).toString();
-                if (body.contains("Success!")) {
-                    AxolotlClient.LOGGER.info("Sucessfully logged in at AxolotlClient!");
-                    loggedIn = true;
-                }
-            } catch (Exception e) {
-                AxolotlClient.LOGGER.error("Error while logging in!");
-            }
-        }
-    }
+		if (uuid != null) {
+			try {
+				String body = NetworkUtil.postRequest("https://moehreag.duckdns.org/axolotlclient-api/", "{\n\t\"uuid\": \"" + uuid + "\",\n\t\"online\": true\n}", HttpClients.createMinimal()).toString();
+				if (body.contains("Success!")) {
+					AxolotlClient.LOGGER.info("Sucessfully logged in at AxolotlClient!");
+					loggedIn = true;
+				}
+			} catch (Exception e) {
+				AxolotlClient.LOGGER.error("Error while logging in!");
+			}
+		}
+	}
 
-    public static void setOffline() {
-        if (loggedIn) {
-            try {
-                AxolotlClient.LOGGER.info("Logging off..");
-                String body = NetworkUtil.deleteRequest("https://moehreag.duckdns.org/axolotlclient-api/?uuid=" + uuid.toString(), "", HttpClients.createMinimal()).toString();
-                if (body.contains("Success!")) {
-                    AxolotlClient.LOGGER.info("Successfully logged off!");
-                } else {
-                    throw new Exception("Error while logging off: " + body);
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                AxolotlClient.LOGGER.error("Error while logging off!");
-            }
-        }
-    }
+	public static void setOffline() {
+		if (loggedIn) {
+			try {
+				AxolotlClient.LOGGER.info("Logging off..");
+				String body = NetworkUtil.deleteRequest("https://moehreag.duckdns.org/axolotlclient-api/?uuid=" + uuid.toString(), "", HttpClients.createMinimal()).toString();
+				if (body.contains("Success!")) {
+					AxolotlClient.LOGGER.info("Successfully logged off!");
+				} else {
+					throw new Exception("Error while logging off: " + body);
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				AxolotlClient.LOGGER.error("Error while logging off!");
+			}
+		}
+	}
 
-    // In case we ever implement more of HyCord's features...
-    public static JsonElement getRequest(String site) {
-        return getRequest(site, HttpClients.custom().disableAutomaticRetries().build());
-    }
+	// In case we ever implement more of HyCord's features...
+	public static JsonElement getRequest(String site) {
+		return getRequest(site, HttpClients.custom().disableAutomaticRetries().build());
+	}
 
-    public static JsonElement getRequest(String url, CloseableHttpClient client){
-        try {
-            return NetworkUtil.getRequest(url, client);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+	public static JsonElement getRequest(String url, CloseableHttpClient client) {
+		try {
+			return NetworkUtil.getRequest(url, client);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
     /*public static String getUuid(String username) {
         JsonElement response = getRequest("https://api.mojang.com/users/profiles/minecraft/" + username);

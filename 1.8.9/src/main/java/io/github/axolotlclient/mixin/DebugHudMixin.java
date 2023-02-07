@@ -32,12 +32,12 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(DebugHud.class)
 public abstract class DebugHudMixin {
 
-    @Redirect(method = "getLeftText", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/ClientBrandRetriever;getClientModName()Ljava/lang/String;"))
-    public String axolotlclient$nicerVersionString() {
-        if (FabricLoader.getInstance().getModContainer("axolotlclient").isPresent()) {
-            return ClientBrandRetriever.getClientModName() + "/" + FabricLoader.getInstance()
-                    .getModContainer("axolotlclient").get().getMetadata().getVersion().getFriendlyString();
-        }
-        return ClientBrandRetriever.getClientModName();
-    }
+	@Redirect(method = "getLeftText", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/ClientBrandRetriever;getClientModName()Ljava/lang/String;"))
+	public String axolotlclient$nicerVersionString() {
+		if (FabricLoader.getInstance().getModContainer("axolotlclient").isPresent()) {
+			return ClientBrandRetriever.getClientModName() + "/" + FabricLoader.getInstance()
+					.getModContainer("axolotlclient").get().getMetadata().getVersion().getFriendlyString();
+		}
+		return ClientBrandRetriever.getClientModName();
+	}
 }

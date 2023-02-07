@@ -45,131 +45,133 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class PackDisplayHud extends TextHudEntry {
 
-    public static Identifier ID = new Identifier("axolotlclient", "packdisplayhud");
+	public static Identifier ID = new Identifier("axolotlclient", "packdisplayhud");
 
-    private final BooleanOption iconsOnly = new BooleanOption("iconsonly", false);
+	private final BooleanOption iconsOnly = new BooleanOption("iconsonly", false);
 
-    public final List<PackWidget> widgets = new ArrayList<>();
-    private PackWidget placeholder;
+	public final List<PackWidget> widgets = new ArrayList<>();
+	private PackWidget placeholder;
 
-    public PackDisplayHud() {
-        super(200, 50, true);
-    }
+	public PackDisplayHud() {
+		super(200, 50, true);
+	}
 
-    @Override
-    public void init() {
-        int listSize = client.getResourcePackManager().getProfiles().size();
-        MinecraftClient.getInstance().getResourcePackManager().getEnabledProfiles().forEach(profile -> {
-            try (ResourcePack pack = profile.createResourcePack()) {
+	@Override
+	public void init() {
+		int listSize = client.getResourcePackManager().getProfiles().size();
+		MinecraftClient.getInstance().getResourcePackManager().getEnabledProfiles().forEach(profile -> {
+			try (ResourcePack pack = profile.createResourcePack()) {
 
-                if (listSize == 1) {
-                    widgets.add(createWidget(profile.getDisplayName(), pack));
-                } else if (!pack.getName().equalsIgnoreCase("vanilla")) {
-                    widgets.add(createWidget(profile.getDisplayName(), pack));
-                }
+				if (listSize == 1) {
+					widgets.add(createWidget(profile.getDisplayName(), pack));
+				} else if (!pack.getName().equalsIgnoreCase("vanilla")) {
+					widgets.add(createWidget(profile.getDisplayName(), pack));
+				}
 
-            } catch (Exception ignored) {}
-        });
+			} catch (Exception ignored) {
+			}
+		});
 
-        AtomicInteger w = new AtomicInteger(20);
-        widgets.forEach(packWidget -> {
-            int textW = MinecraftClient.getInstance().textRenderer.getWidth(packWidget.getName()) + 20;
-            if (textW > w.get())
-                w.set(textW);
-        });
-        setWidth(w.get());
+		AtomicInteger w = new AtomicInteger(20);
+		widgets.forEach(packWidget -> {
+			int textW = MinecraftClient.getInstance().textRenderer.getWidth(packWidget.getName()) + 20;
+			if (textW > w.get())
+				w.set(textW);
+		});
+		setWidth(w.get());
 
-        setHeight(widgets.size() * 18);
-        onBoundsUpdate();
-    }
+		setHeight(widgets.size() * 18);
+		onBoundsUpdate();
+	}
 
-    private PackWidget createWidget(Text displayName, ResourcePack pack) throws IOException, AssertionError {
-        InputStream supplier = pack.openRoot("pack.png");
-        assert supplier != null;
-        int texture = new NativeImageBackedTexture(NativeImage.read(supplier)).getGlId();
-        supplier.close();
-        return new PackWidget(displayName, texture);
-    }
+	private PackWidget createWidget(Text displayName, ResourcePack pack) throws IOException, AssertionError {
+		InputStream supplier = pack.openRoot("pack.png");
+		assert supplier != null;
+		int texture = new NativeImageBackedTexture(NativeImage.read(supplier)).getGlId();
+		supplier.close();
+		return new PackWidget(displayName, texture);
+	}
 
-    @Override
-    public void renderComponent(MatrixStack matrices, float f) {
-        DrawPosition pos = getPos();
+	@Override
+	public void renderComponent(MatrixStack matrices, float f) {
+		DrawPosition pos = getPos();
 
-        if (widgets.isEmpty())
-            init();
+		if (widgets.isEmpty())
+			init();
 
-        if (background.get()) {
-            fillRect(matrices, getBounds(), backgroundColor.get());
-        }
+		if (background.get()) {
+			fillRect(matrices, getBounds(), backgroundColor.get());
+		}
 
-        if (outline.get())
-            outlineRect(matrices, getBounds(), outlineColor.get());
+		if (outline.get())
+			outlineRect(matrices, getBounds(), outlineColor.get());
 
-        int y = pos.y + 1;
-        for (int i = widgets.size() - 1; i >= 0; i--) { // Badly reverse the order (I'm sure there are better ways to do this)
-            widgets.get(i).render(matrices, pos.x + 1, y);
-            y += 18;
-        }
-        if (y - pos.y + 1 != getHeight()) {
-            setHeight(y - pos.y - 1);
-            onBoundsUpdate();
-        }
-    }
+		int y = pos.y + 1;
+		for (int i = widgets.size() - 1; i >= 0; i--) { // Badly reverse the order (I'm sure there are better ways to do this)
+			widgets.get(i).render(matrices, pos.x + 1, y);
+			y += 18;
+		}
+		if (y - pos.y + 1 != getHeight()) {
+			setHeight(y - pos.y - 1);
+			onBoundsUpdate();
+		}
+	}
 
-    @Override
-    public void renderPlaceholderComponent(MatrixStack matrices, float f) {
-        boolean updateBounds = false;
-        if (getHeight() < 18) {
-            setHeight(18);
-            updateBounds = true;
-        }
-        if (getWidth() < 56) {
-            setWidth(56);
-            updateBounds = true;
-        }
-        if (updateBounds) {
-            onBoundsUpdate();
-        }
-        if (placeholder == null) {
-            try (ResourcePack defaultPack = MinecraftClient.getInstance().getResourcePackDownloader().getPack()) {
-                placeholder = createWidget(Text.of(defaultPack.getName()), defaultPack);
-            } catch (Exception ignored){}
-        } else {
-            placeholder.render(matrices, getPos().x + 1, getPos().y + 1);
-        }
-    }
+	@Override
+	public void renderPlaceholderComponent(MatrixStack matrices, float f) {
+		boolean updateBounds = false;
+		if (getHeight() < 18) {
+			setHeight(18);
+			updateBounds = true;
+		}
+		if (getWidth() < 56) {
+			setWidth(56);
+			updateBounds = true;
+		}
+		if (updateBounds) {
+			onBoundsUpdate();
+		}
+		if (placeholder == null) {
+			try (ResourcePack defaultPack = MinecraftClient.getInstance().getResourcePackDownloader().getPack()) {
+				placeholder = createWidget(Text.of(defaultPack.getName()), defaultPack);
+			} catch (Exception ignored) {
+			}
+		} else {
+			placeholder.render(matrices, getPos().x + 1, getPos().y + 1);
+		}
+	}
 
-    @Override
-    public List<Option<?>> getConfigurationOptions() {
-        List<Option<?>> options = super.getConfigurationOptions();
-        options.add(iconsOnly);
-        return options;
-    }
+	@Override
+	public List<Option<?>> getConfigurationOptions() {
+		List<Option<?>> options = super.getConfigurationOptions();
+		options.add(iconsOnly);
+		return options;
+	}
 
-    @Override
-    public Identifier getId() {
-        return ID;
-    }
+	@Override
+	public Identifier getId() {
+		return ID;
+	}
 
-    @Override
-    public boolean movable() {
-        return true;
-    }
+	@Override
+	public boolean movable() {
+		return true;
+	}
 
-    public void update() {
-        widgets.clear();
-        init();
-    }
+	public void update() {
+		widgets.clear();
+		init();
+	}
 
-    private class PackWidget {
+	private class PackWidget {
 
-        private final int texture;
-        @Getter
-        public final String name;
+		private final int texture;
+		@Getter
+		public final String name;
 
-        public PackWidget(Text name, int textureId) {
-            this.name = name.getString();
-            texture = textureId;
+		public PackWidget(Text name, int textureId) {
+			this.name = name.getString();
+			texture = textureId;
             /*try {
                 InputStream stream = pack.openRoot("pack.png").get();
                 assert stream != null;
@@ -179,15 +181,15 @@ public class PackDisplayHud extends TextHudEntry {
                 Logger.warn("Pack " + pack.getName()
                         + " somehow threw an error! Please investigate... Does it have an icon?");
             }*/
-        }
+		}
 
-        public void render(MatrixStack matrices, int x, int y) {
-            if (!iconsOnly.get()) {
-                RenderSystem.color4f(1, 1, 1, 1F);
-                RenderSystem.bindTexture(texture);
-                DrawableHelper.drawTexture(matrices, x, y, 0, 0, 16, 16, 16, 16);
-            }
-            drawString(matrices, name, x + 18, y + 6, textColor.get().getAsInt(), shadow.get());
-        }
-    }
+		public void render(MatrixStack matrices, int x, int y) {
+			if (!iconsOnly.get()) {
+				RenderSystem.color4f(1, 1, 1, 1F);
+				RenderSystem.bindTexture(texture);
+				DrawableHelper.drawTexture(matrices, x, y, 0, 0, 16, 16, 16, 16);
+			}
+			drawString(matrices, name, x + 18, y + 6, textColor.get().getAsInt(), shadow.get());
+		}
+	}
 }

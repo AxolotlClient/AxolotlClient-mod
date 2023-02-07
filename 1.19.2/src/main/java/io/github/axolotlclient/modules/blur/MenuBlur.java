@@ -53,168 +53,168 @@ import java.io.IOException;
 
 public class MenuBlur extends AbstractModule {
 
-    @Getter
-    private static final MenuBlur Instance = new MenuBlur();
+	@Getter
+	private static final MenuBlur Instance = new MenuBlur();
 
-    private final Identifier shaderLocation = new Identifier("minecraft:shaders/post/menu_blur.json");
+	private final Identifier shaderLocation = new Identifier("minecraft:shaders/post/menu_blur.json");
 
-    public final BooleanOption enabled = new BooleanOption("enabled", false);
-    private final IntegerOption strength = new IntegerOption("strength", 8, 0, 100);
-    private final IntegerOption fadeTime = new IntegerOption("fadeTime", 1, 0, 10);
-    private final ColorOption bgColor = new ColorOption("bgcolor", 0x64000000);
-    private final OptionCategory category = new OptionCategory("menublur");
+	public final BooleanOption enabled = new BooleanOption("enabled", false);
+	private final IntegerOption strength = new IntegerOption("strength", 8, 0, 100);
+	private final IntegerOption fadeTime = new IntegerOption("fadeTime", 1, 0, 10);
+	private final ColorOption bgColor = new ColorOption("bgcolor", 0x64000000);
+	private final OptionCategory category = new OptionCategory("menublur");
 
-    private final Color black = new Color(0);
+	private final Color black = new Color(0);
 
-    private long openTime;
+	private long openTime;
 
-    private ShaderEffect shader;
+	private ShaderEffect shader;
 
-    private int lastWidth;
-    private int lastHeight;
+	private int lastWidth;
+	private int lastHeight;
 
-    @Override
-    public void init() {
-        category.add(enabled, strength, fadeTime, bgColor);
+	@Override
+	public void init() {
+		category.add(enabled, strength, fadeTime, bgColor);
 
-        AxolotlClient.CONFIG.rendering.add(category);
+		AxolotlClient.CONFIG.rendering.add(category);
 
-        AxolotlClient.runtimeResources.put(shaderLocation, new MenuBlurShader());
-    }
+		AxolotlClient.runtimeResources.put(shaderLocation, new MenuBlurShader());
+	}
 
-    public boolean renderScreen(MatrixStack matrices) {
-        if (enabled.get() && !(MinecraftClient.getInstance().currentScreen instanceof ChatScreen) && shader != null) {
-            DrawableHelper.fill(matrices, 0, 0, MinecraftClient.getInstance().getWindow().getWidth(), MinecraftClient.getInstance().getWindow().getHeight(),
-                    Color.blend(black, bgColor.get(), getProgress()).getAsInt());
-            return true;
-        }
-        return false;
-    }
+	public boolean renderScreen(MatrixStack matrices) {
+		if (enabled.get() && !(MinecraftClient.getInstance().currentScreen instanceof ChatScreen) && shader != null) {
+			DrawableHelper.fill(matrices, 0, 0, MinecraftClient.getInstance().getWindow().getWidth(), MinecraftClient.getInstance().getWindow().getHeight(),
+					Color.blend(black, bgColor.get(), getProgress()).getAsInt());
+			return true;
+		}
+		return false;
+	}
 
-    public void renderBlur() {
-        shader.render(MinecraftClient.getInstance().getTickDelta());
-    }
+	public void renderBlur() {
+		shader.render(MinecraftClient.getInstance().getTickDelta());
+	}
 
-    private float getProgress() {
-        return Math.min((System.currentTimeMillis() - openTime) / (fadeTime.get() * 1000F), 1);
-    }
+	private float getProgress() {
+		return Math.min((System.currentTimeMillis() - openTime) / (fadeTime.get() * 1000F), 1);
+	}
 
-    public void updateBlur() {
-        if (enabled.get() && MinecraftClient.getInstance().currentScreen != null && !(MinecraftClient.getInstance().currentScreen instanceof ChatScreen)) {
-            if ((shader == null || MinecraftClient.getInstance().getWindow().getWidth() != lastWidth
-                    || MinecraftClient.getInstance().getWindow().getHeight() != lastHeight)
-                    && MinecraftClient.getInstance().getWindow().getWidth() > 0
-                    && MinecraftClient.getInstance().getWindow().getHeight() > 0) {
-                try {
-                    shader = new ShaderEffect(client.getTextureManager(), client.getResourceManager(),
-                            client.getFramebuffer(), shaderLocation);
-                    shader.setupDimensions(client.getWindow().getWidth(), client.getWindow().getHeight());
-                } catch (IOException e) {
-                    AxolotlClient.LOGGER.error("Failed to load Menu Blur: ", e);
-                    return;
-                }
-            }
+	public void updateBlur() {
+		if (enabled.get() && MinecraftClient.getInstance().currentScreen != null && !(MinecraftClient.getInstance().currentScreen instanceof ChatScreen)) {
+			if ((shader == null || MinecraftClient.getInstance().getWindow().getWidth() != lastWidth
+					|| MinecraftClient.getInstance().getWindow().getHeight() != lastHeight)
+					&& MinecraftClient.getInstance().getWindow().getWidth() > 0
+					&& MinecraftClient.getInstance().getWindow().getHeight() > 0) {
+				try {
+					shader = new ShaderEffect(client.getTextureManager(), client.getResourceManager(),
+							client.getFramebuffer(), shaderLocation);
+					shader.setupDimensions(client.getWindow().getWidth(), client.getWindow().getHeight());
+				} catch (IOException e) {
+					AxolotlClient.LOGGER.error("Failed to load Menu Blur: ", e);
+					return;
+				}
+			}
 
-            if (shader != null) {
-                ((ShaderEffectAccessor) shader).getPasses().forEach((shader) -> {
-                    GlUniform radius = shader.getProgram().getUniformByName("Radius");
-                    GlUniform progress = shader.getProgram().getUniformByName("Progress");
+			if (shader != null) {
+				((ShaderEffectAccessor) shader).getPasses().forEach((shader) -> {
+					GlUniform radius = shader.getProgram().getUniformByName("Radius");
+					GlUniform progress = shader.getProgram().getUniformByName("Progress");
 
-                    if (radius != null) {
-                        radius.setFloat(strength.get());
-                    }
+					if (radius != null) {
+						radius.setFloat(strength.get());
+					}
 
-                    if (progress != null) {
-                        if (fadeTime.get() > 0) {
-                            progress.setFloat(getProgress());
-                        } else {
-                            progress.setFloat(1);
-                        }
-                    }
-                });
-            }
+					if (progress != null) {
+						if (fadeTime.get() > 0) {
+							progress.setFloat(getProgress());
+						} else {
+							progress.setFloat(1);
+						}
+					}
+				});
+			}
 
-            lastWidth = client.getWindow().getWidth();
-            lastHeight = client.getWindow().getHeight();
-            renderBlur();
-        }
-    }
+			lastWidth = client.getWindow().getWidth();
+			lastHeight = client.getWindow().getHeight();
+			renderBlur();
+		}
+	}
 
-    public void onScreenOpen() {
-        openTime = System.currentTimeMillis();
-    }
+	public void onScreenOpen() {
+		openTime = System.currentTimeMillis();
+	}
 
-    private static class MenuBlurShader extends Resource {
+	private static class MenuBlurShader extends Resource {
 
-        public MenuBlurShader() {
-            super("", () -> IOUtils.toInputStream("""
-                    {
-                        "targets": [
-                            "swap"
-                        ],
-                        "passes": [
-                            {
-                                "name": "menu_blur",
-                                "intarget": "minecraft:main",
-                                "outtarget": "swap",
-                                "uniforms": [
-                                    {
-                                        "name": "BlurDir",
-                                        "values": [ 1.0, 0.0 ]
-                                    },
-                                    {
-                                        "name": "Radius",
-                                        "values": [ 0.0 ]
-                                    }
-                                ]
-                            },
-                            {
-                                "name": "menu_blur",
-                                "intarget": "swap",
-                                "outtarget": "minecraft:main",
-                                "uniforms": [
-                                    {
-                                        "name": "BlurDir",
-                                        "values": [ 0.0, 1.0 ]
-                                    },
-                                    {
-                                        "name": "Radius",
-                                        "values": [ 0.0 ]
-                                    }
-                                ]
-                            },
-                            {
-                                "name": "menu_blur",
-                                "intarget": "minecraft:main",
-                                "outtarget": "swap",
-                                "uniforms": [
-                                    {
-                                        "name": "BlurDir",
-                                        "values": [ 1.0, 0.0 ]
-                                    },
-                                    {
-                                        "name": "Radius",
-                                        "values": [ 0.0 ]
-                                    }
-                                ]
-                            },
-                            {
-                                "name": "menu_blur",
-                                "intarget": "swap",
-                                "outtarget": "minecraft:main",
-                                "uniforms": [
-                                    {
-                                        "name": "BlurDir",
-                                        "values": [ 0.0, 1.0 ]
-                                    },
-                                    {
-                                        "name": "Radius",
-                                        "values": [ 0.0 ]
-                                    }
-                                ]
-                            }
-                        ]
-                    }""", "utf-8"));
-        }
-    }
+		public MenuBlurShader() {
+			super("", () -> IOUtils.toInputStream("""
+					{
+					    "targets": [
+					        "swap"
+					    ],
+					    "passes": [
+					        {
+					            "name": "menu_blur",
+					            "intarget": "minecraft:main",
+					            "outtarget": "swap",
+					            "uniforms": [
+					                {
+					                    "name": "BlurDir",
+					                    "values": [ 1.0, 0.0 ]
+					                },
+					                {
+					                    "name": "Radius",
+					                    "values": [ 0.0 ]
+					                }
+					            ]
+					        },
+					        {
+					            "name": "menu_blur",
+					            "intarget": "swap",
+					            "outtarget": "minecraft:main",
+					            "uniforms": [
+					                {
+					                    "name": "BlurDir",
+					                    "values": [ 0.0, 1.0 ]
+					                },
+					                {
+					                    "name": "Radius",
+					                    "values": [ 0.0 ]
+					                }
+					            ]
+					        },
+					        {
+					            "name": "menu_blur",
+					            "intarget": "minecraft:main",
+					            "outtarget": "swap",
+					            "uniforms": [
+					                {
+					                    "name": "BlurDir",
+					                    "values": [ 1.0, 0.0 ]
+					                },
+					                {
+					                    "name": "Radius",
+					                    "values": [ 0.0 ]
+					                }
+					            ]
+					        },
+					        {
+					            "name": "menu_blur",
+					            "intarget": "swap",
+					            "outtarget": "minecraft:main",
+					            "uniforms": [
+					                {
+					                    "name": "BlurDir",
+					                    "values": [ 0.0, 1.0 ]
+					                },
+					                {
+					                    "name": "Radius",
+					                    "values": [ 0.0 ]
+					                }
+					            ]
+					        }
+					    ]
+					}""", "utf-8"));
+		}
+	}
 }

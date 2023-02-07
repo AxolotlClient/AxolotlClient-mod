@@ -31,35 +31,35 @@ package io.github.axolotlclient.modules.hud.gui.component;
 
 public interface HudEntry extends Identifiable, Configurable, Positionable {
 
-    boolean isEnabled();
+	boolean isEnabled();
 
-    void setEnabled(boolean value);
+	void setEnabled(boolean value);
 
-    default boolean tickable() {
-        return false;
-    }
+	default boolean tickable() {
+		return false;
+	}
 
-    default boolean overridesF3() {
-        return false;
-    }
+	default boolean overridesF3() {
+		return false;
+	}
 
-    default void tick() {
-    }
+	default void tick() {
+	}
 
-    default void init() {
-    }
+	default void init() {
+	}
 
-    default double getDefaultX() {
-        return 0;
-    }
+	default double getDefaultX() {
+		return 0;
+	}
 
-    default double getDefaultY() {
-        return 0;
-    }
+	default double getDefaultY() {
+		return 0;
+	}
 
-    void render(float delta);
+	void render(float delta);
 
-    void renderPlaceholder(float delta);
+	void renderPlaceholder(float delta);
 
-    void setHovered(boolean hovered);
+	void setHovered(boolean hovered);
 }

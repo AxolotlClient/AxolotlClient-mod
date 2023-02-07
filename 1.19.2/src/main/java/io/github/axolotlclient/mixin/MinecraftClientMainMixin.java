@@ -30,8 +30,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(Main.class)
 public abstract class MinecraftClientMainMixin {
 
-    @Redirect(method = "<clinit>", at = @At(value = "INVOKE", target = "Ljava/lang/System;setProperty(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;"))
-    private static String axolotlclient$noHeadless(String key, String value) {
-        return "";
-    }
+	@Redirect(method = "<clinit>", at = @At(value = "INVOKE", target = "Ljava/lang/System;setProperty(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;"))
+	private static String axolotlclient$noHeadless(String key, String value) {
+		return "";
+	}
 }

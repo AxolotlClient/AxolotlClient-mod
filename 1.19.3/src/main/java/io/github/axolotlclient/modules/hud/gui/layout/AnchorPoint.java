@@ -35,45 +35,45 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum AnchorPoint {
 
-    TOP_LEFT(-1, 1), TOP_MIDDLE(0, 1), TOP_RIGHT(1, 1), MIDDLE_LEFT(-1, 0), MIDDLE_MIDDLE(0, 0), MIDDLE_RIGHT(1, 0),
-    BOTTOM_LEFT(-1, -1), BOTTOM_MIDDLE(0, -1), BOTTOM_RIGHT(1, -1),
-    ;
+	TOP_LEFT(-1, 1), TOP_MIDDLE(0, 1), TOP_RIGHT(1, 1), MIDDLE_LEFT(-1, 0), MIDDLE_MIDDLE(0, 0), MIDDLE_RIGHT(1, 0),
+	BOTTOM_LEFT(-1, -1), BOTTOM_MIDDLE(0, -1), BOTTOM_RIGHT(1, -1),
+	;
 
-    @Getter
-    private final int xComponent;
+	@Getter
+	private final int xComponent;
 
-    @Getter
-    private final int yComponent;
+	@Getter
+	private final int yComponent;
 
-    public int getX(int anchorX, int width) {
-        return switch (xComponent) {
-            case 0 -> anchorX - (width / 2);
-            case 1 -> anchorX - width;
-            default -> anchorX;
-        };
-    }
+	public int getX(int anchorX, int width) {
+		return switch (xComponent) {
+			case 0 -> anchorX - (width / 2);
+			case 1 -> anchorX - width;
+			default -> anchorX;
+		};
+	}
 
-    public int getY(int anchorY, int height) {
-        return switch (yComponent) {
-            case 0 -> anchorY - (height / 2);
-            case 1 -> anchorY - height;
-            default -> anchorY;
-        };
-    }
+	public int getY(int anchorY, int height) {
+		return switch (yComponent) {
+			case 0 -> anchorY - (height / 2);
+			case 1 -> anchorY - height;
+			default -> anchorY;
+		};
+	}
 
-    public int offsetWidth(int width) {
-        return switch (xComponent) {
-            case 0 -> width / 2;
-            case 1 -> width;
-            default -> 0;
-        };
-    }
+	public int offsetWidth(int width) {
+		return switch (xComponent) {
+			case 0 -> width / 2;
+			case 1 -> width;
+			default -> 0;
+		};
+	}
 
-    public int offsetHeight(int height) {
-        return switch (yComponent) {
-            case 0 -> (height / 2);
-            case 1 -> 0;
-            default -> height;
-        };
-    }
+	public int offsetHeight(int height) {
+		return switch (yComponent) {
+			case 0 -> (height / 2);
+			case 1 -> 0;
+			default -> height;
+		};
+	}
 }

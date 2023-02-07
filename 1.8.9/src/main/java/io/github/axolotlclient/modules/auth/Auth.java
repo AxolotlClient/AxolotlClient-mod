@@ -46,80 +46,80 @@ import java.util.stream.Collectors;
 
 public class Auth extends Accounts implements Module {
 
-    @Getter
-    private static final Auth Instance = new Auth();
+	@Getter
+	private static final Auth Instance = new Auth();
 
-    public final BooleanOption showButton = new BooleanOption("auth.showButton", false);
-    private final MinecraftClient client = MinecraftClient.getInstance();
-    private final GenericOption viewAccounts = new GenericOption("viewAccounts", "clickToOpen", (x, y) -> client.setScreen(new AccountsScreen(client.currentScreen)));
+	public final BooleanOption showButton = new BooleanOption("auth.showButton", false);
+	private final MinecraftClient client = MinecraftClient.getInstance();
+	private final GenericOption viewAccounts = new GenericOption("viewAccounts", "clickToOpen", (x, y) -> client.setScreen(new AccountsScreen(client.currentScreen)));
 
-    @Override
-    public void init() {
-        load();
-        this.auth = new MSAuth(AxolotlClient.LOGGER, this);
-        if (isContained(client.getSession().getUuid())) {
-            current = getAccounts().stream().filter(account -> account.getUuid().equals(client.getSession().getUuid())).collect(Collectors.toList()).get(0);
-            if (current.isExpired()) {
-                current.refresh(auth, () -> {
-                });
-            }
-        } else {
-            current = new MSAccount(client.getSession().getUsername(), client.getSession().getUuid(), client.getSession().getAccessToken());
-        }
+	@Override
+	public void init() {
+		load();
+		this.auth = new MSAuth(AxolotlClient.LOGGER, this);
+		if (isContained(client.getSession().getUuid())) {
+			current = getAccounts().stream().filter(account -> account.getUuid().equals(client.getSession().getUuid())).collect(Collectors.toList()).get(0);
+			if (current.isExpired()) {
+				current.refresh(auth, () -> {
+				});
+			}
+		} else {
+			current = new MSAccount(client.getSession().getUsername(), client.getSession().getUuid(), client.getSession().getAccessToken());
+		}
 
-        OptionCategory category = new OptionCategory("auth");
-        category.add(showButton, viewAccounts);
-        AxolotlClient.CONFIG.general.add(category);
-    }
+		OptionCategory category = new OptionCategory("auth");
+		category.add(showButton, viewAccounts);
+		AxolotlClient.CONFIG.general.add(category);
+	}
 
-    @Override
-    protected Path getConfigDir() {
-        return FabricLoader.getInstance().getConfigDir();
-    }
+	@Override
+	protected Path getConfigDir() {
+		return FabricLoader.getInstance().getConfigDir();
+	}
 
-    @Override
-    protected void login(MSAccount account) {
-        if (client.world != null) {
-            return;
-        }
+	@Override
+	protected void login(MSAccount account) {
+		if (client.world != null) {
+			return;
+		}
 
-        Runnable runnable = () -> {
-            try {
-                ((MinecraftClientAccessor) client).setSession(new Session(account.getName(), account.getUuid(), account.getAuthToken(), Session.AccountType.MOJANG.name()));
-                save();
-                current = account;
-                Notifications.getInstance().addStatus(I18n.translate("auth.notif.title"), I18n.translate("auth.notif.login.successful", current.getName()));
-                AxolotlClient.LOGGER.info("Successfully logged in as " + current.getName());
-            } catch (Exception e) {
-                AxolotlClient.LOGGER.error("Failed to log in! ", e);
-                Notifications.getInstance().addStatus(I18n.translate("auth.notif.title"), I18n.translate("auth.notif.login.failed"));
-            }
-        };
+		Runnable runnable = () -> {
+			try {
+				((MinecraftClientAccessor) client).setSession(new Session(account.getName(), account.getUuid(), account.getAuthToken(), Session.AccountType.MOJANG.name()));
+				save();
+				current = account;
+				Notifications.getInstance().addStatus(I18n.translate("auth.notif.title"), I18n.translate("auth.notif.login.successful", current.getName()));
+				AxolotlClient.LOGGER.info("Successfully logged in as " + current.getName());
+			} catch (Exception e) {
+				AxolotlClient.LOGGER.error("Failed to log in! ", e);
+				Notifications.getInstance().addStatus(I18n.translate("auth.notif.title"), I18n.translate("auth.notif.login.failed"));
+			}
+		};
 
-        if (account.isExpired() && !account.isOffline()) {
-            Notifications.getInstance().addStatus(I18n.translate("auth.notif.title"), I18n.translate("auth.notif.refreshing", account.getName()));
-            account.refresh(auth, runnable);
-        } else {
-            runnable.run();
-        }
-    }
+		if (account.isExpired() && !account.isOffline()) {
+			Notifications.getInstance().addStatus(I18n.translate("auth.notif.title"), I18n.translate("auth.notif.refreshing", account.getName()));
+			account.refresh(auth, runnable);
+		} else {
+			runnable.run();
+		}
+	}
 
-    @Override
-    protected Logger getLogger() {
-        return AxolotlClient.LOGGER;
-    }
+	@Override
+	protected Logger getLogger() {
+		return AxolotlClient.LOGGER;
+	}
 
-    public void loadSkinFile(Identifier skinId, MSAccount account) {
-        if (!account.isOffline() && MinecraftClient.getInstance().getTextureManager().getTexture(skinId) == null) {
-            try {
-                BufferedImage image = ImageIO.read(Auth.getInstance().getSkinFile(account));
-                if (image != null) {
-                    client.getTextureManager().loadTexture(skinId, new NativeImageBackedTexture(image));
-                    AxolotlClient.LOGGER.debug("Loaded skin file for " + account.getName());
-                }
-            } catch (IOException e) {
-                AxolotlClient.LOGGER.warn("Couldn't load skin file for " + account.getName());
-            }
-        }
-    }
+	public void loadSkinFile(Identifier skinId, MSAccount account) {
+		if (!account.isOffline() && MinecraftClient.getInstance().getTextureManager().getTexture(skinId) == null) {
+			try {
+				BufferedImage image = ImageIO.read(Auth.getInstance().getSkinFile(account));
+				if (image != null) {
+					client.getTextureManager().loadTexture(skinId, new NativeImageBackedTexture(image));
+					AxolotlClient.LOGGER.debug("Loaded skin file for " + account.getName());
+				}
+			} catch (IOException e) {
+				AxolotlClient.LOGGER.warn("Couldn't load skin file for " + account.getName());
+			}
+		}
+	}
 }

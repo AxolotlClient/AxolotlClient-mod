@@ -35,125 +35,125 @@ import java.util.List;
 
 public class AccountsListWidget extends EntryListWidget {
 
-    private final AccountsScreen screen;
-    private final List<Entry> entries = new ArrayList<>();
-    private int selectedEntry = -1;
+	private final AccountsScreen screen;
+	private final List<Entry> entries = new ArrayList<>();
+	private int selectedEntry = -1;
 
-    public AccountsListWidget(AccountsScreen screen, MinecraftClient client, int width, int height, int top, int bottom, int entryHeight) {
-        super(client, width, height, top, bottom, entryHeight);
-        this.screen = screen;
-    }
+	public AccountsListWidget(AccountsScreen screen, MinecraftClient client, int width, int height, int top, int bottom, int entryHeight) {
+		super(client, width, height, top, bottom, entryHeight);
+		this.screen = screen;
+	}
 
-    public void setAccounts(List<MSAccount> accounts) {
-        accounts.forEach(account -> entries.add(new Entry(screen, account)));
-    }
+	public void setAccounts(List<MSAccount> accounts) {
+		accounts.forEach(account -> entries.add(new Entry(screen, account)));
+	}
 
-    @Override
-    protected int getEntryCount() {
-        return entries.size();
-    }
+	@Override
+	protected int getEntryCount() {
+		return entries.size();
+	}
 
-    @Override
-    public int getRowWidth() {
-        return super.getRowWidth() + 85;
-    }
+	@Override
+	public int getRowWidth() {
+		return super.getRowWidth() + 85;
+	}
 
-    @Override
-    protected int getScrollbarPosition() {
-        return super.getScrollbarPosition() + 30;
-    }
+	@Override
+	protected int getScrollbarPosition() {
+		return super.getScrollbarPosition() + 30;
+	}
 
-    @Override
-    public EntryListWidget.Entry getEntry(int i) {
-        return entries.get(i);
-    }
+	@Override
+	public EntryListWidget.Entry getEntry(int i) {
+		return entries.get(i);
+	}
 
-    public void setSelected(int i) {
-        this.selectedEntry = i;
-    }
+	public void setSelected(int i) {
+		this.selectedEntry = i;
+	}
 
-    @Override
-    protected boolean isEntrySelected(int i) {
-        return i == this.selectedEntry;
-    }
+	@Override
+	protected boolean isEntrySelected(int i) {
+		return i == this.selectedEntry;
+	}
 
-    public int getSelected() {
-        return this.selectedEntry;
-    }
+	public int getSelected() {
+		return this.selectedEntry;
+	}
 
-    public Entry getSelectedEntry() {
-        if (getSelected() < 0) {
-            return null;
-        }
-        return entries.get(getSelected());
-    }
+	public Entry getSelectedEntry() {
+		if (getSelected() < 0) {
+			return null;
+		}
+		return entries.get(getSelected());
+	}
 
-    @Environment(EnvType.CLIENT)
-    public static class Entry extends DrawUtil implements EntryListWidget.Entry {
+	@Environment(EnvType.CLIENT)
+	public static class Entry extends DrawUtil implements EntryListWidget.Entry {
 
-        private static final Identifier checkmark = new Identifier("axolotlclient", "textures/check.png");
-        private static final Identifier warningSign = new Identifier("axolotlclient", "textures/warning.png");
+		private static final Identifier checkmark = new Identifier("axolotlclient", "textures/check.png");
+		private static final Identifier warningSign = new Identifier("axolotlclient", "textures/warning.png");
 
-        private final Identifier skin;
+		private final Identifier skin;
 
-        private final AccountsScreen screen;
-        private final MSAccount account;
-        private final MinecraftClient client;
-        private long time;
+		private final AccountsScreen screen;
+		private final MSAccount account;
+		private final MinecraftClient client;
+		private long time;
 
-        public Entry(AccountsScreen screen, MSAccount account) {
-            this.screen = screen;
-            this.account = account;
-            this.client = MinecraftClient.getInstance();
-            this.skin = new Identifier(Auth.getInstance().getSkinTextureId(account));
-            Auth.getInstance().loadSkinFile(skin, account);
-        }
+		public Entry(AccountsScreen screen, MSAccount account) {
+			this.screen = screen;
+			this.account = account;
+			this.client = MinecraftClient.getInstance();
+			this.skin = new Identifier(Auth.getInstance().getSkinTextureId(account));
+			Auth.getInstance().loadSkinFile(skin, account);
+		}
 
-        @Override
-        public void updatePosition(int i, int j, int k) {
+		@Override
+		public void updatePosition(int i, int j, int k) {
 
-        }
+		}
 
-        @Override
-        public void render(int index, int x, int y, int rowWidth, int rowHeight, int mouseX, int mouseY, boolean hovered) {
-            client.textRenderer.draw(account.getName(), x + 3 + 33, y + 1, -1);
-            client.textRenderer.draw(account.getUuid(), x + 3 + 33, y + 12, 8421504);
-            GlStateManager.color(1, 1, 1, 1);
-            if (Auth.getInstance().getCurrent().equals(account)) {
-                client.getTextureManager().bindTexture(checkmark);
-                drawTexture(x - 35, y + 1, 0, 0, 25, 25, 25, 25);
-            } else if (account.isExpired()) {
-                client.getTextureManager().bindTexture(warningSign);
-                drawTexture(x - 35, y + 1, 0, 0, 25, 25, 25, 25);
-            }
-            if (!account.isOffline()) {
-                GlStateManager.color(1, 1, 1, 1);
-                client.getTextureManager().bindTexture(skin);
-                GlStateManager.enableBlend();
-                drawTexture(x - 1, y - 1, 8, 8, 8, 8, 33, 33, 64, 64);
-                drawTexture(x - 1, y - 1, 40, 8, 8, 8, 33, 33, 64, 64);
-                GlStateManager.disableBlend();
-            }
-        }
+		@Override
+		public void render(int index, int x, int y, int rowWidth, int rowHeight, int mouseX, int mouseY, boolean hovered) {
+			client.textRenderer.draw(account.getName(), x + 3 + 33, y + 1, -1);
+			client.textRenderer.draw(account.getUuid(), x + 3 + 33, y + 12, 8421504);
+			GlStateManager.color(1, 1, 1, 1);
+			if (Auth.getInstance().getCurrent().equals(account)) {
+				client.getTextureManager().bindTexture(checkmark);
+				drawTexture(x - 35, y + 1, 0, 0, 25, 25, 25, 25);
+			} else if (account.isExpired()) {
+				client.getTextureManager().bindTexture(warningSign);
+				drawTexture(x - 35, y + 1, 0, 0, 25, 25, 25, 25);
+			}
+			if (!account.isOffline()) {
+				GlStateManager.color(1, 1, 1, 1);
+				client.getTextureManager().bindTexture(skin);
+				GlStateManager.enableBlend();
+				drawTexture(x - 1, y - 1, 8, 8, 8, 8, 33, 33, 64, 64);
+				drawTexture(x - 1, y - 1, 40, 8, 8, 8, 33, 33, 64, 64);
+				GlStateManager.disableBlend();
+			}
+		}
 
-        @Override
-        public boolean mouseClicked(int index, int mouseX, int mouseY, int button, int x, int y) {
-            this.screen.select(index);
-            if (MinecraftClient.getTime() - this.time < 250L && client.world == null) {
-                Auth.getInstance().login(account);
-            }
+		@Override
+		public boolean mouseClicked(int index, int mouseX, int mouseY, int button, int x, int y) {
+			this.screen.select(index);
+			if (MinecraftClient.getTime() - this.time < 250L && client.world == null) {
+				Auth.getInstance().login(account);
+			}
 
-            this.time = MinecraftClient.getTime();
-            return false;
-        }
+			this.time = MinecraftClient.getTime();
+			return false;
+		}
 
-        @Override
-        public void mouseReleased(int i, int j, int k, int l, int m, int n) {
+		@Override
+		public void mouseReleased(int i, int j, int k, int l, int m, int n) {
 
-        }
+		}
 
-        public MSAccount getAccount() {
-            return account;
-        }
-    }
+		public MSAccount getAccount() {
+			return account;
+		}
+	}
 }

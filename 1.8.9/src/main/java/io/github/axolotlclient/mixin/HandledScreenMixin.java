@@ -35,32 +35,32 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(HandledScreen.class)
 public abstract class HandledScreenMixin {
 
-    @Shadow
-    private Slot focusedSlot;
+	@Shadow
+	private Slot focusedSlot;
 
-    @Shadow
-    protected abstract boolean handleHotbarKeyPressed(int keyCode);
+	@Shadow
+	protected abstract boolean handleHotbarKeyPressed(int keyCode);
 
-    private Slot cachedSlot;
+	private Slot cachedSlot;
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;popMatrix()V"))
-    public void axolotlclient$resetScrollOnSlotChange(int mouseX, int mouseY, float tickDelta, CallbackInfo ci) {
-        if (ScrollableTooltips.getInstance().enabled.get() && cachedSlot != focusedSlot) {
-            cachedSlot = focusedSlot;
-            ScrollableTooltips.getInstance().resetScroll();
-        }
-    }
+	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;popMatrix()V"))
+	public void axolotlclient$resetScrollOnSlotChange(int mouseX, int mouseY, float tickDelta, CallbackInfo ci) {
+		if (ScrollableTooltips.getInstance().enabled.get() && cachedSlot != focusedSlot) {
+			cachedSlot = focusedSlot;
+			ScrollableTooltips.getInstance().resetScroll();
+		}
+	}
 
-    @Inject(method = "mouseClicked", at = @At("HEAD"), cancellable = true)
-    private void axolotlclient$mouseClickedHead(int mouseX, int mouseY, int mouseButton, CallbackInfo ci) {
-        if (mouseButton - 100 == MinecraftClient.getInstance().options.inventoryKey.getCode()) {
-            MinecraftClient.getInstance().closeScreen();
-            ci.cancel();
-        }
-    }
+	@Inject(method = "mouseClicked", at = @At("HEAD"), cancellable = true)
+	private void axolotlclient$mouseClickedHead(int mouseX, int mouseY, int mouseButton, CallbackInfo ci) {
+		if (mouseButton - 100 == MinecraftClient.getInstance().options.inventoryKey.getCode()) {
+			MinecraftClient.getInstance().closeScreen();
+			ci.cancel();
+		}
+	}
 
-    @Inject(method = "mouseClicked", at = @At("RETURN"))
-    private void axolotlclient$mouseClickedTail(int mouseX, int mouseY, int mouseButton, CallbackInfo ci) {
-        handleHotbarKeyPressed(mouseButton - 100);
-    }
+	@Inject(method = "mouseClicked", at = @At("RETURN"))
+	private void axolotlclient$mouseClickedTail(int mouseX, int mouseY, int mouseButton, CallbackInfo ci) {
+		handleHotbarKeyPressed(mouseButton - 100);
+	}
 }

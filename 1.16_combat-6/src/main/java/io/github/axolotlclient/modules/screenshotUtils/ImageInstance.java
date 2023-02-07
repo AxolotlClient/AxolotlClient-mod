@@ -26,18 +26,19 @@ import net.minecraft.client.texture.NativeImage;
 
 public class ImageInstance {
 
-    private final NativeImage image;
-    private final String fileName;
-    public ImageInstance(NativeImage image, String name){
-        this.image = image;
-        this.fileName = name;
-    }
+	private final NativeImage image;
+	private final String fileName;
 
-    public NativeImage getImage() {
-        return image;
-    }
+	public ImageInstance(NativeImage image, String name) {
+		this.image = image;
+		this.fileName = name;
+	}
 
-    public String getFileName() {
-        return fileName;
-    }
+	public NativeImage getImage() {
+		return image;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
 }

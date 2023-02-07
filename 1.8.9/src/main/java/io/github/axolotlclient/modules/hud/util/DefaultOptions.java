@@ -40,31 +40,31 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class DefaultOptions {
 
-    public static DoubleOption getX(double defaultX, HudEntry entry) {
-        return new DoubleOption("x", value -> entry.onBoundsUpdate(), defaultX, 0d, 1d);
-    }
+	public static DoubleOption getX(double defaultX, HudEntry entry) {
+		return new DoubleOption("x", value -> entry.onBoundsUpdate(), defaultX, 0d, 1d);
+	}
 
-    public static DoubleOption getY(double defaultY, HudEntry entry) {
-        return new DoubleOption("y", value -> entry.onBoundsUpdate(), defaultY, 0d, 1d);
-    }
+	public static DoubleOption getY(double defaultY, HudEntry entry) {
+		return new DoubleOption("y", value -> entry.onBoundsUpdate(), defaultY, 0d, 1d);
+	}
 
-    public static DoubleOption getScale(HudEntry entry) {
-        return new DoubleOption("scale", value -> entry.onBoundsUpdate(), 1d, 0d, 2d);
-    }
+	public static DoubleOption getScale(HudEntry entry) {
+		return new DoubleOption("scale", value -> entry.onBoundsUpdate(), 1d, 0d, 2d);
+	}
 
-    public static BooleanOption getEnabled() {
-        return new BooleanOption("enabled", false);
-    }
+	public static BooleanOption getEnabled() {
+		return new BooleanOption("enabled", false);
+	}
 
-    public static EnumOption getAnchorPoint() {
-        return getAnchorPoint(AnchorPoint.TOP_LEFT);
-    }
+	public static EnumOption getAnchorPoint() {
+		return getAnchorPoint(AnchorPoint.TOP_LEFT);
+	}
 
-    public static EnumOption getAnchorPoint(AnchorPoint defaultValue) {
-        return new EnumOption("anchorpoint", AnchorPoint.values(), defaultValue.toString());
-    }
+	public static EnumOption getAnchorPoint(AnchorPoint defaultValue) {
+		return new EnumOption("anchorpoint", AnchorPoint.values(), defaultValue.toString());
+	}
 
-    public static EnumOption getCardinalOrder(CardinalOrder defaultValue) {
-        return new EnumOption("cardinalorder", CardinalOrder.values(), defaultValue.toString());
-    }
+	public static EnumOption getCardinalOrder(CardinalOrder defaultValue) {
+		return new EnumOption("cardinalorder", CardinalOrder.values(), defaultValue.toString());
+	}
 }

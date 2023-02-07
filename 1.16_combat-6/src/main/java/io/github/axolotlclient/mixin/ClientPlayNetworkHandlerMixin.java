@@ -37,16 +37,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ClientPlayNetworkHandler.class)
 public abstract class ClientPlayNetworkHandlerMixin {
 
-    @Inject(method = "onGameJoin", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/ClientPlayerEntity;yaw:F"))
-    public void axolotlclient$onGameJoin(GameJoinS2CPacket packet, CallbackInfo ci) {
-        if (AxolotlClient.CONFIG.showBadges.get()) {
-            NetworkHelper.setOnline();
-        }
-    }
+	@Inject(method = "onGameJoin", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/ClientPlayerEntity;yaw:F"))
+	public void axolotlclient$onGameJoin(GameJoinS2CPacket packet, CallbackInfo ci) {
+		if (AxolotlClient.CONFIG.showBadges.get()) {
+			NetworkHelper.setOnline();
+		}
+	}
 
-    @Inject(method = "onWorldTimeUpdate", at = @At("HEAD"))
-    private void axolotlclient$onWorldUpdate(WorldTimeUpdateS2CPacket packet, CallbackInfo ci) {
-        TPSHud tpsHud = (TPSHud) HudManager.getInstance().get(TPSHud.ID);
-        tpsHud.updateTime(packet.getTime());
-    }
+	@Inject(method = "onWorldTimeUpdate", at = @At("HEAD"))
+	private void axolotlclient$onWorldUpdate(WorldTimeUpdateS2CPacket packet, CallbackInfo ci) {
+		TPSHud tpsHud = (TPSHud) HudManager.getInstance().get(TPSHud.ID);
+		tpsHud.updateTime(packet.getTime());
+	}
 }

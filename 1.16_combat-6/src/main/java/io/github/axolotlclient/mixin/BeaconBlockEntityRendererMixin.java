@@ -36,11 +36,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class BeaconBlockEntityRendererMixin {
 
 
-    @Inject(method = "renderLightBeam", at = @At("HEAD"), cancellable = true)
-    private static void axolotlclient$cancelBeamRender(MatrixStack matrices, VertexConsumerProvider vertexConsumers, Identifier textureId, float tickDelta,
-                                         float heightScale, long worldTime, int yOffset, int maxY, float[] color, float innerRadius, float outerRadius, CallbackInfo ci) {
-        if(!BeaconBeam.getInstance().showBeam(textureId.getPath().contains("end_gateway"))) {
-            ci.cancel();
-        }
-    }
+	@Inject(method = "renderLightBeam", at = @At("HEAD"), cancellable = true)
+	private static void axolotlclient$cancelBeamRender(MatrixStack matrices, VertexConsumerProvider vertexConsumers, Identifier textureId, float tickDelta,
+													   float heightScale, long worldTime, int yOffset, int maxY, float[] color, float innerRadius, float outerRadius, CallbackInfo ci) {
+		if (!BeaconBeam.getInstance().showBeam(textureId.getPath().contains("end_gateway"))) {
+			ci.cancel();
+		}
+	}
 }

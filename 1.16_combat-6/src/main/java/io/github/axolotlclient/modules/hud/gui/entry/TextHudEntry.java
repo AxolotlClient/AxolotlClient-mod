@@ -32,27 +32,28 @@ import java.util.List;
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ *
  * @license GPL-3.0
  */
 
 public abstract class TextHudEntry extends BoxHudEntry {
 
-    protected ColorOption textColor = new ColorOption("textcolor", Color.WHITE);
-    protected BooleanOption shadow = new BooleanOption("shadow", getShadowDefault());
+	protected ColorOption textColor = new ColorOption("textcolor", Color.WHITE);
+	protected BooleanOption shadow = new BooleanOption("shadow", getShadowDefault());
 
-    protected boolean getShadowDefault() {
-        return true;
-    }
+	protected boolean getShadowDefault() {
+		return true;
+	}
 
-    public TextHudEntry(int width, int height, boolean backgroundAllowed) {
-        super(width, height, backgroundAllowed);
-    }
+	public TextHudEntry(int width, int height, boolean backgroundAllowed) {
+		super(width, height, backgroundAllowed);
+	}
 
-    @Override
-    public List<Option<?>> getConfigurationOptions() {
-        List<Option<?>> options = super.getConfigurationOptions();
-        options.add(textColor);
-        options.add(shadow);
-        return options;
-    }
+	@Override
+	public List<Option<?>> getConfigurationOptions() {
+		List<Option<?>> options = super.getConfigurationOptions();
+		options.add(textColor);
+		options.add(shadow);
+		return options;
+	}
 }

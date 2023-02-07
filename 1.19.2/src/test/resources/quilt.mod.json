@@ -18,13 +18,13 @@
 		},
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"entrypoints": {
-      "client_init": "io.github.axolotlclient.AxolotlClientTest"
+			"client_init": "io.github.axolotlclient.AxolotlClientTest"
 		},
 		"depends": [
-      {
-        "id": "axolotlclient",
-        "versions": "*"
-      }
+			{
+				"id": "axolotlclient",
+				"versions": "*"
+			}
 		]
 	}
 }

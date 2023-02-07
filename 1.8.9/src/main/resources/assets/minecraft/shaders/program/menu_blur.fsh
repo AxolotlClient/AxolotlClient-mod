@@ -12,18 +12,18 @@ uniform float Radius;
 uniform float Progress;
 
 void main() {
-    float transformedRadius = floor(Radius * Progress);
+	float transformedRadius = floor(Radius * Progress);
 
-    vec4 blurred = vec4(0.0);
-    float totalStrength = 0.0;
-    float totalAlpha = 0.0;
-    float totalSamples = 0.0;
+	vec4 blurred = vec4(0.0);
+	float totalStrength = 0.0;
+	float totalAlpha = 0.0;
+	float totalSamples = 0.0;
 
-    for (float r = -transformedRadius; r <= transformedRadius; r += 1.0) {
-        vec4 sample = texture2D(DiffuseSampler, texCoord + oneTexel * r * BlurDir);
+	for (float r = -transformedRadius; r <= transformedRadius; r += 1.0) {
+		vec4 sample = texture2D(DiffuseSampler, texCoord + oneTexel * r * BlurDir);
 
-    // Accumulate average alpha
-    totalAlpha = totalAlpha + sample.a;
+	// Accumulate average alpha
+	totalAlpha = totalAlpha + sample.a;
 totalSamples = totalSamples + 1.0;
 
 // Accumulate smoothed blur

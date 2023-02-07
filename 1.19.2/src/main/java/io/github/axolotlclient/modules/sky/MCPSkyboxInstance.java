@@ -36,113 +36,113 @@ import net.minecraft.util.math.Vec3f;
 
 public class MCPSkyboxInstance extends SkyboxInstance {
 
-    public MCPSkyboxInstance(JsonObject json) {
-        super(json);
-        this.textures[0] = new Identifier(json.get("source").getAsString());
-        try {
-            this.fade[0] = convertToTicks(json.get("startFadeIn").getAsInt());
-            this.fade[1] = convertToTicks(json.get("endFadeIn").getAsInt());
-            this.fade[3] = convertToTicks(json.get("endFadeOut").getAsInt());
-        } catch (Exception e) {
-            this.alwaysOn = true;
-        }
-        try {
-            this.fade[2] = convertToTicks(json.get("startFadeOut").getAsInt());
-        } catch (Exception ignored) {
-            this.fade[2] = Util.getTicksBetween(Util.getTicksBetween(fade[0], fade[1]), fade[3]);
-        }
-        try {
-            this.rotate = json.get("rotate").getAsBoolean();
-            if (rotate) {
-                this.rotationSpeed = json.get("speed").getAsFloat();
-            }
-        } catch (Exception e) {
-            this.rotate = false;
-        }
-        try {
-            String[] axis = json.get("axis").getAsString().split(" ");
-            for (int i = 0; i < axis.length; i++) {
-                this.rotationStatic[i] = Float.parseFloat(axis[i]);
-            }
-        } catch (Exception ignored) {
-        }
+	public MCPSkyboxInstance(JsonObject json) {
+		super(json);
+		this.textures[0] = new Identifier(json.get("source").getAsString());
+		try {
+			this.fade[0] = convertToTicks(json.get("startFadeIn").getAsInt());
+			this.fade[1] = convertToTicks(json.get("endFadeIn").getAsInt());
+			this.fade[3] = convertToTicks(json.get("endFadeOut").getAsInt());
+		} catch (Exception e) {
+			this.alwaysOn = true;
+		}
+		try {
+			this.fade[2] = convertToTicks(json.get("startFadeOut").getAsInt());
+		} catch (Exception ignored) {
+			this.fade[2] = Util.getTicksBetween(Util.getTicksBetween(fade[0], fade[1]), fade[3]);
+		}
+		try {
+			this.rotate = json.get("rotate").getAsBoolean();
+			if (rotate) {
+				this.rotationSpeed = json.get("speed").getAsFloat();
+			}
+		} catch (Exception e) {
+			this.rotate = false;
+		}
+		try {
+			String[] axis = json.get("axis").getAsString().split(" ");
+			for (int i = 0; i < axis.length; i++) {
+				this.rotationStatic[i] = Float.parseFloat(axis[i]);
+			}
+		} catch (Exception ignored) {
+		}
 
-        try {
-            this.blendMode = parseBlend(json.get("blend").getAsString());
-        } catch (Exception ignored) {
-        }
-        showMoon = true;
-        showSun = true;
-    }
+		try {
+			this.blendMode = parseBlend(json.get("blend").getAsString());
+		} catch (Exception ignored) {
+		}
+		showMoon = true;
+		showSun = true;
+	}
 
-    @Override
-    public void renderSkybox(MatrixStack matrices) {
-        this.alpha = getAlpha();
+	@Override
+	public void renderSkybox(MatrixStack matrices) {
+		this.alpha = getAlpha();
 
-        RenderSystem.setShaderColor(1, 1, 1, 1);
-        RenderSystem.enableTexture();
+		RenderSystem.setShaderColor(1, 1, 1, 1);
+		RenderSystem.enableTexture();
 
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferBuilder = tessellator.getBufferBuilder();
-        RenderSystem.setShaderTexture(0, textures[0]);
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder bufferBuilder = tessellator.getBufferBuilder();
+		RenderSystem.setShaderTexture(0, textures[0]);
 
-        for (int i = 0; i < 6; ++i) {
-            if (textures[0] != null) {
-                matrices.push();
+		for (int i = 0; i < 6; ++i) {
+			if (textures[0] != null) {
+				matrices.push();
 
-                float u;
-                float v;
+				float u;
+				float v;
 
-                if (i == 0) {
-                    u = 0;
-                    v = 0;
-                } else if (i == 1) {
-                    matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(90));
-                    u = 1 / 3F;
-                    v = 0.5F;
-                } else if (i == 2) {
-                    matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-90));
-                    matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180));
-                    u = 2 / 3F;
-                    v = 0F;
-                } else if (i == 3) {
-                    matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(180));
-                    u = 1 / 3F;
-                    v = 0F;
-                } else if (i == 4) {
-                    matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(90));
-                    matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-90));
-                    u = 2 / 3F;
-                    v = 0.5F;
-                } else {
-                    matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(-90));
-                    matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(90));
-                    v = 0.5F;
-                    u = 0;
-                }
+				if (i == 0) {
+					u = 0;
+					v = 0;
+				} else if (i == 1) {
+					matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(90));
+					u = 1 / 3F;
+					v = 0.5F;
+				} else if (i == 2) {
+					matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-90));
+					matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180));
+					u = 2 / 3F;
+					v = 0F;
+				} else if (i == 3) {
+					matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(180));
+					u = 1 / 3F;
+					v = 0F;
+				} else if (i == 4) {
+					matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(90));
+					matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-90));
+					u = 2 / 3F;
+					v = 0.5F;
+				} else {
+					matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(-90));
+					matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(90));
+					v = 0.5F;
+					u = 0;
+				}
 
-                Matrix4f matrix4f = matrices.peek().getModel();
-                bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
-                bufferBuilder.vertex(matrix4f, -100, -100, -100).uv(u, v).color(1F, 1F, 1F, alpha).next();
-                bufferBuilder.vertex(matrix4f, -100, -100, 100).uv(u, v + 0.5F).color(1F, 1F, 1F, alpha).next();
-                bufferBuilder.vertex(matrix4f, 100, -100, 100).uv(u + 1 / 3F, v + 0.5F).color(1F, 1F, 1F, alpha).next();
-                bufferBuilder.vertex(matrix4f, 100, -100, -100).uv(u + 1 / 3F, v).color(1F, 1F, 1F, alpha).next();
-                tessellator.draw();
+				Matrix4f matrix4f = matrices.peek().getModel();
+				bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
+				bufferBuilder.vertex(matrix4f, -100, -100, -100).uv(u, v).color(1F, 1F, 1F, alpha).next();
+				bufferBuilder.vertex(matrix4f, -100, -100, 100).uv(u, v + 0.5F).color(1F, 1F, 1F, alpha).next();
+				bufferBuilder.vertex(matrix4f, 100, -100, 100).uv(u + 1 / 3F, v + 0.5F).color(1F, 1F, 1F, alpha).next();
+				bufferBuilder.vertex(matrix4f, 100, -100, -100).uv(u + 1 / 3F, v).color(1F, 1F, 1F, alpha).next();
+				tessellator.draw();
 
-                matrices.pop();
-            }
-        }
-    }
+				matrices.pop();
+			}
+		}
+	}
 
-    protected int convertToTicks(int hourFormat) {
-        hourFormat *= 10;
-        hourFormat -= 6000;
-        if (hourFormat < 0) {
-            hourFormat += 24000;
-        }
-        if (hourFormat >= 24000) {
-            hourFormat -= 24000;
-        }
-        return hourFormat;
-    }
+	protected int convertToTicks(int hourFormat) {
+		hourFormat *= 10;
+		hourFormat -= 6000;
+		if (hourFormat < 0) {
+			hourFormat += 24000;
+		}
+		if (hourFormat >= 24000) {
+			hourFormat -= 24000;
+		}
+		return hourFormat;
+	}
 }

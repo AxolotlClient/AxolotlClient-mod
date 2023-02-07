@@ -42,89 +42,93 @@ import java.util.Base64;
 
 public class ImageShare {
 
-    private final String separator = ";";//"ⓢ¢€ⓢ¢";
+	private final String separator = ";";//"ⓢ¢€ⓢ¢";
 
-    @Getter
-    private static final ImageShare Instance = new ImageShare();
-    private ImageShare(){}
+	@Getter
+	private static final ImageShare Instance = new ImageShare();
 
-    private CloseableHttpClient createHttpClient(){
-        String modVer = FabricLoader.getInstance().getModContainer("axolotlclient").orElseThrow(RuntimeException::new).getMetadata().getVersion().getFriendlyString();
-        return HttpClients.custom().setUserAgent("AxolotlClient/"+modVer+" ImageShare").build();
-    }
+	private ImageShare() {
+	}
 
-    public void uploadImage(String url, File file){
-        Util.sendChatMessage(new TranslatableText("imageUploadStarted"));
-        String downloadUrl = upload(url + "/api/stream", file);
+	private CloseableHttpClient createHttpClient() {
+		String modVer = FabricLoader.getInstance().getModContainer("axolotlclient").orElseThrow(RuntimeException::new).getMetadata().getVersion().getFriendlyString();
+		return HttpClients.custom().setUserAgent("AxolotlClient/" + modVer + " ImageShare").build();
+	}
 
-        if (downloadUrl.isEmpty()) {
-            Util.sendChatMessage(new TranslatableText("imageUploadFailure"));
-        } else {
-            Util.sendChatMessage(new TranslatableText("imageUploadSuccess").append(" ")
-                    .append(new LiteralText(url + "/" + downloadUrl)
-                            .setStyle(Style.EMPTY
-                                    .withFormatting(Formatting.UNDERLINE, Formatting.DARK_PURPLE)
-                                    .withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, url + "/" + downloadUrl))
-                                    .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableText("clickToCopy"))))));
-        }
-    }
+	public void uploadImage(String url, File file) {
+		Util.sendChatMessage(new TranslatableText("imageUploadStarted"));
+		String downloadUrl = upload(url + "/api/stream", file);
 
-    public String upload(String url, File file){
+		if (downloadUrl.isEmpty()) {
+			Util.sendChatMessage(new TranslatableText("imageUploadFailure"));
+		} else {
+			Util.sendChatMessage(new TranslatableText("imageUploadSuccess").append(" ")
+					.append(new LiteralText(url + "/" + downloadUrl)
+							.setStyle(Style.EMPTY
+									.withFormatting(Formatting.UNDERLINE, Formatting.DARK_PURPLE)
+									.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, url + "/" + downloadUrl))
+									.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableText("clickToCopy"))))));
+		}
+	}
 
-        try (CloseableHttpClient client = createHttpClient()){
+	public String upload(String url, File file) {
 
-            AxolotlClient.LOGGER.info("Uploading image "+file.getName());
+		try (CloseableHttpClient client = createHttpClient()) {
 
-            return ImageNetworking.upload(encodeB64(file), url, client, AxolotlClient.LOGGER);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+			AxolotlClient.LOGGER.info("Uploading image " + file.getName());
 
-        return "";
-    }
+			return ImageNetworking.upload(encodeB64(file), url, client, AxolotlClient.LOGGER);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-    public ImageInstance downloadImage(String id){
-        if(id.contains(ScreenshotUtils.getInstance().shareUrl.get()+"/api/")) {
-            return download(id);
-        } else if(id.contains(ScreenshotUtils.getInstance().shareUrl.get()) && !id.contains("api")) {
-            return downloadImage(id.substring(id.lastIndexOf("/")+1));
-        } else if(id.startsWith("https://") && id.contains("api")) {
-            download(id);
-        }
-        return download(ScreenshotUtils.getInstance().shareUrl.get()+"/api/"+id);
-    }
+		return "";
+	}
 
-    public ImageInstance download(String url){
+	public ImageInstance downloadImage(String id) {
+		if (id.contains(ScreenshotUtils.getInstance().shareUrl.get() + "/api/")) {
+			return download(id);
+		} else if (id.contains(ScreenshotUtils.getInstance().shareUrl.get()) && !id.contains("api")) {
+			return downloadImage(id.substring(id.lastIndexOf("/") + 1));
+		} else if (id.startsWith("https://") && id.contains("api")) {
+			download(id);
+		}
+		return download(ScreenshotUtils.getInstance().shareUrl.get() + "/api/" + id);
+	}
 
-        if(!url.isEmpty()) {
-            JsonElement element = NetworkHelper.getRequest(url, createHttpClient());
-            if(element != null) {
-                JsonObject response = element.getAsJsonObject();
-                String content = response.get("content").getAsString();
+	public ImageInstance download(String url) {
 
-                return decodeB64(content);
-            }
-        }
-        return null;
-    }
+		if (!url.isEmpty()) {
+			JsonElement element = NetworkHelper.getRequest(url, createHttpClient());
+			if (element != null) {
+				JsonObject response = element.getAsJsonObject();
+				String content = response.get("content").getAsString();
 
-    private String encodeB64(File file){
-        try {
-            return file.getName() + separator + Base64.getEncoder().encodeToString(Files.readAllBytes(file.toPath()));
-        } catch (Exception ignored){};
+				return decodeB64(content);
+			}
+		}
+		return null;
+	}
 
-        return "Encoding failed!";
-    }
+	private String encodeB64(File file) {
+		try {
+			return file.getName() + separator + Base64.getEncoder().encodeToString(Files.readAllBytes(file.toPath()));
+		} catch (Exception ignored) {
+		}
+		;
 
-    private ImageInstance decodeB64(String data){
-        try {
-            String[] info = data.split(separator);
-            byte[] bytes = Base64.getDecoder().decode(info[info.length-1]);
-            return new ImageInstance(NativeImage.read(new ByteArrayInputStream(bytes)), info[0]);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        //Logger.warn("Not base64 data: "+data);
-        return null;
-    }
+		return "Encoding failed!";
+	}
+
+	private ImageInstance decodeB64(String data) {
+		try {
+			String[] info = data.split(separator);
+			byte[] bytes = Base64.getDecoder().decode(info[info.length - 1]);
+			return new ImageInstance(NativeImage.read(new ByteArrayInputStream(bytes)), info[0]);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		//Logger.warn("Not base64 data: "+data);
+		return null;
+	}
 }

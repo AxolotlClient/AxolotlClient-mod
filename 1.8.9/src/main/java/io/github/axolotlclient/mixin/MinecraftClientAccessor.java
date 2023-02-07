@@ -32,16 +32,16 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 @Mixin(MinecraftClient.class)
 public interface MinecraftClientAccessor {
 
-    @Accessor
-    ClientTickTracker getTicker();
+	@Accessor
+	ClientTickTracker getTicker();
 
-    @Accessor
-    String getServerAddress();
+	@Accessor
+	String getServerAddress();
 
-    @Accessor
-    int getServerPort();
+	@Accessor
+	int getServerPort();
 
-    @Accessor
-    @Mutable
-    void setSession(Session session);
+	@Accessor
+	@Mutable
+	void setSession(Session session);
 }

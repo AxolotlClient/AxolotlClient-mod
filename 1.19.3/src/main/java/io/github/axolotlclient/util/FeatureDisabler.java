@@ -42,83 +42,83 @@ import java.util.function.Supplier;
 
 public class FeatureDisabler {
 
-    private static final HashMap<BooleanOption, String[]> disabledServers = new HashMap<>();
-    private static final HashMap<BooleanOption, Supplier<Boolean>> conditions = new HashMap<>();
+	private static final HashMap<BooleanOption, String[]> disabledServers = new HashMap<>();
+	private static final HashMap<BooleanOption, Supplier<Boolean>> conditions = new HashMap<>();
 
-    private static final Supplier<Boolean> NONE = () -> true;
+	private static final Supplier<Boolean> NONE = () -> true;
 
-    private static String currentAddress = "";
+	private static String currentAddress = "";
 
-    private static final Identifier channelName = new Identifier("axolotlclient", "block_mods");
+	private static final Identifier channelName = new Identifier("axolotlclient", "block_mods");
 
-    // Features that can be disabled on the server's behalf
-    // If something should be added here, feel free to ping us via your favorite way.
-    private static final HashMap<String, BooleanOption> features = Util.make(() -> {
-        HashMap<String, BooleanOption> features = new HashMap<>();
-        features.put("freelook", Freelook.getInstance().enabled);
-        features.put("timechanger", AxolotlClient.CONFIG.timeChangerEnabled);
-        features.put("lowfire", AxolotlClient.CONFIG.lowFire);
-        features.put("fullbright", AxolotlClient.CONFIG.fullBright);
-        return features;
-    });
+	// Features that can be disabled on the server's behalf
+	// If something should be added here, feel free to ping us via your favorite way.
+	private static final HashMap<String, BooleanOption> features = Util.make(() -> {
+		HashMap<String, BooleanOption> features = new HashMap<>();
+		features.put("freelook", Freelook.getInstance().enabled);
+		features.put("timechanger", AxolotlClient.CONFIG.timeChangerEnabled);
+		features.put("lowfire", AxolotlClient.CONFIG.lowFire);
+		features.put("fullbright", AxolotlClient.CONFIG.fullBright);
+		return features;
+	});
 
-    public static void init() {
-        setServers(AxolotlClient.CONFIG.fullBright, NONE, "gommehd");
-        setServers(AxolotlClient.CONFIG.lowFire, NONE, "gommehd");
-        setServers(Freelook.getInstance().enabled, () -> Freelook.getInstance().needsDisabling(), "hypixel", "mineplex", "gommehd", "nucleoid");
-        setServers(((ToggleSprintHud) HudManager.getInstance().get(ToggleSprintHud.ID)).toggleSneak, NONE, "hypixel");
+	public static void init() {
+		setServers(AxolotlClient.CONFIG.fullBright, NONE, "gommehd");
+		setServers(AxolotlClient.CONFIG.lowFire, NONE, "gommehd");
+		setServers(Freelook.getInstance().enabled, () -> Freelook.getInstance().needsDisabling(), "hypixel", "mineplex", "gommehd", "nucleoid");
+		setServers(((ToggleSprintHud) HudManager.getInstance().get(ToggleSprintHud.ID)).toggleSneak, NONE, "hypixel");
 
-        ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
-            if (handler.m_uccwwurs() != null) {
-                onServerJoin(Objects.requireNonNull(handler.m_uccwwurs()).address);
-            }
-        });
-        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> clear());
+		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
+			if (handler.m_uccwwurs() != null) {
+				onServerJoin(Objects.requireNonNull(handler.m_uccwwurs()).address);
+			}
+		});
+		ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> clear());
 
-        ClientPlayConnectionEvents.INIT.register((handler0, client0) ->
-                ClientPlayNetworking.registerGlobalReceiver(channelName, (client, handler, buf, responseSender) -> {
-                    JsonArray array = JsonParser.parseString(buf.readString()).getAsJsonArray();
-                    for (JsonElement element : array) {
-                        try {
-                            features.get(element.getAsString()).setForceOff(true, "ban_reason");
-                        } catch (Exception e) {
-                            AxolotlClient.LOGGER.error("Failed to disable " + element.getAsString() + "!");
-                        }
-                    }
-                })
-        );
-    }
+		ClientPlayConnectionEvents.INIT.register((handler0, client0) ->
+				ClientPlayNetworking.registerGlobalReceiver(channelName, (client, handler, buf, responseSender) -> {
+					JsonArray array = JsonParser.parseString(buf.readString()).getAsJsonArray();
+					for (JsonElement element : array) {
+						try {
+							features.get(element.getAsString()).setForceOff(true, "ban_reason");
+						} catch (Exception e) {
+							AxolotlClient.LOGGER.error("Failed to disable " + element.getAsString() + "!");
+						}
+					}
+				})
+		);
+	}
 
-    public static void onServerJoin(String address) {
-        currentAddress = address;
-        update();
-    }
+	public static void onServerJoin(String address) {
+		currentAddress = address;
+		update();
+	}
 
-    public static void clear() {
-        disabledServers.keySet().forEach(option -> option.setForceOff(false, ""));
-        features.values().forEach(option -> option.setForceOff(false, ""));
-    }
+	public static void clear() {
+		disabledServers.keySet().forEach(option -> option.setForceOff(false, ""));
+		features.values().forEach(option -> option.setForceOff(false, ""));
+	}
 
-    private static void disableOption(BooleanOption option, String[] servers, String currentServer) {
-        boolean ban = false;
-        for (String s : servers) {
-            if (currentServer.toLowerCase(Locale.ROOT).contains(s.toLowerCase(Locale.ROOT))) {
-                ban = conditions.get(option).get();
-                break;
-            }
-        }
+	private static void disableOption(BooleanOption option, String[] servers, String currentServer) {
+		boolean ban = false;
+		for (String s : servers) {
+			if (currentServer.toLowerCase(Locale.ROOT).contains(s.toLowerCase(Locale.ROOT))) {
+				ban = conditions.get(option).get();
+				break;
+			}
+		}
 
-        if (option.getForceDisabled() != ban) {
-            option.setForceOff(ban, "ban_reason");
-        }
-    }
+		if (option.getForceDisabled() != ban) {
+			option.setForceOff(ban, "ban_reason");
+		}
+	}
 
-    private static void setServers(BooleanOption option, Supplier<Boolean> condition, String... servers) {
-        disabledServers.put(option, servers);
-        conditions.put(option, condition);
-    }
+	private static void setServers(BooleanOption option, Supplier<Boolean> condition, String... servers) {
+		disabledServers.put(option, servers);
+		conditions.put(option, condition);
+	}
 
-    public static void update() {
+	public static void update() {
 		disabledServers.forEach((option, strings) -> disableOption(option, strings, currentAddress));
-    }
+	}
 }

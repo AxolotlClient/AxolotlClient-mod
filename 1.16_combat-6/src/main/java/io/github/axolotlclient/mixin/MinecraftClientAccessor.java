@@ -31,12 +31,12 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 @Mixin(MinecraftClient.class)
 public interface MinecraftClientAccessor {
 
-    @Accessor
-    static int getCurrentFps() {
-        return 0;
-    }
+	@Accessor
+	static int getCurrentFps() {
+		return 0;
+	}
 
-    @Accessor("session")
-    @Mutable
-    void setSession(Session session);
+	@Accessor("session")
+	@Mutable
+	void setSession(Session session);
 }

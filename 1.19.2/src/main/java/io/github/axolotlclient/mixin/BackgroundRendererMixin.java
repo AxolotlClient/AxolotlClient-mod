@@ -35,15 +35,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(BackgroundRenderer.class)
 public abstract class BackgroundRendererMixin {
 
-    @Inject(method = "applyFog", at = @At("TAIL"))
-    private static void axolotlclient$applyNoFog(Camera camera, BackgroundRenderer.FogType fogType, float viewDistance,
-                                                 boolean thickFog, float tickDelta, CallbackInfo ci) {
-        if (camera.getSubmersionType() == CameraSubmersionType.NONE
-                && (thickFog || fogType == BackgroundRenderer.FogType.FOG_TERRAIN)) {
-            if (SkyboxManager.getInstance().hasSkyBoxes()) {
-                RenderSystem.setShaderFogStart(Short.MAX_VALUE - 1);
-                RenderSystem.setShaderFogEnd(Short.MAX_VALUE);
-            }
-        }
-    }
+	@Inject(method = "applyFog", at = @At("TAIL"))
+	private static void axolotlclient$applyNoFog(Camera camera, BackgroundRenderer.FogType fogType, float viewDistance,
+												 boolean thickFog, float tickDelta, CallbackInfo ci) {
+		if (camera.getSubmersionType() == CameraSubmersionType.NONE
+				&& (thickFog || fogType == BackgroundRenderer.FogType.FOG_TERRAIN)) {
+			if (SkyboxManager.getInstance().hasSkyBoxes()) {
+				RenderSystem.setShaderFogStart(Short.MAX_VALUE - 1);
+				RenderSystem.setShaderFogEnd(Short.MAX_VALUE);
+			}
+		}
+	}
 }

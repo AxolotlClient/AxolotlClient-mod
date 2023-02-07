@@ -37,48 +37,48 @@ import net.minecraft.client.gui.DrawableHelper;
 
 public class DrawUtil extends DrawableHelper {
 
-    public static void fillRect(Rectangle rectangle, Color color) {
-        fillRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height, color.getAsInt());
-    }
+	public static void fillRect(Rectangle rectangle, Color color) {
+		fillRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height, color.getAsInt());
+	}
 
-    public static void fillRect(int x, int y, int width, int height, Color color) {
-        fillRect(x, y, x + width, y + height, color.getAsInt());
-    }
+	public static void fillRect(int x, int y, int width, int height, Color color) {
+		fillRect(x, y, x + width, y + height, color.getAsInt());
+	}
 
-    public static void fillRect(int x, int y, int width, int height, int color) {
-        DrawableHelper.fill(x, y, x + width, y + height, color);
-    }
+	public static void fillRect(int x, int y, int width, int height, int color) {
+		DrawableHelper.fill(x, y, x + width, y + height, color);
+	}
 
-    public static void outlineRect(Rectangle rectangle, Color color) {
-        outlineRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height, color.getAsInt());
-    }
+	public static void outlineRect(Rectangle rectangle, Color color) {
+		outlineRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height, color.getAsInt());
+	}
 
-    public static void outlineRect(int x, int y, int width, int height, int color) {
-        fillRect(x, y, 1, height - 1, color);
-        fillRect(x + width - 1, y + 1, 1, height - 1, color);
-        fillRect(x + 1, y, width - 1, 1, color);
-        fillRect(x, y + height - 1, width - 1, 1, color);
-    }
+	public static void outlineRect(int x, int y, int width, int height, int color) {
+		fillRect(x, y, 1, height - 1, color);
+		fillRect(x + width - 1, y + 1, 1, height - 1, color);
+		fillRect(x + 1, y, width - 1, 1, color);
+		fillRect(x, y + height - 1, width - 1, 1, color);
+	}
 
-    public static void drawCenteredString(TextRenderer renderer, String text, int x, int y, Color color,
-                                          boolean shadow) {
-        drawCenteredString(renderer, text, x, y, color.getAsInt(), shadow);
-    }
+	public static void drawCenteredString(TextRenderer renderer, String text, int x, int y, Color color,
+										  boolean shadow) {
+		drawCenteredString(renderer, text, x, y, color.getAsInt(), shadow);
+	}
 
-    public static void drawCenteredString(TextRenderer renderer, String text, int x, int y, int color, boolean shadow) {
-        drawString(text, (float) (x - renderer.getStringWidth(text) / 2), (float) y, color, shadow);
-    }
+	public static void drawCenteredString(TextRenderer renderer, String text, int x, int y, int color, boolean shadow) {
+		drawString(text, (float) (x - renderer.getStringWidth(text) / 2), (float) y, color, shadow);
+	}
 
-    public static void drawString(String text, float x, float y, Color color, boolean shadow) {
-        drawString(text, x, y, color.getAsInt(), shadow);
-    }
+	public static void drawString(String text, float x, float y, Color color, boolean shadow) {
+		drawString(text, x, y, color.getAsInt(), shadow);
+	}
 
-    public static void drawString(TextRenderer textRenderer, String text, float x, float y, int color, boolean shadow) {
-        drawString(text, x, y, color, shadow);
-    }
+	public static void drawString(TextRenderer textRenderer, String text, float x, float y, int color, boolean shadow) {
+		drawString(text, x, y, color, shadow);
+	}
 
-    public static void drawString(String text, float x, float y, int color, boolean shadow) {
-        GlStateManager.enableTexture();
-        MinecraftClient.getInstance().textRenderer.draw(text, x, y, color, shadow);
-    }
+	public static void drawString(String text, float x, float y, int color, boolean shadow) {
+		GlStateManager.enableTexture();
+		MinecraftClient.getInstance().textRenderer.draw(text, x, y, color, shadow);
+	}
 }

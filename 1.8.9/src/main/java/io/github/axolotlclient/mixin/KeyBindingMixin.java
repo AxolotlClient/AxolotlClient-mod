@@ -38,38 +38,38 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(KeyBinding.class)
 public abstract class KeyBindingMixin {
 
-    @Shadow
-    private boolean pressed;
+	@Shadow
+	private boolean pressed;
 
-    @Shadow
-    private int code;
+	@Shadow
+	private int code;
 
-    @Shadow
-    @Final
-    private static IntObjectStorage<KeyBinding> KEY_MAP;
+	@Shadow
+	@Final
+	private static IntObjectStorage<KeyBinding> KEY_MAP;
 
-    @Inject(method = "isPressed", at = @At("HEAD"))
-    public void axolotlclient$noMovementFixAfterInventory(CallbackInfoReturnable<Boolean> cir) {
-        if (this.code == MinecraftClient.getInstance().options.sneakKey.getCode()
-                || code == MinecraftClient.getInstance().options.forwardKey.getCode()
-                || code == MinecraftClient.getInstance().options.backKey.getCode()
-                || code == MinecraftClient.getInstance().options.rightKey.getCode()
-                || code == MinecraftClient.getInstance().options.leftKey.getCode()
-                || code == MinecraftClient.getInstance().options.jumpKey.getCode()
-                || code == MinecraftClient.getInstance().options.sprintKey.getCode()) {
-            this.pressed = Keyboard.isKeyDown(code) && (MinecraftClient.getInstance().currentScreen == null);
-        }
-    }
+	@Inject(method = "isPressed", at = @At("HEAD"))
+	public void axolotlclient$noMovementFixAfterInventory(CallbackInfoReturnable<Boolean> cir) {
+		if (this.code == MinecraftClient.getInstance().options.sneakKey.getCode()
+				|| code == MinecraftClient.getInstance().options.forwardKey.getCode()
+				|| code == MinecraftClient.getInstance().options.backKey.getCode()
+				|| code == MinecraftClient.getInstance().options.rightKey.getCode()
+				|| code == MinecraftClient.getInstance().options.leftKey.getCode()
+				|| code == MinecraftClient.getInstance().options.jumpKey.getCode()
+				|| code == MinecraftClient.getInstance().options.sprintKey.getCode()) {
+			this.pressed = Keyboard.isKeyDown(code) && (MinecraftClient.getInstance().currentScreen == null);
+		}
+	}
 
-    @Inject(method = "setCode", at = @At("RETURN"))
-    public void axolotlclient$boundKeySet(int code, CallbackInfo ci) {
-        Hooks.KEYBIND_CHANGE.invoker().setBoundKey(code);
-    }
+	@Inject(method = "setCode", at = @At("RETURN"))
+	public void axolotlclient$boundKeySet(int code, CallbackInfo ci) {
+		Hooks.KEYBIND_CHANGE.invoker().setBoundKey(code);
+	}
 
-    @Inject(method = "setKeyPressed", at = @At(value = "FIELD", target = "Lnet/minecraft/client/option/KeyBinding;pressed:Z"))
-    private static void axolotlclient$onPress(int keyCode, boolean pressed, CallbackInfo ci) {
-        if (pressed) {
-            Hooks.KEYBIND_PRESS.invoker().onPress(KEY_MAP.get(keyCode));
-        }
-    }
+	@Inject(method = "setKeyPressed", at = @At(value = "FIELD", target = "Lnet/minecraft/client/option/KeyBinding;pressed:Z"))
+	private static void axolotlclient$onPress(int keyCode, boolean pressed, CallbackInfo ci) {
+		if (pressed) {
+			Hooks.KEYBIND_PRESS.invoker().onPress(KEY_MAP.get(keyCode));
+		}
+	}
 }

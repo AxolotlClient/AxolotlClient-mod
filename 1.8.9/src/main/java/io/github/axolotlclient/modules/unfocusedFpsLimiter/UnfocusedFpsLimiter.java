@@ -45,152 +45,152 @@ import java.util.concurrent.locks.LockSupport;
 
 public class UnfocusedFpsLimiter extends AbstractModule {
 
-    @Getter
-    private static final UnfocusedFpsLimiter Instance = new UnfocusedFpsLimiter();
+	@Getter
+	private static final UnfocusedFpsLimiter Instance = new UnfocusedFpsLimiter();
 
-    private final BooleanOption enabled = new BooleanOption("enabled", false);
-    private final BooleanOption reduceFPSWhenUnfocused = new BooleanOption("reduceFPS", false);
-    private final IntegerOption unfocusedFPS = new IntegerOption("unfocusedFPS", 10, 0, 60);
-    private final BooleanOption restoreOnHover = new BooleanOption("restoreOnHover", true);
-    private final FloatOption unfocusedVolumeMultiplier = new FloatOption("unfocusedVolumeMultiplier", 0.25f, 0f, 1f);
-    private final FloatOption hiddenVolumeMultiplier = new FloatOption("hiddenVolumeMultiplier", 0f, 0f, 1f);
-    private final BooleanOption runGCOnUnfocus = new BooleanOption("runGCOnUnfocus", false);
+	private final BooleanOption enabled = new BooleanOption("enabled", false);
+	private final BooleanOption reduceFPSWhenUnfocused = new BooleanOption("reduceFPS", false);
+	private final IntegerOption unfocusedFPS = new IntegerOption("unfocusedFPS", 10, 0, 60);
+	private final BooleanOption restoreOnHover = new BooleanOption("restoreOnHover", true);
+	private final FloatOption unfocusedVolumeMultiplier = new FloatOption("unfocusedVolumeMultiplier", 0.25f, 0f, 1f);
+	private final FloatOption hiddenVolumeMultiplier = new FloatOption("hiddenVolumeMultiplier", 0f, 0f, 1f);
+	private final BooleanOption runGCOnUnfocus = new BooleanOption("runGCOnUnfocus", false);
 
-    @Override
-    public void init() {
-        OptionCategory category = new OptionCategory("fpsLimiter");
-        category.add(enabled, reduceFPSWhenUnfocused, unfocusedFPS, restoreOnHover, unfocusedVolumeMultiplier, hiddenVolumeMultiplier, runGCOnUnfocus);
-        AxolotlClient.CONFIG.rendering.add(category);
-    }
+	@Override
+	public void init() {
+		OptionCategory category = new OptionCategory("fpsLimiter");
+		category.add(enabled, reduceFPSWhenUnfocused, unfocusedFPS, restoreOnHover, unfocusedVolumeMultiplier, hiddenVolumeMultiplier, runGCOnUnfocus);
+		AxolotlClient.CONFIG.rendering.add(category);
+	}
 
-    private boolean isFocused, isVisible, isHovered;
-    private long lastRender;
+	private boolean isFocused, isVisible, isHovered;
+	private long lastRender;
 
-    public boolean checkForRender() {
+	public boolean checkForRender() {
 
-        if (!enabled.get()) {
-            return true;
-        }
+		if (!enabled.get()) {
+			return true;
+		}
 
-        isFocused = Display.isActive();
-        isVisible = Display.isVisible();
-        isHovered = Mouse.isInsideWindow();
+		isFocused = Display.isActive();
+		isVisible = Display.isVisible();
+		isHovered = Mouse.isInsideWindow();
 
-        checkForStateChanges();
+		checkForStateChanges();
 
-        long currentTime = MinecraftClient.getTime();
-        long timeSinceLastRender = currentTime - lastRender;
+		long currentTime = MinecraftClient.getTime();
+		long timeSinceLastRender = currentTime - lastRender;
 
-        if (!checkForRender(timeSinceLastRender)) return false;
+		if (!checkForRender(timeSinceLastRender)) return false;
 
-        lastRender = currentTime;
-        return true;
-    }
+		lastRender = currentTime;
+		return true;
+	}
 
-    private boolean wasFocused = true;
-    private boolean wasVisible = true;
+	private boolean wasFocused = true;
+	private boolean wasVisible = true;
 
-    private void checkForStateChanges() {
-        if (isFocused != wasFocused) {
-            wasFocused = isFocused;
-            if (isFocused) {
-                onFocus();
-            } else {
-                onUnfocus();
-            }
-        }
+	private void checkForStateChanges() {
+		if (isFocused != wasFocused) {
+			wasFocused = isFocused;
+			if (isFocused) {
+				onFocus();
+			} else {
+				onUnfocus();
+			}
+		}
 
-        if (isVisible != wasVisible) {
-            wasVisible = isVisible;
-            if (isVisible) {
-                onAppear();
-            } else {
-                onDisappear();
-            }
-        }
-    }
+		if (isVisible != wasVisible) {
+			wasVisible = isVisible;
+			if (isVisible) {
+				onAppear();
+			} else {
+				onDisappear();
+			}
+		}
+	}
 
-    private void onFocus() {
-        setVolumeMultiplier(1);
-    }
+	private void onFocus() {
+		setVolumeMultiplier(1);
+	}
 
-    private void onUnfocus() {
-        if (isVisible) {
-            setVolumeMultiplier(unfocusedVolumeMultiplier.get());
-        }
+	private void onUnfocus() {
+		if (isVisible) {
+			setVolumeMultiplier(unfocusedVolumeMultiplier.get());
+		}
 
-        if (runGCOnUnfocus.get()) {
-            System.gc();
-        }
-    }
+		if (runGCOnUnfocus.get()) {
+			System.gc();
+		}
+	}
 
-    private void onAppear() {
-        if (!isFocused) {
-            setVolumeMultiplier(unfocusedVolumeMultiplier.get());
-        }
-    }
+	private void onAppear() {
+		if (!isFocused) {
+			setVolumeMultiplier(unfocusedVolumeMultiplier.get());
+		}
+	}
 
-    private void onDisappear() {
-        setVolumeMultiplier(hiddenVolumeMultiplier.get());
-    }
+	private void onDisappear() {
+		setVolumeMultiplier(hiddenVolumeMultiplier.get());
+	}
 
-    private void setVolumeMultiplier(float multiplier) {
-        // setting the volume to 0 stops all sounds (including music), which we want to avoid if possible.
-        boolean clientWillPause = !isFocused && client.options.pauseOnLostFocus && client.currentScreen == null;
-        // if the client would pause anyway, we don't need to do anything because that will already pause all sounds.
-        if (multiplier == 0 && clientWillPause) return;
+	private void setVolumeMultiplier(float multiplier) {
+		// setting the volume to 0 stops all sounds (including music), which we want to avoid if possible.
+		boolean clientWillPause = !isFocused && client.options.pauseOnLostFocus && client.currentScreen == null;
+		// if the client would pause anyway, we don't need to do anything because that will already pause all sounds.
+		if (multiplier == 0 && clientWillPause) return;
 
-        float baseVolume = MinecraftClient.getInstance().options.getSoundVolume(SoundCategory.MASTER);
-        MinecraftClient.getInstance().getSoundManager().updateSoundVolume(
-                SoundCategory.MASTER,
-                baseVolume * multiplier
-        );
-    }
+		float baseVolume = MinecraftClient.getInstance().options.getSoundVolume(SoundCategory.MASTER);
+		MinecraftClient.getInstance().getSoundManager().updateSoundVolume(
+				SoundCategory.MASTER,
+				baseVolume * multiplier
+		);
+	}
 
-    // we always render one last frame before actually reducing FPS, so the hud text shows up instantly when forcing low fps.
-    // additionally, this would enable mods which render differently while mc is inactive.
-    private boolean hasRenderedLastFrame = false;
+	// we always render one last frame before actually reducing FPS, so the hud text shows up instantly when forcing low fps.
+	// additionally, this would enable mods which render differently while mc is inactive.
+	private boolean hasRenderedLastFrame = false;
 
-    private boolean checkForRender(long timeSinceLastRender) {
-        Integer fpsOverride = fpsOverride();
-        if (fpsOverride == null) {
-            hasRenderedLastFrame = false;
-            return true;
-        }
+	private boolean checkForRender(long timeSinceLastRender) {
+		Integer fpsOverride = fpsOverride();
+		if (fpsOverride == null) {
+			hasRenderedLastFrame = false;
+			return true;
+		}
 
-        if (!hasRenderedLastFrame) {
-            // render one last frame before reducing, to make sure differences in this state show up instantly.
-            hasRenderedLastFrame = true;
-            return true;
-        }
+		if (!hasRenderedLastFrame) {
+			// render one last frame before reducing, to make sure differences in this state show up instantly.
+			hasRenderedLastFrame = true;
+			return true;
+		}
 
-        if (fpsOverride == 0) {
-            idle(1000);
-            return false;
-        }
+		if (fpsOverride == 0) {
+			idle(1000);
+			return false;
+		}
 
-        long frameTime = 1000 / fpsOverride;
-        boolean shouldSkipRender = timeSinceLastRender < frameTime;
-        if (!shouldSkipRender) return true;
+		long frameTime = 1000 / fpsOverride;
+		boolean shouldSkipRender = timeSinceLastRender < frameTime;
+		if (!shouldSkipRender) return true;
 
-        idle(frameTime);
-        return false;
-    }
+		idle(frameTime);
+		return false;
+	}
 
-    /**
-     * force minecraft to idle because otherwise we'll be busy checking for render again and again
-     */
-    private void idle(long waitMillis) {
-        // cap at 30 ms before we check again so user doesn't have to wait long after tabbing back in
-        waitMillis = Math.min(waitMillis, 30);
-        LockSupport.parkNanos("waiting to render", waitMillis * 1_000_000);
-    }
+	/**
+	 * force minecraft to idle because otherwise we'll be busy checking for render again and again
+	 */
+	private void idle(long waitMillis) {
+		// cap at 30 ms before we check again so user doesn't have to wait long after tabbing back in
+		waitMillis = Math.min(waitMillis, 30);
+		LockSupport.parkNanos("waiting to render", waitMillis * 1_000_000);
+	}
 
-    @Nullable
-    private Integer fpsOverride() {
-        if (!isVisible) return 0;
-        if (restoreOnHover.get() && isHovered) return null;
-        if (reduceFPSWhenUnfocused.get() && !Display.isActive()) return unfocusedFPS.get();
-        return null;
-    }
+	@Nullable
+	private Integer fpsOverride() {
+		if (!isVisible) return 0;
+		if (restoreOnHover.get() && isHovered) return null;
+		if (reduceFPSWhenUnfocused.get() && !Display.isActive()) return unfocusedFPS.get();
+		return null;
+	}
 }

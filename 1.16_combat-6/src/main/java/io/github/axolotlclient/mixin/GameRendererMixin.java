@@ -49,62 +49,64 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 @Mixin(GameRenderer.class)
 public abstract class GameRendererMixin {
 
-    @Final @Shadow private MinecraftClient client;
+	@Final
+	@Shadow
+	private MinecraftClient client;
 
-    @Inject(method = "getFov", at = @At(value = "RETURN", ordinal = 1), cancellable = true)
-    public void axolotlclient$setZoom(Camera camera, float tickDelta, boolean changingFov, CallbackInfoReturnable<Double> cir) {
-        Zoom.update();
-        double returnValue = cir.getReturnValue();
+	@Inject(method = "getFov", at = @At(value = "RETURN", ordinal = 1), cancellable = true)
+	public void axolotlclient$setZoom(Camera camera, float tickDelta, boolean changingFov, CallbackInfoReturnable<Double> cir) {
+		Zoom.update();
+		double returnValue = cir.getReturnValue();
 
-        if (!AxolotlClient.CONFIG.dynamicFOV.get()) {
-            Entity entity = this.client.getCameraEntity();
-            double f = changingFov ? client.options.fov : 70F;
-            if (entity instanceof LivingEntity && ((LivingEntity) entity).getHealth() <= 0.0F) {
-                float g = (float) ((LivingEntity) entity).deathTime + tickDelta;
-                f /= (1.0F - 500.0F / (g + 500.0F)) * 2.0F + 1.0F;
-            }
+		if (!AxolotlClient.CONFIG.dynamicFOV.get()) {
+			Entity entity = this.client.getCameraEntity();
+			double f = changingFov ? client.options.fov : 70F;
+			if (entity instanceof LivingEntity && ((LivingEntity) entity).getHealth() <= 0.0F) {
+				float g = (float) ((LivingEntity) entity).deathTime + tickDelta;
+				f /= (1.0F - 500.0F / (g + 500.0F)) * 2.0F + 1.0F;
+			}
 
-            FluidState fluidState = camera.getSubmergedFluidState();
-            if (!fluidState.isEmpty()) {
-                f = f * 60.0 / 70.0;
-            }
-            returnValue = f;
-        }
-        returnValue = Zoom.getFov(returnValue, tickDelta);
+			FluidState fluidState = camera.getSubmergedFluidState();
+			if (!fluidState.isEmpty()) {
+				f = f * 60.0 / 70.0;
+			}
+			returnValue = f;
+		}
+		returnValue = Zoom.getFov(returnValue, tickDelta);
 
-        cir.setReturnValue(returnValue);
-    }
+		cir.setReturnValue(returnValue);
+	}
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getFramebuffer()Lnet/minecraft/client/gl/Framebuffer;"))
-    public void axolotlclient$worldMotionBlur(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
-        MenuBlur.getInstance().updateBlur();
-        axolotlclient$motionBlur(tickDelta, startTime, tick, null);
-    }
+	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getFramebuffer()Lnet/minecraft/client/gl/Framebuffer;"))
+	public void axolotlclient$worldMotionBlur(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
+		MenuBlur.getInstance().updateBlur();
+		axolotlclient$motionBlur(tickDelta, startTime, tick, null);
+	}
 
-    @Inject(method = "render", at = @At("TAIL"))
-    public void axolotlclient$motionBlur(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
-        if (ci != null && !MotionBlur.getInstance().inGuis.get()) {
-            return;
-        }
+	@Inject(method = "render", at = @At("TAIL"))
+	public void axolotlclient$motionBlur(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
+		if (ci != null && !MotionBlur.getInstance().inGuis.get()) {
+			return;
+		}
 
-        this.client.getProfiler().push("Motion Blur");
+		this.client.getProfiler().push("Motion Blur");
 
-        if (MotionBlur.getInstance().enabled.get()) {
-            MotionBlur blur = MotionBlur.getInstance();
-            blur.onUpdate();
-            blur.shader.render(tickDelta);
-            RenderSystem.enableTexture();
-        }
+		if (MotionBlur.getInstance().enabled.get()) {
+			MotionBlur blur = MotionBlur.getInstance();
+			blur.onUpdate();
+			blur.shader.render(tickDelta);
+			RenderSystem.enableTexture();
+		}
 
-        this.client.getProfiler().pop();
-    }
+		this.client.getProfiler().pop();
+	}
 
 	@Inject(method = "bobView", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;translate(DDD)V"), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
-	private void axolotlclient$minimalViewBob(MatrixStack matrixStack, float f, CallbackInfo ci, PlayerEntity playerEntity, float g, float h, float i){
-		if(AxolotlClient.CONFIG.minimalViewBob.get()){
-			h/=2;
-			i/=2;
-			matrixStack.translate((double)(MathHelper.sin(h * (float) Math.PI) * i * 0.5F), (double)(-Math.abs(MathHelper.cos(h * (float) Math.PI) * i)), 0.0);
+	private void axolotlclient$minimalViewBob(MatrixStack matrixStack, float f, CallbackInfo ci, PlayerEntity playerEntity, float g, float h, float i) {
+		if (AxolotlClient.CONFIG.minimalViewBob.get()) {
+			h /= 2;
+			i /= 2;
+			matrixStack.translate((double) (MathHelper.sin(h * (float) Math.PI) * i * 0.5F), (double) (-Math.abs(MathHelper.cos(h * (float) Math.PI) * i)), 0.0);
 			matrixStack.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(MathHelper.sin(h * (float) Math.PI) * i * 3.0F));
 			matrixStack.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(Math.abs(MathHelper.cos(h * (float) Math.PI - 0.2F) * i) * 5.0F));
 			ci.cancel();

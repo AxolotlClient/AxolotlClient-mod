@@ -29,35 +29,36 @@ import net.minecraft.text.Text;
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
+ *
  * @license GPL-3.0
  */
 
 @AllArgsConstructor
 public enum Justification {
 
-    LEFT, CENTER, RIGHT;
+	LEFT, CENTER, RIGHT;
 
-    public int getXOffset(Text text, int width) {
-        if (this == LEFT) {
-            return 0;
-        }
-        return getXOffset(MinecraftClient.getInstance().textRenderer.getWidth(text), width);
-    }
+	public int getXOffset(Text text, int width) {
+		if (this == LEFT) {
+			return 0;
+		}
+		return getXOffset(MinecraftClient.getInstance().textRenderer.getWidth(text), width);
+	}
 
-    public int getXOffset(String text, int width) {
-        if (this == LEFT) {
-            return 0;
-        }
-        return getXOffset(MinecraftClient.getInstance().textRenderer.getWidth(text), width);
-    }
+	public int getXOffset(String text, int width) {
+		if (this == LEFT) {
+			return 0;
+		}
+		return getXOffset(MinecraftClient.getInstance().textRenderer.getWidth(text), width);
+	}
 
-    public int getXOffset(int textWidth, int width) {
-        if (this == LEFT) {
-            return 0;
-        }
-        if (this == RIGHT) {
-            return width - textWidth;
-        }
-        return (width - textWidth) / 2;
-    }
+	public int getXOffset(int textWidth, int width) {
+		if (this == LEFT) {
+			return 0;
+		}
+		if (this == RIGHT) {
+			return width - textWidth;
+		}
+		return (width - textWidth) / 2;
+	}
 }

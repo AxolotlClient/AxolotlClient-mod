@@ -53,104 +53,104 @@ import java.util.List;
 
 public class PingHud extends SimpleTextHudEntry {
 
-    public static final Identifier ID = new Identifier("kronhud", "pinghud");
+	public static final Identifier ID = new Identifier("kronhud", "pinghud");
 
-    private int currentServerPing;
+	private int currentServerPing;
 
-    private final IntegerOption refreshDelay = new IntegerOption("refreshTime", 4, 1, 15);
+	private final IntegerOption refreshDelay = new IntegerOption("refreshTime", 4, 1, 15);
 
-    public PingHud() {
-        super();
-    }
+	public PingHud() {
+		super();
+	}
 
-    @Override
-    public String getValue() {
-        return currentServerPing + " ms";
-    }
+	@Override
+	public String getValue() {
+		return currentServerPing + " ms";
+	}
 
-    @Override
-    public String getPlaceholder() {
-        return "68 ms";
-    }
+	@Override
+	public String getPlaceholder() {
+		return "68 ms";
+	}
 
-    @Override
-    public Identifier getId() {
-        return ID;
-    }
+	@Override
+	public Identifier getId() {
+		return ID;
+	}
 
-    @Override
-    public boolean tickable() {
-        return true;
-    }
+	@Override
+	public boolean tickable() {
+		return true;
+	}
 
-    private void updatePing() {
-        if (MinecraftClient.getInstance().getCurrentServerEntry() != null) {
-            if (MinecraftClient.getInstance().getCurrentServerEntry().ping <= 1) {
-                ServerAddress address = ServerAddress
-                        .parse(MinecraftClient.getInstance().getCurrentServerEntry().address);
-                getRealTimeServerPing(address.getAddress(), address.getPort());
-            } else {
-                currentServerPing = (int) MinecraftClient.getInstance().getCurrentServerEntry().ping;
-            }
-        } else if (((MinecraftClientAccessor) MinecraftClient.getInstance()).getServerAddress() != null) {
-            getRealTimeServerPing(((MinecraftClientAccessor) MinecraftClient.getInstance()).getServerAddress(),
-                    ((MinecraftClientAccessor) MinecraftClient.getInstance()).getServerPort());
-        } else if (MinecraftClient.getInstance().isIntegratedServerRunning()) {
-            currentServerPing = 1;
-        }
-    }
+	private void updatePing() {
+		if (MinecraftClient.getInstance().getCurrentServerEntry() != null) {
+			if (MinecraftClient.getInstance().getCurrentServerEntry().ping <= 1) {
+				ServerAddress address = ServerAddress
+						.parse(MinecraftClient.getInstance().getCurrentServerEntry().address);
+				getRealTimeServerPing(address.getAddress(), address.getPort());
+			} else {
+				currentServerPing = (int) MinecraftClient.getInstance().getCurrentServerEntry().ping;
+			}
+		} else if (((MinecraftClientAccessor) MinecraftClient.getInstance()).getServerAddress() != null) {
+			getRealTimeServerPing(((MinecraftClientAccessor) MinecraftClient.getInstance()).getServerAddress(),
+					((MinecraftClientAccessor) MinecraftClient.getInstance()).getServerPort());
+		} else if (MinecraftClient.getInstance().isIntegratedServerRunning()) {
+			currentServerPing = 1;
+		}
+	}
 
-    private int second;
+	private int second;
 
-    @Override
-    public void tick() {
-        if (second >= refreshDelay.get() * 20) {
-            updatePing();
-            second = 0;
-        } else
-            second++;
-    }
+	@Override
+	public void tick() {
+		if (second >= refreshDelay.get() * 20) {
+			updatePing();
+			second = 0;
+		} else
+			second++;
+	}
 
-    @Override
-    public List<Option<?>> getConfigurationOptions() {
-        List<Option<?>> options = super.getConfigurationOptions();
-        options.add(refreshDelay);
-        return options;
-    }
+	@Override
+	public List<Option<?>> getConfigurationOptions() {
+		List<Option<?>> options = super.getConfigurationOptions();
+		options.add(refreshDelay);
+		return options;
+	}
 
-    //Indicatia removed this feature...
-    //We still need it :(
-    private void getRealTimeServerPing(String address, int port) {
-        ThreadExecuter.scheduleTask(() -> {
-            try {
-                final ClientConnection manager = ClientConnection.connect(InetAddress.getByName(address), port, false);
+	//Indicatia removed this feature...
+	//We still need it :(
+	private void getRealTimeServerPing(String address, int port) {
+		ThreadExecuter.scheduleTask(() -> {
+			try {
+				final ClientConnection manager = ClientConnection.connect(InetAddress.getByName(address), port, false);
 
-                manager.setPacketListener(new ClientQueryPacketListener() {
+				manager.setPacketListener(new ClientQueryPacketListener() {
 
-                    @Override
-                    public void onResponse(QueryResponseS2CPacket packet) {
-                        this.currentSystemTime = MinecraftClient.getTime();
-                        manager.send(new QueryPingC2SPacket(this.currentSystemTime));
-                    }
+					@Override
+					public void onResponse(QueryResponseS2CPacket packet) {
+						this.currentSystemTime = MinecraftClient.getTime();
+						manager.send(new QueryPingC2SPacket(this.currentSystemTime));
+					}
 
-                    @Override
-                    public void onPong(QueryPongS2CPacket packet) {
-                        long time = this.currentSystemTime;
-                        long latency = MinecraftClient.getTime();
-                        currentServerPing = (int) (latency - time);
-                        manager.disconnect(new LiteralText(""));
-                    }
+					@Override
+					public void onPong(QueryPongS2CPacket packet) {
+						long time = this.currentSystemTime;
+						long latency = MinecraftClient.getTime();
+						currentServerPing = (int) (latency - time);
+						manager.disconnect(new LiteralText(""));
+					}
 
-                    private long currentSystemTime = 0L;
+					private long currentSystemTime = 0L;
 
-                    @Override
-                    public void onDisconnected(Text reason) {
-                    }
-                });
-                manager.send(new HandshakeC2SPacket(47, address, port, NetworkState.STATUS));
-                manager.send(new QueryRequestC2SPacket());
-            } catch (Exception ignored) {
-            }
-        });
-    }
+					@Override
+					public void onDisconnected(Text reason) {
+					}
+				});
+				manager.send(new HandshakeC2SPacket(47, address, port, NetworkState.STATUS));
+				manager.send(new QueryRequestC2SPacket());
+			} catch (Exception ignored) {
+			}
+		});
+	}
 }

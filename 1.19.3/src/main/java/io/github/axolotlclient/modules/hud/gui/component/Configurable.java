@@ -36,21 +36,21 @@ import java.util.List;
 
 public interface Configurable {
 
-    /**
-     * Returns a list of options that will be configured
-     *
-     * @return List of configurable options
-     */
-    List<Option<?>> getConfigurationOptions();
+	/**
+	 * Returns a list of options that will be configured
+	 *
+	 * @return List of configurable options
+	 */
+	List<Option<?>> getConfigurationOptions();
 
-    /**
-     * Returns a list of options that should be saved. By default, this includes {@link #getConfigurationOptions()}
-     *
-     * @return Options to save within a config
-     */
-    default List<Option<?>> getSaveOptions() {
-        return getConfigurationOptions();
-    }
+	/**
+	 * Returns a list of options that should be saved. By default, this includes {@link #getConfigurationOptions()}
+	 *
+	 * @return Options to save within a config
+	 */
+	default List<Option<?>> getSaveOptions() {
+		return getConfigurationOptions();
+	}
 
-    OptionCategory getOptionsAsCategory();
+	OptionCategory getOptionsAsCategory();
 }

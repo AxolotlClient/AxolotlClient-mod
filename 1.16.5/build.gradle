@@ -24,7 +24,7 @@ dependencies {
 
 	modImplementation include("net.fabricmc.fabric-api:fabric-networking-api-v1:1.0.5+3cc0f0907d")
 
-	modImplementation ("io.github.axolotlclient:AxolotlClient-config:${project.config}+1.16") {
+	modImplementation("io.github.axolotlclient:AxolotlClient-config:${project.config}+1.16") {
 		exclude group: "com.terraformersmc"
 	}
 	include "io.github.axolotlclient:AxolotlClient-config:${project.config}+1.16"
@@ -65,7 +65,7 @@ publishing {
 		maven {
 			name = "owlMaven"
 			def repository = project.version.toString().contains("beta") || project.version.toString().contains("alpha") ? "snapshots" : "releases"
-			url = "https://moehreag.duckdns.org/maven/"+repository
+			url = "https://moehreag.duckdns.org/maven/" + repository
 			credentials(PasswordCredentials)
 			authentication {
 				basic(BasicAuthentication)

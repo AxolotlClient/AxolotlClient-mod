@@ -32,11 +32,11 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(LightmapTextureManager.class)
 public abstract class LightmapManagerMixin {
 
-    @Redirect(method = "update", at = @At(value = "FIELD", target = "Lnet/minecraft/client/option/GameOptions;gamma:D"))
-    public double axolotlclient$fullBright(GameOptions instance) {
-        if (AxolotlClient.CONFIG.fullBright.get()) {
-            return 15D;
-        }
-        return instance.gamma;
-    }
+	@Redirect(method = "update", at = @At(value = "FIELD", target = "Lnet/minecraft/client/option/GameOptions;gamma:D"))
+	public double axolotlclient$fullBright(GameOptions instance) {
+		if (AxolotlClient.CONFIG.fullBright.get()) {
+			return 15D;
+		}
+		return instance.gamma;
+	}
 }

@@ -30,22 +30,22 @@ import lombok.Getter;
 
 public class BeaconBeam extends AbstractModule {
 
-    @Getter
-    private final static BeaconBeam Instance = new BeaconBeam();
+	@Getter
+	private final static BeaconBeam Instance = new BeaconBeam();
 
-    private final BooleanOption showBeaconBeams = new BooleanOption("showBeaconBeams", true);
-    private final BooleanOption showEndGatewayBeams = new BooleanOption("showEndGatewayBeams", true);
+	private final BooleanOption showBeaconBeams = new BooleanOption("showBeaconBeams", true);
+	private final BooleanOption showEndGatewayBeams = new BooleanOption("showEndGatewayBeams", true);
 
-    private final OptionCategory beams = new OptionCategory("beams");
+	private final OptionCategory beams = new OptionCategory("beams");
 
-    @Override
-    public void init() {
-        beams.add(showBeaconBeams, showEndGatewayBeams);
+	@Override
+	public void init() {
+		beams.add(showBeaconBeams, showEndGatewayBeams);
 
-        AxolotlClient.CONFIG.rendering.add(beams);
-    }
+		AxolotlClient.CONFIG.rendering.add(beams);
+	}
 
-    public boolean showBeam(boolean endGateway) {
-        return endGateway ? showEndGatewayBeams.get() : showBeaconBeams.get();
-    }
+	public boolean showBeam(boolean endGateway) {
+		return endGateway ? showEndGatewayBeams.get() : showBeaconBeams.get();
+	}
 }

@@ -32,15 +32,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(I18n.class)
 public abstract class I18nMixin {
 
-    private static final String KEY_PREFIX = "axolotlclient.";
+	private static final String KEY_PREFIX = "axolotlclient.";
 
-    @Inject(method = "translate", at = @At("HEAD"), cancellable = true)
-    private static void axolotlclient$translate(String key, Object[] args, CallbackInfoReturnable<String> callback) {
-        if (key.startsWith(KEY_PREFIX)) {
-            callback.setReturnValue(TranslationProvider
-                    .format(TranslationProvider.translate(key.substring(KEY_PREFIX.length())), args));
-        } else if (TranslationProvider.hasTranslation(key)) {
-            callback.setReturnValue(TranslationProvider.translate(key, args));
-        }
-    }
+	@Inject(method = "translate", at = @At("HEAD"), cancellable = true)
+	private static void axolotlclient$translate(String key, Object[] args, CallbackInfoReturnable<String> callback) {
+		if (key.startsWith(KEY_PREFIX)) {
+			callback.setReturnValue(TranslationProvider
+					.format(TranslationProvider.translate(key.substring(KEY_PREFIX.length())), args));
+		} else if (TranslationProvider.hasTranslation(key)) {
+			callback.setReturnValue(TranslationProvider.translate(key, args));
+		}
+	}
 }

@@ -53,136 +53,136 @@ import java.util.stream.Collectors;
 
 public class HudManager extends AbstractModule {
 
-    private final OptionCategory hudCategory = new OptionCategory("hud", false);
+	private final OptionCategory hudCategory = new OptionCategory("hud", false);
 
-    private final static HudManager INSTANCE = new HudManager();
+	private final static HudManager INSTANCE = new HudManager();
 
-    public static HudManager getInstance() {
-        return INSTANCE;
-    }
+	public static HudManager getInstance() {
+		return INSTANCE;
+	}
 
-    private final Map<Identifier, HudEntry> entries;
-    private final MinecraftClient client;
+	private final Map<Identifier, HudEntry> entries;
+	private final MinecraftClient client;
 
-    private HudManager() {
-        this.entries = new LinkedHashMap<>();
-        client = MinecraftClient.getInstance();
-        KeyBind key = new KeyBind("key.openHud", InputUtil.KEY_RIGHT_SHIFT_CODE, "category.axolotlclient");
-        hudCategory.add(new KeyBindOption("key.openHud", key, keyBind -> MinecraftClient.getInstance().setScreen(new HudEditScreen())));
-    }
+	private HudManager() {
+		this.entries = new LinkedHashMap<>();
+		client = MinecraftClient.getInstance();
+		KeyBind key = new KeyBind("key.openHud", InputUtil.KEY_RIGHT_SHIFT_CODE, "category.axolotlclient");
+		hudCategory.add(new KeyBindOption("key.openHud", key, keyBind -> MinecraftClient.getInstance().setScreen(new HudEditScreen())));
+	}
 
-    public void init() {
-        //KeyBindingHelper.registerKeyBinding(key);
+	public void init() {
+		//KeyBindingHelper.registerKeyBinding(key);
 
-        AxolotlClient.CONFIG.addCategory(hudCategory);
+		AxolotlClient.CONFIG.addCategory(hudCategory);
 
-        add(new PingHud());
-        add(new FPSHud());
-        add(new CPSHud());
-        add(new ArmorHud());
-        add(new PotionsHud());
-        add(new KeystrokeHud());
-        add(new ToggleSprintHud());
-        add(new IPHud());
-        add(new iconHud());
-        add(new SpeedHud());
-        add(new ScoreboardHud());
-        add(new CrosshairHud());
-        add(new CoordsHud());
-        add(new ActionBarHud());
-        add(new BossBarHud());
-        add(new ArrowHud());
-        add(new ItemUpdateHud());
-        add(new PackDisplayHud());
-        add(new IRLTimeHud());
-        add(new ReachHud());
-        add(new HotbarHUD());
-        add(new MemoryHud());
-        add(new PlayerCountHud());
-        add(new CompassHud());
-        add(new TPSHud());
-        add(new ComboHud());
-        add(new PlayerHud());
+		add(new PingHud());
+		add(new FPSHud());
+		add(new CPSHud());
+		add(new ArmorHud());
+		add(new PotionsHud());
+		add(new KeystrokeHud());
+		add(new ToggleSprintHud());
+		add(new IPHud());
+		add(new iconHud());
+		add(new SpeedHud());
+		add(new ScoreboardHud());
+		add(new CrosshairHud());
+		add(new CoordsHud());
+		add(new ActionBarHud());
+		add(new BossBarHud());
+		add(new ArrowHud());
+		add(new ItemUpdateHud());
+		add(new PackDisplayHud());
+		add(new IRLTimeHud());
+		add(new ReachHud());
+		add(new HotbarHUD());
+		add(new MemoryHud());
+		add(new PlayerCountHud());
+		add(new CompassHud());
+		add(new TPSHud());
+		add(new ComboHud());
+		add(new PlayerHud());
 
-        entries.values().forEach(HudEntry::init);
+		entries.values().forEach(HudEntry::init);
 
-        refreshAllBounds();
-    }
+		refreshAllBounds();
+	}
 
-    public void refreshAllBounds() {
-        for (HudEntry entry : getEntries()) {
-            entry.onBoundsUpdate();
-        }
-    }
+	public void refreshAllBounds() {
+		for (HudEntry entry : getEntries()) {
+			entry.onBoundsUpdate();
+		}
+	}
 
-    public void tick() {
-        entries.values().stream().filter(hudEntry -> hudEntry.isEnabled() && hudEntry.tickable())
-                .forEach(HudEntry::tick);
-    }
+	public void tick() {
+		entries.values().stream().filter(hudEntry -> hudEntry.isEnabled() && hudEntry.tickable())
+				.forEach(HudEntry::tick);
+	}
 
-    public HudManager add(AbstractHudEntry entry) {
-        entries.put(entry.getId(), entry);
-        hudCategory.addSubCategory(entry.getAllOptions());
-        return this;
-    }
+	public HudManager add(AbstractHudEntry entry) {
+		entries.put(entry.getId(), entry);
+		hudCategory.addSubCategory(entry.getAllOptions());
+		return this;
+	}
 
-    public List<HudEntry> getEntries() {
-        if (entries.size() > 0) {
-            return new ArrayList<>(entries.values());
-        }
-        return new ArrayList<>();
-    }
+	public List<HudEntry> getEntries() {
+		if (entries.size() > 0) {
+			return new ArrayList<>(entries.values());
+		}
+		return new ArrayList<>();
+	}
 
-    public List<HudEntry> getMoveableEntries() {
-        if (entries.size() > 0) {
-            return entries.values().stream().filter((entry) -> entry.isEnabled() && entry.movable())
-                    .collect(Collectors.toList());
-        }
-        return new ArrayList<>();
-    }
+	public List<HudEntry> getMoveableEntries() {
+		if (entries.size() > 0) {
+			return entries.values().stream().filter((entry) -> entry.isEnabled() && entry.movable())
+					.collect(Collectors.toList());
+		}
+		return new ArrayList<>();
+	}
 
-    public HudEntry get(Identifier identifier) {
-        return entries.get(identifier);
-    }
+	public HudEntry get(Identifier identifier) {
+		return entries.get(identifier);
+	}
 
-    public void render(MatrixStack matrices, float delta) {
-        client.getProfiler().push("Hud Modules");
-        if (!(client.currentScreen instanceof HudEditScreen)) {
-            for (HudEntry hud : getEntries()) {
-                if (hud.isEnabled() && (!client.options.debugEnabled || hud.overridesF3())) {
-                    client.getProfiler().push(hud.getName());
-                    hud.render(matrices, delta);
-                    client.getProfiler().pop();
-                }
-            }
-        }
-        client.getProfiler().pop();
-    }
+	public void render(MatrixStack matrices, float delta) {
+		client.getProfiler().push("Hud Modules");
+		if (!(client.currentScreen instanceof HudEditScreen)) {
+			for (HudEntry hud : getEntries()) {
+				if (hud.isEnabled() && (!client.options.debugEnabled || hud.overridesF3())) {
+					client.getProfiler().push(hud.getName());
+					hud.render(matrices, delta);
+					client.getProfiler().pop();
+				}
+			}
+		}
+		client.getProfiler().pop();
+	}
 
-    public Optional<HudEntry> getEntryXY(int x, int y) {
-        for (HudEntry entry : getMoveableEntries()) {
-            Rectangle bounds = entry.getTrueBounds();
-            if (bounds.x() <= x && bounds.x() + bounds.width() >= x && bounds.y() <= y
-                    && bounds.y() + bounds.height() >= y) {
-                return Optional.of(entry);
-            }
-        }
-        return Optional.empty();
-    }
+	public Optional<HudEntry> getEntryXY(int x, int y) {
+		for (HudEntry entry : getMoveableEntries()) {
+			Rectangle bounds = entry.getTrueBounds();
+			if (bounds.x() <= x && bounds.x() + bounds.width() >= x && bounds.y() <= y
+					&& bounds.y() + bounds.height() >= y) {
+				return Optional.of(entry);
+			}
+		}
+		return Optional.empty();
+	}
 
-    public void renderPlaceholder(MatrixStack matrices, float delta) {
-        for (HudEntry hud : getEntries()) {
-            if (hud.isEnabled()) {
-                hud.renderPlaceholder(matrices, delta);
-            }
-        }
-    }
+	public void renderPlaceholder(MatrixStack matrices, float delta) {
+		for (HudEntry hud : getEntries()) {
+			if (hud.isEnabled()) {
+				hud.renderPlaceholder(matrices, delta);
+			}
+		}
+	}
 
-    public List<Rectangle> getAllBounds() {
-        ArrayList<Rectangle> bounds = new ArrayList<>();
-        for (HudEntry entry : getMoveableEntries()) {
-            bounds.add(entry.getTrueBounds());
-        }
-        return bounds;
-    }
+	public List<Rectangle> getAllBounds() {
+		ArrayList<Rectangle> bounds = new ArrayList<>();
+		for (HudEntry entry : getMoveableEntries()) {
+			bounds.add(entry.getTrueBounds());
+		}
+		return bounds;
+	}
 }

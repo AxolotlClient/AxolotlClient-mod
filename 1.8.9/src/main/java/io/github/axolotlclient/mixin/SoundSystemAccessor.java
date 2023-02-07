@@ -32,6 +32,6 @@ import java.util.Map;
 @Mixin(SoundSystem.class)
 public interface SoundSystemAccessor {
 
-    @Accessor
-    Map<SoundInstance, String> getField_8196();
+	@Accessor
+	Map<SoundInstance, String> getField_8196();
 }

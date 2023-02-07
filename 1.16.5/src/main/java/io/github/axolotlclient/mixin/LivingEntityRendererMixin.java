@@ -38,18 +38,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntityRenderer.class)
 public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends EntityModel<T>>
-        extends EntityRenderer<T> implements FeatureRendererContext<T, M> {
+		extends EntityRenderer<T> implements FeatureRendererContext<T, M> {
 
-    protected LivingEntityRendererMixin(EntityRenderDispatcher dispatcher) {
-        super(dispatcher);
-    }
+	protected LivingEntityRendererMixin(EntityRenderDispatcher dispatcher) {
+		super(dispatcher);
+	}
 
-    @Inject(method = "hasLabel(Lnet/minecraft/entity/LivingEntity;)Z", at = @At("HEAD"), cancellable = true)
-    private void axolotlclient$showOwnNametag(T livingEntity, CallbackInfoReturnable<Boolean> cir) {
-        if (AxolotlClient.CONFIG.showOwnNametag.get()
-                && livingEntity.getEntityId() == MinecraftClient.getInstance().player.getEntityId()
-                && !PlayerHud.isCurrentlyRendering()) {
-            cir.setReturnValue(true);
-        }
-    }
+	@Inject(method = "hasLabel(Lnet/minecraft/entity/LivingEntity;)Z", at = @At("HEAD"), cancellable = true)
+	private void axolotlclient$showOwnNametag(T livingEntity, CallbackInfoReturnable<Boolean> cir) {
+		if (AxolotlClient.CONFIG.showOwnNametag.get()
+				&& livingEntity.getEntityId() == MinecraftClient.getInstance().player.getEntityId()
+				&& !PlayerHud.isCurrentlyRendering()) {
+			cir.setReturnValue(true);
+		}
+	}
 }

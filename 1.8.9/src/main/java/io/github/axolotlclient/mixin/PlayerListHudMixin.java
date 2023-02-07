@@ -46,96 +46,96 @@ import java.util.UUID;
 @Mixin(PlayerListHud.class)
 public abstract class PlayerListHudMixin extends DrawableHelper {
 
-    @Shadow
-    private Text header;
-    @Shadow
-    private Text footer;
-    MinecraftClient client = MinecraftClient.getInstance();
-    private PlayerListEntry playerListEntry;
+	@Shadow
+	private Text header;
+	@Shadow
+	private Text footer;
+	MinecraftClient client = MinecraftClient.getInstance();
+	private PlayerListEntry playerListEntry;
 
-    @Inject(method = "getPlayerName", at = @At("HEAD"), cancellable = true)
-    public void axolotlclient$nickHider(PlayerListEntry playerEntry, CallbackInfoReturnable<String> cir) {
-        if (playerEntry.getProfile().getId() == MinecraftClient.getInstance().player.getUuid()
-                && NickHider.getInstance().hideOwnName.get()) {
-            cir.setReturnValue(NickHider.getInstance().hiddenNameSelf.get());
-        } else if (playerEntry.getProfile().getId() != MinecraftClient.getInstance().player.getUuid()
-                && NickHider.getInstance().hideOtherNames.get()) {
-            cir.setReturnValue(NickHider.getInstance().hiddenNameOthers.get());
-        }
-    }
+	@Inject(method = "getPlayerName", at = @At("HEAD"), cancellable = true)
+	public void axolotlclient$nickHider(PlayerListEntry playerEntry, CallbackInfoReturnable<String> cir) {
+		if (playerEntry.getProfile().getId() == MinecraftClient.getInstance().player.getUuid()
+				&& NickHider.getInstance().hideOwnName.get()) {
+			cir.setReturnValue(NickHider.getInstance().hiddenNameSelf.get());
+		} else if (playerEntry.getProfile().getId() != MinecraftClient.getInstance().player.getUuid()
+				&& NickHider.getInstance().hideOtherNames.get()) {
+			cir.setReturnValue(NickHider.getInstance().hiddenNameOthers.get());
+		}
+	}
 
-    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;getPlayerName(Lnet/minecraft/client/network/PlayerListEntry;)Ljava/lang/String;"))
-    public PlayerListEntry axolotlclient$getPlayer(PlayerListEntry playerEntry) {
-        playerListEntry = playerEntry;
-        return playerEntry;
-    }
+	@ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;getPlayerName(Lnet/minecraft/client/network/PlayerListEntry;)Ljava/lang/String;"))
+	public PlayerListEntry axolotlclient$getPlayer(PlayerListEntry playerEntry) {
+		playerListEntry = playerEntry;
+		return playerEntry;
+	}
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;getStringWidth(Ljava/lang/String;)I", ordinal = 0))
-    public int axolotlclient$moveName(TextRenderer instance, String text) {
-        if (AxolotlClient.CONFIG.showBadges.get() && AxolotlClient.isUsingClient(playerListEntry.getProfile().getId()))
-            return instance.getStringWidth(text) + 10;
-        return instance.getStringWidth(text);
-    }
+	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;getStringWidth(Ljava/lang/String;)I", ordinal = 0))
+	public int axolotlclient$moveName(TextRenderer instance, String text) {
+		if (AxolotlClient.CONFIG.showBadges.get() && AxolotlClient.isUsingClient(playerListEntry.getProfile().getId()))
+			return instance.getStringWidth(text) + 10;
+		return instance.getStringWidth(text);
+	}
 
-    @ModifyArgs(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Ljava/lang/String;FFI)I", ordinal = 1))
-    public void axolotlclient$getCoords(Args args) {
-        float x = args.get(1);
-        float y = args.get(2);
-        if (AxolotlClient.CONFIG.showBadges.get()
-                && AxolotlClient.isUsingClient(playerListEntry.getProfile().getId())) {
-            client.getTextureManager().bindTexture(AxolotlClient.badgeIcon);
-            DrawableHelper.drawTexture((int) x, (int) y, 0, 0, 8, 8, 8, 8);
-            args.set(1, x + 10);
-        }
-    }
+	@ModifyArgs(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Ljava/lang/String;FFI)I", ordinal = 1))
+	public void axolotlclient$getCoords(Args args) {
+		float x = args.get(1);
+		float y = args.get(2);
+		if (AxolotlClient.CONFIG.showBadges.get()
+				&& AxolotlClient.isUsingClient(playerListEntry.getProfile().getId())) {
+			client.getTextureManager().bindTexture(AxolotlClient.badgeIcon);
+			DrawableHelper.drawTexture((int) x, (int) y, 0, 0, 8, 8, 8, 8);
+			args.set(1, x + 10);
+		}
+	}
 
-    @ModifyArgs(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Ljava/lang/String;FFI)I", ordinal = 2))
-    public void axolotlclient$getCoords2(Args args) {
-        float x = args.get(1);
-        float y = args.get(2);
-        if (AxolotlClient.CONFIG.showBadges.get()
-                && AxolotlClient.isUsingClient(playerListEntry.getProfile().getId())) {
-            client.getTextureManager().bindTexture(AxolotlClient.badgeIcon);
-            DrawableHelper.drawTexture((int) x, (int) y, 0, 0, 8, 8, 8, 8);
-            args.set(1, x + 10);
-        }
-    }
+	@ModifyArgs(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Ljava/lang/String;FFI)I", ordinal = 2))
+	public void axolotlclient$getCoords2(Args args) {
+		float x = args.get(1);
+		float y = args.get(2);
+		if (AxolotlClient.CONFIG.showBadges.get()
+				&& AxolotlClient.isUsingClient(playerListEntry.getProfile().getId())) {
+			client.getTextureManager().bindTexture(AxolotlClient.badgeIcon);
+			DrawableHelper.drawTexture((int) x, (int) y, 0, 0, 8, 8, 8, 8);
+			args.set(1, x + 10);
+		}
+	}
 
-    @Inject(method = "renderLatencyIcon", at = @At("HEAD"), cancellable = true)
-    private void axolotlclient$numericalPing(int width, int x, int y, PlayerListEntry entry, CallbackInfo ci) {
-        if (Tablist.getInstance().renderNumericPing(width, x, y, entry)) {
-            ci.cancel();
-        }
-    }
+	@Inject(method = "renderLatencyIcon", at = @At("HEAD"), cancellable = true)
+	private void axolotlclient$numericalPing(int width, int x, int y, PlayerListEntry entry, CallbackInfo ci) {
+		if (Tablist.getInstance().renderNumericPing(width, x, y, entry)) {
+			ci.cancel();
+		}
+	}
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;isIntegratedServerRunning()Z"))
-    private boolean axolotlclient$showPlayerHeads$1(MinecraftClient instance) {
-        if (Tablist.getInstance().showPlayerHeads.get()) {
-            return instance.isIntegratedServerRunning();
-        }
-        return false;
-    }
+	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;isIntegratedServerRunning()Z"))
+	private boolean axolotlclient$showPlayerHeads$1(MinecraftClient instance) {
+		if (Tablist.getInstance().showPlayerHeads.get()) {
+			return instance.isIntegratedServerRunning();
+		}
+		return false;
+	}
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ClientConnection;isEncrypted()Z"))
-    private boolean axolotlclient$showPlayerHeads$2(ClientConnection instance) {
-        if (Tablist.getInstance().showPlayerHeads.get()) {
-            return instance.isEncrypted();
-        }
-        return false;
-    }
+	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ClientConnection;isEncrypted()Z"))
+	private boolean axolotlclient$showPlayerHeads$2(ClientConnection instance) {
+		if (Tablist.getInstance().showPlayerHeads.get()) {
+			return instance.isEncrypted();
+		}
+		return false;
+	}
 
-    @Inject(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;header:Lnet/minecraft/text/Text;"))
-    private void axolotlclient$setRenderHeaderFooter(int width, Scoreboard scoreboard, ScoreboardObjective playerListScoreboardObjective, CallbackInfo ci) {
-        if (!Tablist.getInstance().showHeader.get()) {
-            header = null;
-        }
-        if (!Tablist.getInstance().showFooter.get()) {
-            footer = null;
-        }
-    }
+	@Inject(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;header:Lnet/minecraft/text/Text;"))
+	private void axolotlclient$setRenderHeaderFooter(int width, Scoreboard scoreboard, ScoreboardObjective playerListScoreboardObjective, CallbackInfo ci) {
+		if (!Tablist.getInstance().showHeader.get()) {
+			header = null;
+		}
+		if (!Tablist.getInstance().showFooter.get()) {
+			footer = null;
+		}
+	}
 
 	@ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;getPlayerByUuid(Ljava/util/UUID;)Lnet/minecraft/entity/player/PlayerEntity;"))
-	private UUID makeStuff(UUID par1){
+	private UUID makeStuff(UUID par1) {
 		return Tablist.getInstance().alwaysShowHeadLayer.get() ? MinecraftClient.getInstance().player.getUuid() : par1;
 	}
 }

@@ -38,16 +38,16 @@ import java.util.function.Consumer;
 @Mixin(net.minecraft.client.util.ScreenshotUtils.class)
 public abstract class ScreenshotRecorderMixin {
 
-    private static File currentFile;
+	private static File currentFile;
 
-    @Inject(method = "method_1661", at = @At("HEAD"))
-    private static void axolotlclient$getFile(NativeImage nativeImage, File file, Consumer<Text> consumer, CallbackInfo ci) {
-        currentFile = file;
-    }
+	@Inject(method = "method_1661", at = @At("HEAD"))
+	private static void axolotlclient$getFile(NativeImage nativeImage, File file, Consumer<Text> consumer, CallbackInfo ci) {
+		currentFile = file;
+	}
 
-    @SuppressWarnings("unchecked")
-    @ModifyArg(method = "method_1661", at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V"))
-    private static <T> T axolotlclient$onScreenShotTaken(T t) {
-        return (T) ScreenshotUtils.getInstance().onScreenshotTaken((MutableText) t, currentFile);
-    }
+	@SuppressWarnings("unchecked")
+	@ModifyArg(method = "method_1661", at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V"))
+	private static <T> T axolotlclient$onScreenShotTaken(T t) {
+		return (T) ScreenshotUtils.getInstance().onScreenshotTaken((MutableText) t, currentFile);
+	}
 }

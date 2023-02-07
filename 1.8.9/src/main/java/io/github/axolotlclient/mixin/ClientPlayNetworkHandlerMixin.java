@@ -34,9 +34,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ClientPlayNetworkHandler.class)
 public abstract class ClientPlayNetworkHandlerMixin {
 
-    @Inject(method = "onWorldTimeUpdate", at = @At("HEAD"))
-    private void axolotlclient$onWorldUpdate(WorldTimeUpdateS2CPacket packet, CallbackInfo ci) {
-        TPSHud tpsHud = (TPSHud) HudManager.getInstance().get(TPSHud.ID);
-        tpsHud.updateTime(packet.getTime());
-    }
+	@Inject(method = "onWorldTimeUpdate", at = @At("HEAD"))
+	private void axolotlclient$onWorldUpdate(WorldTimeUpdateS2CPacket packet, CallbackInfo ci) {
+		TPSHud tpsHud = (TPSHud) HudManager.getInstance().get(TPSHud.ID);
+		tpsHud.updateTime(packet.getTime());
+	}
 }

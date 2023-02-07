@@ -31,29 +31,29 @@ import net.minecraft.text.Text;
 
 public class AutoBoop implements AbstractHypixelMod {
 
-    @Getter
-    private final static AutoBoop Instance = new AutoBoop();
+	@Getter
+	private final static AutoBoop Instance = new AutoBoop();
 
-    protected OptionCategory cat = new OptionCategory("autoBoop");
-    protected BooleanOption enabled = new BooleanOption("enabled", "autoBoop", false);
+	protected OptionCategory cat = new OptionCategory("autoBoop");
+	protected BooleanOption enabled = new BooleanOption("enabled", "autoBoop", false);
 
-    @Override
-    public void init() {
-        cat.add(enabled);
-    }
+	@Override
+	public void init() {
+		cat.add(enabled);
+	}
 
-    @Override
-    public OptionCategory getCategory() {
-        return cat;
-    }
+	@Override
+	public OptionCategory getCategory() {
+		return cat;
+	}
 
-    public void onMessage(Text message) {
-        if (enabled.get() && message.asUnformattedString().contains("Friend >")
-                && message.asUnformattedString().contains("joined.")) {
-            String player = message.asUnformattedString().substring(message.asFormattedString().indexOf(">"),
-                    message.asUnformattedString().lastIndexOf(" "));
-            Util.sendChatMessage("/boop " + player);
-            System.out.println("Booped " + player);
-        }
-    }
+	public void onMessage(Text message) {
+		if (enabled.get() && message.asUnformattedString().contains("Friend >")
+				&& message.asUnformattedString().contains("joined.")) {
+			String player = message.asUnformattedString().substring(message.asFormattedString().indexOf(">"),
+					message.asUnformattedString().lastIndexOf(" "));
+			Util.sendChatMessage("/boop " + player);
+			System.out.println("Booped " + player);
+		}
+	}
 }

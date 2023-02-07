@@ -31,8 +31,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ModStatus.class)
 public abstract class ModStatusMixin {
 
-    @Inject(method = "isModded", at = @At("HEAD"), cancellable = true)
-    private void axolotlclient$isModded(CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(false);
-    }
+	@Inject(method = "isModded", at = @At("HEAD"), cancellable = true)
+	private void axolotlclient$isModded(CallbackInfoReturnable<Boolean> cir) {
+		cir.setReturnValue(false);
+	}
 }

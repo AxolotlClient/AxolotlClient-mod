@@ -31,32 +31,32 @@ import net.minecraft.util.Identifier;
 
 public class iconHud extends BoxHudEntry {
 
-    public Identifier ID = new Identifier("axolotlclient", "iconhud");
+	public Identifier ID = new Identifier("axolotlclient", "iconhud");
 
-    public iconHud() {
-        super(15, 15, false);
-    }
+	public iconHud() {
+		super(15, 15, false);
+	}
 
-    @Override
-    public void renderComponent(MatrixStack matrices, float delta) {
-        DrawPosition pos = getPos();
-        MinecraftClient.getInstance().getTextureManager().bindTexture(AxolotlClient.badgeIcon);
+	@Override
+	public void renderComponent(MatrixStack matrices, float delta) {
+		DrawPosition pos = getPos();
+		MinecraftClient.getInstance().getTextureManager().bindTexture(AxolotlClient.badgeIcon);
 
-        drawTexture(matrices, pos.x, pos.y, 0, 0, width, height, width, height);
-    }
+		drawTexture(matrices, pos.x, pos.y, 0, 0, width, height, width, height);
+	}
 
-    @Override
-    public void renderPlaceholderComponent(MatrixStack matrices, float delta) {
-        render(matrices, delta);
-    }
+	@Override
+	public void renderPlaceholderComponent(MatrixStack matrices, float delta) {
+		render(matrices, delta);
+	}
 
-    @Override
-    public Identifier getId() {
-        return ID;
-    }
+	@Override
+	public Identifier getId() {
+		return ID;
+	}
 
-    @Override
-    public boolean movable() {
-        return true;
-    }
+	@Override
+	public boolean movable() {
+		return true;
+	}
 }

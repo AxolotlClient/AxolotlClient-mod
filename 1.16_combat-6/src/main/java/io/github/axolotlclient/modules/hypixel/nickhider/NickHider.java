@@ -34,52 +34,52 @@ import net.minecraft.text.Text;
 
 public class NickHider implements AbstractHypixelMod {
 
-    @Getter
-    private final static NickHider Instance = new NickHider();
+	@Getter
+	private final static NickHider Instance = new NickHider();
 
-    private final OptionCategory category = new OptionCategory("nickhider");
+	private final OptionCategory category = new OptionCategory("nickhider");
 
-    public StringOption hiddenNameSelf = new StringOption("hiddenNameSelf", "You");
-    public StringOption hiddenNameOthers = new StringOption("hiddenNameOthers", "Player");
-    public BooleanOption hideOwnName = new BooleanOption("hideOwnName", false);
-    public BooleanOption hideOtherNames = new BooleanOption("hideOtherNames", false);
-    public BooleanOption hideOwnSkin = new BooleanOption("hideOwnSkin", false);
-    public BooleanOption hideOtherSkins = new BooleanOption("hideOtherSkins", false);
+	public StringOption hiddenNameSelf = new StringOption("hiddenNameSelf", "You");
+	public StringOption hiddenNameOthers = new StringOption("hiddenNameOthers", "Player");
+	public BooleanOption hideOwnName = new BooleanOption("hideOwnName", false);
+	public BooleanOption hideOtherNames = new BooleanOption("hideOtherNames", false);
+	public BooleanOption hideOwnSkin = new BooleanOption("hideOwnSkin", false);
+	public BooleanOption hideOtherSkins = new BooleanOption("hideOtherSkins", false);
 
-    @Override
-    public void init() {
-        category.add(hiddenNameSelf);
-        category.add(hiddenNameOthers);
-        category.add(hideOwnName);
-        category.add(hideOtherNames);
-        category.add(hideOwnSkin);
-        category.add(hideOtherSkins);
-    }
+	@Override
+	public void init() {
+		category.add(hiddenNameSelf);
+		category.add(hiddenNameOthers);
+		category.add(hideOwnName);
+		category.add(hideOtherNames);
+		category.add(hideOwnSkin);
+		category.add(hideOtherSkins);
+	}
 
-    @Override
-    public OptionCategory getCategory() {
-        return category;
-    }
+	@Override
+	public OptionCategory getCategory() {
+		return category;
+	}
 
-    public Text editMessage(Text message) {
-        if (hideOwnName.get() || hideOtherNames.get()) {
-            String msg = message.getString();
+	public Text editMessage(Text message) {
+		if (hideOwnName.get() || hideOtherNames.get()) {
+			String msg = message.getString();
 
-            String playerName = MinecraftClient.getInstance().player.getName().getString();
-            if (NickHider.Instance.hideOwnName.get() && msg.contains(playerName)) {
-                msg = msg.replaceAll(playerName, NickHider.Instance.hiddenNameSelf.get());
-            }
+			String playerName = MinecraftClient.getInstance().player.getName().getString();
+			if (NickHider.Instance.hideOwnName.get() && msg.contains(playerName)) {
+				msg = msg.replaceAll(playerName, NickHider.Instance.hiddenNameSelf.get());
+			}
 
-            if (NickHider.Instance.hideOtherNames.get()) {
-                for (AbstractClientPlayerEntity player : MinecraftClient.getInstance().world.getPlayers()) {
-                    if (msg.contains(player.getName().getString())) {
-                        msg = msg.replaceAll(player.getName().getString(), NickHider.Instance.hiddenNameOthers.get());
-                    }
-                }
-            }
+			if (NickHider.Instance.hideOtherNames.get()) {
+				for (AbstractClientPlayerEntity player : MinecraftClient.getInstance().world.getPlayers()) {
+					if (msg.contains(player.getName().getString())) {
+						msg = msg.replaceAll(player.getName().getString(), NickHider.Instance.hiddenNameOthers.get());
+					}
+				}
+			}
 
-            return new LiteralText(msg).copy().setStyle(message.getStyle());
-        }
-        return message;
-    }
+			return new LiteralText(msg).copy().setStyle(message.getStyle());
+		}
+		return message;
+	}
 }

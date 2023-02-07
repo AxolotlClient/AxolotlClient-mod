@@ -44,42 +44,42 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(MinecraftClient.class)
 public abstract class MinecraftClientMixin {
 
-    /**
-     * @author meohreag
-     * @reason Customize Window title for use in AxolotlClient
-     */
-    @Inject(method = "getWindowTitle", at = @At("HEAD"), cancellable = true)
-    private void axolotlclient$getWindowTitle(CallbackInfoReturnable<String> cir) {
-        if (AxolotlClient.CONFIG.customWindowTitle.get()) {
-            cir.setReturnValue("AxolotlClient" + " " + SharedConstants.getGameVersion().getName());
-        }
-    }
+	/**
+	 * @author meohreag
+	 * @reason Customize Window title for use in AxolotlClient
+	 */
+	@Inject(method = "getWindowTitle", at = @At("HEAD"), cancellable = true)
+	private void axolotlclient$getWindowTitle(CallbackInfoReturnable<String> cir) {
+		if (AxolotlClient.CONFIG.customWindowTitle.get()) {
+			cir.setReturnValue("AxolotlClient" + " " + SharedConstants.getGameVersion().getName());
+		}
+	}
 
-    @Redirect(method = "<init>", at = @At(value = "FIELD", target = "Lnet/minecraft/client/RunArgs$Game;version:Ljava/lang/String;"))
-    private String axolotlclient$redirectVersion(RunArgs.Game game) {
-        ResourceLoader.get(ResourceType.CLIENT_RESOURCES).registerReloader(SkyResourceManager.getInstance());
-        return SharedConstants.getGameVersion().getName();
-    }
+	@Redirect(method = "<init>", at = @At(value = "FIELD", target = "Lnet/minecraft/client/RunArgs$Game;version:Ljava/lang/String;"))
+	private String axolotlclient$redirectVersion(RunArgs.Game game) {
+		ResourceLoader.get(ResourceType.CLIENT_RESOURCES).registerReloader(SkyResourceManager.getInstance());
+		return SharedConstants.getGameVersion().getName();
+	}
 
-    @Inject(method = "getVersionType", at = @At("HEAD"), cancellable = true)
-    public void axolotlclient$noVersionType(CallbackInfoReturnable<String> cir) {
-        if (QuiltLoader.getModContainer("axolotlclient").isPresent()) {
-            cir.setReturnValue(QuiltLoader.getModContainer("axolotlclient").get().metadata().version().raw());
-        }
-    }
+	@Inject(method = "getVersionType", at = @At("HEAD"), cancellable = true)
+	public void axolotlclient$noVersionType(CallbackInfoReturnable<String> cir) {
+		if (QuiltLoader.getModContainer("axolotlclient").isPresent()) {
+			cir.setReturnValue(QuiltLoader.getModContainer("axolotlclient").get().metadata().version().raw());
+		}
+	}
 
-    @Inject(method = "stop", at = @At("HEAD"))
-    public void axolotlclient$stop(CallbackInfo ci) {
-        if (AxolotlClient.CONFIG.showBadges.get()) {
-            NetworkHelper.setOffline();
-        }
-        DiscordRPC.shutdown();
-    }
+	@Inject(method = "stop", at = @At("HEAD"))
+	public void axolotlclient$stop(CallbackInfo ci) {
+		if (AxolotlClient.CONFIG.showBadges.get()) {
+			NetworkHelper.setOffline();
+		}
+		DiscordRPC.shutdown();
+	}
 
-    @Inject(method = "setScreen", at = @At("HEAD"))
-    private void axolotlclient$onScreenOpen(Screen screen, CallbackInfo ci) {
-        if (MinecraftClient.getInstance().currentScreen == null) {
-            MenuBlur.getInstance().onScreenOpen();
-        }
-    }
+	@Inject(method = "setScreen", at = @At("HEAD"))
+	private void axolotlclient$onScreenOpen(Screen screen, CallbackInfo ci) {
+		if (MinecraftClient.getInstance().currentScreen == null) {
+			MenuBlur.getInstance().onScreenOpen();
+		}
+	}
 }

@@ -39,57 +39,57 @@ import java.util.List;
 
 public class HypixelMods extends AbstractModule {
 
-    public static final HypixelMods INSTANCE = new HypixelMods();
+	public static final HypixelMods INSTANCE = new HypixelMods();
 
-    public StringOption hypixel_api_key = new StringOption("hypixel_api_key", "");
-    public EnumOption cacheMode = new EnumOption("cache_mode", HypixelApiCacheMode.values(),
-            HypixelApiCacheMode.ON_CLIENT_DISCONNECT.toString());
+	public StringOption hypixel_api_key = new StringOption("hypixel_api_key", "");
+	public EnumOption cacheMode = new EnumOption("cache_mode", HypixelApiCacheMode.values(),
+			HypixelApiCacheMode.ON_CLIENT_DISCONNECT.toString());
 
-    private final OptionCategory category = new OptionCategory("hypixel-mods");
-    private final List<AbstractHypixelMod> subModules = new ArrayList<>();
+	private final OptionCategory category = new OptionCategory("hypixel-mods");
+	private final List<AbstractHypixelMod> subModules = new ArrayList<>();
 
-    @Override
-    public void init() {
-        category.add(hypixel_api_key);
-        category.add(cacheMode);
+	@Override
+	public void init() {
+		category.add(hypixel_api_key);
+		category.add(cacheMode);
 
-        addSubModule(LevelHead.getInstance());
-        addSubModule(AutoGG.getInstance());
-        addSubModule(AutoTip.getInstance());
-        addSubModule(NickHider.getInstance());
-        addSubModule(AutoBoop.getInstance());
-        addSubModule(Skyblock.getInstance());
+		addSubModule(LevelHead.getInstance());
+		addSubModule(AutoGG.getInstance());
+		addSubModule(AutoTip.getInstance());
+		addSubModule(NickHider.getInstance());
+		addSubModule(AutoBoop.getInstance());
+		addSubModule(Skyblock.getInstance());
 
-        subModules.forEach(AbstractHypixelMod::init);
+		subModules.forEach(AbstractHypixelMod::init);
 
-        AxolotlClient.CONFIG.addCategory(category);
-    }
+		AxolotlClient.CONFIG.addCategory(category);
+	}
 
-    @Override
-    public void tick() {
-        subModules.forEach(abstractHypixelMod -> {
-            if (abstractHypixelMod.tickable())
-                abstractHypixelMod.tick();
-        });
-    }
+	@Override
+	public void tick() {
+		subModules.forEach(abstractHypixelMod -> {
+			if (abstractHypixelMod.tickable())
+				abstractHypixelMod.tick();
+		});
+	}
 
-    @Override
-    public void lateInit() {
-        HypixelAbstractionLayer.setApiKeySupplier(() -> hypixel_api_key.get());
-        HypixelAbstractionLayer.loadApiKey();
-    }
+	@Override
+	public void lateInit() {
+		HypixelAbstractionLayer.setApiKeySupplier(() -> hypixel_api_key.get());
+		HypixelAbstractionLayer.loadApiKey();
+	}
 
-    public static HypixelMods getInstance() {
-        return INSTANCE;
-    }
+	public static HypixelMods getInstance() {
+		return INSTANCE;
+	}
 
-    private void addSubModule(AbstractHypixelMod mod) {
-        this.subModules.add(mod);
-        this.category.addSubCategory(mod.getCategory());
-    }
+	private void addSubModule(AbstractHypixelMod mod) {
+		this.subModules.add(mod);
+		this.category.addSubCategory(mod.getCategory());
+	}
 
-    public enum HypixelApiCacheMode {
-        ON_CLIENT_DISCONNECT, ON_PLAYER_DISCONNECT,
+	public enum HypixelApiCacheMode {
+		ON_CLIENT_DISCONNECT, ON_PLAYER_DISCONNECT,
 
-    }
+	}
 }

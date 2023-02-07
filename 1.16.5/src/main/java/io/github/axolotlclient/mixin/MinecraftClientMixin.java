@@ -41,46 +41,46 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(MinecraftClient.class)
 public abstract class MinecraftClientMixin {
 
-    /**
-     * @author meohreag
-     * @reason Customize Window title for use in AxolotlClient
-     */
-    @Inject(method = "getWindowTitle", at = @At("HEAD"), cancellable = true)
-    private void axolotlclient$getWindowTitle(CallbackInfoReturnable<String> cir) {
-        if (AxolotlClient.CONFIG.customWindowTitle.get()) {
-            cir.setReturnValue("AxolotlClient" + " " + SharedConstants.getGameVersion().getName());
-        }
-    }
+	/**
+	 * @author meohreag
+	 * @reason Customize Window title for use in AxolotlClient
+	 */
+	@Inject(method = "getWindowTitle", at = @At("HEAD"), cancellable = true)
+	private void axolotlclient$getWindowTitle(CallbackInfoReturnable<String> cir) {
+		if (AxolotlClient.CONFIG.customWindowTitle.get()) {
+			cir.setReturnValue("AxolotlClient" + " " + SharedConstants.getGameVersion().getName());
+		}
+	}
 
-    @Redirect(method = "<init>", at = @At(value = "FIELD", target = "Lnet/minecraft/client/RunArgs$Game;version:Ljava/lang/String;"))
-    private String axolotlclient$redirectVersion(RunArgs.Game game) {
-        return SharedConstants.getGameVersion().getName();
-    }
+	@Redirect(method = "<init>", at = @At(value = "FIELD", target = "Lnet/minecraft/client/RunArgs$Game;version:Ljava/lang/String;"))
+	private String axolotlclient$redirectVersion(RunArgs.Game game) {
+		return SharedConstants.getGameVersion().getName();
+	}
 
-    @Inject(method = "getVersionType", at = @At("HEAD"), cancellable = true)
-    public void axolotlclient$noVersionType(CallbackInfoReturnable<String> cir) {
-        if (FabricLoader.getInstance().getModContainer("axolotlclient").isPresent()) {
-            cir.setReturnValue(FabricLoader.getInstance().getModContainer("axolotlclient").get().getMetadata().getVersion().getFriendlyString());
-        }
-    }
+	@Inject(method = "getVersionType", at = @At("HEAD"), cancellable = true)
+	public void axolotlclient$noVersionType(CallbackInfoReturnable<String> cir) {
+		if (FabricLoader.getInstance().getModContainer("axolotlclient").isPresent()) {
+			cir.setReturnValue(FabricLoader.getInstance().getModContainer("axolotlclient").get().getMetadata().getVersion().getFriendlyString());
+		}
+	}
 
-    @Inject(method = "stop", at = @At("HEAD"))
-    public void axolotlclient$stop(CallbackInfo ci) {
-        if (AxolotlClient.CONFIG.showBadges.get()) {
-            NetworkHelper.setOffline();
-        }
-        DiscordRPC.shutdown();
-    }
+	@Inject(method = "stop", at = @At("HEAD"))
+	public void axolotlclient$stop(CallbackInfo ci) {
+		if (AxolotlClient.CONFIG.showBadges.get()) {
+			NetworkHelper.setOffline();
+		}
+		DiscordRPC.shutdown();
+	}
 
-    @Inject(method = "openScreen", at = @At("HEAD"))
-    private void axolotlclient$onScreenOpen(Screen screen, CallbackInfo ci) {
-        if (MinecraftClient.getInstance().currentScreen == null) {
-            MenuBlur.getInstance().onScreenOpen();
-        }
-    }
+	@Inject(method = "openScreen", at = @At("HEAD"))
+	private void axolotlclient$onScreenOpen(Screen screen, CallbackInfo ci) {
+		if (MinecraftClient.getInstance().currentScreen == null) {
+			MenuBlur.getInstance().onScreenOpen();
+		}
+	}
 
-    @Inject(method = "isModded", at = @At("HEAD"), cancellable = true)
-    private void axolotlclient$noModdedSigns(CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(false);
-    }
+	@Inject(method = "isModded", at = @At("HEAD"), cancellable = true)
+	private void axolotlclient$noModdedSigns(CallbackInfoReturnable<Boolean> cir) {
+		cir.setReturnValue(false);
+	}
 }

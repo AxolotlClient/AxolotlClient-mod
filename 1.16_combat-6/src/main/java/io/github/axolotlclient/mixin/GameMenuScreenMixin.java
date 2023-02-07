@@ -40,21 +40,21 @@ import java.util.Objects;
 @Mixin(GameMenuScreen.class)
 public abstract class GameMenuScreenMixin {
 
-    @ModifyArgs(method = "initWidgets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget;<init>(IIIILnet/minecraft/text/Text;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;)V", ordinal = 3))
-    public void addClientOptionsButton(Args args) {
-        args.set(4, new TranslatableText("title_short"));
-        args.set(5, (ButtonWidget.PressAction) (buttonWidget) -> MinecraftClient.getInstance()
-                .openScreen(new HudEditScreen(((GameMenuScreen) (Object) this))));
-    }
+	@ModifyArgs(method = "initWidgets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget;<init>(IIIILnet/minecraft/text/Text;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;)V", ordinal = 3))
+	public void addClientOptionsButton(Args args) {
+		args.set(4, new TranslatableText("title_short"));
+		args.set(5, (ButtonWidget.PressAction) (buttonWidget) -> MinecraftClient.getInstance()
+				.openScreen(new HudEditScreen(((GameMenuScreen) (Object) this))));
+	}
 
-    @ModifyArg(method = "initWidgets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget;<init>(IIIILnet/minecraft/text/Text;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;)V", ordinal = 1), index = 5)
-    private ButtonWidget.PressAction axolotlclient$clearFeatureRestrictions(ButtonWidget.PressAction onPress){
-        return (buttonWidget) -> {
-            if (Objects.equals(HypixelMods.getInstance().cacheMode.get(),
-                    HypixelMods.HypixelCacheMode.ON_CLIENT_DISCONNECT.toString())) {
-                HypixelAbstractionLayer.clearPlayerData();
-            }
-            onPress.onPress(buttonWidget);
-        };
-    }
+	@ModifyArg(method = "initWidgets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget;<init>(IIIILnet/minecraft/text/Text;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;)V", ordinal = 1), index = 5)
+	private ButtonWidget.PressAction axolotlclient$clearFeatureRestrictions(ButtonWidget.PressAction onPress) {
+		return (buttonWidget) -> {
+			if (Objects.equals(HypixelMods.getInstance().cacheMode.get(),
+					HypixelMods.HypixelCacheMode.ON_CLIENT_DISCONNECT.toString())) {
+				HypixelAbstractionLayer.clearPlayerData();
+			}
+			onPress.onPress(buttonWidget);
+		};
+	}
 }

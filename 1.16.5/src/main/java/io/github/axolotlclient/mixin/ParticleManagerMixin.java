@@ -46,52 +46,52 @@ import java.util.Queue;
 @Mixin(ParticleManager.class)
 public abstract class ParticleManagerMixin {
 
-    @Shadow
-    protected abstract void tickParticle(Particle particle);
+	@Shadow
+	protected abstract void tickParticle(Particle particle);
 
-    private ParticleType<?> cachedType;
+	private ParticleType<?> cachedType;
 
-    @Inject(method = "addParticle(Lnet/minecraft/particle/ParticleEffect;DDDDDD)Lnet/minecraft/client/particle/Particle;", at = @At(value = "HEAD"), cancellable = true)
-    public void axolotlclient$afterCreation(ParticleEffect parameters, double x, double y, double z, double velocityX,
-                                            double velocityY, double velocityZ, CallbackInfoReturnable<Particle> cir) {
-        cachedType = parameters.getType();
+	@Inject(method = "addParticle(Lnet/minecraft/particle/ParticleEffect;DDDDDD)Lnet/minecraft/client/particle/Particle;", at = @At(value = "HEAD"), cancellable = true)
+	public void axolotlclient$afterCreation(ParticleEffect parameters, double x, double y, double z, double velocityX,
+											double velocityY, double velocityZ, CallbackInfoReturnable<Particle> cir) {
+		cachedType = parameters.getType();
 
-        if (!Particles.getInstance().getShowParticle(cachedType)) {
-            cir.setReturnValue(null);
-            cir.cancel();
-        }
-    }
+		if (!Particles.getInstance().getShowParticle(cachedType)) {
+			cir.setReturnValue(null);
+			cir.cancel();
+		}
+	}
 
-    @Inject(method = "addParticle(Lnet/minecraft/client/particle/Particle;)V", at = @At(value = "HEAD"))
-    public void axolotlclient$afterCreation(Particle particle, CallbackInfo ci) {
-        if (cachedType != null) {
-            Particles.getInstance().particleMap.put(particle, cachedType);
-            cachedType = null;
-        }
-    }
+	@Inject(method = "addParticle(Lnet/minecraft/client/particle/Particle;)V", at = @At(value = "HEAD"))
+	public void axolotlclient$afterCreation(Particle particle, CallbackInfo ci) {
+		if (cachedType != null) {
+			Particles.getInstance().particleMap.put(particle, cachedType);
+			cachedType = null;
+		}
+	}
 
-    @Redirect(method = "tickParticles", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/particle/ParticleManager;tickParticle(Lnet/minecraft/client/particle/Particle;)V"))
-    public void axolotlclient$removeParticlesWhenRemoved(ParticleManager instance, Particle particle) {
-        if (!particle.isAlive()) {
-            Particles.getInstance().particleMap.remove(particle);
-        }
-        tickParticle(particle);
-    }
+	@Redirect(method = "tickParticles", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/particle/ParticleManager;tickParticle(Lnet/minecraft/client/particle/Particle;)V"))
+	public void axolotlclient$removeParticlesWhenRemoved(ParticleManager instance, Particle particle) {
+		if (!particle.isAlive()) {
+			Particles.getInstance().particleMap.remove(particle);
+		}
+		tickParticle(particle);
+	}
 
-    @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Ljava/util/Queue;removeAll(Ljava/util/Collection;)Z"))
-    public boolean axolotlclient$removeEmitterParticlesWhenRemoved(Queue<Particle> instance, Collection<Particle> collection) {
-        collection.forEach(particle -> Particles.getInstance().particleMap.remove(particle));
+	@Redirect(method = "tick", at = @At(value = "INVOKE", target = "Ljava/util/Queue;removeAll(Ljava/util/Collection;)Z"))
+	public boolean axolotlclient$removeEmitterParticlesWhenRemoved(Queue<Particle> instance, Collection<Particle> collection) {
+		collection.forEach(particle -> Particles.getInstance().particleMap.remove(particle));
 
-        return instance.removeAll(collection);
-    }
+		return instance.removeAll(collection);
+	}
 
-    @Inject(method = "renderParticles", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/particle/Particle;buildGeometry(Lnet/minecraft/client/render/VertexConsumer;Lnet/minecraft/client/render/Camera;F)V"), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
-    private void axolotlclient$applyOptions(MatrixStack matrixStack, VertexConsumerProvider.Immediate immediate,
-                                            LightmapTextureManager lightmapTextureManager, Camera camera, float f,
-                                            CallbackInfo ci, Iterator<Particle> iterator, ParticleTextureSheet sheet, Iterable<Particle> iterable,
-                                            Tessellator tessellator, BufferBuilder bufferBuilder, Iterator<Particle> iterator2, Particle particle) {
-        if (Particles.getInstance().particleMap.containsKey(particle)) {
-            Particles.getInstance().applyOptions(particle);
-        }
-    }
+	@Inject(method = "renderParticles", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/particle/Particle;buildGeometry(Lnet/minecraft/client/render/VertexConsumer;Lnet/minecraft/client/render/Camera;F)V"), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
+	private void axolotlclient$applyOptions(MatrixStack matrixStack, VertexConsumerProvider.Immediate immediate,
+											LightmapTextureManager lightmapTextureManager, Camera camera, float f,
+											CallbackInfo ci, Iterator<Particle> iterator, ParticleTextureSheet sheet, Iterable<Particle> iterable,
+											Tessellator tessellator, BufferBuilder bufferBuilder, Iterator<Particle> iterator2, Particle particle) {
+		if (Particles.getInstance().particleMap.containsKey(particle)) {
+			Particles.getInstance().applyOptions(particle);
+		}
+	}
 }

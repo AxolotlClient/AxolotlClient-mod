@@ -54,10 +54,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(PlayerListHud.class)
 public abstract class PlayerListHudMixin {
 
-    @Shadow
-    private Text header;
-    @Shadow
-    private Text footer;
+	@Shadow
+	private Text header;
+	@Shadow
+	private Text footer;
 
 	@Shadow
 	protected abstract Text applyGameModeFormatting(PlayerListEntry par1, MutableText par2);
@@ -92,63 +92,63 @@ public abstract class PlayerListHudMixin {
 	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/Text;FFI)I"))
 	public int axolotlclient$moveName2(TextRenderer instance, MatrixStack matrices, Text text, float x, float y, int color) {
 		if (profile != null && AxolotlClient.CONFIG.showBadges.get() && AxolotlClient.isUsingClient(profile.getId())) {
-            MinecraftClient.getInstance().getTextureManager().bindTexture(AxolotlClient.badgeIcon);
-            RenderSystem.color4f(1, 1, 1, 1);
+			MinecraftClient.getInstance().getTextureManager().bindTexture(AxolotlClient.badgeIcon);
+			RenderSystem.color4f(1, 1, 1, 1);
 
-            DrawableHelper.drawTexture(matrices, (int) x, (int) y, 8, 8, 0, 0, 8, 8, 8, 8);
+			DrawableHelper.drawTexture(matrices, (int) x, (int) y, 8, 8, 0, 0, 8, 8, 8, 8);
 
-            x += 9;
-        }
-        profile = null;
-        return instance.drawWithShadow(matrices, text, x, y, color);
-    }
+			x += 9;
+		}
+		profile = null;
+		return instance.drawWithShadow(matrices, text, x, y, color);
+	}
 
-    @ModifyArg(method = "getPlayerName", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;applyGameModeFormatting(Lnet/minecraft/client/network/PlayerListEntry;Lnet/minecraft/text/MutableText;)Lnet/minecraft/text/Text;"), index = 1)
-    public MutableText axolotlclient$hideNames(MutableText par2) {
-        if (NickHider.getInstance().hideOwnName.get()) {
-            return new LiteralText(NickHider.getInstance().hiddenNameSelf.get());
-        }
-        if (NickHider.getInstance().hideOtherNames.get()) {
-            return new LiteralText(NickHider.getInstance().hiddenNameOthers.get());
-        }
-        return par2;
-    }
+	@ModifyArg(method = "getPlayerName", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;applyGameModeFormatting(Lnet/minecraft/client/network/PlayerListEntry;Lnet/minecraft/text/MutableText;)Lnet/minecraft/text/Text;"), index = 1)
+	public MutableText axolotlclient$hideNames(MutableText par2) {
+		if (NickHider.getInstance().hideOwnName.get()) {
+			return new LiteralText(NickHider.getInstance().hiddenNameSelf.get());
+		}
+		if (NickHider.getInstance().hideOtherNames.get()) {
+			return new LiteralText(NickHider.getInstance().hiddenNameOthers.get());
+		}
+		return par2;
+	}
 
-    @Inject(method = "renderLatencyIcon", at = @At("HEAD"), cancellable = true)
-    private void axolotlclient$numericalPing(MatrixStack matrices, int width, int x, int y, PlayerListEntry entry, CallbackInfo ci) {
-        if (Tablist.getInstance().renderNumericPing(matrices, width, x, y, entry)) {
-            ci.cancel();
-        }
-    }
+	@Inject(method = "renderLatencyIcon", at = @At("HEAD"), cancellable = true)
+	private void axolotlclient$numericalPing(MatrixStack matrices, int width, int x, int y, PlayerListEntry entry, CallbackInfo ci) {
+		if (Tablist.getInstance().renderNumericPing(matrices, width, x, y, entry)) {
+			ci.cancel();
+		}
+	}
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;isInSingleplayer()Z"))
-    private boolean showPlayerHeads$1(MinecraftClient instance) {
-        if (Tablist.getInstance().showPlayerHeads.get()) {
-            return instance.isInSingleplayer();
-        }
-        return false;
-    }
+	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;isInSingleplayer()Z"))
+	private boolean showPlayerHeads$1(MinecraftClient instance) {
+		if (Tablist.getInstance().showPlayerHeads.get()) {
+			return instance.isInSingleplayer();
+		}
+		return false;
+	}
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ClientConnection;isEncrypted()Z"))
-    private boolean axolotlclient$showPlayerHeads$1(ClientConnection instance) {
-        if (Tablist.getInstance().showPlayerHeads.get()) {
-            return instance.isEncrypted();
-        }
-        return false;
-    }
+	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ClientConnection;isEncrypted()Z"))
+	private boolean axolotlclient$showPlayerHeads$1(ClientConnection instance) {
+		if (Tablist.getInstance().showPlayerHeads.get()) {
+			return instance.isEncrypted();
+		}
+		return false;
+	}
 
-    @Inject(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;header:Lnet/minecraft/text/Text;"))
-    private void axolotlclient$setRenderHeaderFooter(MatrixStack matrices, int scaledWindowWidth, Scoreboard scoreboard, ScoreboardObjective objective, CallbackInfo ci) {
-        if (!Tablist.getInstance().showHeader.get()) {
-            header = null;
-        }
-        if (!Tablist.getInstance().showFooter.get()) {
-            footer = null;
-        }
-    }
+	@Inject(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;header:Lnet/minecraft/text/Text;"))
+	private void axolotlclient$setRenderHeaderFooter(MatrixStack matrices, int scaledWindowWidth, Scoreboard scoreboard, ScoreboardObjective objective, CallbackInfo ci) {
+		if (!Tablist.getInstance().showHeader.get()) {
+			header = null;
+		}
+		if (!Tablist.getInstance().showFooter.get()) {
+			footer = null;
+		}
+	}
 
 	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;isPartVisible(Lnet/minecraft/client/render/entity/PlayerModelPart;)Z", ordinal = 1))
-	private boolean axolotlclient$alwaysShowHeadLayer(PlayerEntity instance, PlayerModelPart modelPart){
+	private boolean axolotlclient$alwaysShowHeadLayer(PlayerEntity instance, PlayerModelPart modelPart) {
 		return Tablist.getInstance().alwaysShowHeadLayer.get() || instance.isPartVisible(modelPart);
 	}
 }

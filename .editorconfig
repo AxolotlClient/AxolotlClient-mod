@@ -16,6 +16,3 @@ tab_width = 2
 
 [*.properties]
 indent_size = 2
-
-[.editorconfig]
-indent_size = 4

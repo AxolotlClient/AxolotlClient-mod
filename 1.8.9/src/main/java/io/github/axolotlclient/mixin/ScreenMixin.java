@@ -45,48 +45,48 @@ import java.net.URI;
 @Mixin(Screen.class)
 public abstract class ScreenMixin {
 
-    @Shadow
-    public int height;
+	@Shadow
+	public int height;
 
-    @ModifyArgs(method = "renderTooltip(Lnet/minecraft/item/ItemStack;II)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;renderTooltip(Ljava/util/List;II)V"))
-    public void axolotlclient$modifyTooltipPosition(Args args) {
-        if (ScrollableTooltips.getInstance().enabled.get()) {
-            if ((MinecraftClient.getInstance().currentScreen instanceof CreativeInventoryScreen)
-                    && ((CreativeInventoryScreen) MinecraftClient.getInstance().currentScreen)
-                    .getSelectedTab() != ItemGroup.INVENTORY.getIndex()) {
-                return;
-            }
+	@ModifyArgs(method = "renderTooltip(Lnet/minecraft/item/ItemStack;II)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;renderTooltip(Ljava/util/List;II)V"))
+	public void axolotlclient$modifyTooltipPosition(Args args) {
+		if (ScrollableTooltips.getInstance().enabled.get()) {
+			if ((MinecraftClient.getInstance().currentScreen instanceof CreativeInventoryScreen)
+					&& ((CreativeInventoryScreen) MinecraftClient.getInstance().currentScreen)
+					.getSelectedTab() != ItemGroup.INVENTORY.getIndex()) {
+				return;
+			}
 
-            ScrollableTooltips.getInstance().onRenderTooltip();
-            args.set(1, (int) args.get(1) + ScrollableTooltips.getInstance().tooltipOffsetX);
-            args.set(2, (int) args.get(2) + ScrollableTooltips.getInstance().tooltipOffsetY);
-        }
-    }
+			ScrollableTooltips.getInstance().onRenderTooltip();
+			args.set(1, (int) args.get(1) + ScrollableTooltips.getInstance().tooltipOffsetX);
+			args.set(2, (int) args.get(2) + ScrollableTooltips.getInstance().tooltipOffsetY);
+		}
+	}
 
-    @ModifyConstant(method = "renderTooltip(Ljava/util/List;II)V", constant = @Constant(intValue = 6))
-    public int axolotlclient$noLimit(int constant) {
-        return -(height * 2);
-    }
+	@ModifyConstant(method = "renderTooltip(Ljava/util/List;II)V", constant = @Constant(intValue = 6))
+	public int axolotlclient$noLimit(int constant) {
+		return -(height * 2);
+	}
 
-    @Inject(method = "openLink", at = @At("HEAD"), cancellable = true)
-    public void axolotlclient$openLink(URI link, CallbackInfo ci) {
-        OSUtil.getOS().open(link, AxolotlClient.LOGGER);
-        ci.cancel();
-    }
+	@Inject(method = "openLink", at = @At("HEAD"), cancellable = true)
+	public void axolotlclient$openLink(URI link, CallbackInfo ci) {
+		OSUtil.getOS().open(link, AxolotlClient.LOGGER);
+		ci.cancel();
+	}
 
-    @Inject(method = "handleTextClick", at = @At(value = "INVOKE", target = "Lnet/minecraft/text/ClickEvent;getAction()Lnet/minecraft/text/ClickEvent$Action;", ordinal = 0), cancellable = true)
-    public void axolotlclient$customClickEvents(Text text, CallbackInfoReturnable<Boolean> cir) {
-        ClickEvent event = text.getStyle().getClickEvent();
-        if (event instanceof ScreenshotUtils.CustomClickEvent) {
-            ((ScreenshotUtils.CustomClickEvent) event).doAction();
-            cir.setReturnValue(true);
-        }
-    }
+	@Inject(method = "handleTextClick", at = @At(value = "INVOKE", target = "Lnet/minecraft/text/ClickEvent;getAction()Lnet/minecraft/text/ClickEvent$Action;", ordinal = 0), cancellable = true)
+	public void axolotlclient$customClickEvents(Text text, CallbackInfoReturnable<Boolean> cir) {
+		ClickEvent event = text.getStyle().getClickEvent();
+		if (event instanceof ScreenshotUtils.CustomClickEvent) {
+			((ScreenshotUtils.CustomClickEvent) event).doAction();
+			cir.setReturnValue(true);
+		}
+	}
 
-    @Inject(method = "renderBackground(I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;fillGradient(IIIIII)V"), cancellable = true)
-    private void axolotlclient$menuBlur(int alpha, CallbackInfo ci) {
-        if (MenuBlur.getInstance().renderScreen()) {
-            ci.cancel();
-        }
-    }
+	@Inject(method = "renderBackground(I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;fillGradient(IIIIII)V"), cancellable = true)
+	private void axolotlclient$menuBlur(int alpha, CallbackInfo ci) {
+		if (MenuBlur.getInstance().renderScreen()) {
+			ci.cancel();
+		}
+	}
 }

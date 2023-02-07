@@ -53,63 +53,63 @@ public abstract class EntityRendererMixin<T extends Entity> {
 	protected EntityRenderDispatcher dispatcher;
 
 	@Inject(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;rotate(FFFF)V", ordinal = 1))
-	private void axolotlclient$correctNameplateRotation(Entity entity, String string, double d, double e, double f, int i, CallbackInfo ci){
-		if(MinecraftClient.getInstance().options.perspective == Perspective.THIRD_PERSON_FRONT.ordinal()){
-			GlStateManager.rotate(-this.dispatcher.pitch*2, 1.0F, 0.0F, 0.0F);
+	private void axolotlclient$correctNameplateRotation(Entity entity, String string, double d, double e, double f, int i, CallbackInfo ci) {
+		if (MinecraftClient.getInstance().options.perspective == Perspective.THIRD_PERSON_FRONT.ordinal()) {
+			GlStateManager.rotate(-this.dispatcher.pitch * 2, 1.0F, 0.0F, 0.0F);
 		}
 	}
 
-    @Inject(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Ljava/lang/String;III)I"))
-    public void axolotlclient$addBadges(T entity, String string, double d, double e, double f, int i, CallbackInfo ci) {
-        if (entity instanceof AbstractClientPlayerEntity && string.contains(entity.getName().asFormattedString()))
-            AxolotlClient.addBadge(entity);
-    }
+	@Inject(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Ljava/lang/String;III)I"))
+	public void axolotlclient$addBadges(T entity, String string, double d, double e, double f, int i, CallbackInfo ci) {
+		if (entity instanceof AbstractClientPlayerEntity && string.contains(entity.getName().asFormattedString()))
+			AxolotlClient.addBadge(entity);
+	}
 
-    @Redirect(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Ljava/lang/String;III)I"))
-    public int axolotlclient$forceShadows(TextRenderer instance, String text, int x, int y, int color) {
-        instance.draw(text, x, y, color, AxolotlClient.CONFIG.useShadows.get());
-        return 0;
-    }
+	@Redirect(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Ljava/lang/String;III)I"))
+	public int axolotlclient$forceShadows(TextRenderer instance, String text, int x, int y, int color) {
+		instance.draw(text, x, y, color, AxolotlClient.CONFIG.useShadows.get());
+		return 0;
+	}
 
-    @Inject(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Ljava/lang/String;III)I", ordinal = 1))
-    public void axolotlclient$addLevel(T entity, String string, double d, double e, double f, int i, CallbackInfo ci) {
-        if (entity instanceof AbstractClientPlayerEntity) {
-            if (Util.currentServerAddressContains("hypixel.net")) {
-                if (HypixelAbstractionLayer.hasValidAPIKey() && LevelHead.getInstance().enabled.get()
-                        && string.contains(entity.getName().asFormattedString())) {
-                    TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
-                    String text = "Level: " + HypixelAbstractionLayer.getPlayerLevel(String.valueOf(entity.getUuid()), LevelHead.getInstance().mode.get());
+	@Inject(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Ljava/lang/String;III)I", ordinal = 1))
+	public void axolotlclient$addLevel(T entity, String string, double d, double e, double f, int i, CallbackInfo ci) {
+		if (entity instanceof AbstractClientPlayerEntity) {
+			if (Util.currentServerAddressContains("hypixel.net")) {
+				if (HypixelAbstractionLayer.hasValidAPIKey() && LevelHead.getInstance().enabled.get()
+						&& string.contains(entity.getName().asFormattedString())) {
+					TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
+					String text = "Level: " + HypixelAbstractionLayer.getPlayerLevel(String.valueOf(entity.getUuid()), LevelHead.getInstance().mode.get());
 
-                    float x = textRenderer.getStringWidth(text) / 2F;
-                    int y = string.contains("deadmau5") ? -20 : -10;
+					float x = textRenderer.getStringWidth(text) / 2F;
+					int y = string.contains("deadmau5") ? -20 : -10;
 
-                    if (LevelHead.getInstance().background.get()) {
-                        Tessellator tessellator = Tessellator.getInstance();
-                        BufferBuilder bufferBuilder = tessellator.getBuffer();
-                        GlStateManager.disableTexture();
-                        bufferBuilder.begin(7, VertexFormats.POSITION_COLOR);
-                        bufferBuilder.vertex(-x - 1, -1 + y, 0.0).color(0.0F, 0.0F, 0.0F, 0.25F).next();
-                        bufferBuilder.vertex(-x - 1, 8 + y, 0.0).color(0.0F, 0.0F, 0.0F, 0.25F).next();
-                        bufferBuilder.vertex(x + 1, 8 + y, 0.0).color(0.0F, 0.0F, 0.0F, 0.25F).next();
-                        bufferBuilder.vertex(x + 1, -1 + y, 0.0).color(0.0F, 0.0F, 0.0F, 0.25F).next();
-                        tessellator.draw();
-                        GlStateManager.enableTexture();
-                    }
+					if (LevelHead.getInstance().background.get()) {
+						Tessellator tessellator = Tessellator.getInstance();
+						BufferBuilder bufferBuilder = tessellator.getBuffer();
+						GlStateManager.disableTexture();
+						bufferBuilder.begin(7, VertexFormats.POSITION_COLOR);
+						bufferBuilder.vertex(-x - 1, -1 + y, 0.0).color(0.0F, 0.0F, 0.0F, 0.25F).next();
+						bufferBuilder.vertex(-x - 1, 8 + y, 0.0).color(0.0F, 0.0F, 0.0F, 0.25F).next();
+						bufferBuilder.vertex(x + 1, 8 + y, 0.0).color(0.0F, 0.0F, 0.0F, 0.25F).next();
+						bufferBuilder.vertex(x + 1, -1 + y, 0.0).color(0.0F, 0.0F, 0.0F, 0.25F).next();
+						tessellator.draw();
+						GlStateManager.enableTexture();
+					}
 
-                    textRenderer.draw(text, -x, y, LevelHead.getInstance().textColor.get().getAsInt(),
-                            AxolotlClient.CONFIG.useShadows.get());
-                } else if (!HypixelAbstractionLayer.hasValidAPIKey()) {
-                    HypixelAbstractionLayer.loadApiKey();
-                }
-            }
-        }
-    }
+					textRenderer.draw(text, -x, y, LevelHead.getInstance().textColor.get().getAsInt(),
+							AxolotlClient.CONFIG.useShadows.get());
+				} else if (!HypixelAbstractionLayer.hasValidAPIKey()) {
+					HypixelAbstractionLayer.loadApiKey();
+				}
+			}
+		}
+	}
 
-    @Redirect(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/BufferBuilder;vertex(DDD)Lnet/minecraft/client/render/BufferBuilder;"))
-    public BufferBuilder axolotlclient$noBg(BufferBuilder instance, double d, double e, double f) {
-        if (AxolotlClient.CONFIG.nametagBackground.get()) {
-            instance.vertex(d, e, f);
-        }
-        return instance;
-    }
+	@Redirect(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/BufferBuilder;vertex(DDD)Lnet/minecraft/client/render/BufferBuilder;"))
+	public BufferBuilder axolotlclient$noBg(BufferBuilder instance, double d, double e, double f) {
+		if (AxolotlClient.CONFIG.nametagBackground.get()) {
+			instance.vertex(d, e, f);
+		}
+		return instance;
+	}
 }

@@ -32,12 +32,12 @@ import java.util.List;
 @Mixin(ChatHud.class)
 public interface ChatHudAccessor {
 
-    @Accessor
-    int getScrolledLines();
+	@Accessor
+	int getScrolledLines();
 
-    @Accessor
-    List<ChatHudLine> getMessages();
+	@Accessor
+	List<ChatHudLine> getMessages();
 
-    @Accessor
-    List<ChatHudLine> getVisibleMessages();
+	@Accessor
+	List<ChatHudLine> getVisibleMessages();
 }

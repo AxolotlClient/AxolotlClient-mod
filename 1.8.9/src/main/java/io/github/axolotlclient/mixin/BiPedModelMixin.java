@@ -33,33 +33,33 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(BiPedModel.class)
 public abstract class BiPedModelMixin {
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/ModelPart;render(F)V", ordinal = 6))
-    public void axolotlclient$translucentHatOne(ModelPart instance, float scale) {
-        GlStateManager.pushMatrix();
+	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/ModelPart;render(F)V", ordinal = 6))
+	public void axolotlclient$translucentHatOne(ModelPart instance, float scale) {
+		GlStateManager.pushMatrix();
 
-        GlStateManager.enableCull();
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        instance.render(scale);
-        GlStateManager.disableBlend();
-        GlStateManager.enableBlend();
-        GlStateManager.disableCull();
+		GlStateManager.enableCull();
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		instance.render(scale);
+		GlStateManager.disableBlend();
+		GlStateManager.enableBlend();
+		GlStateManager.disableCull();
 
-        GlStateManager.popMatrix();
-    }
+		GlStateManager.popMatrix();
+	}
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/ModelPart;render(F)V", ordinal = 13))
-    public void axolotlclient$translucentHatTwo(ModelPart instance, float scale) {
-        GlStateManager.pushMatrix();
+	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/ModelPart;render(F)V", ordinal = 13))
+	public void axolotlclient$translucentHatTwo(ModelPart instance, float scale) {
+		GlStateManager.pushMatrix();
 
-        GlStateManager.enableCull();
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        instance.render(scale);
-        GlStateManager.disableBlend();
-        GlStateManager.enableBlend();
-        GlStateManager.disableCull();
+		GlStateManager.enableCull();
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		instance.render(scale);
+		GlStateManager.disableBlend();
+		GlStateManager.enableBlend();
+		GlStateManager.disableCull();
 
-        GlStateManager.popMatrix();
-    }
+		GlStateManager.popMatrix();
+	}
 }

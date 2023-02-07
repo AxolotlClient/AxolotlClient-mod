@@ -32,14 +32,14 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 @Mixin(OverlayTexture.class)
 public abstract class OverlayTextureMixin {
 
-    @ModifyConstant(method = "<init>", constant = @Constant(intValue = -1308622593))
-    private int axolotlclient$customHitColor(int constant) {
+	@ModifyConstant(method = "<init>", constant = @Constant(intValue = -1308622593))
+	private int axolotlclient$customHitColor(int constant) {
 
-        Color c = AxolotlClient.CONFIG.hitColor.get();
-        int color = 255 - c.getAlpha();
-        color = (color << 8) + c.getBlue();
-        color = (color << 8) + c.getGreen();
-        color = (color << 8) + c.getRed();
-        return color;
-    }
+		Color c = AxolotlClient.CONFIG.hitColor.get();
+		int color = 255 - c.getAlpha();
+		color = (color << 8) + c.getBlue();
+		color = (color << 8) + c.getGreen();
+		color = (color << 8) + c.getRed();
+		return color;
+	}
 }

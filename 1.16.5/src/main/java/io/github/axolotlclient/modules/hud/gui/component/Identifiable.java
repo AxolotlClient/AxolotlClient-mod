@@ -35,28 +35,28 @@ import net.minecraft.util.Identifier;
  */
 public interface Identifiable {
 
-    /**
-     * Returns a unique identifier for this object
-     *
-     * @return The identifier
-     */
-    Identifier getId();
+	/**
+	 * Returns a unique identifier for this object
+	 *
+	 * @return The identifier
+	 */
+	Identifier getId();
 
-    /**
-     * Gets the display name key
-     *
-     * @return The display name key
-     */
-    default String getNameKey() {
-        return getId().getPath();
-    }
+	/**
+	 * Gets the display name key
+	 *
+	 * @return The display name key
+	 */
+	default String getNameKey() {
+		return getId().getPath();
+	}
 
-    /**
-     * The translated name of the object
-     *
-     * @return String containing the name
-     */
-    default String getName() {
-        return I18n.translate(getNameKey());
-    }
+	/**
+	 * The translated name of the object
+	 *
+	 * @return String containing the name
+	 */
+	default String getName() {
+		return I18n.translate(getNameKey());
+	}
 }

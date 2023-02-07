@@ -37,53 +37,53 @@ import net.minecraft.util.Util;
 
 public class ComboHud extends SimpleTextHudEntry {
 
-    public static final Identifier ID = new Identifier("kronhud", "combohud");
+	public static final Identifier ID = new Identifier("kronhud", "combohud");
 
-    private long lastTime = 0;
-    private int target = -1;
-    private int count = 0;
+	private long lastTime = 0;
+	private int target = -1;
+	private int count = 0;
 
-    @Override
-    public Identifier getId() {
-        return ID;
-    }
+	@Override
+	public Identifier getId() {
+		return ID;
+	}
 
-    @Override
-    public String getValue() {
-        if (count == 0) {
-            return I18n.translate("combocounter.no_hits");
-        }
-        if (lastTime + 2000 < Util.getMeasuringTimeMs()) {
-            count = 0;
-            return "0 hits";
-        }
-        if (count == 1) {
-            return I18n.translate("combocounter.one_hit");
-        }
-        return I18n.translate("combocounter.hits", count);
-    }
+	@Override
+	public String getValue() {
+		if (count == 0) {
+			return I18n.translate("combocounter.no_hits");
+		}
+		if (lastTime + 2000 < Util.getMeasuringTimeMs()) {
+			count = 0;
+			return "0 hits";
+		}
+		if (count == 1) {
+			return I18n.translate("combocounter.one_hit");
+		}
+		return I18n.translate("combocounter.hits", count);
+	}
 
-    @Override
-    public String getPlaceholder() {
-        return I18n.translate("combocounter.hits", 3);
-    }
+	@Override
+	public String getPlaceholder() {
+		return I18n.translate("combocounter.hits", 3);
+	}
 
-    public void onEntityAttack(Entity attacked) {
-        target = attacked.getEntityId();
-    }
+	public void onEntityAttack(Entity attacked) {
+		target = attacked.getEntityId();
+	}
 
-    public void onEntityDamage(Entity entity) {
-        if (client.player == null) {
-            return;
-        }
-        if (entity.getEntityId() == client.player.getEntityId()) {
-            target = -1;
-            count = 0;
-            return;
-        }
-        if (entity.getEntityId() == target) {
-            count++;
-            lastTime = Util.getMeasuringTimeMs();
-        }
-    }
+	public void onEntityDamage(Entity entity) {
+		if (client.player == null) {
+			return;
+		}
+		if (entity.getEntityId() == client.player.getEntityId()) {
+			target = -1;
+			count = 0;
+			return;
+		}
+		if (entity.getEntityId() == target) {
+			count++;
+			lastTime = Util.getMeasuringTimeMs();
+		}
+	}
 }

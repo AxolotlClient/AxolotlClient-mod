@@ -35,61 +35,61 @@ import java.text.DecimalFormat;
 
 public class TntTime extends AbstractModule {
 
-    private static final TntTime Instance = new TntTime();
+	private static final TntTime Instance = new TntTime();
 
-    private DecimalFormat format;
-    private int decimals;
+	private DecimalFormat format;
+	private int decimals;
 
-    private final OptionCategory category = new OptionCategory("tnttime");
-    public final BooleanOption enabled = new BooleanOption("enabled", false);
-    private final IntegerOption decimalPlaces = new IntegerOption("decimalplaces", 2, 0, 6);
+	private final OptionCategory category = new OptionCategory("tnttime");
+	public final BooleanOption enabled = new BooleanOption("enabled", false);
+	private final IntegerOption decimalPlaces = new IntegerOption("decimalplaces", 2, 0, 6);
 
-    public static TntTime getInstance() {
-        return Instance;
-    }
+	public static TntTime getInstance() {
+		return Instance;
+	}
 
-    @Override
-    public void init() {
-        category.add(enabled, decimalPlaces);
-        AxolotlClient.CONFIG.rendering.addSubCategory(category);
-    }
+	@Override
+	public void init() {
+		category.add(enabled, decimalPlaces);
+		AxolotlClient.CONFIG.rendering.addSubCategory(category);
+	}
 
-    @Override
-    public void tick() {
-        if (decimalPlaces.get() != decimals || format == null) {
-            StringBuilder string = new StringBuilder("#0");
-            if (decimalPlaces.get() > 0) {
-                string.append(".");
-                string.append("0".repeat(Math.max(0, decimalPlaces.get())));
-            }
-            format = new DecimalFormat(string.toString());
-            decimals = decimalPlaces.get();
-        }
-    }
+	@Override
+	public void tick() {
+		if (decimalPlaces.get() != decimals || format == null) {
+			StringBuilder string = new StringBuilder("#0");
+			if (decimalPlaces.get() > 0) {
+				string.append(".");
+				string.append("0".repeat(Math.max(0, decimalPlaces.get())));
+			}
+			format = new DecimalFormat(string.toString());
+			decimals = decimalPlaces.get();
+		}
+	}
 
-    public Text getFuseTime(int time) {
-        float secs = time / 20F;
-        return Text.of(String.valueOf(format.format(secs))).copy()
-                .setStyle(Style.EMPTY.withColor(getCurrentColor(secs)));
-    }
+	public Text getFuseTime(int time) {
+		float secs = time / 20F;
+		return Text.of(String.valueOf(format.format(secs))).copy()
+				.setStyle(Style.EMPTY.withColor(getCurrentColor(secs)));
+	}
 
-    private Formatting getCurrentColor(float seconds) {
-        if (seconds > 7d) {
-            return Formatting.DARK_AQUA;
-        } else if (seconds > 6d) {
-            return Formatting.AQUA;
-        } else if (seconds > 4d) {
-            return Formatting.DARK_GREEN;
-        } else if (seconds > 3d) {
-            return Formatting.GREEN;
-        } else if (seconds > 2d) {
-            return Formatting.GOLD;
-        } else if (seconds > 1d) {
-            return Formatting.RED;
-        } else if (seconds > 0d) {
-            return Formatting.DARK_RED;
-        } else {
-            return Formatting.WHITE;
-        }
-    }
+	private Formatting getCurrentColor(float seconds) {
+		if (seconds > 7d) {
+			return Formatting.DARK_AQUA;
+		} else if (seconds > 6d) {
+			return Formatting.AQUA;
+		} else if (seconds > 4d) {
+			return Formatting.DARK_GREEN;
+		} else if (seconds > 3d) {
+			return Formatting.GREEN;
+		} else if (seconds > 2d) {
+			return Formatting.GOLD;
+		} else if (seconds > 1d) {
+			return Formatting.RED;
+		} else if (seconds > 0d) {
+			return Formatting.DARK_RED;
+		} else {
+			return Formatting.WHITE;
+		}
+	}
 }

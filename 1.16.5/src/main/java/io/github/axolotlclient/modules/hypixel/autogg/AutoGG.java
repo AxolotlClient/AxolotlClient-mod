@@ -44,154 +44,154 @@ import java.util.stream.Collectors;
 
 public class AutoGG implements AbstractHypixelMod {
 
-    @Getter
-    private final static AutoGG Instance = new AutoGG();
+	@Getter
+	private final static AutoGG Instance = new AutoGG();
 
-    private final OptionCategory category = new OptionCategory("autogg");
-    private final MinecraftClient client = MinecraftClient.getInstance();
-    private long lastTime = 0;
+	private final OptionCategory category = new OptionCategory("autogg");
+	private final MinecraftClient client = MinecraftClient.getInstance();
+	private long lastTime = 0;
 
-    public BooleanOption gg = new BooleanOption("printGG", false);
-    public StringOption ggString = new StringOption("ggString", "gg");
+	public BooleanOption gg = new BooleanOption("printGG", false);
+	public StringOption ggString = new StringOption("ggString", "gg");
 
-    public BooleanOption gf = new BooleanOption("printGF", false);
-    public StringOption gfString = new StringOption("gfString", "gf");
+	public BooleanOption gf = new BooleanOption("printGF", false);
+	public StringOption gfString = new StringOption("gfString", "gf");
 
-    public BooleanOption glhf = new BooleanOption("printGLHF", false);
-    public StringOption glhfString = new StringOption("glhfString", "glhf");
+	public BooleanOption glhf = new BooleanOption("printGLHF", false);
+	public StringOption glhfString = new StringOption("glhfString", "glhf");
 
-    private final BooleanOption onHypixel = new BooleanOption("onHypixel", false);
-    private final BooleanOption onBWP = new BooleanOption("onBWP", false);
-    private final BooleanOption onPVPL = new BooleanOption("onPVPL", false);
-    private final BooleanOption onMMC = new BooleanOption("onMMC", false);
+	private final BooleanOption onHypixel = new BooleanOption("onHypixel", false);
+	private final BooleanOption onBWP = new BooleanOption("onBWP", false);
+	private final BooleanOption onPVPL = new BooleanOption("onPVPL", false);
+	private final BooleanOption onMMC = new BooleanOption("onMMC", false);
 
 
-    private final HashMap<String, List<String>> ggStrings = new HashMap<>();
-    private final HashMap<String, List<String>> gfStrings = new HashMap<>();
-    private final HashMap<String, List<String>> glhfStrings = new HashMap<>();
+	private final HashMap<String, List<String>> ggStrings = new HashMap<>();
+	private final HashMap<String, List<String>> gfStrings = new HashMap<>();
+	private final HashMap<String, List<String>> glhfStrings = new HashMap<>();
 
-    private final HashMap<String, BooleanOption> serverMap = new HashMap<>();
+	private final HashMap<String, BooleanOption> serverMap = new HashMap<>();
 
-    @Override
-    public void init() {
-        populateGGStrings();
-        populateGFStrings();
-        populateGLHFStrings();
-        serverMap.put("hypixel.net", onHypixel);
+	@Override
+	public void init() {
+		populateGGStrings();
+		populateGFStrings();
+		populateGLHFStrings();
+		serverMap.put("hypixel.net", onHypixel);
 
-        serverMap.put("bedwarspractice.club", onBWP);
+		serverMap.put("bedwarspractice.club", onBWP);
 
-        serverMap.put("pvp.land", onPVPL);
+		serverMap.put("pvp.land", onPVPL);
 
-        serverMap.put("minemen.club", onMMC);
+		serverMap.put("minemen.club", onMMC);
 
-        category.add(gg);
-        category.add(ggString);
-        category.add(gf);
-        category.add(gfString);
-        category.add(glhf);
-        category.add(glhfString);
-        category.add(onHypixel);
-        category.add(onBWP);
-        category.add(onPVPL);
-        category.add(onMMC);
-    }
+		category.add(gg);
+		category.add(ggString);
+		category.add(gf);
+		category.add(gfString);
+		category.add(glhf);
+		category.add(glhfString);
+		category.add(onHypixel);
+		category.add(onBWP);
+		category.add(onPVPL);
+		category.add(onMMC);
+	}
 
-    @Override
-    public OptionCategory getCategory() {
-        return category;
-    }
+	@Override
+	public OptionCategory getCategory() {
+		return category;
+	}
 
-    private void processChat(Text messageReceived, List<String> options, String messageToSend) {
-        if (System.currentTimeMillis() - this.lastTime > 3000 && options != null) {
-            for (String s : options) {
-                if (messageReceived.getString().contains(s)) {
-                    Util.sendChatMessage(messageToSend);
-                    this.lastTime = System.currentTimeMillis();
-                    return;
-                }
-            }
-        }
-    }
+	private void processChat(Text messageReceived, List<String> options, String messageToSend) {
+		if (System.currentTimeMillis() - this.lastTime > 3000 && options != null) {
+			for (String s : options) {
+				if (messageReceived.getString().contains(s)) {
+					Util.sendChatMessage(messageToSend);
+					this.lastTime = System.currentTimeMillis();
+					return;
+				}
+			}
+		}
+	}
 
-    private void populateGGStrings() {
-        ggStrings.put("hypixel.net", addToList(
-                        "1st Killer -",
-                        "1st Place -",
-                        "Winner:",
-                        " - Damage Dealt -",
-                        "Winning Team -",
-                        "1st -",
-                        "Winners:",
-                        "Winner:",
-                        "Winning Team:",
-                        " won the game!",
-                        "Top Seeker:",
-                        "1st Place:",
-                        "Last team standing!",
-                        "Winner #1 (",
-                        "Top Survivors",
-                        "Winners -",
-                        "Sumo Duel -",
-                        "Most Wool Placed -",
-                        "Your Overall Winstreak:"
-                )
-        );
+	private void populateGGStrings() {
+		ggStrings.put("hypixel.net", addToList(
+						"1st Killer -",
+						"1st Place -",
+						"Winner:",
+						" - Damage Dealt -",
+						"Winning Team -",
+						"1st -",
+						"Winners:",
+						"Winner:",
+						"Winning Team:",
+						" won the game!",
+						"Top Seeker:",
+						"1st Place:",
+						"Last team standing!",
+						"Winner #1 (",
+						"Top Survivors",
+						"Winners -",
+						"Sumo Duel -",
+						"Most Wool Placed -",
+						"Your Overall Winstreak:"
+				)
+		);
 
-        ggStrings.put("bedwarspractice.club", addToList(
-                "Winners -",
-                "Game Won!",
-                "Game Lost!",
-                "The winning team is"));
+		ggStrings.put("bedwarspractice.club", addToList(
+				"Winners -",
+				"Game Won!",
+				"Game Lost!",
+				"The winning team is"));
 
-        ggStrings.put("pvp.land", addToList(
-                "The match has ended!",
-                "Match Results",
-                "Winner:",
-                "Loser:"
-        ));
+		ggStrings.put("pvp.land", addToList(
+				"The match has ended!",
+				"Match Results",
+				"Winner:",
+				"Loser:"
+		));
 
-        ggStrings.put("minemen.club", addToList("Match Results"));
-    }
+		ggStrings.put("minemen.club", addToList("Match Results"));
+	}
 
-    private void populateGFStrings() {
-        gfStrings.put("hypixel.net", addToList("SkyWars Experience (Kill)",
-                "coins! (Final Kill)"));
+	private void populateGFStrings() {
+		gfStrings.put("hypixel.net", addToList("SkyWars Experience (Kill)",
+				"coins! (Final Kill)"));
 
-        gfStrings.put("bedwarspractice.club", addToList(client.getSession().getUsername() + " FINAL KILL!"));
+		gfStrings.put("bedwarspractice.club", addToList(client.getSession().getUsername() + " FINAL KILL!"));
 
-        gfStrings.put("pvp.land", addToList("slain by " + client.getSession().getUsername()));
+		gfStrings.put("pvp.land", addToList("slain by " + client.getSession().getUsername()));
 
-        gfStrings.put("minemen.club", addToList("killed by " + client.getSession().getUsername() + "!"));
-    }
+		gfStrings.put("minemen.club", addToList("killed by " + client.getSession().getUsername() + "!"));
+	}
 
-    private void populateGLHFStrings() {
-        glhfStrings.put("hypixel.net", addToList("The game starts in 1 second!"));
+	private void populateGLHFStrings() {
+		glhfStrings.put("hypixel.net", addToList("The game starts in 1 second!"));
 
-        glhfStrings.put("bedwarspractice.club", addToList("Game starting in 1 seconds!", "Game has started!"));
+		glhfStrings.put("bedwarspractice.club", addToList("Game starting in 1 seconds!", "Game has started!"));
 
-        glhfStrings.put("minemen.club", addToList("1..."));
-    }
+		glhfStrings.put("minemen.club", addToList("1..."));
+	}
 
-    private List<String> addToList(String... strings) {
-        return Arrays.stream(strings).collect(Collectors.toList());
-    }
+	private List<String> addToList(String... strings) {
+		return Arrays.stream(strings).collect(Collectors.toList());
+	}
 
-    public void onMessage(Text message) {
-        if (client.getCurrentServerEntry() != null) {
-            serverMap.keySet().forEach(s -> {
-                if (serverMap.get(s).get() && client.getCurrentServerEntry().address.contains(s)) {
-                    if (gf.get()) {
-                        processChat(message, gfStrings.get(s), gfString.get());
-                    }
-                    if (gg.get()) {
-                        processChat(message, ggStrings.get(s), ggString.get());
-                    }
-                    if (glhf.get()) {
-                        processChat(message, glhfStrings.get(s), glhfString.get());
-                    }
-                }
-            });
-        }
-    }
+	public void onMessage(Text message) {
+		if (client.getCurrentServerEntry() != null) {
+			serverMap.keySet().forEach(s -> {
+				if (serverMap.get(s).get() && client.getCurrentServerEntry().address.contains(s)) {
+					if (gf.get()) {
+						processChat(message, gfStrings.get(s), gfString.get());
+					}
+					if (gg.get()) {
+						processChat(message, ggStrings.get(s), ggString.get());
+					}
+					if (glhf.get()) {
+						processChat(message, glhfStrings.get(s), glhfString.get());
+					}
+				}
+			});
+		}
+	}
 }

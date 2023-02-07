@@ -32,8 +32,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(DownloadingTerrainScreen.class)
 public abstract class DownloadingTerrainScreenMixin {
 
-    @Inject(method = "init", at = @At("TAIL"))
-    public void axolotlclient$noLoadingScreen(CallbackInfo ci) {
-        MinecraftClient.getInstance().closeScreen();
-    }
+	@Inject(method = "init", at = @At("TAIL"))
+	public void axolotlclient$noLoadingScreen(CallbackInfo ci) {
+		MinecraftClient.getInstance().closeScreen();
+	}
 }

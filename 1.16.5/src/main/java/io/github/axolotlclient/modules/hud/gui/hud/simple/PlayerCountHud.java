@@ -28,20 +28,20 @@ import net.minecraft.util.Identifier;
 
 public class PlayerCountHud extends SimpleTextHudEntry {
 
-    public static Identifier ID = new Identifier("axolotlclient", "playercounthud");
+	public static Identifier ID = new Identifier("axolotlclient", "playercounthud");
 
-    @Override
-    public Identifier getId() {
-        return ID;
-    }
+	@Override
+	public Identifier getId() {
+		return ID;
+	}
 
-    @Override
-    public String getValue() {
-        return client.world.getPlayers().size() + " " + I18n.translate("players");
-    }
+	@Override
+	public String getValue() {
+		return client.world.getPlayers().size() + " " + I18n.translate("players");
+	}
 
-    @Override
-    public String getPlaceholder() {
-        return 3.141592 + " " + I18n.translate("players");
-    }
+	@Override
+	public String getPlaceholder() {
+		return 3.141592 + " " + I18n.translate("players");
+	}
 }

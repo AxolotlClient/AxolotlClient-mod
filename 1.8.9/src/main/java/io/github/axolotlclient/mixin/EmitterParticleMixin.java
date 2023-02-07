@@ -33,11 +33,11 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 @Mixin(EmitterParticle.class)
 public abstract class EmitterParticleMixin {
 
-    @Shadow
-    private ParticleType types;
+	@Shadow
+	private ParticleType types;
 
-    @ModifyConstant(method = "tick", constant = @Constant(intValue = 16))
-    public int axolotlclient$multiplyParticles(int constant) {
-        return constant * Particles.getInstance().getMultiplier(types);
-    }
+	@ModifyConstant(method = "tick", constant = @Constant(intValue = 16))
+	public int axolotlclient$multiplyParticles(int constant) {
+		return constant * Particles.getInstance().getMultiplier(types);
+	}
 }

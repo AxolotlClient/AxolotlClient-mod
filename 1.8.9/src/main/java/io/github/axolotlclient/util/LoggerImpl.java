@@ -28,29 +28,29 @@ import org.apache.logging.log4j.LogManager;
 
 public class LoggerImpl implements Logger {
 
-    public static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger("AxolotlClient");
+	public static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger("AxolotlClient");
 
-    private static final String modId = FabricLoader.getInstance().isDevelopmentEnvironment() ? "" : "(AxolotlClient) ";
+	private static final String modId = FabricLoader.getInstance().isDevelopmentEnvironment() ? "" : "(AxolotlClient) ";
 
-    public void warn(String message, Object... args) {
-        LOGGER.warn(modId + message, args);
-    }
+	public void warn(String message, Object... args) {
+		LOGGER.warn(modId + message, args);
+	}
 
-    public void error(String message, Object... args) {
-        try {
-            LOGGER.error(modId + message, args);
-        } catch (Exception e) {
-            LOGGER.warn(modId + "[ERROR]" + message, args);
-        }
-    }
+	public void error(String message, Object... args) {
+		try {
+			LOGGER.error(modId + message, args);
+		} catch (Exception e) {
+			LOGGER.warn(modId + "[ERROR]" + message, args);
+		}
+	}
 
-    public void info(String message, Object... args) {
-        LOGGER.info(modId + message, args);
-    }
+	public void info(String message, Object... args) {
+		LOGGER.info(modId + message, args);
+	}
 
-    public void debug(String message, Object... args) {
-        if (AxolotlClient.CONFIG.debugLogOutput.get()) {
-            info(modId + "[DEBUG] " + message, args);
-        }
-    }
+	public void debug(String message, Object... args) {
+		if (AxolotlClient.CONFIG.debugLogOutput.get()) {
+			info(modId + "[DEBUG] " + message, args);
+		}
+	}
 }

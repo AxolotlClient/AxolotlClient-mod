@@ -30,42 +30,42 @@ import net.minecraft.util.Identifier;
 
 public class iconHud extends BoxHudEntry {
 
-    public Identifier ID = new Identifier("axolotlclient", "iconhud");
+	public Identifier ID = new Identifier("axolotlclient", "iconhud");
 
-    public iconHud() {
-        super(15, 15, false);
-    }
+	public iconHud() {
+		super(15, 15, false);
+	}
 
-    @Override
-    public void renderComponent(float delta) {
-        GlStateManager.color(1, 1, 1, 1);
-        MinecraftClient.getInstance().getTextureManager().bindTexture(AxolotlClient.badgeIcon);
-        GlStateManager.enableBlend();
-        drawTexture(getX(), getY(), 0, 0, width, height, width, height);
-        GlStateManager.disableBlend();
-    }
+	@Override
+	public void renderComponent(float delta) {
+		GlStateManager.color(1, 1, 1, 1);
+		MinecraftClient.getInstance().getTextureManager().bindTexture(AxolotlClient.badgeIcon);
+		GlStateManager.enableBlend();
+		drawTexture(getX(), getY(), 0, 0, width, height, width, height);
+		GlStateManager.disableBlend();
+	}
 
-    @Override
-    public void renderPlaceholder(float delta) {
-        GlStateManager.pushMatrix();
-        scale();
-        GlStateManager.color(1, 1, 1, 1);
-        renderComponent(delta);
-        GlStateManager.popMatrix();
-        hovered = false;
-    }
+	@Override
+	public void renderPlaceholder(float delta) {
+		GlStateManager.pushMatrix();
+		scale();
+		GlStateManager.color(1, 1, 1, 1);
+		renderComponent(delta);
+		GlStateManager.popMatrix();
+		hovered = false;
+	}
 
-    @Override
-    public void renderPlaceholderComponent(float delta) {
-    }
+	@Override
+	public void renderPlaceholderComponent(float delta) {
+	}
 
-    @Override
-    public Identifier getId() {
-        return ID;
-    }
+	@Override
+	public Identifier getId() {
+		return ID;
+	}
 
-    @Override
-    public boolean movable() {
-        return true;
-    }
+	@Override
+	public boolean movable() {
+		return true;
+	}
 }

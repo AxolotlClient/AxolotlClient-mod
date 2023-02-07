@@ -41,129 +41,129 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class PackDisplayHud extends TextHudEntry {
 
-    public static Identifier ID = new Identifier("axolotlclient", "packdisplayhud");
+	public static Identifier ID = new Identifier("axolotlclient", "packdisplayhud");
 
-    private final List<PackWidget> widgets = new ArrayList<>();
-    private PackWidget placeholder;
-    private final List<ResourcePack> packs = new ArrayList<>();
+	private final List<PackWidget> widgets = new ArrayList<>();
+	private PackWidget placeholder;
+	private final List<ResourcePack> packs = new ArrayList<>();
 
-    private final BooleanOption iconsOnly = new BooleanOption("iconsonly", false);
+	private final BooleanOption iconsOnly = new BooleanOption("iconsonly", false);
 
-    public PackDisplayHud() {
-        super(200, 50, true);
-    }
+	public PackDisplayHud() {
+		super(200, 50, true);
+	}
 
-    @Override
-    public void init() {
-        packs.forEach(pack -> {
-            try {
-                if (pack.getIcon() != null) {
-                    if (packs.size() == 1) {
-                        widgets.add(new PackWidget(pack));
-                    } else if (!pack.getName().equalsIgnoreCase("Default")) {
-                        widgets.add(new PackWidget(pack));
-                    }
-                }
-            } catch (Exception ignored) {
-            }
-        });
+	@Override
+	public void init() {
+		packs.forEach(pack -> {
+			try {
+				if (pack.getIcon() != null) {
+					if (packs.size() == 1) {
+						widgets.add(new PackWidget(pack));
+					} else if (!pack.getName().equalsIgnoreCase("Default")) {
+						widgets.add(new PackWidget(pack));
+					}
+				}
+			} catch (Exception ignored) {
+			}
+		});
 
-        AtomicInteger w = new AtomicInteger(20);
-        widgets.forEach(packWidget -> {
-            int textW = MinecraftClient.getInstance().textRenderer.getStringWidth(packWidget.getName()) + 20;
-            if (textW > w.get())
-                w.set(textW);
-        });
-        setWidth(w.get());
+		AtomicInteger w = new AtomicInteger(20);
+		widgets.forEach(packWidget -> {
+			int textW = MinecraftClient.getInstance().textRenderer.getStringWidth(packWidget.getName()) + 20;
+			if (textW > w.get())
+				w.set(textW);
+		});
+		setWidth(w.get());
 
-        setHeight(widgets.size() * 18);
-        onBoundsUpdate();
-    }
+		setHeight(widgets.size() * 18);
+		onBoundsUpdate();
+	}
 
-    public void setPacks(List<ResourcePack> packs) {
-        widgets.clear();
-        this.packs.clear();
-        this.packs.addAll(packs);
-    }
+	public void setPacks(List<ResourcePack> packs) {
+		widgets.clear();
+		this.packs.clear();
+		this.packs.addAll(packs);
+	}
 
-    @Override
-    public void renderComponent(float f) {
-        DrawPosition pos = getPos();
+	@Override
+	public void renderComponent(float f) {
+		DrawPosition pos = getPos();
 
-        if (widgets.isEmpty())
-            init();
+		if (widgets.isEmpty())
+			init();
 
-        int y = pos.y + 1;
-        for (int i = widgets.size() - 1; i >= 0; i--) { // Badly reverse the order (I'm sure there are better ways to do this)
-            widgets.get(i).render(pos.x + 1, y);
-            y += 18;
-        }
-        if (y - pos.y + 1 != getHeight()) {
-            setHeight(y - pos.y - 1);
-            onBoundsUpdate();
-        }
-    }
+		int y = pos.y + 1;
+		for (int i = widgets.size() - 1; i >= 0; i--) { // Badly reverse the order (I'm sure there are better ways to do this)
+			widgets.get(i).render(pos.x + 1, y);
+			y += 18;
+		}
+		if (y - pos.y + 1 != getHeight()) {
+			setHeight(y - pos.y - 1);
+			onBoundsUpdate();
+		}
+	}
 
-    @Override
-    public void renderPlaceholderComponent(float delta) {
-        boolean updateBounds = false;
-        if (getHeight() < 18) {
-            setHeight(18);
-            updateBounds = true;
-        }
-        if (getWidth() < 56) {
-            setWidth(56);
-            updateBounds = true;
-        }
-        if (updateBounds) {
-            onBoundsUpdate();
-        }
-        if (placeholder == null) {
-            placeholder = new PackWidget(MinecraftClient.getInstance().getResourcePackLoader().defaultResourcePack);
-        }
-        placeholder.render(getPos().x + 1, getPos().y + 1);
-    }
+	@Override
+	public void renderPlaceholderComponent(float delta) {
+		boolean updateBounds = false;
+		if (getHeight() < 18) {
+			setHeight(18);
+			updateBounds = true;
+		}
+		if (getWidth() < 56) {
+			setWidth(56);
+			updateBounds = true;
+		}
+		if (updateBounds) {
+			onBoundsUpdate();
+		}
+		if (placeholder == null) {
+			placeholder = new PackWidget(MinecraftClient.getInstance().getResourcePackLoader().defaultResourcePack);
+		}
+		placeholder.render(getPos().x + 1, getPos().y + 1);
+	}
 
-    @Override
-    public List<Option<?>> getConfigurationOptions() {
-        List<Option<?>> options = super.getConfigurationOptions();
-        options.add(iconsOnly);
-        return options;
-    }
+	@Override
+	public List<Option<?>> getConfigurationOptions() {
+		List<Option<?>> options = super.getConfigurationOptions();
+		options.add(iconsOnly);
+		return options;
+	}
 
-    @Override
-    public Identifier getId() {
-        return ID;
-    }
+	@Override
+	public Identifier getId() {
+		return ID;
+	}
 
-    @Override
-    public boolean movable() {
-        return true;
-    }
+	@Override
+	public boolean movable() {
+		return true;
+	}
 
-    private class PackWidget {
+	private class PackWidget {
 
-        private int texture;
-        @Getter
-        private final String name;
+		private int texture;
+		@Getter
+		private final String name;
 
-        public PackWidget(ResourcePack pack) {
-            this.name = pack.getName();
-            try {
-                this.texture = new NativeImageBackedTexture(pack.getIcon()).getGlId();
-            } catch (Exception e) {
-                AxolotlClient.LOGGER.warn("Pack " + pack.getName()
-                        + " somehow threw an error! Please investigate... Does it have an icon?");
-            }
-        }
+		public PackWidget(ResourcePack pack) {
+			this.name = pack.getName();
+			try {
+				this.texture = new NativeImageBackedTexture(pack.getIcon()).getGlId();
+			} catch (Exception e) {
+				AxolotlClient.LOGGER.warn("Pack " + pack.getName()
+						+ " somehow threw an error! Please investigate... Does it have an icon?");
+			}
+		}
 
-        public void render(int x, int y) {
-            if (!iconsOnly.get()) {
-                GlStateManager.color(1, 1, 1, 1F);
-                GlStateManager.bindTexture(texture);
-                DrawableHelper.drawTexture(x, y, 0, 0, 16, 16, 16, 16);
-            }
-            drawString(name, x + 18, y + 6, textColor.get().getAsInt(), shadow.get());
-        }
-    }
+		public void render(int x, int y) {
+			if (!iconsOnly.get()) {
+				GlStateManager.color(1, 1, 1, 1F);
+				GlStateManager.bindTexture(texture);
+				DrawableHelper.drawTexture(x, y, 0, 0, 16, 16, 16, 16);
+			}
+			drawString(name, x + 18, y + 6, textColor.get().getAsInt(), shadow.get());
+		}
+	}
 }

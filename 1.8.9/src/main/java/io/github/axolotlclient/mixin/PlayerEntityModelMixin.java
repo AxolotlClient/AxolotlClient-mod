@@ -34,52 +34,52 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(PlayerEntityModel.class)
 public abstract class PlayerEntityModelMixin {
 
-    @Inject(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/render/entity/model/PlayerEntityModel;child:Z"))
-    public void axolotlclient$translucencyStart(Entity entity, float f, float g, float h, float i, float j, float scale,
-                                                CallbackInfo ci) {
-        startTranslucency();
-    }
+	@Inject(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/render/entity/model/PlayerEntityModel;child:Z"))
+	public void axolotlclient$translucencyStart(Entity entity, float f, float g, float h, float i, float j, float scale,
+												CallbackInfo ci) {
+		startTranslucency();
+	}
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;popMatrix()V"))
-    public void axolotlclient$translucencyStop(Entity entity, float f, float g, float h, float i, float j, float scale,
-                                               CallbackInfo ci) {
-        stopTranslucency();
-    }
+	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;popMatrix()V"))
+	public void axolotlclient$translucencyStop(Entity entity, float f, float g, float h, float i, float j, float scale,
+											   CallbackInfo ci) {
+		stopTranslucency();
+	}
 
-    @Inject(method = "renderRightArm", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/ModelPart;render(F)V", ordinal = 1))
-    public void axolotlclient$handTranslucentRightStart(CallbackInfo ci) {
-        startTranslucency();
-    }
+	@Inject(method = "renderRightArm", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/ModelPart;render(F)V", ordinal = 1))
+	public void axolotlclient$handTranslucentRightStart(CallbackInfo ci) {
+		startTranslucency();
+	}
 
-    @Inject(method = "renderRightArm", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/ModelPart;render(F)V", ordinal = 1, shift = At.Shift.AFTER))
-    public void axolotlclient$handTranslucentRightStop(CallbackInfo ci) {
-        stopTranslucency();
-    }
+	@Inject(method = "renderRightArm", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/ModelPart;render(F)V", ordinal = 1, shift = At.Shift.AFTER))
+	public void axolotlclient$handTranslucentRightStop(CallbackInfo ci) {
+		stopTranslucency();
+	}
 
-    @Inject(method = "renderLeftArm", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/ModelPart;render(F)V", ordinal = 1))
-    public void axolotlclient$handTranslucentLeftStart(CallbackInfo ci) {
-        startTranslucency();
-    }
+	@Inject(method = "renderLeftArm", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/ModelPart;render(F)V", ordinal = 1))
+	public void axolotlclient$handTranslucentLeftStart(CallbackInfo ci) {
+		startTranslucency();
+	}
 
-    @Inject(method = "renderLeftArm", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/ModelPart;render(F)V", ordinal = 1, shift = At.Shift.AFTER))
-    public void axolotlclient$handTranslucentLEftStop(CallbackInfo ci) {
-        stopTranslucency();
-    }
+	@Inject(method = "renderLeftArm", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/ModelPart;render(F)V", ordinal = 1, shift = At.Shift.AFTER))
+	public void axolotlclient$handTranslucentLEftStop(CallbackInfo ci) {
+		stopTranslucency();
+	}
 
-    private void startTranslucency() {
-        GlStateManager.pushMatrix();
+	private void startTranslucency() {
+		GlStateManager.pushMatrix();
 
-        GlStateManager.enableCull();
-        //GlStateManager.enableRescaleNormal();
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-    }
+		GlStateManager.enableCull();
+		//GlStateManager.enableRescaleNormal();
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+	}
 
-    private void stopTranslucency() {
-        GlStateManager.disableBlend();
-        //GlStateManager.disableRescaleNormal();
-        GlStateManager.disableCull();
-        GlStateManager.popMatrix();
-        GlStateManager.enableBlend();
-    }
+	private void stopTranslucency() {
+		GlStateManager.disableBlend();
+		//GlStateManager.disableRescaleNormal();
+		GlStateManager.disableCull();
+		GlStateManager.popMatrix();
+		GlStateManager.enableBlend();
+	}
 }

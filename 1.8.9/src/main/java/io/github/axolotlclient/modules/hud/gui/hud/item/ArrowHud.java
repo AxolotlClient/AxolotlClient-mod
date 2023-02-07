@@ -44,67 +44,67 @@ import java.util.List;
 
 public class ArrowHud extends TextHudEntry {
 
-    public static final Identifier ID = new Identifier("kronhud", "arrowhud");
-    private int arrows = 0;
-    private final BooleanOption dynamic = new BooleanOption("dynamic", false);
-    private final ItemStack currentArrow = new ItemStack(Items.ARROW);
+	public static final Identifier ID = new Identifier("kronhud", "arrowhud");
+	private int arrows = 0;
+	private final BooleanOption dynamic = new BooleanOption("dynamic", false);
+	private final ItemStack currentArrow = new ItemStack(Items.ARROW);
 
-    public ArrowHud() {
-        super(20, 30, true);
-    }
+	public ArrowHud() {
+		super(20, 30, true);
+	}
 
-    @Override
-    public void render(float delta) {
-        if (dynamic.get()) {
-            ClientPlayerEntity player = client.player;
-            if (player == null || player.getMainHandStack() == null
-                    || !(player.getMainHandStack().getItem() instanceof BowItem)) {
-                return;
-            }
-        }
-        super.render(delta);
-    }
+	@Override
+	public void render(float delta) {
+		if (dynamic.get()) {
+			ClientPlayerEntity player = client.player;
+			if (player == null || player.getMainHandStack() == null
+					|| !(player.getMainHandStack().getItem() instanceof BowItem)) {
+				return;
+			}
+		}
+		super.render(delta);
+	}
 
-    @Override
-    public void renderComponent(float delta) {
-        DrawPosition pos = getPos();
-        drawCenteredString(client.textRenderer, String.valueOf(arrows), pos.x() + getWidth() / 2,
-                pos.y() + getHeight() - 10, textColor.get(), shadow.get());
-        ItemUtil.renderGuiItemModel(currentArrow, pos.x() + 2, pos.y() + 2);
-    }
+	@Override
+	public void renderComponent(float delta) {
+		DrawPosition pos = getPos();
+		drawCenteredString(client.textRenderer, String.valueOf(arrows), pos.x() + getWidth() / 2,
+				pos.y() + getHeight() - 10, textColor.get(), shadow.get());
+		ItemUtil.renderGuiItemModel(currentArrow, pos.x() + 2, pos.y() + 2);
+	}
 
-    @Override
-    public boolean tickable() {
-        return true;
-    }
+	@Override
+	public boolean tickable() {
+		return true;
+	}
 
-    @Override
-    public void tick() {
-        arrows = ItemUtil.getTotal(client, currentArrow);
-    }
+	@Override
+	public void tick() {
+		arrows = ItemUtil.getTotal(client, currentArrow);
+	}
 
-    @Override
-    public void renderPlaceholderComponent(float delta) {
-        DrawPosition pos = getPos();
-        drawCenteredString(client.textRenderer, "64", pos.x() + getWidth() / 2, pos.y() + getHeight() - 10,
-                textColor.get(), shadow.get());
-        ItemUtil.renderGuiItemModel(new ItemStack(Items.ARROW), pos.x() + 2, pos.y() + 2);
-    }
+	@Override
+	public void renderPlaceholderComponent(float delta) {
+		DrawPosition pos = getPos();
+		drawCenteredString(client.textRenderer, "64", pos.x() + getWidth() / 2, pos.y() + getHeight() - 10,
+				textColor.get(), shadow.get());
+		ItemUtil.renderGuiItemModel(new ItemStack(Items.ARROW), pos.x() + 2, pos.y() + 2);
+	}
 
-    @Override
-    public List<Option<?>> getConfigurationOptions() {
-        List<Option<?>> options = super.getConfigurationOptions();
-        options.add(dynamic);
-        return options;
-    }
+	@Override
+	public List<Option<?>> getConfigurationOptions() {
+		List<Option<?>> options = super.getConfigurationOptions();
+		options.add(dynamic);
+		return options;
+	}
 
-    @Override
-    public boolean movable() {
-        return true;
-    }
+	@Override
+	public boolean movable() {
+		return true;
+	}
 
-    @Override
-    public Identifier getId() {
-        return ID;
-    }
+	@Override
+	public Identifier getId() {
+		return ID;
+	}
 }
