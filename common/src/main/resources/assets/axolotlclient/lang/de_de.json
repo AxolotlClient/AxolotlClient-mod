@@ -1,8 +1,6 @@
 {
-
 	"config": "AxolotlClient Optionen",
 	"title_short": "Client Optionen",
-
 	"general": "Allgemein",
 	"general.tooltip": "Allgemeine Optionen",
 	"showActivity": "Zeige Aktivität",
@@ -10,7 +8,6 @@
 	"loadingBgColor.tooltip": "Die Hintergrundfarbe des Ladebildschirms",
 	"nightMode": "Blaufilter",
 	"nightMode.tooltip": "Verringert blaue Farben.",
-
 	"rendering": "Rendering",
 	"customSky": "Benutzerdefinierte Himmel",
 	"showSunMoon": "Zeige Sonne & Mond auf eigenem Himmel",
@@ -39,7 +36,6 @@
 	"shiftHorizontalScroll": "Horizontales Scrollen (Shift)",
 	"scrollAmount": "Scrollstufe",
 	"scrollAmount.tooltip": "Wie viel der Tooltip beim scrollen verschoben wird.",
-
 	"nametagOptions": "Nametag Optionen",
 	"showOwnNametag": "Zeige eigenes Nametag",
 	"useShadows": "Erzwinge Schatten",
@@ -47,7 +43,6 @@
 	"badgeText": "Eigener Text als Badge",
 	"customBadge": "Benutze eigene Badge",
 	"showBadges": "Zeige Badges",
-
 	"hypixel-mods": "Hypixel Mods",
 	"hypixel_api_key": "Hypixel API Schlüssel",
 	"levelhead": "LevelHead",
@@ -79,14 +74,11 @@
 	"hideOtherNames.tooltip": "Verstecke die Namen anderer.",
 	"autoBoop": "AutoBoop",
 	"autoBoop.enabled.tooltip": "Ob /boop <player> ausgeführt werden soll, wenn ein Freund Hypixel betritt.",
-
 	"category.axolotlclient": "AxolotlClient",
-
 	"key.zoom": "Zoom",
 	"key.openHud": "Öffne Hud Editor",
 	"key.toggleSneak": "Toggle Sneaking",
 	"key.toggleSprint": "Toggle Sprinting",
-
 	"hud": "Hud Optionen",
 	"pinghud": "Ping Hud",
 	"cpshud": "CPS Hud",
@@ -152,15 +144,12 @@
 	"timeout": "Timeout",
 	"reachhud": "Reach HUD",
 	"blocks": "Blöcke",
-
 	"toggleSprint": "Erlaube Sprint toggle",
 	"toggleSneak": "Erlaube Sneak toggle",
 	"sneakToggled": "Sneaking currently toggled",
 	"sprintToggled": "Sprinting currently toggled",
-
 	"hud.snapping": "Snapping",
 	"hud.clientOptions": "Client Optionen",
-
 	"enabled": "Aktiviert",
 	"scale": "Größe",
 	"textcolor": "Textfarbe",
@@ -175,23 +164,18 @@
 	"outline": "Umrandung",
 	"outlinecolor": "Umrandungsfarbe",
 	"shadow": "Schatten",
-
 	"rpc": "Discord RPC",
 	"showActivity.tooltip": "Ob deine geradige In-Game Aktivität angezeigt werden soll.",
 	"showTime": "Zeige Zeitstempel",
 	"showTime.tooltip": "Ob ein Zeitstempel in Discord angezeigt werden soll.",
-
 	"credits": "Credits",
 	"creditsBGM": "BGM",
 	"contributors": "Contributors:",
 	"other_people": "Andere Personen:",
-
 	"crash": "Diese Option ist deaktiviert <br>da sie dein Spiel crashen würde.",
 	"ban_reason": "Diese Option ist deaktiviert <br>da sie zu einem Ban auf deinem geradigen Server führen kann.",
-
 	"back": "Zurück",
 	"close": "Schließen",
-
 	"rendering.tooltip": "Rendering Optionen",
 	"customSky.tooltip": "Ob benutzerdefinierte Himmel verwendet werden sollen.",
 	"showSunMoon.tooltip": "Ob Sonne und Mond auf benutzerdefinierten Himmeln gezeigt werden sollen.",

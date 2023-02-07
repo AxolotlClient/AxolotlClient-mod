@@ -1,5 +1,5 @@
 plugins {
-    id 'java'
+	id 'java'
 	id 'com.github.johnrengelman.shadow' version '7.+'
 }
 
@@ -89,7 +89,7 @@ publishing {
 		maven {
 			name = "owlMaven"
 			def repository = project.version.toString().contains("beta") || project.version.toString().contains("alpha") ? "snapshots" : "releases"
-			url = "https://moehreag.duckdns.org/maven/"+repository
+			url = "https://moehreag.duckdns.org/maven/" + repository
 			credentials(PasswordCredentials)
 			authentication {
 				basic(BasicAuthentication)

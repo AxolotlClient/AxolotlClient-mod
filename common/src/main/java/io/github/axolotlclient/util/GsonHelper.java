@@ -27,5 +27,5 @@ import com.google.gson.GsonBuilder;
 
 public class GsonHelper {
 
-    public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+	public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 }

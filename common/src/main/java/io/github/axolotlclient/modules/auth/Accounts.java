@@ -37,109 +37,109 @@ import java.util.List;
 
 public abstract class Accounts {
 
-    private final List<MSAccount> accounts = new ArrayList<>();
-    protected MSAccount current;
-    protected MSAuth auth;
+	private final List<MSAccount> accounts = new ArrayList<>();
+	protected MSAccount current;
+	protected MSAuth auth;
 
-    public MSAuth getAuth() {
-        return auth;
-    }
+	public MSAuth getAuth() {
+		return auth;
+	}
 
-    public List<MSAccount> getAccounts() {
-        return accounts;
-    }
+	public List<MSAccount> getAccounts() {
+		return accounts;
+	}
 
-    public void load() {
-        if (getAccountsSaveFile().toFile().exists()) {
-            try {
-                JsonObject list = GsonHelper.GSON.fromJson(String.join("", Files.readAllLines(getAccountsSaveFile())), JsonObject.class);
-                if (list != null) {
-                    list.get("accounts").getAsJsonArray().forEach(jsonElement -> accounts.add(MSAccount.deserialize(jsonElement.getAsJsonObject())));
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        } else {
-            try {
-                //noinspection ResultOfMethodCallIgnored
-                getAccountsSaveFile().toFile().createNewFile();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
+	public void load() {
+		if (getAccountsSaveFile().toFile().exists()) {
+			try {
+				JsonObject list = GsonHelper.GSON.fromJson(String.join("", Files.readAllLines(getAccountsSaveFile())), JsonObject.class);
+				if (list != null) {
+					list.get("accounts").getAsJsonArray().forEach(jsonElement -> accounts.add(MSAccount.deserialize(jsonElement.getAsJsonObject())));
+				}
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		} else {
+			try {
+				//noinspection ResultOfMethodCallIgnored
+				getAccountsSaveFile().toFile().createNewFile();
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		}
+	}
 
-    protected Path getAccountsSaveFile() {
-        return getConfigDir().resolve("accounts.json");
-    }
+	protected Path getAccountsSaveFile() {
+		return getConfigDir().resolve("accounts.json");
+	}
 
-    protected abstract Path getConfigDir();
+	protected abstract Path getConfigDir();
 
-    public void addAccount(MSAccount account) {
-        accounts.add(account);
-    }
+	public void addAccount(MSAccount account) {
+		accounts.add(account);
+	}
 
-    public MSAccount getCurrent() {
-        return current;
-    }
+	public MSAccount getCurrent() {
+		return current;
+	}
 
-    protected abstract void login(MSAccount account);
+	protected abstract void login(MSAccount account);
 
-    public void removeAccount(MSAccount account) {
-        accounts.remove(account);
-        removeSkinFile(account);
-        save();
-    }
+	public void removeAccount(MSAccount account) {
+		accounts.remove(account);
+		removeSkinFile(account);
+		save();
+	}
 
-    public File getSkinFile(MSAccount account) {
-        return getSkinFile(account.getUuid());
-    }
+	public File getSkinFile(MSAccount account) {
+		return getSkinFile(account.getUuid());
+	}
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    public File getSkinFile(String uuid) {
-        File f = getConfigDir().resolve("skins").resolve(uuid).toFile();
-        if (!f.exists()) {
-            try {
-                f.getParentFile().mkdirs();
-                f.createNewFile();
-            } catch (IOException e) {
-                getLogger().error("Couldn't create skin file for " + uuid);
-            }
-        }
-        return f;
-    }
+	@SuppressWarnings("ResultOfMethodCallIgnored")
+	public File getSkinFile(String uuid) {
+		File f = getConfigDir().resolve("skins").resolve(uuid).toFile();
+		if (!f.exists()) {
+			try {
+				f.getParentFile().mkdirs();
+				f.createNewFile();
+			} catch (IOException e) {
+				getLogger().error("Couldn't create skin file for " + uuid);
+			}
+		}
+		return f;
+	}
 
-    public void removeSkinFile(MSAccount account) {
-        try {
-            Files.delete(getSkinFile(account).toPath());
-        } catch (IOException e) {
-            getLogger().error("Failed to clean up skin file for " + account.getName());
-        }
-    }
+	public void removeSkinFile(MSAccount account) {
+		try {
+			Files.delete(getSkinFile(account).toPath());
+		} catch (IOException e) {
+			getLogger().error("Failed to clean up skin file for " + account.getName());
+		}
+	}
 
-    public String getSkinTextureId(MSAccount account) {
-        return "accounts_" + account.getUuid();
-    }
+	public String getSkinTextureId(MSAccount account) {
+		return "accounts_" + account.getUuid();
+	}
 
-    public void save() {
-        JsonArray array = new JsonArray();
-        accounts.forEach(account -> array.add(account.serialize()));
-        JsonObject object = new JsonObject();
-        object.add("accounts", array);
-        try {
-            Files.write(getAccountsSaveFile(), GsonHelper.GSON.toJson(object).getBytes(StandardCharsets.UTF_8));
-        } catch (IOException e) {
-            getLogger().error("Failed to save acounts config!", e);
-        }
-    }
+	public void save() {
+		JsonArray array = new JsonArray();
+		accounts.forEach(account -> array.add(account.serialize()));
+		JsonObject object = new JsonObject();
+		object.add("accounts", array);
+		try {
+			Files.write(getAccountsSaveFile(), GsonHelper.GSON.toJson(object).getBytes(StandardCharsets.UTF_8));
+		} catch (IOException e) {
+			getLogger().error("Failed to save acounts config!", e);
+		}
+	}
 
-    protected abstract Logger getLogger();
+	protected abstract Logger getLogger();
 
-    protected boolean isContained(String uuid) {
-        return accounts.stream().anyMatch(account -> account.getUuid().equals(uuid));
-    }
+	protected boolean isContained(String uuid) {
+		return accounts.stream().anyMatch(account -> account.getUuid().equals(uuid));
+	}
 
-    public boolean allowOfflineAccounts() {
-        return accounts.size() > 0 && !accounts.stream().allMatch(MSAccount::isOffline);
-    }
+	public boolean allowOfflineAccounts() {
+		return accounts.size() > 0 && !accounts.stream().allMatch(MSAccount::isOffline);
+	}
 }

@@ -44,60 +44,60 @@ import java.util.List;
 @UtilityClass
 public class ImageNetworking {
 
-    public String upload(String data, String url, CloseableHttpClient client, Logger logger) throws IOException {
+	public String upload(String data, String url, CloseableHttpClient client, Logger logger) throws IOException {
 
-        JsonElement el = NetworkUtil.getRequest(url, client);
-        if (el != null) {
-            JsonObject initGet = el.getAsJsonObject();
-            String tempId = initGet.get("id").getAsString();
-            int chunkSize = initGet.get("chunkSize").getAsInt();
-            int maxChunks = initGet.get("maxChunks").getAsInt();
+		JsonElement el = NetworkUtil.getRequest(url, client);
+		if (el != null) {
+			JsonObject initGet = el.getAsJsonObject();
+			String tempId = initGet.get("id").getAsString();
+			int chunkSize = initGet.get("chunkSize").getAsInt();
+			int maxChunks = initGet.get("maxChunks").getAsInt();
 
-            List<String> dataList = new ArrayList<>();
+			List<String> dataList = new ArrayList<>();
 
-            for (char c : data.toCharArray()) {
-                dataList.add(String.valueOf(c));
-            }
+			for (char c : data.toCharArray()) {
+				dataList.add(String.valueOf(c));
+			}
 
-            List<String> chunks = new ArrayList<>();
-            Lists.partition(dataList, chunkSize).forEach(list -> chunks.add(String.join("", list)));
+			List<String> chunks = new ArrayList<>();
+			Lists.partition(dataList, chunkSize).forEach(list -> chunks.add(String.join("", list)));
 
-            if (chunks.size() > maxChunks) {
-                throw new IllegalStateException("Too much Data!");
-            }
+			if (chunks.size() > maxChunks) {
+				throw new IllegalStateException("Too much Data!");
+			}
 
-            long index = 0;
-            for (String content : chunks) {
-                RequestBuilder requestBuilder = RequestBuilder.post().setUri(url + "/" + tempId);
-                requestBuilder.setHeader("Content-Type", "application/json");
-                requestBuilder.setEntity(new StringEntity("{" +
-                        "\"index\":" + index + "," +
-                        "  \"content\": \"" + content + "\"" +
-                        "}"));
-                logger.debug(EntityUtils.toString(client.execute(requestBuilder.build()).getEntity()));
-                index += content.getBytes(StandardCharsets.UTF_8).length;
-            }
+			long index = 0;
+			for (String content : chunks) {
+				RequestBuilder requestBuilder = RequestBuilder.post().setUri(url + "/" + tempId);
+				requestBuilder.setHeader("Content-Type", "application/json");
+				requestBuilder.setEntity(new StringEntity("{" +
+						"\"index\":" + index + "," +
+						"  \"content\": \"" + content + "\"" +
+						"}"));
+				logger.debug(EntityUtils.toString(client.execute(requestBuilder.build()).getEntity()));
+				index += content.getBytes(StandardCharsets.UTF_8).length;
+			}
 
-            logger.debug("Finishing Stream... tempId was: " + tempId);
+			logger.debug("Finishing Stream... tempId was: " + tempId);
 
-            RequestBuilder requestBuilder = RequestBuilder.post().setUri(url + "/" + tempId + "/end");
-            requestBuilder.setHeader("Content-Type", "application/json");
+			RequestBuilder requestBuilder = RequestBuilder.post().setUri(url + "/" + tempId + "/end");
+			requestBuilder.setHeader("Content-Type", "application/json");
 
-            requestBuilder.setEntity(new StringEntity("{\"language\": \"image:png/base64\", \"expiration\": 168, \"password\":\"\"}"));
+			requestBuilder.setEntity(new StringEntity("{\"language\": \"image:png/base64\", \"expiration\": 168, \"password\":\"\"}"));
 
-            HttpResponse response = client.execute(requestBuilder.build());
+			HttpResponse response = client.execute(requestBuilder.build());
 
-            String body = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
-            try {
-                JsonElement element = new JsonParser().parse(body);
+			String body = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
+			try {
+				JsonElement element = new JsonParser().parse(body);
 
-                return element.getAsJsonObject().get("pasteId").getAsString();
-            } catch (JsonParseException e) {
-                logger.warn("Not Json data: \n" + body);
-            }
-        } else {
-            logger.error("Server Error!");
-        }
-        return "";
-    }
+				return element.getAsJsonObject().get("pasteId").getAsString();
+			} catch (JsonParseException e) {
+				logger.warn("Not Json data: \n" + body);
+			}
+		} else {
+			logger.error("Server Error!");
+		}
+		return "";
+	}
 }
