@@ -77,5 +77,10 @@ public abstract class PlayerEntityMixin extends Entity {
                 reachDisplayHud.updateDistance(source.getAttacker(), this);
             }
         }
+
+		if (source.getAttacker() instanceof PlayerEntity) {
+			ComboHud comboHud = (ComboHud) HudManager.getInstance().get(ComboHud.ID);
+			comboHud.onEntityDamage(this);
+		}
     }
 }

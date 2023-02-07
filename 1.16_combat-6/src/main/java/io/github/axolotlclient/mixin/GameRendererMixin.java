@@ -27,7 +27,6 @@ import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.blur.MenuBlur;
 import io.github.axolotlclient.modules.blur.MotionBlur;
 import io.github.axolotlclient.modules.zoom.Zoom;
-import static jdk.internal.org.jline.utils.Colors.h;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;

@@ -22,22 +22,40 @@
 
 package io.github.axolotlclient.mixin;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.modules.freelook.Perspective;
 import io.github.axolotlclient.modules.hud.gui.hud.PlayerHud;
 import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.minecraft.client.render.entity.EntityRenderDispatcher;
+import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntityRenderer.class)
-public abstract class LivingEntityRendererMixin {
+public abstract class LivingEntityRendererMixin<T extends LivingEntity> extends EntityRenderer<T> {
+
+	protected LivingEntityRendererMixin(EntityRenderDispatcher entityRenderDispatcher) {
+		super(entityRenderDispatcher);
+	}
+
+	@Inject(method = "method_10208(Lnet/minecraft/entity/LivingEntity;DDD)V", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;rotate(FFFF)V", ordinal = 1))
+	private void axolotlclient$correctNameplateRotation(LivingEntity livingEntity, double d, double e, double f, CallbackInfo ci){
+		if(MinecraftClient.getInstance().options.perspective == Perspective.THIRD_PERSON_FRONT.ordinal()){
+			GlStateManager.rotate(-this.dispatcher.pitch*2, 1.0F, 0.0F, 0.0F);
+		}
+	}
 
     @Inject(method = "hasLabel*", at = @At("HEAD"), cancellable = true)
     private void axolotlclient$showOwnNametag(LivingEntity livingEntity, CallbackInfoReturnable<Boolean> cir) {

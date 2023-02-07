@@ -28,6 +28,7 @@
     "HeldItemRendererMixin",
     "I18nMixin",
     "InGameHudMixin",
+    "ItemEntityRendererMixin",
     "KeyBindingMixin",
     "KeyboardInputMixin",
     "LivingEntityMixin",
