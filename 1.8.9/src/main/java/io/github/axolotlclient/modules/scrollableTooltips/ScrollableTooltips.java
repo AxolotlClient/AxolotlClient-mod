@@ -38,9 +38,6 @@ public class ScrollableTooltips extends AbstractModule {
 	public int tooltipOffsetX;
 	public int tooltipOffsetY;
 
-	protected KeyBinding key = new KeyBinding("key.scrollHorizontally", Keyboard.KEY_LSHIFT,
-			"category.axolotlclient");
-
 	private static final ScrollableTooltips instance = new ScrollableTooltips();
 
 	private final OptionCategory category = new OptionCategory("scrollableTooltips");
@@ -63,8 +60,6 @@ public class ScrollableTooltips extends AbstractModule {
 		category.add(inverse);
 
 		AxolotlClient.CONFIG.rendering.addSubCategory(category);
-
-		KeyBindingHelper.registerKeyBinding(key);
 	}
 
 	public void onRenderTooltip() {
@@ -90,7 +85,7 @@ public class ScrollableTooltips extends AbstractModule {
 	}
 
 	public void onScroll(boolean reverse) {
-		if ((Screen.hasShiftDown() && key.getCode() == Keyboard.KEY_LSHIFT) || key.isPressed()) {
+		if (Screen.hasShiftDown()) {
 			if (reverse) {
 				tooltipOffsetX -= scrollAmount.get();
 			} else {

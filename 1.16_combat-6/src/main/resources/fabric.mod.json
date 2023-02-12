@@ -23,6 +23,9 @@
 	"entrypoints": {
 		"client": [
 			"io.github.axolotlclient.AxolotlClient"
+		],
+		"modmenu": [
+			"io.github.axolotlclient.config.modmenu.ModMenuCompat"
 		]
 	},
 	"mixins": [
@@ -33,7 +36,7 @@
 	},
 	"depends": {
 		"fabricloader": ">=0.12.0",
-		"minecraft": "1.16.3-combat.8.c",
+		"minecraft": ["1.16.3-combat.8.c", "1.16.3-combat.8.a"],
 		"fabric-resource-loader-v0": "*",
 		"axolotlclientconfig": "*"
 	}

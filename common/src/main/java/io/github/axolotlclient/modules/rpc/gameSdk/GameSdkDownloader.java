@@ -156,13 +156,12 @@ public class GameSdkDownloader {
 				System.load(sdk.getAbsolutePath());
 			}
 
-			if (jni.getAbsolutePath().contains(" ")) {
-				throw new IllegalStateException("JNI Path: <" + jni.getAbsolutePath() + "> contains spaces!");
-			}
-
 			System.load(jni.getAbsolutePath()); // it WILL crash if your path contains spaces. No, escaping them does not help.
 			Core.initDiscordNative(sdk.getAbsolutePath());
 		} catch (Throwable e) {
+			if (jni.getAbsolutePath().contains(" ")) {
+				throw new IllegalStateException("JNI Path: <" + jni.getAbsolutePath() + "> contains spaces!", e);
+			}
 			logger.warn("Discord RPC failed to load: ");
 			e.printStackTrace();
 			rpcEnabled.set(false);

@@ -115,3 +115,8 @@
 - fix resourcepacks on 1.16 versions
 - add a notification system to 1.8.9
 - fix more bugs
+
+### 3.0.2
+
+- fix *more* bugs
+- re-instantiate modmenu compat on 1.16 versions

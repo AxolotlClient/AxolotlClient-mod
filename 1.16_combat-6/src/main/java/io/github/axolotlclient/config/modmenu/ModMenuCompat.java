@@ -22,9 +22,9 @@
 
 package io.github.axolotlclient.config.modmenu;
 
-import com.terraformersmc.modmenu.api.ConfigScreenFactory;
-import com.terraformersmc.modmenu.api.ModMenuApi;
 import io.github.axolotlclient.modules.hud.HudEditScreen;
+import io.github.prospector.modmenu.api.ConfigScreenFactory;
+import io.github.prospector.modmenu.api.ModMenuApi;
 
 public class ModMenuCompat implements ModMenuApi {
 

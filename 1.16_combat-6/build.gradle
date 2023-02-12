@@ -37,8 +37,7 @@ dependencies {
 	}
 	include "io.github.axolotlclient:AxolotlClient-config:${project.config}+1.16"
 
-	modCompileOnlyApi("com.terraformersmc:modmenu:1.15.0")
-	// there is no working modmenu release for this version, but we still provide support for it just in case.
+	modLocalRuntime modCompileOnlyApi("io.github.prospector:modmenu:1.14.9+build.14")
 
 	implementation include(project(path: ":common", configuration: 'shadow'))
 
@@ -89,9 +88,9 @@ modrinth {
 	versionNumber = "${project.version}"
 	versionType = "release"
 	uploadFile = remapJar
-	gameVersions = ["1.16.3"]
-	loaders = ["fabric"]
-	additionalFiles = [remapSourcesJar]
+	gameVersions.set(["1.16.3"])
+	loaders.set(["fabric", "quilt"])
+	additionalFiles.set([remapSourcesJar])
 	dependencies {
 		required.version "IQ3UGSc2"
 	}

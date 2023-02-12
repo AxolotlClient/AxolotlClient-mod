@@ -29,7 +29,7 @@ dependencies {
 	}
 	include "io.github.axolotlclient:AxolotlClient-config:${project.config}+1.16"
 
-	modCompileOnlyApi("com.terraformersmc:modmenu:1.15.0")
+	modLocalRuntime modCompileOnlyApi("com.terraformersmc:modmenu:1.15.0")
 
 	implementation include(project(path: ":common", configuration: 'shadow'))
 
@@ -80,9 +80,9 @@ modrinth {
 	versionNumber = "${project.version}"
 	versionType = "release"
 	uploadFile = remapJar
-	gameVersions = ["${project.minecraft_1165}"]
-	loaders = ["fabric"]
-	additionalFiles = [remapSourcesJar]
+	gameVersions.set(["${project.minecraft_1165}"])
+	loaders.set(["fabric", "quilt"])
+	additionalFiles.set([remapSourcesJar])
 	dependencies {
 		required.version "IQ3UGSc2"
 	}

@@ -80,9 +80,9 @@ modrinth {
 	versionNumber = "${project.version}"
 	versionType = "release"
 	uploadFile = remapJar
-	gameVersions = ["${project.minecraft_1192}"]
-	loaders = ["quilt"]
-	additionalFiles = [remapSourcesJar]
+	gameVersions.set(["${project.minecraft_1192}"])
+	loaders.set(["quilt"])
+	additionalFiles.set([remapSourcesJar])
 	dependencies {
 		required.project "qsl"
 	}

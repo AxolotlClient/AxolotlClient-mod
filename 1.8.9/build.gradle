@@ -95,9 +95,9 @@ modrinth {
 	versionNumber = "${project.version}"
 	versionType = "release"
 	uploadFile = remapJar
-	gameVersions = ["${project.minecraft_18}"]
-	loaders = ["fabric"]
-	additionalFiles = [remapSourcesJar]
+	gameVersions.set(["${project.minecraft_18}"])
+	loaders.set(["fabric", "quilt"])
+	additionalFiles.set([remapSourcesJar])
 	dependencies {
 		required.project "legacy-fabric-api"
 	}
