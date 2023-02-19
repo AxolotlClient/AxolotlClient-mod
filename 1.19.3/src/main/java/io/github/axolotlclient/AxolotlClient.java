@@ -28,6 +28,8 @@ import io.github.axolotlclient.AxolotlClientConfig.DefaultConfigManager;
 import io.github.axolotlclient.AxolotlClientConfig.common.ConfigManager;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
+import io.github.axolotlclient.api.API;
+import io.github.axolotlclient.api.handlers.FriendRequestHandlerImpl;
 import io.github.axolotlclient.config.AxolotlClientConfig;
 import io.github.axolotlclient.modules.Module;
 import io.github.axolotlclient.modules.ModuleLoader;
@@ -93,6 +95,7 @@ public class AxolotlClient implements ClientModInitializer {
 	public static boolean showWarning = true;
 
 	public static Logger LOGGER = new LoggerImpl();
+	public static API API;
 
 	@Override
 	public void onInitializeClient(ModContainer container) {
@@ -144,6 +147,9 @@ public class AxolotlClient implements ClientModInitializer {
 		FeatureDisabler.init();
 
 		LOGGER.debug("Debug Output activated, Logs will be more verbose!");
+
+		API = new API(LOGGER);
+		API.addHandler(new FriendRequestHandlerImpl());
 
 		LOGGER.info("AxolotlClient Initialized");
 	}

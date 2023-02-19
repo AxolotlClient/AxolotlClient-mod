@@ -30,9 +30,11 @@ import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.GenericOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
+import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.mixin.MinecraftClientAccessor;
 import io.github.axolotlclient.modules.Module;
 import io.github.axolotlclient.util.Logger;
+import io.github.axolotlclient.util.notifications.Notifications;
 import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.multiplayer.report.ReportEnvironment;
@@ -73,6 +75,10 @@ public class Auth extends Accounts implements Module {
 			current = new MSAccount(client.getSession().getUsername(), client.getSession().getUuid(), client.getSession().getAccessToken());
 		}
 
+		if(!current.isOffline()){
+			AxolotlClient.API.startup(current.getUuid());
+		}
+
 		OptionCategory category = new OptionCategory("auth");
 		category.add(showButton, viewAccounts);
 		AxolotlClient.CONFIG.general.add(category);
@@ -91,6 +97,7 @@ public class Auth extends Accounts implements Module {
 
 		Runnable runnable = () -> {
 			try {
+				API.getInstance().shutdown();
 				((MinecraftClientAccessor) client).setSession(new Session(account.getName(), account.getUuid(), account.getAuthToken(),
 						Optional.empty(), Optional.empty(),
 						Session.AccountType.MSA));
@@ -99,6 +106,7 @@ public class Auth extends Accounts implements Module {
 					service = UserApiService.OFFLINE;
 				} else {
 					service = ((YggdrasilMinecraftSessionService) MinecraftClient.getInstance().getSessionService()).getAuthenticationService().createUserApiService(client.getSession().getAccessToken());
+					API.getInstance().startup(current.getUuid());
 				}
 				((MinecraftClientAccessor) client).setUserApiService(service);
 				((MinecraftClientAccessor) client).setSocialInteractionsManager(new SocialInteractionsManager(client, service));
@@ -106,15 +114,15 @@ public class Auth extends Accounts implements Module {
 				((MinecraftClientAccessor) client).setChatReportingContext(ChatReportingContext.m_ddscuhgw(ReportEnvironment.createLocal(), service));
 				save();
 				current = account;
-				client.getToastManager().add(new SystemToast(SystemToast.Type.TUTORIAL_HINT, Text.translatable("auth.notif.title"), Text.translatable("auth.notif.login.successful", current.getName())));
+				Notifications.getInstance().addStatus( Text.translatable("auth.notif.title"), Text.translatable("auth.notif.login.successful", current.getName()));
 			} catch (AuthenticationException e) {
 				e.printStackTrace();
-				client.getToastManager().add(new SystemToast(SystemToast.Type.TUTORIAL_HINT, Text.translatable("auth.notif.title"), Text.translatable("auth.notif.login.failed")));
+				Notifications.getInstance().addStatus(Text.translatable("auth.notif.title"), Text.translatable("auth.notif.login.failed"));
 			}
 		};
 
 		if (account.isExpired() && !account.isOffline()) {
-			client.getToastManager().add(new SystemToast(SystemToast.Type.TUTORIAL_HINT, Text.translatable("auth.notif.title"), Text.translatable("auth.notif.refreshing", account.getName())));
+			Notifications.getInstance().addStatus(Text.translatable("auth.notif.title"), Text.translatable("auth.notif.refreshing", account.getName()));
 			account.refresh(auth, runnable);
 		} else {
 			runnable.run();
