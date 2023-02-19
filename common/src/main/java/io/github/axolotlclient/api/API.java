@@ -17,7 +17,8 @@ import java.util.Set;
 
 public class API {
 
-	private static final String API_URL = "https://axo.gart.sh/";
+	private static final String API_BASE = "https://axo.gart.sh";
+	private static final String API_URL = API_BASE+"/api/ws";
 	@Getter
 	private static API Instance;
 	private final HashMap<String, Request> requests = new HashMap<>();

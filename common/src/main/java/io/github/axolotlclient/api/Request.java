@@ -60,6 +60,15 @@ public class Request {
 			this.elements = elements;
 		}
 
+		public Data addElement(String name, String object){
+			elements.put(name, object);
+			return this;
+		}
+
+		public Data addElement(String name, JsonObject object){
+			return addElement(name, object.toString());
+		}
+
 		private JsonObject getJson() {
 			JsonObject object = new JsonObject();
 			elements.keySet().forEach(s -> object.add(s, new JsonPrimitive(elements.get(s))));
