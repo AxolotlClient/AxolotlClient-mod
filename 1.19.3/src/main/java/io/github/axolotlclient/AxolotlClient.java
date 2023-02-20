@@ -29,7 +29,6 @@ import io.github.axolotlclient.AxolotlClientConfig.common.ConfigManager;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.api.API;
-import io.github.axolotlclient.api.handlers.FriendRequestHandler;
 import io.github.axolotlclient.config.AxolotlClientConfig;
 import io.github.axolotlclient.modules.Module;
 import io.github.axolotlclient.modules.ModuleLoader;
@@ -51,6 +50,7 @@ import io.github.axolotlclient.modules.tnttime.TntTime;
 import io.github.axolotlclient.modules.zoom.Zoom;
 import io.github.axolotlclient.util.*;
 import io.github.axolotlclient.util.notifications.Notifications;
+import io.github.axolotlclient.util.translation.Translations;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
@@ -128,6 +128,9 @@ public class AxolotlClient implements ClientModInitializer {
 		addExternalModules();
 
 		CONFIG.init();
+
+		new API(LOGGER, Notifications.getInstance(), Translations.getInstance());
+
 		modules.forEach(Module::init);
 
 		CONFIG.getConfig().addAll(CONFIG.getCategories());
@@ -147,8 +150,6 @@ public class AxolotlClient implements ClientModInitializer {
 		FeatureDisabler.init();
 
 		LOGGER.debug("Debug Output activated, Logs will be more verbose!");
-
-		new API(LOGGER, Notifications.getInstance());
 
 		LOGGER.info("AxolotlClient Initialized");
 	}

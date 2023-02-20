@@ -25,6 +25,7 @@ package io.github.axolotlclient.util.translation;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
@@ -43,7 +44,10 @@ import java.util.*;
  * @author TheKodeToad
  */
 
-public class TranslationProvider {
+public class Translations implements TranslationProvider {
+
+	@Getter
+	private static final TranslationProvider Instance = new Translations();
 
 	private static final JsonParser parser = new JsonParser();
 
@@ -62,7 +66,7 @@ public class TranslationProvider {
 		}
 	}
 
-	public static String translate(String key, Object... args) {
+	public String translate(String key, Object... args) {
 		String translated = TRANSLATIONS.getOrDefault(key, "axolotlclient." + key);
 		if (translated.contains("%s")) {
 			for (Object arg : args) {

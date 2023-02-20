@@ -1,4 +1,4 @@
-package io.github.axolotlclient.api.channels;
+package io.github.axolotlclient.api.requests;
 
 import com.google.gson.JsonObject;
 import io.github.axolotlclient.api.Request;

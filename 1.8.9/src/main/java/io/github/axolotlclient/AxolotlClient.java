@@ -54,6 +54,7 @@ import io.github.axolotlclient.util.Logger;
 import io.github.axolotlclient.util.LoggerImpl;
 import io.github.axolotlclient.util.NetworkHelper;
 import io.github.axolotlclient.util.notifications.Notifications;
+import io.github.axolotlclient.util.translation.Translations;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.legacyfabric.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -97,6 +98,9 @@ public class AxolotlClient implements ClientModInitializer {
 		getModules();
 		addExternalModules();
 		CONFIG.init();
+
+		new API(LOGGER, Notifications.getInstance(), Translations.getInstance());
+
 		modules.forEach(Module::init);
 
 		CONFIG.config.addAll(CONFIG.getCategories());
@@ -119,8 +123,6 @@ public class AxolotlClient implements ClientModInitializer {
 		FeatureDisabler.init();
 
 		LOGGER.debug("Debug Output enabled, Logs will be quite verbose!");
-
-		new API(LOGGER, Notifications.getInstance());
 
 		LOGGER.info("AxolotlClient Initialized");
 	}

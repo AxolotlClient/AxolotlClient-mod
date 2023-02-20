@@ -18,7 +18,7 @@ public class Request {
 	private final Consumer<JsonObject> handler;
 	private final Data data;
 
-	public Request(String type, Consumer<JsonObject> handler, String... data){
+	public Request(String type, Consumer<JsonObject> handler, String... data) {
 		this.type = type;
 		this.data = new Data(data);
 		this.handler = handler;
@@ -33,7 +33,7 @@ public class Request {
 		return key.toString();
 	}
 
-	public String getJson(){
+	public String getJson() {
 		JsonObject object = new JsonObject();
 		object.add("id", new JsonPrimitive(id));
 		object.add("type", new JsonPrimitive(type));
@@ -46,27 +46,27 @@ public class Request {
 	public static class Data {
 		private final Map<String, String> elements;
 
-		public Data(String... data){
+		public Data(String... data) {
 			elements = new HashMap<>();
-			if(data.length%2 != 0){
+			if (data.length % 2 != 0) {
 				throw new IllegalArgumentException("Unequal count of arguments!");
 			}
-			for(int i=0;i<data.length-1;i+=2){
-				elements.put(data[i], data[i+1]);
+			for (int i = 0; i < data.length - 1; i += 2) {
+				elements.put(data[i], data[i + 1]);
 			}
 		}
 
-		public Data(Map<String, String> elements){
+		public Data(Map<String, String> elements) {
 			this.elements = elements;
 		}
 
-		public Data addElement(String name, String object){
-			elements.put(name, object);
-			return this;
+		public Data addElement(String name, JsonObject object) {
+			return addElement(name, object.toString());
 		}
 
-		public Data addElement(String name, JsonObject object){
-			return addElement(name, object.toString());
+		public Data addElement(String name, String object) {
+			elements.put(name, object);
+			return this;
 		}
 
 		private JsonObject getJson() {

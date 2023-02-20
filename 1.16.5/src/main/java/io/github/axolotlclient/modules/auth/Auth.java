@@ -70,10 +70,6 @@ public class Auth extends Accounts implements Module {
 			current = new MSAccount(client.getSession().getUsername(), client.getSession().getUuid(), client.getSession().getAccessToken());
 		}
 
-		if(!current.isOffline()){
-			API.getInstance().startup(current.getUuid());
-		}
-
 		OptionCategory category = new OptionCategory("auth");
 		category.add(showButton, viewAccounts);
 		AxolotlClient.CONFIG.general.add(category);

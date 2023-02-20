@@ -24,11 +24,15 @@ package io.github.axolotlclient.mixin;
 
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
+import io.github.axolotlclient.api.API;
+import io.github.axolotlclient.modules.auth.Auth;
 import net.minecraft.client.gui.screen.SplashOverlay;
+import net.minecraft.client.util.math.MatrixStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
@@ -47,5 +51,12 @@ public abstract class SplashOverlayMixin {
 		args.set(0, (float) color.getRed() / 255);
 		args.set(1, (float) color.getGreen() / 255);
 		args.set(2, (float) color.getBlue() / 255);
+	}
+
+	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;init(Lnet/minecraft/client/MinecraftClient;II)V"))
+	private void onReloadFinish(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+		if (!API.getInstance().isConnected() && !Auth.getInstance().getCurrent().isOffline()) {
+			API.getInstance().startup(Auth.getInstance().getCurrent().getUuid());
+		}
 	}
 }

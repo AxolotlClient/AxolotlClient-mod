@@ -1,4 +1,4 @@
-package io.github.axolotlclient.api.channels;
+package io.github.axolotlclient.api.requests;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
@@ -18,13 +18,13 @@ public class StatusUpdate extends Request {
 		}, new Data("updateType", updateType.getIdentifier(), "uuid", uuid).addElement("update", updateData));
 	}
 
-	public static StatusUpdate online(String uuid, MenuId menuId){
+	public static StatusUpdate online(String uuid, MenuId menuId) {
 		JsonObject data = new JsonObject();
 		data.add("location", new JsonPrimitive(menuId.getIdentifier()));
 		return new StatusUpdate(Type.ONLINE, uuid, data);
 	}
 
-	public static StatusUpdate inGame(String uuid, String server, String gameType, String gameMode, String map, int players, int maxPlayers, long elapsedSecs){
+	public static StatusUpdate inGame(String uuid, String server, String gameType, String gameMode, String map, int players, int maxPlayers, long elapsedSecs) {
 		JsonObject object = new JsonObject();
 		SupportedServer serv = Arrays.stream(SupportedServer.values()).filter(s -> s.adress.matcher(server).matches()).collect(Collectors.toList()).get(0);
 		object.addProperty("server", serv.name);
@@ -52,16 +52,14 @@ public class StatusUpdate extends Request {
 	public enum MenuId {
 		MAIN_MENU("MAIN_MENU"),
 		SERVER_LIST("SERVER_LIST"),
-		SETTINGS("SETTINGS")
-		;
+		SETTINGS("SETTINGS");
 		@Getter
 		private final String identifier;
 	}
 
 	@RequiredArgsConstructor
 	public enum SupportedServer {
-		HYPIXEL("HYPIXEL", Pattern.compile("^hypixel.$"))
-		;
+		HYPIXEL("HYPIXEL", Pattern.compile("^hypixel.$"));
 		private final String name;
 		private final Pattern adress;
 	}

@@ -34,7 +34,6 @@ import io.github.axolotlclient.util.notifications.Notifications;
 import lombok.Getter;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.client.util.Session;
 import net.minecraft.util.Identifier;
@@ -68,10 +67,6 @@ public class Auth extends Accounts implements Module {
 			current = new MSAccount(client.getSession().getUsername(), client.getSession().getUuid(), client.getSession().getAccessToken());
 		}
 
-		if(!current.isOffline()) {
-			API.getInstance().startup(current.getUuid());
-		}
-
 		OptionCategory category = new OptionCategory("auth");
 		category.add(showButton, viewAccounts);
 		AxolotlClient.CONFIG.general.add(category);
@@ -97,16 +92,16 @@ public class Auth extends Accounts implements Module {
 				}
 				save();
 				current = account;
-				Notifications.getInstance().addStatus(I18n.translate("auth.notif.title"), I18n.translate("auth.notif.login.successful", current.getName()));
+				Notifications.getInstance().addStatus("auth.notif.title", "auth.notif.login.successful", current.getName());
 				AxolotlClient.LOGGER.info("Successfully logged in as " + current.getName());
 			} catch (Exception e) {
 				AxolotlClient.LOGGER.error("Failed to log in! ", e);
-				Notifications.getInstance().addStatus(I18n.translate("auth.notif.title"), I18n.translate("auth.notif.login.failed"));
+				Notifications.getInstance().addStatus("auth.notif.title", "auth.notif.login.failed");
 			}
 		};
 
 		if (account.isExpired() && !account.isOffline()) {
-			Notifications.getInstance().addStatus(I18n.translate("auth.notif.title"), I18n.translate("auth.notif.refreshing", account.getName()));
+			Notifications.getInstance().addStatus("auth.notif.title", "auth.notif.refreshing", account.getName());
 			account.refresh(auth, runnable);
 		} else {
 			runnable.run();

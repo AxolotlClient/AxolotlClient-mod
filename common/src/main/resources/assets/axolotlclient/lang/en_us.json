@@ -374,5 +374,13 @@
 	"zoomScrollStep": "Scroll Step",
 	"zoomScrolling": "Zoom Scrolling",
 	"zoomScrolling.tooltip": "Whether to allow scrolling to modify the zoom factor.",
-	"zoomSpeed": "Animation Speed"
+	"zoomSpeed": "Animation Speed",
+	"api.error.handshake": "Handshake failed!",
+	"api.success.handshake": "Handshake successful!",
+	"api.success.handshake.desc": "The API Handshake was successful.",
+	"api.error.userNotFound": "The specified User could not be found.",
+	"api.error.friendRequestNotFound": "You do not have a friend request from this user.",
+	"api.error.userBlocked": "You blocked this user.",
+	"api.error.userAlreadyBlocked": "You already blocked this user.",
+	"api.error.userAlreadyFriends": "You are already friends with this user."
 }

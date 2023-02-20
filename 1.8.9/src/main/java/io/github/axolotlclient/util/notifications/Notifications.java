@@ -26,6 +26,7 @@ import io.github.axolotlclient.util.Util;
 import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.util.Identifier;
 
@@ -45,11 +46,11 @@ public class Notifications implements NotificationProvider {
 	private int lastX;
 	private boolean fading;
 
-	public void addStatus(String title, String description) {
+	public void addStatus(String title, String description, Object... args) {
 		if (statusQueue.isEmpty() && currentStatus == null) {
-			setStatus(new Status(title, description));
+			setStatus(new Status(I18n.translate(title, args), I18n.translate(description, args)));
 		} else {
-			statusQueue.add(new Status(title, description));
+			statusQueue.add(new Status(I18n.translate(title, args), I18n.translate(description, args)));
 		}
 	}
 
