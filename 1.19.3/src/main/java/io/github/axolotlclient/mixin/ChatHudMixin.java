@@ -45,11 +45,8 @@ public abstract class ChatHudMixin {
 		AutoGG.getInstance().onMessage(message);
 		AutoBoop.getInstance().onMessage(message);
 
-		if (AutoTip.getInstance().onChatMessage(message)) {
+		if (AutoTip.getInstance().onChatMessage(message) || HypixelLocation.waitingForResponse(message.getString())) {
 			ci.cancel();
-		}
-		if(HypixelLocation.waitingForResponse(message.getString())){
-
 		}
 	}
 

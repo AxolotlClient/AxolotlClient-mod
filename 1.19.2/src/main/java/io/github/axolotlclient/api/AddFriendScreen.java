@@ -24,8 +24,6 @@ package io.github.axolotlclient.api;
 
 import io.github.axolotlclient.api.handlers.FriendHandler;
 import io.github.axolotlclient.api.util.UUIDHelper;
-import io.github.axolotlclient.modules.auth.Auth;
-import io.github.axolotlclient.modules.auth.MSAccount;
 import io.github.axolotlclient.util.notifications.Notifications;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -65,7 +63,7 @@ public class AddFriendScreen extends Screen {
 	public void render(MatrixStack matrices, int i, int j, float f) {
 		renderBackground(matrices);
 		super.render(matrices, i, j, f);
-		textRenderer.drawWithShadow(matrices, Text.translatable("api.screen.friends.add"), width / 2F - 100, height / 2f - 20, -1);
+		textRenderer.drawWithShadow(matrices, Text.translatable("api.screen.friends.add.name"), width / 2F - 100, height / 2f - 22, -1);
 		drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 20, 16777215);
 		nameInput.render(matrices, i, j, f);
 	}
@@ -74,8 +72,10 @@ public class AddFriendScreen extends Screen {
 	public void init() {
 		addDrawableChild(nameInput = new TextFieldWidget(textRenderer, width / 2 - 100, height / 2 - 10, 200, 20, Text.empty()));
 
-		addDrawableChild(new ButtonWidget.Builder(ScreenTexts.CANCEL, button -> client.setScreen(parent)).positionAndSize(width / 2 - 155, height - 50, 150, 20).build());
-		addDrawableChild(new ButtonWidget.Builder(ScreenTexts.DONE, button -> {
+		addDrawableChild(new ButtonWidget(width / 2 - 155, height - 50, 150, 20,
+				ScreenTexts.CANCEL, button -> client.setScreen(parent)));
+		addDrawableChild(new ButtonWidget(width / 2 + 5, height - 50, 150, 20,
+				ScreenTexts.DONE, button -> {
 			if(API.getInstance().isConnected()) {
 				String uuid;
 				try {
@@ -89,6 +89,6 @@ public class AddFriendScreen extends Screen {
 				Notifications.getInstance().addStatus("api.error.notLoggedIn", "api.error.notLoggedIn.desc");
 				client.setScreen(parent);
 			}
-		}).positionAndSize(width / 2 + 5, height - 50, 150, 20).build());
+		}));
 	}
 }

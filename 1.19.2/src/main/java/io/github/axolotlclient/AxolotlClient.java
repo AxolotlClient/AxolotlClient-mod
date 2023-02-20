@@ -29,6 +29,8 @@ import io.github.axolotlclient.AxolotlClientConfig.common.ConfigManager;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.api.API;
+import io.github.axolotlclient.api.APIOptions;
+import io.github.axolotlclient.api.StatusUpdateProviderImpl;
 import io.github.axolotlclient.config.AxolotlClientConfig;
 import io.github.axolotlclient.modules.Module;
 import io.github.axolotlclient.modules.ModuleLoader;
@@ -129,7 +131,7 @@ public class AxolotlClient implements ClientModInitializer {
 
 		CONFIG.init();
 
-		new API(LOGGER, Notifications.getInstance(), Translations.getInstance());
+		new API(LOGGER, Notifications.getInstance(), Translations.getInstance(), new StatusUpdateProviderImpl(), APIOptions.getInstance());
 
 		modules.forEach(Module::init);
 

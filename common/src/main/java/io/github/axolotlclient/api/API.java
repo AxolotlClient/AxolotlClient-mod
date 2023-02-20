@@ -1,3 +1,25 @@
+/*
+ * Copyright © 2021-2023 moehreag <moehreag@gmail.com> & Contributors
+ *
+ * This file is part of AxolotlClient.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ * For more information, see the LICENSE file.
+ */
+
 package io.github.axolotlclient.api;
 
 import com.google.gson.JsonObject;
@@ -27,7 +49,7 @@ public class API {
 
 	private static final String API_BASE = "wss://axo.gart.sh";
 	private static final URI API_URL = URI.create(API_BASE + "/api/ws");
-	private static final int STATUS_UPDATE_DELAY = 1; // The Delay between Status updates, in seconds.
+	private static final int STATUS_UPDATE_DELAY = 15; // The Delay between Status updates, in seconds. Discord uses 15 seconds so we will as well.
 
 	@Getter
 	private static API Instance;
@@ -43,12 +65,15 @@ public class API {
 	private Session session;
 	@Getter
 	private String uuid;
+	@Getter
+	private final Options apiOptions;
 
-	public API(Logger logger, NotificationProvider notificationProvider, TranslationProvider translationProvider, StatusUpdateProvider statusUpdateProvider) {
+	public API(Logger logger, NotificationProvider notificationProvider, TranslationProvider translationProvider, StatusUpdateProvider statusUpdateProvider, Options apiOptions) {
 		this.logger = logger;
 		this.notificationProvider = notificationProvider;
 		this.translationProvider = translationProvider;
 		this.statusUpdateProvider = statusUpdateProvider;
+		this.apiOptions = apiOptions;
 		Instance = this;
 		addHandler(new FriendRequestHandler());
 		addHandler(new FriendRequestAcceptedHandler());
@@ -144,12 +169,11 @@ public class API {
 	}
 
 	public void send(Request request) {
-		System.out.println(session.isOpen());
 		if (isConnected()) {
 			requests.put(request.getId(), request);
 			ThreadExecuter.scheduleTask(() -> {
 				String text = request.getJson();
-				logger.debug("Sending Request: " + text);
+				logDetailed("Sending Request: " + text);
 				try {
 					session.getBasicRemote().sendText(text);
 				} catch (IOException e) {
@@ -157,12 +181,12 @@ public class API {
 				}
 			});
 		} else {
-			logger.debug("Not sending request because API is closed: "+request.getJson());
+			logger.warn("Not sending request because API is closed: "+request.getJson());
 		}
 	}
 
 	public void onMessage(String message) {
-		logger.debug("Handling response: "+message);
+		logDetailed("Handling response: "+message);
 		handleResponse(message);
 	}
 
@@ -193,13 +217,19 @@ public class API {
 	}
 
 	public void onClose(CloseReason reason) {
-		logger.debug("Session closed! Reason: "+reason.getReasonPhrase()+" Code: "+reason.getCloseCode());
-		logger.debug("Restarting API session...");
+		logDetailed("Session closed! Reason: "+reason.getReasonPhrase()+" Code: "+reason.getCloseCode());
+		logDetailed("Restarting API session...");
 		session = createSession();
-		logger.debug("Restarted API session!");
+		logDetailed("Restarted API session!");
 	}
 
 	public void restart() {
 		startup(uuid);
+	}
+
+	public void logDetailed(String message, Object... args){
+		if(apiOptions.detailedLogging.get()){
+			logger.debug("[DETAIL] "+message, args);
+		}
 	}
 }
