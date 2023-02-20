@@ -29,7 +29,7 @@ import io.github.axolotlclient.AxolotlClientConfig.common.ConfigManager;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.api.API;
-import io.github.axolotlclient.api.handlers.FriendRequestHandlerImpl;
+import io.github.axolotlclient.api.handlers.FriendRequestHandler;
 import io.github.axolotlclient.config.AxolotlClientConfig;
 import io.github.axolotlclient.modules.Module;
 import io.github.axolotlclient.modules.ModuleLoader;
@@ -50,6 +50,7 @@ import io.github.axolotlclient.modules.tablist.Tablist;
 import io.github.axolotlclient.modules.tnttime.TntTime;
 import io.github.axolotlclient.modules.zoom.Zoom;
 import io.github.axolotlclient.util.*;
+import io.github.axolotlclient.util.notifications.Notifications;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
@@ -95,7 +96,6 @@ public class AxolotlClient implements ClientModInitializer {
 	public static boolean showWarning = true;
 
 	public static Logger LOGGER = new LoggerImpl();
-	public static API API;
 
 	@Override
 	public void onInitializeClient(ModContainer container) {
@@ -148,8 +148,7 @@ public class AxolotlClient implements ClientModInitializer {
 
 		LOGGER.debug("Debug Output activated, Logs will be more verbose!");
 
-		API = new API(LOGGER);
-		API.addHandler(new FriendRequestHandlerImpl());
+		new API(LOGGER, Notifications.getInstance());
 
 		LOGGER.info("AxolotlClient Initialized");
 	}

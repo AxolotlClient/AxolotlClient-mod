@@ -32,6 +32,7 @@ repositories {
 }
 
 dependencies {
+	implementation 'org.glassfish.tyrus.bundles:tyrus-standalone-client:2.1.3'
 
 	// take the oldest version just to build against
 	compileOnly("io.github.axolotlclient:AxolotlClient-config:${project.config}+${project.minecraft_18}")
@@ -53,6 +54,7 @@ dependencies {
 	})
 
 	shadow implementation('com.github.JnCrMx:discord-game-sdk4j:v0.5.5')
+	shadow implementation('org.glassfish.tyrus.bundles:tyrus-standalone-client:2.1.3')
 }
 
 build {
@@ -76,7 +78,7 @@ tasks.withType(AbstractArchiveTask).configureEach {
 shadowJar {
 	archiveClassifier.set('')
 	minimize()
-	relocate 'net.hypixel', 'axolotlclient.hypixel'
+	relocate 'net.hypixel', 'axolotlclient.shadow.hypixel'
 }
 
 publishing {

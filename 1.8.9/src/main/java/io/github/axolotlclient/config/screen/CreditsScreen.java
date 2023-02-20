@@ -25,6 +25,7 @@ package io.github.axolotlclient.config.screen;
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
+import io.github.axolotlclient.credits.Credits;
 import io.github.axolotlclient.mixin.SoundManagerAccessor;
 import io.github.axolotlclient.mixin.SoundSystemAccessor;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
@@ -245,18 +246,11 @@ public class CreditsScreen extends Screen {
 	private void initCredits() {
 		credits.add(new SpacerTitle("- - - - - - " + I18n.translate("contributors") + " - - - - - -"));
 
-		credits.add(new Credit("moehreag", "Author, Programming", "https://github.com/moehreag"));
-		credits.add(new Credit("YakisikliBaran", "Turkish Translation"));
-		credits.add(new Credit("TheKodeToad", "Contributor", "Motion Blur", "Freelook", "Zoom"));
-		credits.add(new Credit("DragonEggBedrockBreaking", "Bugfixing", "Inspiration of new Features"));
-		credits.add(new Credit("CornetPanique86", "French Translation"));
-		credits.add(new Credit("kuchenag", "Logo/Icon Creator"));
+		Credits.getContributors().forEach(credit -> credits.add(new Credit(credit.getName(), credit.getThings())));
 
 		credits.add(new SpacerTitle("- - - - - - " + I18n.translate("other_people") + " - - - - - -"));
 
-		credits.add(new Credit("gart", "gartbin dev and host", "Image sharing help", "https://gart.sh"));
-		credits.add(new Credit("DarkKronicle", "Author of KronHUD, the best HUD mod!"));
-		credits.add(new Credit("AMereBagatelle", "Author of the excellent FabricSkyBoxes Mod"));
+		Credits.getOtherPeople().forEach(credit -> credits.add(new Credit(credit.getName(), credit.getThings())));
 
 		if (!externalModuleCredits.isEmpty()) {
 			credits.add(new SpacerTitle(

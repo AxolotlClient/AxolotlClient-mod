@@ -83,9 +83,6 @@ modrinth {
 	gameVersions.set(["${project.minecraft_1165}"])
 	loaders.set(["fabric", "quilt"])
 	additionalFiles.set([remapSourcesJar])
-	dependencies {
-		required.version "IQ3UGSc2"
-	}
 
 	// Changelog fetching: Credit LambdAurora.
 	// https://github.com/LambdAurora/LambDynamicLights/blob/1ef85f486084873b5d97b8a08df72f57859a3295/build.gradle#L145

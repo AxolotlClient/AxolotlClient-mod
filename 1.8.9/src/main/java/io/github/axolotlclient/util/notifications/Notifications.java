@@ -32,7 +32,7 @@ import net.minecraft.util.Identifier;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Notifications {
+public class Notifications implements NotificationProvider {
 
 	// ---------------------- Basic Notification System because 1.8.9 has none by itself (except Achievements which only work in worlds) --------------------------
 

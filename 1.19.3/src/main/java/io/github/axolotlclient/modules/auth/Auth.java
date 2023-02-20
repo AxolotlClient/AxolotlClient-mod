@@ -41,7 +41,6 @@ import net.minecraft.client.multiplayer.report.ReportEnvironment;
 import net.minecraft.client.multiplayer.report.chat.ChatReportingContext;
 import net.minecraft.client.network.SocialInteractionsManager;
 import net.minecraft.client.texture.NativeImageBackedTexture;
-import net.minecraft.client.toast.SystemToast;
 import net.minecraft.client.util.PlayerKeyPairManager;
 import net.minecraft.client.util.Session;
 import net.minecraft.text.Text;
@@ -76,7 +75,7 @@ public class Auth extends Accounts implements Module {
 		}
 
 		if(!current.isOffline()){
-			AxolotlClient.API.startup(current.getUuid());
+			API.getInstance().startup(current.getUuid());
 		}
 
 		OptionCategory category = new OptionCategory("auth");
@@ -106,7 +105,7 @@ public class Auth extends Accounts implements Module {
 					service = UserApiService.OFFLINE;
 				} else {
 					service = ((YggdrasilMinecraftSessionService) MinecraftClient.getInstance().getSessionService()).getAuthenticationService().createUserApiService(client.getSession().getAccessToken());
-					API.getInstance().startup(current.getUuid());
+					API.getInstance().startup(account.getUuid());
 				}
 				((MinecraftClientAccessor) client).setUserApiService(service);
 				((MinecraftClientAccessor) client).setSocialInteractionsManager(new SocialInteractionsManager(client, service));
@@ -114,7 +113,7 @@ public class Auth extends Accounts implements Module {
 				((MinecraftClientAccessor) client).setChatReportingContext(ChatReportingContext.m_ddscuhgw(ReportEnvironment.createLocal(), service));
 				save();
 				current = account;
-				Notifications.getInstance().addStatus( Text.translatable("auth.notif.title"), Text.translatable("auth.notif.login.successful", current.getName()));
+				Notifications.getInstance().addStatus(Text.translatable("auth.notif.title"), Text.translatable("auth.notif.login.successful", current.getName()));
 			} catch (AuthenticationException e) {
 				e.printStackTrace();
 				Notifications.getInstance().addStatus(Text.translatable("auth.notif.title"), Text.translatable("auth.notif.login.failed"));

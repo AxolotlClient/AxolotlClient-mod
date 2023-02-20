@@ -26,6 +26,7 @@ import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.GenericOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
+import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.mixin.MinecraftClientAccessor;
 import io.github.axolotlclient.modules.Module;
 import io.github.axolotlclient.util.Logger;
@@ -67,6 +68,10 @@ public class Auth extends Accounts implements Module {
 			current = new MSAccount(client.getSession().getUsername(), client.getSession().getUuid(), client.getSession().getAccessToken());
 		}
 
+		if(!current.isOffline()) {
+			API.getInstance().startup(current.getUuid());
+		}
+
 		OptionCategory category = new OptionCategory("auth");
 		category.add(showButton, viewAccounts);
 		AxolotlClient.CONFIG.general.add(category);
@@ -85,7 +90,11 @@ public class Auth extends Accounts implements Module {
 
 		Runnable runnable = () -> {
 			try {
+				API.getInstance().shutdown();
 				((MinecraftClientAccessor) client).setSession(new Session(account.getName(), account.getUuid(), account.getAuthToken(), Session.AccountType.MOJANG.name()));
+				if(!account.isOffline()) {
+					API.getInstance().startup(account.getUuid());
+				}
 				save();
 				current = account;
 				Notifications.getInstance().addStatus(I18n.translate("auth.notif.title"), I18n.translate("auth.notif.login.successful", current.getName()));
