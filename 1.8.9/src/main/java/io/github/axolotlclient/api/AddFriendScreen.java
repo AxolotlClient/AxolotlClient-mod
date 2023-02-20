@@ -28,9 +28,7 @@ import io.github.axolotlclient.util.notifications.Notifications;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.ScreenTexts;
-import net.minecraft.text.Text;
+import net.minecraft.client.resource.language.I18n;
 
 import java.util.UUID;
 
@@ -40,13 +38,14 @@ public class AddFriendScreen extends Screen {
 	private final Screen parent;
 
 	public AddFriendScreen(Screen parent) {
-		super(Text.translatable("api.screen.friends.add"));
+		super();
 		this.parent = parent;
 	}
 
 	@Override
-	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-		return super.keyPressed(keyCode, scanCode, modifiers) || nameInput.keyPressed(keyCode, scanCode, modifiers);
+	public void keyPressed(char c, int keyCode) {
+		super.keyPressed(c, keyCode);
+		nameInput.keyPressed(c, keyCode);
 	}
 
 	@Override
@@ -55,25 +54,25 @@ public class AddFriendScreen extends Screen {
 	}
 
 	@Override
-	public boolean mouseClicked(double mouseX, double mouseY, int button) {
-		return super.mouseClicked(mouseX, mouseY, button) || nameInput.mouseClicked(mouseX, mouseY, button);
+	public void mouseClicked(int mouseX, int mouseY, int button) {
+		super.mouseClicked(mouseX, mouseY, button);
+		nameInput.mouseClicked(mouseX, mouseY, button);
 	}
 
 	@Override
-	public void render(MatrixStack matrices, int i, int j, float f) {
-		renderBackground(matrices);
-		super.render(matrices, i, j, f);
-		textRenderer.drawWithShadow(matrices, Text.translatable("api.screen.friends.add"), width / 2F - 100, height / 2f - 20, -1);
-		drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 20, 16777215);
-		nameInput.render(matrices, i, j, f);
+	public void render(int i, int j, float f) {
+		renderBackground();
+		super.render(i, j, f);
+		textRenderer.drawWithShadow(I18n.translate("api.screen.friends.add"), width / 2F - 100, height / 2f - 20, -1);
+		drawCenteredString(this.textRenderer, I18n.translate("api.screen.friends"), this.width / 2, 20, 16777215);
+		nameInput.render();
 	}
 
 	@Override
-	public void init() {
-		addDrawableChild(nameInput = new TextFieldWidget(textRenderer, width / 2 - 100, height / 2 - 10, 200, 20, Text.empty()));
-
-		addDrawableChild(new ButtonWidget(width / 2 - 155, height - 50, 150, 20, ScreenTexts.CANCEL, button -> client.setScreen(parent)));
-		addDrawableChild(new ButtonWidget(width / 2 + 5, height - 50, 150, 20, ScreenTexts.DONE, button -> {
+	protected void buttonClicked(ButtonWidget buttonWidget) {
+		if (buttonWidget.id == 0) {
+			client.setScreen(parent);
+		} else if (buttonWidget.id == 1) {
 			if (API.getInstance().isConnected()) {
 				String uuid;
 				try {
@@ -87,6 +86,14 @@ public class AddFriendScreen extends Screen {
 				Notifications.getInstance().addStatus("api.error.notLoggedIn", "api.error.notLoggedIn.desc");
 				client.setScreen(parent);
 			}
-		}));
+		}
+	}
+
+	@Override
+	public void init() {
+		nameInput = new TextFieldWidget(0, textRenderer, width / 2 - 100, height / 2 - 10, 200, 20);
+
+		buttons.add(new ButtonWidget(0, width / 2 - 155, height - 50, 150, 20, I18n.translate("gui.cancel")));
+		buttons.add(new ButtonWidget(1, width / 2 + 5, height - 50, 150, 20, I18n.translate("gui.done")));
 	}
 }

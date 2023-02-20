@@ -22,28 +22,21 @@
 
 package io.github.axolotlclient.api;
 
-import jakarta.websocket.*;
+import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.AxolotlClientConfig.options.GenericOption;
+import lombok.Getter;
+import net.minecraft.client.MinecraftClient;
 
-@jakarta.websocket.ClientEndpoint
-public class ClientEndpoint {
+public class APIOptions extends Options {
 
-	@OnMessage
-	public void onMessage(String message) {
-		API.getInstance().onMessage(message);
-	}
+	@Getter
+	private static final Options Instance = new APIOptions();
 
-	@OnOpen
-	public void onOpen(Session session) {
-		API.getInstance().onOpen(session);
-	}
+	@Override
+	public void init() {
+		super.init();
 
-	@OnError
-	public void onError(Throwable throwable) {
-		API.getInstance().onError(throwable);
-	}
-
-	@OnClose
-	public void onClose(CloseReason reason) {
-		API.getInstance().onClose(reason);
+		category.add(new GenericOption("viewFriends", "clickToOpen", (mX, mY) -> MinecraftClient.getInstance().setScreen(new FriendsScreen(MinecraftClient.getInstance().currentScreen))));
+		AxolotlClient.CONFIG.addCategory(category);
 	}
 }

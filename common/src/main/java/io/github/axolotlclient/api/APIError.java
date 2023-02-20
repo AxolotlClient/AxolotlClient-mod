@@ -42,8 +42,8 @@ public class APIError {
 		}
 	}
 
-	public static void display(JsonObject object){
-		API.getInstance().getLogger().debug("APIError: "+object);
+	public static void display(JsonObject object) {
+		API.getInstance().getLogger().debug("APIError: " + object);
 		API.getInstance().getNotificationProvider().addStatus("api.error.requestGeneric", fromResponse(object));
 	}
 

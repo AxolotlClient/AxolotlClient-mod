@@ -87,7 +87,7 @@ public class Auth extends Accounts implements Module {
 			try {
 				API.getInstance().shutdown();
 				((MinecraftClientAccessor) client).setSession(new Session(account.getName(), account.getUuid(), account.getAuthToken(), Session.AccountType.MOJANG.name()));
-				if(!account.isOffline()) {
+				if (!account.isOffline()) {
 					API.getInstance().startup(account.getUuid());
 				}
 				save();

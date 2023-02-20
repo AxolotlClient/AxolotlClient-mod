@@ -57,7 +57,7 @@ public class StatusUpdate extends Request {
 		return new StatusUpdate(Type.IN_GAME, object);
 	}
 
-	public static StatusUpdate inGameUnknown(String server, String worldType, String worldName, String gamemode, long activityStartedEpochSecs){
+	public static StatusUpdate inGameUnknown(String server, String worldType, String worldName, String gamemode, long activityStartedEpochSecs) {
 		JsonObject object = new JsonObject();
 		object.addProperty("server", server);
 		object.addProperty("worldType", worldType);
@@ -151,7 +151,7 @@ public class StatusUpdate extends Request {
 		MEGA_WALLS("Mega Walls", "Standard", "Face Off", "Challenge"),
 		MURDER_MYSTERY("Murder Mystery", "Classic", "Double Up!", "Assassins", "Infection"),
 		DROPPER("Dropper"),
-		SKYBLOCK("Skyblock","Classic", "Ironman", "Stranded"),
+		SKYBLOCK("Skyblock", "Classic", "Ironman", "Stranded"),
 		SKYWARS("SkyWars", "Solo Normal", "Solo Insane", "Doubles Normal", "Doubles Insane", "Lucky Block Solo", "Lucky Block Team"),
 		SMASH_HEROES("Smash Heroes", "1v1", "2v2", "Solo", "Team", "Friends"),
 		HYPIXEL_PIT("The Hypixel Pit"),
@@ -169,7 +169,7 @@ public class StatusUpdate extends Request {
 
 		private final String[] gameModes;
 
-		GameType(String name, String... gameModes){
+		GameType(String name, String... gameModes) {
 			this.name = name;
 			this.gameModes = gameModes;
 		}

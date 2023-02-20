@@ -43,11 +43,11 @@ public class UserListWidget extends AlwaysSelectedEntryListWidget<UserListWidget
 		this.screen = screen;
 	}
 
-	public void setUsers(List<User> users){
+	public void setUsers(List<User> users) {
 		users.forEach(user -> addEntry(new UserListEntry(user)));
 	}
 
-	public int addEntry(UserListEntry entry){
+	public int addEntry(UserListEntry entry) {
 		return super.addEntry(entry.init(screen));
 	}
 
@@ -77,17 +77,17 @@ public class UserListWidget extends AlwaysSelectedEntryListWidget<UserListWidget
 		private Text note;
 		private FriendsScreen screen;
 
-		public UserListEntry(User user){
+		public UserListEntry(User user) {
 			this.client = MinecraftClient.getInstance();
 			this.user = user;
 		}
 
-		public UserListEntry(User user, MutableText note){
+		public UserListEntry(User user, MutableText note) {
 			this(user);
 			this.note = note.formatted(Formatting.ITALIC);
 		}
 
-		public UserListEntry init(FriendsScreen screen){
+		public UserListEntry init(FriendsScreen screen) {
 			this.screen = screen;
 			return this;
 		}
@@ -102,12 +102,12 @@ public class UserListWidget extends AlwaysSelectedEntryListWidget<UserListWidget
 		public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
 			client.textRenderer.draw(matrices, user.getName(), x + 3 + 33, y + 1, -1);
 			client.textRenderer.draw(matrices, user.getStatus().getTitle(), x + 3 + 33, y + 12, 8421504);
-			if(user.getStatus().isOnline()){
-				client.textRenderer.draw(matrices, user.getStatus().getText(), x+3+40, y+23, 8421504);
+			if (user.getStatus().isOnline()) {
+				client.textRenderer.draw(matrices, user.getStatus().getText(), x + 3 + 40, y + 23, 8421504);
 			}
 
-			if(note != null){
-				client.textRenderer.draw(matrices, note, x+entryWidth - client.textRenderer.getWidth(note)-2,  y+entryHeight-10, 8421504);
+			if (note != null) {
+				client.textRenderer.draw(matrices, note, x + entryWidth - client.textRenderer.getWidth(note) - 2, y + entryHeight - 10, 8421504);
 			}
 		}
 

@@ -49,22 +49,22 @@ public class StatusUpdateProviderImpl implements StatusUpdateProvider {
 	public StatusUpdate getStatus() {
 
 		Screen current = MinecraftClient.getInstance().currentScreen;
-		if(current instanceof TitleScreen){
+		if (current instanceof TitleScreen) {
 			return StatusUpdate.online(StatusUpdate.MenuId.MAIN_MENU);
-		} else if(current instanceof MultiplayerScreen){
+		} else if (current instanceof MultiplayerScreen) {
 			return StatusUpdate.online(StatusUpdate.MenuId.SERVER_LIST);
-		} else if(current != null){
+		} else if (current != null) {
 			return StatusUpdate.online(StatusUpdate.MenuId.SETTINGS);
 		}
 
 		ServerInfo entry = MinecraftClient.getInstance().getCurrentServerEntry();
-		if(entry != null){
+		if (entry != null) {
 
-			if(!entry.isLocal()){
+			if (!entry.isLocal()) {
 				Optional<StatusUpdate.SupportedServer> optional = Arrays.stream(StatusUpdate.SupportedServer.values()).filter(s -> s.getAdress().matcher(entry.address).matches()).findFirst();
-				if(optional.isPresent()) {
+				if (optional.isPresent()) {
 					StatusUpdate.SupportedServer server = optional.get();
-					if(server.equals(StatusUpdate.SupportedServer.HYPIXEL)){
+					if (server.equals(StatusUpdate.SupportedServer.HYPIXEL)) {
 						AtomicReference<JsonObject> loc = new AtomicReference<>();
 						HypixelLocation.get(s -> loc.set(GsonHelper.GSON.fromJson(s, JsonObject.class)));
 						JsonObject object = loc.get();
@@ -86,9 +86,9 @@ public class StatusUpdateProviderImpl implements StatusUpdateProvider {
 		return StatusUpdate.offline();
 	}
 
-	private String getGameMode(PlayerEntity entity){
+	private String getGameMode(PlayerEntity entity) {
 		PlayerListEntry entry = MinecraftClient.getInstance().getNetworkHandler().getPlayerListEntry(entity.getUuid());
-		switch (entry.getGameMode()){
+		switch (entry.getGameMode()) {
 			case CREATIVE:
 				return "Creative Mode";
 			case SURVIVAL:
@@ -102,7 +102,7 @@ public class StatusUpdateProviderImpl implements StatusUpdateProvider {
 		}
 	}
 
-	private String getOrEmpty(JsonObject object, String name){
+	private String getOrEmpty(JsonObject object, String name) {
 		return object.has(name) ? object.get(name).getAsString() : "";
 	}
 }

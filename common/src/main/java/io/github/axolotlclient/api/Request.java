@@ -85,7 +85,7 @@ public class Request {
 			return addElement(name, new JsonPrimitive(object));
 		}
 
-		public Data removeElement(String name){
+		public Data removeElement(String name) {
 			elements.remove(name);
 			return this;
 		}

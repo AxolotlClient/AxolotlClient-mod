@@ -66,7 +66,7 @@ public class UserListWidget extends AlwaysSelectedEntryListWidget<UserListWidget
 		return this.screen.getFocused() == this;
 	}
 
-	public static class UserListEntry extends Entry<UserListEntry> {
+	public static class UserListEntry extends AlwaysSelectedEntryListWidget.Entry<UserListEntry> {
 
 		@Getter
 		private final User user;
@@ -90,12 +90,6 @@ public class UserListWidget extends AlwaysSelectedEntryListWidget<UserListWidget
 		public UserListEntry init(FriendsScreen screen) {
 			this.screen = screen;
 			return this;
-		}
-
-
-		@Override
-		public Text getNarration() {
-			return Text.of(user.getName());
 		}
 
 		@Override

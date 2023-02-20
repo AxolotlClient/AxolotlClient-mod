@@ -31,15 +31,15 @@ public class HypixelLocation {
 	private static boolean waiting;
 	private static Consumer<String> consumer;
 
-	public static void get(Consumer<String> location){
+	public static void get(Consumer<String> location) {
 		Util.sendChatMessage("/locraw");
 		waiting = true;
 		consumer = location;
 	}
 
-	public static boolean waitingForResponse(String message){
+	public static boolean waitingForResponse(String message) {
 		boolean consume = waiting && message.startsWith("{") && message.endsWith("}") && message.contains("gameType") && consumer != null;
-		if(consume){
+		if (consume) {
 			consumer.accept(message);
 			consumer = null;
 		}

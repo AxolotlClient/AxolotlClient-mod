@@ -61,9 +61,9 @@ public class FriendHandler implements RequestHandler {
 		}, "add", uuid));
 	}
 
-	public void removeFriend(User user){
+	public void removeFriend(User user) {
 		api.send(new Friends(object -> {
-			if(API.getInstance().requestFailed(object)){
+			if (API.getInstance().requestFailed(object)) {
 				APIError.display(object);
 			} else {
 				api.getNotificationProvider().addStatus("api.success.removeFriend", "api.success.removeFriend.desc", user.getName());
@@ -101,7 +101,7 @@ public class FriendHandler implements RequestHandler {
 				friends.forEach(e -> {
 					JsonObject s = e.getAsJsonObject().get("status").getAsJsonObject();
 					Instant startedAt;
-					if(s.has("startedAt")){
+					if (s.has("startedAt")) {
 						startedAt = Instant.ofEpochSecond(s.get("startedAt").getAsLong());
 					} else {
 						startedAt = Instant.ofEpochSecond(0);
@@ -177,11 +177,11 @@ public class FriendHandler implements RequestHandler {
 	@Override
 	public void handle(JsonObject object) {
 		String method = object.get("data").getAsJsonObject().get("method").getAsString();
-		if(object.get("data").getAsJsonObject().has("from")) {
+		if (object.get("data").getAsJsonObject().has("from")) {
 			String from = object.get("data").getAsJsonObject().get("from").getAsString();
-			if(method.equals("add")) {
+			if (method.equals("add")) {
 				API.getInstance().getNotificationProvider().addStatus("api.success.friendAccept", "api.success.friendAccept.desc.name", from);
-			} else if(method.equals("decline")) {
+			} else if (method.equals("decline")) {
 				API.getInstance().getNotificationProvider().addStatus("api.success.friendDeclined", "api.success.friendDeclined.desc.name", from);
 			}
 		}

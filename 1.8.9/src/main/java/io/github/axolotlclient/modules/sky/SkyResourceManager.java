@@ -107,7 +107,7 @@ public class SkyResourceManager extends AbstractModule implements IdentifiableRe
 
 	@Override
 	public void reload(ResourceManager resourceManager) {
-		if(initialized){
+		if (initialized) {
 			return;
 		}
 		SkyboxManager.getInstance().clearSkyboxes();

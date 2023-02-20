@@ -24,8 +24,6 @@ package io.github.axolotlclient.api;
 
 import io.github.axolotlclient.api.handlers.FriendHandler;
 import io.github.axolotlclient.api.util.UUIDHelper;
-import io.github.axolotlclient.modules.auth.Auth;
-import io.github.axolotlclient.modules.auth.MSAccount;
 import io.github.axolotlclient.util.notifications.Notifications;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -76,7 +74,7 @@ public class AddFriendScreen extends Screen {
 
 		addDrawableChild(new ButtonWidget.Builder(ScreenTexts.CANCEL, button -> client.setScreen(parent)).positionAndSize(width / 2 - 155, height - 50, 150, 20).build());
 		addDrawableChild(new ButtonWidget.Builder(ScreenTexts.DONE, button -> {
-			if(API.getInstance().isConnected()) {
+			if (API.getInstance().isConnected()) {
 				String uuid;
 				try {
 					uuid = API.getInstance().sanitizeUUID(UUID.fromString(nameInput.getText()).toString());

@@ -25,18 +25,18 @@ package io.github.axolotlclient.api;
 import io.github.axolotlclient.api.types.User;
 import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.widget.EntryListWidget;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Util;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class UserListWidget extends AlwaysSelectedEntryListWidget<UserListWidget.UserListEntry> {
+public class UserListWidget extends EntryListWidget {
 
 	private final FriendsScreen screen;
+	private int selectedEntry = -1;
+
+	private final List<UserListEntry> entries = new ArrayList<>();
 
 	public UserListWidget(FriendsScreen screen, MinecraftClient client, int width, int height, int top, int bottom, int entryHeight) {
 		super(client, width, height, top, bottom, entryHeight);
@@ -48,7 +48,13 @@ public class UserListWidget extends AlwaysSelectedEntryListWidget<UserListWidget
 	}
 
 	public int addEntry(UserListEntry entry) {
-		return super.addEntry(entry.init(screen));
+		entries.add(entry.init(screen));
+		return entries.indexOf(entry);
+	}
+
+	@Override
+	protected int getEntryCount() {
+		return entries.size();
 	}
 
 	@Override
@@ -57,16 +63,36 @@ public class UserListWidget extends AlwaysSelectedEntryListWidget<UserListWidget
 	}
 
 	@Override
-	protected int getScrollbarPositionX() {
-		return super.getScrollbarPositionX() + 30;
+	protected int getScrollbarPosition() {
+		return super.getScrollbarPosition() + 30;
+	}
+
+	public void setSelected(int i) {
+		this.selectedEntry = i;
 	}
 
 	@Override
-	protected boolean isFocused() {
-		return this.screen.getFocused() == this;
+	protected boolean isEntrySelected(int i) {
+		return i == this.selectedEntry;
 	}
 
-	public static class UserListEntry extends Entry<UserListEntry> {
+	public int getSelected() {
+		return this.selectedEntry;
+	}
+
+	@Override
+	public Entry getEntry(int i) {
+		return entries.get(i);
+	}
+
+	public UserListEntry getSelectedEntry() {
+		if (getSelected() < 0) {
+			return null;
+		}
+		return entries.get(getSelected());
+	}
+
+	public static class UserListEntry implements EntryListWidget.Entry {
 
 		@Getter
 		private final User user;
@@ -74,7 +100,7 @@ public class UserListWidget extends AlwaysSelectedEntryListWidget<UserListWidget
 
 		private final MinecraftClient client;
 
-		private Text note;
+		private String note;
 		private FriendsScreen screen;
 
 		public UserListEntry(User user) {
@@ -82,9 +108,9 @@ public class UserListWidget extends AlwaysSelectedEntryListWidget<UserListWidget
 			this.user = user;
 		}
 
-		public UserListEntry(User user, MutableText note) {
+		public UserListEntry(User user, String note) {
 			this(user);
-			this.note = note.formatted(Formatting.ITALIC);
+			this.note = Formatting.ITALIC + note;
 		}
 
 		public UserListEntry init(FriendsScreen screen) {
@@ -92,34 +118,38 @@ public class UserListWidget extends AlwaysSelectedEntryListWidget<UserListWidget
 			return this;
 		}
 
-
 		@Override
-		public Text getNarration() {
-			return Text.of(user.getName());
+		public void updatePosition(int i, int j, int k) {
+
 		}
 
 		@Override
-		public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-			client.textRenderer.draw(matrices, user.getName(), x + 3 + 33, y + 1, -1);
-			client.textRenderer.draw(matrices, user.getStatus().getTitle(), x + 3 + 33, y + 12, 8421504);
+		public void render(int index, int x, int y, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered) {
+			client.textRenderer.draw(user.getName(), x + 3 + 33, y + 1, -1);
+			client.textRenderer.draw(user.getStatus().getTitle(), x + 3 + 33, y + 12, 8421504);
 			if (user.getStatus().isOnline()) {
-				client.textRenderer.draw(matrices, user.getStatus().getText(), x + 3 + 40, y + 23, 8421504);
+				client.textRenderer.draw(user.getStatus().getText(), x + 3 + 40, y + 23, 8421504);
 			}
 
 			if (note != null) {
-				client.textRenderer.draw(matrices, note, x + entryWidth - client.textRenderer.getWidth(note) - 2, y + entryHeight - 10, 8421504);
+				client.textRenderer.draw(note, x + entryWidth - client.textRenderer.getStringWidth(note) - 2, y + entryHeight - 10, 8421504);
 			}
 		}
 
 		@Override
-		public boolean mouseClicked(double mouseX, double mouseY, int button) {
-			this.screen.select(this);
-			if (Util.getMeasuringTimeMs() - this.time < 250L && client.world == null) {
+		public boolean mouseClicked(int i, int j, int k, int l, int m, int n) {
+			this.screen.select(i);
+			if (MinecraftClient.getTime() - this.time < 250L && client.world == null) {
 				screen.openChat();
 			}
 
-			this.time = Util.getMeasuringTimeMs();
+			this.time = MinecraftClient.getTime();
 			return false;
+		}
+
+		@Override
+		public void mouseReleased(int i, int j, int k, int l, int m, int n) {
+
 		}
 	}
 }

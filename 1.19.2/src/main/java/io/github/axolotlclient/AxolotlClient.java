@@ -172,6 +172,7 @@ public class AxolotlClient implements ClientModInitializer {
 		modules.add(BeaconBeam.getInstance());
 		modules.add(Tablist.getInstance());
 		modules.add(Auth.getInstance());
+		modules.add(APIOptions.getInstance());
 	}
 
 	private static void addExternalModules() {

@@ -29,17 +29,27 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.ScreenTexts;
 import net.minecraft.text.Text;
 
+import java.util.stream.Collectors;
+
 public class FriendsScreen extends Screen {
 
 	private final Screen parent;
 
 	private UserListWidget widget;
 
-	private ButtonWidget chatButton, removeButton;
+	private ButtonWidget chatButton, removeButton, onlineTab, allTab, pendingTab, blockedTab;
+	private ButtonWidget denyButton, acceptButton;
+
+	private Tab current = Tab.ONLINE;
 
 	protected FriendsScreen(Screen parent) {
 		super(Text.translatable("api.screen.friends"));
 		this.parent = parent;
+	}
+
+	protected FriendsScreen(Screen parent, Tab tab) {
+		this(parent);
+		current = tab;
 	}
 
 	@Override
@@ -52,14 +62,44 @@ public class FriendsScreen extends Screen {
 
 	@Override
 	protected void init() {
-		addSelectableChild(widget = new UserListWidget(this, client,  width, height, 32, height - 64, 35));
-		FriendHandler.getInstance().getFriends(list -> widget.setUsers(list));
+		addSelectableChild(widget = new UserListWidget(this, client, width, height, 32, height - 64, 35));
 
-		/*addDrawableChild(loginButton = new ButtonWidget.Builder(Text.translatable("auth.login"),
-				buttonWidget -> login()).positionAndSize(this.width / 2 - 154, this.height - 52, 150, 20).build());*/
+		if (current == Tab.ALL || current == Tab.ONLINE) {
+			FriendHandler.getInstance().getFriends(list -> widget.setUsers(list.stream().filter(user -> {
+				if (current == Tab.ONLINE) {
+					return user.getStatus().isOnline();
+				}
+				return true;
+			}).collect(Collectors.toList())));
+		} else if (current == Tab.PENDING) {
+			FriendHandler.getInstance().getFriendRequests((in, out) -> {
 
-		this.addDrawableChild(new ButtonWidget(this.width / 2 + 4, this.height - 52, 150, 20, Text.translatable("api.friends.add"),
-						button -> client.setScreen(new AddFriendScreen(this))));
+				in.forEach(user -> widget.addEntry(new UserListWidget.UserListEntry(user, Text.translatable("api.friends.pending.incoming"))));
+				out.forEach(user -> widget.addEntry(new UserListWidget.UserListEntry(user, Text.translatable("api.friends.pending.outgoing"))));
+			});
+		} else if (current == Tab.BLOCKED) {
+			FriendHandler.getInstance().getBlocked(list -> widget.setUsers(list));
+		}
+
+		this.addDrawableChild(blockedTab = new ButtonWidget(this.width / 2 + 24, this.height - 52, 57, 20,
+				Text.translatable("api.friends.tab.blocked"), button ->
+				client.setScreen(new FriendsScreen(parent, Tab.BLOCKED))));
+
+		this.addDrawableChild(pendingTab = new ButtonWidget(this.width / 2 - 34, this.height - 52, 57, 20,
+				Text.translatable("api.friends.tab.pending"), button ->
+				client.setScreen(new FriendsScreen(parent, Tab.PENDING))));
+
+		this.addDrawableChild(allTab = new ButtonWidget(this.width / 2 - 94, this.height - 52, 57, 20,
+				Text.translatable("api.friends.tab.all"), button ->
+				client.setScreen(new FriendsScreen(parent, Tab.ALL))));
+
+		this.addDrawableChild(onlineTab = new ButtonWidget(this.width / 2 - 154, this.height - 52, 57, 20,
+				Text.translatable("api.friends.tab.online"), button ->
+				client.setScreen(new FriendsScreen(parent, Tab.ONLINE))));
+
+		this.addDrawableChild(new ButtonWidget(this.width / 2 + 88, this.height - 52, 66, 20,
+				Text.translatable("api.friends.add"),
+				button -> client.setScreen(new AddFriendScreen(this))));
 
 		this.removeButton = this.addDrawableChild(new ButtonWidget(this.width / 2 - 50, this.height - 28, 100, 20,
 				Text.translatable("api.friends.remove"), button -> {
@@ -70,10 +110,16 @@ public class FriendsScreen extends Screen {
 			}
 		}));
 
+		addDrawableChild(denyButton = new ButtonWidget(this.width / 2 - 50, this.height - 28, 48, 20,
+				Text.translatable("api.friends.request.deny"),
+				button -> denyRequest()));
+
+		addDrawableChild(acceptButton = new ButtonWidget(this.width / 2 + 2, this.height - 28, 48, 20,
+				Text.translatable("api.friends.request.accept"),
+				button -> acceptRequest()));
 
 		this.addDrawableChild(chatButton = new ButtonWidget(this.width / 2 - 154, this.height - 28, 100, 20,
-				Text.translatable("api.friends.chat"), button -> openChat())
-		);
+				Text.translatable("api.friends.chat"), button -> openChat()));
 
 		this.addDrawableChild(
 				new ButtonWidget(this.width / 2 + 4 + 50, this.height - 28, 100, 20,
@@ -81,25 +127,87 @@ public class FriendsScreen extends Screen {
 		updateButtonActivationStates();
 	}
 
-	private void openChat() {
-		// TODO chat API
+	public void openChat() {
+
 	}
 
-	private void refresh(){
+	private void denyRequest() {
+		UserListWidget.UserListEntry entry = widget.getSelectedOrNull();
+		if (entry != null) {
+			FriendHandler.getInstance().denyFriendRequest(entry.getUser());
+		}
+		refresh();
+	}
+
+	private void acceptRequest() {
+		UserListWidget.UserListEntry entry = widget.getSelectedOrNull();
+		if (entry != null) {
+			FriendHandler.getInstance().acceptFriendRequest(entry.getUser());
+		}
+		refresh();
+	}
+
+	private void refresh() {
 		client.setScreen(new FriendsScreen(parent));
 	}
 
 	private void updateButtonActivationStates() {
 		UserListWidget.UserListEntry entry = widget.getSelectedOrNull();
-		if (client.world == null && entry != null) {
+		if (entry != null) {
 			chatButton.active = removeButton.active = true;
 		} else {
 			chatButton.active = removeButton.active = false;
+		}
+
+		removeButton.visible = true;
+		denyButton.visible = false;
+		acceptButton.visible = false;
+		if (current == Tab.ONLINE) {
+			onlineTab.active = false;
+			allTab.active = pendingTab.active = blockedTab.active = true;
+		} else if (current == Tab.ALL) {
+			allTab.active = false;
+			onlineTab.active = pendingTab.active = blockedTab.active = true;
+		} else if (current == Tab.PENDING) {
+			pendingTab.active = false;
+			onlineTab.active = allTab.active = blockedTab.active = true;
+			removeButton.visible = false;
+			denyButton.visible = true;
+			acceptButton.visible = true;
+		} else if (current == Tab.BLOCKED) {
+			blockedTab.active = false;
+			onlineTab.active = allTab.active = pendingTab.active = true;
+		}
+	}
+
+	@Override
+	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+		if (super.keyPressed(keyCode, scanCode, modifiers)) {
+			return true;
+		} else if (keyCode == 294) {
+			this.refresh();
+			return true;
+		} else if (this.widget.getSelectedOrNull() != null) {
+			if (keyCode != 257 && keyCode != 335) {
+				return this.widget.keyPressed(keyCode, scanCode, modifiers);
+			} else {
+				this.openChat();
+				return true;
+			}
+		} else {
+			return false;
 		}
 	}
 
 	public void select(UserListWidget.UserListEntry entry) {
 		this.widget.setSelected(entry);
 		this.updateButtonActivationStates();
+	}
+
+	public enum Tab {
+		ONLINE,
+		ALL,
+		PENDING,
+		BLOCKED
 	}
 }

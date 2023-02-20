@@ -31,15 +31,14 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
-import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.level.LevelInfo;
 
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 public class StatusUpdateProviderImpl implements StatusUpdateProvider {
 
@@ -71,14 +70,15 @@ public class StatusUpdateProviderImpl implements StatusUpdateProvider {
 						StatusUpdate.GameType gameType = StatusUpdate.GameType.valueOf(object.get("gametype").getAsString());
 						String gameMode = getOrEmpty(object, "mode");
 						String map = getOrEmpty(object, "map");
-						int maxPlayers = MinecraftClient.getInstance().world.getPlayers().size();
-						int players = MinecraftClient.getInstance().world.getPlayers().stream().filter(e -> !(e.isCreative() || e.isSpectator())).collect(Collectors.toList()).size();
+						int maxPlayers = MinecraftClient.getInstance().world.playerEntities.size();
+						int players = MinecraftClient.getInstance().world.playerEntities.stream()
+								.filter(e -> getGameMode(e) != LevelInfo.GameMode.CREATIVE && getGameMode(e) != LevelInfo.GameMode.SPECTATOR).mapToInt(value -> 1).reduce(0, Integer::sum);
 						return StatusUpdate.inGame(server, gameType.toString(), gameMode, map, players, maxPlayers, Instant.now().getEpochSecond() - time.getEpochSecond());
 					}
 				}
 			}
 
-			String gamemode = getGameMode(MinecraftClient.getInstance().player);
+			String gamemode = getGameModeString(MinecraftClient.getInstance().player);
 			return StatusUpdate.inGameUnknown(entry.address, "", entry.name, gamemode, Instant.now().getEpochSecond() - time.getEpochSecond());
 
 		}
@@ -86,9 +86,8 @@ public class StatusUpdateProviderImpl implements StatusUpdateProvider {
 		return StatusUpdate.offline();
 	}
 
-	private String getGameMode(PlayerEntity entity) {
-		PlayerListEntry entry = MinecraftClient.getInstance().getNetworkHandler().getPlayerListEntry(entity.getUuid());
-		switch (entry.getGameMode()) {
+	private String getGameModeString(PlayerEntity entity) {
+		switch (getGameMode(entity)) {
 			case CREATIVE:
 				return "Creative Mode";
 			case SURVIVAL:
@@ -100,6 +99,10 @@ public class StatusUpdateProviderImpl implements StatusUpdateProvider {
 			default:
 				return "";
 		}
+	}
+
+	private LevelInfo.GameMode getGameMode(PlayerEntity entity) {
+		return MinecraftClient.getInstance().getNetworkHandler().getPlayerListEntry(entity.getUuid()).getGameMode();
 	}
 
 	private String getOrEmpty(JsonObject object, String name) {

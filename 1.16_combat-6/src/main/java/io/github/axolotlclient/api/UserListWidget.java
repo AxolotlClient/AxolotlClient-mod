@@ -92,12 +92,6 @@ public class UserListWidget extends AlwaysSelectedEntryListWidget<UserListWidget
 			return this;
 		}
 
-
-		@Override
-		public Text getNarration() {
-			return Text.of(user.getName());
-		}
-
 		@Override
 		public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
 			client.textRenderer.draw(matrices, user.getName(), x + 3 + 33, y + 1, -1);

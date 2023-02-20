@@ -88,9 +88,9 @@ public class API {
 		handlers.add(handler);
 	}
 
-	private Session createSession(){
+	private Session createSession() {
 		try {
-			return GrizzlyContainerProvider.getWebSocketContainer().connectToServer(ClientEndpoint.class,  API_URL);
+			return GrizzlyContainerProvider.getWebSocketContainer().connectToServer(ClientEndpoint.class, API_URL);
 		} catch (DeploymentException | IOException e) {
 			logger.error("Error while starting API!", e);
 			return null;
@@ -103,7 +103,7 @@ public class API {
 			logger.debug("Starting API...");
 			session = createSession();
 
-			new Thread("Status Update Thread"){
+			new Thread("Status Update Thread") {
 				@Override
 				public void run() {
 					try {
@@ -114,7 +114,7 @@ public class API {
 						send(statusUpdateProvider.getStatus());
 						try {
 							//noinspection BusyWait
-							Thread.sleep(STATUS_UPDATE_DELAY*1000);
+							Thread.sleep(STATUS_UPDATE_DELAY * 1000);
 						} catch (InterruptedException ignored) {
 
 						}
@@ -181,12 +181,12 @@ public class API {
 				}
 			});
 		} else {
-			logger.warn("Not sending request because API is closed: "+request.getJson());
+			logger.warn("Not sending request because API is closed: " + request.getJson());
 		}
 	}
 
 	public void onMessage(String message) {
-		logDetailed("Handling response: "+message);
+		logDetailed("Handling response: " + message);
 		handleResponse(message);
 	}
 
@@ -217,7 +217,7 @@ public class API {
 	}
 
 	public void onClose(CloseReason reason) {
-		logDetailed("Session closed! Reason: "+reason.getReasonPhrase()+" Code: "+reason.getCloseCode());
+		logDetailed("Session closed! Reason: " + reason.getReasonPhrase() + " Code: " + reason.getCloseCode());
 		logDetailed("Restarting API session...");
 		session = createSession();
 		logDetailed("Restarted API session!");
@@ -227,9 +227,9 @@ public class API {
 		startup(uuid);
 	}
 
-	public void logDetailed(String message, Object... args){
-		if(apiOptions.detailedLogging.get()){
-			logger.debug("[DETAIL] "+message, args);
+	public void logDetailed(String message, Object... args) {
+		if (apiOptions.detailedLogging.get()) {
+			logger.debug("[DETAIL] " + message, args);
 		}
 	}
 }

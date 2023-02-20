@@ -30,9 +30,9 @@ import java.io.IOException;
 
 public class UUIDHelper {
 
-	public static String getUsername(String uuid){
+	public static String getUsername(String uuid) {
 		try {
-			JsonElement e = NetworkUtil.getRequest("https://sessionserver.mojang.com/session/minecraft/profile/"+uuid, NetworkUtil.createHttpClient("API"));
+			JsonElement e = NetworkUtil.getRequest("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid, NetworkUtil.createHttpClient("API"));
 			return e.getAsJsonObject().get("name").getAsString();
 		} catch (IOException e) {
 			API.getInstance().getLogger().warn("Conversion uuid -> username failed: ", e);
