@@ -1,0 +1,86 @@
+package io.github.axolotlclient.api;
+
+import com.google.gson.JsonObject;
+import io.github.axolotlclient.api.requests.StatusUpdate;
+import io.github.axolotlclient.api.util.StatusUpdateProvider;
+import io.github.axolotlclient.modules.hypixel.HypixelLocation;
+import io.github.axolotlclient.util.GsonHelper;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.TitleScreen;
+import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
+import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.client.network.ServerInfo;
+import net.minecraft.entity.player.PlayerEntity;
+
+import java.time.Instant;
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
+
+public class StatusUpdateProviderImpl implements StatusUpdateProvider {
+
+	private final Instant time = Instant.now();
+
+	@Override
+	public StatusUpdate getStatus() {
+
+		Screen current = MinecraftClient.getInstance().currentScreen;
+		if(current instanceof TitleScreen){
+			return StatusUpdate.online(StatusUpdate.MenuId.MAIN_MENU);
+		} else if(current instanceof MultiplayerScreen){
+			return StatusUpdate.online(StatusUpdate.MenuId.SERVER_LIST);
+		} else if(current != null){
+			return StatusUpdate.online(StatusUpdate.MenuId.SETTINGS);
+		}
+
+		ServerInfo entry = MinecraftClient.getInstance().getCurrentServerEntry();
+		if(entry != null){
+
+			if(!entry.isLocal()){
+				Optional<StatusUpdate.SupportedServer> optional = Arrays.stream(StatusUpdate.SupportedServer.values()).filter(s -> s.getAdress().matcher(entry.address).matches()).findFirst();
+				if(optional.isPresent()) {
+					StatusUpdate.SupportedServer server = optional.get();
+					if(server.equals(StatusUpdate.SupportedServer.HYPIXEL)){
+						AtomicReference<JsonObject> loc = new AtomicReference<>();
+						HypixelLocation.get(s -> loc.set(GsonHelper.GSON.fromJson(s, JsonObject.class)));
+						JsonObject object = loc.get();
+						StatusUpdate.GameType gameType = StatusUpdate.GameType.valueOf(object.get("gametype").getAsString());
+						String gameMode = getOrEmpty(object, "mode");
+						String map = getOrEmpty(object, "map");
+						int maxPlayers = MinecraftClient.getInstance().world.getPlayers().size();
+						int players = MinecraftClient.getInstance().world.getPlayers().stream().filter(e -> !(e.isCreative() || e.isSpectator())).collect(Collectors.toList()).size();
+						return StatusUpdate.inGame(server, gameType.toString(), gameMode, map, players, maxPlayers, Instant.now().getEpochSecond() - time.getEpochSecond());
+					}
+				}
+			}
+
+			String gamemode = getGameMode(MinecraftClient.getInstance().player);
+			return StatusUpdate.inGameUnknown(entry.address, "", entry.name, gamemode, Instant.now().getEpochSecond() - time.getEpochSecond());
+
+		}
+
+		return StatusUpdate.offline();
+	}
+
+	private String getGameMode(PlayerEntity entity){
+		PlayerListEntry entry = MinecraftClient.getInstance().getNetworkHandler().getPlayerListEntry(entity.getUuid());
+		switch (entry.getGameMode()){
+			case CREATIVE:
+				return "Creative Mode";
+			case SURVIVAL:
+				return "Survival Mode";
+			case SPECTATOR:
+				return "Spectator Mode";
+			case ADVENTURE:
+				return "Adventure Mode";
+			default:
+				return "";
+		}
+	}
+
+	private String getOrEmpty(JsonObject object, String name){
+		return object.has(name) ? object.get(name).getAsString() : "";
+	}
+}

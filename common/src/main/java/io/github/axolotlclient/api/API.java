@@ -5,6 +5,7 @@ import io.github.axolotlclient.api.handlers.FriendHandler;
 import io.github.axolotlclient.api.handlers.FriendRequestAcceptedHandler;
 import io.github.axolotlclient.api.handlers.FriendRequestHandler;
 import io.github.axolotlclient.api.util.RequestHandler;
+import io.github.axolotlclient.api.util.StatusUpdateProvider;
 import io.github.axolotlclient.util.GsonHelper;
 import io.github.axolotlclient.util.Logger;
 import io.github.axolotlclient.util.ThreadExecuter;
@@ -25,7 +26,9 @@ import java.util.Set;
 public class API {
 
 	private static final String API_BASE = "wss://axo.gart.sh";
-	private static final String API_URL = API_BASE + "/api/ws";
+	private static final URI API_URL = URI.create(API_BASE + "/api/ws");
+	private static final int STATUS_UPDATE_DELAY = 1; // The Delay between Status updates, in seconds.
+
 	@Getter
 	private static API Instance;
 	private final HashMap<String, Request> requests = new HashMap<>();
@@ -36,14 +39,16 @@ public class API {
 	private final NotificationProvider notificationProvider;
 	@Getter
 	private final TranslationProvider translationProvider;
+	private final StatusUpdateProvider statusUpdateProvider;
 	private Session session;
 	@Getter
 	private String uuid;
 
-	public API(Logger logger, NotificationProvider notificationProvider, TranslationProvider translationProvider) {
+	public API(Logger logger, NotificationProvider notificationProvider, TranslationProvider translationProvider, StatusUpdateProvider statusUpdateProvider) {
 		this.logger = logger;
 		this.notificationProvider = notificationProvider;
 		this.translationProvider = translationProvider;
+		this.statusUpdateProvider = statusUpdateProvider;
 		Instance = this;
 		addHandler(new FriendRequestHandler());
 		addHandler(new FriendRequestAcceptedHandler());
@@ -58,17 +63,41 @@ public class API {
 		handlers.add(handler);
 	}
 
-	public void startup(String uuid) {
+	private Session createSession(){
 		try {
-			if (session == null || !session.isOpen()) {
-				this.uuid = sanitizeUUID(uuid);
-				logger.debug("Starting API...");
-				session = GrizzlyContainerProvider.getWebSocketContainer().connectToServer(ClientEndpoint.class, URI.create(API_URL));
-			} else {
-				logger.warn("API is already running!");
-			}
-		} catch (IOException | DeploymentException e) {
+			return GrizzlyContainerProvider.getWebSocketContainer().connectToServer(ClientEndpoint.class,  API_URL);
+		} catch (DeploymentException | IOException e) {
 			logger.error("Error while starting API!", e);
+			return null;
+		}
+	}
+
+	public void startup(String uuid) {
+		if (session == null || !session.isOpen()) {
+			this.uuid = sanitizeUUID(uuid);
+			logger.debug("Starting API...");
+			session = createSession();
+
+			new Thread("Status Update Thread"){
+				@Override
+				public void run() {
+					try {
+						Thread.sleep(50);
+					} catch (InterruptedException ignored) {
+					}
+					while (API.getInstance().isConnected()) {
+						send(statusUpdateProvider.getStatus());
+						try {
+							//noinspection BusyWait
+							Thread.sleep(STATUS_UPDATE_DELAY*1000);
+						} catch (InterruptedException ignored) {
+
+						}
+					}
+				}
+			}.start();
+		} else {
+			logger.warn("API is already running!");
 		}
 	}
 
@@ -100,7 +129,7 @@ public class API {
 	public void shutdown() {
 		try {
 			if (session != null && session.isOpen()) {
-				session.close();
+				session.close(new CloseReason(CloseReason.CloseCodes.NORMAL_CLOSURE, "API shutdown procedure"));
 			}
 		} catch (IOException e) {
 			throw new RuntimeException(e);
@@ -133,6 +162,7 @@ public class API {
 	}
 
 	public void onMessage(String message) {
+		logger.debug("Handling response: "+message);
 		handleResponse(message);
 	}
 
@@ -164,12 +194,12 @@ public class API {
 
 	public void onClose(CloseReason reason) {
 		logger.debug("Session closed! Reason: "+reason.getReasonPhrase()+" Code: "+reason.getCloseCode());
-		try {
-			logger.debug("Restarting API session...");
-			session = GrizzlyContainerProvider.getWebSocketContainer().connectToServer(ClientEndpoint.class, URI.create(API_URL));
-			logger.debug("Restarted API session!");
-		} catch (DeploymentException | IOException e) {
-			logger.error("Failed to restart API session!", e);
-		}
+		logger.debug("Restarting API session...");
+		session = createSession();
+		logger.debug("Restarted API session!");
+	}
+
+	public void restart() {
+		startup(uuid);
 	}
 }

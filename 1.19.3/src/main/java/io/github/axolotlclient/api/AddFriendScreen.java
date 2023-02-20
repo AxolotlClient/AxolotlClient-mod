@@ -55,11 +55,11 @@ public class AddFriendScreen extends Screen {
 		addDrawableChild(new ButtonWidget.Builder(ScreenTexts.CANCEL, button -> client.setScreen(parent)).positionAndSize(width / 2 - 155, height - 50, 150, 20).build());
 		addDrawableChild(new ButtonWidget.Builder(ScreenTexts.DONE, button -> {
 			if(API.getInstance().isConnected()) {
-				UUID uuid;
+				String uuid;
 				try {
-					uuid = UUID.fromString(nameInput.getText());
+					uuid = API.getInstance().sanitizeUUID(UUID.fromString(nameInput.getText()).toString());
 				} catch (IllegalArgumentException e) {
-					uuid = UUID.fromString(UUIDHelper.getUuid(nameInput.getText()));
+					uuid = UUIDHelper.getUuid(nameInput.getText());
 				}
 				FriendHandler.getInstance().addFriend(uuid);
 				client.setScreen(parent);

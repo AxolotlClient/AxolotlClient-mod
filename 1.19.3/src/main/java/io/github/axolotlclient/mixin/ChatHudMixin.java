@@ -22,6 +22,7 @@
 
 package io.github.axolotlclient.mixin;
 
+import io.github.axolotlclient.modules.hypixel.HypixelLocation;
 import io.github.axolotlclient.modules.hypixel.autoboop.AutoBoop;
 import io.github.axolotlclient.modules.hypixel.autogg.AutoGG;
 import io.github.axolotlclient.modules.hypixel.autotip.AutoTip;
@@ -46,6 +47,9 @@ public abstract class ChatHudMixin {
 
 		if (AutoTip.getInstance().onChatMessage(message)) {
 			ci.cancel();
+		}
+		if(HypixelLocation.waitingForResponse(message.getString())){
+
 		}
 	}
 

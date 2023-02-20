@@ -1,12 +1,11 @@
 package io.github.axolotlclient.api;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Consumer;
 
 @Getter
@@ -44,35 +43,33 @@ public class Request {
 
 	@Getter
 	public static class Data {
-		private final Map<String, String> elements;
+		private final JsonObject elements = new JsonObject();
 
 		public Data(String... data) {
-			elements = new HashMap<>();
 			if (data.length % 2 != 0) {
 				throw new IllegalArgumentException("Unequal count of arguments!");
 			}
 			for (int i = 0; i < data.length - 1; i += 2) {
-				elements.put(data[i], data[i + 1]);
+				elements.addProperty(data[i], data[i + 1]);
 			}
 		}
 
-		public Data(Map<String, String> elements) {
-			this.elements = elements;
-		}
-
-		public Data addElement(String name, JsonObject object) {
-			return addElement(name, object.toString());
+		public Data addElement(String name, JsonElement object) {
+			elements.add(name, object);
+			return this;
 		}
 
 		public Data addElement(String name, String object) {
-			elements.put(name, object);
+			return addElement(name, new JsonPrimitive(object));
+		}
+
+		public Data removeElement(String name){
+			elements.remove(name);
 			return this;
 		}
 
 		private JsonObject getJson() {
-			JsonObject object = new JsonObject();
-			elements.keySet().forEach(s -> object.add(s, new JsonPrimitive(elements.get(s))));
-			return object;
+			return elements;
 		}
 	}
 }

@@ -2,39 +2,53 @@ package io.github.axolotlclient.api.requests;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.Request;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Arrays;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class StatusUpdate extends Request {
 
-	protected StatusUpdate(Type updateType, String uuid, JsonObject updateData) {
+	protected StatusUpdate(Type updateType, JsonObject updateData) {
 		super("statusUpdate", object -> {
 			// not yet implemented, the response is unclear
-		}, new Data("updateType", updateType.getIdentifier(), "uuid", uuid).addElement("update", updateData));
+		}, new Data("updateType", updateType.getIdentifier(), "uuid", API.getInstance().getUuid()).addElement("update", updateData));
 	}
 
-	public static StatusUpdate online(String uuid, MenuId menuId) {
+	public static StatusUpdate online(MenuId menuId) {
 		JsonObject data = new JsonObject();
 		data.add("location", new JsonPrimitive(menuId.getIdentifier()));
-		return new StatusUpdate(Type.ONLINE, uuid, data);
+		return new StatusUpdate(Type.ONLINE, data);
 	}
 
-	public static StatusUpdate inGame(String uuid, String server, String gameType, String gameMode, String map, int players, int maxPlayers, long elapsedSecs) {
+	public static StatusUpdate inGame(SupportedServer server, String gameType, String gameMode, String map, int players, int maxPlayers, long elapsedSecs) {
 		JsonObject object = new JsonObject();
-		SupportedServer serv = Arrays.stream(SupportedServer.values()).filter(s -> s.adress.matcher(server).matches()).collect(Collectors.toList()).get(0);
-		object.addProperty("server", serv.name);
+		object.addProperty("server", server.name);
 		object.addProperty("gameType", gameType);
 		object.addProperty("gameMode", gameMode);
 		object.addProperty("map", map);
 		object.addProperty("players", players);
 		object.addProperty("maxPlayers", maxPlayers);
 		object.addProperty("elapsed", elapsedSecs);
-		return new StatusUpdate(Type.IN_GAME, uuid, object);
+		return new StatusUpdate(Type.IN_GAME, object);
+	}
+
+	public static StatusUpdate inGameUnknown(String server, String worldType, String worldName, String gamemode, long elapsedSecs){
+		JsonObject object = new JsonObject();
+		object.addProperty("server", server);
+		object.addProperty("worldType", worldType);
+		object.addProperty("worldName", worldName);
+		object.addProperty("gamemode", gamemode);
+		object.addProperty("elapsed", elapsedSecs);
+		return new StatusUpdate(Type.IN_GAME_UNKNOWN, object);
+	}
+
+	public static StatusUpdate offline() {
+		StatusUpdate update = new StatusUpdate(Type.OFFLINE, new JsonObject());
+		update.getData().removeElement("update");
+		return update;
 	}
 
 	@RequiredArgsConstructor
@@ -58,13 +72,14 @@ public class StatusUpdate extends Request {
 	}
 
 	@RequiredArgsConstructor
+	@Getter
 	public enum SupportedServer {
 		HYPIXEL("HYPIXEL", Pattern.compile("^hypixel.$"));
 		private final String name;
 		private final Pattern adress;
 	}
 
-	@RequiredArgsConstructor
+	@Getter
 	public enum GameType {
 		BLOCKING_DEAD("The Blocking Dead"),
 		BOUNTY_HUNTERS("Bounty Hunters"),
@@ -75,59 +90,66 @@ public class StatusUpdate extends Request {
 		FARM_HUNT("Farm Hunt"),
 		FOOTBALL("Football"),
 		GALAXY_WARS("Galaxy Wars"),
-		HIDE_AND_SEEK("Hide and Seek"),
+		HIDE_AND_SEEK("Hide and Seek", "Prop Hunt", "Party Pooper"),
 		HOLE_IN_THE_WALL("Hole in the Wall"),
 		HYPIXEL_SAYS("Hypixel Says"),
 		MINI_WALLS("Mini Walls"),
 		PARTY_GAMES("Party Games"),
 		PIXEL_PAINTERS("Pixel Painters"),
-		PIXEL_PARTY("Pixel Party"),
+		PIXEL_PARTY("Pixel Party", "Normal Mode", "Hyper Mode"),
 		THROW_OUT("Throw Out"),
-		ZOMBIES("Zombies"),
-		BED_WARS("Bed Wars"),
-		BLITZ_SG("Blitz SG"),
-		BUILD_BATTLE("Build Battle"),
-		ARENA_BRAWL("Arena Brawl"),
+		ZOMBIES("Zombies", "Dead End", "Bad Blood", "Alien Arcadium"),
+		BEDWARS("Bed Wars", "Solo", "Doubles", "3v3v3v3", "4v4v4v4", "4v4", "Dreams"),
+		BLITZ_SG("Blitz SG", "Solo", "Teams"),
+		BUILD_BATTLE("Build Battle", "Solo Mode", "Teams Mode", "Pro Mode", "Guess The Build"),
+		ARENA_BRAWL("Arena Brawl", "1v1", "2v2", "4v4"),
 		PAINTBALL("Paintball Warfare"),
-		QUAKECRAFT("Quakecraft"),
+		QUAKECRAFT("Quakecraft", "Solo", "Teams"),
 		THE_WALLS("The Walls"),
 		TURBO_KART_RACERS("Turbo Kart Racers"),
 		VAMPIREZ("VampireZ"),
-		COPS_AND_CRIMS("Cops and Crims"),
+		COPS_AND_CRIMS("Cops and Crims", "Challenge Mode", "Defusal", "Gun Game", "Team Deathmatch"),
 		BLITZ_DUELS("Blitz Duels"),
 		BOW_DUELS("Bow Duels"),
 		BOXING_DUELS("Boxing Duels"),
 		CLASSIC_DUELS("Classic Duels"),
 		COMBO_DUELS("Combo Duels"),
 		DUEL_ARENA("Duel Arena"),
-		MEGA_WALLS_DUELS("Mega Walls Duels"),
+		MEGA_WALLS_DUELS("Mega Walls Duels", "1v1", "2v2"),
 		NODEBUFF_DUELS("NoDebuff Duels"),
-		OP_DUELS("OP Duels"),
+		OP_DUELS("OP Duels", "1v1", "2v2"),
 		PARKOUR_DUELS("Parkour Duels"),
-		SKYWARS_DUELS("SkyWars Duels"),
+		SKYWARS_DUELS("SkyWars Duels", "1v1", "2v2"),
 		SUMO_DUELS("Sumo Duels"),
-		THE_BRIDGE("The Bridge"),
-		TNT_GAMNES_DUELS("TNT Games Duels"),
-		UHC_DUELS("UHC Duels"),
+		THE_BRIDGE("The Bridge", "1v1", "2v2", "3v3", "4v4", "2v2v2v2", "3v3v3v3", "CTF 3v3"),
+		TNT_GAMES_DUELS("TNT Games Duels"),
+		UHC_DUELS("UHC Duels", "1v1", "2v2", "4v4", "8 Player FFA"),
 		HOUSING("Housing"),
 		HYPIXEL_SMP("Hypixel SMP"),
-		MEGA_WALLS("Mega Walls"),
-		MURDER_MYSTERY("Murder Mystery"),
+		MEGA_WALLS("Mega Walls", "Standard", "Face Off", "Challenge"),
+		MURDER_MYSTERY("Murder Mystery", "Classic", "Double Up!", "Assassins", "Infection"),
 		DROPPER("Dropper"),
-		SKYBLOCK("Skyblock"),
-		SKYWARS("SkyWars"),
-		SMASH_HEROES("Smash Heroes"),
+		SKYBLOCK("Skyblock","Classic", "Ironman", "Stranded"),
+		SKYWARS("SkyWars", "Solo Normal", "Solo Insane", "Doubles Normal", "Doubles Insane", "Lucky Block Solo", "Lucky Block Team"),
+		SMASH_HEROES("Smash Heroes", "1v1", "2v2", "Solo", "Team", "Friends"),
 		HYPIXEL_PIT("The Hypixel Pit"),
 		BOW_SPLEEF("Bow Spleef"),
 		PVP_RUN("PVP Run"),
 		TNT_RUN("TNT Run"),
 		TNT_TAG("TNT Tag"),
 		WIZARDS("Wizards"),
-		UHC_CHAMPIONS("UHC Champions"),
-		SPEED_UHC("Speed UHC"),
-		CAPTURE_THE_FLAG("Capture The Flag"),
+		UHC_CHAMPIONS("UHC Champions", "Solo", "Teams of Three"),
+		SPEED_UHC("Speed UHC", "Solo Normal", "Team Normal"),
+		CAPTURE_THE_FLAG("Capture The Flag", "Domination", "Team Deathmatch"),
 		WOOL_WARS("Wool Wars");
-		@Getter
+
 		private final String name;
+
+		private final String[] gameModes;
+
+		GameType(String name, String... gameModes){
+			this.name = name;
+			this.gameModes = gameModes;
+		}
 	}
 }

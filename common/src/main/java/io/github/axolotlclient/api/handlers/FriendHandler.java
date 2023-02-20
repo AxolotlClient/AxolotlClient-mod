@@ -27,14 +27,14 @@ public class FriendHandler implements RequestHandler {
 		this.api = API.getInstance();
 	}
 
-	public void addFriend(UUID uuid) {
+	public void addFriend(String uuid) {
 		api.send(new Friends(object -> {
 			if (!API.getInstance().requestFailed(object)) {
 				System.out.println(object.get("data").getAsJsonObject().get("message").getAsString());
 			} else {
 				APIError.display(object);
 			}
-		}, "add", API.getInstance().sanitizeUUID(uuid.toString())));
+		}, "add", uuid));
 	}
 
 	public void removeFriend(User user){
@@ -73,7 +73,7 @@ public class FriendHandler implements RequestHandler {
 	}
 
 	public void getFriends(Consumer<List<User>> responseConsumer) {
-		api.send(new Friends(object -> {
+		/*api.send(new Friends(object -> {
 			if (API.getInstance().requestFailed(object)) {
 				APIError.display(object);
 			} else {
@@ -86,7 +86,7 @@ public class FriendHandler implements RequestHandler {
 				});
 				responseConsumer.accept(list);
 			}
-		}, "get"));
+		}, "get"));*/
 	}
 
 	public void getFriendRequests(BiConsumer<List<User>, List<User>> responseConsumer) {
