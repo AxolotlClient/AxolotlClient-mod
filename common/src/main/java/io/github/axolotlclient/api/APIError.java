@@ -20,6 +20,11 @@ public class APIError {
 		}
 	}
 
+	public static void display(JsonObject object){
+		API.getInstance().getLogger().debug("APIError: "+object);
+		API.getInstance().getNotificationProvider().addStatus("api.error.requestGeneric", fromResponse(object));
+	}
+
 	@RequiredArgsConstructor
 	private enum ErrorCodes {
 		USER_NOT_FOUND("api.error.userNotFound"),

@@ -29,6 +29,7 @@ import io.github.axolotlclient.AxolotlClientConfig.common.ConfigManager;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.api.API;
+import io.github.axolotlclient.api.APIOptions;
 import io.github.axolotlclient.config.AxolotlClientConfig;
 import io.github.axolotlclient.modules.Module;
 import io.github.axolotlclient.modules.ModuleLoader;
@@ -170,6 +171,7 @@ public class AxolotlClient implements ClientModInitializer {
 		modules.add(BeaconBeam.getInstance());
 		modules.add(Tablist.getInstance());
 		modules.add(Auth.getInstance());
+		modules.add(APIOptions.getInstance());
 	}
 
 	private static void addExternalModules() {

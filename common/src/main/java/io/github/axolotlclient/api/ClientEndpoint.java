@@ -1,9 +1,6 @@
 package io.github.axolotlclient.api;
 
-import jakarta.websocket.OnError;
-import jakarta.websocket.OnMessage;
-import jakarta.websocket.OnOpen;
-import jakarta.websocket.Session;
+import jakarta.websocket.*;
 
 @jakarta.websocket.ClientEndpoint
 public class ClientEndpoint {
@@ -21,5 +18,10 @@ public class ClientEndpoint {
 	@OnError
 	public void onError(Throwable throwable) {
 		API.getInstance().onError(throwable);
+	}
+
+	@OnClose
+	public void onClose(CloseReason reason){
+		API.getInstance().onClose(reason);
 	}
 }

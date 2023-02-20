@@ -1,13 +1,16 @@
 package io.github.axolotlclient.api;
 
 import com.google.gson.JsonObject;
+import io.github.axolotlclient.api.handlers.FriendHandler;
 import io.github.axolotlclient.api.handlers.FriendRequestAcceptedHandler;
 import io.github.axolotlclient.api.handlers.FriendRequestHandler;
 import io.github.axolotlclient.api.util.RequestHandler;
 import io.github.axolotlclient.util.GsonHelper;
 import io.github.axolotlclient.util.Logger;
+import io.github.axolotlclient.util.ThreadExecuter;
 import io.github.axolotlclient.util.notifications.NotificationProvider;
 import io.github.axolotlclient.util.translation.TranslationProvider;
+import jakarta.websocket.CloseReason;
 import jakarta.websocket.DeploymentException;
 import jakarta.websocket.Session;
 import lombok.Getter;
@@ -44,6 +47,7 @@ public class API {
 		Instance = this;
 		addHandler(new FriendRequestHandler());
 		addHandler(new FriendRequestAcceptedHandler());
+		addHandler(FriendHandler.getInstance());
 	}
 
 	public boolean isConnected() {
@@ -57,7 +61,7 @@ public class API {
 	public void startup(String uuid) {
 		try {
 			if (session == null || !session.isOpen()) {
-				this.uuid = uuid;
+				this.uuid = sanitizeUUID(uuid);
 				logger.debug("Starting API...");
 				session = GrizzlyContainerProvider.getWebSocketContainer().connectToServer(ClientEndpoint.class, URI.create(API_URL));
 			} else {
@@ -85,7 +89,7 @@ public class API {
 				logger.debug("Handshake successful!");
 				notificationProvider.addStatus("api.success.handshake", "api.success.handshake.desc");
 			}
-		}, "uuid", sanitizeUUID(uuid));
+		}, "uuid", uuid);
 		send(request);
 	}
 
@@ -111,14 +115,20 @@ public class API {
 	}
 
 	public void send(Request request) {
-		if (session.isOpen()) {
+		System.out.println(session.isOpen());
+		if (isConnected()) {
 			requests.put(request.getId(), request);
-			String text = request.getJson();
-			try {
-				session.getBasicRemote().sendText(text);
-			} catch (IOException e) {
-				logger.error("Failed to send Request! Request: ", text, e);
-			}
+			ThreadExecuter.scheduleTask(() -> {
+				String text = request.getJson();
+				logger.debug("Sending Request: " + text);
+				try {
+					session.getBasicRemote().sendText(text);
+				} catch (IOException e) {
+					logger.error("Failed to send Request! Request: ", text, e);
+				}
+			});
+		} else {
+			logger.debug("Not sending request because API is closed: "+request.getJson());
 		}
 	}
 
@@ -149,6 +159,17 @@ public class API {
 		} catch (RuntimeException e) {
 			e.printStackTrace();
 			logger.error("Invalid response: " + response);
+		}
+	}
+
+	public void onClose(CloseReason reason) {
+		logger.debug("Session closed! Reason: "+reason.getReasonPhrase()+" Code: "+reason.getCloseCode());
+		try {
+			logger.debug("Restarting API session...");
+			session = GrizzlyContainerProvider.getWebSocketContainer().connectToServer(ClientEndpoint.class, URI.create(API_URL));
+			logger.debug("Restarted API session!");
+		} catch (DeploymentException | IOException e) {
+			logger.error("Failed to restart API session!", e);
 		}
 	}
 }

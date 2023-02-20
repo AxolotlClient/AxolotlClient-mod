@@ -10,4 +10,8 @@ public class Friends extends Request {
 	public Friends(Consumer<JsonObject> consumer, String method, String uuid) {
 		super("friends", consumer, "method", method, "uuid", uuid);
 	}
+
+	public Friends(Consumer<JsonObject> consumer, String method) {
+		super("friends", consumer, "method", method);
+	}
 }
