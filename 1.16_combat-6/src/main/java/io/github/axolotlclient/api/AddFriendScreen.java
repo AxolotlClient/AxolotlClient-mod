@@ -64,7 +64,7 @@ public class AddFriendScreen extends Screen {
 	public void render(MatrixStack matrices, int i, int j, float f) {
 		renderBackground(matrices);
 		super.render(matrices, i, j, f);
-		textRenderer.drawWithShadow(matrices, new TranslatableText("api.screen.friends.add"), width / 2F - 100, height / 2f - 20, -1);
+		textRenderer.drawWithShadow(matrices, new TranslatableText("api.screen.friends.add.name"), width / 2F - 100, height / 2f - 20, -1);
 		drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 20, 16777215);
 		nameInput.render(matrices, i, j, f);
 	}

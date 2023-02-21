@@ -23,6 +23,7 @@
 package io.github.axolotlclient.api;
 
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.KeyBindOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.Module;
 
@@ -38,6 +39,8 @@ public abstract class Options implements Module {
 	public final BooleanOption statusUpdateNotifs = new BooleanOption("statusUpdateNotifs", true);
 	public final BooleanOption friendRequestsEnabled = new BooleanOption("friendRequestsEnabled", true);
 	public final BooleanOption detailedLogging = new BooleanOption("detailedLogging", false);
+
+	public KeyBindOption openSidebar;
 
 	protected final OptionCategory category = new OptionCategory("api.category");
 

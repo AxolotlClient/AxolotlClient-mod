@@ -63,8 +63,8 @@ public class AddFriendScreen extends Screen {
 	public void render(int i, int j, float f) {
 		renderBackground();
 		super.render(i, j, f);
-		textRenderer.drawWithShadow(I18n.translate("api.screen.friends.add"), width / 2F - 100, height / 2f - 20, -1);
-		drawCenteredString(this.textRenderer, I18n.translate("api.screen.friends"), this.width / 2, 20, 16777215);
+		textRenderer.drawWithShadow(I18n.translate("api.screen.friends.add.name"), width / 2F - 100, height / 2f - 20, -1);
+		drawCenteredString(this.textRenderer, I18n.translate("api.screen.friends.add"), this.width / 2, 20, 16777215);
 		nameInput.render();
 	}
 

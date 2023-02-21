@@ -78,6 +78,7 @@ public class API {
 		addHandler(new FriendRequestDeniedHandler());
 		addHandler(FriendHandler.getInstance());
 		addHandler(new StatusUpdateHandler());
+		addHandler(ChatHandler.getInstance());
 	}
 
 	public boolean isConnected() {

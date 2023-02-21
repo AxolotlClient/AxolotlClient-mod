@@ -421,5 +421,8 @@
 	"api.friends.request": "New Friend Request from %s!",
 	"api.friends.request.accepted": "%s accepted your Friend Request!",
 	"api.friends.request.declined": "%s declined your Friend Request.",
-	"statusUpdateNotifs": "Status Update Notifications"
+	"statusUpdateNotifs": "Status Update Notifications",
+	"api.friends.sidebar": "Friends Sidebar",
+	"api.friends.chat.input": "Enter Message...",
+	"api.friends.sidebar.open": "Open Friends Sidebar"
 }

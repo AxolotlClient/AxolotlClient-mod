@@ -129,7 +129,10 @@ public class FriendsScreen extends Screen {
 	}
 
 	public void openChat() {
-
+		UserListWidget.UserListEntry entry = widget.getSelectedOrNull();
+		if (entry != null) {
+			client.setScreen(new ChatScreen(this, entry.getUser()));
+		}
 	}
 
 	private void denyRequest() {
