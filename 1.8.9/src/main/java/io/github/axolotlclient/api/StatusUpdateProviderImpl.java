@@ -45,7 +45,7 @@ public class StatusUpdateProviderImpl implements StatusUpdateProvider {
 	private final Instant time = Instant.now();
 
 	@Override
-	public StatusUpdate getStatus() {
+	public Request getStatus() {
 
 		Screen current = MinecraftClient.getInstance().currentScreen;
 		if (current instanceof TitleScreen) {
@@ -83,7 +83,7 @@ public class StatusUpdateProviderImpl implements StatusUpdateProvider {
 
 		}
 
-		return StatusUpdate.offline();
+		return StatusUpdate.dummy();
 	}
 
 	private String getGameModeString(PlayerEntity entity) {

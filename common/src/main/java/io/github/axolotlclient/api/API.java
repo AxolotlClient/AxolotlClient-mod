@@ -26,6 +26,7 @@ import com.google.gson.JsonObject;
 import io.github.axolotlclient.api.handlers.FriendHandler;
 import io.github.axolotlclient.api.handlers.FriendRequestAcceptedHandler;
 import io.github.axolotlclient.api.handlers.FriendRequestHandler;
+import io.github.axolotlclient.api.handlers.StatusUpdateHandler;
 import io.github.axolotlclient.api.util.RequestHandler;
 import io.github.axolotlclient.api.util.StatusUpdateProvider;
 import io.github.axolotlclient.util.GsonHelper;
@@ -78,6 +79,7 @@ public class API {
 		addHandler(new FriendRequestHandler());
 		addHandler(new FriendRequestAcceptedHandler());
 		addHandler(FriendHandler.getInstance());
+		addHandler(new StatusUpdateHandler());
 	}
 
 	public boolean isConnected() {
@@ -170,16 +172,18 @@ public class API {
 
 	public void send(Request request) {
 		if (isConnected()) {
-			requests.put(request.getId(), request);
-			ThreadExecuter.scheduleTask(() -> {
-				String text = request.getJson();
-				logDetailed("Sending Request: " + text);
-				try {
-					session.getBasicRemote().sendText(text);
-				} catch (IOException e) {
-					logger.error("Failed to send Request! Request: ", text, e);
-				}
-			});
+			if(!request.equals(Request.DUMMY)) {
+				requests.put(request.getId(), request);
+				ThreadExecuter.scheduleTask(() -> {
+					String text = request.getJson();
+					logDetailed("Sending Request: " + text);
+					try {
+						session.getBasicRemote().sendText(text);
+					} catch (IOException e) {
+						logger.error("Failed to send Request! Request: ", text, e);
+					}
+				});
+			}
 		} else {
 			logger.warn("Not sending request because API is closed: " + request.getJson());
 		}
@@ -198,13 +202,14 @@ public class API {
 		try {
 			JsonObject object = GsonHelper.GSON.fromJson(response, JsonObject.class);
 
-			String id = object.get("id").getAsString();
+			String id = "";
+			if(object.has("id") && !object.get("id").isJsonNull()) id = object.get("id").getAsString();
 
 			if (requests.containsKey(id)) {
 				requests.get(id).getHandler().accept(object);
 				requests.remove(id);
 
-			} else if (id == null) {
+			} else if (id == null || id.isEmpty()) {
 				handlers.stream().filter(handler -> handler.isApplicable(object)).forEach(handler -> handler.handle(object));
 			} else {
 				logger.error("Unknown response: " + response);

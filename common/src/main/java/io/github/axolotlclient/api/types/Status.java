@@ -31,12 +31,11 @@ import java.time.Instant;
 @AllArgsConstructor
 public class Status {
 
-	public static Status UNKNOWN = new Status(false, "", "", "", "", Instant.EPOCH);
+	public static Status UNKNOWN = new Status(false, "", "", "", Instant.EPOCH);
 
 	private boolean online;
 	private String title;
 	private String description;
-	private String text;
 	private String icon;
 	private Instant startTime;
 }

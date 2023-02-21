@@ -25,6 +25,7 @@ package io.github.axolotlclient.api;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -32,8 +33,12 @@ import java.util.function.Consumer;
 
 @Getter
 @RequiredArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Request {
 
+	public static Request DUMMY = new Request(null, null);
+
+	@EqualsAndHashCode.Include
 	private final String id = randomKey(6);
 	private final String type;
 	private final Consumer<JsonObject> handler;

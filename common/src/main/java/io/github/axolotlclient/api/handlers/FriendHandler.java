@@ -53,8 +53,7 @@ public class FriendHandler implements RequestHandler {
 	public void addFriend(String uuid) {
 		api.send(new Friends(object -> {
 			if (!API.getInstance().requestFailed(object)) {
-				api.getNotificationProvider().addStatus("api.succes.requestSent", "api.success.requestSent.desc", UUIDHelper.getUsername(uuid));
-				System.out.println(object.get("data").getAsJsonObject().get("message").getAsString());
+				api.getNotificationProvider().addStatus("api.success.requestSent", "api.success.requestSent.desc", UUIDHelper.getUsername(uuid));
 			} else {
 				APIError.display(object);
 			}
@@ -107,7 +106,7 @@ public class FriendHandler implements RequestHandler {
 						startedAt = Instant.ofEpochSecond(0);
 					}
 					Status status = new Status(s.get("online").getAsBoolean(), s.get("title").getAsString(),
-							s.get("description").getAsString(), s.get("text").getAsString(), s.get("icon").getAsString(), startedAt);
+							s.get("description").getAsString(), s.get("icon").getAsString(), startedAt);
 					list.add(new User(e.getAsJsonObject().get("uuid").getAsString(), status));
 				});
 				responseConsumer.accept(list);

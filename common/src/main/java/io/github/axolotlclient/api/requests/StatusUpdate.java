@@ -39,13 +39,13 @@ public class StatusUpdate extends Request {
 		}, new Data("updateType", updateType.getIdentifier(), "uuid", API.getInstance().getUuid()).addElement("update", updateData));
 	}
 
-	public static StatusUpdate online(MenuId menuId) {
+	public static Request online(MenuId menuId) {
 		JsonObject data = new JsonObject();
 		data.add("location", new JsonPrimitive(menuId.getIdentifier()));
 		return new StatusUpdate(Type.ONLINE, data);
 	}
 
-	public static StatusUpdate inGame(SupportedServer server, String gameType, String gameMode, String map, int players, int maxPlayers, long activityStartedEpochSecs) {
+	public static Request inGame(SupportedServer server, String gameType, String gameMode, String map, int players, int maxPlayers, long activityStartedEpochSecs) {
 		JsonObject object = new JsonObject();
 		object.addProperty("server", server.name);
 		object.addProperty("gameType", gameType);
@@ -57,7 +57,7 @@ public class StatusUpdate extends Request {
 		return new StatusUpdate(Type.IN_GAME, object);
 	}
 
-	public static StatusUpdate inGameUnknown(String server, String worldType, String worldName, String gamemode, long activityStartedEpochSecs) {
+	public static Request inGameUnknown(String server, String worldType, String worldName, String gamemode, long activityStartedEpochSecs) {
 		JsonObject object = new JsonObject();
 		object.addProperty("server", server);
 		object.addProperty("worldType", worldType);
@@ -67,10 +67,8 @@ public class StatusUpdate extends Request {
 		return new StatusUpdate(Type.IN_GAME_UNKNOWN, object);
 	}
 
-	public static StatusUpdate offline() {
-		StatusUpdate update = new StatusUpdate(Type.OFFLINE, new JsonObject());
-		update.getData().removeElement("update");
-		return update;
+	public static Request dummy() {
+		return Request.DUMMY;
 	}
 
 	@RequiredArgsConstructor

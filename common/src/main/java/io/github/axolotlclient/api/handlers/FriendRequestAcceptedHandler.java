@@ -25,6 +25,7 @@ package io.github.axolotlclient.api.handlers;
 import com.google.gson.JsonObject;
 import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.util.RequestHandler;
+import io.github.axolotlclient.api.util.UUIDHelper;
 
 public class FriendRequestAcceptedHandler implements RequestHandler {
 	@Override
@@ -35,6 +36,6 @@ public class FriendRequestAcceptedHandler implements RequestHandler {
 	@Override
 	public void handle(JsonObject object) {
 		String fromUUID = object.get("data").getAsJsonObject().get("from").getAsString();
-		API.getInstance().getNotificationProvider().addStatus("api.success.friendRequest", "api.success.friendRequest", fromUUID);
+		API.getInstance().getNotificationProvider().addStatus("api.friends", "api.friends.request.accepted", UUIDHelper.getUsername(fromUUID));
 	}
 }
