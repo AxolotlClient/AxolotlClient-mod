@@ -23,10 +23,7 @@
 package io.github.axolotlclient.api;
 
 import com.google.gson.JsonObject;
-import io.github.axolotlclient.api.handlers.FriendHandler;
-import io.github.axolotlclient.api.handlers.FriendRequestAcceptedHandler;
-import io.github.axolotlclient.api.handlers.FriendRequestHandler;
-import io.github.axolotlclient.api.handlers.StatusUpdateHandler;
+import io.github.axolotlclient.api.handlers.*;
 import io.github.axolotlclient.api.util.RequestHandler;
 import io.github.axolotlclient.api.util.StatusUpdateProvider;
 import io.github.axolotlclient.util.GsonHelper;
@@ -78,6 +75,7 @@ public class API {
 		Instance = this;
 		addHandler(new FriendRequestHandler());
 		addHandler(new FriendRequestAcceptedHandler());
+		addHandler(new FriendRequestDeniedHandler());
 		addHandler(FriendHandler.getInstance());
 		addHandler(new StatusUpdateHandler());
 	}
@@ -139,11 +137,15 @@ public class API {
 		Request request = new Request("handshake", object -> {
 			if (requestFailed(object)) {
 				logger.error("Handshake failed, closing API!");
-				notificationProvider.addStatus("api.error.handshake", APIError.fromResponse(object));
+				if(apiOptions.detailedLogging.get()) {
+					notificationProvider.addStatus("api.error.handshake", APIError.fromResponse(object));
+				}
 				shutdown();
 			} else {
 				logger.debug("Handshake successful!");
-				notificationProvider.addStatus("api.success.handshake", "api.success.handshake.desc");
+				if(apiOptions.detailedLogging.get()) {
+					notificationProvider.addStatus("api.success.handshake", "api.success.handshake.desc");
+				}
 			}
 		}, "uuid", uuid);
 		send(request);

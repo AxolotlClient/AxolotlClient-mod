@@ -420,5 +420,6 @@
 	"api.friends.statusChange.offline": "%s is now offline!",
 	"api.friends.request": "New Friend Request from %s!",
 	"api.friends.request.accepted": "%s accepted your Friend Request!",
-	"api.friends.request.declined": "%s declined your Friend Request."
+	"api.friends.request.declined": "%s declined your Friend Request.",
+	"statusUpdateNotifs": "Status Update Notifications"
 }

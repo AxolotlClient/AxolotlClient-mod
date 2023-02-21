@@ -35,6 +35,7 @@ public abstract class Options implements Module {
 			API.getInstance().shutdown();
 		}
 	}, true);
+	public final BooleanOption statusUpdateNotifs = new BooleanOption("statusUpdateNotifs", true);
 	public final BooleanOption friendRequestsEnabled = new BooleanOption("friendRequestsEnabled", true);
 	public final BooleanOption detailedLogging = new BooleanOption("detailedLogging", false);
 
@@ -42,6 +43,6 @@ public abstract class Options implements Module {
 
 	@Override
 	public void init() {
-		category.add(enabled, friendRequestsEnabled, detailedLogging);
+		category.add(enabled, friendRequestsEnabled, statusUpdateNotifs, detailedLogging);
 	}
 }

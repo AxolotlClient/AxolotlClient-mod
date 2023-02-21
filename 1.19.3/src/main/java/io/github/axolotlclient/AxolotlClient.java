@@ -31,6 +31,7 @@ import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.APIOptions;
 import io.github.axolotlclient.api.StatusUpdateProviderImpl;
+import io.github.axolotlclient.api.requests.User;
 import io.github.axolotlclient.config.AxolotlClientConfig;
 import io.github.axolotlclient.modules.Module;
 import io.github.axolotlclient.modules.ModuleLoader;
@@ -184,7 +185,7 @@ public class AxolotlClient implements ClientModInitializer {
 		if (uuid == MinecraftClient.getInstance().player.getUuid()) {
 			return true;
 		} else {
-			return NetworkHelper.getOnline(uuid);
+			return User.getOnline(API.getInstance().sanitizeUUID(uuid.toString()));
 		}
 	}
 
