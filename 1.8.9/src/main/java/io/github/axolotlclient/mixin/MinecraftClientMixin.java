@@ -30,7 +30,6 @@ import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.rpc.DiscordRPC;
 import io.github.axolotlclient.modules.zoom.Zoom;
 import io.github.axolotlclient.util.Hooks;
-import io.github.axolotlclient.util.NetworkHelper;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
@@ -145,9 +144,6 @@ public abstract class MinecraftClientMixin {
 
 	@Inject(method = "stop", at = @At("HEAD"))
 	public void axolotlclient$stop(CallbackInfo ci) {
-		if (AxolotlClient.CONFIG.showBadges.get()) {
-			NetworkHelper.setOffline();
-		}
 		DiscordRPC.shutdown();
 	}
 
@@ -169,9 +165,6 @@ public abstract class MinecraftClientMixin {
 
 	@Inject(method = "connect(Lnet/minecraft/client/world/ClientWorld;Ljava/lang/String;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;flipPlayer(Lnet/minecraft/entity/player/PlayerEntity;)V"))
 	public void axolotlclient$login(ClientWorld world, String loadingMessage, CallbackInfo ci) {
-		if (AxolotlClient.CONFIG.showBadges.get()) {
-			NetworkHelper.setOnline();
-		}
 	}
 
 	@Inject(method = "resizeFramebuffer", at = @At("TAIL"))

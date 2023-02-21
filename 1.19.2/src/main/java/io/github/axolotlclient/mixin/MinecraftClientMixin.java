@@ -26,7 +26,6 @@ import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.blur.MenuBlur;
 import io.github.axolotlclient.modules.rpc.DiscordRPC;
 import io.github.axolotlclient.modules.sky.SkyResourceManager;
-import io.github.axolotlclient.util.NetworkHelper;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
@@ -70,9 +69,6 @@ public abstract class MinecraftClientMixin {
 
 	@Inject(method = "stop", at = @At("HEAD"))
 	public void axolotlclient$stop(CallbackInfo ci) {
-		if (AxolotlClient.CONFIG.showBadges.get()) {
-			NetworkHelper.setOffline();
-		}
 		DiscordRPC.shutdown();
 	}
 
