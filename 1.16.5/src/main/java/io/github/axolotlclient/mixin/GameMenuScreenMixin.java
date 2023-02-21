@@ -25,6 +25,7 @@ package io.github.axolotlclient.mixin;
 import io.github.axolotlclient.modules.hud.HudEditScreen;
 import io.github.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
 import io.github.axolotlclient.modules.hypixel.HypixelMods;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -42,6 +43,9 @@ public abstract class GameMenuScreenMixin {
 
 	@ModifyArgs(method = "initWidgets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget;<init>(IIIILnet/minecraft/text/Text;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;)V", ordinal = 3))
 	public void addClientOptionsButton(Args args) {
+		if (axolotlclient$hasModMenu())
+			return;
+		
 		args.set(4, new TranslatableText("title_short"));
 		args.set(5, (ButtonWidget.PressAction) (buttonWidget) -> MinecraftClient.getInstance()
 				.openScreen(new HudEditScreen(((GameMenuScreen) (Object) this))));
@@ -56,5 +60,9 @@ public abstract class GameMenuScreenMixin {
 			}
 			onPress.onPress(buttonWidget);
 		};
+	}
+
+	private static boolean axolotlclient$hasModMenu() {
+		return FabricLoader.getInstance().isModLoaded("modmenu") && !FabricLoader.getInstance().isModLoaded("axolotlclient-modmenu");
 	}
 }

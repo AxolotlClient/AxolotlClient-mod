@@ -46,9 +46,12 @@ public abstract class GameMenuScreenMixin extends Screen {
 
 	@Inject(method = "init", at = @At("RETURN"))
 	public void axolotlclient$addConfigButton(CallbackInfo ci) {
+		if (axolotlclient$hasModMenu())
+			return;
+		
 		if (MinecraftClient.getInstance().isInSingleplayer() && !this.client.getServer().isPublished()) {
 			buttons.add(new ButtonWidget(20, width / 2 - 100,
-					height / 4 + (!axolotlclient$alternateLayout() ? 82 : 80),
+					height / 4 + 82,
 					I18n.translate("config")));
 			for (ButtonWidget button : buttons) {
 				if (button.y >= this.height / 4 - 16 + 24 * 4 - 1 && !(button.id == 20)) {
@@ -67,6 +70,9 @@ public abstract class GameMenuScreenMixin extends Screen {
 
 	@ModifyArgs(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget;<init>(IIIIILjava/lang/String;)V", ordinal = 1))
 	public void axolotlclient$addOptionsButton(Args args) {
+		if (axolotlclient$hasModMenu())
+			return;
+		
 		if ((MinecraftClient.getInstance().getServer() != null
 				&& MinecraftClient.getInstance().getServer().isPublished())
 				|| MinecraftClient.getInstance().getCurrentServerEntry() != null) {
@@ -77,7 +83,7 @@ public abstract class GameMenuScreenMixin extends Screen {
 
 	@Inject(method = "buttonClicked", at = @At("HEAD"))
 	public void axolotlclient$customButtons(ButtonWidget button, CallbackInfo ci) {
-		if (button.id == 20) {
+		if (button.id == 20 && !axolotlclient$hasModMenu()) {
 			MinecraftClient.getInstance().setScreen(new HudEditScreen((GameMenuScreen) (Object) this));
 		} else if (button.id == 1) {
 			FeatureDisabler.clear();
@@ -89,7 +95,7 @@ public abstract class GameMenuScreenMixin extends Screen {
 		}
 	}
 
-	private boolean axolotlclient$alternateLayout() {
+	private static boolean axolotlclient$hasModMenu() {
 		return FabricLoader.getInstance().isModLoaded("modmenu") && !FabricLoader.getInstance().isModLoaded("axolotlclient-modmenu");
 	}
 }
