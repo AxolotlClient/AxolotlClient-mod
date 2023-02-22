@@ -25,6 +25,7 @@ package io.github.axolotlclient.api.requests;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import io.github.axolotlclient.api.API;
+import io.github.axolotlclient.api.APIError;
 import io.github.axolotlclient.api.Request;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,10 @@ public class StatusUpdate extends Request {
 
 	protected StatusUpdate(Type updateType, JsonObject updateData) {
 		super("statusUpdate", object -> {
-			// not yet implemented, the response is unclear
+			if(API.getInstance().requestFailed(object)){
+				APIError.display(object);
+			}
+			// no explixit response handling necessary
 		}, new Data("updateType", updateType.getIdentifier(), "uuid", API.getInstance().getUuid()).addElement("update", updateData));
 	}
 

@@ -22,10 +22,12 @@
 
 package io.github.axolotlclient.api.types;
 
+import io.github.axolotlclient.api.API;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.Instant;
+import java.util.Locale;
 
 @Data
 @AllArgsConstructor
@@ -38,4 +40,12 @@ public class Status {
 	private String description;
 	private String icon;
 	private Instant startTime;
+
+	public String getDescription(){
+		return description.isEmpty() ? "" : API.getInstance().getTranslationProvider().translate("api.status.description." + description.toLowerCase(Locale.ROOT));
+	}
+
+	public String getTitle(){
+		return title.isEmpty() ? "" : API.getInstance().getTranslationProvider().translate("api.status.title." + title.toLowerCase(Locale.ROOT));
+	}
 }

@@ -24,7 +24,6 @@ package io.github.axolotlclient.api;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.api.types.User;
-import io.github.axolotlclient.modules.auth.Account;
 import io.github.axolotlclient.modules.auth.Auth;
 import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
@@ -75,8 +74,6 @@ public class UserListWidget extends AlwaysSelectedEntryListWidget<UserListWidget
 		private final User user;
 		private long time;
 
-		private final Account account;
-
 		private final MinecraftClient client;
 
 		private Text note;
@@ -85,7 +82,6 @@ public class UserListWidget extends AlwaysSelectedEntryListWidget<UserListWidget
 		public UserListEntry(User user) {
 			this.client = MinecraftClient.getInstance();
 			this.user = user;
-			account = new Account(user.getName(), user.getUuid(), "");
 		}
 
 		public UserListEntry(User user, MutableText note) {
@@ -110,7 +106,7 @@ public class UserListWidget extends AlwaysSelectedEntryListWidget<UserListWidget
 				client.textRenderer.draw(matrices, note, x + entryWidth - client.textRenderer.getWidth(note) - 2, y + entryHeight - 10, 8421504);
 			}
 
-			client.getTextureManager().bindTexture(Auth.getInstance().getSkinTexture(account));
+			client.getTextureManager().bindTexture(Auth.getInstance().getSkinTexture(user.getUuid(), user.getName()));
 			RenderSystem.enableBlend();
 			drawTexture(matrices, x - 1, y - 1, 33, 33, 8, 8, 8, 8, 64, 64);
 			drawTexture(matrices, x - 1, y - 1, 33, 33, 40, 8, 8, 8, 64, 64);

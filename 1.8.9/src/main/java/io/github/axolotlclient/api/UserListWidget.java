@@ -24,7 +24,6 @@ package io.github.axolotlclient.api;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.api.types.User;
-import io.github.axolotlclient.modules.auth.Account;
 import io.github.axolotlclient.modules.auth.Auth;
 import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
@@ -101,8 +100,6 @@ public class UserListWidget extends EntryListWidget {
 		private final User user;
 		private long time;
 
-		private final Account account;
-
 		private final MinecraftClient client;
 
 		private String note;
@@ -111,7 +108,6 @@ public class UserListWidget extends EntryListWidget {
 		public UserListEntry(User user) {
 			this.client = MinecraftClient.getInstance();
 			this.user = user;
-			account = new Account(user.getName(), user.getUuid(), "");
 		}
 
 		public UserListEntry(User user, String note) {
@@ -142,7 +138,7 @@ public class UserListWidget extends EntryListWidget {
 			}
 
 			GlStateManager.color(1, 1, 1, 1);
-			client.getTextureManager().bindTexture(Auth.getInstance().getSkinTexture(account));
+			client.getTextureManager().bindTexture(Auth.getInstance().getSkinTexture(user.getUuid(), user.getName()));
 			GlStateManager.enableBlend();
 			drawTexture(x - 1, y - 1, 8, 8, 8, 8, 33, 33, 64, 64);
 			drawTexture(x - 1, y - 1, 40, 8, 8, 8, 33, 33, 64, 64);

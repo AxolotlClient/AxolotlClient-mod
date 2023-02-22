@@ -111,5 +111,5 @@ public abstract class Accounts {
 		return accounts.size() > 0 && !accounts.stream().allMatch(Account::isOffline);
 	}
 
-	public abstract void loadTextures(Account account);
+	public abstract void loadTextures(String uuid, String name);
 }

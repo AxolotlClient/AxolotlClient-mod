@@ -22,7 +22,6 @@
 
 package io.github.axolotlclient.modules.auth;
 
-import com.google.common.base.MoreObjects;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.minecraft.SocialInteractionsService;
@@ -59,9 +58,9 @@ public class Auth extends Accounts implements Module {
 	public final BooleanOption showButton = new BooleanOption("auth.showButton", false);
 	private final GenericOption viewAccounts = new GenericOption("viewAccounts", "clickToOpen", (x, y) -> client.openScreen(new AccountsScreen(client.currentScreen)));
 
-	private final Map<Account, Identifier> textures = new HashMap<>();
-	private final Set<Account> loadingTexture = new HashSet<>();
-	private final Map<Account, GameProfile> profileCache = new WeakHashMap<>();
+	private final Map<String, Identifier> textures = new HashMap<>();
+	private final Set<String> loadingTexture = new HashSet<>();
+	private final Map<String, GameProfile> profileCache = new WeakHashMap<>();
 
 	@Override
 	public void init() {
@@ -126,27 +125,27 @@ public class Auth extends Accounts implements Module {
 	}
 
 	@Override
-	public void loadTextures(Account account) {
-		if(!textures.containsKey(account) && !loadingTexture.contains(account)) {
+	public void loadTextures(String uuid, String name) {
+		if(!textures.containsKey(uuid) && !loadingTexture.contains(uuid)) {
 			ThreadExecuter.scheduleTask(() -> {
-				loadingTexture.add(account);
+				loadingTexture.add(uuid);
 				GameProfile gameProfile;
-				if (profileCache.containsKey(account)) {
-					gameProfile = profileCache.get(account);
+				if (profileCache.containsKey(uuid)) {
+					gameProfile = profileCache.get(uuid);
 				} else {
 					try {
-						UUID uUID = UUIDTypeAdapter.fromString(account.getUuid());
-						gameProfile = new GameProfile(uUID, account.getName());
+						UUID uUID = UUIDTypeAdapter.fromString(uuid);
+						gameProfile = new GameProfile(uUID, name);
 						gameProfile = client.getSessionService().fillProfileProperties(gameProfile, false);
 					} catch (IllegalArgumentException var2) {
-						gameProfile = new GameProfile(null, account.getName());
+						gameProfile = new GameProfile(null, name);
 					}
-					profileCache.put(account, gameProfile);
+					profileCache.put(uuid, gameProfile);
 				}
 				client.getSkinProvider().loadSkin(gameProfile, ((type, id, tex) -> {
 					if (type == MinecraftProfileTexture.Type.SKIN) {
-						textures.put(account, id);
-						loadingTexture.remove(account);
+						textures.put(uuid, id);
+						loadingTexture.remove(uuid);
 					}
 				}), false);
 			});
@@ -154,7 +153,20 @@ public class Auth extends Accounts implements Module {
 	}
 
 	public Identifier getSkinTexture(Account account) {
-		loadTextures(account);
-		return MoreObjects.firstNonNull(this.textures.get(account), DefaultSkinHelper.getTexture(UUIDTypeAdapter.fromString(account.getUuid())));
+		return getSkinTexture(account.getUuid(), account.getName());
+	}
+
+	public Identifier getSkinTexture(String uuid, String name){
+		loadTextures(uuid, name);
+		Identifier id;
+		if ((id = textures.get(uuid)) != null) {
+			return id;
+		}
+		try {
+			UUID uUID = UUIDTypeAdapter.fromString(uuid);
+			return DefaultSkinHelper.getTexture(uUID);
+		} catch (IllegalArgumentException ignored) {
+			return DefaultSkinHelper.getTexture();
+		}
 	}
 }
