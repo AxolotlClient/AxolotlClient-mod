@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.modules.auth;
 
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture;
+import com.mojang.util.UUIDTypeAdapter;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.GenericOption;
@@ -30,18 +33,17 @@ import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.mixin.MinecraftClientAccessor;
 import io.github.axolotlclient.modules.Module;
 import io.github.axolotlclient.util.Logger;
+import io.github.axolotlclient.util.ThreadExecuter;
 import io.github.axolotlclient.util.notifications.Notifications;
 import lombok.Getter;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.texture.NativeImageBackedTexture;
+import net.minecraft.client.util.DefaultSkinHelper;
 import net.minecraft.client.util.Session;
 import net.minecraft.util.Identifier;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.nio.file.Path;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Auth extends Accounts implements Module {
@@ -52,6 +54,9 @@ public class Auth extends Accounts implements Module {
 	public final BooleanOption showButton = new BooleanOption("auth.showButton", false);
 	private final MinecraftClient client = MinecraftClient.getInstance();
 	private final GenericOption viewAccounts = new GenericOption("viewAccounts", "clickToOpen", (x, y) -> client.setScreen(new AccountsScreen(client.currentScreen)));
+
+	private final Map<MSAccount, Identifier> textures = new HashMap<>();
+	private final Set<MSAccount> loadingTexture = new HashSet<>();
 
 	@Override
 	public void init() {
@@ -113,17 +118,41 @@ public class Auth extends Accounts implements Module {
 		return AxolotlClient.LOGGER;
 	}
 
-	public void loadSkinFile(Identifier skinId, MSAccount account) {
-		if (!account.isOffline() && MinecraftClient.getInstance().getTextureManager().getTexture(skinId) == null) {
-			try {
-				BufferedImage image = ImageIO.read(Auth.getInstance().getSkinFile(account));
-				if (image != null) {
-					client.getTextureManager().loadTexture(skinId, new NativeImageBackedTexture(image));
-					AxolotlClient.LOGGER.debug("Loaded skin file for " + account.getName());
+	@Override
+	public void loadTextures(MSAccount account) {
+		if (!textures.containsKey(account) && !loadingTexture.contains(account)) {
+			ThreadExecuter.scheduleTask(()-> {
+				loadingTexture.add(account);
+				GameProfile gameProfile;
+				try {
+					UUID uUID = UUIDTypeAdapter.fromString(account.getUuid());
+					gameProfile = new GameProfile(uUID, account.getName());
+					client.getSessionService().fillProfileProperties(gameProfile, false);
+				} catch (IllegalArgumentException var2) {
+					gameProfile = new GameProfile(null, account.getName());
 				}
-			} catch (IOException e) {
-				AxolotlClient.LOGGER.warn("Couldn't load skin file for " + account.getName());
-			}
+				client.getSkinProvider().loadProfileSkin(gameProfile, (type, identifier, minecraftProfileTexture) -> {
+					if (type == MinecraftProfileTexture.Type.SKIN) {
+						textures.put(account, identifier);
+						loadingTexture.remove(account);
+					}
+				}, false);
+			});
+		}
+
+	}
+
+	public Identifier getSkinTexture(MSAccount account) {
+		loadTextures(account);
+		Identifier id;
+		if ((id = textures.get(account)) != null) {
+			return id;
+		}
+		try {
+			UUID uuid = UUIDTypeAdapter.fromString(account.getUuid());
+			return DefaultSkinHelper.getTexture(uuid);
+		} catch (IllegalArgumentException ignored) {
+			return DefaultSkinHelper.getTexture();
 		}
 	}
 }

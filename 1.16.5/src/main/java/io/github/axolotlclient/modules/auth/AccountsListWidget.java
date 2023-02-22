@@ -68,8 +68,6 @@ public class AccountsListWidget extends AlwaysSelectedEntryListWidget<AccountsLi
 		private static final Identifier checkmark = new Identifier("axolotlclient", "textures/check.png");
 		private static final Identifier warningSign = new Identifier("axolotlclient", "textures/warning.png");
 
-		private final Identifier skin;
-
 		private final AccountsScreen screen;
 		private final MSAccount account;
 		private final MinecraftClient client;
@@ -79,8 +77,6 @@ public class AccountsListWidget extends AlwaysSelectedEntryListWidget<AccountsLi
 			this.screen = screen;
 			this.account = account;
 			this.client = MinecraftClient.getInstance();
-			this.skin = new Identifier(Auth.getInstance().getSkinTextureId(account));
-			Auth.getInstance().loadSkinFile(skin, account);
 		}
 
 		@Override
@@ -93,13 +89,12 @@ public class AccountsListWidget extends AlwaysSelectedEntryListWidget<AccountsLi
 				client.getTextureManager().bindTexture(warningSign);
 				drawTexture(matrices, x - 35, y + 1, 0, 0, 25, 25, 25, 25);
 			}
-			if (!account.isOffline()) {
-				client.getTextureManager().bindTexture(skin);
-				RenderSystem.enableBlend();
-				drawTexture(matrices, x - 1, y - 1, 33, 33, 8, 8, 8, 8, 64, 64);
-				drawTexture(matrices, x - 1, y - 1, 33, 33, 40, 8, 8, 8, 64, 64);
-				RenderSystem.disableBlend();
-			}
+			client.getTextureManager().bindTexture(Auth.getInstance().getSkinTexture(account));
+			RenderSystem.enableBlend();
+			drawTexture(matrices, x - 1, y - 1, 33, 33, 8, 8, 8, 8, 64, 64);
+			drawTexture(matrices, x - 1, y - 1, 33, 33, 40, 8, 8, 8, 64, 64);
+			RenderSystem.disableBlend();
+
 			client.textRenderer.draw(matrices, account.getName(), x + 3 + 33, y + 1, -1);
 			client.textRenderer.draw(matrices, account.getUuid(), x + 3 + 33, y + 12, 8421504);
 		}

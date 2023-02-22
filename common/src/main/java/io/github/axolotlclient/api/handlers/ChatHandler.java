@@ -23,8 +23,6 @@
 package io.github.axolotlclient.api.handlers;
 
 import com.google.gson.JsonObject;
-import io.github.axolotlclient.api.API;
-import io.github.axolotlclient.api.requests.ChatMessage;
 import io.github.axolotlclient.api.types.User;
 import io.github.axolotlclient.api.util.RequestHandler;
 import lombok.Getter;

@@ -22,6 +22,10 @@
 
 package io.github.axolotlclient.modules.auth;
 
+import com.google.common.base.MoreObjects;
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture;
+import com.mojang.util.UUIDTypeAdapter;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.GenericOption;
@@ -36,6 +40,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.texture.NativeImageBackedTexture;
+import net.minecraft.client.util.DefaultSkinHelper;
 import net.minecraft.client.util.Session;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
@@ -43,6 +48,8 @@ import net.minecraft.util.Identifier;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Auth extends Accounts implements Module {
@@ -52,6 +59,8 @@ public class Auth extends Accounts implements Module {
 	private final MinecraftClient client = MinecraftClient.getInstance();
 	public final BooleanOption showButton = new BooleanOption("auth.showButton", false);
 	private final GenericOption viewAccounts = new GenericOption("viewAccounts", "clickToOpen", (x, y) -> client.openScreen(new AccountsScreen(client.currentScreen)));
+
+	private final Map<MSAccount, Identifier> textures = new HashMap<>();
 
 	@Override
 	public void init() {
@@ -112,15 +121,19 @@ public class Auth extends Accounts implements Module {
 		return AxolotlClient.LOGGER;
 	}
 
-	public void loadSkinFile(Identifier skinId, MSAccount account) {
-		if (!account.isOffline() && MinecraftClient.getInstance().getTextureManager().getTexture(skinId) == null) {
-			try {
-				MinecraftClient.getInstance().getTextureManager().registerTexture(skinId,
-						new NativeImageBackedTexture(NativeImage.read(Files.newInputStream(getSkinFile(account).toPath()))));
-				AxolotlClient.LOGGER.debug("Loaded skin file for " + account.getName());
-			} catch (IOException e) {
-				AxolotlClient.LOGGER.warn("Couldn't load skin file for " + account.getName());
-			}
+	@Override
+	public void loadTextures(MSAccount account) {
+		if(!textures.containsKey(account)) {
+			client.getSkinProvider().loadSkin(new GameProfile(UUIDTypeAdapter.fromString(account.getUuid()), account.getName()), ((type, id, tex) -> {
+				if (type == MinecraftProfileTexture.Type.SKIN) {
+					textures.put(account, id);
+				}
+			}), false);
 		}
+	}
+
+	public Identifier getSkinTexture(MSAccount account) {
+		loadTextures(account);
+		return MoreObjects.firstNonNull(this.textures.get(account), DefaultSkinHelper.getTexture(UUIDTypeAdapter.fromString(account.getUuid())));
 	}
 }
