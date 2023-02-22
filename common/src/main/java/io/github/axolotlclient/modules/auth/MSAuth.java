@@ -125,7 +125,7 @@ public class MSAuth {
 			String accessToken = authMC(xsts.getValue(), xsts.getKey());
 			if (checkOwnership(accessToken)) {
 				logger.debug("finished auth flow!");
-				MSAccount account = new MSAccount(getMCProfile(accessToken), accessToken, msTokens.getValue());
+				Account account = new Account(getMCProfile(accessToken), accessToken, msTokens.getValue());
 				if (accounts.isContained(account.getUuid())) {
 					accounts.getAccounts().removeAll(accounts.getAccounts().stream().filter(acc -> acc.getUuid().equals(account.getUuid())).collect(Collectors.toList()));
 				}

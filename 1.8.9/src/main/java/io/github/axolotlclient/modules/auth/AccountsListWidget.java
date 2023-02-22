@@ -44,7 +44,7 @@ public class AccountsListWidget extends EntryListWidget {
 		this.screen = screen;
 	}
 
-	public void setAccounts(List<MSAccount> accounts) {
+	public void setAccounts(List<Account> accounts) {
 		accounts.forEach(account -> entries.add(new Entry(screen, account)));
 	}
 
@@ -95,11 +95,11 @@ public class AccountsListWidget extends EntryListWidget {
 		private static final Identifier warningSign = new Identifier("axolotlclient", "textures/warning.png");
 
 		private final AccountsScreen screen;
-		private final MSAccount account;
+		private final Account account;
 		private final MinecraftClient client;
 		private long time;
 
-		public Entry(AccountsScreen screen, MSAccount account) {
+		public Entry(AccountsScreen screen, Account account) {
 			this.screen = screen;
 			this.account = account;
 			this.client = MinecraftClient.getInstance();
@@ -147,7 +147,7 @@ public class AccountsListWidget extends EntryListWidget {
 
 		}
 
-		public MSAccount getAccount() {
+		public Account getAccount() {
 			return account;
 		}
 	}

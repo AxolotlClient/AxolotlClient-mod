@@ -36,15 +36,15 @@ import java.util.List;
 
 public abstract class Accounts {
 
-	private final List<MSAccount> accounts = new ArrayList<>();
-	protected MSAccount current;
+	private final List<Account> accounts = new ArrayList<>();
+	protected Account current;
 	protected MSAuth auth;
 
 	public MSAuth getAuth() {
 		return auth;
 	}
 
-	public List<MSAccount> getAccounts() {
+	public List<Account> getAccounts() {
 		return accounts;
 	}
 
@@ -53,7 +53,7 @@ public abstract class Accounts {
 			try {
 				JsonObject list = GsonHelper.GSON.fromJson(String.join("", Files.readAllLines(getAccountsSaveFile())), JsonObject.class);
 				if (list != null) {
-					list.get("accounts").getAsJsonArray().forEach(jsonElement -> accounts.add(MSAccount.deserialize(jsonElement.getAsJsonObject())));
+					list.get("accounts").getAsJsonArray().forEach(jsonElement -> accounts.add(Account.deserialize(jsonElement.getAsJsonObject())));
 				}
 			} catch (IOException e) {
 				throw new RuntimeException(e);
@@ -74,17 +74,17 @@ public abstract class Accounts {
 
 	protected abstract Path getConfigDir();
 
-	public void addAccount(MSAccount account) {
+	public void addAccount(Account account) {
 		accounts.add(account);
 	}
 
-	public MSAccount getCurrent() {
+	public Account getCurrent() {
 		return current;
 	}
 
-	protected abstract void login(MSAccount account);
+	protected abstract void login(Account account);
 
-	public void removeAccount(MSAccount account) {
+	public void removeAccount(Account account) {
 		accounts.remove(account);
 		save();
 	}
@@ -108,8 +108,8 @@ public abstract class Accounts {
 	}
 
 	public boolean allowOfflineAccounts() {
-		return accounts.size() > 0 && !accounts.stream().allMatch(MSAccount::isOffline);
+		return accounts.size() > 0 && !accounts.stream().allMatch(Account::isOffline);
 	}
 
-	public abstract void loadTextures(MSAccount account);
+	public abstract void loadTextures(Account account);
 }

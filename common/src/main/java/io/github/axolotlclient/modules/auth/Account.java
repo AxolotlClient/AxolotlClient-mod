@@ -30,7 +30,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
 
-public class MSAccount {
+public class Account {
 
 	public static final String OFFLINE_TOKEN = "AxolotlClient/Offline";
 
@@ -41,7 +41,7 @@ public class MSAccount {
 	private String refreshToken;
 	private Instant expiration;
 
-	public MSAccount(String name, String uuid, String accessToken) {
+	public Account(String name, String uuid, String accessToken) {
 		this.name = name;
 		this.uuid = uuid.replace("-", "");
 		this.authToken = accessToken;
@@ -49,7 +49,7 @@ public class MSAccount {
 		refreshToken = "";
 	}
 
-	public MSAccount(JsonObject profile, String authToken, String refreshToken) {
+	public Account(JsonObject profile, String authToken, String refreshToken) {
 		uuid = profile.get("id").getAsString();
 		name = profile.get("name").getAsString();
 		this.authToken = authToken;
@@ -57,7 +57,7 @@ public class MSAccount {
 		expiration = Instant.now().plus(1, ChronoUnit.DAYS);
 	}
 
-	private MSAccount(String uuid, String name, String authToken, String refreshToken, long expiration) {
+	private Account(String uuid, String name, String authToken, String refreshToken, long expiration) {
 		this.uuid = uuid;
 		this.name = name;
 		this.authToken = authToken;
@@ -96,13 +96,13 @@ public class MSAccount {
 		return object;
 	}
 
-	public static MSAccount deserialize(JsonObject object) {
+	public static Account deserialize(JsonObject object) {
 		String uuid = object.get("uuid").getAsString();
 		String name = object.get("name").getAsString();
 		String authToken = object.get("authToken").getAsString();
 		String refreshToken = object.get("refreshToken").getAsString();
 		long expiration = object.get("expiration").getAsLong();
-		return new MSAccount(uuid, name, authToken, refreshToken, expiration);
+		return new Account(uuid, name, authToken, refreshToken, expiration);
 	}
 
 	public boolean isExpired() {
@@ -123,8 +123,8 @@ public class MSAccount {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof MSAccount) {
-			MSAccount other = (MSAccount) obj;
+		if (obj instanceof Account) {
+			Account other = (Account) obj;
 			return name.equals(other.name) &&
 					uuid.equals(other.uuid);
 		}

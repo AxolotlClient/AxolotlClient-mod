@@ -55,8 +55,8 @@ public class Auth extends Accounts implements Module {
 	private final MinecraftClient client = MinecraftClient.getInstance();
 	private final GenericOption viewAccounts = new GenericOption("viewAccounts", "clickToOpen", (x, y) -> client.setScreen(new AccountsScreen(client.currentScreen)));
 
-	private final Map<MSAccount, Identifier> textures = new HashMap<>();
-	private final Set<MSAccount> loadingTexture = new HashSet<>();
+	private final Map<Account, Identifier> textures = new HashMap<>();
+	private final Set<Account> loadingTexture = new HashSet<>();
 
 	@Override
 	public void init() {
@@ -69,7 +69,7 @@ public class Auth extends Accounts implements Module {
 				});
 			}
 		} else {
-			current = new MSAccount(client.getSession().getUsername(), client.getSession().getUuid(), client.getSession().getAccessToken());
+			current = new Account(client.getSession().getUsername(), client.getSession().getUuid(), client.getSession().getAccessToken());
 		}
 
 		OptionCategory category = new OptionCategory("auth");
@@ -83,7 +83,7 @@ public class Auth extends Accounts implements Module {
 	}
 
 	@Override
-	protected void login(MSAccount account) {
+	protected void login(Account account) {
 		if (client.world != null) {
 			return;
 		}
@@ -119,7 +119,7 @@ public class Auth extends Accounts implements Module {
 	}
 
 	@Override
-	public void loadTextures(MSAccount account) {
+	public void loadTextures(Account account) {
 		if (!textures.containsKey(account) && !loadingTexture.contains(account)) {
 			ThreadExecuter.scheduleTask(()-> {
 				loadingTexture.add(account);
@@ -142,7 +142,7 @@ public class Auth extends Accounts implements Module {
 
 	}
 
-	public Identifier getSkinTexture(MSAccount account) {
+	public Identifier getSkinTexture(Account account) {
 		loadTextures(account);
 		Identifier id;
 		if ((id = textures.get(account)) != null) {

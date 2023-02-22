@@ -22,9 +22,13 @@
 
 package io.github.axolotlclient.api;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.api.types.User;
+import io.github.axolotlclient.modules.auth.Account;
+import io.github.axolotlclient.modules.auth.Auth;
 import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.widget.EntryListWidget;
 import net.minecraft.util.Formatting;
 
@@ -47,9 +51,8 @@ public class UserListWidget extends EntryListWidget {
 		users.forEach(user -> addEntry(new UserListEntry(user)));
 	}
 
-	public int addEntry(UserListEntry entry) {
+	public void addEntry(UserListEntry entry) {
 		entries.add(entry.init(screen));
-		return entries.indexOf(entry);
 	}
 
 	@Override
@@ -92,11 +95,13 @@ public class UserListWidget extends EntryListWidget {
 		return entries.get(getSelected());
 	}
 
-	public static class UserListEntry implements EntryListWidget.Entry {
+	public static class UserListEntry extends DrawableHelper implements EntryListWidget.Entry {
 
 		@Getter
 		private final User user;
 		private long time;
+
+		private final Account account;
 
 		private final MinecraftClient client;
 
@@ -106,6 +111,7 @@ public class UserListWidget extends EntryListWidget {
 		public UserListEntry(User user) {
 			this.client = MinecraftClient.getInstance();
 			this.user = user;
+			account = new Account(user.getName(), user.getUuid(), "");
 		}
 
 		public UserListEntry(User user, String note) {
@@ -134,6 +140,13 @@ public class UserListWidget extends EntryListWidget {
 			if (note != null) {
 				client.textRenderer.draw(note, x + entryWidth - client.textRenderer.getStringWidth(note) - 2, y + entryHeight - 10, 8421504);
 			}
+
+			GlStateManager.color(1, 1, 1, 1);
+			client.getTextureManager().bindTexture(Auth.getInstance().getSkinTexture(account));
+			GlStateManager.enableBlend();
+			drawTexture(x - 1, y - 1, 8, 8, 8, 8, 33, 33, 64, 64);
+			drawTexture(x - 1, y - 1, 40, 8, 8, 8, 33, 33, 64, 64);
+			GlStateManager.disableBlend();
 		}
 
 		@Override

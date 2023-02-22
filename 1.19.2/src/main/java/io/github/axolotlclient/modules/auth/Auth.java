@@ -63,7 +63,7 @@ public class Auth extends Accounts implements Module {
 	public final BooleanOption showButton = new BooleanOption("auth.showButton", false);
 	private final GenericOption viewAccounts = new GenericOption("viewAccounts", "clickToOpen", (x, y) -> client.setScreen(new AccountsScreen(client.currentScreen)));
 
-	private final Map<MSAccount, Identifier> textures = new HashMap<>();
+	private final Map<Account, Identifier> textures = new HashMap<>();
 
 	@Override
 	public void init() {
@@ -76,7 +76,7 @@ public class Auth extends Accounts implements Module {
 				});
 			}
 		} else {
-			current = new MSAccount(client.getSession().getUsername(), client.getSession().getUuid(), client.getSession().getAccessToken());
+			current = new Account(client.getSession().getUsername(), client.getSession().getUuid(), client.getSession().getAccessToken());
 		}
 
 		OptionCategory category = new OptionCategory("auth");
@@ -90,7 +90,7 @@ public class Auth extends Accounts implements Module {
 	}
 
 	@Override
-	protected void login(MSAccount account) {
+	protected void login(Account account) {
 		if (client.world != null) {
 			return;
 		}
@@ -135,7 +135,7 @@ public class Auth extends Accounts implements Module {
 	}
 
 	@Override
-	public void loadTextures(MSAccount account) {
+	public void loadTextures(Account account) {
 		if(!textures.containsKey(account)) {
 			client.getSkinProvider().loadSkin(new GameProfile(UUIDTypeAdapter.fromString(account.getUuid()), account.getName()), ((type, id, tex) -> {
 				if (type == MinecraftProfileTexture.Type.SKIN) {
@@ -145,7 +145,7 @@ public class Auth extends Accounts implements Module {
 		}
 	}
 
-	public Identifier getSkinTexture(MSAccount account) {
+	public Identifier getSkinTexture(Account account) {
 		loadTextures(account);
 		return MoreObjects.firstNonNull(this.textures.get(account), DefaultSkinHelper.getTexture(UUIDTypeAdapter.fromString(account.getUuid())));
 	}
