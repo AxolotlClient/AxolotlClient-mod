@@ -37,6 +37,7 @@ import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.mixin.MinecraftClientAccessor;
 import io.github.axolotlclient.modules.Module;
 import io.github.axolotlclient.util.Logger;
+import io.github.axolotlclient.util.ThreadExecuter;
 import io.github.axolotlclient.util.notifications.Notifications;
 import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
@@ -51,9 +52,7 @@ import net.minecraft.util.Identifier;
 import org.quiltmc.loader.api.QuiltLoader;
 
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class Auth extends Accounts implements Module {
 
@@ -64,6 +63,8 @@ public class Auth extends Accounts implements Module {
 	private final GenericOption viewAccounts = new GenericOption("viewAccounts", "clickToOpen", (x, y) -> client.setScreen(new AccountsScreen(client.currentScreen)));
 
 	private final Map<Account, Identifier> textures = new HashMap<>();
+	private final Set<Account> loadingTexture = new HashSet<>();
+	private final Map<Account, GameProfile> profileCache = new WeakHashMap<>();
 
 	@Override
 	public void init() {
@@ -136,12 +137,29 @@ public class Auth extends Accounts implements Module {
 
 	@Override
 	public void loadTextures(Account account) {
-		if(!textures.containsKey(account)) {
-			client.getSkinProvider().loadSkin(new GameProfile(UUIDTypeAdapter.fromString(account.getUuid()), account.getName()), ((type, id, tex) -> {
-				if (type == MinecraftProfileTexture.Type.SKIN) {
-					textures.put(account, id);
+		if(!textures.containsKey(account) && !loadingTexture.contains(account)) {
+			ThreadExecuter.scheduleTask(() -> {
+				loadingTexture.add(account);
+				GameProfile gameProfile;
+				if (profileCache.containsKey(account)) {
+					gameProfile = profileCache.get(account);
+				} else {
+					try {
+						UUID uUID = UUIDTypeAdapter.fromString(account.getUuid());
+						gameProfile = new GameProfile(uUID, account.getName());
+						gameProfile = client.getSessionService().fillProfileProperties(gameProfile, false);
+					} catch (IllegalArgumentException var2) {
+						gameProfile = new GameProfile(null, account.getName());
+					}
+					profileCache.put(account, gameProfile);
 				}
-			}), false);
+				client.getSkinProvider().loadSkin(gameProfile, ((type, id, tex) -> {
+					if (type == MinecraftProfileTexture.Type.SKIN) {
+						textures.put(account, id);
+						loadingTexture.remove(account);
+					}
+				}), false);
+			});
 		}
 	}
 

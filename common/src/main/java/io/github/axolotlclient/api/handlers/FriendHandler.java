@@ -125,7 +125,7 @@ public class FriendHandler implements RequestHandler {
 				List<User> in = new ArrayList<>();
 				List<User> out = new ArrayList<>();
 				incoming.forEach(e -> in.add(new User(e.getAsJsonObject().get("from").getAsString(), Status.UNKNOWN)));
-				outgoing.forEach(e -> out.add(new User(e.getAsJsonObject().get("from").getAsString(), Status.UNKNOWN)));
+				outgoing.forEach(e -> out.add(new User(e.getAsJsonObject().get("to").getAsString(), Status.UNKNOWN)));
 				responseConsumer.accept(in, out);
 			}
 		}, "getRequests"));

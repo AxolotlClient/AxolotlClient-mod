@@ -57,6 +57,7 @@ public class Auth extends Accounts implements Module {
 
 	private final Map<Account, Identifier> textures = new HashMap<>();
 	private final Set<Account> loadingTexture = new HashSet<>();
+	private final Map<Account, GameProfile> profileCache = new WeakHashMap<>();
 
 	@Override
 	public void init() {
@@ -124,12 +125,17 @@ public class Auth extends Accounts implements Module {
 			ThreadExecuter.scheduleTask(()-> {
 				loadingTexture.add(account);
 				GameProfile gameProfile;
-				try {
-					UUID uUID = UUIDTypeAdapter.fromString(account.getUuid());
-					gameProfile = new GameProfile(uUID, account.getName());
-					client.getSessionService().fillProfileProperties(gameProfile, false);
-				} catch (IllegalArgumentException var2) {
-					gameProfile = new GameProfile(null, account.getName());
+				if(profileCache.containsKey(account)){
+					gameProfile = profileCache.get(account);
+				} else {
+					try {
+						UUID uUID = UUIDTypeAdapter.fromString(account.getUuid());
+						gameProfile = new GameProfile(uUID, account.getName());
+						client.getSessionService().fillProfileProperties(gameProfile, false);
+					} catch (IllegalArgumentException var2) {
+						gameProfile = new GameProfile(null, account.getName());
+					}
+					profileCache.put(account, gameProfile);
 				}
 				client.getSkinProvider().loadProfileSkin(gameProfile, (type, identifier, minecraftProfileTexture) -> {
 					if (type == MinecraftProfileTexture.Type.SKIN) {
