@@ -23,6 +23,7 @@
 package io.github.axolotlclient.api;
 
 import io.github.axolotlclient.api.handlers.FriendHandler;
+import io.github.axolotlclient.api.util.AlphabeticalComparator;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.multiplayer.LanScanWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -111,15 +112,18 @@ public class FriendsScreen extends Screen {
 					return user.getStatus().isOnline();
 				}
 				return true;
-			}).collect(Collectors.toList())));
+			}).sorted((u1, u2) -> new AlphabeticalComparator().compare(u1.getName(), u2.getName())).collect(Collectors.toList())));
 		} else if (current == Tab.PENDING) {
 			FriendHandler.getInstance().getFriendRequests((in, out) -> {
 
-				in.forEach(user -> widget.addEntry(new UserListWidget.UserListEntry(user, I18n.translate("api.friends.pending.incoming"))));
-				out.forEach(user -> widget.addEntry(new UserListWidget.UserListEntry(user, I18n.translate("api.friends.pending.outgoing"))));
+				in.stream().sorted((u1, u2) -> new AlphabeticalComparator().compare(u1.getName(), u2.getName()))
+						.forEach(user -> widget.addEntry(new UserListWidget.UserListEntry(user, I18n.translate("api.friends.pending.incoming"))));
+				out.stream().sorted((u1, u2) -> new AlphabeticalComparator().compare(u1.getName(), u2.getName()))
+						.forEach(user -> widget.addEntry(new UserListWidget.UserListEntry(user, I18n.translate("api.friends.pending.outgoing"))));
 			});
 		} else if (current == Tab.BLOCKED) {
-			FriendHandler.getInstance().getBlocked(list -> widget.setUsers(list));
+			FriendHandler.getInstance().getBlocked(list -> widget.setUsers(list.stream().sorted((u1, u2) ->
+					new AlphabeticalComparator().compare(u1.getName(), u2.getName())).collect(Collectors.toList())));
 		}
 
 		this.buttons.add(blockedTab = new ButtonWidget(9, this.width / 2 + 24, this.height - 52, 57, 20,

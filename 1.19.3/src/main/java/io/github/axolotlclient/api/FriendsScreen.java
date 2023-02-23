@@ -23,6 +23,7 @@
 package io.github.axolotlclient.api;
 
 import io.github.axolotlclient.api.handlers.FriendHandler;
+import io.github.axolotlclient.api.util.AlphabeticalComparator;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
@@ -65,7 +66,8 @@ public class FriendsScreen extends Screen {
 		addSelectableChild(widget = new UserListWidget(this, client, width, height, 32, height - 64, 35));
 
 		if (current == Tab.ALL || current == Tab.ONLINE) {
-			FriendHandler.getInstance().getFriends(list -> widget.setUsers(list.stream().filter(user -> {
+			FriendHandler.getInstance().getFriends(list -> widget.setUsers(list.stream().sorted((u1, u2) ->
+					new AlphabeticalComparator().compare(u1.getName(), u2.getName())).filter(user -> {
 				if (current == Tab.ONLINE) {
 					return user.getStatus().isOnline();
 				}
@@ -74,11 +76,14 @@ public class FriendsScreen extends Screen {
 		} else if (current == Tab.PENDING) {
 			FriendHandler.getInstance().getFriendRequests((in, out) -> {
 
-				in.forEach(user -> widget.addEntry(new UserListWidget.UserListEntry(user, Text.translatable("api.friends.pending.incoming"))));
-				out.forEach(user -> widget.addEntry(new UserListWidget.UserListEntry(user, Text.translatable("api.friends.pending.outgoing"))));
+				in.stream().sorted((u1, u2) -> new AlphabeticalComparator().compare(u1.getName(), u2.getName()))
+						.forEach(user -> widget.addEntry(new UserListWidget.UserListEntry(user, Text.translatable("api.friends.pending.incoming"))));
+				out.stream().sorted((u1, u2) -> new AlphabeticalComparator().compare(u1.getName(), u2.getName()))
+						.forEach(user -> widget.addEntry(new UserListWidget.UserListEntry(user, Text.translatable("api.friends.pending.outgoing"))));
 			});
 		} else if (current == Tab.BLOCKED) {
-			FriendHandler.getInstance().getBlocked(list -> widget.setUsers(list));
+			FriendHandler.getInstance().getBlocked(list -> widget.setUsers(list.stream().sorted((u1, u2) ->
+					new AlphabeticalComparator().compare(u1.getName(), u2.getName())).toList()));
 		}
 
 		this.addDrawableChild(blockedTab = ButtonWidget.builder(Text.translatable("api.friends.tab.blocked"), button ->

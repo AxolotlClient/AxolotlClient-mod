@@ -25,7 +25,9 @@ package io.github.axolotlclient.api;
 import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.api.handlers.ChatHandler;
 import io.github.axolotlclient.api.handlers.FriendHandler;
+import io.github.axolotlclient.api.types.ChatMessage;
 import io.github.axolotlclient.api.types.User;
+import io.github.axolotlclient.api.util.AlphabeticalComparator;
 import net.minecraft.client.gui.AbstractParentElement;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
@@ -41,6 +43,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.MathHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -57,6 +60,8 @@ public class FriendsSidebar extends Screen {
 	private User chatUser;
 	private ListWidget list;
 	private TextFieldWidget input;
+
+	private final List<ChatMessage> currentMessages = new ArrayList<>();
 
 	public FriendsSidebar(Screen parent) {
 		super(Text.translatable("api.friends.sidebar"));
@@ -196,7 +201,8 @@ public class FriendsSidebar extends Screen {
 			this.width = width;
 			this.height = height;
 			AtomicInteger buttonY = new AtomicInteger(y);
-			elements = list.stream().map(user -> ButtonWidget.builder(Text.of(user.getName()), buttonWidget -> addChat(user))
+			elements = list.stream().sorted((u1, u2) -> new AlphabeticalComparator().compare(u1.getName(), u2.getName()))
+					.map(user -> ButtonWidget.builder(Text.of(user.getName()), buttonWidget -> addChat(user))
 					.positionAndSize(x, buttonY.getAndAdd(entryHeight), width, entryHeight-5).build()).collect(Collectors.toList());
 		}
 

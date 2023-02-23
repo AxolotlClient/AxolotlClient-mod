@@ -26,6 +26,7 @@ import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.api.handlers.ChatHandler;
 import io.github.axolotlclient.api.handlers.FriendHandler;
 import io.github.axolotlclient.api.types.User;
+import io.github.axolotlclient.api.util.AlphabeticalComparator;
 import net.minecraft.client.gui.AbstractParentElement;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
@@ -196,7 +197,8 @@ public class FriendsSidebar extends Screen {
 			this.width = width;
 			this.height = height;
 			AtomicInteger buttonY = new AtomicInteger(y);
-			elements = list.stream().map(user -> new ButtonWidget(x, buttonY.getAndAdd(entryHeight), width, entryHeight-5,
+			elements = list.stream().sorted((u1, u2) -> new AlphabeticalComparator().compare(u1.getName(), u2.getName()))
+					.map(user -> new ButtonWidget(x, buttonY.getAndAdd(entryHeight), width, entryHeight-5,
 					Text.of(user.getName()), buttonWidget -> addChat(user))).collect(Collectors.toList());
 		}
 

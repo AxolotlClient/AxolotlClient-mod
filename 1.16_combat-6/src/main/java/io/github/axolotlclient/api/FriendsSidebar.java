@@ -25,6 +25,7 @@ package io.github.axolotlclient.api;
 import io.github.axolotlclient.api.handlers.ChatHandler;
 import io.github.axolotlclient.api.handlers.FriendHandler;
 import io.github.axolotlclient.api.types.User;
+import io.github.axolotlclient.api.util.AlphabeticalComparator;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ScreenTexts;
@@ -195,7 +196,8 @@ public class FriendsSidebar extends Screen {
 
 			setRenderSelection(false);
 			AtomicInteger buttonY = new AtomicInteger(y);
-			list.stream().map(user -> new ButtonWidget(x, buttonY.getAndAdd(entryHeight), width, entryHeight-5,
+			list.stream().sorted((u1, u2) -> new AlphabeticalComparator().compare(u1.getName(), u2.getName()))
+					.map(user -> new ButtonWidget(x, buttonY.getAndAdd(entryHeight), width, entryHeight-5,
 					Text.of(user.getName()), buttonWidget -> addChat(user))).forEach(b -> addEntry(new ButtonEntry(b)));
 		}
 

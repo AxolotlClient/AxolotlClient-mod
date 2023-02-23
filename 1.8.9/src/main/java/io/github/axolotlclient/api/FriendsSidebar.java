@@ -23,9 +23,11 @@
 package io.github.axolotlclient.api;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import io.github.axolotlclient.AxolotlClientConfig.common.types.Identifiable;
 import io.github.axolotlclient.api.handlers.ChatHandler;
 import io.github.axolotlclient.api.handlers.FriendHandler;
 import io.github.axolotlclient.api.types.User;
+import io.github.axolotlclient.api.util.AlphabeticalComparator;
 import io.github.axolotlclient.mixin.ScreenAccessor;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
@@ -38,6 +40,7 @@ import net.minecraft.util.Formatting;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -230,7 +233,8 @@ public class FriendsSidebar extends Screen {
 			yStart = y;
 			yEnd = y+height;
 			AtomicInteger buttonY = new AtomicInteger(y);
-			elements = list.stream().map(user -> new UserButton(x, buttonY.getAndAdd(entryHeight), width, entryHeight-5,
+			elements = list.stream().sorted((u1, u2) -> new AlphabeticalComparator().compare(u1.getName(), u2.getName()))
+					.map(user -> new UserButton(x, buttonY.getAndAdd(entryHeight), width, entryHeight-5,
 					user.getName(), buttonWidget -> addChat(user))).collect(Collectors.toList());
 		}
 

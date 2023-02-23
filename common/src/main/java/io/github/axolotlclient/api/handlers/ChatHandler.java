@@ -23,11 +23,21 @@
 package io.github.axolotlclient.api.handlers;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import io.github.axolotlclient.api.API;
+import io.github.axolotlclient.api.Request;
+import io.github.axolotlclient.api.types.ChatMessage;
 import io.github.axolotlclient.api.types.User;
 import io.github.axolotlclient.api.util.RequestHandler;
 import lombok.Getter;
+import lombok.Setter;
+
+import java.util.function.Consumer;
 
 public class ChatHandler implements RequestHandler {
+
+	@Setter
+	private Consumer<ChatMessage> messageConsumer = m -> {};
 
 	@Getter
 	private static final ChatHandler Instance = new ChatHandler();
@@ -40,10 +50,24 @@ public class ChatHandler implements RequestHandler {
 	@Override
 	public void handle(JsonObject object) {
 		// TODO implement chat handling
+		handleMessage(object, true);
+	}
+
+	private void handleMessage(JsonObject object, boolean notify){
+		if(notify){
+			API.getInstance().getNotificationProvider().addStatus("", ""); // TODO
+		}
+		JsonObject data = object.get("data").getAsJsonObject();
+		messageConsumer.accept(new ChatMessage(data.get("content").getAsString(), data.get("timestamp").getAsLong()));
 	}
 
 	public void sendMessage(User user, String message){
 		// TODO chat messages
-		// API.getInstance().send(new ChatMessage((object)->{}));
+		API.getInstance().send(new Request("chat", object -> handleMessage(object, false), "method", "add", "content", message, "to", user.getUuid()));
+	}
+
+	public void getMessages(User user, long getBefore){
+		API.getInstance().send(new Request("chat", object -> handleMessage(object, false),
+				new Request.Data("method", "get", "user", user.getUuid()).addElement("timestamp", new JsonPrimitive(getBefore))));
 	}
 }
