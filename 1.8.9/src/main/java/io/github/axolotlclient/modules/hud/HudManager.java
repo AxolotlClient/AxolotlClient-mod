@@ -66,7 +66,7 @@ public class HudManager extends AbstractModule {
 		this.entries = new LinkedHashMap<>();
 	}
 
-	static KeyBinding key = new KeyBinding("key.openHud", Keyboard.KEY_RSHIFT, "category.axolotlclient");
+	private static final KeyBinding key = new KeyBinding("key.openHud", Keyboard.KEY_RSHIFT, "category.axolotlclient");
 
 	public void init() {
 		KeyBindingHelper.registerKeyBinding(key);

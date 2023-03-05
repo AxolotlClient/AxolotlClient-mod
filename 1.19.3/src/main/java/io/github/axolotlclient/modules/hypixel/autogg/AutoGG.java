@@ -50,14 +50,14 @@ public class AutoGG implements AbstractHypixelMod {
 	private final MinecraftClient client = MinecraftClient.getInstance();
 	private long lastTime = 0;
 
-	public BooleanOption gg = new BooleanOption("printGG", false);
-	public StringOption ggString = new StringOption("ggString", "gg");
+	public final BooleanOption gg = new BooleanOption("printGG", false);
+	public final StringOption ggString = new StringOption("ggString", "gg");
 
-	public BooleanOption gf = new BooleanOption("printGF", false);
-	public StringOption gfString = new StringOption("gfString", "gf");
+	public final BooleanOption gf = new BooleanOption("printGF", false);
+	public final StringOption gfString = new StringOption("gfString", "gf");
 
-	public BooleanOption glhf = new BooleanOption("printGLHF", false);
-	public StringOption glhfString = new StringOption("glhfString", "glhf");
+	public final BooleanOption glhf = new BooleanOption("printGLHF", false);
+	public final StringOption glhfString = new StringOption("glhfString", "glhf");
 
 	private final BooleanOption onHypixel = new BooleanOption("onHypixel", false);
 	private final BooleanOption onBWP = new BooleanOption("onBWP", false);

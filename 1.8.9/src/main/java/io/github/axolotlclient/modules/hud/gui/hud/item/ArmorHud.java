@@ -46,7 +46,7 @@ public class ArmorHud extends TextHudEntry {
 
 	public static final Identifier ID = new Identifier("kronhud", "armorhud");
 
-	protected BooleanOption showProtLvl = new BooleanOption("showProtectionLevel", false);
+	protected final BooleanOption showProtLvl = new BooleanOption("showProtectionLevel", false);
 
 	public ArmorHud() {
 		super(20, 100, true);

@@ -41,7 +41,7 @@ public class HypixelMods extends AbstractModule {
 
 	private static final HypixelMods INSTANCE = new HypixelMods();
 
-	public StringOption hypixel_api_key = new StringOption("hypixel_api_key", "");
+	public final StringOption hypixel_api_key = new StringOption("hypixel_api_key", "");
 	public final EnumOption cacheMode = new EnumOption("cache_mode", HypixelCacheMode.values(),
 			HypixelCacheMode.ON_CLIENT_DISCONNECT.toString());
 
@@ -78,17 +78,13 @@ public class HypixelMods extends AbstractModule {
 
 	@Override
 	public void lateInit() {
-		HypixelAbstractionLayer.setApiKeySupplier(() -> hypixel_api_key.get());
+		HypixelAbstractionLayer.setApiKeySupplier(hypixel_api_key::get);
 		HypixelAbstractionLayer.loadApiKey();
 	}
 
 	private void addSubModule(AbstractHypixelMod mod) {
 		this.subModules.add(mod);
 		this.category.addSubCategory(mod.getCategory());
-	}
-
-	public OptionCategory getCategory() {
-		return null;
 	}
 
 	public enum HypixelCacheMode {

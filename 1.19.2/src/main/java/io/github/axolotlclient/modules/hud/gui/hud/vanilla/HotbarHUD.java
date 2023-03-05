@@ -42,7 +42,7 @@ import java.util.List;
 
 public class HotbarHUD extends TextHudEntry {
 
-	public static Identifier ID = new Identifier("axolotlclient", "hotbarhud");
+	public static final Identifier ID = new Identifier("axolotlclient", "hotbarhud");
 	private static final Identifier WIDGETS_TEXTURE = new Identifier("textures/gui/widgets.png");
 
 	public HotbarHUD() {

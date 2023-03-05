@@ -88,6 +88,7 @@ public class StatusUpdate extends Request {
 
 	@RequiredArgsConstructor
 	public enum MenuId {
+		IN_MENU("IN_MENU"),
 		MAIN_MENU("MAIN_MENU"),
 		SERVER_LIST("SERVER_LIST"),
 		SETTINGS("SETTINGS");

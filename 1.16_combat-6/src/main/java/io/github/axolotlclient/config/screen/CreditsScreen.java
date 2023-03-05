@@ -372,14 +372,14 @@ public class CreditsScreen extends Screen {
 	private class Overlay {
 
 		private Window window;
-		Credit credit;
+		private final Credit credit;
 		private final int x;
 		private final int y;
 		private int width;
 		private int height;
 
-		protected HashMap<String, ClickEvent> effects = new HashMap<>();
-		protected HashMap<Integer, String> lines = new HashMap<>();
+		protected final HashMap<String, ClickEvent> effects = new HashMap<>();
+		protected final HashMap<Integer, String> lines = new HashMap<>();
 
 		public Overlay(Credit credit) {
 			x = 100;

@@ -22,6 +22,7 @@
 
 package io.github.axolotlclient.api;
 
+import io.github.axolotlclient.api.chat.ChatScreen;
 import io.github.axolotlclient.api.handlers.FriendHandler;
 import io.github.axolotlclient.api.util.AlphabeticalComparator;
 import net.minecraft.client.gui.screen.Screen;

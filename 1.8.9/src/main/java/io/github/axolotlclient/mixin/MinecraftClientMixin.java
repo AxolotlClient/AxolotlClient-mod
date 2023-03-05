@@ -74,6 +74,7 @@ public abstract class MinecraftClientMixin {
 	@Shadow
 	private TextureManager textureManager;
 
+	@SuppressWarnings("EmptyMethod")
 	@Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;info(Ljava/lang/String;)V", ordinal = 1), remap = false)
 	public void axolotlclient$noSessionIDLeak(Logger instance, String s) {
 	}
@@ -82,6 +83,7 @@ public abstract class MinecraftClientMixin {
 	 * @author TheKodeToad & Sk1erLLC (initially created this fix).
 	 * @reason unnecessary garbage collection
 	 */
+	@SuppressWarnings("EmptyMethod")
 	@Redirect(method = "connect(Lnet/minecraft/client/world/ClientWorld;Ljava/lang/String;)V", at = @At(value = "INVOKE", target = "Ljava/lang/System;gc()V"))
 	public void axolotlclient$noWorldGC() {
 	}
@@ -161,10 +163,6 @@ public abstract class MinecraftClientMixin {
 		if (Mouse.getEventButtonState()) {
 			Hooks.MOUSE_INPUT.invoker().onMouseButton(Mouse.getEventButton());
 		}
-	}
-
-	@Inject(method = "connect(Lnet/minecraft/client/world/ClientWorld;Ljava/lang/String;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;flipPlayer(Lnet/minecraft/entity/player/PlayerEntity;)V"))
-	public void axolotlclient$login(ClientWorld world, String loadingMessage, CallbackInfo ci) {
 	}
 
 	@Inject(method = "resizeFramebuffer", at = @At("TAIL"))

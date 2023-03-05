@@ -118,7 +118,6 @@ public class ImageShare {
 			return file.getName() + separator + Base64.getEncoder().encodeToString(Files.readAllBytes(file.toPath()));
 		} catch (Exception ignored) {
 		}
-		;
 
 		return "Encoding failed!";
 	}

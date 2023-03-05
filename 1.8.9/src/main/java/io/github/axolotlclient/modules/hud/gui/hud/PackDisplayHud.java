@@ -41,7 +41,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class PackDisplayHud extends TextHudEntry {
 
-	public static Identifier ID = new Identifier("axolotlclient", "packdisplayhud");
+	public static final Identifier ID = new Identifier("axolotlclient", "packdisplayhud");
 
 	private final List<PackWidget> widgets = new ArrayList<>();
 	private PackWidget placeholder;

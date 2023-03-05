@@ -69,7 +69,7 @@ public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
 
 	@Setter
 	protected boolean hovered = false;
-	protected MinecraftClient client = MinecraftClient.getInstance();
+	protected final MinecraftClient client = MinecraftClient.getInstance();
 
 	public AbstractHudEntry(int width, int height) {
 		this.width = width;

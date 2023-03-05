@@ -50,7 +50,7 @@ public abstract class PlayerListHudMixin extends DrawableHelper {
 	private Text header;
 	@Shadow
 	private Text footer;
-	MinecraftClient client = MinecraftClient.getInstance();
+	private final MinecraftClient client = MinecraftClient.getInstance();
 	private PlayerListEntry playerListEntry;
 
 	@Inject(method = "getPlayerName", at = @At("HEAD"), cancellable = true)

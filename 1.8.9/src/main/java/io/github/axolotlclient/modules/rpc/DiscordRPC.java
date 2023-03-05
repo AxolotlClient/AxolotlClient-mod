@@ -55,7 +55,7 @@ public class DiscordRPC extends AbstractModule {
 	public static Activity currentActivity;
 	public static Core discordRPC;
 	private static DiscordRPC Instance;
-	public BooleanOption enabled = new BooleanOption("enabled", value -> {
+	public final BooleanOption enabled = new BooleanOption("enabled", value -> {
 		if (value) {
 			initRPC();
 		} else {
@@ -64,12 +64,12 @@ public class DiscordRPC extends AbstractModule {
 	}, false);
 	private static String modVersion;
 	private static boolean running;
-	public OptionCategory category = new OptionCategory("rpc");
-	public BooleanOption showActivity = new BooleanOption("showActivity", true);
-	public EnumOption showServerNameMode = new EnumOption("showServerNameMode",
+	public final OptionCategory category = new OptionCategory("rpc");
+	public final BooleanOption showActivity = new BooleanOption("showActivity", true);
+	public final EnumOption showServerNameMode = new EnumOption("showServerNameMode",
 			new String[]{"showIp", "showName", "off"}, "off");
-	public BooleanOption showTime = new BooleanOption("showTime", true);
-	Instant time = Instant.now();
+	public final BooleanOption showTime = new BooleanOption("showTime", true);
+	private final Instant time = Instant.now();
 
 	public static void setWorld(String world) {
 		if (running) {

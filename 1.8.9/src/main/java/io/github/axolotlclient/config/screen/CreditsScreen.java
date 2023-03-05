@@ -343,7 +343,7 @@ public class CreditsScreen extends Screen {
 	private class Overlay extends DrawUtil {
 
 		private Window window;
-		Credit credit;
+		private final Credit credit;
 		private final int x;
 		private final int y;
 		private int width;
@@ -351,8 +351,8 @@ public class CreditsScreen extends Screen {
 
 		private final Color DARK_GRAY = Color.DARK_GRAY.withAlpha(127);
 
-		protected HashMap<String, ClickEvent> effects = new HashMap<>();
-		protected HashMap<Integer, String> lines = new HashMap<>();
+		protected final HashMap<String, ClickEvent> effects = new HashMap<>();
+		protected final HashMap<Integer, String> lines = new HashMap<>();
 
 		public Overlay(Credit credit) {
 			x = 100;

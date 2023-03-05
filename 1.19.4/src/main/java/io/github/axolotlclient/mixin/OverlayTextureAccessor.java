@@ -20,21 +20,16 @@
  * For more information, see the LICENSE file.
  */
 
-package io.github.axolotlclient.api;
+package io.github.axolotlclient.mixin;
 
-import io.github.axolotlclient.api.types.User;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.text.Text;
+import net.minecraft.client.render.OverlayTexture;
+import net.minecraft.client.texture.NativeImageBackedTexture;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Accessor;
 
-public class ChatScreen extends Screen {
-	private final User user;
-	private final Screen parent;
+@Mixin(OverlayTexture.class)
+public interface OverlayTextureAccessor {
 
-	protected ChatScreen(Screen parent, User user) {
-		super(Text.translatable("api.screen.chat"));
-		this.user = user;
-		this.parent = parent;
-	}
-
-
+	@Accessor
+	NativeImageBackedTexture getTexture();
 }

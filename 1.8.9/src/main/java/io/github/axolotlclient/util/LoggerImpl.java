@@ -28,7 +28,7 @@ import org.apache.logging.log4j.LogManager;
 
 public class LoggerImpl implements Logger {
 
-	public static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger("AxolotlClient");
+	private final static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger("AxolotlClient");
 
 	private static final String modId = FabricLoader.getInstance().isDevelopmentEnvironment() ? "" : "(AxolotlClient) ";
 

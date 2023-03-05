@@ -43,8 +43,8 @@ public class ActionBarHud extends TextHudEntry {
 
 	public static final Identifier ID = new Identifier("kronhud", "actionbarhud");
 
-	public IntegerOption timeShown = new IntegerOption("timeshown", 60, 40, 300);
-	public BooleanOption customTextColor = new BooleanOption("customtextcolor", false);
+	public final IntegerOption timeShown = new IntegerOption("timeshown", 60, 40, 300);
+	public final BooleanOption customTextColor = new BooleanOption("customtextcolor", false);
 
 	@Getter
 	private String actionBar;

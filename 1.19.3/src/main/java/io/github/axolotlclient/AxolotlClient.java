@@ -78,13 +78,13 @@ import java.util.UUID;
 
 public class AxolotlClient implements ClientModInitializer {
 
-	public static String modid = "AxolotlClient";
+	public static final String modid = "AxolotlClient";
 
 	public static AxolotlClientConfig CONFIG;
 	public static ConfigManager configManager;
-	public static HashMap<UUID, Boolean> playerCache = new HashMap<>();
+	public static final HashMap<UUID, Boolean> playerCache = new HashMap<>();
 
-	public static HashMap<Identifier, Resource> runtimeResources = new HashMap<>();
+	public static final HashMap<Identifier, Resource> runtimeResources = new HashMap<>();
 
 	public static final Identifier badgeIcon = new Identifier("axolotlclient", "textures/badge.png");
 
@@ -98,7 +98,7 @@ public class AxolotlClient implements ClientModInitializer {
 	public static boolean titleDisclaimer = false;
 	public static boolean showWarning = true;
 
-	public static Logger LOGGER = new LoggerImpl();
+	public static final Logger LOGGER = new LoggerImpl();
 
 	@Override
 	public void onInitializeClient(ModContainer container) {

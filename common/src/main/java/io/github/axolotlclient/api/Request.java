@@ -36,7 +36,7 @@ import java.util.function.Consumer;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Request {
 
-	public static Request DUMMY = new Request(null, null);
+	public static final Request DUMMY = new Request(null, null);
 
 	@EqualsAndHashCode.Include
 	private final String id = randomKey(6);

@@ -78,12 +78,6 @@ public class ToggleSprintHud extends SimpleTextHudEntry {
 		super(100, 20, false);
 	}
 
-	@Override
-	public void init() {
-		//KeyBindingHelper.registerKeyBinding(sprintToggle);
-		//KeyBindingHelper.registerKeyBinding(sneakToggle);
-	}
-
 	private void loadRandomPlaceholder() {
 		try {
 			BufferedReader bufferedReader = new BufferedReader(

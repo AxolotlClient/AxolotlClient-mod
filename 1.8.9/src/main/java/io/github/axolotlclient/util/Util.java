@@ -49,7 +49,7 @@ import java.util.stream.Collectors;
 
 public class Util {
 
-	public static Color GlColor = new Color();
+	public static final Color GlColor = new Color();
 	public static String lastgame;
 	public static String game;
 

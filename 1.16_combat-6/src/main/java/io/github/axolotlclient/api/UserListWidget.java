@@ -68,7 +68,7 @@ public class UserListWidget extends AlwaysSelectedEntryListWidget<UserListWidget
 		return this.screen.getFocused() == this;
 	}
 
-	public static class UserListEntry extends Entry<UserListEntry> {
+	public static class UserListEntry extends AlwaysSelectedEntryListWidget.Entry<UserListEntry> {
 
 		@Getter
 		private final User user;

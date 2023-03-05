@@ -22,12 +22,23 @@
 
 package io.github.axolotlclient;
 
+import com.mojang.brigadier.arguments.StringArgumentType;
+import io.github.axolotlclient.api.API;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
+import org.quiltmc.qsl.command.api.client.ClientCommandManager;
+import org.quiltmc.qsl.command.api.client.ClientCommandRegistrationCallback;
 
 public class AxolotlClientTest implements ClientModInitializer {
 	@Override
 	public void onInitializeClient(ModContainer mod) {
+
+		ClientCommandRegistrationCallback.EVENT.register((dispatcher, buildContext, environment) ->
+				ClientCommandManager.getDispatcher().register(ClientCommandManager.literal("apisend")
+						.then(ClientCommandManager.argument("sample response", StringArgumentType.greedyString()).executes(context -> {
+			API.getInstance().onMessage(context.getInput());
+			return 1;
+		}))));
 
 	}
 }

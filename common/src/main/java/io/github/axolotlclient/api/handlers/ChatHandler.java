@@ -22,22 +22,29 @@
 
 package io.github.axolotlclient.api.handlers;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.Request;
 import io.github.axolotlclient.api.types.ChatMessage;
+import io.github.axolotlclient.api.types.Status;
 import io.github.axolotlclient.api.types.User;
 import io.github.axolotlclient.api.util.RequestHandler;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class ChatHandler implements RequestHandler {
 
 	@Setter
 	private Consumer<ChatMessage> messageConsumer = m -> {};
+	@Setter
+	private Consumer<List<ChatMessage>> messagesConsumer = m -> {};
 
 	@Getter
 	private static final ChatHandler Instance = new ChatHandler();
@@ -54,11 +61,42 @@ public class ChatHandler implements RequestHandler {
 	}
 
 	private void handleMessage(JsonObject object, boolean notify){
-		if(notify){
-			API.getInstance().getNotificationProvider().addStatus("", ""); // TODO
-		}
 		JsonObject data = object.get("data").getAsJsonObject();
-		messageConsumer.accept(new ChatMessage(data.get("content").getAsString(), data.get("timestamp").getAsLong()));
+		JsonObject s = data.get("from").getAsJsonObject().get("status").getAsJsonObject();
+		Instant startedAt;
+		if (s.has("startedAt")) {
+			startedAt = Instant.ofEpochSecond(s.get("startedAt").getAsLong());
+		} else {
+			startedAt = Instant.ofEpochSecond(0);
+		}
+		Status status = new Status(s.get("online").getAsBoolean(), s.get("title").getAsString(),
+				s.get("description").getAsString(), s.get("icon").getAsString(), startedAt);
+		User from = new User(data.get("from").getAsJsonObject().get("uuid").getAsString(), status);
+		ChatMessage message = new ChatMessage(from, data.get("content").getAsString(), data.get("timestamp").getAsLong());
+		if(notify){
+			API.getInstance().getNotificationProvider().addStatus(API.getInstance().getTranslationProvider().translate("api.chat.newMessageFrom", message.getSender().getName()), message.getContent());
+			// TODO
+		}
+		messageConsumer.accept(message);
+	}
+
+	private void handleMessages(JsonObject object){
+		List<ChatMessage> list = new ArrayList<>();
+		for(JsonElement element : object.get("data").getAsJsonObject().get("messages").getAsJsonArray()){
+			JsonObject data = element.getAsJsonObject();
+			JsonObject s = data.get("from").getAsJsonObject().get("status").getAsJsonObject();
+			Instant startedAt;
+			if (s.has("startedAt")) {
+				startedAt = Instant.ofEpochSecond(s.get("startedAt").getAsLong());
+			} else {
+				startedAt = Instant.ofEpochSecond(0);
+			}
+			Status status = new Status(s.get("online").getAsBoolean(), s.get("title").getAsString(),
+					s.get("description").getAsString(), s.get("icon").getAsString(), startedAt);
+			User from = new User(data.get("from").getAsJsonObject().get("uuid").getAsString(), status);
+			list.add(new ChatMessage(from, data.get("content").getAsString(), data.get("timestamp").getAsLong()));
+		}
+		messagesConsumer.accept(list);
 	}
 
 	public void sendMessage(User user, String message){
@@ -66,8 +104,13 @@ public class ChatHandler implements RequestHandler {
 		API.getInstance().send(new Request("chat", object -> handleMessage(object, false), "method", "add", "content", message, "to", user.getUuid()));
 	}
 
-	public void getMessages(User user, long getBefore){
-		API.getInstance().send(new Request("chat", object -> handleMessage(object, false),
-				new Request.Data("method", "get", "user", user.getUuid()).addElement("timestamp", new JsonPrimitive(getBefore))));
+	public void getMessagesBefore(User user, long getBefore){
+		API.getInstance().send(new Request("chat", this::handleMessages,
+				new Request.Data("method", "get", "user", user.getUuid()).addElement("before", new JsonPrimitive(getBefore))));
+	}
+
+	public void getMessagesAfter(User user, long getAfter){
+		API.getInstance().send(new Request("chat", this::handleMessages,
+				new Request.Data("method", "get", "user", user.getUuid()).addElement("after", new JsonPrimitive(getAfter))));
 	}
 }

@@ -53,24 +53,24 @@ import java.util.Objects;
 
 public abstract class SkyboxInstance {
 
-	JsonObject object;
+	final JsonObject object;
 	float alpha = 1F;
-	Identifier[] textures = new Identifier[6];
-	int[] fade = new int[4];
+	final Identifier[] textures = new Identifier[6];
+	final int[] fade = new int[4];
 
 	protected int blendMode = 1;
 
 	// ! These are the options variables.  Do not mess with these.
 	protected boolean alwaysOn;
-	protected float maxAlpha = 1f;
+	protected final float maxAlpha = 1f;
 	protected boolean manualBlend = false;
 	protected int blendSrcFactor = 1;
 	protected int blendDstFactor = 1;
 	protected int blendEquation;
 	protected boolean rotate = false;
 	protected float rotationSpeed = 1F;
-	protected float[] rotationStatic = new float[]{0, 0, 0};
-	protected float[] rotationAxis = new float[]{0, 0, 0};
+	protected final float[] rotationStatic = new float[]{0, 0, 0};
+	protected final float[] rotationAxis = new float[]{0, 0, 0};
 
 	protected boolean showSun = true;
 	protected boolean showMoon = true;

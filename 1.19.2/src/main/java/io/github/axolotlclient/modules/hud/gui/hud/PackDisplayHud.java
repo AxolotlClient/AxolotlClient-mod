@@ -45,7 +45,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class PackDisplayHud extends TextHudEntry {
 
-	public static Identifier ID = new Identifier("axolotlclient", "packdisplayhud");
+	public static final Identifier ID = new Identifier("axolotlclient", "packdisplayhud");
 
 	private final BooleanOption iconsOnly = new BooleanOption("iconsonly", false);
 
@@ -172,15 +172,6 @@ public class PackDisplayHud extends TextHudEntry {
 		public PackWidget(Text name, int textureId) {
 			this.name = name.getString();
 			texture = textureId;
-            /*try {
-                InputStream stream = pack.openRoot("pack.png").get();
-                assert stream != null;
-                this.texture = new NativeImageBackedTexture(NativeImage.read(stream)).getGlId();
-                stream.close();
-            } catch (Exception e) {
-                Logger.warn("Pack " + pack.getName()
-                        + " somehow threw an error! Please investigate... Does it have an icon?");
-            }*/
 		}
 
 		public void render(MatrixStack matrices, int x, int y) {

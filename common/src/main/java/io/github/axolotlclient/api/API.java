@@ -45,7 +45,7 @@ import java.util.Set;
 
 public class API {
 
-	private static final String API_BASE = "wss://axo.gart.sh";
+	private static final String API_BASE = "wss://axolotlclient.xyz";
 	private static final URI API_URL = URI.create(API_BASE + "/api/ws");
 	private static final int STATUS_UPDATE_DELAY = 15; // The Delay between Status updates, in seconds. Discord uses 15 seconds so we will as well.
 
