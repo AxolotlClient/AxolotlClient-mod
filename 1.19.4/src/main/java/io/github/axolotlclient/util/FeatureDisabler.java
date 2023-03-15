@@ -69,8 +69,8 @@ public class FeatureDisabler {
 		setServers(((ToggleSprintHud) HudManager.getInstance().get(ToggleSprintHud.ID)).toggleSneak, NONE, "hypixel");
 
 		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
-			if (handler.m_uccwwurs() != null) {
-				onServerJoin(Objects.requireNonNull(handler.m_uccwwurs()).address);
+			if (handler.getServerInfo() != null) {
+				onServerJoin(Objects.requireNonNull(handler.getServerInfo()).address);
 			}
 		});
 		ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> clear());

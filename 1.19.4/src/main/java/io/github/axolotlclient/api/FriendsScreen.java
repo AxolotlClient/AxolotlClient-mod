@@ -22,16 +22,21 @@
 
 package io.github.axolotlclient.api;
 
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 import io.github.axolotlclient.api.chat.ChatScreen;
 import io.github.axolotlclient.api.handlers.FriendHandler;
+import io.github.axolotlclient.api.types.Channel;
+import io.github.axolotlclient.api.types.ChatMessage;
+import io.github.axolotlclient.api.types.Status;
+import io.github.axolotlclient.api.types.User;
 import io.github.axolotlclient.api.util.AlphabeticalComparator;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.ScreenTexts;
 import net.minecraft.text.Text;
-
-import java.util.stream.Collectors;
 
 public class FriendsScreen extends Screen {
 
@@ -56,7 +61,7 @@ public class FriendsScreen extends Screen {
 
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-		this.m_qfxudleh(matrices);
+		this.renderBackground(matrices);
 		this.widget.render(matrices, mouseX, mouseY, delta);
 		drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 20, 16777215);
 		super.render(matrices, mouseX, mouseY, delta);
@@ -137,7 +142,13 @@ public class FriendsScreen extends Screen {
 	public void openChat() {
 		UserListWidget.UserListEntry entry = widget.getSelectedOrNull();
 		if (entry != null) {
-			client.setScreen(new ChatScreen(this, entry.getUser()));
+			User u1 = new User(UUID.randomUUID().toString(), Status.UNKNOWN);
+			User u2 = new User(UUID.randomUUID().toString(), Status.UNKNOWN);
+			User self = API.getInstance().getSelf();
+			client.setScreen(new ChatScreen(this, new Channel.DM("aaaa",
+					new User[]{self, u1, u2}, new ChatMessage[]{new ChatMessage(u1, "AHHHHHHHHH!!", 16835345), new ChatMessage(self, "hhhhhh", 16835348)})));
+			//API.getInstance().send(ChannelRequest.getDM(c -> client.setScreen(new ChatScreen(this, c)),
+			//		entry.getUser().getUuid(), ChannelRequest.Include.MESSAGES));
 		}
 	}
 

@@ -55,7 +55,6 @@ public class User extends Request {
 			}
 		};
 		return new User(consumer, array);
-
 	}
 
 	public static boolean getOnline(String uuid){

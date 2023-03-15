@@ -159,4 +159,9 @@ public abstract class InGameHudMixin {
 		}
 		return instance.getWidth();
 	}
+
+	@Inject(method = "renderStatusBars", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V", ordinal = 2))
+	private void axolotlclient$renderSaturation(Window window, CallbackInfo ci){
+
+	}
 }

@@ -434,5 +434,6 @@
 	"api.status.title.in_game_unknown": "Enjoying Minecraft",
 	"api.chat.newMessageFrom": "Chat: %s",
 	"api.chat.enterMessage": "Enter Message",
-	"api.chat.messageUser": "Message @%s"
+	"api.chat.messageUser": "Message @%s",
+	"api.error.requestGeneric": "API Error"
 }

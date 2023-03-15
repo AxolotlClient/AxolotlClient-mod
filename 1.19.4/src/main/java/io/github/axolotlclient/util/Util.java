@@ -132,9 +132,9 @@ public class Util {
 		msg = ChatUtil.cutString(StringUtils.normalizeSpace(msg.trim()));
 		assert MinecraftClient.getInstance().player != null;
 		if (msg.startsWith("/")) {
-			MinecraftClient.getInstance().player.networkHandler.m_gkszsvqi(msg.substring(1));
+			MinecraftClient.getInstance().player.networkHandler.sendCommand(msg.substring(1));
 		} else {
-			MinecraftClient.getInstance().player.networkHandler.m_fzlgisyq(msg);
+			MinecraftClient.getInstance().player.networkHandler.sendChatMessage(msg);
 		}
 	}
 

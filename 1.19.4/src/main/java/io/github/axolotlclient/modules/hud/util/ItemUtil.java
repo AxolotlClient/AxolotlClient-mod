@@ -22,6 +22,10 @@
 
 package io.github.axolotlclient.modules.hud.util;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import com.mojang.blaze3d.lighting.DiffuseLighting;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -34,17 +38,12 @@ import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.BakedModel;
-import net.minecraft.client.render.model.json.ModelTransformation;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.PlayerScreenHandler;
-import net.minecraft.unmapped.C_byhguelf;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -187,7 +186,7 @@ public class ItemUtil {
 			DiffuseLighting.setupFlatGuiLighting();
 		}
 
-		client.getItemRenderer().renderItem(stack, C_byhguelf.GUI, false, nextStack, immediate, 15728880,
+		client.getItemRenderer().renderItem(stack, ModelTransformationMode.GUI, false, nextStack, immediate, 15728880,
 				OverlayTexture.DEFAULT_UV, model);
 		immediate.draw();
 		RenderSystem.enableDepthTest();

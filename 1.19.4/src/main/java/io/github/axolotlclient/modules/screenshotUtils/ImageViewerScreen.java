@@ -128,7 +128,7 @@ public class ImageViewerScreen extends Screen {
 			clearAndInit();
 		}, Supplier::get) {
 			@Override
-			public void m_mxhoikgj(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+			public void drawWidget(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 				RenderSystem.setShader(GameRenderer::getPositionTexShader);
 				RenderSystem.setShaderTexture(0, WIDGETS_TEXTURE);
 				RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, this.alpha);
@@ -202,7 +202,7 @@ public class ImageViewerScreen extends Screen {
 
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-		m_qfxudleh(matrices);
+		renderBackground(matrices);
 
 		super.render(matrices, mouseX, mouseY, delta);
 

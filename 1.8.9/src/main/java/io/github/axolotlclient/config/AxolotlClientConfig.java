@@ -63,6 +63,7 @@ public class AxolotlClientConfig extends ConfigHolder {
 	public final IntegerOption outlineWidth = new IntegerOption("outlineWidth", 1, 1, 10);
 
 	public final BooleanOption noRain = new BooleanOption("noRain", false);
+	public final BooleanOption showSaturation = new BooleanOption("showSaturation", false);
 
 	public final BooleanOption debugLogOutput = new BooleanOption("debugLogOutput", false);
 	public final GenericOption openCredits = new GenericOption("Credits", "Open Credits",
@@ -136,7 +137,8 @@ public class AxolotlClientConfig extends ConfigHolder {
 				lowFire,
 				hitColor,
 				minimalViewBob,
-				flatItems);
+				flatItems,
+				showSaturation);
 
 		timeChanger.add(timeChangerEnabled);
 		timeChanger.add(customTime);

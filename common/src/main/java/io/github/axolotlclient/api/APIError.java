@@ -53,7 +53,6 @@ public class APIError {
 		FRIEND_REQUEST_NOT_FOUND("api.error.friendRequestNotFound"),
 		USER_BLOCKED("api.error.userBlocked"),
 		USER_ALREADY_BLOCKED("api.error.userAlreadyBlocked"),
-		//USER_ALREADY_EXISTS("api.error.userAlreadyExists"), // ??????
 		USER_ALREADY_FRIENDS("api.error.userAlreadyFriends"),
 		MALFORMED_PACKET("api.error.packetMalformed");
 		@Getter

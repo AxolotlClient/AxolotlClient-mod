@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.modules.hud;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.KeyBindOption;
@@ -37,12 +40,8 @@ import io.github.axolotlclient.modules.hud.gui.hud.simple.*;
 import io.github.axolotlclient.modules.hud.gui.hud.vanilla.*;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.option.KeyBind;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -67,8 +66,7 @@ public class HudManager extends AbstractModule {
 	private HudManager() {
 		this.entries = new LinkedHashMap<>();
 		client = MinecraftClient.getInstance();
-		KeyBind key = new KeyBind("key.openHud", InputUtil.KEY_RIGHT_SHIFT_CODE, "category.axolotlclient");
-		hudCategory.add(new KeyBindOption("key.openHud", key, keyBind -> MinecraftClient.getInstance().setScreen(new HudEditScreen())));
+		hudCategory.add(new KeyBindOption("key.openHud", InputUtil.KEY_RIGHT_SHIFT_CODE, keyBind -> MinecraftClient.getInstance().setScreen(new HudEditScreen())));
 	}
 
 	public void init() {

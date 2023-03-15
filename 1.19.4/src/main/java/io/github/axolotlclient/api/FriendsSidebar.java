@@ -22,10 +22,15 @@
 
 package io.github.axolotlclient.api;
 
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+
 import com.mojang.blaze3d.platform.InputUtil;
+import io.github.axolotlclient.api.chat.ChatWidget;
 import io.github.axolotlclient.api.handlers.ChatHandler;
-import io.github.axolotlclient.api.handlers.FriendHandler;
-import io.github.axolotlclient.api.types.ChatMessage;
+import io.github.axolotlclient.api.requests.ChannelRequest;
+import io.github.axolotlclient.api.types.Channel;
 import io.github.axolotlclient.api.types.User;
 import io.github.axolotlclient.api.util.AlphabeticalComparator;
 import net.minecraft.client.gui.AbstractParentElement;
@@ -43,11 +48,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.MathHelper;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
-
 public class FriendsSidebar extends Screen {
 
 	private final Screen parent;
@@ -57,11 +57,11 @@ public class FriendsSidebar extends Screen {
 	private int sidebarWidth;
 	private boolean remove;
 	private boolean hasChat;
-	private User chatUser;
 	private ListWidget list;
 	private TextFieldWidget input;
+	private Channel channel;
 
-	private final List<ChatMessage> currentMessages = new ArrayList<>();
+	private ChatWidget chatWidget;
 
 	public FriendsSidebar(Screen parent) {
 		super(Text.translatable("api.friends.sidebar"));
@@ -78,8 +78,7 @@ public class FriendsSidebar extends Screen {
 					.map(e -> (ClickableWidget) e).filter(e -> e.getMessage().equals(Text.translatable("api.friends"))).forEach(e -> e.visible = false);
 		}
 
-
-		FriendHandler.getInstance().getFriends(list -> addDrawableChild(this.list = new ListWidget(list, 10, 30, 50, height-60)));
+		ChannelRequest.getChannelList(list -> addDrawableChild(this.list = new ListWidget(list, 10, 30, 50, height-60)), API.getInstance().getUuid(), ChannelRequest.SortBy.LAST_MESSAGE, ChannelRequest.Include.USER_STATUS);
 
 		addDrawableChild(ButtonWidget.builder(ScreenTexts.BACK, buttonWidget -> remove()).positionAndSize(10-sidebarWidth, height-30, 50, 20).build());
 	}
@@ -97,9 +96,13 @@ public class FriendsSidebar extends Screen {
 
 		if(hasChat){
 			drawVerticalLine(matrices, 70+sidebarAnimX, 0, height, 0xFF000000);
-			client.textRenderer.drawWithShadow(matrices, chatUser.getName(), sidebarAnimX+75, 20, -1);
-			client.textRenderer.drawWithShadow(matrices, Formatting.ITALIC+chatUser.getStatus().getTitle()+":"+chatUser.getStatus().getDescription(),
-					sidebarAnimX+80, 30, 8421504);
+			client.textRenderer.drawWithShadow(matrices, channel.getName(), sidebarAnimX+75, 20, -1);
+			if(channel.isDM()) {
+				client.textRenderer.drawWithShadow(matrices, Formatting.ITALIC + ((Channel.DM)channel).getReceiver().getStatus().getTitle() + ":" + ((Channel.DM)channel).getReceiver().getStatus().getDescription(),
+						sidebarAnimX + 80, 30, 8421504);
+			}
+
+			chatWidget.render(matrices, mouseX, mouseY, delta);
 		}
 
 		animate();
@@ -123,9 +126,12 @@ public class FriendsSidebar extends Screen {
 			if(list != null) {
 				list.setX(list.getX() - ANIM_STEP);
 			}
-			getButtons().forEach(button -> button.setX(button.getX()-ANIM_STEP));
+			getButtons().forEach(button -> button.setX(button.getX() - ANIM_STEP));
+			if(chatWidget != null) {
+				chatWidget.setX(chatWidget.getX() - ANIM_STEP);
+			}
 		} else {
-			if(list != null) {
+			if(list != null && !list.visible) {
 				list.visible = true;
 			}
 		}
@@ -138,6 +144,16 @@ public class FriendsSidebar extends Screen {
 
 	private void close(){
 		client.setScreen(parent);
+		if(chatWidget != null) {
+			chatWidget.remove();
+		}
+	}
+
+	@Override
+	public void removed() {
+		if(chatWidget != null) {
+			chatWidget.remove();
+		}
 	}
 
 	public List<ClickableWidget> getButtons(){
@@ -153,17 +169,26 @@ public class FriendsSidebar extends Screen {
 		return super.mouseClicked(mouseX, mouseY, button);
 	}
 
-	private void addChat(User user){
+	private void addChat(Channel channel){
 		// TODO implement Chat
 		hasChat = true;
-		chatUser = user;
-		sidebarWidth = Math.max(width*5/12, client.textRenderer.getWidth(chatUser.getStatus().getTitle()+":"+chatUser.getStatus().getDescription())+5);
+		this.channel = channel;
+		int w;
+		if(channel.isDM()){
+			User chatUser = ((Channel.DM)channel).getReceiver();
+			w = Math.max(client.textRenderer.getWidth(chatUser.getStatus().getTitle()+":"+chatUser.getStatus().getDescription()),
+					client.textRenderer.getWidth(channel.getName()));
+		} else {
+			w = client.textRenderer.getWidth(channel.getName());
+		}
+		sidebarWidth = Math.max(width*5/12, w+5);
+		chatWidget = new ChatWidget(channel, 75, 50, sidebarWidth - 80, height - 60);
 		addDrawableChild(input = new TextFieldWidget(textRenderer, 75, height-30, sidebarWidth-80, 20, Text.translatable("api.friends.chat.input")){
 			@Override
 			public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 				if(keyCode == InputUtil.KEY_ENTER_CODE){
 					// TODO send chat message
-					ChatHandler.getInstance().sendMessage(chatUser, input.getText());
+					ChatHandler.getInstance().sendMessage(channel, input.getText());
 					input.setText("");
 					return true;
 				}
@@ -195,14 +220,14 @@ public class FriendsSidebar extends Screen {
 		private final int entryHeight = 25;
 		private boolean visible;
 
-		public ListWidget(List<User> list, int x, int y, int width, int height){
+		public ListWidget(List<Channel> list, int x, int y, int width, int height){
 			this.x = x;
 			this.y = y;
 			this.width = width;
 			this.height = height;
 			AtomicInteger buttonY = new AtomicInteger(y);
 			elements = list.stream().sorted((u1, u2) -> new AlphabeticalComparator().compare(u1.getName(), u2.getName()))
-					.map(user -> ButtonWidget.builder(Text.of(user.getName()), buttonWidget -> addChat(user))
+					.map(user -> ButtonWidget.builder(Text.of(user.getName()), buttonWidget -> addChat(channel))
 					.positionAndSize(x, buttonY.getAndAdd(entryHeight), width, entryHeight-5).build()).collect(Collectors.toList());
 		}
 

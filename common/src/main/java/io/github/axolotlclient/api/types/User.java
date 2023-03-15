@@ -22,14 +22,16 @@
 
 package io.github.axolotlclient.api.types;
 
+import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.util.UUIDHelper;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter @Setter
+@ToString
 public class User {
 
 	public User(String uuid, Status status) {
-		this.uuid = uuid;
+		this.uuid = API.getInstance().sanitizeUUID(uuid);
 		this.status = status;
 		this.name = UUIDHelper.getUsername(uuid);
 	}
@@ -37,4 +39,27 @@ public class User {
 	private String name;
 	private String uuid;
 	private Status status;
+
+	@Override
+	public int hashCode() {
+		int result = 1;
+		String $name = this.getName();
+		result = result * 59 + ($name == null ? 43 : $name.hashCode());
+		String $uuid = this.getUuid();
+		result = result * 59 + ($uuid == null ? 43 : $uuid.hashCode());
+		Status $status = this.getStatus();
+		result = result * 59 + ($status == null ? 43 : $status.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == this){
+			return true;
+		}
+		if(obj instanceof User){
+			return uuid.equals(((User) obj).getUuid());
+		}
+		return false;
+	}
 }

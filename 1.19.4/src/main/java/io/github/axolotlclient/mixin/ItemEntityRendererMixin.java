@@ -30,11 +30,10 @@ import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.ItemEntityRenderer;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.BakedModel;
-import net.minecraft.client.render.model.json.ModelTransformation;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.unmapped.C_byhguelf;
 import net.minecraft.util.math.Axis;
 import net.minecraft.util.random.RandomGenerator;
 import org.spongepowered.asm.mixin.Final;
@@ -90,7 +89,7 @@ public abstract class ItemEntityRendererMixin extends EntityRenderer<ItemEntity>
 				}
 
 				this.itemRenderer
-						.renderItem(itemStack, C_byhguelf.GROUND, false, matrixStack, vertexConsumerProvider, i, OverlayTexture.DEFAULT_UV, bakedModel);
+						.renderItem(itemStack, ModelTransformationMode.GROUND, false, matrixStack, vertexConsumerProvider, i, OverlayTexture.DEFAULT_UV, bakedModel);
 				matrixStack.pop();
 				if (!bl) {
 					matrixStack.translate(0.0F * o, 0.0F * p, 0.09375F * q);

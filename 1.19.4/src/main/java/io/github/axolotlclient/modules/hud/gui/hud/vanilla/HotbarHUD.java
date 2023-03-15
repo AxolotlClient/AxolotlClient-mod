@@ -86,7 +86,7 @@ public class HotbarHUD extends TextHudEntry {
 				int k = pos.x + n * 20 + 3;
 				int l = pos.y + 3;
 				MinecraftClient.getInstance().getItemRenderer()
-						.m_emcvxosv(matrices, playerEntity.getInventory().main.get(n), k, l);
+						.renderInGui(matrices, playerEntity.getInventory().main.get(n), k, l);
 				ItemUtil.renderGuiItemModel(getScale(), playerEntity.getInventory().main.get(n), k, l);
 				ItemUtil.renderGuiItemOverlay(matrices, client.textRenderer, playerEntity.getInventory().main.get(n), k,
 						l, null, -1, true);

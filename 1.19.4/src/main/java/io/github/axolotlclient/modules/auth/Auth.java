@@ -110,7 +110,7 @@ public class Auth extends Accounts implements Module {
 				}
 				((MinecraftClientAccessor) client).setUserApiService(service);
 				((MinecraftClientAccessor) client).setSocialInteractionsManager(new SocialInteractionsManager(client, service));
-				((MinecraftClientAccessor) client).setPlayerKeyPairManager(PlayerKeyPairManager.m_fgoaidjm(service, client.getSession(), client.runDirectory.toPath()));
+				((MinecraftClientAccessor) client).setPlayerKeyPairManager(PlayerKeyPairManager.create(service, client.getSession(), client.runDirectory.toPath()));
 				((MinecraftClientAccessor) client).setChatReportingContext(ChatReportingContext.create(ReportEnvironment.createLocal(), service));
 				save();
 				current = account;

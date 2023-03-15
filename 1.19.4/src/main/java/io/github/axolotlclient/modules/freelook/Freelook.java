@@ -38,7 +38,6 @@ import net.minecraft.entity.Entity;
 public class Freelook extends AbstractModule {
 
 	private static final Freelook Instance = new Freelook();
-	private static KeyBind KEY;
 
 	private final MinecraftClient client = MinecraftClient.getInstance();
 
@@ -47,8 +46,9 @@ public class Freelook extends AbstractModule {
 
 	private final OptionCategory category = new OptionCategory("freelook");
 	public final BooleanOption enabled = new BooleanOption("enabled", false);
-	private final KeyBindOption keyOption = new KeyBindOption("key.freelook", KEY = new KeyBind("key.freelook", InputUtil.KEY_V_CODE, "category.axolotlclient"), (key) -> {
+	private final KeyBindOption keyOption = new KeyBindOption("key.freelook", InputUtil.KEY_V_CODE, (key) -> {
 	});
+	private static KeyBind KEY;
 	private final EnumOption mode = new EnumOption("mode",
 			value -> FeatureDisabler.update(),
 			new String[]{"snap_perspective", "freelook"},
@@ -65,9 +65,12 @@ public class Freelook extends AbstractModule {
 		return Instance;
 	}
 
+	public Freelook(){
+		KEY = keyOption.get();
+	}
+
 	@Override
 	public void init() {
-		//KeyBindingHelper.registerKeyBinding(KEY);
 		category.add(enabled, keyOption, mode, perspective, invert, toggle);
 		AxolotlClient.CONFIG.addCategory(category);
 	}

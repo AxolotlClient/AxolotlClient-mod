@@ -37,8 +37,8 @@ public class AuthWidget extends ButtonWidget {
 	}
 
 	@Override
-	public void m_mxhoikgj(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-		super.m_mxhoikgj(matrices, mouseX, mouseY, delta);
+	public void drawWidget(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+		super.drawWidget(matrices, mouseX, mouseY, delta);
 		RenderSystem.setShaderTexture(0, Auth.getInstance().getSkinTexture(Auth.getInstance().getCurrent()));
 		RenderSystem.enableBlend();
 		drawTexture(matrices, getX() + 1, getY() + 1, getHeight() - 2, getHeight() - 2, 8, 8, 8, 8, 64, 64);

@@ -24,6 +24,8 @@ package io.github.axolotlclient.api;
 
 import com.google.gson.JsonObject;
 import io.github.axolotlclient.api.handlers.*;
+import io.github.axolotlclient.api.types.Status;
+import io.github.axolotlclient.api.types.User;
 import io.github.axolotlclient.api.util.RequestHandler;
 import io.github.axolotlclient.api.util.StatusUpdateProvider;
 import io.github.axolotlclient.util.GsonHelper;
@@ -48,6 +50,7 @@ public class API {
 	private static final String API_BASE = "wss://axolotlclient.xyz";
 	private static final URI API_URL = URI.create(API_BASE + "/api/ws");
 	private static final int STATUS_UPDATE_DELAY = 15; // The Delay between Status updates, in seconds. Discord uses 15 seconds so we will as well.
+	private static final boolean TESTING = false;
 
 	@Getter
 	private static API Instance;
@@ -63,6 +66,8 @@ public class API {
 	private Session session;
 	@Getter
 	private String uuid;
+	@Getter
+	private User self;
 	@Getter
 	private final Options apiOptions;
 
@@ -101,6 +106,7 @@ public class API {
 	public void startup(String uuid) {
 		if (session == null || !session.isOpen()) {
 			this.uuid = sanitizeUUID(uuid);
+			self = new User(uuid, Status.UNKNOWN);
 			logger.debug("Starting API...");
 			session = createSession();
 
@@ -175,7 +181,7 @@ public class API {
 
 	public void send(Request request) {
 		if (isConnected()) {
-			if(!request.equals(Request.DUMMY)) {
+			if(!request.equals(Request.DUMMY) && !TESTING) {
 				requests.put(request.getId(), request);
 				ThreadExecuter.scheduleTask(() -> {
 					String text = request.getJson();

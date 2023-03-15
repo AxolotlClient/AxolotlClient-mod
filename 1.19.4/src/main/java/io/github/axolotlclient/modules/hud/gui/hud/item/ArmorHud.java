@@ -79,19 +79,17 @@ public class ArmorHud extends TextHudEntry {
 	}
 
 	public void renderItem(MatrixStack matrices, ItemStack stack, int x, int y) {
-		ItemUtil.renderGuiItemModel(getScale(), stack, x, y);
-		ItemUtil.renderGuiItemOverlay(matrices, client.textRenderer, stack, x, y, null, textColor.get().getAsInt(),
-				shadow.get());
+		client.getItemRenderer().renderInGui(matrices, stack, x, y);
+		client.getItemRenderer().method_4025(matrices, client.textRenderer, stack, x, y);
 	}
 
 	public void renderMainItem(MatrixStack matrices, ItemStack stack, int x, int y) {
-		ItemUtil.renderGuiItemModel(getScale(), stack, x, y);
+		client.getItemRenderer().renderInGui(matrices, stack, x, y);
 		String total = String.valueOf(ItemUtil.getTotal(client, stack));
 		if (total.equals("1")) {
 			total = null;
 		}
-		ItemUtil.renderGuiItemOverlay(matrices, client.textRenderer, stack, x, y, total, textColor.get().getAsInt(),
-				shadow.get());
+		client.getItemRenderer().method_4022(matrices, client.textRenderer, stack, x, y, total);
 	}
 
 	private final ItemStack[] placeholderStacks = new ItemStack[]{new ItemStack(Items.IRON_BOOTS),
