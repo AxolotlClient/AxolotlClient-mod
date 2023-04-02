@@ -53,7 +53,7 @@ import org.lwjgl.input.Keyboard;
 public class HudManager extends AbstractModule {
 
 	private final static HudManager INSTANCE = new HudManager();
-	private static final KeyBinding key = new KeyBinding("key.openHud", Keyboard.KEY_RSHIFT, "category.axolotlclient");
+	static KeyBinding key = new KeyBinding("key.openHud", Keyboard.KEY_RSHIFT, "category.axolotlclient");
 	private final OptionCategory hudCategory = new OptionCategory("hud", false);
 	private final Map<Identifier, HudEntry> entries;
 

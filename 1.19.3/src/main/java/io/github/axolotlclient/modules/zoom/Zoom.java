@@ -40,7 +40,6 @@ import net.minecraft.client.option.KeyBind;
 
 public class Zoom extends AbstractModule {
 
-	public static final KeyBind keyBinding = new KeyBind("key.zoom", InputUtil.KEY_C_CODE, "category.axolotlclient");
 	public static final FloatOption zoomDivisor = new FloatOption("zoomDivisor", 4F, 1F, 16F);
 	public static final FloatOption zoomSpeed = new FloatOption("zoomSpeed", 7.5F, 1F, 10F);
 	public static final BooleanOption zoomScrolling = new BooleanOption("zoomScrolling", false);
@@ -48,6 +47,7 @@ public class Zoom extends AbstractModule {
 	public static final BooleanOption smoothCamera = new BooleanOption("smoothCamera", false);
 	private static final Zoom Instance = new Zoom();
 	public static boolean active;
+	public static KeyBind keyBinding;
 	private static Double originalSensitivity;
 	private static boolean originalSmoothCamera;
 	private static double targetFactor = 1;
@@ -149,12 +149,12 @@ public class Zoom extends AbstractModule {
 		zoom.add(zoomScrolling);
 		zoom.add(decreaseSensitivity);
 		zoom.add(smoothCamera);
-		zoom.add(new KeyBindOption("key.zoom", keyBinding, keyBind -> {
+		KeyBindOption o;
+		zoom.add(o = new KeyBindOption("key.zoom", InputUtil.KEY_C_CODE, keyBind -> {
 		}));
+		keyBinding = o.get();
 
 		AxolotlClient.CONFIG.rendering.addSubCategory(zoom);
-
-		//KeyBindingHelper.registerKeyBinding(keyBinding);
 
 		active = false;
 	}

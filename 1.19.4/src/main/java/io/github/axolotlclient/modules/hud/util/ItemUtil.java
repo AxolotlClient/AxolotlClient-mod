@@ -200,7 +200,6 @@ public class ItemUtil {
 
 	public static void renderGuiItemOverlay(MatrixStack matrices, TextRenderer renderer, ItemStack stack, int x, int y,
 											String countLabel, int textColor, boolean shadow) {
-		MinecraftClient client = MinecraftClient.getInstance();
 		if (stack.isEmpty()) {
 			return;
 		}
@@ -214,7 +213,6 @@ public class ItemUtil {
 
 		if (stack.isItemBarVisible()) {
 			RenderSystem.disableDepthTest();
-			//RenderSystem.disableTexture();
 			RenderSystem.disableBlend();
 			int i = stack.getItemBarStep();
 			int j = stack.getItemBarColor();
@@ -222,7 +220,6 @@ public class ItemUtil {
 			DrawUtil.fillRect(matrices, x + 2, y + 13, i, 1,
 				new Color(j >> 16 & 255, j >> 8 & 255, j & 255, 255).getAsInt());
 			RenderSystem.enableBlend();
-			//RenderSystem.enableTexture();
 			RenderSystem.enableDepthTest();
 		}
 
@@ -232,12 +229,10 @@ public class ItemUtil {
 			MinecraftClient.getInstance().getTickDelta());
 		if (f > 0.0F) {
 			RenderSystem.disableDepthTest();
-			//RenderSystem.disableTexture();
 			RenderSystem.enableBlend();
 			RenderSystem.defaultBlendFunc();
 			DrawUtil.fillRect(matrices, x, y + MathHelper.floor(16.0F * (1.0F - f)), 16, MathHelper.ceil(16.0F * f),
 				Color.WHITE.withAlpha(127).getAsInt());
-			//RenderSystem.enableTexture();
 			RenderSystem.enableDepthTest();
 		}
 	}

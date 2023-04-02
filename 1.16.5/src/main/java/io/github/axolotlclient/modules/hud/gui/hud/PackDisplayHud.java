@@ -140,11 +140,6 @@ public class PackDisplayHud extends TextHudEntry {
 	}
 
 	@Override
-	public boolean movable() {
-		return true;
-	}
-
-	@Override
 	public List<Option<?>> getConfigurationOptions() {
 		List<Option<?>> options = super.getConfigurationOptions();
 		options.add(iconsOnly);

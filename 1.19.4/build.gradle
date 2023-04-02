@@ -14,7 +14,6 @@ repositories {
 	maven {
 		url = "https://moehreag.duckdns.org/maven/releases"
 	}
-	mavenLocal()
 }
 
 dependencies {

@@ -40,7 +40,6 @@ import io.github.axolotlclient.modules.hud.gui.hud.simple.*;
 import io.github.axolotlclient.modules.hud.gui.hud.vanilla.*;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.option.KeyBind;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
@@ -60,8 +59,8 @@ public class HudManager extends AbstractModule {
 	private HudManager() {
 		this.entries = new LinkedHashMap<>();
 		client = MinecraftClient.getInstance();
-		KeyBind key = new KeyBind("key.openHud", InputUtil.KEY_RIGHT_SHIFT_CODE, "category.axolotlclient");
-		hudCategory.add(new KeyBindOption("key.openHud", key, keyBind -> MinecraftClient.getInstance().setScreen(new HudEditScreen())));
+		hudCategory.add(new KeyBindOption("key.openHud", InputUtil.KEY_RIGHT_SHIFT_CODE,
+			keyBind -> MinecraftClient.getInstance().setScreen(new HudEditScreen())));
 	}
 
 	public static HudManager getInstance() {
@@ -69,7 +68,6 @@ public class HudManager extends AbstractModule {
 	}
 
 	public void init() {
-		//KeyBindingHelper.registerKeyBinding(key);
 
 		AxolotlClient.CONFIG.addCategory(hudCategory);
 

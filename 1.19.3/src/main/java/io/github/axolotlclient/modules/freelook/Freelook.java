@@ -34,6 +34,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBind;
 import net.minecraft.client.option.Perspective;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.Util;
 
 public class Freelook extends AbstractModule {
 
@@ -42,7 +43,11 @@ public class Freelook extends AbstractModule {
 	public final BooleanOption enabled = new BooleanOption("enabled", false);
 	private final MinecraftClient client = MinecraftClient.getInstance();
 	private final OptionCategory category = new OptionCategory("freelook");
-	private final KeyBindOption keyOption = new KeyBindOption("key.freelook", KEY = new KeyBind("key.freelook", InputUtil.KEY_V_CODE, "category.axolotlclient"), (key) -> {
+	private final KeyBindOption keyOption = Util.make(() -> {
+		KeyBindOption option = new KeyBindOption("key.freelook", InputUtil.KEY_V_CODE, (key) -> {
+		});
+		KEY = option.get();
+		return option;
 	});
 	private final EnumOption mode = new EnumOption("mode",
 		value -> FeatureDisabler.update(),

@@ -219,6 +219,10 @@ public class ChatHud extends TextHudEntry {
 		}
 	}
 
+    /*public int getHeight() {
+        return getHeight(this.isChatFocused() ? this.client.options.chatHeightFocused : this.client.options.chatHeightUnfocused);
+    }*/
+
 	@Override
 	public double getDefaultX() {
 		return 0.01;

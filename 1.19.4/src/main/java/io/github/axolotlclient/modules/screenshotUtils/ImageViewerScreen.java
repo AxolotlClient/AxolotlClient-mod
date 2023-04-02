@@ -145,26 +145,10 @@ public class ImageViewerScreen extends Screen {
 		}, Supplier::get) {
 			@Override
 			public void drawWidget(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-				RenderSystem.setShader(GameRenderer::getPositionTexShader);
-				RenderSystem.setShaderTexture(0, WIDGETS_TEXTURE);
-				RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, this.alpha);
-				int i = this.getYImage();
-				drawTexture(matrices, this.getX(), this.getY(), 0, 46 + i * 20, this.width / 2, this.height);
-				drawTexture(matrices, this.getX() + this.width / 2, this.getY(), 200 - this.width / 2, 46 + i * 20, this.width / 2, this.height);
+				super.drawWidget(matrices, mouseX, mouseY, delta);
 				RenderSystem.enableDepthTest();
 				RenderSystem.setShaderTexture(0, downloadIcon);
 				drawTexture(matrices, this.getX(), this.getY(), 0, 0, this.getWidth(), this.getHeight(), getWidth(), getHeight());
-			}
-
-			private int getYImage() {
-				int i = 1;
-				if (!this.active) {
-					i = 0;
-				} else if (this.isHoveredOrFocused()) {
-					i = 2;
-				}
-
-				return 46 + i * 20;
 			}
 		});
 

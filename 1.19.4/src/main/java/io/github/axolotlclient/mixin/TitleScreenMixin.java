@@ -39,6 +39,7 @@ import net.minecraft.client.realms.gui.screen.RealmsNotificationsScreen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import org.jetbrains.annotations.Nullable;
 import org.quiltmc.loader.api.QuiltLoader;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -54,6 +55,7 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 public abstract class TitleScreenMixin extends Screen {
 
 	@Shadow
+	@Nullable
 	private RealmsNotificationsScreen realmsNotificationGui;
 
 	protected TitleScreenMixin() {

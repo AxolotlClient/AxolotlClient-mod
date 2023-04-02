@@ -256,6 +256,4 @@ public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
 		enabled.set(value);
 	}
 
-	public void init() {
-	}
 }

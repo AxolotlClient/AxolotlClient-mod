@@ -53,27 +53,27 @@ import org.lwjgl.opengl.GL14;
 
 public abstract class SkyboxInstance {
 
-	protected final float maxAlpha = 1f;
-	protected final float[] rotationStatic = new float[]{0, 0, 0};
-	protected final float[] rotationAxis = new float[]{0, 0, 0};
 	protected final Identifier MOON_PHASES = new Identifier("textures/environment/moon_phases.png");
 	protected final Identifier SUN = new Identifier("textures/environment/sun.png");
-	final JsonObject object;
-	final Identifier[] textures = new Identifier[6];
-	final int[] fade = new int[4];
 	protected int blendMode = 1;
 	// ! These are the options variables.  Do not mess with these.
 	protected boolean alwaysOn;
+	protected float maxAlpha = 1f;
 	protected boolean manualBlend = false;
 	protected int blendSrcFactor = 1;
 	protected int blendDstFactor = 1;
 	protected int blendEquation;
 	protected boolean rotate = false;
 	protected float rotationSpeed = 1F;
+	protected float[] rotationStatic = new float[]{0, 0, 0};
+	protected float[] rotationAxis = new float[]{0, 0, 0};
 	protected boolean showSun = true;
 	protected boolean showMoon = true;
 	protected boolean showStars = true;
+	JsonObject object;
 	float alpha = 1F;
+	Identifier[] textures = new Identifier[6];
+	int[] fade = new int[4];
 
 	public SkyboxInstance(JsonObject json) {
 		this.object = json;
@@ -144,27 +144,37 @@ public abstract class SkyboxInstance {
 			return 1;
 		} else {
 			switch (str.toLowerCase(Locale.ENGLISH).trim()) {
-				case "alpha":
+				case "alpha" -> {
 					return 0;
-				case "add":
+				}
+				case "add" -> {
 					return 1;
-				case "subtract":
+				}
+				case "subtract" -> {
 					return 2;
-				case "multiply":
+				}
+				case "multiply" -> {
 					return 3;
-				case "dodge":
+				}
+				case "dodge" -> {
 					return 4;
-				case "burn":
+				}
+				case "burn" -> {
 					return 5;
-				case "screen":
+				}
+				case "screen" -> {
 					return 6;
-				case "overlay":
+				}
+				case "overlay" -> {
 					return 7;
-				case "replace":
+				}
+				case "replace" -> {
 					return 8;
-				default:
+				}
+				default -> {
 					AxolotlClient.LOGGER.warn("Unknown blend: " + str);
 					return 1;
+				}
 			}
 		}
 	}

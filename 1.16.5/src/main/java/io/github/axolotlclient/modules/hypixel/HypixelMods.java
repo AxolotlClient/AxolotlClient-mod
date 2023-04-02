@@ -40,13 +40,11 @@ import io.github.axolotlclient.modules.hypixel.skyblock.Skyblock;
 public class HypixelMods extends AbstractModule {
 
 	private static final HypixelMods INSTANCE = new HypixelMods();
-
-	public final StringOption hypixel_api_key = new StringOption("hypixel_api_key", "");
 	public final EnumOption cacheMode = new EnumOption("cache_mode", HypixelCacheMode.values(),
 		HypixelCacheMode.ON_CLIENT_DISCONNECT.toString());
-
 	private final OptionCategory category = new OptionCategory("hypixel-mods");
 	private final List<AbstractHypixelMod> subModules = new ArrayList<>();
+	public StringOption hypixel_api_key = new StringOption("hypixel_api_key", "");
 
 	public static HypixelMods getInstance() {
 		return INSTANCE;
@@ -71,7 +69,7 @@ public class HypixelMods extends AbstractModule {
 
 	@Override
 	public void lateInit() {
-		HypixelAbstractionLayer.setApiKeySupplier(hypixel_api_key::get);
+		HypixelAbstractionLayer.setApiKeySupplier(() -> hypixel_api_key.get());
 		HypixelAbstractionLayer.loadApiKey();
 	}
 

@@ -42,16 +42,16 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 @Mixin(Screen.class)
 public abstract class ScreenMixin {
 
-	@ModifyArgs(method = "renderTooltip(Lnet/minecraft/client/util/math/MatrixStack;Ljava/util/List;Ljava/util/Optional;II)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;renderTooltipFromComponents(Lnet/minecraft/client/util/math/MatrixStack;Ljava/util/List;IILnet/minecraft/client/gui/tooltip/TooltipPositioner;)V"))
+	@ModifyArgs(method = "renderTooltip(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/item/ItemStack;II)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;renderTooltip(Lnet/minecraft/client/util/math/MatrixStack;Ljava/util/List;Ljava/util/Optional;II)V"))
 	public void axolotlclient$modifyTooltipPosition(Args args) {
 		if (ScrollableTooltips.getInstance().enabled.get()) {
 			if ((MinecraftClient.getInstance().currentScreen instanceof CreativeInventoryScreen)
-				&& !((CreativeInventoryScreen) MinecraftClient.getInstance().currentScreen).isInventoryOpen()) {
+				&& ((CreativeInventoryScreen) MinecraftClient.getInstance().currentScreen).isInventoryOpen()) {
 				return;
 			}
 
-			args.set(2, (int) args.get(2) + ScrollableTooltips.getInstance().tooltipOffsetX);
-			args.set(3, (int) args.get(3) + ScrollableTooltips.getInstance().tooltipOffsetY);
+			args.set(3, (int) args.get(3) + ScrollableTooltips.getInstance().tooltipOffsetX);
+			args.set(4, (int) args.get(4) + ScrollableTooltips.getInstance().tooltipOffsetY);
 		}
 	}
 

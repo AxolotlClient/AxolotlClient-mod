@@ -42,6 +42,10 @@ public class LevelHead implements AbstractHypixelMod {
 		return Instance;
 	}
 
+	public static LevelHead getInstance() {
+		return Instance;
+	}
+
 	@Override
 	public void init() {
 		category.add(enabled);
