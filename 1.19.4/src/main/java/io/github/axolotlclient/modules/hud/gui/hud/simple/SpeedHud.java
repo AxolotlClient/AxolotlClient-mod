@@ -22,16 +22,16 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.simple;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.List;
+
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.Option;
 import io.github.axolotlclient.modules.hud.gui.entry.SimpleTextHudEntry;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
-
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -52,6 +52,13 @@ public class SpeedHud extends SimpleTextHudEntry {
 	}
 
 	@Override
+	public List<Option<?>> getConfigurationOptions() {
+		List<Option<?>> options = super.getConfigurationOptions();
+		options.add(horizontal);
+		return options;
+	}
+
+	@Override
 	public String getValue() {
 		if (client.player == null) {
 			return getPlaceholder();
@@ -68,13 +75,6 @@ public class SpeedHud extends SimpleTextHudEntry {
 			speed = vec.length();
 		}
 		return FORMATTER.format(speed * 20) + " BPS";
-	}
-
-	@Override
-	public List<Option<?>> getConfigurationOptions() {
-		List<Option<?>> options = super.getConfigurationOptions();
-		options.add(horizontal);
-		return options;
 	}
 
 	@Override

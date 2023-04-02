@@ -22,6 +22,10 @@
 
 package io.github.axolotlclient.modules.hud.util;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
@@ -39,10 +43,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -208,7 +208,7 @@ public class ItemUtil {
 			String string = countLabel == null ? String.valueOf(stack.getCount()) : countLabel;
 			matrices.translate(0.0, 0.0, client.getItemRenderer().zOffset + 200.0F);
 			DrawUtil.drawString(matrices, string, (x + 19 - 2 - renderer.getWidth(string)), (y + 6 + 3), textColor,
-					shadow);
+				shadow);
 		}
 
 		if (stack.isDamaged()) {
@@ -222,7 +222,7 @@ public class ItemUtil {
 			int j = MathHelper.hsvToRgb(h / 3.0F, 1.0F, 1.0F);
 			DrawUtil.fillRect(matrices, x + 2, y + 13, 13, 2, Color.BLACK.getAsInt());
 			DrawUtil.fillRect(matrices, x + 2, y + 13, i, 1,
-					new Color(j >> 16 & 255, j >> 8 & 255, j & 255, 255).getAsInt());
+				new Color(j >> 16 & 255, j >> 8 & 255, j & 255, 255).getAsInt());
 			RenderSystem.enableBlend();
 			RenderSystem.enableTexture();
 			RenderSystem.enableDepthTest();
@@ -230,15 +230,15 @@ public class ItemUtil {
 
 		ClientPlayerEntity clientPlayerEntity = MinecraftClient.getInstance().player;
 		float f = clientPlayerEntity == null ? 0.0F
-				: clientPlayerEntity.getItemCooldownManager().getCooldownProgress(stack.getItem(),
-				MinecraftClient.getInstance().getTickDelta());
+			: clientPlayerEntity.getItemCooldownManager().getCooldownProgress(stack.getItem(),
+			MinecraftClient.getInstance().getTickDelta());
 		if (f > 0.0F) {
 			RenderSystem.disableDepthTest();
 			RenderSystem.disableTexture();
 			RenderSystem.enableBlend();
 			RenderSystem.defaultBlendFunc();
 			DrawUtil.fillRect(matrices, x, y + MathHelper.floor(16.0F * (1.0F - f)), 16, MathHelper.ceil(16.0F * f),
-					Color.WHITE.withAlpha(127).getAsInt());
+				Color.WHITE.withAlpha(127).getAsInt());
 			RenderSystem.enableTexture();
 			RenderSystem.enableDepthTest();
 		}

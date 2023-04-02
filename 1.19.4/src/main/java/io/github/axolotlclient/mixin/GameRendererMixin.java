@@ -67,7 +67,7 @@ public abstract class GameRendererMixin {
 
 			CameraSubmersionType cameraSubmersionType = camera.getSubmersionType();
 			if (cameraSubmersionType == CameraSubmersionType.LAVA
-					|| cameraSubmersionType == CameraSubmersionType.WATER) {
+				|| cameraSubmersionType == CameraSubmersionType.WATER) {
 				f *= MathHelper.lerp(this.client.options.getFovEffectScale().get(), 1.0, 0.85714287F);
 			}
 			returnValue = f;

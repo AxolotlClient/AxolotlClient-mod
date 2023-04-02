@@ -45,11 +45,11 @@ public class Freelook extends AbstractModule {
 	private final KeyBindOption keyOption = new KeyBindOption("key.freelook", InputUtil.KEY_V_CODE, (key) -> {
 	});
 	private final EnumOption mode = new EnumOption("mode",
-			value -> FeatureDisabler.update(),
-			new String[]{"snap_perspective", "freelook"},
-			"freelook");
+		value -> FeatureDisabler.update(),
+		new String[]{"snap_perspective", "freelook"},
+		"freelook");
 	private final EnumOption perspective = new EnumOption("perspective", Perspective.values(),
-			Perspective.THIRD_PERSON_BACK.toString());
+		Perspective.THIRD_PERSON_BACK.toString());
 	private final BooleanOption invert = new BooleanOption("invert", false);
 	private final BooleanOption toggle = new BooleanOption("toggle", false);
 	public boolean active;
@@ -130,7 +130,7 @@ public class Freelook extends AbstractModule {
 			dy = -dy;
 
 		if (MinecraftClient.getInstance().options.getPerspective().isFrontView()
-				|| MinecraftClient.getInstance().options.getPerspective().isFirstPerson())
+			|| MinecraftClient.getInstance().options.getPerspective().isFirstPerson())
 			dy *= -1;
 
 		yaw += dx * 0.15F;

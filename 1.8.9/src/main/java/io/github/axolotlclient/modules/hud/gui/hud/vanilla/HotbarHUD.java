@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.vanilla;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClientConfig.options.Option;
 import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
@@ -32,13 +35,10 @@ import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class HotbarHUD extends TextHudEntry {
 
-	public static Identifier ID = new Identifier("axolotlclient", "hotbarhud");
 	private static final Identifier WIDGETS_TEXTURE = new Identifier("textures/gui/widgets.png");
+	public static Identifier ID = new Identifier("axolotlclient", "hotbarhud");
 
 	public HotbarHUD() {
 		super(182, 22, false);
@@ -77,7 +77,7 @@ public class HotbarHUD extends TextHudEntry {
 			if (playerEntity.inventory.main[j] != null) {
 				ItemUtil.renderGuiItemModel(playerEntity.inventory.main[j], k, l);
 				ItemUtil.renderGuiItemOverlay(MinecraftClient.getInstance().textRenderer,
-						playerEntity.inventory.main[j], k, l, null, textColor.get().getAsInt(), shadow.get());
+					playerEntity.inventory.main[j], k, l, null, textColor.get().getAsInt(), shadow.get());
 			}
 		}
 
@@ -90,17 +90,17 @@ public class HotbarHUD extends TextHudEntry {
 	public void renderPlaceholderComponent(float delta) {
 		DrawPosition pos = getPos();
 		drawCenteredString(MinecraftClient.getInstance().textRenderer, getName(), pos.x + width / 2,
-				pos.y + height / 2 - 4, -1, true);
-	}
-
-	@Override
-	public Identifier getId() {
-		return ID;
+			pos.y + height / 2 - 4, -1, true);
 	}
 
 	@Override
 	public boolean movable() {
 		return true;
+	}
+
+	@Override
+	public Identifier getId() {
+		return ID;
 	}
 
 	@Override

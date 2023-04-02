@@ -56,6 +56,11 @@ public class NickHider implements AbstractHypixelMod {
 		category.add(hideOtherSkins);
 	}
 
+	@Override
+	public OptionCategory getCategory() {
+		return category;
+	}
+
 	public Text editMessage(Text message) {
 		if (hideOwnName.get() || hideOtherNames.get()) {
 			String msg = message.asFormattedString();
@@ -75,10 +80,5 @@ public class NickHider implements AbstractHypixelMod {
 			return new LiteralText(msg).setStyle(message.getStyle().deepCopy());
 		}
 		return message;
-	}
-
-	@Override
-	public OptionCategory getCategory() {
-		return category;
 	}
 }

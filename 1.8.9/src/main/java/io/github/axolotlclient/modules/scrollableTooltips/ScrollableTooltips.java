@@ -27,26 +27,20 @@ import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.IntegerOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
-import net.legacyfabric.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.option.KeyBinding;
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 public class ScrollableTooltips extends AbstractModule {
 
-	public int tooltipOffsetX;
-	public int tooltipOffsetY;
-
 	private static final ScrollableTooltips instance = new ScrollableTooltips();
-
-	private final OptionCategory category = new OptionCategory("scrollableTooltips");
-
 	public final BooleanOption enabled = new BooleanOption("enabled", false);
 	public final BooleanOption enableShiftHorizontalScroll = new BooleanOption("shiftHorizontalScroll",
-			true);
+		true);
 	protected final IntegerOption scrollAmount = new IntegerOption("scrollAmount", 5, 1, 20);
 	protected final BooleanOption inverse = new BooleanOption("inverse", false);
+	private final OptionCategory category = new OptionCategory("scrollableTooltips");
+	public int tooltipOffsetX;
+	public int tooltipOffsetY;
 
 	public static ScrollableTooltips getInstance() {
 		return instance;
@@ -77,13 +71,6 @@ public class ScrollableTooltips extends AbstractModule {
 		}
 	}
 
-	protected boolean applyInverse(boolean value) {
-		if (inverse.get()) {
-			return !value;
-		}
-		return value;
-	}
-
 	public void onScroll(boolean reverse) {
 		if (Screen.hasShiftDown()) {
 			if (reverse) {
@@ -98,6 +85,13 @@ public class ScrollableTooltips extends AbstractModule {
 				tooltipOffsetY += scrollAmount.get();
 			}
 		}
+	}
+
+	protected boolean applyInverse(boolean value) {
+		if (inverse.get()) {
+			return !value;
+		}
+		return value;
 	}
 
 	public void resetScroll() {

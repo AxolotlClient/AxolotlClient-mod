@@ -56,7 +56,7 @@ public abstract class WorldRendererMixin {
 	@Inject(method = "renderSky", at = @At("HEAD"), cancellable = true)
 	public void axolotlclient$renderSky(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
 		if (AxolotlClient.CONFIG.customSky.get() && SkyboxManager.getInstance().hasSkyBoxes()
-				&& !FabricLoader.getInstance().isModLoaded("fabricskyboxes")) {
+			&& !FabricLoader.getInstance().isModLoaded("fabricskyboxes")) {
 			this.client.getProfiler().push("Custom Skies");
 
 			RenderSystem.depthMask(false);

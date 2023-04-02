@@ -22,6 +22,12 @@
 
 package io.github.axolotlclient.modules.sky;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -34,12 +40,6 @@ import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 /**
  * This implementation of custom skies is based on the FabricSkyBoxes mod by AMereBagatelle
  * <a href="https://github.com/AMereBagatelle/FabricSkyBoxes">Github Link.</a>
@@ -50,18 +50,53 @@ import java.util.stream.Collectors;
 public class SkyResourceManager extends AbstractModule implements IdentifiableResourceReloadListener {
 
 	private static final SkyResourceManager Instance = new SkyResourceManager();
-
+	private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 	private static boolean initialized = false;
 
 	public static SkyResourceManager getInstance() {
 		return Instance;
 	}
 
-	private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+	@Override
+	public net.legacyfabric.fabric.api.util.Identifier getFabricId() {
+		return new net.legacyfabric.fabric.api.util.Identifier("axolotlclient", "custom_skies");
+	}
+
+	@Override
+	public void reload(ResourceManager resourceManager) {
+		if (initialized) {
+			return;
+		}
+		SkyboxManager.getInstance().clearSkyboxes();
+		for (Map.Entry<Identifier, Resource> entry : ((SearchableResourceManager) resourceManager)
+			.findResources("fabricskyboxes", "sky", identifier -> identifier.getPath().endsWith(".json"))
+			.entrySet()) {
+			AxolotlClient.LOGGER.debug("Loaded sky: " + entry.getKey());
+			SkyboxManager.getInstance().addSkybox(new FSBSkyboxInstance(gson.fromJson(
+				new BufferedReader(new InputStreamReader(entry.getValue().getInputStream(), StandardCharsets.UTF_8))
+					.lines().collect(Collectors.joining("\n")),
+				JsonObject.class)));
+		}
+
+		for (Map.Entry<Identifier, Resource> entry : ((SearchableResourceManager) resourceManager)
+			.findResources("minecraft", "optifine/sky", identifier -> identifier.getPath().endsWith(".properties"))
+			.entrySet()) {
+			AxolotlClient.LOGGER.debug("Loaded sky: " + entry.getKey());
+			loadMCPSky("optifine", entry.getKey(), entry.getValue());
+		}
+
+		for (Map.Entry<Identifier, Resource> entry : ((SearchableResourceManager) resourceManager)
+			.findResources("minecraft", "mcpatcher/sky", identifier -> identifier.getPath().endsWith(".properties"))
+			.entrySet()) {
+			AxolotlClient.LOGGER.debug("Loaded sky: " + entry.getKey());
+			loadMCPSky("mcpatcher", entry.getKey(), entry.getValue());
+		}
+		initialized = true;
+	}
 
 	private void loadMCPSky(String loader, Identifier id, Resource resource) {
 		BufferedReader reader = new BufferedReader(
-				new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8));
+			new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8));
 
 		JsonObject object = new JsonObject();
 		String string;
@@ -80,12 +115,12 @@ public class SkyResourceManager extends AbstractModule implements IdentifiableRe
 								}
 								if (id.getPath().contains("world")) {
 									option[1] = loader + "/sky/world" + id.getPath().split("world")[1].split("/")[0]
-											+ "/" + option[1].replace("./", "");
+										+ "/" + option[1].replace("./", "");
 								}
 							}
 						}
 						if (option[0].equals("startFadeIn") || option[0].equals("endFadeIn")
-								|| option[0].equals("startFadeOut") || option[0].equals("endFadeOut")) {
+							|| option[0].equals("startFadeOut") || option[0].equals("endFadeOut")) {
 							option[1] = option[1].replace(":", "").replace("\\", "");
 						}
 
@@ -98,43 +133,6 @@ public class SkyResourceManager extends AbstractModule implements IdentifiableRe
 			SkyboxManager.getInstance().addSkybox(new MCPSkyboxInstance(object));
 		} catch (Exception ignored) {
 		}
-	}
-
-	@Override
-	public net.legacyfabric.fabric.api.util.Identifier getFabricId() {
-		return new net.legacyfabric.fabric.api.util.Identifier("axolotlclient", "custom_skies");
-	}
-
-	@Override
-	public void reload(ResourceManager resourceManager) {
-		if(initialized){
-			return;
-		}
-		SkyboxManager.getInstance().clearSkyboxes();
-		for (Map.Entry<Identifier, Resource> entry : ((SearchableResourceManager) resourceManager)
-				.findResources("fabricskyboxes", "sky", identifier -> identifier.getPath().endsWith(".json"))
-				.entrySet()) {
-			AxolotlClient.LOGGER.debug("Loaded sky: " + entry.getKey());
-			SkyboxManager.getInstance().addSkybox(new FSBSkyboxInstance(gson.fromJson(
-					new BufferedReader(new InputStreamReader(entry.getValue().getInputStream(), StandardCharsets.UTF_8))
-							.lines().collect(Collectors.joining("\n")),
-					JsonObject.class)));
-		}
-
-		for (Map.Entry<Identifier, Resource> entry : ((SearchableResourceManager) resourceManager)
-				.findResources("minecraft", "optifine/sky", identifier -> identifier.getPath().endsWith(".properties"))
-				.entrySet()) {
-			AxolotlClient.LOGGER.debug("Loaded sky: " + entry.getKey());
-			loadMCPSky("optifine", entry.getKey(), entry.getValue());
-		}
-
-		for (Map.Entry<Identifier, Resource> entry : ((SearchableResourceManager) resourceManager)
-				.findResources("minecraft", "mcpatcher/sky", identifier -> identifier.getPath().endsWith(".properties"))
-				.entrySet()) {
-			AxolotlClient.LOGGER.debug("Loaded sky: " + entry.getKey());
-			loadMCPSky("mcpatcher", entry.getKey(), entry.getValue());
-		}
-		initialized = true;
 	}
 
 	@Override

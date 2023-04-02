@@ -22,6 +22,14 @@
 
 package io.github.axolotlclient.modules.screenshotUtils;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.datatransfer.StringSelection;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.nio.file.Files;
+import java.util.Base64;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.github.axolotlclient.AxolotlClient;
@@ -37,27 +45,13 @@ import net.minecraft.util.Formatting;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.datatransfer.StringSelection;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.nio.file.Files;
-import java.util.Base64;
-
 public class ImageShare {
-
-	private final String separator = ";";//"ⓢ¢€ⓢ¢";
 
 	@Getter
 	private static final ImageShare Instance = new ImageShare();
+	private final String separator = ";";//"ⓢ¢€ⓢ¢";
 
 	private ImageShare() {
-	}
-
-	private CloseableHttpClient createHttpClient() {
-		String modVer = FabricLoader.getInstance().getModContainer("axolotlclient").orElseThrow(RuntimeException::new).getMetadata().getVersion().getFriendlyString();
-		return HttpClients.custom().setUserAgent("AxolotlClient/" + modVer + " ImageShare").build();
 	}
 
 	public void uploadImage(String url, File file) {
@@ -68,18 +62,18 @@ public class ImageShare {
 			Util.sendChatMessage(new LiteralText(I18n.translate("imageUploadFailure")));
 		} else {
 			Util.sendChatMessage(new LiteralText(I18n.translate("imageUploadSuccess") + " ")
-					.append(new LiteralText(url + "/" + downloadUrl)
-							.setStyle(new Style()
-									.setUnderline(true)
-									.setFormatting(Formatting.DARK_PURPLE)
-									.setClickEvent(new ScreenshotUtils.CustomClickEvent(null) {
-													   @Override
-													   public void doAction() {
-														   Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(url + "/" + downloadUrl), null);
-													   }
-												   }
-									)
-									.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(I18n.translate("clickToCopy")))))));
+				.append(new LiteralText(url + "/" + downloadUrl)
+					.setStyle(new Style()
+						.setUnderline(true)
+						.setFormatting(Formatting.DARK_PURPLE)
+						.setClickEvent(new ScreenshotUtils.CustomClickEvent(null) {
+										   @Override
+										   public void doAction() {
+											   Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(url + "/" + downloadUrl), null);
+										   }
+									   }
+						)
+						.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(I18n.translate("clickToCopy")))))));
 		}
 
 	}
@@ -96,6 +90,21 @@ public class ImageShare {
 		}
 
 		return "";
+	}
+
+	private CloseableHttpClient createHttpClient() {
+		String modVer = FabricLoader.getInstance().getModContainer("axolotlclient").orElseThrow(RuntimeException::new).getMetadata().getVersion().getFriendlyString();
+		return HttpClients.custom().setUserAgent("AxolotlClient/" + modVer + " ImageShare").build();
+	}
+
+	private String encodeB64(File file) {
+		try {
+			return file.getName() + separator + Base64.getEncoder().encodeToString(Files.readAllBytes(file.toPath()));
+		} catch (Exception ignored) {
+		}
+		;
+
+		return "Encoding failed!";
 	}
 
 	public ImageInstance downloadImage(String id) {
@@ -121,16 +130,6 @@ public class ImageShare {
 			}
 		}
 		return null;
-	}
-
-	private String encodeB64(File file) {
-		try {
-			return file.getName() + separator + Base64.getEncoder().encodeToString(Files.readAllBytes(file.toPath()));
-		} catch (Exception ignored) {
-		}
-		;
-
-		return "Encoding failed!";
 	}
 
 	private ImageInstance decodeB64(String data) {

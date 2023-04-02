@@ -46,7 +46,7 @@ public abstract class TntEntityRendererMixin extends EntityRenderer<TntEntity> {
 									 VertexConsumerProvider vertexConsumerProvider, int light, CallbackInfo ci) {
 		if (TntTime.getInstance().enabled.get()) {
 			super.renderLabelIfPresent(entity, TntTime.getInstance().getFuseTime(entity.getFuse()), matrixStack,
-					vertexConsumerProvider, light);
+				vertexConsumerProvider, light);
 		}
 	}
 }

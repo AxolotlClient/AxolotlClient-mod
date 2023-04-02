@@ -22,12 +22,6 @@
 
 package io.github.axolotlclient.modules.hypixel;
 
-import io.github.axolotlclient.modules.hypixel.levelhead.LevelHeadMode;
-import io.github.axolotlclient.util.ThreadExecuter;
-import net.hypixel.api.HypixelAPI;
-import net.hypixel.api.apache.ApacheHttpClient;
-import net.hypixel.api.reply.PlayerReply;
-
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
@@ -37,6 +31,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
+
+import io.github.axolotlclient.modules.hypixel.levelhead.LevelHeadMode;
+import io.github.axolotlclient.util.ThreadExecuter;
+import net.hypixel.api.HypixelAPI;
+import net.hypixel.api.apache.ApacheHttpClient;
+import net.hypixel.api.reply.PlayerReply;
 
 /**
  * Based on Osmium by Intro-Dev
@@ -48,19 +48,41 @@ import java.util.function.Supplier;
 
 public class HypixelAbstractionLayer {
 
-	private static Supplier<String> keySupplier;
-
 	private static final HashMap<String, CompletableFuture<PlayerReply>> cachedPlayerData = new HashMap<>();
-
-	private static HypixelAPI api;
-
-
-	private static boolean validApiKey = false;
-
 	private static final AtomicInteger hypixelApiCalls = new AtomicInteger(0);
+	private static Supplier<String> keySupplier;
+	private static HypixelAPI api;
+	private static boolean validApiKey = false;
 
 	public static void setApiKeySupplier(Supplier<String> supplier) {
 		keySupplier = supplier;
+	}
+
+	public static boolean hasValidAPIKey() {
+		return validApiKey;
+	}
+
+	public static int getPlayerLevel(String uuid, String mode) {
+		if (api == null) {
+			loadApiKey();
+		}
+		if (loadPlayerDataIfAbsent(uuid)) {
+			try {
+				if (Objects.equals(mode, LevelHeadMode.NETWORK.toString())) {
+					return (int) cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer().getNetworkLevel();
+				} else if (Objects.equals(mode, LevelHeadMode.BEDWARS.toString())) {
+					return cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer()
+						.getIntProperty("achievements.bedwars_level", 0);
+				} else if (Objects.equals(mode, LevelHeadMode.SKYWARS.toString())) {
+					int exp = cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer()
+						.getIntProperty("stats.SkyWars.skywars_experience", 0);
+					return Math.round(ExpCalculator.getLevelForExp(exp));
+				}
+			} catch (TimeoutException | InterruptedException | ExecutionException e) {
+				return -1;
+			}
+		}
+		return 0;
 	}
 
 	public static void loadApiKey() {
@@ -80,37 +102,6 @@ public class HypixelAbstractionLayer {
 		}
 	}
 
-	public static boolean hasValidAPIKey() {
-		return validApiKey;
-	}
-
-	public static int getPlayerLevel(String uuid, String mode) {
-		if (api == null) {
-			loadApiKey();
-		}
-		if (loadPlayerDataIfAbsent(uuid)) {
-			try {
-				if (Objects.equals(mode, LevelHeadMode.NETWORK.toString())) {
-					return (int) cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer().getNetworkLevel();
-				} else if (Objects.equals(mode, LevelHeadMode.BEDWARS.toString())) {
-					return cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer()
-							.getIntProperty("achievements.bedwars_level", 0);
-				} else if (Objects.equals(mode, LevelHeadMode.SKYWARS.toString())) {
-					int exp = cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer()
-							.getIntProperty("stats.SkyWars.skywars_experience", 0);
-					return Math.round(ExpCalculator.getLevelForExp(exp));
-				}
-			} catch (TimeoutException | InterruptedException | ExecutionException e) {
-				return -1;
-			}
-		}
-		return 0;
-	}
-
-	public static void clearPlayerData() {
-		cachedPlayerData.clear();
-	}
-
 	private static boolean loadPlayerDataIfAbsent(String uuid) {
 		if (cachedPlayerData.get(uuid) == null) {
 			// set at 115 to have a buffer in case of disparity between threads
@@ -125,11 +116,15 @@ public class HypixelAbstractionLayer {
 		return true;
 	}
 
-	private static void freePlayerData(String uuid) {
-		cachedPlayerData.remove(uuid);
+	public static void clearPlayerData() {
+		cachedPlayerData.clear();
 	}
 
 	public static void handleDisconnectEvents(UUID uuid) {
 		freePlayerData(uuid.toString());
+	}
+
+	private static void freePlayerData(String uuid) {
+		cachedPlayerData.remove(uuid);
 	}
 }

@@ -22,15 +22,15 @@
 
 package io.github.axolotlclient.util.notifications;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.github.axolotlclient.util.Util;
 import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.util.Identifier;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Notifications {
 
@@ -103,9 +103,9 @@ public class Notifications {
 		public Status(String title, String description) {
 			this.title = title;
 			width = Math.max(
-					160,
-					Math.max(MinecraftClient.getInstance().textRenderer.getStringWidth(title),
-							description == null ? 0 : MinecraftClient.getInstance().textRenderer.getStringWidth(description)));
+				160,
+				Math.max(MinecraftClient.getInstance().textRenderer.getStringWidth(title),
+					description == null ? 0 : MinecraftClient.getInstance().textRenderer.getStringWidth(description)));
 			//this.width = description.stream().mapToInt(MinecraftClient.getInstance().textRenderer::getStringWidth).max().orElse(200);
 			this.description = MinecraftClient.getInstance().textRenderer.wrapLines(description, width);
 		}

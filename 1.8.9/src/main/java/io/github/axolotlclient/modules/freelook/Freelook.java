@@ -38,25 +38,20 @@ public class Freelook extends AbstractModule {
 
 	private static final Freelook INSTANCE = new Freelook();
 	private static final KeyBinding KEY = new KeyBinding("key.freelook", Keyboard.KEY_V,
-			"category.axolotlclient");
-
+		"category.axolotlclient");
+	public final BooleanOption enabled = new BooleanOption("enabled", false);
 	private final MinecraftClient client = MinecraftClient.getInstance();
-
+	private final OptionCategory category = new OptionCategory("freelook");
+	private final EnumOption mode = new EnumOption("mode",
+		value -> FeatureDisabler.update(),
+		new String[]{"snap_perspective", "freelook"},
+		"freelook");
+	private final EnumOption perspective = new EnumOption("perspective", Perspective.values(),
+		Perspective.THIRD_PERSON_BACK.toString());
+	private final BooleanOption invert = new BooleanOption("invert", false);
+	private final BooleanOption toggle = new BooleanOption("toggle", false);
 	private float yaw, pitch;
 	private boolean active;
-
-	private final OptionCategory category = new OptionCategory("freelook");
-	public final BooleanOption enabled = new BooleanOption("enabled", false);
-	private final EnumOption mode = new EnumOption("mode",
-			value -> FeatureDisabler.update(),
-			new String[]{"snap_perspective", "freelook"},
-			"freelook");
-	private final EnumOption perspective = new EnumOption("perspective", Perspective.values(),
-			Perspective.THIRD_PERSON_BACK.toString());
-	private final BooleanOption invert = new BooleanOption("invert", false);
-
-	private final BooleanOption toggle = new BooleanOption("toggle", false);
-
 	private int previousPerspective;
 
 	public static Freelook getInstance() {
@@ -94,6 +89,12 @@ public class Freelook extends AbstractModule {
 		}
 	}
 
+	private void stop() {
+		active = false;
+		client.worldRenderer.scheduleTerrainUpdate();
+		client.options.perspective = previousPerspective;
+	}
+
 	private void start() {
 		active = true;
 
@@ -109,12 +110,6 @@ public class Freelook extends AbstractModule {
 
 		yaw = camera.yaw;
 		pitch = camera.pitch;
-	}
-
-	private void stop() {
-		active = false;
-		client.worldRenderer.scheduleTerrainUpdate();
-		client.options.perspective = previousPerspective;
 	}
 
 	public boolean consumeRotation(float dx, float dy) {

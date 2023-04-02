@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.mixin;
 
+import java.util.List;
+
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hypixel.autoboop.AutoBoop;
 import io.github.axolotlclient.modules.hypixel.autogg.AutoGG;
@@ -40,8 +42,6 @@ import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.List;
-
 @Mixin(ChatHud.class)
 public abstract class ChatHudMixin {
 
@@ -59,20 +59,20 @@ public abstract class ChatHudMixin {
 		}
 	}
 
-	@ModifyArg(method = "addMessage(Lnet/minecraft/text/Text;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;addMessage(Lnet/minecraft/text/Text;IIZ)V"))
-	public Text axolotlclient$editChat(Text message) {
-		return NickHider.getInstance().editMessage(message);
-	}
-
 	@ModifyArg(method = "addMessage(Lnet/minecraft/text/Text;I)V", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;info(Ljava/lang/String;)V"), remap = false)
 	public String axolotlclient$noNamesInLogIfHidden(String message) {
 		return axolotlclient$editChat(new LiteralText(message)).asUnformattedString();
 	}
 
+	@ModifyArg(method = "addMessage(Lnet/minecraft/text/Text;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;addMessage(Lnet/minecraft/text/Text;IIZ)V"))
+	public Text axolotlclient$editChat(Text message) {
+		return NickHider.getInstance().editMessage(message);
+	}
+
 	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;fill(IIIII)V", ordinal = 0))
 	public void axolotlclient$noBg(int x, int y, int x2, int y2, int color) {
 		io.github.axolotlclient.modules.hud.gui.hud.ChatHud hud = (io.github.axolotlclient.modules.hud.gui.hud.ChatHud) HudManager
-				.getInstance().get(io.github.axolotlclient.modules.hud.gui.hud.ChatHud.ID);
+			.getInstance().get(io.github.axolotlclient.modules.hud.gui.hud.ChatHud.ID);
 		if (hud.background.get()) {
 			DrawableHelper.fill(x, y, x2, y2, color);
 		}
@@ -81,7 +81,7 @@ public abstract class ChatHudMixin {
 	@Inject(method = "render", at = @At("HEAD"), cancellable = true)
 	public void axolotlclient$render(int ticks, CallbackInfo ci) {
 		io.github.axolotlclient.modules.hud.gui.hud.ChatHud hud = (io.github.axolotlclient.modules.hud.gui.hud.ChatHud) HudManager
-				.getInstance().get(io.github.axolotlclient.modules.hud.gui.hud.ChatHud.ID);
+			.getInstance().get(io.github.axolotlclient.modules.hud.gui.hud.ChatHud.ID);
 		if (hud.isEnabled()) {
 			hud.ticks = ticks;
 			ci.cancel();
@@ -91,7 +91,7 @@ public abstract class ChatHudMixin {
 	@Inject(method = "getTextAt", at = @At("HEAD"), cancellable = true)
 	public void axolotlclient$getTextAt(int x, int y, CallbackInfoReturnable<Text> cir) {
 		io.github.axolotlclient.modules.hud.gui.hud.ChatHud hud = (io.github.axolotlclient.modules.hud.gui.hud.ChatHud) HudManager
-				.getInstance().get(io.github.axolotlclient.modules.hud.gui.hud.ChatHud.ID);
+			.getInstance().get(io.github.axolotlclient.modules.hud.gui.hud.ChatHud.ID);
 		if (hud != null && hud.isEnabled()) {
 			cir.setReturnValue(hud.getTextAt(Util.toMCCoordsX(x), Util.toMCCoordsY(y)));
 		}
@@ -100,7 +100,7 @@ public abstract class ChatHudMixin {
 	@ModifyConstant(method = "addMessage(Lnet/minecraft/text/Text;IIZ)V", constant = @Constant(intValue = 100), expect = 2)
 	public int axolotlclient$moreChatHistory(int constant) {
 		io.github.axolotlclient.modules.hud.gui.hud.ChatHud hud = (io.github.axolotlclient.modules.hud.gui.hud.ChatHud) HudManager
-				.getInstance().get(io.github.axolotlclient.modules.hud.gui.hud.ChatHud.ID);
+			.getInstance().get(io.github.axolotlclient.modules.hud.gui.hud.ChatHud.ID);
 		int length = hud.chatHistory.get();
 
 		if (length == hud.chatHistory.getMax()) {

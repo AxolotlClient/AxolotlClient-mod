@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.modules.rpc;
 
+import java.time.Instant;
+
 import de.jcm.discordgamesdk.Core;
 import de.jcm.discordgamesdk.CreateParams;
 import de.jcm.discordgamesdk.DiscordEventAdapter;
@@ -37,8 +39,6 @@ import io.github.axolotlclient.util.OSUtil;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 
-import java.time.Instant;
-
 /**
  * This DiscordRPC module is derived from <a href="https://github.com/DeDiamondPro/HyCord">HyCord</a>.
  *
@@ -51,18 +51,17 @@ public class DiscordRPC extends AbstractModule {
 	public static Activity currentActivity;
 	public static Core discordRPC;
 	private static DiscordRPC Instance;
-	public BooleanOption enabled = new BooleanOption("enabled", value -> {
+	private static boolean running;	public BooleanOption enabled = new BooleanOption("enabled", value -> {
 		if (value) {
 			initRPC();
 		} else {
 			shutdown();
 		}
 	}, false);
-	private static boolean running;
 	public OptionCategory category = new OptionCategory("rpc");
 	public BooleanOption showActivity = new BooleanOption("showActivity", true);
 	public EnumOption showServerNameMode = new EnumOption("showServerNameMode",
-			new String[]{"showIp", "showName", "off"}, "off");
+		new String[]{"showIp", "showName", "off"}, "off");
 	public BooleanOption showTime = new BooleanOption("showTime", true);
 	Instant time = Instant.now();
 
@@ -95,11 +94,11 @@ public class DiscordRPC extends AbstractModule {
 
 		String state = switch (showServerNameMode.get()) {
 			case "showIp" -> MinecraftClient.getInstance().world == null ? "In the menu"
-					: (MinecraftClient.getInstance().getCurrentServerEntry() == null ? "Singleplayer"
-					: MinecraftClient.getInstance().getCurrentServerEntry().address);
+				: (MinecraftClient.getInstance().getCurrentServerEntry() == null ? "Singleplayer"
+				: MinecraftClient.getInstance().getCurrentServerEntry().address);
 			case "showName" -> MinecraftClient.getInstance().world == null ? "In the menu"
-					: (MinecraftClient.getInstance().getCurrentServerEntry() == null ? "Singleplayer"
-					: MinecraftClient.getInstance().getCurrentServerEntry().name);
+				: (MinecraftClient.getInstance().getCurrentServerEntry() == null ? "Singleplayer"
+				: MinecraftClient.getInstance().getCurrentServerEntry().name);
 			default -> "";
 		};
 
@@ -196,6 +195,8 @@ public class DiscordRPC extends AbstractModule {
 			}
 		}
 	}
+
+
 
 
 }

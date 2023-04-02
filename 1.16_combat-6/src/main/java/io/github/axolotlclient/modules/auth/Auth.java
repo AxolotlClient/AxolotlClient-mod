@@ -22,6 +22,11 @@
 
 package io.github.axolotlclient.modules.auth;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.stream.Collectors;
+
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.GenericOption;
@@ -39,17 +44,12 @@ import net.minecraft.client.util.Session;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.stream.Collectors;
-
 public class Auth extends Accounts implements Module {
 
 	@Getter
 	private final static Auth Instance = new Auth();
-	private final MinecraftClient client = MinecraftClient.getInstance();
 	public final BooleanOption showButton = new BooleanOption("auth.showButton", false);
+	private final MinecraftClient client = MinecraftClient.getInstance();
 	private final GenericOption viewAccounts = new GenericOption("viewAccounts", "clickToOpen", (x, y) -> client.openScreen(new AccountsScreen(client.currentScreen)));
 
 	@Override
@@ -111,7 +111,7 @@ public class Auth extends Accounts implements Module {
 		if (!account.isOffline() && MinecraftClient.getInstance().getTextureManager().getTexture(skinId) == null) {
 			try {
 				MinecraftClient.getInstance().getTextureManager().registerTexture(skinId,
-						new NativeImageBackedTexture(NativeImage.read(Files.newInputStream(getSkinFile(account).toPath()))));
+					new NativeImageBackedTexture(NativeImage.read(Files.newInputStream(getSkinFile(account).toPath()))));
 				AxolotlClient.LOGGER.debug("Loaded skin file for " + account.getName());
 			} catch (IOException e) {
 				AxolotlClient.LOGGER.warn("Couldn't load skin file for " + account.getName());

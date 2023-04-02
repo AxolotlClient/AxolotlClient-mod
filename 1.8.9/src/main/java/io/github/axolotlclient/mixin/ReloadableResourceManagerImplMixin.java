@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.mixin;
 
+import java.util.List;
+
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hud.gui.hud.PackDisplayHud;
@@ -36,8 +38,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.List;
 
 @Mixin(ReloadableResourceManagerImpl.class)
 public abstract class ReloadableResourceManagerImplMixin {

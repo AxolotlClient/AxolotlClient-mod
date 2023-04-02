@@ -22,6 +22,11 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.vanilla;
 
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
@@ -38,11 +43,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.stream.Collectors;
-
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
@@ -56,7 +56,7 @@ public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionab
 	public static final ScoreboardObjective placeholder = Util.make(() -> {
 		Scoreboard placeScore = new Scoreboard();
 		ScoreboardObjective objective = placeScore.addObjective("placeholder", ScoreboardCriterion.DUMMY,
-				Text.literal("Scoreboard"), ScoreboardCriterion.RenderType.INTEGER);
+			Text.literal("Scoreboard"), ScoreboardCriterion.RenderType.INTEGER);
 		ScoreboardPlayerScore dark = placeScore.getPlayerScore("DarkKronicle", objective);
 		dark.setScore(8780);
 
@@ -76,7 +76,7 @@ public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionab
 	private final BooleanOption scores = new BooleanOption("scores", true);
 	private final ColorOption scoreColor = new ColorOption("scorecolor", 0xFFFF5555);
 	private final EnumOption anchor = new EnumOption("anchorpoint", AnchorPoint.values(),
-			AnchorPoint.MIDDLE_RIGHT.toString());
+		AnchorPoint.MIDDLE_RIGHT.toString());
 
 	public ScoreboardHud() {
 		super(200, 146, true);
@@ -103,7 +103,7 @@ public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionab
 		}
 
 		ScoreboardObjective scoreboardObjective2 = scoreboardObjective != null ? scoreboardObjective
-				: scoreboard.getObjectiveForSlot(1);
+			: scoreboard.getObjectiveForSlot(1);
 		if (scoreboardObjective2 != null) {
 			this.renderScoreboardSidebar(matrices, scoreboardObjective2);
 		}
@@ -114,14 +114,19 @@ public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionab
 		renderScoreboardSidebar(matrices, placeholder);
 	}
 
+	@Override
+	public boolean movable() {
+		return true;
+	}
+
 	// Abusing this could break some stuff/could allow for unfair advantages. The goal is not to do this, so it won't
 	// show any more information than it would have in vanilla.
 	private void renderScoreboardSidebar(MatrixStack matrices, ScoreboardObjective objective) {
 		Scoreboard scoreboard = objective.getScoreboard();
 		Collection<ScoreboardPlayerScore> scores = scoreboard.getAllPlayerScores(objective);
 		List<ScoreboardPlayerScore> filteredScores = scores.stream()
-				.filter((testScore) -> testScore.getPlayerName() != null && !testScore.getPlayerName().startsWith("#"))
-				.collect(Collectors.toList());
+			.filter((testScore) -> testScore.getPlayerName() != null && !testScore.getPlayerName().startsWith("#"))
+			.collect(Collectors.toList());
 
 		if (filteredScores.size() > 15) {
 			scores = Lists.newArrayList(Iterables.skip(filteredScores, scores.size() - 15));
@@ -138,8 +143,8 @@ public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionab
 		ScoreboardPlayerScore scoreboardPlayerScore;
 		MutableText formattedText;
 		for (Iterator<ScoreboardPlayerScore> scoresIterator = scores.iterator(); scoresIterator
-				.hasNext(); maxWidth = Math.max(maxWidth, client.textRenderer.getWidth(formattedText) + spacerWidth
-				+ client.textRenderer.getWidth(Integer.toString(scoreboardPlayerScore.getScore())))) {
+			.hasNext(); maxWidth = Math.max(maxWidth, client.textRenderer.getWidth(formattedText) + spacerWidth
+			+ client.textRenderer.getWidth(Integer.toString(scoreboardPlayerScore.getScore())))) {
 			scoreboardPlayerScore = scoresIterator.next();
 			Team team = scoreboard.getPlayerTeam(scoreboardPlayerScore.getPlayerName());
 			formattedText = Team.decorateName(team, Text.literal(scoreboardPlayerScore.getPlayerName()));
@@ -184,13 +189,13 @@ public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionab
 			if (background.get() && backgroundColor.get().getAsInt() > 0) {
 				if (num == scoresSize) {
 					RenderUtil.drawRectangle(matrices, textOffset, relativeY - 1, maxWidth, 10,
-							backgroundColor.get().getAsInt());
+						backgroundColor.get().getAsInt());
 				} else if (num == 1) {
 					RenderUtil.drawRectangle(matrices, textOffset, relativeY, maxWidth, 10,
-							backgroundColor.get().getAsInt());
+						backgroundColor.get().getAsInt());
 				} else {
 					RenderUtil.drawRectangle(matrices, textOffset, relativeY, maxWidth, 9,
-							backgroundColor.get().getAsInt());
+						backgroundColor.get().getAsInt());
 				}
 			}
 
@@ -201,18 +206,18 @@ public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionab
 			}
 			if (this.scores.get()) {
 				drawString(matrices, score, (float) (scoreX + maxWidth - client.textRenderer.getWidth(score) - 6),
-						(float) relativeY, scoreColor.get().getAsInt(), shadow.get());
+					(float) relativeY, scoreColor.get().getAsInt(), shadow.get());
 			}
 			if (num == scoresSize) {
 				// Draw the title
 				if (background.get()) {
 					RenderUtil.drawRectangle(matrices, textOffset, relativeY - 10 - topPadding.get() * 2 - 1, maxWidth,
-							10 + topPadding.get() * 2, topColor.get());
+						10 + topPadding.get() * 2, topColor.get());
 				}
 				float title = (float) (renderX + (maxWidth - displayNameWidth) / 2);
 				if (shadow.get()) {
 					client.textRenderer.drawWithShadow(matrices, text, title,
-							(float) (relativeY - 9) - topPadding.get(), -1);
+						(float) (relativeY - 9) - topPadding.get(), -1);
 				} else {
 					client.textRenderer.draw(matrices, text, title, (float) (relativeY - 9), -1);
 				}
@@ -241,11 +246,6 @@ public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionab
 	@Override
 	public Identifier getId() {
 		return ID;
-	}
-
-	@Override
-	public boolean movable() {
-		return true;
 	}
 
 	@Override

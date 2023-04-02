@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.mixin;
 
+import java.util.Collection;
+import java.util.List;
+
 import io.github.axolotlclient.modules.particles.Particles;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleManager;
@@ -32,9 +35,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.Collection;
-import java.util.List;
 
 @Mixin(ParticleManager.class)
 public abstract class ParticleManagerMixin {
@@ -65,16 +65,16 @@ public abstract class ParticleManagerMixin {
 		Particles.getInstance().particleMap.remove(particle);
 	}
 
+	@Redirect(method = "tick", at = @At(value = "INVOKE", target = "Ljava/util/List;removeAll(Ljava/util/Collection;)Z"))
+	public boolean axolotlclient$removeEmitterParticlesWhenRemoved(List<Particle> instance, Collection<Particle> objects) {
+		return axolotlclient$removeParticlesWhenRemoved(instance, objects);
+	}
+
 	@Redirect(method = "updateLayer(Ljava/util/List;)V", at = @At(value = "INVOKE", target = "Ljava/util/List;removeAll(Ljava/util/Collection;)Z"))
 	public boolean axolotlclient$removeParticlesWhenRemoved(List<Particle> instance, Collection<Particle> objects) {
 		objects.forEach(particle -> Particles.getInstance().particleMap.remove(particle));
 
 		return instance.removeAll(objects);
-	}
-
-	@Redirect(method = "tick", at = @At(value = "INVOKE", target = "Ljava/util/List;removeAll(Ljava/util/Collection;)Z"))
-	public boolean axolotlclient$removeEmitterParticlesWhenRemoved(List<Particle> instance, Collection<Particle> objects) {
-		return axolotlclient$removeParticlesWhenRemoved(instance, objects);
 	}
 
 	@Redirect(method = "renderParticles", at = @At(value = "INVOKE", target = "Ljava/util/List;get(I)Ljava/lang/Object;"))

@@ -22,6 +22,10 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.simple;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.util.List;
+
 import com.google.common.util.concurrent.AtomicDouble;
 import io.github.axolotlclient.AxolotlClientConfig.options.IntegerOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.Option;
@@ -34,10 +38,6 @@ import net.minecraft.util.Util;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
-
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -60,29 +60,24 @@ public class ReachHud extends SimpleTextHudEntry {
 		return ID;
 	}
 
-	@Override
-	public String getValue() {
-		if (currentDist == null) {
-			return "0 " + I18n.translate("blocks");
-		} else if (lastTime + 2000 < Util.getMeasuringTimeMs()) {
-			currentDist = null;
-			return "0 " + I18n.translate("blocks");
+	public void updateDistance(Entity attacking, Entity receiving) {
+		double distance = getAttackDistance(attacking, receiving);
+		if (distance < 0) {
+			distance *= -1;
+			// This should not happen...
+			currentDist = "NaN";
+			//return;
 		}
-		return currentDist;
-	}
 
-	@Override
-	public String getPlaceholder() {
-		return "3.45 " + I18n.translate("blocks");
-	}
-
-	private static Vec3d compareTo(Vec3d compare, Vec3d test, AtomicDouble max) {
-		double dist = compare.distanceTo(test);
-		if (dist > max.get()) {
-			max.set(dist);
-			return test;
+		StringBuilder format = new StringBuilder("0");
+		if (decimalPlaces.get() > 0) {
+			format.append(".");
+			format.append("0".repeat(Math.max(0, decimalPlaces.get())));
 		}
-		return compare;
+		DecimalFormat formatter = new DecimalFormat(format.toString());
+		formatter.setRoundingMode(RoundingMode.HALF_UP);
+		currentDist = formatter.format(distance) + " " + I18n.translate("blocks");
+		lastTime = Util.getMeasuringTimeMs();
 	}
 
 	public static double getAttackDistance(Entity attacking, Entity receiving) {
@@ -105,7 +100,7 @@ public class ReachHud extends SimpleTextHudEntry {
 		Box box = attacking.getBoundingBox().stretch(rotation.multiply(d)).expand(1.0, 1.0, 1.0);
 
 		EntityHitResult result = ProjectileUtil.raycast(attacking, camera, possibleHits, box,
-				entity -> entity.getId() == receiving.getId(), d);
+			entity -> entity.getId() == receiving.getId(), d);
 		if (result == null || result.getEntity() == null) {
 			// This should not happen...
 			return -1;
@@ -113,24 +108,13 @@ public class ReachHud extends SimpleTextHudEntry {
 		return camera.distanceTo(result.getPos());
 	}
 
-	public void updateDistance(Entity attacking, Entity receiving) {
-		double distance = getAttackDistance(attacking, receiving);
-		if (distance < 0) {
-			distance *= -1;
-			// This should not happen...
-			currentDist = "NaN";
-			//return;
+	private static Vec3d compareTo(Vec3d compare, Vec3d test, AtomicDouble max) {
+		double dist = compare.distanceTo(test);
+		if (dist > max.get()) {
+			max.set(dist);
+			return test;
 		}
-
-		StringBuilder format = new StringBuilder("0");
-		if (decimalPlaces.get() > 0) {
-			format.append(".");
-			format.append("0".repeat(Math.max(0, decimalPlaces.get())));
-		}
-		DecimalFormat formatter = new DecimalFormat(format.toString());
-		formatter.setRoundingMode(RoundingMode.HALF_UP);
-		currentDist = formatter.format(distance) + " " + I18n.translate("blocks");
-		lastTime = Util.getMeasuringTimeMs();
+		return compare;
 	}
 
 	@Override
@@ -138,5 +122,21 @@ public class ReachHud extends SimpleTextHudEntry {
 		List<Option<?>> options = super.getConfigurationOptions();
 		options.add(decimalPlaces);
 		return options;
+	}
+
+	@Override
+	public String getValue() {
+		if (currentDist == null) {
+			return "0 " + I18n.translate("blocks");
+		} else if (lastTime + 2000 < Util.getMeasuringTimeMs()) {
+			currentDist = null;
+			return "0 " + I18n.translate("blocks");
+		}
+		return currentDist;
+	}
+
+	@Override
+	public String getPlaceholder() {
+		return "3.45 " + I18n.translate("blocks");
 	}
 }

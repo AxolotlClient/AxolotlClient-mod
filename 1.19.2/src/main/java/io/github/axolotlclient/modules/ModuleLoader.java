@@ -22,15 +22,15 @@
 
 package io.github.axolotlclient.modules;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.config.screen.CreditsScreen;
 import org.quiltmc.loader.api.ModContributor;
 import org.quiltmc.loader.api.ModMetadata;
 import org.quiltmc.loader.api.QuiltLoader;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class ModuleLoader {
 
@@ -46,15 +46,15 @@ public class ModuleLoader {
 					List<String> authorsNContributors = new ArrayList<>();
 
 					List<String> authors = data.contributors().stream()
-							.filter(contributor -> contributor.roles().contains("Author")
-									|| contributor.roles().contains("Owner"))
-							.map(ModContributor::name).collect(Collectors.toList());
+						.filter(contributor -> contributor.roles().contains("Author")
+							|| contributor.roles().contains("Owner"))
+						.map(ModContributor::name).collect(Collectors.toList());
 
 					List<String> contributors = data.contributors().stream().map(ModContributor::name)
-							.filter(name -> !authors.contains(name)).toList();
+						.filter(name -> !authors.contains(name)).toList();
 					if (authors.isEmpty()) {
 						data.contributors().stream().findFirst()
-								.ifPresent(modContributor -> authors.add(modContributor.name()));
+							.ifPresent(modContributor -> authors.add(modContributor.name()));
 					}
 					authorsNContributors.add("Author(s):");
 					authorsNContributors.addAll(authors);

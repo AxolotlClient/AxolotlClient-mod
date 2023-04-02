@@ -32,8 +32,8 @@ public class AuthWidget extends ButtonWidget {
 
 	public AuthWidget() {
 		super(242, 10, 10,
-				MinecraftClient.getInstance().textRenderer.getStringWidth(Auth.getInstance().getCurrent().getName()) + 28,
-				20, (!Auth.getInstance().getCurrent().isOffline() ? "    " : "") + Auth.getInstance().getCurrent().getName());
+			MinecraftClient.getInstance().textRenderer.getStringWidth(Auth.getInstance().getCurrent().getName()) + 28,
+			20, (!Auth.getInstance().getCurrent().isOffline() ? "    " : "") + Auth.getInstance().getCurrent().getName());
 		skinId = new Identifier(Auth.getInstance().getSkinTextureId(Auth.getInstance().getCurrent()));
 	}
 

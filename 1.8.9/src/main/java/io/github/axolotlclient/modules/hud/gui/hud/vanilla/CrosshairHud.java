@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.vanilla;
 
+import java.util.List;
+
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.AxolotlClientConfig.options.*;
@@ -39,8 +41,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -62,22 +62,22 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
 	private final ColorOption containerColor = new ColorOption("blockcolor", Color.SELECTOR_BLUE);
 
 	private final GraphicsOption customTextureGraphics = new GraphicsOption("customTextureGraphics",
-			new int[][]{
-					new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-					new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-					new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-					new int[]{0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0},
-					new int[]{0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0},
-					new int[]{0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0},
-					new int[]{0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0},
-					new int[]{0, 0, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 0, 0},
-					new int[]{0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0},
-					new int[]{0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0},
-					new int[]{0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0},
-					new int[]{0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0},
-					new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-					new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-					new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},}, true);
+		new int[][]{
+			new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			new int[]{0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0},
+			new int[]{0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0},
+			new int[]{0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0},
+			new int[]{0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0},
+			new int[]{0, 0, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 0, 0},
+			new int[]{0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0},
+			new int[]{0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0},
+			new int[]{0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0},
+			new int[]{0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0},
+			new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},}, true);
 
 	public CrosshairHud() {
 		super(15, 15);
@@ -133,7 +133,7 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
 		scale();
 		Color color = getColor();
 		GlStateManager.color((float) color.getRed() / 255, (float) color.getGreen() / 255,
-				(float) color.getBlue() / 255, 1F);
+			(float) color.getBlue() / 255, 1F);
 		if (color == defaultColor.get() && applyBlend.get()) {
 			GlStateManager.enableBlend();
 			GlStateManager.blendFuncSeparate(775, 769, 1, 0);
@@ -153,7 +153,7 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
 
 			// Draw crosshair
 			client.inGameHud.drawTexture((int) (((Util.getWindow().getScaledWidth() / getScale()) - 14) / 2),
-					(int) (((Util.getWindow().getScaledHeight() / getScale()) - 14) / 2), 0, 0, 16, 16);
+				(int) (((Util.getWindow().getScaledHeight() / getScale()) - 14) / 2), 0, 0, 16, 16);
 		} else if (type.get().equals(Crosshair.CUSTOM.toString())) {
 			customTextureGraphics.bindTexture();
 			drawTexture(x + (width / 2) - (15 / 2), y + height / 2 - 15 / 2 - 1, 0, 0, 15, 15, 15, 15);
@@ -175,9 +175,9 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
 			BlockPos blockPos = hit.getBlockPos();
 			World world = this.client.world;
 			if (world.getBlockState(blockPos).getBlock() != null
-					&& (world.getBlockState(blockPos).getBlock() instanceof ChestBlock
-					|| world.getBlockState(blockPos).getBlock() instanceof EnderChestBlock
-					|| world.getBlockState(blockPos).getBlock() instanceof HopperBlock)) {
+				&& (world.getBlockState(blockPos).getBlock() instanceof ChestBlock
+				|| world.getBlockState(blockPos).getBlock() instanceof EnderChestBlock
+				|| world.getBlockState(blockPos).getBlock() instanceof HopperBlock)) {
 				return containerColor.get();
 			}
 		}

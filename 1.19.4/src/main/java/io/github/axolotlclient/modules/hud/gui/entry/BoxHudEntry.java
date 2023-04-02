@@ -22,14 +22,14 @@
 
 package io.github.axolotlclient.modules.hud.gui.entry;
 
+import java.util.List;
+
 import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.ColorOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.Option;
 import io.github.axolotlclient.modules.hud.gui.AbstractHudEntry;
 import net.minecraft.client.util.math.MatrixStack;
-
-import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.

@@ -39,7 +39,7 @@ public abstract class BackgroundRendererMixin {
 	private static void axolotlclient$applyNoFog(Camera camera, BackgroundRenderer.FogType fogType, float viewDistance,
 												 boolean thickFog, float tickDelta, CallbackInfo ci) {
 		if (camera.getSubmersionType() == CameraSubmersionType.NONE
-				&& (thickFog || fogType == BackgroundRenderer.FogType.FOG_TERRAIN)) {
+			&& (thickFog || fogType == BackgroundRenderer.FogType.FOG_TERRAIN)) {
 			if (SkyboxManager.getInstance().hasSkyBoxes()) {
 				RenderSystem.setShaderFogStart(Short.MAX_VALUE - 1);
 				RenderSystem.setShaderFogEnd(Short.MAX_VALUE);

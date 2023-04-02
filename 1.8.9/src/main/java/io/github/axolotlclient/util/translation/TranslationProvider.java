@@ -22,6 +22,11 @@
 
 package io.github.axolotlclient.util.translation;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.*;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -29,11 +34,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.*;
 
 /**
  * This file is derived from <a href="https://github.com/Sol-Client/Client">Sol Client</a>.
@@ -48,19 +48,6 @@ public class TranslationProvider {
 	private static final JsonParser parser = new JsonParser();
 
 	private static final Map<String, String> TRANSLATIONS = new HashMap<>();
-
-	public static void clear() {
-		TRANSLATIONS.clear();
-	}
-
-	public static void accept(InputStream json) {
-		JsonObject obj = parser.parse(new InputStreamReader(json)).getAsJsonObject();
-		for (Map.Entry<String, JsonElement> entry : obj.entrySet()) {
-			String key = entry.getKey();
-			String value = entry.getValue().getAsString();
-			TRANSLATIONS.put(key, value);
-		}
-	}
 
 	public static String translate(String key, Object... args) {
 		String translated = TRANSLATIONS.getOrDefault(key, "axolotlclient." + key);
@@ -91,7 +78,7 @@ public class TranslationProvider {
 
 			resources.addAll(resourceManager.getAllResources(new Identifier("axolotlclient", "lang/en_us.json")));
 			resources.addAll(resourceManager.getAllResources(
-					new Identifier("axolotlclient", "lang/" + mc.options.language.toLowerCase(Locale.ROOT) + ".json")));
+				new Identifier("axolotlclient", "lang/" + mc.options.language.toLowerCase(Locale.ROOT) + ".json")));
 
 			for (Resource resource : resources) {
 				try (InputStream in = resource.getInputStream()) {
@@ -99,6 +86,19 @@ public class TranslationProvider {
 				}
 			}
 		} catch (IOException ignored) {
+		}
+	}
+
+	public static void clear() {
+		TRANSLATIONS.clear();
+	}
+
+	public static void accept(InputStream json) {
+		JsonObject obj = parser.parse(new InputStreamReader(json)).getAsJsonObject();
+		for (Map.Entry<String, JsonElement> entry : obj.entrySet()) {
+			String key = entry.getKey();
+			String value = entry.getValue().getAsString();
+			TRANSLATIONS.put(key, value);
 		}
 	}
 

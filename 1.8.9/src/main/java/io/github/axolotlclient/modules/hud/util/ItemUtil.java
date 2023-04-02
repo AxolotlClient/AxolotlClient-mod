@@ -22,6 +22,12 @@
 
 package io.github.axolotlclient.modules.hud.util;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import com.mojang.blaze3d.platform.GlStateManager;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.MinecraftClient;
@@ -32,12 +38,6 @@ import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Formatting;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -99,6 +99,21 @@ public class ItemUtil {
 		return list;
 	}
 
+	public static Optional<ItemUtil.ItemStorage> getItemFromItem(ItemStack item, List<ItemUtil.ItemStorage> list) {
+		ItemStack compare = item.copy();
+		compare.count = 1;
+		for (ItemUtil.ItemStorage storage : list) {
+			if (isEqual(storage.stack, compare)) {
+				return Optional.of(storage);
+			}
+		}
+		return Optional.empty();
+	}
+
+	private static boolean isEqual(ItemStack stack, ItemStack compare) {
+		return stack != null && compare != null && stack.getItem() == compare.getItem();
+	}
+
 	public static ArrayList<ItemUtil.TimedItemStorage> removeOld(List<ItemUtil.TimedItemStorage> list, int time) {
 		ArrayList<ItemUtil.TimedItemStorage> stored = new ArrayList<>();
 		for (ItemUtil.TimedItemStorage storage : list) {
@@ -119,21 +134,6 @@ public class ItemUtil {
 			}
 		}
 		return Optional.empty();
-	}
-
-	public static Optional<ItemUtil.ItemStorage> getItemFromItem(ItemStack item, List<ItemUtil.ItemStorage> list) {
-		ItemStack compare = item.copy();
-		compare.count = 1;
-		for (ItemUtil.ItemStorage storage : list) {
-			if (isEqual(storage.stack, compare)) {
-				return Optional.of(storage);
-			}
-		}
-		return Optional.empty();
-	}
-
-	private static boolean isEqual(ItemStack stack, ItemStack compare) {
-		return stack != null && compare != null && stack.getItem() == compare.getItem();
 	}
 
 	public static List<ItemStorage> storageFromItem(List<ItemStack> items) {
@@ -187,7 +187,7 @@ public class ItemUtil {
 				GlStateManager.disableDepthTest();
 				GlStateManager.disableBlend();
 				renderer.draw(string, (float) (x + 19 - 2 - renderer.getStringWidth(string)), (float) (y + 6 + 3),
-						16777215, shadow);
+					16777215, shadow);
 				GlStateManager.enableLighting();
 				GlStateManager.enableDepthTest();
 			}

@@ -22,6 +22,10 @@
 
 package io.github.axolotlclient.modules.hud;
 
+import java.awt.*;
+import java.util.List;
+import java.util.Optional;
+
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
@@ -36,10 +40,6 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.resource.language.I18n;
 
-import java.awt.*;
-import java.util.List;
-import java.util.Optional;
-
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
@@ -51,15 +51,20 @@ public class HudEditScreen extends Screen {
 
 	private static final BooleanOption snapping = new BooleanOption("snapping", true);
 	private static final OptionCategory hudEditScreenCategory = new OptionCategory("hudEditScreen");
-	private HudEntry current;
-	private DrawPosition offset = null;
-	private boolean mouseDown;
-	private SnappingHelper snap;
-	private final Screen parent;
 
 	static {
 		hudEditScreenCategory.add(snapping);
 		AxolotlClient.config.addSubCategory(hudEditScreenCategory);
+	}
+
+	private final Screen parent;
+	private HudEntry current;
+	private DrawPosition offset = null;
+	private boolean mouseDown;
+	private SnappingHelper snap;
+
+	public HudEditScreen() {
+		this(null);
 	}
 
 	public HudEditScreen(Screen parent) {
@@ -69,15 +74,21 @@ public class HudEditScreen extends Screen {
 		this.parent = parent;
 	}
 
-	public HudEditScreen() {
-		this(null);
+	private void updateSnapState() {
+		if (snapping.get() && current != null) {
+			List<Rectangle> bounds = HudManager.getInstance().getAllBounds();
+			bounds.remove(current.getTrueBounds());
+			snap = new SnappingHelper(bounds, current.getTrueBounds());
+		} else if (snap != null) {
+			snap = null;
+		}
 	}
 
 	@Override
 	public void render(int mouseX, int mouseY, float delta) {
 		if (MinecraftClient.getInstance().world != null)
 			fillGradient(0, 0, width, height, new Color(0xB0100E0E, true).hashCode(),
-					new Color(0x46212020, true).hashCode());
+				new Color(0x46212020, true).hashCode());
 		else {
 			renderDirtBackground(0);
 		}
@@ -97,20 +108,20 @@ public class HudEditScreen extends Screen {
 	public void mouseClicked(int mouseX, int mouseY, int button) {
 		super.mouseClicked(mouseX, mouseY, button);
 		Optional<HudEntry> entry = HudManager.getInstance().getEntryXY(Math.round(mouseX),
-				Math.round(mouseY));
+			Math.round(mouseY));
 		if (button == 0) {
 			mouseDown = true;
 			if (entry.isPresent()) {
 				current = entry.get();
 				offset = new DrawPosition(Math.round(mouseX - current.getTruePos().x()),
-						Math.round(mouseY - current.getTruePos().y()));
+					Math.round(mouseY - current.getTruePos().y()));
 				updateSnapState();
 			} else {
 				current = null;
 			}
 		} else if (button == 1) {
 			entry.ifPresent(abstractHudEntry -> MinecraftClient.getInstance().setScreen(
-					new OptionsScreenBuilder(this, abstractHudEntry.getOptionsAsCategory(), AxolotlClient.modid)));
+				new OptionsScreenBuilder(this, abstractHudEntry.getOptionsAsCategory(), AxolotlClient.modid)));
 		}
 	}
 
@@ -146,43 +157,19 @@ public class HudEditScreen extends Screen {
 		}
 	}
 
-	private void updateSnapState() {
-		if (snapping.get() && current != null) {
-			List<Rectangle> bounds = HudManager.getInstance().getAllBounds();
-			bounds.remove(current.getTrueBounds());
-			snap = new SnappingHelper(bounds, current.getTrueBounds());
-		} else if (snap != null) {
-			snap = null;
-		}
-	}
-
-	@Override
-	public void init() {
-		this.buttons.add(new ButtonWidget(3, width / 2 - 50, height / 2 + 12, 100, 20,
-				I18n.translate("hud.snapping") + ": " + I18n.translate(snapping.get() ? "options.on" : "options.off")));
-
-		this.buttons.add(
-				new ButtonWidget(1, width / 2 - 75, height / 2 - 10, 150, 20, I18n.translate("hud.clientOptions")));
-
-		if (parent != null)
-			buttons.add(new ButtonWidget(0, width / 2 - 75, height - 50 + 22, 150, 20, I18n.translate("back")));
-		else
-			buttons.add(new ButtonWidget(2, width / 2 - 75, height - 50 + 22, 150, 20, I18n.translate("close")));
-	}
-
 	@Override
 	protected void buttonClicked(ButtonWidget button) {
 		switch (button.id) {
 			case 3:
 				snapping.toggle();
 				button.message = I18n.translate("hud.snapping") + ": "
-						+ I18n.translate(snapping.get() ? "options.on" : "options.off");
+					+ I18n.translate(snapping.get() ? "options.on" : "options.off");
 				AxolotlClient.configManager.save();
 				break;
 			case 1:
 				MinecraftClient.getInstance().setScreen(new OptionsScreenBuilder(this,
-						(OptionCategory) new OptionCategory("config", false).addSubCategories(AxolotlClient.CONFIG.getCategories()),
-						AxolotlClient.modid));
+					(OptionCategory) new OptionCategory("config", false).addSubCategories(AxolotlClient.CONFIG.getCategories()),
+					AxolotlClient.modid));
 				break;
 			case 0:
 				MinecraftClient.getInstance().setScreen(parent);
@@ -191,5 +178,19 @@ public class HudEditScreen extends Screen {
 				MinecraftClient.getInstance().setScreen(null);
 				break;
 		}
+	}
+
+	@Override
+	public void init() {
+		this.buttons.add(new ButtonWidget(3, width / 2 - 50, height / 2 + 12, 100, 20,
+			I18n.translate("hud.snapping") + ": " + I18n.translate(snapping.get() ? "options.on" : "options.off")));
+
+		this.buttons.add(
+			new ButtonWidget(1, width / 2 - 75, height / 2 - 10, 150, 20, I18n.translate("hud.clientOptions")));
+
+		if (parent != null)
+			buttons.add(new ButtonWidget(0, width / 2 - 75, height - 50 + 22, 150, 20, I18n.translate("back")));
+		else
+			buttons.add(new ButtonWidget(2, width / 2 - 75, height - 50 + 22, 150, 20, I18n.translate("close")));
 	}
 }

@@ -37,10 +37,6 @@ public abstract class HandledScreenMixin {
 
 	@Shadow
 	private Slot focusedSlot;
-
-	@Shadow
-	protected abstract boolean handleHotbarKeyPressed(int keyCode);
-
 	private Slot cachedSlot;
 
 	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;popMatrix()V"))
@@ -63,4 +59,7 @@ public abstract class HandledScreenMixin {
 	private void axolotlclient$mouseClickedTail(int mouseX, int mouseY, int mouseButton, CallbackInfo ci) {
 		handleHotbarKeyPressed(mouseButton - 100);
 	}
+
+	@Shadow
+	protected abstract boolean handleHotbarKeyPressed(int keyCode);
 }

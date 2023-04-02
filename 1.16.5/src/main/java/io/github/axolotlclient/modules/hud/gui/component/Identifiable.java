@@ -36,11 +36,13 @@ import net.minecraft.util.Identifier;
 public interface Identifiable {
 
 	/**
-	 * Returns a unique identifier for this object
+	 * The translated name of the object
 	 *
-	 * @return The identifier
+	 * @return String containing the name
 	 */
-	Identifier getId();
+	default String getName() {
+		return I18n.translate(getNameKey());
+	}
 
 	/**
 	 * Gets the display name key
@@ -52,11 +54,9 @@ public interface Identifiable {
 	}
 
 	/**
-	 * The translated name of the object
+	 * Returns a unique identifier for this object
 	 *
-	 * @return String containing the name
+	 * @return The identifier
 	 */
-	default String getName() {
-		return I18n.translate(getNameKey());
-	}
+	Identifier getId();
 }

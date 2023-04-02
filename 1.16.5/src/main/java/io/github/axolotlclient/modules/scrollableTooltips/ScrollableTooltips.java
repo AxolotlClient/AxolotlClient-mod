@@ -31,17 +31,14 @@ import net.minecraft.client.gui.screen.Screen;
 
 public class ScrollableTooltips extends AbstractModule {
 
-	public int tooltipOffsetX;
-	public int tooltipOffsetY;
-
 	private static final ScrollableTooltips Instance = new ScrollableTooltips();
-
-	private final OptionCategory category = new OptionCategory("scrollableTooltips");
-
 	public final BooleanOption enabled = new BooleanOption("enabled", false);
 	public final BooleanOption enableShiftHorizontalScroll = new BooleanOption("shiftHorizontalScroll", true);
 	protected final IntegerOption scrollAmount = new IntegerOption("scrollAmount", 5, 1, 20);
 	protected final BooleanOption inverse = new BooleanOption("inverse", false);
+	private final OptionCategory category = new OptionCategory("scrollableTooltips");
+	public int tooltipOffsetX;
+	public int tooltipOffsetY;
 
 	public static ScrollableTooltips getInstance() {
 		return Instance;
@@ -55,13 +52,6 @@ public class ScrollableTooltips extends AbstractModule {
 		category.add(inverse);
 
 		AxolotlClient.CONFIG.rendering.addSubCategory(category);
-	}
-
-	protected boolean applyInverse(boolean value) {
-		if (inverse.get()) {
-			return !value;
-		}
-		return value;
 	}
 
 	public void onScroll(boolean reverse) {
@@ -78,6 +68,13 @@ public class ScrollableTooltips extends AbstractModule {
 				tooltipOffsetY += scrollAmount.get();
 			}
 		}
+	}
+
+	protected boolean applyInverse(boolean value) {
+		if (inverse.get()) {
+			return !value;
+		}
+		return value;
 	}
 
 	public void resetScroll() {

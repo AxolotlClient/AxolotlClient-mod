@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.mixin;
 
+import java.util.Objects;
+import java.util.function.Supplier;
+
 import io.github.axolotlclient.modules.hud.HudEditScreen;
 import io.github.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
 import io.github.axolotlclient.modules.hypixel.HypixelMods;
@@ -29,7 +32,6 @@ import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
-
 import org.quiltmc.loader.api.QuiltLoader;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -37,38 +39,35 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-import java.util.Objects;
-import java.util.function.Supplier;
-
 @Mixin(GameMenuScreen.class)
 public abstract class GameMenuScreenMixin {
-
-	@Shadow
-	protected abstract ButtonWidget m_rkfzqxdi(Text text, String string);
-	
-	@Shadow
-	protected abstract ButtonWidget m_cqzqwlun(Text text, Supplier<Screen> supplier);
 
 	@Redirect(method = "initWidgets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/GameMenuScreen;m_rkfzqxdi(Lnet/minecraft/text/Text;Ljava/lang/String;)Lnet/minecraft/client/gui/widget/ButtonWidget;", ordinal = 1))
 	private ButtonWidget axolotlclient$addClientOptionsButton(GameMenuScreen instance, Text text, String string) {
 		if (axolotlclient$hasModMenu())
 			return m_rkfzqxdi(text, string);
-		
+
 		return m_cqzqwlun(Text.translatable("title_short"), () -> new HudEditScreen(((GameMenuScreen) (Object) this)));
 	}
+
+	private static boolean axolotlclient$hasModMenu() {
+		return QuiltLoader.isModLoaded("modmenu") && !QuiltLoader.isModLoaded("axolotlclient-modmenu");
+	}
+
+	@Shadow
+	protected abstract ButtonWidget m_rkfzqxdi(Text text, String string);
+
+	@Shadow
+	protected abstract ButtonWidget m_cqzqwlun(Text text, Supplier<Screen> supplier);
 
 	@ModifyArg(method = "initWidgets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget;builder(Lnet/minecraft/text/Text;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;)Lnet/minecraft/client/gui/widget/ButtonWidget$Builder;", ordinal = 1), index = 1)
 	private ButtonWidget.PressAction axolotlclient$clearFeatureRestrictions(ButtonWidget.PressAction onPress) {
 		return (buttonWidget) -> {
 			if (Objects.equals(HypixelMods.getInstance().cacheMode.get(),
-					HypixelMods.HypixelCacheMode.ON_CLIENT_DISCONNECT.toString())) {
+				HypixelMods.HypixelCacheMode.ON_CLIENT_DISCONNECT.toString())) {
 				HypixelAbstractionLayer.clearPlayerData();
 			}
 			onPress.onPress(buttonWidget);
 		};
-	}
-
-	private static boolean axolotlclient$hasModMenu() {
-		return QuiltLoader.isModLoaded("modmenu") && !QuiltLoader.isModLoaded("axolotlclient-modmenu");
 	}
 }

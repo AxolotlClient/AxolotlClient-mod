@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.modules.unfocusedFpsLimiter;
 
+import java.util.concurrent.locks.LockSupport;
+
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.FloatOption;
@@ -34,8 +36,6 @@ import net.minecraft.client.sound.SoundCategory;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
-
-import java.util.concurrent.locks.LockSupport;
 
 /**
  * This module is based on the mod DynamicFps by juliand665.
@@ -55,6 +55,13 @@ public class UnfocusedFpsLimiter extends AbstractModule {
 	private final FloatOption unfocusedVolumeMultiplier = new FloatOption("unfocusedVolumeMultiplier", 0.25f, 0f, 1f);
 	private final FloatOption hiddenVolumeMultiplier = new FloatOption("hiddenVolumeMultiplier", 0f, 0f, 1f);
 	private final BooleanOption runGCOnUnfocus = new BooleanOption("runGCOnUnfocus", false);
+	private boolean isFocused, isVisible, isHovered;
+	private long lastRender;
+	private boolean wasFocused = true;
+	private boolean wasVisible = true;
+	// we always render one last frame before actually reducing FPS, so the hud text shows up instantly when forcing low fps.
+	// additionally, this would enable mods which render differently while mc is inactive.
+	private boolean hasRenderedLastFrame = false;
 
 	@Override
 	public void init() {
@@ -62,9 +69,6 @@ public class UnfocusedFpsLimiter extends AbstractModule {
 		category.add(enabled, reduceFPSWhenUnfocused, unfocusedFPS, restoreOnHover, unfocusedVolumeMultiplier, hiddenVolumeMultiplier, runGCOnUnfocus);
 		AxolotlClient.CONFIG.rendering.add(category);
 	}
-
-	private boolean isFocused, isVisible, isHovered;
-	private long lastRender;
 
 	public boolean checkForRender() {
 
@@ -87,9 +91,6 @@ public class UnfocusedFpsLimiter extends AbstractModule {
 		return true;
 	}
 
-	private boolean wasFocused = true;
-	private boolean wasVisible = true;
-
 	private void checkForStateChanges() {
 		if (isFocused != wasFocused) {
 			wasFocused = isFocused;
@@ -109,47 +110,6 @@ public class UnfocusedFpsLimiter extends AbstractModule {
 			}
 		}
 	}
-
-	private void onFocus() {
-		setVolumeMultiplier(1);
-	}
-
-	private void onUnfocus() {
-		if (isVisible) {
-			setVolumeMultiplier(unfocusedVolumeMultiplier.get());
-		}
-
-		if (runGCOnUnfocus.get()) {
-			System.gc();
-		}
-	}
-
-	private void onAppear() {
-		if (!isFocused) {
-			setVolumeMultiplier(unfocusedVolumeMultiplier.get());
-		}
-	}
-
-	private void onDisappear() {
-		setVolumeMultiplier(hiddenVolumeMultiplier.get());
-	}
-
-	private void setVolumeMultiplier(float multiplier) {
-		// setting the volume to 0 stops all sounds (including music), which we want to avoid if possible.
-		boolean clientWillPause = !isFocused && client.options.pauseOnLostFocus && client.currentScreen == null;
-		// if the client would pause anyway, we don't need to do anything because that will already pause all sounds.
-		if (multiplier == 0 && clientWillPause) return;
-
-		float baseVolume = MinecraftClient.getInstance().options.getSoundVolume(SoundCategory.MASTER);
-		MinecraftClient.getInstance().getSoundManager().updateSoundVolume(
-				SoundCategory.MASTER,
-				baseVolume * multiplier
-		);
-	}
-
-	// we always render one last frame before actually reducing FPS, so the hud text shows up instantly when forcing low fps.
-	// additionally, this would enable mods which render differently while mc is inactive.
-	private boolean hasRenderedLastFrame = false;
 
 	private boolean checkForRender(long timeSinceLastRender) {
 		Integer fpsOverride = fpsOverride();
@@ -177,6 +137,38 @@ public class UnfocusedFpsLimiter extends AbstractModule {
 		return false;
 	}
 
+	private void onFocus() {
+		setVolumeMultiplier(1);
+	}
+
+	private void onUnfocus() {
+		if (isVisible) {
+			setVolumeMultiplier(unfocusedVolumeMultiplier.get());
+		}
+
+		if (runGCOnUnfocus.get()) {
+			System.gc();
+		}
+	}
+
+	private void onAppear() {
+		if (!isFocused) {
+			setVolumeMultiplier(unfocusedVolumeMultiplier.get());
+		}
+	}
+
+	private void onDisappear() {
+		setVolumeMultiplier(hiddenVolumeMultiplier.get());
+	}
+
+	@Nullable
+	private Integer fpsOverride() {
+		if (!isVisible) return 0;
+		if (restoreOnHover.get() && isHovered) return null;
+		if (reduceFPSWhenUnfocused.get() && !Display.isActive()) return unfocusedFPS.get();
+		return null;
+	}
+
 	/**
 	 * force minecraft to idle because otherwise we'll be busy checking for render again and again
 	 */
@@ -186,11 +178,16 @@ public class UnfocusedFpsLimiter extends AbstractModule {
 		LockSupport.parkNanos("waiting to render", waitMillis * 1_000_000);
 	}
 
-	@Nullable
-	private Integer fpsOverride() {
-		if (!isVisible) return 0;
-		if (restoreOnHover.get() && isHovered) return null;
-		if (reduceFPSWhenUnfocused.get() && !Display.isActive()) return unfocusedFPS.get();
-		return null;
+	private void setVolumeMultiplier(float multiplier) {
+		// setting the volume to 0 stops all sounds (including music), which we want to avoid if possible.
+		boolean clientWillPause = !isFocused && client.options.pauseOnLostFocus && client.currentScreen == null;
+		// if the client would pause anyway, we don't need to do anything because that will already pause all sounds.
+		if (multiplier == 0 && clientWillPause) return;
+
+		float baseVolume = MinecraftClient.getInstance().options.getSoundVolume(SoundCategory.MASTER);
+		MinecraftClient.getInstance().getSoundManager().updateSoundVolume(
+			SoundCategory.MASTER,
+			baseVolume * multiplier
+		);
 	}
 }

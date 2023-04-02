@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.modules.sky;
 
+import java.util.Locale;
+import java.util.Objects;
+
 import com.google.gson.JsonObject;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -38,9 +41,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Matrix4f;
 import org.lwjgl.opengl.GL14;
 
-import java.util.Locale;
-import java.util.Objects;
-
 /**
  * This implementation of custom skies is based on the FabricSkyBoxes mod by AMereBagatelle
  * <a href="https://github.com/AMereBagatelle/FabricSkyBoxes">Github Link.</a>
@@ -52,13 +52,9 @@ import java.util.Objects;
 
 public abstract class SkyboxInstance {
 
-	JsonObject object;
-	float alpha = 1F;
-	Identifier[] textures = new Identifier[6];
-	int[] fade = new int[4];
-
+	protected final Identifier MOON_PHASES = new Identifier("textures/environment/moon_phases.png");
+	protected final Identifier SUN = new Identifier("textures/environment/sun.png");
 	protected int blendMode = 1;
-
 	// ! These are the options variables.  Do not mess with these.
 	protected boolean alwaysOn;
 	protected float maxAlpha = 1f;
@@ -70,13 +66,13 @@ public abstract class SkyboxInstance {
 	protected float rotationSpeed = 1F;
 	protected float[] rotationStatic = new float[]{0, 0, 0};
 	protected float[] rotationAxis = new float[]{0, 0, 0};
-
 	protected boolean showSun = true;
 	protected boolean showMoon = true;
 	protected boolean showStars = true;
-
-	protected final Identifier MOON_PHASES = new Identifier("textures/environment/moon_phases.png");
-	protected final Identifier SUN = new Identifier("textures/environment/sun.png");
+	JsonObject object;
+	float alpha = 1F;
+	Identifier[] textures = new Identifier[6];
+	int[] fade = new int[4];
 
 	public SkyboxInstance(JsonObject json) {
 		this.object = json;
@@ -172,6 +168,19 @@ public abstract class SkyboxInstance {
 		}
 	}
 
+	public void render(MatrixStack matrices, float tickDelta) {
+		float brightness = MinecraftClient.getInstance().world.getRainGradient(tickDelta);
+		matrices.push();
+		setupBlend(brightness);
+		setupRotate(matrices, tickDelta, brightness);
+		renderSkybox(matrices);
+		clearBlend(brightness);
+		clearRotate(matrices);
+		matrices.pop();
+		renderDecorations(matrices, tickDelta);
+		RenderSystem.enableTexture();
+	}
+
 	protected void setupBlend(float brightness) {
 		if (manualBlend) {
 			RenderSystem.enableBlend();
@@ -233,12 +242,6 @@ public abstract class SkyboxInstance {
 		RenderSystem.enableTexture();
 	}
 
-	protected void clearBlend(float brightness) {
-		RenderSystem.enableBlend();
-		RenderSystem.blendFunc(770, 1);
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, brightness);
-	}
-
 	protected void setupRotate(MatrixStack matrices, float delta, float brightness) {
 		matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(rotationStatic[0]));
 		matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(rotationStatic[1]));
@@ -250,11 +253,19 @@ public abstract class SkyboxInstance {
 			matrices.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(rotationAxis[2]));
 			matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(-90.0F));
 			matrices.multiply(Vector3f.NEGATIVE_X.getDegreesQuaternion(
-					MinecraftClient.getInstance().world.getSkyAngle(delta) * 360F * rotationSpeed));
+				MinecraftClient.getInstance().world.getSkyAngle(delta) * 360F * rotationSpeed));
 			matrices.multiply(Vector3f.NEGATIVE_Z.getDegreesQuaternion(rotationAxis[0]));
 			matrices.multiply(Vector3f.NEGATIVE_Y.getDegreesQuaternion(rotationAxis[1]));
 			matrices.multiply(Vector3f.NEGATIVE_X.getDegreesQuaternion(rotationAxis[2]));
 		}
+	}
+
+	public abstract void renderSkybox(MatrixStack matrices);
+
+	protected void clearBlend(float brightness) {
+		RenderSystem.enableBlend();
+		RenderSystem.blendFunc(770, 1);
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, brightness);
 	}
 
 	protected void clearRotate(MatrixStack matrices) {
@@ -263,32 +274,19 @@ public abstract class SkyboxInstance {
 		matrices.multiply(Vector3f.NEGATIVE_Z.getDegreesQuaternion(rotationStatic[2]));
 	}
 
-	public void render(MatrixStack matrices, float tickDelta) {
-		float brightness = MinecraftClient.getInstance().world.getRainGradient(tickDelta);
-		matrices.push();
-		setupBlend(brightness);
-		setupRotate(matrices, tickDelta, brightness);
-		renderSkybox(matrices);
-		clearBlend(brightness);
-		clearRotate(matrices);
-		matrices.pop();
-		renderDecorations(matrices, tickDelta);
-		RenderSystem.enableTexture();
-	}
-
 	protected void renderDecorations(MatrixStack matrices, float delta) {
 		WorldRendererAccessor worldRendererAccessor = (WorldRendererAccessor) MinecraftClient
-				.getInstance().worldRenderer;
+			.getInstance().worldRenderer;
 		RenderSystem.enableTexture();
 		RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE,
-				GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
+			GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
 
 		matrices.push();
 		float i = 1.0F - MinecraftClient.getInstance().world.getRainGradient(delta);
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, i);
 		matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(-90.0F));
 		matrices.multiply(
-				Vector3f.POSITIVE_X.getDegreesQuaternion(MinecraftClient.getInstance().world.getSkyAngle(delta) * 360.0F));
+			Vector3f.POSITIVE_X.getDegreesQuaternion(MinecraftClient.getInstance().world.getSkyAngle(delta) * 360.0F));
 		Matrix4f matrix4f2 = matrices.peek().getModel();
 		float k = 30.0F;
 
@@ -339,6 +337,4 @@ public abstract class SkyboxInstance {
 		RenderSystem.enableTexture();
 		RenderSystem.depthMask(true);
 	}
-
-	public abstract void renderSkybox(MatrixStack matrices);
 }

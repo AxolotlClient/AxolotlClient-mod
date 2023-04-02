@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.vanilla;
 
+import java.util.List;
+
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
@@ -37,8 +39,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.entity.boss.BossBar;
 import net.minecraft.util.Identifier;
-
-import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -83,8 +83,8 @@ public class BossBarHud extends TextHudEntry implements DynamicallyPositionable 
 			if (text.get()) {
 				String string = BossBar.name;
 				client.textRenderer.draw(string,
-						(float) ((pos.x + width / 2) - client.textRenderer.getStringWidth(BossBar.name) / 2),
-						(float) (pos.y + 2), textColor.get().getAsInt(), shadow.get());
+					(float) ((pos.x + width / 2) - client.textRenderer.getStringWidth(BossBar.name) / 2),
+					(float) (pos.y + 2), textColor.get().getAsInt(), shadow.get());
 			}
 		}
 	}
@@ -96,13 +96,13 @@ public class BossBarHud extends TextHudEntry implements DynamicallyPositionable 
 	}
 
 	@Override
-	public Identifier getId() {
-		return ID;
+	public boolean movable() {
+		return true;
 	}
 
 	@Override
-	public boolean movable() {
-		return true;
+	public Identifier getId() {
+		return ID;
 	}
 
 	@Override
@@ -112,6 +112,11 @@ public class BossBarHud extends TextHudEntry implements DynamicallyPositionable 
 		options.add(bar);
 		options.add(anchor);
 		return options;
+	}
+
+	@Override
+	public AnchorPoint getAnchor() {
+		return AnchorPoint.valueOf(anchor.get());
 	}
 
 	@RequiredArgsConstructor
@@ -131,13 +136,8 @@ public class BossBarHud extends TextHudEntry implements DynamicallyPositionable 
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			if (text.get()) {
 				client.textRenderer.draw(name, (float) ((x + width / 2) - client.textRenderer.getStringWidth(name) / 2),
-						(float) (y - 10), textColor.get().getAsInt(), shadow.get());
+					(float) (y - 10), textColor.get().getAsInt(), shadow.get());
 			}
 		}
-	}
-
-	@Override
-	public AnchorPoint getAnchor() {
-		return AnchorPoint.valueOf(anchor.get());
 	}
 }

@@ -22,6 +22,12 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.Option;
@@ -37,23 +43,40 @@ import net.minecraft.resource.ResourcePack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-
 public class PackDisplayHud extends TextHudEntry {
 
 	public static Identifier ID = new Identifier("axolotlclient", "packdisplayhud");
-
-	private final BooleanOption iconsOnly = new BooleanOption("iconsonly", false);
-
 	public final List<PackWidget> widgets = new ArrayList<>();
+	private final BooleanOption iconsOnly = new BooleanOption("iconsonly", false);
 	private PackWidget placeholder;
 
 	public PackDisplayHud() {
 		super(200, 50, true);
+	}
+
+	@Override
+	public void renderComponent(MatrixStack matrices, float f) {
+		DrawPosition pos = getPos();
+
+		if (widgets.isEmpty())
+			init();
+
+		if (background.get()) {
+			fillRect(matrices, getBounds(), backgroundColor.get());
+		}
+
+		if (outline.get())
+			outlineRect(matrices, getBounds(), outlineColor.get());
+
+		int y = pos.y + 1;
+		for (int i = widgets.size() - 1; i >= 0; i--) { // Badly reverse the order (I'm sure there are better ways to do this)
+			widgets.get(i).render(matrices, pos.x + 1, y);
+			y += 18;
+		}
+		if (y - pos.y + 1 != getHeight()) {
+			setHeight(y - pos.y - 1);
+			onBoundsUpdate();
+		}
 	}
 
 	@Override
@@ -93,31 +116,6 @@ public class PackDisplayHud extends TextHudEntry {
 	}
 
 	@Override
-	public void renderComponent(MatrixStack matrices, float f) {
-		DrawPosition pos = getPos();
-
-		if (widgets.isEmpty())
-			init();
-
-		if (background.get()) {
-			fillRect(matrices, getBounds(), backgroundColor.get());
-		}
-
-		if (outline.get())
-			outlineRect(matrices, getBounds(), outlineColor.get());
-
-		int y = pos.y + 1;
-		for (int i = widgets.size() - 1; i >= 0; i--) { // Badly reverse the order (I'm sure there are better ways to do this)
-			widgets.get(i).render(matrices, pos.x + 1, y);
-			y += 18;
-		}
-		if (y - pos.y + 1 != getHeight()) {
-			setHeight(y - pos.y - 1);
-			onBoundsUpdate();
-		}
-	}
-
-	@Override
 	public void renderPlaceholderComponent(MatrixStack matrices, float f) {
 		boolean updateBounds = false;
 		if (getHeight() < 18) {
@@ -142,6 +140,11 @@ public class PackDisplayHud extends TextHudEntry {
 	}
 
 	@Override
+	public boolean movable() {
+		return true;
+	}
+
+	@Override
 	public List<Option<?>> getConfigurationOptions() {
 		List<Option<?>> options = super.getConfigurationOptions();
 		options.add(iconsOnly);
@@ -153,11 +156,6 @@ public class PackDisplayHud extends TextHudEntry {
 		return ID;
 	}
 
-	@Override
-	public boolean movable() {
-		return true;
-	}
-
 	public void update() {
 		widgets.clear();
 		init();
@@ -165,9 +163,9 @@ public class PackDisplayHud extends TextHudEntry {
 
 	private class PackWidget {
 
-		private final int texture;
 		@Getter
 		public final String name;
+		private final int texture;
 
 		public PackWidget(Text name, int textureId) {
 			this.name = name.getString();

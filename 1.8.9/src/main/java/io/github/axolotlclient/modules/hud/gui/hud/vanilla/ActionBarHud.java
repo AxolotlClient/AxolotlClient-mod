@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.vanilla;
 
+import java.util.List;
+
 import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.IntegerOption;
@@ -29,8 +31,6 @@ import io.github.axolotlclient.AxolotlClientConfig.options.Option;
 import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
 import lombok.Getter;
 import net.minecraft.util.Identifier;
-
-import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -42,15 +42,13 @@ import java.util.List;
 public class ActionBarHud extends TextHudEntry {
 
 	public static final Identifier ID = new Identifier("kronhud", "actionbarhud");
-
+	private final String placeholder = "Action Bar";
 	public IntegerOption timeShown = new IntegerOption("timeshown", 60, 40, 300);
 	public BooleanOption customTextColor = new BooleanOption("customtextcolor", false);
-
 	@Getter
 	private String actionBar;
 	private int ticksShown;
 	private int color;
-	private final String placeholder = "Action Bar";
 
 	public ActionBarHud() {
 		super(115, 13, false);
@@ -70,29 +68,29 @@ public class ActionBarHud extends TextHudEntry {
 		if (this.actionBar != null) {
 			if (shadow.get()) {
 				client.textRenderer
-						.drawWithShadow(actionBar,
-								(float) getPos().x() + Math.round((float) getWidth() / 2)
-										- (float) client.textRenderer.getStringWidth(actionBar) / 2,
-								(float) getPos().y() + 3,
-								customTextColor.get()
-										? (textColor.get().getAlpha() == 255
-										? new Color(textColor.get().getRed(), textColor.get().getGreen(),
-										textColor.get().getBlue(), vanillaColor.getAlpha()).getAsInt()
-										: textColor.get().getAsInt())
-										: color);
+					.drawWithShadow(actionBar,
+						(float) getPos().x() + Math.round((float) getWidth() / 2)
+							- (float) client.textRenderer.getStringWidth(actionBar) / 2,
+						(float) getPos().y() + 3,
+						customTextColor.get()
+							? (textColor.get().getAlpha() == 255
+							? new Color(textColor.get().getRed(), textColor.get().getGreen(),
+							textColor.get().getBlue(), vanillaColor.getAlpha()).getAsInt()
+							: textColor.get().getAsInt())
+							: color);
 			} else {
 				client.textRenderer
-						.draw(actionBar,
-								(float) getPos().x() + Math.round((float) getWidth() / 2)
-										- ((float) client.textRenderer.getStringWidth(actionBar) / 2),
-								(float) getPos().y() + 3,
-								customTextColor.get()
-										? (textColor.get().getAlpha() == 255
-										? new Color(textColor.get().getRed(), textColor.get().getGreen(),
-										textColor.get().getBlue(), vanillaColor.getAlpha()).getAsInt()
-										: textColor.get().getAsInt())
-										: color,
-								false);
+					.draw(actionBar,
+						(float) getPos().x() + Math.round((float) getWidth() / 2)
+							- ((float) client.textRenderer.getStringWidth(actionBar) / 2),
+						(float) getPos().y() + 3,
+						customTextColor.get()
+							? (textColor.get().getAlpha() == 255
+							? new Color(textColor.get().getRed(), textColor.get().getGreen(),
+							textColor.get().getBlue(), vanillaColor.getAlpha()).getAsInt()
+							: textColor.get().getAsInt())
+							: color,
+						false);
 			}
 			ticksShown++;
 		} else {
@@ -103,9 +101,9 @@ public class ActionBarHud extends TextHudEntry {
 	@Override
 	public void renderPlaceholderComponent(float delta) {
 		client.textRenderer.draw(placeholder,
-				(float) getPos().x() + Math.round((float) getWidth() / 2)
-						- (float) client.textRenderer.getStringWidth(placeholder) / 2,
-				(float) getPos().y() + 3, -1, shadow.get());
+			(float) getPos().x() + Math.round((float) getWidth() / 2)
+				- (float) client.textRenderer.getStringWidth(placeholder) / 2,
+			(float) getPos().y() + 3, -1, shadow.get());
 	}
 
 	@Override

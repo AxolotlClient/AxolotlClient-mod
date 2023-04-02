@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.mixin;
 
+import java.util.Objects;
+
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
 import io.github.axolotlclient.modules.hypixel.HypixelMods;
@@ -34,15 +36,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Objects;
-
 @Mixin(ClientWorld.class)
 public abstract class ClientWorldMixin {
 
 	@Inject(method = "onEntityRemoved", at = @At("HEAD"))
 	public void axolotlclient$onEntityRemoved(Entity entity, CallbackInfo ci) {
 		if (entity instanceof PlayerEntity && Objects.equals(HypixelMods.getInstance().cacheMode.get(),
-				HypixelMods.HypixelApiCacheMode.ON_PLAYER_DISCONNECT.toString())) {
+			HypixelMods.HypixelApiCacheMode.ON_PLAYER_DISCONNECT.toString())) {
 			HypixelAbstractionLayer.handleDisconnectEvents(entity.getUuid());
 		}
 	}

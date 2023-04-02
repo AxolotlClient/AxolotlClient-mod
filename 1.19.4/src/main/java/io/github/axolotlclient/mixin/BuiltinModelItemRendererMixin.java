@@ -41,9 +41,9 @@ public abstract class BuiltinModelItemRendererMixin {
 	public void axolotlclient$lowShield(ItemStack itemStack, ModelTransformationMode mode, MatrixStack matrixStack,
 										VertexConsumerProvider vertexConsumerProvider, int i, int j, CallbackInfo ci) {
 		if (AxolotlClient.CONFIG.lowShield.get()
-				&& MinecraftClient.getInstance().options.getPerspective().isFirstPerson()
-				&& (mode.equals(ModelTransformationMode.FIRST_PERSON_LEFT_HAND)
-				|| mode.equals(ModelTransformationMode.FIRST_PERSON_RIGHT_HAND))) {
+			&& MinecraftClient.getInstance().options.getPerspective().isFirstPerson()
+			&& (mode.equals(ModelTransformationMode.FIRST_PERSON_LEFT_HAND)
+			|| mode.equals(ModelTransformationMode.FIRST_PERSON_RIGHT_HAND))) {
 			matrixStack.translate(0, 0.2F, 0);
 		}
 	}

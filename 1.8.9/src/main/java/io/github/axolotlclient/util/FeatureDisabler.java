@@ -22,6 +22,10 @@
 
 package io.github.axolotlclient.util;
 
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.function.Supplier;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -35,21 +39,13 @@ import net.legacyfabric.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.util.Identifier;
 
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.function.Supplier;
-
 public class FeatureDisabler {
 
 	private static final HashMap<BooleanOption, String[]> disabledServers = new HashMap<>();
 	private static final HashMap<BooleanOption, Supplier<Boolean>> conditions = new HashMap<>();
 
 	private static final Supplier<Boolean> NONE = () -> true;
-
-	private static String currentAddress = "";
-
 	private static final Identifier channelName = new Identifier("axolotlclient", "block_mods");
-
 	// Features that can be disabled on the server's behalf
 	// If something should be added here, feel free to ping us via your favorite way.
 	private static final HashMap<String, BooleanOption> features = Util.make(() -> {
@@ -60,6 +56,7 @@ public class FeatureDisabler {
 		features.put("lowfire", AxolotlClient.CONFIG.lowFire);
 		return features;
 	});
+	private static String currentAddress = "";
 
 	public static void init() {
 		setServers(AxolotlClient.CONFIG.lowFire, NONE, "gommehd");
@@ -68,17 +65,22 @@ public class FeatureDisabler {
 		setServers(((ToggleSprintHud) HudManager.getInstance().get(ToggleSprintHud.ID)).toggleSneak, NONE, "hypixel");
 
 		ClientPlayConnectionEvents.INIT.register((handler0, client0) ->
-				ClientPlayNetworking.registerGlobalReceiver(channelName.toString(), (client, handler, buf, responseSender) -> {
-					JsonArray array = new JsonParser().parse(buf.readString(32767)).getAsJsonArray();
-					for (JsonElement element : array) {
-						try {
-							features.get(element.getAsString()).setForceOff(true, "ban_reason");
-						} catch (Exception e) {
-							AxolotlClient.LOGGER.error("Failed to disable " + element.getAsString() + "!");
-						}
+			ClientPlayNetworking.registerGlobalReceiver(channelName.toString(), (client, handler, buf, responseSender) -> {
+				JsonArray array = new JsonParser().parse(buf.readString(32767)).getAsJsonArray();
+				for (JsonElement element : array) {
+					try {
+						features.get(element.getAsString()).setForceOff(true, "ban_reason");
+					} catch (Exception e) {
+						AxolotlClient.LOGGER.error("Failed to disable " + element.getAsString() + "!");
 					}
-				})
+				}
+			})
 		);
+	}
+
+	private static void setServers(BooleanOption option, Supplier<Boolean> condition, String... servers) {
+		disabledServers.put(option, servers);
+		conditions.put(option, condition);
 	}
 
 	public static void onServerJoin(String address) {
@@ -86,9 +88,8 @@ public class FeatureDisabler {
 		update();
 	}
 
-	public static void clear() {
-		disabledServers.keySet().forEach(option -> option.setForceOff(false, ""));
-		features.values().forEach(option -> option.setForceOff(false, ""));
+	public static void update() {
+		disabledServers.forEach((option, strings) -> disableOption(option, strings, currentAddress));
 	}
 
 	private static void disableOption(BooleanOption option, String[] servers, String currentServer) {
@@ -105,12 +106,8 @@ public class FeatureDisabler {
 		}
 	}
 
-	private static void setServers(BooleanOption option, Supplier<Boolean> condition, String... servers) {
-		disabledServers.put(option, servers);
-		conditions.put(option, condition);
-	}
-
-	public static void update() {
-		disabledServers.forEach((option, strings) -> disableOption(option, strings, currentAddress));
+	public static void clear() {
+		disabledServers.keySet().forEach(option -> option.setForceOff(false, ""));
+		features.values().forEach(option -> option.setForceOff(false, ""));
 	}
 }

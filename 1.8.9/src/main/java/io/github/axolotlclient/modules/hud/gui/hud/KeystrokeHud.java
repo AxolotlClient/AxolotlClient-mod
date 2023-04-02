@@ -22,6 +22,10 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
@@ -40,10 +44,6 @@ import net.minecraft.client.option.KeyBinding;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
@@ -54,36 +54,34 @@ import java.util.Optional;
 public class KeystrokeHud extends TextHudEntry {
 
 	public static final Identifier ID = new Identifier("kronhud", "keystrokehud");
-
+	private static final MinecraftClient client = MinecraftClient.getInstance();
 	private final ColorOption pressedTextColor = new ColorOption("heldtextcolor", new Color(0xFF000000));
 	private final ColorOption pressedBackgroundColor = new ColorOption("heldbackgroundcolor", 0x64FFFFFF);
 	private final ColorOption pressedOutlineColor = new ColorOption("heldoutlinecolor", Color.BLACK);
 	private final BooleanOption mouseMovement = new BooleanOption("mousemovement", this::onMouseMovementOption, false);
 	private final GraphicsOption mouseMovementIndicatorInner = new GraphicsOption("mouseMovementIndicator", new int[][]{
-			new int[]{0, 0, 0, 0, 0, 0, 0},
-			new int[]{0, 0, 0, 0, 0, 0, 0},
-			new int[]{0, 0, 0, 0, 0, 0, 0},
-			new int[]{0, 0, 0, -1, 0, 0, 0},
-			new int[]{0, 0, 0, 0, 0, 0, 0},
-			new int[]{0, 0, 0, 0, 0, 0, 0},
-			new int[]{0, 0, 0, 0, 0, 0, 0}
+		new int[]{0, 0, 0, 0, 0, 0, 0},
+		new int[]{0, 0, 0, 0, 0, 0, 0},
+		new int[]{0, 0, 0, 0, 0, 0, 0},
+		new int[]{0, 0, 0, -1, 0, 0, 0},
+		new int[]{0, 0, 0, 0, 0, 0, 0},
+		new int[]{0, 0, 0, 0, 0, 0, 0},
+		new int[]{0, 0, 0, 0, 0, 0, 0}
 	}, true);
 	private final GraphicsOption mouseMovementIndicatorOuter = new GraphicsOption("mouseMovementIndicatorOuter", new int[][]{
-			new int[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
-			new int[]{-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1},
-			new int[]{-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1},
-			new int[]{-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1},
-			new int[]{-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1},
-			new int[]{-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1},
-			new int[]{-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1},
-			new int[]{-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1},
-			new int[]{-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1},
-			new int[]{-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1},
-			new int[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}
+		new int[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
+		new int[]{-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1},
+		new int[]{-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1},
+		new int[]{-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1},
+		new int[]{-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1},
+		new int[]{-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1},
+		new int[]{-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1},
+		new int[]{-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1},
+		new int[]{-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1},
+		new int[]{-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1},
+		new int[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}
 	}, true);
 	private ArrayList<Keystroke> keystrokes;
-	private static final MinecraftClient client = MinecraftClient.getInstance();
-
 	private float mouseX = 0;
 	private float mouseY = 0;
 	private float lastMouseX = 0;
@@ -93,17 +91,6 @@ public class KeystrokeHud extends TextHudEntry {
 		super(53, 61, true);
 		Hooks.KEYBIND_CHANGE.register(key -> setKeystrokes());
 		Hooks.PLAYER_DIRECTION_CHANGE.register(this::onPlayerDirectionChange);
-	}
-
-	public static Optional<String> getMouseKeyBindName(KeyBinding keyBinding) {
-		if (keyBinding.getTranslationKey().equalsIgnoreCase(client.options.attackKey.getTranslationKey())) {
-			return Optional.of("LMB");
-		} else if (keyBinding.getTranslationKey().equalsIgnoreCase(client.options.useKey.getTranslationKey())) {
-			return Optional.of("RMB");
-		} else if (keyBinding.getTranslationKey().equalsIgnoreCase(client.options.pickItemKey.getTranslationKey())) {
-			return Optional.of("MMB");
-		}
-		return Optional.empty();
 	}
 
 	public void setKeystrokes() {
@@ -131,17 +118,69 @@ public class KeystrokeHud extends TextHudEntry {
 		keystrokes.add(new Keystroke(new Rectangle(0, 54, 53, 7), pos, client.options.jumpKey, (stroke) -> {
 			Rectangle bounds = stroke.bounds;
 			Rectangle spaceBounds = new Rectangle(bounds.x() + stroke.offset.x() + 4,
-					bounds.y() + stroke.offset.y() + 2, bounds.width() - 8, 1);
+				bounds.y() + stroke.offset.y() + 2, bounds.width() - 8, 1);
 			fillRect(spaceBounds, stroke.getFGColor());
 			if (shadow.get()) {
 				fillRect(spaceBounds.offset(1, 1), new Color(
-						(stroke.getFGColor().getAsInt() & 16579836) >> 2 | stroke.getFGColor().getAsInt() & -16777216));
+					(stroke.getFGColor().getAsInt() & 16579836) >> 2 | stroke.getFGColor().getAsInt() & -16777216));
 			}
 		}));
 		KeyBinding.unpressAll();
 		KeyBinding.updateKeysByCode();
 
 		onMouseMovementOption(mouseMovement.get());
+	}
+
+	public void onPlayerDirectionChange(float prevPitch, float prevYaw, float pitch, float yaw) {
+		// Implementation credit goes to TheKodeToad
+		// This project has the author's approval to use this
+		// https://github.com/Sol-Client/Client/blob/main/game/src/main/java/io/github/solclient/client/mod/impl/hud/keystrokes/KeystrokesMod.java
+		mouseX += (yaw - prevYaw) / 7F;
+		mouseY += (pitch - prevPitch) / 7F;
+		// 0, 0 will be the center of the HUD element
+		float halfWidth = getWidth() / 2f;
+		mouseX = MathHelper.clamp(mouseX, -halfWidth + 4, halfWidth - 4);
+		mouseY = MathHelper.clamp(mouseY, -13, 13);
+	}
+
+	public Keystroke createFromKey(Rectangle bounds, DrawPosition offset, KeyBinding key) {
+		String name = getMouseKeyBindName(key)
+			.orElse(GameOptions.getFormattedNameForKeyCode(key.getCode()).toUpperCase());
+		if (name.length() > 4) {
+			name = name.substring(0, 2);
+		}
+		return createFromString(bounds, offset, key, name);
+	}
+
+	public void onMouseMovementOption(boolean value) {
+		int baseHeight = 61;
+		if (value) {
+			baseHeight += 36;
+		}
+		height = baseHeight;
+		onBoundsUpdate();
+	}
+
+	public static Optional<String> getMouseKeyBindName(KeyBinding keyBinding) {
+		if (keyBinding.getTranslationKey().equalsIgnoreCase(client.options.attackKey.getTranslationKey())) {
+			return Optional.of("LMB");
+		} else if (keyBinding.getTranslationKey().equalsIgnoreCase(client.options.useKey.getTranslationKey())) {
+			return Optional.of("RMB");
+		} else if (keyBinding.getTranslationKey().equalsIgnoreCase(client.options.pickItemKey.getTranslationKey())) {
+			return Optional.of("MMB");
+		}
+		return Optional.empty();
+	}
+
+	public Keystroke createFromString(Rectangle bounds, DrawPosition offset, KeyBinding key, String word) {
+		return new Keystroke(bounds, offset, key, (stroke) -> {
+			Rectangle strokeBounds = stroke.bounds;
+			float x = (strokeBounds.x() + stroke.offset.x() + ((float) strokeBounds.width() / 2))
+				- ((float) client.textRenderer.getStringWidth(word) / 2);
+			float y = strokeBounds.y() + stroke.offset.y() + ((float) strokeBounds.height() / 2) - 4;
+
+			drawString(word, (int) x, (int) y, stroke.getFGColor().getAsInt(), shadow.get());
+		});
 	}
 
 	@Override
@@ -184,16 +223,14 @@ public class KeystrokeHud extends TextHudEntry {
 		}
 	}
 
-	public void onPlayerDirectionChange(float prevPitch, float prevYaw, float pitch, float yaw) {
-		// Implementation credit goes to TheKodeToad
-		// This project has the author's approval to use this
-		// https://github.com/Sol-Client/Client/blob/main/game/src/main/java/io/github/solclient/client/mod/impl/hud/keystrokes/KeystrokesMod.java
-		mouseX += (yaw - prevYaw) / 7F;
-		mouseY += (pitch - prevPitch) / 7F;
-		// 0, 0 will be the center of the HUD element
-		float halfWidth = getWidth() / 2f;
-		mouseX = MathHelper.clamp(mouseX, -halfWidth + 4, halfWidth - 4);
-		mouseY = MathHelper.clamp(mouseY, -13, 13);
+	@Override
+	public void renderPlaceholderComponent(float delta) {
+		renderComponent(delta);
+	}
+
+	@Override
+	public boolean movable() {
+		return true;
 	}
 
 	@Override
@@ -222,41 +259,6 @@ public class KeystrokeHud extends TextHudEntry {
 	}
 
 	@Override
-	public void renderPlaceholderComponent(float delta) {
-		renderComponent(delta);
-	}
-
-	public Keystroke createFromKey(Rectangle bounds, DrawPosition offset, KeyBinding key) {
-		String name = getMouseKeyBindName(key)
-				.orElse(GameOptions.getFormattedNameForKeyCode(key.getCode()).toUpperCase());
-		if (name.length() > 4) {
-			name = name.substring(0, 2);
-		}
-		return createFromString(bounds, offset, key, name);
-	}
-
-	public Keystroke createFromString(Rectangle bounds, DrawPosition offset, KeyBinding key, String word) {
-		return new Keystroke(bounds, offset, key, (stroke) -> {
-			Rectangle strokeBounds = stroke.bounds;
-			float x = (strokeBounds.x() + stroke.offset.x() + ((float) strokeBounds.width() / 2))
-					- ((float) client.textRenderer.getStringWidth(word) / 2);
-			float y = strokeBounds.y() + stroke.offset.y() + ((float) strokeBounds.height() / 2) - 4;
-
-			drawString(word, (int) x, (int) y, stroke.getFGColor().getAsInt(), shadow.get());
-		});
-	}
-
-	@Override
-	public Identifier getId() {
-		return ID;
-	}
-
-	@Override
-	public boolean movable() {
-		return true;
-	}
-
-	@Override
 	public List<Option<?>> getConfigurationOptions() {
 		// We want a specific order since this is a more complicated entry
 		List<Option<?>> options = new ArrayList<>();
@@ -277,23 +279,24 @@ public class KeystrokeHud extends TextHudEntry {
 		return options;
 	}
 
-	public void onMouseMovementOption(boolean value) {
-		int baseHeight = 61;
-		if (value) {
-			baseHeight += 36;
-		}
-		height = baseHeight;
-		onBoundsUpdate();
+	@Override
+	public Identifier getId() {
+		return ID;
+	}
+
+	public interface KeystrokeRenderer {
+
+		void render(Keystroke stroke);
 	}
 
 	public class Keystroke {
 
 		protected final KeyBinding key;
 		protected final KeystrokeRenderer render;
+		private final int animTime = 100;
 		protected Rectangle bounds;
 		protected DrawPosition offset;
 		private float start = -1;
-		private final int animTime = 100;
 		private boolean wasPressed = false;
 
 		public Keystroke(Rectangle bounds, DrawPosition offset, KeyBinding key, KeystrokeRenderer render) {
@@ -301,6 +304,20 @@ public class KeystrokeHud extends TextHudEntry {
 			this.offset = offset;
 			this.key = key;
 			this.render = render;
+		}
+
+		public Color getFGColor() {
+			return !key.isPressed() ? Color.blend(textColor.get(), pressedTextColor.get(), getPercentPressed())
+				: Color.blend(pressedTextColor.get(), textColor.get(), getPercentPressed());
+		}
+
+		private float getPercentPressed() {
+			return start == -1 ? 1 : MathHelper.clamp((MinecraftClient.getTime() - start) / animTime, 0, 1);
+		}
+
+		public void render() {
+			renderStroke();
+			render.render(this);
 		}
 
 		public void renderStroke() {
@@ -320,34 +337,15 @@ public class KeystrokeHud extends TextHudEntry {
 			wasPressed = key.isPressed();
 		}
 
-		private float getPercentPressed() {
-			return start == -1 ? 1 : MathHelper.clamp((MinecraftClient.getTime() - start) / animTime, 0, 1);
-		}
-
 		public Color getColor() {
 			return !key.isPressed()
-					? Color.blend(backgroundColor.get(), pressedBackgroundColor.get(), getPercentPressed())
-					: Color.blend(pressedBackgroundColor.get(), backgroundColor.get(), getPercentPressed());
+				? Color.blend(backgroundColor.get(), pressedBackgroundColor.get(), getPercentPressed())
+				: Color.blend(pressedBackgroundColor.get(), backgroundColor.get(), getPercentPressed());
 		}
 
 		public Color getOutlineColor() {
 			return !key.isPressed() ? Color.blend(outlineColor.get(), pressedOutlineColor.get(), getPercentPressed())
-					: Color.blend(pressedOutlineColor.get(), outlineColor.get(), getPercentPressed());
+				: Color.blend(pressedOutlineColor.get(), outlineColor.get(), getPercentPressed());
 		}
-
-		public Color getFGColor() {
-			return !key.isPressed() ? Color.blend(textColor.get(), pressedTextColor.get(), getPercentPressed())
-					: Color.blend(pressedTextColor.get(), textColor.get(), getPercentPressed());
-		}
-
-		public void render() {
-			renderStroke();
-			render.render(this);
-		}
-	}
-
-	public interface KeystrokeRenderer {
-
-		void render(Keystroke stroke);
 	}
 }

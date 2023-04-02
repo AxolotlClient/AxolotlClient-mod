@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.mixin;
 
+import java.util.Objects;
+
 import io.github.axolotlclient.modules.hud.HudEditScreen;
 import io.github.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
 import io.github.axolotlclient.modules.hypixel.HypixelMods;
@@ -36,8 +38,6 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
-import java.util.Objects;
-
 @Mixin(GameMenuScreen.class)
 public abstract class GameMenuScreenMixin {
 
@@ -45,24 +45,24 @@ public abstract class GameMenuScreenMixin {
 	public void addClientOptionsButton(Args args) {
 		if (axolotlclient$hasModMenu())
 			return;
-		
+
 		args.set(4, new TranslatableText("title_short"));
 		args.set(5, (ButtonWidget.PressAction) (buttonWidget) -> MinecraftClient.getInstance()
-				.openScreen(new HudEditScreen(((GameMenuScreen) (Object) this))));
+			.openScreen(new HudEditScreen(((GameMenuScreen) (Object) this))));
+	}
+
+	private static boolean axolotlclient$hasModMenu() {
+		return FabricLoader.getInstance().isModLoaded("modmenu") && !FabricLoader.getInstance().isModLoaded("axolotlclient-modmenu");
 	}
 
 	@ModifyArg(method = "initWidgets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget;<init>(IIIILnet/minecraft/text/Text;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;)V", ordinal = 1), index = 5)
 	private ButtonWidget.PressAction axolotlclient$clearFeatureRestrictions(ButtonWidget.PressAction onPress) {
 		return (buttonWidget) -> {
 			if (Objects.equals(HypixelMods.getInstance().cacheMode.get(),
-					HypixelMods.HypixelCacheMode.ON_CLIENT_DISCONNECT.toString())) {
+				HypixelMods.HypixelCacheMode.ON_CLIENT_DISCONNECT.toString())) {
 				HypixelAbstractionLayer.clearPlayerData();
 			}
 			onPress.onPress(buttonWidget);
 		};
-	}
-
-	private static boolean axolotlclient$hasModMenu() {
-		return FabricLoader.getInstance().isModLoaded("modmenu") && !FabricLoader.getInstance().isModLoaded("axolotlclient-modmenu");
 	}
 }

@@ -39,26 +39,21 @@ public class Freelook extends AbstractModule {
 
 	private static final Freelook Instance = new Freelook();
 	private static KeyBinding KEY;
-
-	private final MinecraftClient client = MinecraftClient.getInstance();
-
-	private float yaw, pitch;
-	public boolean active;
-
-	private final OptionCategory category = new OptionCategory("freelook");
 	public final BooleanOption enabled = new BooleanOption("enabled", false);
+	private final MinecraftClient client = MinecraftClient.getInstance();
+	private final OptionCategory category = new OptionCategory("freelook");
 	private final KeyBindOption keyOption = new KeyBindOption("key.freelook", KEY = new KeyBinding("key.freelook", GLFW.GLFW_KEY_V, "category.axolotlclient"), (key) -> {
 	});
 	private final EnumOption mode = new EnumOption("mode",
-			value -> FeatureDisabler.update(),
-			new String[]{"snap_perspective", "freelook"},
-			"freelook");
+		value -> FeatureDisabler.update(),
+		new String[]{"snap_perspective", "freelook"},
+		"freelook");
 	private final EnumOption perspective = new EnumOption("perspective", Perspective.values(),
-			Perspective.THIRD_PERSON_BACK.toString());
+		Perspective.THIRD_PERSON_BACK.toString());
 	private final BooleanOption invert = new BooleanOption("invert", false);
-
 	private final BooleanOption toggle = new BooleanOption("toggle", false);
-
+	public boolean active;
+	private float yaw, pitch;
 	private Perspective previousPerspective;
 
 	public static Freelook getInstance() {
@@ -96,6 +91,12 @@ public class Freelook extends AbstractModule {
 		}
 	}
 
+	private void stop() {
+		active = false;
+		client.worldRenderer.scheduleTerrainUpdate();
+		setPerspective(previousPerspective);
+	}
+
 	private void start() {
 		active = true;
 
@@ -114,10 +115,8 @@ public class Freelook extends AbstractModule {
 		pitch = camera.getPitch(0);
 	}
 
-	private void stop() {
-		active = false;
-		client.worldRenderer.scheduleTerrainUpdate();
-		setPerspective(previousPerspective);
+	private void setPerspective(Perspective perspective) {
+		MinecraftClient.getInstance().options.setPerspective(perspective);
 	}
 
 	public boolean consumeRotation(double dx, double dy) {
@@ -128,7 +127,7 @@ public class Freelook extends AbstractModule {
 			dy = -dy;
 
 		if (MinecraftClient.getInstance().options.getPerspective().isFrontView()
-				|| MinecraftClient.getInstance().options.getPerspective().isFirstPerson())
+			|| MinecraftClient.getInstance().options.getPerspective().isFirstPerson())
 			dy *= -1;
 
 		yaw += dx * 0.15F;
@@ -156,10 +155,6 @@ public class Freelook extends AbstractModule {
 			return defaultValue;
 
 		return pitch;
-	}
-
-	private void setPerspective(Perspective perspective) {
-		MinecraftClient.getInstance().options.setPerspective(perspective);
 	}
 
 	public boolean needsDisabling() {

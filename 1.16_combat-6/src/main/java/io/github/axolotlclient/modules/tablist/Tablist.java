@@ -38,7 +38,10 @@ public class Tablist extends AbstractModule {
 
 	@Getter
 	private static final Tablist Instance = new Tablist();
-
+	public final BooleanOption showPlayerHeads = new BooleanOption("showPlayerHeads", true);
+	public final BooleanOption showHeader = new BooleanOption("showHeader", true);
+	public final BooleanOption showFooter = new BooleanOption("showFooter", true);
+	public final BooleanOption alwaysShowHeadLayer = new BooleanOption("alwaysShowHeadLayer", false);
 	private final BooleanOption numericalPing = new BooleanOption("numericalPing", false);
 	private final ColorOption pingColor0 = new ColorOption("pingColor0", Color.parse("#FF00FFFF"));
 	private final ColorOption pingColor1 = new ColorOption("pingColor1", Color.parse("#FF00FF00"));
@@ -47,12 +50,6 @@ public class Tablist extends AbstractModule {
 	private final ColorOption pingColor4 = new ColorOption("pingColor4", Color.parse("#FFFF8800"));
 	private final ColorOption pingColor5 = new ColorOption("pingColor5", Color.parse("#FFFF0000"));
 	private final BooleanOption shadow = new BooleanOption("shadow", true);
-
-	public final BooleanOption showPlayerHeads = new BooleanOption("showPlayerHeads", true);
-	public final BooleanOption showHeader = new BooleanOption("showHeader", true);
-	public final BooleanOption showFooter = new BooleanOption("showFooter", true);
-	public final BooleanOption alwaysShowHeadLayer = new BooleanOption("alwaysShowHeadLayer", false);
-
 	private final OptionCategory tablist = new OptionCategory("tablist");
 
 	@Override
@@ -81,9 +78,9 @@ public class Tablist extends AbstractModule {
 			}
 
 			DrawUtil.drawString(matrices,
-					String.valueOf(entry.getLatency()),
-					x + width - 1 - MinecraftClient.getInstance().textRenderer.getWidth(String.valueOf(entry.getLatency())),
-					y, current, shadow.get());
+				String.valueOf(entry.getLatency()),
+				x + width - 1 - MinecraftClient.getInstance().textRenderer.getWidth(String.valueOf(entry.getLatency())),
+				y, current, shadow.get());
 			return true;
 		}
 		return false;

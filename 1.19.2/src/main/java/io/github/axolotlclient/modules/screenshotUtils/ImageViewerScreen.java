@@ -22,6 +22,18 @@
 
 package io.github.axolotlclient.modules.screenshotUtils;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Objects;
+
 import com.google.common.hash.Hashing;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.texture.NativeImage;
@@ -41,152 +53,24 @@ import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.quiltmc.loader.api.QuiltLoader;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.net.URI;
-import java.nio.file.Files;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Objects;
-
 public class ImageViewerScreen extends Screen {
 
 	// Icon from https://lucide.dev, "arrow-right"
 	private static final Identifier downloadIcon = new Identifier("axolotlclient", "textures/go.png");
 
 	private static final URI aboutPage = URI.create("https://github.com/AxolotlClient/AxolotlClient-mod/wiki/Features#screenshot-sharing");
-
+	private final Screen parent;
+	private final HashMap<ButtonWidget, Boolean> editButtons = new HashMap<>();
 	private Identifier imageId;
 	private NativeImageBackedTexture image;
 	private String url = "";
 	private String imageName;
-
-	private final Screen parent;
-
 	private TextFieldWidget urlBox;
 	private double imgAspectRatio;
-
-	private final HashMap<ButtonWidget, Boolean> editButtons = new HashMap<>();
 
 	public ImageViewerScreen(Screen parent) {
 		super(Text.of("Image viewer"));
 		this.parent = parent;
-	}
-
-	@SuppressWarnings("UnstableApiUsage")
-	private Identifier downloadImage(String url) {
-
-		try {
-			if (image != null) {
-				MinecraftClient.getInstance().getTextureManager().destroyTexture(imageId);
-				image.close();
-			}
-			ImageInstance instance = ImageShare.getInstance().downloadImage(url.trim());
-			NativeImage image = instance.getImage();
-			if (image != null) {
-				Identifier id = new Identifier("screenshot_share_" + Hashing.sha256().hashUnencodedChars(url));
-				MinecraftClient.getInstance().getTextureManager().registerTexture(id,
-						this.image = new NativeImageBackedTexture(image));
-
-				imgAspectRatio = image.getWidth() / (double) image.getHeight();
-				imageName = instance.getFileName();
-				return id;
-			}
-		} catch (Exception ignored) {
-		}
-		return null;
-	}
-
-	@Override
-	protected void init() {
-
-		urlBox = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 2 - 100, imageId == null ? height / 2 - 10 : height - 80, 200, 20, Text.translatable("urlBox"));
-		urlBox.setSuggestion(I18n.translate("pasteURL"));
-		urlBox.setChangedListener(s -> {
-			if (s.isEmpty()) {
-				urlBox.setSuggestion(I18n.translate("pasteURL"));
-			} else {
-				urlBox.setSuggestion("");
-			}
-		});
-		if (!url.isEmpty()) {
-			urlBox.setText(url);
-		}
-		addDrawableChild(urlBox);
-
-		setInitialFocus(urlBox);
-
-		addDrawableChild(new ButtonWidget(width / 2 + 110, imageId == null ? height / 2 - 10 : height - 80,
-				20, 20, Text.translatable("download"), buttonWidget -> {
-			//Logger.info("Downloading image from "+urlBox.getText());
-			imageId = downloadImage(url = urlBox.getText());
-			clearAndInit();
-		}) {
-			@Override
-			public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-				RenderSystem.setShader(GameRenderer::getPositionTexShader);
-				RenderSystem.setShaderTexture(0, WIDGETS_TEXTURE);
-				RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, this.alpha);
-				int i = this.getYImage(this.isHoveredOrFocused());
-				this.drawTexture(matrices, this.x, this.y, 0, 46 + i * 20, this.width / 2, this.height);
-				this.drawTexture(matrices, this.x + this.width / 2, this.y, 200 - this.width / 2, 46 + i * 20, this.width / 2, this.height);
-				RenderSystem.enableDepthTest();
-				RenderSystem.setShaderTexture(0, downloadIcon);
-				drawTexture(matrices, this.x, this.y, 0, 0, this.getWidth(), this.getHeight(), getWidth(), getHeight());
-			}
-		});
-
-		addDrawableChild(new ButtonWidget(width / 2 - 75, height - 50, 150, 20, ScreenTexts.BACK,
-				buttonWidget -> MinecraftClient.getInstance().setScreen(parent)));
-
-		ButtonWidget save = new ButtonWidget(width - 60, 50, 50, 20, Text.translatable("saveAction"),
-				buttonWidget -> {
-					try {
-						Files.write(QuiltLoader.getGameDir().resolve("screenshots").resolve("_share-" + imageName), Objects.requireNonNull(image.getImage()).getBytes());
-						AxolotlClient.LOGGER.info("Saved image " + imageName + " to screenshots folder!");
-					} catch (IOException e) {
-						AxolotlClient.LOGGER.info("Failed to save image!");
-					}
-				}, (buttonWidget, matrixStack, i, j) -> ImageViewerScreen.this.renderTooltip(matrixStack, Text.translatable("save_image"), i, j));
-		addImageButton(save, true);
-
-		ButtonWidget copy = new ButtonWidget(width - 60, 75, 50, 20, Text.translatable("copyAction"), buttonWidget -> {
-			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new Transferable() {
-				@Override
-				public DataFlavor[] getTransferDataFlavors() {
-					return new DataFlavor[]{DataFlavor.imageFlavor};
-				}
-
-				@Override
-				public boolean isDataFlavorSupported(DataFlavor flavor) {
-					return DataFlavor.imageFlavor.equals(flavor);
-				}
-
-				@NotNull
-				@Override
-				public Object getTransferData(DataFlavor flavor) throws IOException {
-					return ImageIO.read(new ByteArrayInputStream(Objects.requireNonNull(image.getImage()).getBytes()));
-				}
-			}, null);
-			AxolotlClient.LOGGER.info("Copied image " + imageName + " to the clipboard!");
-		}, (buttonWidget, matrixStack, i, j) -> ImageViewerScreen.this.renderTooltip(matrixStack, Text.translatable("copy_image"), i, j));
-
-		addImageButton(copy, true);
-
-		ButtonWidget about = new ButtonWidget(width - 60, 100, 50, 20, Text.translatable("aboutAction"), buttonWidget -> {
-			OSUtil.getOS().open(aboutPage, AxolotlClient.LOGGER);
-		}, (buttonWidget, matrixStack, i, j) -> ImageViewerScreen.this.renderTooltip(matrixStack, Text.translatable("about_image"), i, j));
-
-		addImageButton(about, true);
-	}
-
-	private void addImageButton(ButtonWidget button, boolean right) {
-		addSelectableChild(button);
-		editButtons.put(button, right);
 	}
 
 	@Override
@@ -224,16 +108,128 @@ public class ImageViewerScreen extends Screen {
 	}
 
 	@Override
-	public void tick() {
-		urlBox.tick();
-	}
-
-	@Override
 	public void closeScreen() {
 		super.closeScreen();
 		if (image != null) {
 			MinecraftClient.getInstance().getTextureManager().destroyTexture(imageId);
 			image.close();
 		}
+	}
+
+	@Override
+	protected void init() {
+
+		urlBox = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, width / 2 - 100, imageId == null ? height / 2 - 10 : height - 80, 200, 20, Text.translatable("urlBox"));
+		urlBox.setSuggestion(I18n.translate("pasteURL"));
+		urlBox.setChangedListener(s -> {
+			if (s.isEmpty()) {
+				urlBox.setSuggestion(I18n.translate("pasteURL"));
+			} else {
+				urlBox.setSuggestion("");
+			}
+		});
+		if (!url.isEmpty()) {
+			urlBox.setText(url);
+		}
+		addDrawableChild(urlBox);
+
+		setInitialFocus(urlBox);
+
+		addDrawableChild(new ButtonWidget(width / 2 + 110, imageId == null ? height / 2 - 10 : height - 80,
+			20, 20, Text.translatable("download"), buttonWidget -> {
+			//Logger.info("Downloading image from "+urlBox.getText());
+			imageId = downloadImage(url = urlBox.getText());
+			clearAndInit();
+		}) {
+			@Override
+			public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+				RenderSystem.setShader(GameRenderer::getPositionTexShader);
+				RenderSystem.setShaderTexture(0, WIDGETS_TEXTURE);
+				RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, this.alpha);
+				int i = this.getYImage(this.isHoveredOrFocused());
+				this.drawTexture(matrices, this.x, this.y, 0, 46 + i * 20, this.width / 2, this.height);
+				this.drawTexture(matrices, this.x + this.width / 2, this.y, 200 - this.width / 2, 46 + i * 20, this.width / 2, this.height);
+				RenderSystem.enableDepthTest();
+				RenderSystem.setShaderTexture(0, downloadIcon);
+				drawTexture(matrices, this.x, this.y, 0, 0, this.getWidth(), this.getHeight(), getWidth(), getHeight());
+			}
+		});
+
+		addDrawableChild(new ButtonWidget(width / 2 - 75, height - 50, 150, 20, ScreenTexts.BACK,
+			buttonWidget -> MinecraftClient.getInstance().setScreen(parent)));
+
+		ButtonWidget save = new ButtonWidget(width - 60, 50, 50, 20, Text.translatable("saveAction"),
+			buttonWidget -> {
+				try {
+					Files.write(QuiltLoader.getGameDir().resolve("screenshots").resolve("_share-" + imageName), Objects.requireNonNull(image.getImage()).getBytes());
+					AxolotlClient.LOGGER.info("Saved image " + imageName + " to screenshots folder!");
+				} catch (IOException e) {
+					AxolotlClient.LOGGER.info("Failed to save image!");
+				}
+			}, (buttonWidget, matrixStack, i, j) -> ImageViewerScreen.this.renderTooltip(matrixStack, Text.translatable("save_image"), i, j));
+		addImageButton(save, true);
+
+		ButtonWidget copy = new ButtonWidget(width - 60, 75, 50, 20, Text.translatable("copyAction"), buttonWidget -> {
+			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new Transferable() {
+				@Override
+				public DataFlavor[] getTransferDataFlavors() {
+					return new DataFlavor[]{DataFlavor.imageFlavor};
+				}
+
+				@Override
+				public boolean isDataFlavorSupported(DataFlavor flavor) {
+					return DataFlavor.imageFlavor.equals(flavor);
+				}
+
+				@NotNull
+				@Override
+				public Object getTransferData(DataFlavor flavor) throws IOException {
+					return ImageIO.read(new ByteArrayInputStream(Objects.requireNonNull(image.getImage()).getBytes()));
+				}
+			}, null);
+			AxolotlClient.LOGGER.info("Copied image " + imageName + " to the clipboard!");
+		}, (buttonWidget, matrixStack, i, j) -> ImageViewerScreen.this.renderTooltip(matrixStack, Text.translatable("copy_image"), i, j));
+
+		addImageButton(copy, true);
+
+		ButtonWidget about = new ButtonWidget(width - 60, 100, 50, 20, Text.translatable("aboutAction"), buttonWidget -> {
+			OSUtil.getOS().open(aboutPage, AxolotlClient.LOGGER);
+		}, (buttonWidget, matrixStack, i, j) -> ImageViewerScreen.this.renderTooltip(matrixStack, Text.translatable("about_image"), i, j));
+
+		addImageButton(about, true);
+	}
+
+	@SuppressWarnings("UnstableApiUsage")
+	private Identifier downloadImage(String url) {
+
+		try {
+			if (image != null) {
+				MinecraftClient.getInstance().getTextureManager().destroyTexture(imageId);
+				image.close();
+			}
+			ImageInstance instance = ImageShare.getInstance().downloadImage(url.trim());
+			NativeImage image = instance.getImage();
+			if (image != null) {
+				Identifier id = new Identifier("screenshot_share_" + Hashing.sha256().hashUnencodedChars(url));
+				MinecraftClient.getInstance().getTextureManager().registerTexture(id,
+					this.image = new NativeImageBackedTexture(image));
+
+				imgAspectRatio = image.getWidth() / (double) image.getHeight();
+				imageName = instance.getFileName();
+				return id;
+			}
+		} catch (Exception ignored) {
+		}
+		return null;
+	}
+
+	private void addImageButton(ButtonWidget button, boolean right) {
+		addSelectableChild(button);
+		editButtons.put(button, right);
+	}
+
+	@Override
+	public void tick() {
+		urlBox.tick();
 	}
 }

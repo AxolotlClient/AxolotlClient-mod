@@ -58,17 +58,12 @@ import org.lwjgl.opengl.GL11;
 
 public class CreditsScreen extends Screen {
 
-	private final Screen parent;
-
 	public static final HashMap<String, String[]> externalModuleCredits = new HashMap<>();
-
+	private final Screen parent;
 	private final List<Credit> credits = new ArrayList<>();
-
-	private Overlay creditOverlay;
-
-	private EntryListWidget<Credit> creditsList;
-
 	private final SoundInstance bgm = PositionedSoundInstance.master(SoundEvents.MUSIC_DISC_CHIRP, 1, 1);
+	private Overlay creditOverlay;
+	private EntryListWidget<Credit> creditsList;
 
 	public CreditsScreen(Screen parent) {
 		super(Text.translatable("credits"));
@@ -103,23 +98,6 @@ public class CreditsScreen extends Screen {
 	}
 
 	@Override
-	public boolean mouseClicked(double mouseX, double mouseY, int button) {
-		super.mouseClicked(mouseX, mouseY, button);
-
-		if (creditOverlay != null) {
-			if (!creditOverlay.isMouseOver(mouseX, mouseY)) {
-				creditOverlay = null;
-				this.creditsList.mouseClicked(mouseX, mouseY, button);
-			} else {
-				creditOverlay.mouseClicked(mouseX, mouseY);
-			}
-		} else {
-			this.creditsList.mouseClicked(mouseX, mouseY, button);
-		}
-		return false;
-	}
-
-	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 		if (keyCode == InputUtil.KEY_ESCAPE_CODE) {
 			if (creditOverlay == null) {
@@ -133,15 +111,13 @@ public class CreditsScreen extends Screen {
 	}
 
 	@Override
-	public boolean mouseReleased(double mouseX, double mouseY, int button) {
-		return creditsList.mouseReleased(mouseX, mouseY, button) || super.mouseReleased(mouseX, mouseY, button);
-	}
-
-	@Override
-	public void resize(MinecraftClient client, int width, int height) {
-		if (creditOverlay != null)
-			creditOverlay.init();
-		super.resize(client, width, height);
+	public List<? extends Element> children() {
+		if (CreditsScreen.this.creditOverlay != null) {
+			List<? extends Element> l = new ArrayList<>(super.children());
+			l.remove(creditsList);
+			return l;
+		}
+		return super.children();
 	}
 
 	@Override
@@ -162,14 +138,21 @@ public class CreditsScreen extends Screen {
 		}).positionAndSize(width / 2 - 75, height - 50 + 22, 150, 20).build());
 
 		this.addDrawableChild(new ButtonWidget.Builder(Text.translatable("creditsBGM").append(": ")
-				.append(Text.translatable(AxolotlClient.CONFIG.creditsBGM.get() ? "options.on" : "options.off")),
-				buttonWidget -> {
-					AxolotlClient.CONFIG.creditsBGM.toggle();
-					AxolotlClient.configManager.save();
-					stopBGM();
-					buttonWidget.setMessage(Text.translatable("creditsBGM").append(": ").append(
-							Text.translatable(AxolotlClient.CONFIG.creditsBGM.get() ? "options.on" : "options.off")));
-				}).positionAndSize(6, this.height - 26, 100, 20).build());
+			.append(Text.translatable(AxolotlClient.CONFIG.creditsBGM.get() ? "options.on" : "options.off")),
+			buttonWidget -> {
+				AxolotlClient.CONFIG.creditsBGM.toggle();
+				AxolotlClient.configManager.save();
+				stopBGM();
+				buttonWidget.setMessage(Text.translatable("creditsBGM").append(": ").append(
+					Text.translatable(AxolotlClient.CONFIG.creditsBGM.get() ? "options.on" : "options.off")));
+			}).positionAndSize(6, this.height - 26, 100, 20).build());
+	}
+
+	@Override
+	public void resize(MinecraftClient client, int width, int height) {
+		if (creditOverlay != null)
+			creditOverlay.init();
+		super.resize(client, width, height);
 	}
 
 	private void initCredits() {
@@ -197,24 +180,36 @@ public class CreditsScreen extends Screen {
 	}
 
 	@Override
+	public boolean mouseClicked(double mouseX, double mouseY, int button) {
+		super.mouseClicked(mouseX, mouseY, button);
+
+		if (creditOverlay != null) {
+			if (!creditOverlay.isMouseOver(mouseX, mouseY)) {
+				creditOverlay = null;
+				this.creditsList.mouseClicked(mouseX, mouseY, button);
+			} else {
+				creditOverlay.mouseClicked(mouseX, mouseY);
+			}
+		} else {
+			this.creditsList.mouseClicked(mouseX, mouseY, button);
+		}
+		return false;
+	}
+
+	@Override
+	public boolean mouseReleased(double mouseX, double mouseY, int button) {
+		return creditsList.mouseReleased(mouseX, mouseY, button) || super.mouseReleased(mouseX, mouseY, button);
+	}
+
+	@Override
 	public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
 		return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
-				|| creditsList.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+			|| creditsList.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
 	}
 
 	@Override
 	public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
 		return super.mouseScrolled(mouseX, mouseY, amount) || creditsList.mouseScrolled(mouseX, mouseY, amount);
-	}
-
-	@Override
-	public List<? extends Element> children() {
-		if (CreditsScreen.this.creditOverlay != null) {
-			List<? extends Element> l = new ArrayList<>(super.children());
-			l.remove(creditsList);
-			return l;
-		}
-		return super.children();
 	}
 
 	private class CreditsList extends ElementListWidget<Credit> {
@@ -263,10 +258,8 @@ public class CreditsScreen extends Screen {
 
 		private final String name;
 		private final String[] things;
-
-		private boolean hovered;
-
 		private final ButtonWidget c;
+		private boolean hovered;
 
 		public Credit(String name, String... things) {
 			this.name = name;
@@ -279,19 +272,19 @@ public class CreditsScreen extends Screen {
 						   int mouseY, boolean hovered, float tickDelta) {
 			if (hovered || c.isFocused()) {
 				drawVerticalLine(matrices, x - 100, y, y + 20,
-						io.github.axolotlclient.AxolotlClientConfig.Color.ERROR.getAsInt());
+					io.github.axolotlclient.AxolotlClientConfig.Color.ERROR.getAsInt());
 				drawVerticalLine(matrices, x + 100, y, y + 20,
-						io.github.axolotlclient.AxolotlClientConfig.Color.ERROR.getAsInt());
+					io.github.axolotlclient.AxolotlClientConfig.Color.ERROR.getAsInt());
 				drawHorizontalLine(matrices, x - 100, x + 100, y + 20,
-						io.github.axolotlclient.AxolotlClientConfig.Color.ERROR.getAsInt());
+					io.github.axolotlclient.AxolotlClientConfig.Color.ERROR.getAsInt());
 				drawHorizontalLine(matrices, x - 100, x + 100, y,
-						io.github.axolotlclient.AxolotlClientConfig.Color.ERROR.getAsInt());
+					io.github.axolotlclient.AxolotlClientConfig.Color.ERROR.getAsInt());
 			}
 			this.hovered = hovered;
 			DrawUtil.drawCenteredString(matrices, MinecraftClient.getInstance().textRenderer, name, x, y + 5,
-					hovered || c.isFocused() ? io.github.axolotlclient.AxolotlClientConfig.Color.SELECTOR_RED.getAsInt()
-							: -1,
-					true);
+				hovered || c.isFocused() ? io.github.axolotlclient.AxolotlClientConfig.Color.SELECTOR_RED.getAsInt()
+					: -1,
+				true);
 		}
 
 		@Override
@@ -308,11 +301,6 @@ public class CreditsScreen extends Screen {
 			return false;
 		}
 
-		@Override
-		public List<? extends Selectable> selectableChildren() {
-			return List.of(c);
-		}
-
 		@Nullable
 		@Override
 		public Element getFocused() {
@@ -321,19 +309,23 @@ public class CreditsScreen extends Screen {
 			}
 			return super.getFocused();
 		}
+
+		@Override
+		public List<? extends Selectable> selectableChildren() {
+			return List.of(c);
+		}
 	}
 
 	private class Overlay {
 
-		private Window window;
-		Credit credit;
 		private final int x;
 		private final int y;
-		private int width;
-		private int height;
-
 		protected HashMap<String, ClickEvent> effects = new HashMap<>();
 		protected HashMap<Integer, String> lines = new HashMap<>();
+		Credit credit;
+		private Window window;
+		private int width;
+		private int height;
 
 		public Overlay(Credit credit) {
 			x = 100;
@@ -362,18 +354,18 @@ public class CreditsScreen extends Screen {
 
 		public void render(MatrixStack matrices) {
 			RenderUtil.drawRectangle(matrices, x, y, width, height,
-					io.github.axolotlclient.AxolotlClientConfig.Color.DARK_GRAY.withAlpha(127));
+				io.github.axolotlclient.AxolotlClientConfig.Color.DARK_GRAY.withAlpha(127));
 			DrawUtil.outlineRect(matrices, x, y, width, height,
-					io.github.axolotlclient.AxolotlClientConfig.Color.BLACK.getAsInt());
+				io.github.axolotlclient.AxolotlClientConfig.Color.BLACK.getAsInt());
 
 			RenderSystem.setShaderColor(1, 1, 1, 1);
 
 			DrawUtil.drawCenteredString(matrices, MinecraftClient.getInstance().textRenderer, credit.name,
-					window.getScaledWidth() / 2, y + 7, -16784327, true);
+				window.getScaledWidth() / 2, y + 7, -16784327, true);
 
 			lines.forEach(
-					(integer, s) -> DrawUtil.drawCenteredString(matrices, MinecraftClient.getInstance().textRenderer, s,
-							x + width / 2, integer, Color.SELECTOR_GREEN.getAsInt(), true));
+				(integer, s) -> DrawUtil.drawCenteredString(matrices, MinecraftClient.getInstance().textRenderer, s,
+					x + width / 2, integer, Color.SELECTOR_GREEN.getAsInt(), true));
 		}
 
 		public boolean isMouseOver(double mouseX, double mouseY) {
@@ -383,8 +375,8 @@ public class CreditsScreen extends Screen {
 		public void mouseClicked(double mouseX, double mouseY) {
 			lines.forEach((integer, s) -> {
 				if ((mouseY >= integer && mouseY < integer + 11)
-						&& mouseX >= x + width / 2F - MinecraftClient.getInstance().textRenderer.getWidth(s) / 2F
-						&& mouseX <= x + width / 2F + MinecraftClient.getInstance().textRenderer.getWidth(s) / 2F) {
+					&& mouseX >= x + width / 2F - MinecraftClient.getInstance().textRenderer.getWidth(s) / 2F
+					&& mouseX <= x + width / 2F + MinecraftClient.getInstance().textRenderer.getWidth(s) / 2F) {
 					handleTextClick(Style.EMPTY.withClickEvent(effects.get(Formatting.strip(s))));
 				}
 			});
@@ -401,17 +393,17 @@ public class CreditsScreen extends Screen {
 		public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX,
 						   int mouseY, boolean hovered, float tickDelta) {
 			DrawUtil.drawCenteredString(matrices, MinecraftClient.getInstance().textRenderer, super.name, x, y, -128374,
-					true);
-		}
-
-		@Override
-		public boolean mouseClicked(double mouseX, double mouseY, int button) {
-			return false;
+				true);
 		}
 
 		@Override
 		public List<? extends Element> children() {
 			return List.of();
+		}
+
+		@Override
+		public boolean mouseClicked(double mouseX, double mouseY, int button) {
+			return false;
 		}
 
 		@Override

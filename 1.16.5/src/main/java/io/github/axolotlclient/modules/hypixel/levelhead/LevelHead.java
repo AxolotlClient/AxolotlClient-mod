@@ -39,16 +39,16 @@ public class LevelHead implements AbstractHypixelMod {
 	public ColorOption textColor = new ColorOption("textColor", Color.GOLD);
 	public EnumOption mode = new EnumOption("levelHeadMode", LevelHeadMode.values(), LevelHeadMode.NETWORK.toString());
 
+	public static LevelHead getInstance() {
+		return Instance;
+	}
+
 	@Override
 	public void init() {
 		category.add(enabled);
 		category.add(textColor);
 		category.add(background);
 		category.add(mode);
-	}
-
-	public static LevelHead getInstance() {
-		return Instance;
 	}
 
 	@Override

@@ -42,9 +42,6 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 @Mixin(InGameHud.class)
 public abstract class InGameHudMixin {
 
-	@Shadow
-	protected abstract boolean showCrosshair();
-
 	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;color(FFFF)V", ordinal = 0))
 	private void axolotlclient$onHudRender(float tickDelta, CallbackInfo ci) {
 		HudManager.getInstance().render(MinecraftClient.getInstance(), tickDelta);
@@ -68,6 +65,9 @@ public abstract class InGameHudMixin {
 		}
 		return showCrosshair();
 	}
+
+	@Shadow
+	protected abstract boolean showCrosshair();
 
 	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Ljava/lang/String;III)I", ordinal = 0))
 	public int axolotlclient$actionBar(TextRenderer instance, String text, int x, int y, int color) {
@@ -100,9 +100,9 @@ public abstract class InGameHudMixin {
 		HotbarHUD hud = (HotbarHUD) HudManager.getInstance().get(HotbarHUD.ID);
 		if (hud.isEnabled()) {
 			args.set(1, ((Integer) hud.getX()).floatValue() + (hud.getWidth() * hud.getScale()
-					- MinecraftClient.getInstance().textRenderer.getStringWidth(args.get(0))) / 2);
+				- MinecraftClient.getInstance().textRenderer.getStringWidth(args.get(0))) / 2);
 			args.set(2, ((Integer) hud.getY()).floatValue() - 36
-					+ (!MinecraftClient.getInstance().interactionManager.hasStatusBars() ? 14 : 0));
+				+ (!MinecraftClient.getInstance().interactionManager.hasStatusBars() ? 14 : 0));
 		}
 	}
 

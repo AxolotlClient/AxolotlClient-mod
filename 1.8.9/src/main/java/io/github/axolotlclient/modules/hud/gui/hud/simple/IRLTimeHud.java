@@ -22,15 +22,15 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.simple;
 
-import io.github.axolotlclient.AxolotlClientConfig.options.Option;
-import io.github.axolotlclient.AxolotlClientConfig.options.StringOption;
-import io.github.axolotlclient.modules.hud.gui.entry.SimpleTextHudEntry;
-import net.minecraft.util.Identifier;
-
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+
+import io.github.axolotlclient.AxolotlClientConfig.options.Option;
+import io.github.axolotlclient.AxolotlClientConfig.options.StringOption;
+import io.github.axolotlclient.modules.hud.gui.entry.SimpleTextHudEntry;
+import net.minecraft.util.Identifier;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -48,7 +48,7 @@ public class IRLTimeHud extends SimpleTextHudEntry {
 	private boolean error = false;
 
 	private final StringOption format = new StringOption("dateformat", this::updateDateTimeFormatter,
-			"HH:mm:ss");
+		"HH:mm:ss");
 
 	@Override
 	public Identifier getId() {
@@ -63,6 +63,13 @@ public class IRLTimeHud extends SimpleTextHudEntry {
 			error = true;
 			formatter = null;
 		}
+	}
+
+	@Override
+	public List<Option<?>> getConfigurationOptions() {
+		List<Option<?>> options = super.getConfigurationOptions();
+		options.add(format);
+		return options;
 	}
 
 	@Override
@@ -87,12 +94,5 @@ public class IRLTimeHud extends SimpleTextHudEntry {
 			return getValue();
 		}
 		return formatter.format(LocalDateTime.of(2020, Month.AUGUST, 22, 14, 28, 32, 1595135));
-	}
-
-	@Override
-	public List<Option<?>> getConfigurationOptions() {
-		List<Option<?>> options = super.getConfigurationOptions();
-		options.add(format);
-		return options;
 	}
 }

@@ -38,7 +38,7 @@ public abstract class BackgroundRendererMixin {
 	@Inject(method = "applyFog", at = @At("TAIL"))
 	private static void axolotlclient$applyNoFog(Camera camera, BackgroundRenderer.FogType fogType, float viewDistance, boolean thickFog, CallbackInfo ci) {
 		if (camera.getSubmergedFluidState().isIn(FluidTags.WATER)
-				&& (thickFog || fogType == BackgroundRenderer.FogType.FOG_TERRAIN)) {
+			&& (thickFog || fogType == BackgroundRenderer.FogType.FOG_TERRAIN)) {
 			if (SkyboxManager.getInstance().hasSkyBoxes()) {
 				RenderSystem.fogDensity(0);
 			}

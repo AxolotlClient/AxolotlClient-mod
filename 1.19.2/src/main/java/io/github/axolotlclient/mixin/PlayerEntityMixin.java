@@ -49,7 +49,7 @@ public abstract class PlayerEntityMixin extends Entity {
 	@Inject(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getAttributeValue(Lnet/minecraft/entity/attribute/EntityAttribute;)D"))
 	public void axolotlclient$getReach(Entity entity, CallbackInfo ci) {
 		if ((Object) this == MinecraftClient.getInstance().player
-				|| entity.equals(MinecraftClient.getInstance().player)) {
+			|| entity.equals(MinecraftClient.getInstance().player)) {
 			ReachHud reachDisplayHud = (ReachHud) HudManager.getInstance().get(ReachHud.ID);
 			if (reachDisplayHud != null && reachDisplayHud.isEnabled()) {
 				reachDisplayHud.updateDistance(this, entity);

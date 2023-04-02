@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud;
 
+import java.util.List;
+
 import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.ColorOption;
@@ -37,8 +39,6 @@ import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.util.Identifier;
 
-import java.util.List;
-
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
@@ -51,14 +51,14 @@ public class MemoryHud extends TextHudEntry implements DynamicallyPositionable {
 	public static final Identifier ID = new Identifier("axolotlclient", "memoryhud");
 
 	protected final EnumOption justification = new EnumOption("justification", Justification.values(),
-			Justification.CENTER.toString());
+		Justification.CENTER.toString());
 	protected final EnumOption anchor = DefaultOptions.getAnchorPoint();
 
 	private final Rectangle graph = new Rectangle(0, 0, 0, 0);
 	private final ColorOption graphUsedColor = new ColorOption("graphUsedColor",
-			Color.SELECTOR_RED.withAlpha(255));
+		Color.SELECTOR_RED.withAlpha(255));
 	private final ColorOption graphFreeColor = new ColorOption("graphFreeColor",
-			Color.SELECTOR_GREEN.withAlpha(255));
+		Color.SELECTOR_GREEN.withAlpha(255));
 
 	private final BooleanOption showGraph = new BooleanOption("showGraph", true);
 	private final BooleanOption showText = new BooleanOption("showText", false);
@@ -76,9 +76,9 @@ public class MemoryHud extends TextHudEntry implements DynamicallyPositionable {
 			graph.setData(pos.x + 5, pos.y + 5, getBounds().width - 10, getBounds().height - 10);
 
 			fill(graph.x, graph.y, (int) (graph.x + graph.width * (getUsage())), graph.y + graph.height,
-					graphUsedColor.get().getAsInt());
+				graphUsedColor.get().getAsInt());
 			fill((int) (graph.x + graph.width * (getUsage())), graph.y, graph.x + graph.width, graph.y + graph.height,
-					graphFreeColor.get().getAsInt());
+				graphFreeColor.get().getAsInt());
 
 			outlineRect(graph, Color.BLACK);
 		}
@@ -86,13 +86,13 @@ public class MemoryHud extends TextHudEntry implements DynamicallyPositionable {
 		if (showText.get()) {
 			String mem = getMemoryLine();
 			drawString(mem, pos.x + Justification.valueOf(justification.get()).getXOffset(client.textRenderer.getStringWidth(mem), getWidth() - 4) + 2,
-					pos.y + (Math.round((float) height / 2) - 4) - (showAllocated.get() ? 4 : 0),
-					textColor.get().getAsInt(), shadow.get());
+				pos.y + (Math.round((float) height / 2) - 4) - (showAllocated.get() ? 4 : 0),
+				textColor.get().getAsInt(), shadow.get());
 
 			if (showAllocated.get()) {
 				String alloc = getAllocationLine();
 				drawString(alloc, pos.x + Justification.valueOf(justification.get()).getXOffset(client.textRenderer.getStringWidth(alloc), getWidth() - 4) + 2, pos.y + (Math.round((float) height / 2) - 4) + 4,
-						textColor.get().getAsInt(), shadow.get());
+					textColor.get().getAsInt(), shadow.get());
 			}
 		}
 	}
@@ -105,9 +105,9 @@ public class MemoryHud extends TextHudEntry implements DynamicallyPositionable {
 			graph.setData(pos.x + 5, pos.y + 5, getBounds().width - 10, getBounds().height - 10);
 
 			fill(graph.x, graph.y, (int) (graph.x + graph.width * (0.3)), graph.y + graph.height,
-					graphUsedColor.get().getAsInt());
+				graphUsedColor.get().getAsInt());
 			fill((int) (graph.x + graph.width * (0.3)), graph.y, graph.x + graph.width, graph.y + graph.height,
-					graphFreeColor.get().getAsInt());
+				graphFreeColor.get().getAsInt());
 
 			outlineRect(graph, Color.BLACK);
 		}
@@ -115,21 +115,34 @@ public class MemoryHud extends TextHudEntry implements DynamicallyPositionable {
 		if (showText.get()) {
 			String mem = "300MiB/1024MiB";
 			drawString(mem, pos.x + Justification.valueOf(justification.get()).getXOffset(client.textRenderer.getStringWidth(mem), getWidth() - 4) + 2,
-					pos.y + (Math.round((float) height / 2) - 4) - (showAllocated.get() ? 4 : 0), Color.WHITE,
-					shadow.get());
+				pos.y + (Math.round((float) height / 2) - 4) - (showAllocated.get() ? 4 : 0), Color.WHITE,
+				shadow.get());
 			if (showAllocated.get()) {
 				String alloc = I18n.translate("allocated") + ": 976MiB";
 				drawString(alloc, pos.x + Justification.valueOf(justification.get()).getXOffset(client.textRenderer.getStringWidth(alloc), getWidth() - 4) + 2,
-						pos.y + (Math.round((float) height / 2) - 4) + 4, textColor.get(), shadow.get());
+					pos.y + (Math.round((float) height / 2) - 4) + 4, textColor.get(), shadow.get());
 			}
 		}
 
 		if (!showGraph.get() && !showText.get()) {
 			String value = I18n.translate(ID.getPath());
 			drawString(value, pos.x + Justification.valueOf(justification.get()).getXOffset(client.textRenderer.getStringWidth(value), getWidth() - 4) + 2,
-					pos.y + (Math.round((float) height / 2) - 4), Color.WHITE,
-					shadow.get());
+				pos.y + (Math.round((float) height / 2) - 4), Color.WHITE,
+				shadow.get());
 		}
+	}
+
+	@Override
+	public boolean movable() {
+		return true;
+	}
+
+	private float getUsage() {
+		long max = Runtime.getRuntime().maxMemory();
+		long total = Runtime.getRuntime().totalMemory();
+		long free = Runtime.getRuntime().freeMemory();
+		long used = total - free;
+		return (float) used / max;
 	}
 
 	private String getMemoryLine() {
@@ -147,12 +160,8 @@ public class MemoryHud extends TextHudEntry implements DynamicallyPositionable {
 		return I18n.translate("allocated") + ": " + toMiB(total);
 	}
 
-	private float getUsage() {
-		long max = Runtime.getRuntime().maxMemory();
-		long total = Runtime.getRuntime().totalMemory();
-		long free = Runtime.getRuntime().freeMemory();
-		long used = total - free;
-		return (float) used / max;
+	private static String toMiB(long bytes) {
+		return (bytes / 1024L / 1024L) + "MiB";
 	}
 
 	@Override
@@ -171,15 +180,6 @@ public class MemoryHud extends TextHudEntry implements DynamicallyPositionable {
 	@Override
 	public Identifier getId() {
 		return ID;
-	}
-
-	@Override
-	public boolean movable() {
-		return true;
-	}
-
-	private static String toMiB(long bytes) {
-		return (bytes / 1024L / 1024L) + "MiB";
 	}
 
 	@Override

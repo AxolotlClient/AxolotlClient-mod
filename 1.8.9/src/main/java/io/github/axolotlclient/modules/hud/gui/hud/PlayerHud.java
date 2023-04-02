@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud;
 
+import java.util.List;
+
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
@@ -36,8 +38,6 @@ import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.entity.player.ClientPlayerEntity;
 import net.minecraft.util.Identifier;
 
-import java.util.List;
-
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
@@ -48,24 +48,51 @@ import java.util.List;
 public class PlayerHud extends BoxHudEntry {
 
 	public static final Identifier ID = new Identifier("kronhud", "playerhud");
-
+	@Getter
+	private static boolean currentlyRendering = false;
 	private final DoubleOption rotation = new DoubleOption("rotation", 0d, 0d, 360d);
 	private final BooleanOption dynamicRotation = new BooleanOption("dynamicrotation", true);
 	private final BooleanOption autoHide = new BooleanOption("autoHide", false);
-
 	private float lastYawOffset = 0;
 	private float yawOffset = 0;
 	private float lastYOffset = 0;
 	private float yOffset = 0;
-
 	private long hide;
-
-	@Getter
-	private static boolean currentlyRendering = false;
 
 	public PlayerHud() {
 		super(62, 94, true);
 		Hooks.PLAYER_DIRECTION_CHANGE.register(this::onPlayerDirectionChange);
+	}
+
+	public void onPlayerDirectionChange(float prevPitch, float prevYaw, float pitch, float yaw) {
+		yawOffset += (yaw - prevYaw) / 2;
+	}
+
+	@Override
+	public boolean tickable() {
+		return true;
+	}
+
+	@Override
+	public void tick() {
+		lastYawOffset = yawOffset;
+		yawOffset *= .93f;
+		lastYOffset = yOffset;
+		yOffset *= .8;
+	}
+
+	@Override
+	public Identifier getId() {
+		return ID;
+	}
+
+	@Override
+	public List<Option<?>> getConfigurationOptions() {
+		List<Option<?>> options = super.getConfigurationOptions();
+		options.add(dynamicRotation);
+		options.add(rotation);
+		options.add(autoHide);
+		return options;
 	}
 
 	@Override
@@ -76,6 +103,11 @@ public class PlayerHud extends BoxHudEntry {
 	@Override
 	public void renderPlaceholderComponent(float delta) {
 		renderPlayer(true, getTruePos().x() + 31 * getScale(), getTruePos().y() + 86 * getScale(), 0); // If delta was delta, it would start jittering
+	}
+
+	@Override
+	public boolean movable() {
+		return true;
 	}
 
 	public void renderPlayer(boolean placeholder, double x, double y, float delta) {
@@ -160,43 +192,7 @@ public class PlayerHud extends BoxHudEntry {
 		// inspired by tr7zw's mod
 		ClientPlayerEntity player = client.player;
 		return player.isSneaking() || player.isSprinting() || player.abilities.flying
-				|| client.player.isSubmergedIn(Material.WATER) || player.hasVehicle() || player.isUsingItem()
-				|| player.handSwinging || player.hurtTime > 0 || player.isOnFire();
-	}
-
-	public void onPlayerDirectionChange(float prevPitch, float prevYaw, float pitch, float yaw) {
-		yawOffset += (yaw - prevYaw) / 2;
-	}
-
-	@Override
-	public boolean tickable() {
-		return true;
-	}
-
-	@Override
-	public void tick() {
-		lastYawOffset = yawOffset;
-		yawOffset *= .93f;
-		lastYOffset = yOffset;
-		yOffset *= .8;
-	}
-
-	@Override
-	public Identifier getId() {
-		return ID;
-	}
-
-	@Override
-	public boolean movable() {
-		return true;
-	}
-
-	@Override
-	public List<Option<?>> getConfigurationOptions() {
-		List<Option<?>> options = super.getConfigurationOptions();
-		options.add(dynamicRotation);
-		options.add(rotation);
-		options.add(autoHide);
-		return options;
+			|| client.player.isSubmergedIn(Material.WATER) || player.hasVehicle() || player.isUsingItem()
+			|| player.handSwinging || player.hurtTime > 0 || player.isOnFire();
 	}
 }

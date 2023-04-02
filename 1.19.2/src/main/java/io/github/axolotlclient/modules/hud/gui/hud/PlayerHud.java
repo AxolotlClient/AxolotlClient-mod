@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud;
 
+import java.util.List;
+
 import com.mojang.blaze3d.lighting.DiffuseLighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
@@ -40,8 +42,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3f;
 
-import java.util.List;
-
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
@@ -52,24 +52,74 @@ import java.util.List;
 public class PlayerHud extends BoxHudEntry {
 
 	public static final Identifier ID = new Identifier("kronhud", "playerhud");
-
+	@Getter
+	private static boolean currentlyRendering;
 	private final DoubleOption rotation = new DoubleOption("rotation", 0, 0, 360);
 	private final BooleanOption dynamicRotation = new BooleanOption("dynamicrotation", true);
 	private final BooleanOption autoHide = new BooleanOption("autoHide", false);
-
 	private float lastYawOffset = 0;
 	private float yawOffset = 0;
 	private float lastYOffset = 0;
 	private float yOffset = 0;
-
 	private long hide;
-
-	@Getter
-	private static boolean currentlyRendering;
 
 	public PlayerHud() {
 		super(62, 94, true);
 		Hooks.PLAYER_DIRECTION_CHANGE.register(this::onPlayerDirectionChange);
+	}
+
+	public void onPlayerDirectionChange(float prevPitch, float prevYaw, float pitch, float yaw) {
+		yawOffset += (yaw - prevYaw) / 2;
+	}
+
+	@Override
+	public boolean tickable() {
+		return true;
+	}
+
+	@Override
+	public void tick() {
+		lastYawOffset = yawOffset;
+		yawOffset *= .93f;
+		lastYOffset = yOffset;
+		if (client.player != null && client.player.isInSwimmingPose()) {
+			float rawPitch = client.player.isTouchingWater() ? -90.0F - client.player.getPitch() : -90.0F;
+			float pitch = MathHelper.lerp(client.player.getLeaningPitch(1), 0.0F, rawPitch);
+			float height = client.player.getHeight();
+			// sin = opposite / hypotenuse
+			float offset = (float) (Math.sin(Math.toRadians(pitch)) * height);
+			yOffset = Math.abs(offset) + 35;
+		} else if (client.player != null && client.player.isFallFlying()) {
+			// Elytra!
+
+			float j = (float) client.player.getRoll() + 1;
+			float k = MathHelper.clamp(j * j / 100.0F, 0.0F, 1.0F);
+
+			float pitch = k * (-90.0F - client.player.getPitch()) + 90;
+			float height = client.player.getHeight();
+			// sin = opposite / hypotenuse
+			float offset = (float) (Math.sin(Math.toRadians(pitch)) * height) * 50;
+			yOffset = 35 - offset;
+			if (pitch < 0) {
+				yOffset -= ((1 / (1 + Math.exp(-pitch / 4))) - .5) * 20;
+			}
+		} else {
+			yOffset *= .8;
+		}
+	}
+
+	@Override
+	public Identifier getId() {
+		return ID;
+	}
+
+	@Override
+	public List<Option<?>> getConfigurationOptions() {
+		List<Option<?>> options = super.getConfigurationOptions();
+		options.add(dynamicRotation);
+		options.add(rotation);
+		options.add(autoHide);
+		return options;
 	}
 
 	@Override
@@ -80,6 +130,11 @@ public class PlayerHud extends BoxHudEntry {
 	@Override
 	public void renderPlaceholderComponent(MatrixStack matrices, float delta) {
 		renderPlayer(true, getTruePos().x() + 31 * getScale(), getTruePos().y() + 86 * getScale(), 0); // If delta was delta, it would start jittering
+	}
+
+	@Override
+	public boolean movable() {
+		return true;
 	}
 
 	public void renderPlayer(boolean placeholder, double x, double y, float delta) {
@@ -132,7 +187,7 @@ public class PlayerHud extends BoxHudEntry {
 		renderer.setRenderShadows(false);
 
 		VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders()
-				.getEntityVertexConsumers();
+			.getEntityVertexConsumers();
 
 		currentlyRendering = true;
 		renderer.render(client.player, 0, 0, 0, 0, delta, nextStack, immediate, 15728880);
@@ -152,66 +207,7 @@ public class PlayerHud extends BoxHudEntry {
 		// inspired by tr7zw's mod
 		ClientPlayerEntity player = client.player;
 		return player.isSneaking() || player.isSprinting() || player.isFallFlying() || player.getAbilities().flying
-				|| player.isSubmergedInWater() || player.isInSwimmingPose() || player.hasVehicle()
-				|| player.isUsingItem() || player.handSwinging || player.hurtTime > 0 || player.isOnFire();
-	}
-
-	public void onPlayerDirectionChange(float prevPitch, float prevYaw, float pitch, float yaw) {
-		yawOffset += (yaw - prevYaw) / 2;
-	}
-
-	@Override
-	public boolean tickable() {
-		return true;
-	}
-
-	@Override
-	public void tick() {
-		lastYawOffset = yawOffset;
-		yawOffset *= .93f;
-		lastYOffset = yOffset;
-		if (client.player != null && client.player.isInSwimmingPose()) {
-			float rawPitch = client.player.isTouchingWater() ? -90.0F - client.player.getPitch() : -90.0F;
-			float pitch = MathHelper.lerp(client.player.getLeaningPitch(1), 0.0F, rawPitch);
-			float height = client.player.getHeight();
-			// sin = opposite / hypotenuse
-			float offset = (float) (Math.sin(Math.toRadians(pitch)) * height);
-			yOffset = Math.abs(offset) + 35;
-		} else if (client.player != null && client.player.isFallFlying()) {
-			// Elytra!
-
-			float j = (float) client.player.getRoll() + 1;
-			float k = MathHelper.clamp(j * j / 100.0F, 0.0F, 1.0F);
-
-			float pitch = k * (-90.0F - client.player.getPitch()) + 90;
-			float height = client.player.getHeight();
-			// sin = opposite / hypotenuse
-			float offset = (float) (Math.sin(Math.toRadians(pitch)) * height) * 50;
-			yOffset = 35 - offset;
-			if (pitch < 0) {
-				yOffset -= ((1 / (1 + Math.exp(-pitch / 4))) - .5) * 20;
-			}
-		} else {
-			yOffset *= .8;
-		}
-	}
-
-	@Override
-	public Identifier getId() {
-		return ID;
-	}
-
-	@Override
-	public boolean movable() {
-		return true;
-	}
-
-	@Override
-	public List<Option<?>> getConfigurationOptions() {
-		List<Option<?>> options = super.getConfigurationOptions();
-		options.add(dynamicRotation);
-		options.add(rotation);
-		options.add(autoHide);
-		return options;
+			|| player.isSubmergedInWater() || player.isInSwimmingPose() || player.hasVehicle()
+			|| player.isUsingItem() || player.handSwinging || player.hurtTime > 0 || player.isOnFire();
 	}
 }

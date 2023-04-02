@@ -60,7 +60,7 @@ public abstract class WorldRendererMixin {
 										Runnable runnable, CallbackInfo ci) {
 		runnable.run();
 		if (AxolotlClient.CONFIG.customSky.get() && SkyboxManager.getInstance().hasSkyBoxes()
-				&& !QuiltLoader.isModLoaded("fabricskyboxes")) {
+			&& !QuiltLoader.isModLoaded("fabricskyboxes")) {
 			this.client.getProfiler().push("Custom Skies");
 
 			RenderSystem.depthMask(false);

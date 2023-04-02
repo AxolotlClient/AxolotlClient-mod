@@ -22,6 +22,10 @@
 
 package io.github.axolotlclient.modules.hud;
 
+import java.awt.*;
+import java.util.List;
+import java.util.Optional;
+
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
@@ -38,10 +42,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
 
-import java.awt.*;
-import java.util.List;
-import java.util.Optional;
-
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
@@ -53,15 +53,20 @@ public class HudEditScreen extends Screen {
 
 	private static final BooleanOption snapping = new BooleanOption("snapping", true);
 	private static final OptionCategory hudEditScreenCategory = new OptionCategory("hudEditScreen");
-	private HudEntry current;
-	private DrawPosition offset = null;
-	private boolean mouseDown;
-	private SnappingHelper snap;
-	private final Screen parent;
 
 	static {
 		hudEditScreenCategory.add(snapping);
 		AxolotlClient.config.addSubCategory(hudEditScreenCategory);
+	}
+
+	private final Screen parent;
+	private HudEntry current;
+	private DrawPosition offset = null;
+	private boolean mouseDown;
+	private SnappingHelper snap;
+
+	public HudEditScreen() {
+		this(null);
 	}
 
 	public HudEditScreen(Screen parent) {
@@ -71,15 +76,21 @@ public class HudEditScreen extends Screen {
 		this.parent = parent;
 	}
 
-	public HudEditScreen() {
-		this(null);
+	private void updateSnapState() {
+		if (snapping.get() && current != null) {
+			List<Rectangle> bounds = HudManager.getInstance().getAllBounds();
+			bounds.remove(current.getTrueBounds());
+			snap = new SnappingHelper(bounds, current.getTrueBounds());
+		} else if (snap != null) {
+			snap = null;
+		}
 	}
 
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		if (MinecraftClient.getInstance().world != null)
 			fillGradient(matrices, 0, 0, width, height, new Color(0xB0100E0E, true).hashCode(),
-					new Color(0x46212020, true).hashCode());
+				new Color(0x46212020, true).hashCode());
 		else {
 			renderBackgroundTexture(0);
 		}
@@ -95,16 +106,40 @@ public class HudEditScreen extends Screen {
 	}
 
 	@Override
+	public void init() {
+		this.addButton(new ButtonWidget(width / 2 - 50, height / 2 + 12, 100, 20, new TranslatableText("hud.snapping").append(": ")
+			.append(new TranslatableText(snapping.get() ? "options.on" : "options.off")),
+			buttonWidget -> {
+				snapping.toggle();
+				buttonWidget.setMessage(new TranslatableText("hud.snapping").append(": ")
+					.append(new TranslatableText(snapping.get() ? "options.on" : "options.off")));
+				AxolotlClient.configManager.save();
+			}));
+
+		this.addButton(new ButtonWidget(width / 2 - 75, height / 2 - 10, 150, 20, new TranslatableText("hud.clientOptions"),
+			buttonWidget -> MinecraftClient.getInstance().openScreen(new OptionsScreenBuilder(this,
+				(OptionCategory) new OptionCategory("config", false).addSubCategories(AxolotlClient.CONFIG.getCategories()),
+				AxolotlClient.modid))));
+
+		if (parent != null)
+			addButton(new ButtonWidget(width / 2 - 75, height - 50 + 22, 150, 20, ScreenTexts.BACK,
+				buttonWidget -> MinecraftClient.getInstance().openScreen(parent)));
+		else
+			addButton(new ButtonWidget(width / 2 - 75, height - 50 + 22, 150, 20, new TranslatableText("close"),
+				buttonWidget -> MinecraftClient.getInstance().openScreen(null)));
+	}
+
+	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
 		super.mouseClicked(mouseX, mouseY, button);
 		Optional<HudEntry> entry = HudManager.getInstance().getEntryXY((int) Math.round(mouseX),
-				(int) Math.round(mouseY));
+			(int) Math.round(mouseY));
 		if (button == 0) {
 			mouseDown = true;
 			if (entry.isPresent()) {
 				current = entry.get();
 				offset = new DrawPosition((int) Math.round(mouseX - current.getTruePos().x()),
-						(int) Math.round(mouseY - current.getTruePos().y()));
+					(int) Math.round(mouseY - current.getTruePos().y()));
 				updateSnapState();
 				return true;
 			} else {
@@ -112,7 +147,7 @@ public class HudEditScreen extends Screen {
 			}
 		} else if (button == 1) {
 			entry.ifPresent(abstractHudEntry -> MinecraftClient.getInstance().openScreen(
-					new OptionsScreenBuilder(this, abstractHudEntry.getOptionsAsCategory(), AxolotlClient.modid)));
+				new OptionsScreenBuilder(this, abstractHudEntry.getOptionsAsCategory(), AxolotlClient.modid)));
 		}
 		return false;
 	}
@@ -149,39 +184,5 @@ public class HudEditScreen extends Screen {
 			return true;
 		}
 		return false;
-	}
-
-	private void updateSnapState() {
-		if (snapping.get() && current != null) {
-			List<Rectangle> bounds = HudManager.getInstance().getAllBounds();
-			bounds.remove(current.getTrueBounds());
-			snap = new SnappingHelper(bounds, current.getTrueBounds());
-		} else if (snap != null) {
-			snap = null;
-		}
-	}
-
-	@Override
-	public void init() {
-		this.addButton(new ButtonWidget(width / 2 - 50, height / 2 + 12, 100, 20, new TranslatableText("hud.snapping").append(": ")
-				.append(new TranslatableText(snapping.get() ? "options.on" : "options.off")),
-				buttonWidget -> {
-					snapping.toggle();
-					buttonWidget.setMessage(new TranslatableText("hud.snapping").append(": ")
-							.append(new TranslatableText(snapping.get() ? "options.on" : "options.off")));
-					AxolotlClient.configManager.save();
-				}));
-
-		this.addButton(new ButtonWidget(width / 2 - 75, height / 2 - 10, 150, 20, new TranslatableText("hud.clientOptions"),
-				buttonWidget -> MinecraftClient.getInstance().openScreen(new OptionsScreenBuilder(this,
-						(OptionCategory) new OptionCategory("config", false).addSubCategories(AxolotlClient.CONFIG.getCategories()),
-						AxolotlClient.modid))));
-
-		if (parent != null)
-			addButton(new ButtonWidget(width / 2 - 75, height - 50 + 22, 150, 20, ScreenTexts.BACK,
-					buttonWidget -> MinecraftClient.getInstance().openScreen(parent)));
-		else
-			addButton(new ButtonWidget(width / 2 - 75, height - 50 + 22, 150, 20, new TranslatableText("close"),
-					buttonWidget -> MinecraftClient.getInstance().openScreen(null)));
 	}
 }

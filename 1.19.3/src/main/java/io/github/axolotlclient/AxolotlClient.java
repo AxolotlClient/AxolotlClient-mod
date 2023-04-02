@@ -22,6 +22,11 @@
 
 package io.github.axolotlclient;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClientConfig.AxolotlClientConfigManager;
 import io.github.axolotlclient.AxolotlClientConfig.DefaultConfigManager;
@@ -65,34 +70,68 @@ import org.quiltmc.qsl.lifecycle.api.client.event.ClientTickEvents;
 import org.quiltmc.qsl.resource.loader.api.ResourceLoader;
 import org.quiltmc.qsl.resource.loader.api.ResourcePackActivationType;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
-
 public class AxolotlClient implements ClientModInitializer {
 
-	public static String modid = "AxolotlClient";
-
-	public static AxolotlClientConfig CONFIG;
-	public static ConfigManager configManager;
-	public static HashMap<UUID, Boolean> playerCache = new HashMap<>();
-
-	public static HashMap<Identifier, Resource> runtimeResources = new HashMap<>();
-
 	public static final Identifier badgeIcon = new Identifier("axolotlclient", "textures/badge.png");
-
 	public static final OptionCategory config = new OptionCategory("storedOptions");
 	public static final BooleanOption someNiceBackground = new BooleanOption("defNoSecret", false);
 	public static final List<Module> modules = new ArrayList<>();
-
-	private static int tickTime = 0;
-
+	public static String modid = "AxolotlClient";
+	public static AxolotlClientConfig CONFIG;
+	public static ConfigManager configManager;
+	public static HashMap<UUID, Boolean> playerCache = new HashMap<>();
+	public static HashMap<Identifier, Resource> runtimeResources = new HashMap<>();
 	public static UnsupportedMod badmod;
 	public static boolean titleDisclaimer = false;
 	public static boolean showWarning = true;
-
 	public static Logger LOGGER = new LoggerImpl();
+	private static int tickTime = 0;
+
+	public static void addBadge(Entity entity, MatrixStack matrices) {
+		if (entity instanceof PlayerEntity && !entity.isSneaky()) {
+			if (AxolotlClient.CONFIG.showBadges.get() && AxolotlClient.isUsingClient(entity.getUuid())) {
+				RenderSystem.enableDepthTest();
+				RenderSystem.setShaderTexture(0, AxolotlClient.badgeIcon);
+
+				assert MinecraftClient.getInstance().player != null;
+				int x = -(MinecraftClient.getInstance().textRenderer
+					.getWidth(
+						entity.getUuid() == MinecraftClient.getInstance().player.getUuid()
+							? (NickHider.getInstance().hideOwnName.get()
+							? NickHider.getInstance().hiddenNameSelf.get()
+							: Team.decorateName(entity.getScoreboardTeam(), entity.getName())
+							.getString())
+							: (NickHider.getInstance().hideOtherNames.get()
+							? NickHider.getInstance().hiddenNameOthers.get()
+							: Team.decorateName(entity.getScoreboardTeam(), entity.getName())
+							.getString()))
+					/ 2
+					+ (AxolotlClient.CONFIG.customBadge.get() ? MinecraftClient.getInstance().textRenderer
+					.getWidth(" " + Formatting.strip(AxolotlClient.CONFIG.badgeText.get())) : 10));
+
+				RenderSystem.setShaderColor(1, 1, 1, 1);
+
+				if (AxolotlClient.CONFIG.customBadge.get()) {
+					Text badgeText = Util.formatFromCodes(AxolotlClient.CONFIG.badgeText.get());
+					if (AxolotlClient.CONFIG.useShadows.get()) {
+						MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, badgeText, x, 0, -1);
+					} else {
+						MinecraftClient.getInstance().textRenderer.draw(matrices, badgeText, x, 0, -1);
+					}
+				} else
+					DrawableHelper.drawTexture(matrices, x, 0, 0, 0, 8, 8, 8, 8);
+			}
+		}
+	}
+
+	public static boolean isUsingClient(UUID uuid) {
+		assert MinecraftClient.getInstance().player != null;
+		if (uuid == MinecraftClient.getInstance().player.getUuid()) {
+			return true;
+		} else {
+			return NetworkHelper.getOnline(uuid);
+		}
+	}
 
 	@Override
 	public void onInitializeClient(ModContainer container) {
@@ -110,10 +149,10 @@ public class AxolotlClient implements ClientModInitializer {
 			badmod = new UnsupportedMod("Xaero's Minimap", UnsupportedMod.UnsupportedReason.UNKNOWN_CONSEQUENSES);
 		} else if (QuiltLoader.isModLoaded("essential-container")) {
 			badmod = new UnsupportedMod("Essential", UnsupportedMod.UnsupportedReason.MIGHT_CRASH,
-					UnsupportedMod.UnsupportedReason.UNKNOWN_CONSEQUENSES);
+				UnsupportedMod.UnsupportedReason.UNKNOWN_CONSEQUENSES);
 		} else if (QuiltLoader.isModLoaded("optifabric")) {
 			badmod = new UnsupportedMod("OptiFine", UnsupportedMod.UnsupportedReason.MIGHT_CRASH,
-					UnsupportedMod.UnsupportedReason.UNKNOWN_CONSEQUENSES);
+				UnsupportedMod.UnsupportedReason.UNKNOWN_CONSEQUENSES);
 		} else {
 			showWarning = false;
 		}
@@ -131,14 +170,14 @@ public class AxolotlClient implements ClientModInitializer {
 		CONFIG.getConfig().add(config);
 
 		AxolotlClientConfigManager.getInstance().registerConfig(modid, CONFIG, configManager = new DefaultConfigManager(modid,
-				QuiltLoader.getConfigDir().resolve("AxolotlClient.json"), CONFIG.getConfig()));
+			QuiltLoader.getConfigDir().resolve("AxolotlClient.json"), CONFIG.getConfig()));
 		AxolotlClientConfigManager.getInstance().addIgnoredName(modid, "x");
 		AxolotlClientConfigManager.getInstance().addIgnoredName(modid, "y");
 
 		modules.forEach(Module::lateInit);
 
 		ResourceLoader.registerBuiltinResourcePack(new Identifier("axolotlclient", "axolotlclient-ui"), container,
-				ResourcePackActivationType.NORMAL);
+			ResourcePackActivationType.NORMAL);
 		ClientTickEvents.END.register(client -> tickClient());
 
 		FeatureDisabler.init();
@@ -170,15 +209,6 @@ public class AxolotlClient implements ClientModInitializer {
 		modules.addAll(ModuleLoader.loadExternalModules());
 	}
 
-	public static boolean isUsingClient(UUID uuid) {
-		assert MinecraftClient.getInstance().player != null;
-		if (uuid == MinecraftClient.getInstance().player.getUuid()) {
-			return true;
-		} else {
-			return NetworkHelper.getOnline(uuid);
-		}
-	}
-
 	public static void tickClient() {
 		modules.forEach(Module::tick);
 
@@ -190,42 +220,5 @@ public class AxolotlClient implements ClientModInitializer {
 			tickTime = 0;
 		}
 		tickTime++;
-	}
-
-	public static void addBadge(Entity entity, MatrixStack matrices) {
-		if (entity instanceof PlayerEntity && !entity.isSneaky()) {
-			if (AxolotlClient.CONFIG.showBadges.get() && AxolotlClient.isUsingClient(entity.getUuid())) {
-				RenderSystem.enableDepthTest();
-				RenderSystem.setShaderTexture(0, AxolotlClient.badgeIcon);
-
-				assert MinecraftClient.getInstance().player != null;
-				int x = -(MinecraftClient.getInstance().textRenderer
-						.getWidth(
-								entity.getUuid() == MinecraftClient.getInstance().player.getUuid()
-										? (NickHider.getInstance().hideOwnName.get()
-										? NickHider.getInstance().hiddenNameSelf.get()
-										: Team.decorateName(entity.getScoreboardTeam(), entity.getName())
-										.getString())
-										: (NickHider.getInstance().hideOtherNames.get()
-										? NickHider.getInstance().hiddenNameOthers.get()
-										: Team.decorateName(entity.getScoreboardTeam(), entity.getName())
-										.getString()))
-						/ 2
-						+ (AxolotlClient.CONFIG.customBadge.get() ? MinecraftClient.getInstance().textRenderer
-						.getWidth(" " + Formatting.strip(AxolotlClient.CONFIG.badgeText.get())) : 10));
-
-				RenderSystem.setShaderColor(1, 1, 1, 1);
-
-				if (AxolotlClient.CONFIG.customBadge.get()) {
-					Text badgeText = Util.formatFromCodes(AxolotlClient.CONFIG.badgeText.get());
-					if (AxolotlClient.CONFIG.useShadows.get()) {
-						MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, badgeText, x, 0, -1);
-					} else {
-						MinecraftClient.getInstance().textRenderer.draw(matrices, badgeText, x, 0, -1);
-					}
-				} else
-					DrawableHelper.drawTexture(matrices, x, 0, 0, 0, 8, 8, 8, 8);
-			}
-		}
 	}
 }

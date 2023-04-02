@@ -22,11 +22,6 @@
 
 package io.github.axolotlclient.modules.rpc.gameSdk;
 
-import de.jcm.discordgamesdk.Core;
-import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
-import io.github.axolotlclient.util.Logger;
-import io.github.axolotlclient.util.OSUtil;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,6 +33,11 @@ import java.util.Locale;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import de.jcm.discordgamesdk.Core;
+import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
+import io.github.axolotlclient.util.Logger;
+import io.github.axolotlclient.util.OSUtil;
+
 /**
  * This DiscordRPC module is derived from <a href="https://github.com/DeDiamondPro/HyCord">HyCord</a>.
  *
@@ -46,6 +46,8 @@ import java.util.zip.ZipInputStream;
  */
 
 public class GameSdkDownloader {
+
+	private static boolean retriedExtractingJni = false;
 
 	public static void downloadSdk(Logger logger, BooleanOption rpcEnabled) {
 		File target = new File("config/game-sdk");
@@ -63,7 +65,7 @@ public class GameSdkDownloader {
 			} else {
 				if (OSUtil.getOS() != OSUtil.OperatingSystem.LINUX) {
 					throw new RuntimeException("Could not determine OS type: " + System.getProperty("os.name")
-							+ " Detected " + OSUtil.getOS());
+						+ " Detected " + OSUtil.getOS());
 				}
 
 				fileName = "discord_game_sdk.so";
@@ -71,8 +73,8 @@ public class GameSdkDownloader {
 
 			File sdk = new File("config/game-sdk/" + fileName);
 			File jni = new File("config/game-sdk/" + (OSUtil.getOS() == OSUtil.OperatingSystem.WINDOWS
-					? "discord_game_sdk_jni.dll"
-					: "libdiscord_game_sdk_jni" + (OSUtil.getOS() == OSUtil.OperatingSystem.MAC ? ".dylib" : ".so")));
+				? "discord_game_sdk_jni.dll"
+				: "libdiscord_game_sdk_jni" + (OSUtil.getOS() == OSUtil.OperatingSystem.MAC ? ".dylib" : ".so")));
 			if (!sdk.exists()) {
 				downloadSdk(sdk, fileName);
 			}
@@ -118,8 +120,6 @@ public class GameSdkDownloader {
 		zin.close();
 	}
 
-	private static boolean retriedExtractingJni = false;
-
 	private static void extractJni(File jni, Logger logger, BooleanOption rpcEnabled) throws IOException {
 		String arch = System.getProperty("os.arch").toLowerCase(Locale.ROOT);
 		if (arch.equals("x86_64")) {
@@ -127,12 +127,12 @@ public class GameSdkDownloader {
 		}
 
 		String path = "/native/"
-				+ (OSUtil.getOS() == OSUtil.OperatingSystem.WINDOWS ? "windows"
-				: (OSUtil.getOS() == OSUtil.OperatingSystem.MAC ? "macos" : "linux"))
-				+ "/" + arch + "/"
-				+ (OSUtil.getOS() == OSUtil.OperatingSystem.WINDOWS ? "discord_game_sdk_jni.dll"
-				: "libdiscord_game_sdk_jni"
-				+ (OSUtil.getOS() == OSUtil.OperatingSystem.MAC ? ".dylib" : ".so"));
+			+ (OSUtil.getOS() == OSUtil.OperatingSystem.WINDOWS ? "windows"
+			: (OSUtil.getOS() == OSUtil.OperatingSystem.MAC ? "macos" : "linux"))
+			+ "/" + arch + "/"
+			+ (OSUtil.getOS() == OSUtil.OperatingSystem.WINDOWS ? "discord_game_sdk_jni.dll"
+			: "libdiscord_game_sdk_jni"
+			+ (OSUtil.getOS() == OSUtil.OperatingSystem.MAC ? ".dylib" : ".so"));
 
 		InputStream in = GameSdkDownloader.class.getResourceAsStream(path);
 		if (in != null) {

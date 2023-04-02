@@ -22,6 +22,10 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
@@ -35,22 +39,41 @@ import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.resource.ResourcePack;
 import net.minecraft.util.Identifier;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-
 public class PackDisplayHud extends TextHudEntry {
 
 	public static Identifier ID = new Identifier("axolotlclient", "packdisplayhud");
 
 	private final List<PackWidget> widgets = new ArrayList<>();
-	private PackWidget placeholder;
 	private final List<ResourcePack> packs = new ArrayList<>();
-
 	private final BooleanOption iconsOnly = new BooleanOption("iconsonly", false);
+	private PackWidget placeholder;
 
 	public PackDisplayHud() {
 		super(200, 50, true);
+	}
+
+	public void setPacks(List<ResourcePack> packs) {
+		widgets.clear();
+		this.packs.clear();
+		this.packs.addAll(packs);
+	}
+
+	@Override
+	public void renderComponent(float f) {
+		DrawPosition pos = getPos();
+
+		if (widgets.isEmpty())
+			init();
+
+		int y = pos.y + 1;
+		for (int i = widgets.size() - 1; i >= 0; i--) { // Badly reverse the order (I'm sure there are better ways to do this)
+			widgets.get(i).render(pos.x + 1, y);
+			y += 18;
+		}
+		if (y - pos.y + 1 != getHeight()) {
+			setHeight(y - pos.y - 1);
+			onBoundsUpdate();
+		}
 	}
 
 	@Override
@@ -80,30 +103,6 @@ public class PackDisplayHud extends TextHudEntry {
 		onBoundsUpdate();
 	}
 
-	public void setPacks(List<ResourcePack> packs) {
-		widgets.clear();
-		this.packs.clear();
-		this.packs.addAll(packs);
-	}
-
-	@Override
-	public void renderComponent(float f) {
-		DrawPosition pos = getPos();
-
-		if (widgets.isEmpty())
-			init();
-
-		int y = pos.y + 1;
-		for (int i = widgets.size() - 1; i >= 0; i--) { // Badly reverse the order (I'm sure there are better ways to do this)
-			widgets.get(i).render(pos.x + 1, y);
-			y += 18;
-		}
-		if (y - pos.y + 1 != getHeight()) {
-			setHeight(y - pos.y - 1);
-			onBoundsUpdate();
-		}
-	}
-
 	@Override
 	public void renderPlaceholderComponent(float delta) {
 		boolean updateBounds = false;
@@ -125,6 +124,11 @@ public class PackDisplayHud extends TextHudEntry {
 	}
 
 	@Override
+	public boolean movable() {
+		return true;
+	}
+
+	@Override
 	public List<Option<?>> getConfigurationOptions() {
 		List<Option<?>> options = super.getConfigurationOptions();
 		options.add(iconsOnly);
@@ -136,16 +140,11 @@ public class PackDisplayHud extends TextHudEntry {
 		return ID;
 	}
 
-	@Override
-	public boolean movable() {
-		return true;
-	}
-
 	private class PackWidget {
 
-		private int texture;
 		@Getter
 		private final String name;
+		private int texture;
 
 		public PackWidget(ResourcePack pack) {
 			this.name = pack.getName();
@@ -153,7 +152,7 @@ public class PackDisplayHud extends TextHudEntry {
 				this.texture = new NativeImageBackedTexture(pack.getIcon()).getGlId();
 			} catch (Exception e) {
 				AxolotlClient.LOGGER.warn("Pack " + pack.getName()
-						+ " somehow threw an error! Please investigate... Does it have an icon?");
+					+ " somehow threw an error! Please investigate... Does it have an icon?");
 			}
 		}
 

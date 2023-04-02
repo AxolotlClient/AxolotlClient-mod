@@ -22,13 +22,13 @@
 
 package io.github.axolotlclient.modules.auth;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-
 import java.io.IOException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
+
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 
 public class MSAccount {
 
@@ -65,6 +65,15 @@ public class MSAccount {
 		this.expiration = Instant.ofEpochSecond(expiration);
 	}
 
+	public static MSAccount deserialize(JsonObject object) {
+		String uuid = object.get("uuid").getAsString();
+		String name = object.get("name").getAsString();
+		String authToken = object.get("authToken").getAsString();
+		String refreshToken = object.get("refreshToken").getAsString();
+		long expiration = object.get("expiration").getAsLong();
+		return new MSAccount(uuid, name, authToken, refreshToken, expiration);
+	}
+
 	public void refresh(MSAuth auth, Runnable runAfter) {
 		new Thread(() -> {
 			Map.Entry<String, String> tokens = auth.refreshToken(refreshToken, name);
@@ -96,15 +105,6 @@ public class MSAccount {
 		return object;
 	}
 
-	public static MSAccount deserialize(JsonObject object) {
-		String uuid = object.get("uuid").getAsString();
-		String name = object.get("name").getAsString();
-		String authToken = object.get("authToken").getAsString();
-		String refreshToken = object.get("refreshToken").getAsString();
-		long expiration = object.get("expiration").getAsLong();
-		return new MSAccount(uuid, name, authToken, refreshToken, expiration);
-	}
-
 	public boolean isExpired() {
 		return expiration.isBefore(Instant.now());
 	}
@@ -126,7 +126,7 @@ public class MSAccount {
 		if (obj instanceof MSAccount) {
 			MSAccount other = (MSAccount) obj;
 			return name.equals(other.name) &&
-					uuid.equals(other.uuid);
+				uuid.equals(other.uuid);
 		}
 		return false;
 	}

@@ -22,6 +22,11 @@
 
 package io.github.axolotlclient.modules.screenshotUtils;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -35,11 +40,6 @@ import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
-
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 
 @UtilityClass
 public class ImageNetworking {
@@ -71,9 +71,9 @@ public class ImageNetworking {
 				RequestBuilder requestBuilder = RequestBuilder.post().setUri(url + "/" + tempId);
 				requestBuilder.setHeader("Content-Type", "application/json");
 				requestBuilder.setEntity(new StringEntity("{" +
-						"\"index\":" + index + "," +
-						"  \"content\": \"" + content + "\"" +
-						"}"));
+					"\"index\":" + index + "," +
+					"  \"content\": \"" + content + "\"" +
+					"}"));
 				logger.debug(EntityUtils.toString(client.execute(requestBuilder.build()).getEntity()));
 				index += content.getBytes(StandardCharsets.UTF_8).length;
 			}

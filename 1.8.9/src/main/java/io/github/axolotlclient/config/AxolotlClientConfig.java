@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.AxolotlClientConfigConfig;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
@@ -30,9 +33,6 @@ import io.github.axolotlclient.AxolotlClientConfig.options.*;
 import io.github.axolotlclient.config.screen.CreditsScreen;
 import io.github.axolotlclient.util.NetworkHelper;
 import net.minecraft.client.MinecraftClient;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class AxolotlClientConfig extends ConfigHolder {
 
@@ -73,8 +73,8 @@ public class AxolotlClientConfig extends ConfigHolder {
 
 	public final BooleanOption debugLogOutput = new BooleanOption("debugLogOutput", false);
 	public final GenericOption openCredits = new GenericOption("Credits", "Open Credits",
-			(mouseX, mouseY) -> MinecraftClient.getInstance()
-					.setScreen(new CreditsScreen(MinecraftClient.getInstance().currentScreen)));
+		(mouseX, mouseY) -> MinecraftClient.getInstance()
+			.setScreen(new CreditsScreen(MinecraftClient.getInstance().currentScreen)));
 	public final BooleanOption creditsBGM = new BooleanOption("creditsBGM", true);
 	public final BooleanOption customWindowTitle = new BooleanOption("customWindowTitle", true);
 
@@ -84,11 +84,9 @@ public class AxolotlClientConfig extends ConfigHolder {
 	public final OptionCategory outlines = new OptionCategory("blockOutlines");
 	public final OptionCategory timeChanger = new OptionCategory("timeChanger");
 	public final OptionCategory searchFilters = new OptionCategory("searchFilters");
-
+	public final List<io.github.axolotlclient.AxolotlClientConfig.common.options.OptionCategory> config = new ArrayList<>();
 	private final List<Option<?>> options = new ArrayList<>();
 	private final List<io.github.axolotlclient.AxolotlClientConfig.common.options.OptionCategory> categories = new ArrayList<>();
-
-	public final List<io.github.axolotlclient.AxolotlClientConfig.common.options.OptionCategory> config = new ArrayList<>();
 
 	public void add(Option<?> option) {
 		options.add(option);
@@ -132,18 +130,18 @@ public class AxolotlClientConfig extends ConfigHolder {
 		general.add(debugLogOutput);
 
 		searchFilters.add(AxolotlClientConfigConfig.searchIgnoreCase, AxolotlClientConfigConfig.searchForOptions,
-				AxolotlClientConfigConfig.searchSort, AxolotlClientConfigConfig.searchSortOrder);
+			AxolotlClientConfigConfig.searchSort, AxolotlClientConfigConfig.searchSortOrder);
 		general.add(searchFilters);
 
 		rendering.add(customSky,
-				cloudHeight,
-				AxolotlClientConfigConfig.chromaSpeed,
-				dynamicFOV,
-				fullBright,
-				lowFire,
-				hitColor,
-				minimalViewBob,
-				flatItems);
+			cloudHeight,
+			AxolotlClientConfigConfig.chromaSpeed,
+			dynamicFOV,
+			fullBright,
+			lowFire,
+			hitColor,
+			minimalViewBob,
+			flatItems);
 
 		timeChanger.add(timeChangerEnabled);
 		timeChanger.add(customTime);

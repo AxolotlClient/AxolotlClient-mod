@@ -22,6 +22,10 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.item;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.AxolotlClientConfig.options.IntegerOption;
@@ -34,10 +38,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
@@ -48,25 +48,15 @@ import java.util.Optional;
 public class ItemUpdateHud extends TextHudEntry {
 
 	public static final Identifier ID = new Identifier("kronhud", "itemupdatehud");
-
+	private final IntegerOption timeout = new IntegerOption("timeout", 6, 1, 60);
 	private List<ItemUtil.ItemStorage> oldItems = new ArrayList<>();
 	private ArrayList<ItemUtil.TimedItemStorage> removed;
 	private ArrayList<ItemUtil.TimedItemStorage> added;
-
-	private final IntegerOption timeout = new IntegerOption("timeout", 6, 1, 60);
 
 	public ItemUpdateHud() {
 		super(200, 11 * 6 - 2, true);
 		removed = new ArrayList<>();
 		added = new ArrayList<>();
-	}
-
-	public void update() {
-		this.removed = ItemUtil.removeOld(removed, timeout.get() * 1000);
-		this.added = ItemUtil.removeOld(added, timeout.get() * 1000);
-		updateAdded();
-		updateRemoved();
-		oldItems = ItemUtil.storageFromItem(ItemUtil.getItems(client));
 	}
 
 	@Override
@@ -81,9 +71,17 @@ public class ItemUpdateHud extends TextHudEntry {
 		}
 	}
 
+	public void update() {
+		this.removed = ItemUtil.removeOld(removed, timeout.get() * 1000);
+		this.added = ItemUtil.removeOld(added, timeout.get() * 1000);
+		updateAdded();
+		updateRemoved();
+		oldItems = ItemUtil.storageFromItem(ItemUtil.getItems(client));
+	}
+
 	private void updateAdded() {
 		List<ItemUtil.ItemStorage> added = ItemUtil.compare(ItemUtil.storageFromItem(ItemUtil.getItems(client)),
-				oldItems);
+			oldItems);
 		ArrayList<ItemUtil.TimedItemStorage> timedAdded = new ArrayList<>();
 		for (ItemUtil.ItemStorage stack : added) {
 			timedAdded.add(stack.timed());
@@ -104,7 +102,7 @@ public class ItemUpdateHud extends TextHudEntry {
 
 	private void updateRemoved() {
 		List<ItemUtil.ItemStorage> removed = ItemUtil.compare(oldItems,
-				ItemUtil.storageFromItem(ItemUtil.getItems(client)));
+			ItemUtil.storageFromItem(ItemUtil.getItems(client)));
 		List<ItemUtil.TimedItemStorage> timed = ItemUtil.untimedToTimed(removed);
 		for (ItemUtil.TimedItemStorage stack : timed) {
 			if (stack.stack == null) {
@@ -131,7 +129,7 @@ public class ItemUpdateHud extends TextHudEntry {
 				return;
 			}
 			String message = "+ " + Formatting.DARK_GRAY + "[" + Formatting.WHITE + item.times + Formatting.DARK_GRAY
-					+ "] " + Formatting.RESET + item.stack.getCustomName();
+				+ "] " + Formatting.RESET + item.stack.getCustomName();
 			if (shadow.get()) {
 				client.textRenderer.drawWithShadow(message, pos.x, pos.y + lastY, Color.SELECTOR_GREEN.getAsInt());
 			} else {
@@ -146,7 +144,7 @@ public class ItemUpdateHud extends TextHudEntry {
 				return;
 			}
 			String message = "- " + Formatting.DARK_GRAY + "[" + Formatting.WHITE + item.times + Formatting.DARK_GRAY
-					+ "] " + Formatting.RESET + item.stack.getCustomName();
+				+ "] " + Formatting.RESET + item.stack.getCustomName();
 			if (shadow.get()) {
 				client.textRenderer.drawWithShadow(message, pos.x, pos.y + lastY, Color.SELECTOR_RED.getAsInt());
 			} else {
@@ -161,22 +159,27 @@ public class ItemUpdateHud extends TextHudEntry {
 	public void renderPlaceholderComponent(float delta) {
 		DrawPosition pos = getPos();
 		String addM = "+ " + Formatting.DARK_GRAY + "[" + Formatting.WHITE + 2 + Formatting.DARK_GRAY + "] "
-				+ Formatting.RESET + new ItemStack(Blocks.DIRT).getCustomName();
+			+ Formatting.RESET + new ItemStack(Blocks.DIRT).getCustomName();
 		if (shadow.get()) {
 			client.textRenderer.drawWithShadow(addM, pos.x + 1, pos.y + 1, Color.SELECTOR_GREEN.getAsInt());
 		} else {
 			client.textRenderer.draw(addM, pos.x + 1, pos.y + 1 + client.textRenderer.fontHeight + 2,
-					Color.SELECTOR_GREEN.getAsInt());
+				Color.SELECTOR_GREEN.getAsInt());
 		}
 		String removeM = "- " + Formatting.DARK_GRAY + "[" + Formatting.WHITE + 4 + Formatting.DARK_GRAY + "] "
-				+ Formatting.RESET + new ItemStack(Blocks.GRASS).getCustomName();
+			+ Formatting.RESET + new ItemStack(Blocks.GRASS).getCustomName();
 		if (shadow.get()) {
 			client.textRenderer.drawWithShadow(removeM, pos.x + 1, pos.y + 1 + client.textRenderer.fontHeight + 2,
-					Color.SELECTOR_RED.getAsInt());
+				Color.SELECTOR_RED.getAsInt());
 		} else {
 			client.textRenderer.draw(removeM, pos.x + 1, pos.y + 1 + client.textRenderer.fontHeight + 3,
-					Color.SELECTOR_RED.getAsInt());
+				Color.SELECTOR_RED.getAsInt());
 		}
+	}
+
+	@Override
+	public boolean movable() {
+		return true;
 	}
 
 	@Override
@@ -190,10 +193,5 @@ public class ItemUpdateHud extends TextHudEntry {
 	@Override
 	public Identifier getId() {
 		return ID;
-	}
-
-	@Override
-	public boolean movable() {
-		return true;
 	}
 }

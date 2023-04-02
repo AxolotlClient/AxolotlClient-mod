@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.modules.hud;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.KeyBindOption;
@@ -37,12 +40,8 @@ import io.github.axolotlclient.modules.hud.gui.hud.simple.*;
 import io.github.axolotlclient.modules.hud.gui.hud.vanilla.*;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.option.KeyBind;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -53,22 +52,19 @@ import java.util.stream.Collectors;
 
 public class HudManager extends AbstractModule {
 
-	private final OptionCategory hudCategory = new OptionCategory("hud", false);
-
 	private final static HudManager INSTANCE = new HudManager();
-
-	public static HudManager getInstance() {
-		return INSTANCE;
-	}
-
+	private final OptionCategory hudCategory = new OptionCategory("hud", false);
 	private final Map<Identifier, HudEntry> entries;
 	private final MinecraftClient client;
-
 	private HudManager() {
 		this.entries = new LinkedHashMap<>();
 		client = MinecraftClient.getInstance();
 		hudCategory.add(new KeyBindOption("key.openHud", InputUtil.KEY_RIGHT_SHIFT_CODE,
 			keyBind -> MinecraftClient.getInstance().setScreen(new HudEditScreen())));
+	}
+
+	public static HudManager getInstance() {
+		return INSTANCE;
 	}
 
 	public void init() {
@@ -108,15 +104,9 @@ public class HudManager extends AbstractModule {
 		refreshAllBounds();
 	}
 
-	public void refreshAllBounds() {
-		for (HudEntry entry : getEntries()) {
-			entry.onBoundsUpdate();
-		}
-	}
-
 	public void tick() {
 		entries.values().stream().filter(hudEntry -> hudEntry.isEnabled() && hudEntry.tickable())
-				.forEach(HudEntry::tick);
+			.forEach(HudEntry::tick);
 	}
 
 	public HudManager add(AbstractHudEntry entry) {
@@ -125,17 +115,15 @@ public class HudManager extends AbstractModule {
 		return this;
 	}
 
+	public void refreshAllBounds() {
+		for (HudEntry entry : getEntries()) {
+			entry.onBoundsUpdate();
+		}
+	}
+
 	public List<HudEntry> getEntries() {
 		if (entries.size() > 0) {
 			return new ArrayList<>(entries.values());
-		}
-		return new ArrayList<>();
-	}
-
-	public List<HudEntry> getMoveableEntries() {
-		if (entries.size() > 0) {
-			return entries.values().stream().filter((entry) -> entry.isEnabled() && entry.movable())
-					.collect(Collectors.toList());
 		}
 		return new ArrayList<>();
 	}
@@ -162,11 +150,19 @@ public class HudManager extends AbstractModule {
 		for (HudEntry entry : getMoveableEntries()) {
 			Rectangle bounds = entry.getTrueBounds();
 			if (bounds.x() <= x && bounds.x() + bounds.width() >= x && bounds.y() <= y
-					&& bounds.y() + bounds.height() >= y) {
+				&& bounds.y() + bounds.height() >= y) {
 				return Optional.of(entry);
 			}
 		}
 		return Optional.empty();
+	}
+
+	public List<HudEntry> getMoveableEntries() {
+		if (entries.size() > 0) {
+			return entries.values().stream().filter((entry) -> entry.isEnabled() && entry.movable())
+				.collect(Collectors.toList());
+		}
+		return new ArrayList<>();
 	}
 
 	public void renderPlaceholder(MatrixStack matrices, float delta) {

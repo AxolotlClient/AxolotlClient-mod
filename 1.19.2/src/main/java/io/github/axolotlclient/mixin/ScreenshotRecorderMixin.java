@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.mixin;
 
+import java.io.File;
+import java.util.function.Consumer;
+
 import com.mojang.blaze3d.framebuffer.Framebuffer;
 import com.mojang.blaze3d.texture.NativeImage;
 import io.github.axolotlclient.modules.screenshotUtils.ScreenshotUtils;
@@ -39,9 +42,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-
-import java.io.File;
-import java.util.function.Consumer;
 
 @Mixin(ScreenshotRecorder.class)
 public abstract class ScreenshotRecorderMixin {
@@ -67,9 +67,9 @@ public abstract class ScreenshotRecorderMixin {
 			try {
 				image.writeFile(currentFile);
 				Text text = Text.literal(currentFile.getName()).formatted(Formatting.UNDERLINE).styled(style -> style
-						.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, currentFile.getAbsolutePath())));
+					.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, currentFile.getAbsolutePath())));
 				messageReceiver.accept(ScreenshotUtils.getInstance()
-						.onScreenshotTaken(Text.translatable("screenshot.success", text), currentFile));
+					.onScreenshotTaken(Text.translatable("screenshot.success", text), currentFile));
 			} catch (Exception var7) {
 				LOGGER.warn("Couldn't save screenshot", var7);
 				messageReceiver.accept(Text.translatable("screenshot.failure", var7.getMessage()));

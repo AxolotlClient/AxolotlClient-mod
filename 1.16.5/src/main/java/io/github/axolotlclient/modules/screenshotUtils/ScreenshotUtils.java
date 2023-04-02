@@ -22,6 +22,15 @@
 
 package io.github.axolotlclient.modules.screenshotUtils;
 
+import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.io.File;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.*;
 import io.github.axolotlclient.modules.AbstractModule;
@@ -33,60 +42,47 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Util;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.*;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.io.File;
-import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 public class ScreenshotUtils extends AbstractModule {
 
 	private static final ScreenshotUtils Instance = new ScreenshotUtils();
-
-	private final OptionCategory category = new OptionCategory("screenshotUtils");
-
-	private final BooleanOption enabled = new BooleanOption("enabled", false);
-
 	public final StringOption shareUrl = new StringOption("shareUrl", "https://bin.gart.sh");
-
+	private final OptionCategory category = new OptionCategory("screenshotUtils");
+	private final BooleanOption enabled = new BooleanOption("enabled", false);
 	private final List<Action> actions = Util.make(() -> {
 		List<Action> actions = new ArrayList<>();
 		actions.add(new Action("copyAction", Formatting.AQUA,
-				"copy_image",
-				new CustomClickEvent((file) -> {
-					FileTransferable selection = new FileTransferable(file);
-					Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
-				})));
+			"copy_image",
+			new CustomClickEvent((file) -> {
+				FileTransferable selection = new FileTransferable(file);
+				Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
+			})));
 
 		actions.add(new Action("deleteAction", Formatting.LIGHT_PURPLE,
-				"delete_image",
-				new CustomClickEvent((file) -> {
-					try {
-						Files.delete(file.toPath());
-						io.github.axolotlclient.util.Util.sendChatMessage(
-								new LiteralText(I18n.translate("screenshot_deleted").replace("<name>", file.getName())));
-					} catch (Exception e) {
-						AxolotlClient.LOGGER.warn("Couldn't delete Screenshot " + file.getName());
-					}
-				})));
+			"delete_image",
+			new CustomClickEvent((file) -> {
+				try {
+					Files.delete(file.toPath());
+					io.github.axolotlclient.util.Util.sendChatMessage(
+						new LiteralText(I18n.translate("screenshot_deleted").replace("<name>", file.getName())));
+				} catch (Exception e) {
+					AxolotlClient.LOGGER.warn("Couldn't delete Screenshot " + file.getName());
+				}
+			})));
 
 		actions.add(new Action("openAction", Formatting.WHITE,
-				"open_image",
-				new CustomClickEvent((file) -> Util.getOperatingSystem().open(file.toURI()))));
+			"open_image",
+			new CustomClickEvent((file) -> Util.getOperatingSystem().open(file.toURI()))));
 
 		actions.add(new Action("uploadAction", Formatting.LIGHT_PURPLE,
-				"upload_image",
-				new CustomClickEvent(file -> {
-					new Thread("Image Uploader") {
-						@Override
-						public void run() {
-							ImageShare.getInstance().uploadImage(shareUrl.get().trim(), file);
-						}
-					}.start();
-				})));
+			"upload_image",
+			new CustomClickEvent(file -> {
+				new Thread("Image Uploader") {
+					@Override
+					public void run() {
+						ImageShare.getInstance().uploadImage(shareUrl.get().trim(), file);
+					}
+				}.start();
+			})));
 
 		// If you have further ideas to what actions could be added here, please let us know!
 
@@ -100,6 +96,10 @@ public class ScreenshotUtils extends AbstractModule {
 		return names.toArray(new String[0]);
 	}), "off");
 
+	public static ScreenshotUtils getInstance() {
+		return Instance;
+	}
+
 	@Override
 	public void init() {
 		category.add(enabled, autoExec, shareUrl, new GenericOption("imageViewer", "openViewer", (m1, m2) -> {
@@ -107,10 +107,6 @@ public class ScreenshotUtils extends AbstractModule {
 		}));
 
 		AxolotlClient.CONFIG.general.addSubCategory(category);
-	}
-
-	public static ScreenshotUtils getInstance() {
-		return Instance;
 	}
 
 	public Text onScreenshotTaken(MutableText text, File shot) {
@@ -126,7 +122,7 @@ public class ScreenshotUtils extends AbstractModule {
 	private @Nullable Text getUtilsText(File file) {
 		if (!autoExec.get().equals("off")) {
 			actions.parallelStream().filter(action -> autoExec.get().equals(action.getName())).collect(Collectors.toList())
-					.get(0).clickEvent.setFile(file).doAction();
+				.get(0).clickEvent.setFile(file).doAction();
 			return null;
 		}
 
@@ -136,6 +132,11 @@ public class ScreenshotUtils extends AbstractModule {
 			message.append(" ");
 		});
 		return message;
+	}
+
+	interface OnActionCall {
+
+		void doAction(File file);
 	}
 
 	@AllArgsConstructor
@@ -148,7 +149,7 @@ public class ScreenshotUtils extends AbstractModule {
 
 		public Text getText(File file) {
 			return new TranslatableText(translationKey).setStyle(Style.EMPTY.withFormatting(formatting)
-					.withClickEvent(clickEvent.setFile(file)).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableText(hoverTextKey))));
+				.withClickEvent(clickEvent.setFile(file)).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableText(hoverTextKey))));
 		}
 
 		public String getName() {
@@ -194,7 +195,7 @@ public class ScreenshotUtils extends AbstractModule {
 				action.doAction(file);
 			} else {
 				AxolotlClient.LOGGER.warn("How'd you manage to do this? "
-						+ "Now there's a screenshot ClickEvent without a File attached to it!");
+					+ "Now there's a screenshot ClickEvent without a File attached to it!");
 			}
 		}
 
@@ -202,10 +203,5 @@ public class ScreenshotUtils extends AbstractModule {
 			this.file = file;
 			return this;
 		}
-	}
-
-	interface OnActionCall {
-
-		void doAction(File file);
 	}
 }

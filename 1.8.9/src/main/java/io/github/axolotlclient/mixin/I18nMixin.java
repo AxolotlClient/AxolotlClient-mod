@@ -38,7 +38,7 @@ public abstract class I18nMixin {
 	private static void axolotlclient$translate(String key, Object[] args, CallbackInfoReturnable<String> callback) {
 		if (key.startsWith(KEY_PREFIX)) {
 			callback.setReturnValue(TranslationProvider
-					.format(TranslationProvider.translate(key.substring(KEY_PREFIX.length())), args));
+				.format(TranslationProvider.translate(key.substring(KEY_PREFIX.length())), args));
 		} else if (TranslationProvider.hasTranslation(key)) {
 			callback.setReturnValue(TranslationProvider.translate(key, args));
 		}

@@ -22,6 +22,11 @@
 
 package io.github.axolotlclient.modules.hypixel.autogg;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.AxolotlClientConfig.options.StringOption;
@@ -30,11 +35,6 @@ import io.github.axolotlclient.util.Util;
 import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Based on <a href="https://github.com/DragonEggBedrockBreaking/AutoGG/blob/trunk/src/main/java/uk/debb/autogg/mixin/MixinChatHud.java">DragonEggBedrockBreaking's AutoGG Mod</a>
@@ -49,28 +49,21 @@ public class AutoGG implements AbstractHypixelMod {
 
 	private final OptionCategory category = new OptionCategory("autogg");
 	private final MinecraftClient client = MinecraftClient.getInstance();
-	private long lastTime = 0;
-
-	public BooleanOption gg = new BooleanOption("printGG", false);
-	public StringOption ggString = new StringOption("ggString", "gg");
-
-	public BooleanOption gf = new BooleanOption("printGF", false);
-	public StringOption gfString = new StringOption("gfString", "gf");
-
-	public BooleanOption glhf = new BooleanOption("printGLHF", false);
-	public StringOption glhfString = new StringOption("glhfString", "glhf");
-
 	private final BooleanOption onHypixel = new BooleanOption("onHypixel", false);
 	private final BooleanOption onBWP = new BooleanOption("onBWP", false);
 	private final BooleanOption onPVPL = new BooleanOption("onPVPL", false);
 	private final BooleanOption onMMC = new BooleanOption("onMMC", false);
-
-
 	private final HashMap<String, List<String>> ggStrings = new HashMap<>();
 	private final HashMap<String, List<String>> gfStrings = new HashMap<>();
 	private final HashMap<String, List<String>> glhfStrings = new HashMap<>();
-
 	private final HashMap<String, BooleanOption> serverMap = new HashMap<>();
+	public BooleanOption gg = new BooleanOption("printGG", false);
+	public StringOption ggString = new StringOption("ggString", "gg");
+	public BooleanOption gf = new BooleanOption("printGF", false);
+	public StringOption gfString = new StringOption("gfString", "gf");
+	public BooleanOption glhf = new BooleanOption("printGLHF", false);
+	public StringOption glhfString = new StringOption("glhfString", "glhf");
+	private long lastTime = 0;
 
 	@Override
 	public void init() {
@@ -102,53 +95,41 @@ public class AutoGG implements AbstractHypixelMod {
 		return category;
 	}
 
-	private void processChat(Text messageReceived, List<String> options, String messageToSend) {
-		if (System.currentTimeMillis() - this.lastTime > 3000 && options != null) {
-			for (String s : options) {
-				if (messageReceived.getString().contains(s)) {
-					Util.sendChatMessage(messageToSend);
-					this.lastTime = System.currentTimeMillis();
-					return;
-				}
-			}
-		}
-	}
-
 	private void populateGGStrings() {
 		ggStrings.put("hypixel.net", addToList(
-						"1st Killer -",
-						"1st Place -",
-						"Winner:",
-						" - Damage Dealt -",
-						"Winning Team -",
-						"1st -",
-						"Winners:",
-						"Winner:",
-						"Winning Team:",
-						" won the game!",
-						"Top Seeker:",
-						"1st Place:",
-						"Last team standing!",
-						"Winner #1 (",
-						"Top Survivors",
-						"Winners -",
-						"Sumo Duel -",
-						"Most Wool Placed -",
-						"Your Overall Winstreak:"
-				)
+				"1st Killer -",
+				"1st Place -",
+				"Winner:",
+				" - Damage Dealt -",
+				"Winning Team -",
+				"1st -",
+				"Winners:",
+				"Winner:",
+				"Winning Team:",
+				" won the game!",
+				"Top Seeker:",
+				"1st Place:",
+				"Last team standing!",
+				"Winner #1 (",
+				"Top Survivors",
+				"Winners -",
+				"Sumo Duel -",
+				"Most Wool Placed -",
+				"Your Overall Winstreak:"
+			)
 		);
 
 		ggStrings.put("bedwarspractice.club", addToList(
-				"Winners -",
-				"Game Won!",
-				"Game Lost!",
-				"The winning team is"));
+			"Winners -",
+			"Game Won!",
+			"Game Lost!",
+			"The winning team is"));
 
 		ggStrings.put("pvp.land", addToList(
-				"The match has ended!",
-				"Match Results",
-				"Winner:",
-				"Loser:"
+			"The match has ended!",
+			"Match Results",
+			"Winner:",
+			"Loser:"
 		));
 
 		ggStrings.put("minemen.club", addToList("Match Results"));
@@ -156,7 +137,7 @@ public class AutoGG implements AbstractHypixelMod {
 
 	private void populateGFStrings() {
 		gfStrings.put("hypixel.net", addToList("SkyWars Experience (Kill)",
-				"coins! (Final Kill)"));
+			"coins! (Final Kill)"));
 
 		gfStrings.put("bedwarspractice.club", addToList(client.getSession().getUsername() + " FINAL KILL!"));
 
@@ -192,6 +173,18 @@ public class AutoGG implements AbstractHypixelMod {
 					}
 				}
 			});
+		}
+	}
+
+	private void processChat(Text messageReceived, List<String> options, String messageToSend) {
+		if (System.currentTimeMillis() - this.lastTime > 3000 && options != null) {
+			for (String s : options) {
+				if (messageReceived.getString().contains(s)) {
+					Util.sendChatMessage(messageToSend);
+					this.lastTime = System.currentTimeMillis();
+					return;
+				}
+			}
 		}
 	}
 }

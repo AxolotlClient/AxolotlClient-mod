@@ -40,6 +40,9 @@ public abstract class TextRendererMixin {
 
 	// Pain at its finest
 
+	private final Identifier texture_g = new Identifier("axolotlclient", "textures/font/g_breve_capital.png");
+	@Shadow
+	public int fontHeight;
 	@Shadow
 	private float red;
 	@Shadow
@@ -52,10 +55,6 @@ public abstract class TextRendererMixin {
 	private float x;
 	@Shadow
 	private float y;
-	@Shadow
-	public int fontHeight;
-	private final Identifier texture_g = new Identifier("axolotlclient", "textures/font/g_breve_capital.png");
-
 	private boolean shouldHaveShadow;
 
 	@Inject(method = "drawLayer(Ljava/lang/String;FFIZ)I", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Ljava/lang/String;Z)V"))
@@ -83,13 +82,6 @@ public abstract class TextRendererMixin {
 		}
 	}
 
-	@Inject(method = "getCharWidth", at = @At(value = "HEAD"), cancellable = true)
-	public void axolotlclient$modifiedCharWidth(char c, CallbackInfoReturnable<Integer> cir) {
-		if (c == 'Ğ' && !MinecraftClient.getInstance().options.forcesUnicodeFont) {
-			cir.setReturnValue(7);
-		}
-	}
-
 	private void drawTexture(float x, float y) {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferBuilder = tessellator.getBuffer();
@@ -99,5 +91,12 @@ public abstract class TextRendererMixin {
 		bufferBuilder.vertex((x + 5), y, 0.0).texture(1, 0).next();
 		bufferBuilder.vertex(x, y, 0.0).texture(0, 0).next();
 		tessellator.draw();
+	}
+
+	@Inject(method = "getCharWidth", at = @At(value = "HEAD"), cancellable = true)
+	public void axolotlclient$modifiedCharWidth(char c, CallbackInfoReturnable<Integer> cir) {
+		if (c == 'Ğ' && !MinecraftClient.getInstance().options.forcesUnicodeFont) {
+			cir.setReturnValue(7);
+		}
 	}
 }

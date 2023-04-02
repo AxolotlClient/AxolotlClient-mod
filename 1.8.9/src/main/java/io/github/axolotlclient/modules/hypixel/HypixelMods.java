@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.modules.hypixel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.EnumOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
@@ -34,19 +37,18 @@ import io.github.axolotlclient.modules.hypixel.levelhead.LevelHead;
 import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
 import io.github.axolotlclient.modules.hypixel.skyblock.Skyblock;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class HypixelMods extends AbstractModule {
 
 	public static final HypixelMods INSTANCE = new HypixelMods();
-
-	public StringOption hypixel_api_key = new StringOption("hypixel_api_key", "");
-	public EnumOption cacheMode = new EnumOption("cache_mode", HypixelApiCacheMode.values(),
-			HypixelApiCacheMode.ON_CLIENT_DISCONNECT.toString());
-
 	private final OptionCategory category = new OptionCategory("hypixel-mods");
 	private final List<AbstractHypixelMod> subModules = new ArrayList<>();
+	public StringOption hypixel_api_key = new StringOption("hypixel_api_key", "");
+	public EnumOption cacheMode = new EnumOption("cache_mode", HypixelApiCacheMode.values(),
+		HypixelApiCacheMode.ON_CLIENT_DISCONNECT.toString());
+
+	public static HypixelMods getInstance() {
+		return INSTANCE;
+	}
 
 	@Override
 	public void init() {
@@ -66,21 +68,17 @@ public class HypixelMods extends AbstractModule {
 	}
 
 	@Override
-	public void tick() {
-		subModules.forEach(abstractHypixelMod -> {
-			if (abstractHypixelMod.tickable())
-				abstractHypixelMod.tick();
-		});
-	}
-
-	@Override
 	public void lateInit() {
 		HypixelAbstractionLayer.setApiKeySupplier(() -> hypixel_api_key.get());
 		HypixelAbstractionLayer.loadApiKey();
 	}
 
-	public static HypixelMods getInstance() {
-		return INSTANCE;
+	@Override
+	public void tick() {
+		subModules.forEach(abstractHypixelMod -> {
+			if (abstractHypixelMod.tickable())
+				abstractHypixelMod.tick();
+		});
 	}
 
 	private void addSubModule(AbstractHypixelMod mod) {

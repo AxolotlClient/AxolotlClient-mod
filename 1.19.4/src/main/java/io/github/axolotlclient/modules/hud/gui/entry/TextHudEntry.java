@@ -22,12 +22,12 @@
 
 package io.github.axolotlclient.modules.hud.gui.entry;
 
+import java.util.List;
+
 import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.ColorOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.Option;
-
-import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -41,12 +41,12 @@ public abstract class TextHudEntry extends BoxHudEntry {
 	protected ColorOption textColor = new ColorOption("textcolor", Color.WHITE);
 	protected BooleanOption shadow = new BooleanOption("shadow", getShadowDefault());
 
-	protected boolean getShadowDefault() {
-		return true;
-	}
-
 	public TextHudEntry(int width, int height, boolean backgroundAllowed) {
 		super(width, height, backgroundAllowed);
+	}
+
+	protected boolean getShadowDefault() {
+		return true;
 	}
 
 	@Override

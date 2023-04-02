@@ -41,12 +41,12 @@ public class DrawUtil extends DrawableHelper {
 		fillRect(matrices, rectangle.x, rectangle.y, rectangle.width, rectangle.height, color.getAsInt());
 	}
 
-	public static void fillRect(MatrixStack matrices, int x, int y, int width, int height, Color color) {
-		RenderUtil.drawRectangle(matrices, x, y, x + width, y + height, color.getAsInt());
-	}
-
 	public static void fillRect(MatrixStack matrices, int x, int y, int width, int height, int color) {
 		DrawableHelper.fill(matrices, x, y, x + width, y + height, color);
+	}
+
+	public static void fillRect(MatrixStack matrices, int x, int y, int width, int height, Color color) {
+		RenderUtil.drawRectangle(matrices, x, y, x + width, y + height, color.getAsInt());
 	}
 
 	public static void outlineRect(MatrixStack matrices, Rectangle rectangle, Color color) {
@@ -70,6 +70,14 @@ public class DrawUtil extends DrawableHelper {
 		drawString(matrices, text, (float) (x - renderer.getWidth(text) / 2), (float) y, color, shadow);
 	}
 
+	public static void drawString(MatrixStack matrices, String text, float x, float y, int color, boolean shadow) {
+		if (shadow) {
+			MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, text, x, y, color);
+		} else {
+			MinecraftClient.getInstance().textRenderer.draw(matrices, text, x, y, color);
+		}
+	}
+
 	public static void drawString(MatrixStack matrices, String text, float x, float y, Color color, boolean shadow) {
 		drawString(matrices, text, x, y, color.getAsInt(), shadow);
 	}
@@ -77,13 +85,5 @@ public class DrawUtil extends DrawableHelper {
 	public static void drawString(MatrixStack matrices, TextRenderer textRenderer, String text, float x, float y,
 								  int color, boolean shadow) {
 		drawString(matrices, text, x, y, color, shadow);
-	}
-
-	public static void drawString(MatrixStack matrices, String text, float x, float y, int color, boolean shadow) {
-		if (shadow) {
-			MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, text, x, y, color);
-		} else {
-			MinecraftClient.getInstance().textRenderer.draw(matrices, text, x, y, color);
-		}
 	}
 }

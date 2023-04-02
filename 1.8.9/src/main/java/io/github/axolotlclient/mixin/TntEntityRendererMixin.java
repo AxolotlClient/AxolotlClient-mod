@@ -43,7 +43,7 @@ public abstract class TntEntityRendererMixin extends EntityRenderer<TntEntity> {
 	public void axolotlclient$render(TntEntity entity, double x, double y, double z, float f, float tickDelta, CallbackInfo ci) {
 		if (TntTime.getInstance().enabled.get()) {
 			super.renderLabelIfPresent(entity, TntTime.getInstance().getFuseTime(entity.fuseTimer).asFormattedString(),
-					x, y, z, 64);
+				x, y, z, 64);
 			ci.cancel();
 		}
 	}

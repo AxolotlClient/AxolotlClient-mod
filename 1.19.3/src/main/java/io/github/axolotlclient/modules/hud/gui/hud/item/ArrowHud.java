@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.item;
 
+import java.util.List;
+
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.Option;
 import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
@@ -35,8 +37,6 @@ import net.minecraft.item.RangedWeaponItem;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 
-import java.util.List;
-
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
@@ -47,12 +47,11 @@ import java.util.List;
 public class ArrowHud extends TextHudEntry {
 
 	public static final Identifier ID = new Identifier("kronhud", "arrowhud");
-	private int arrows = 0;
 	private final BooleanOption dynamic = new BooleanOption("dynamic", false);
 	private final BooleanOption allArrowTypes = new BooleanOption("allArrowTypes", false);
-
 	private final ItemStack[] arrowTypes = new ItemStack[]{new ItemStack(Items.ARROW),
-			new ItemStack(Items.TIPPED_ARROW), new ItemStack(Items.SPECTRAL_ARROW)};
+		new ItemStack(Items.TIPPED_ARROW), new ItemStack(Items.SPECTRAL_ARROW)};
+	private int arrows = 0;
 	private ItemStack currentArrow = arrowTypes[0];
 
 	public ArrowHud() {
@@ -64,7 +63,7 @@ public class ArrowHud extends TextHudEntry {
 		if (dynamic.get()) {
 			ClientPlayerEntity player = client.player;
 			if (!(player.getStackInHand(Hand.MAIN_HAND).getItem() instanceof RangedWeaponItem
-					|| player.getStackInHand(Hand.OFF_HAND).getItem() instanceof RangedWeaponItem)) {
+				|| player.getStackInHand(Hand.OFF_HAND).getItem() instanceof RangedWeaponItem)) {
 				return;
 			}
 		}
@@ -75,8 +74,21 @@ public class ArrowHud extends TextHudEntry {
 	public void renderComponent(MatrixStack matrices, float delta) {
 		DrawPosition pos = getPos();
 		drawCenteredString(matrices, client.textRenderer, String.valueOf(arrows), pos.x() + getWidth() / 2,
-				pos.y() + getHeight() - 10, textColor.get(), shadow.get());
+			pos.y() + getHeight() - 10, textColor.get(), shadow.get());
 		ItemUtil.renderGuiItemModel(getScale(), currentArrow, pos.x() + 2, pos.y() + 2);
+	}
+
+	@Override
+	public void renderPlaceholderComponent(MatrixStack matrices, float delta) {
+		DrawPosition pos = getPos();
+		drawCenteredString(matrices, client.textRenderer, "64", pos.x() + getWidth() / 2, pos.y() + getHeight() - 10,
+			textColor.get(), shadow.get());
+		ItemUtil.renderGuiItemModel(getScale(), arrowTypes[0], pos.x() + 2, pos.y() + 2);
+	}
+
+	@Override
+	public boolean movable() {
+		return true;
 	}
 
 	@Override
@@ -88,7 +100,7 @@ public class ArrowHud extends TextHudEntry {
 	public void tick() {
 		if (allArrowTypes.get()) {
 			arrows = ItemUtil.getTotal(client, arrowTypes[0]) + ItemUtil.getTotal(client, arrowTypes[1])
-					+ ItemUtil.getTotal(client, arrowTypes[2]);
+				+ ItemUtil.getTotal(client, arrowTypes[2]);
 		} else {
 			arrows = ItemUtil.getTotal(client, currentArrow);
 		}
@@ -103,24 +115,11 @@ public class ArrowHud extends TextHudEntry {
 	}
 
 	@Override
-	public void renderPlaceholderComponent(MatrixStack matrices, float delta) {
-		DrawPosition pos = getPos();
-		drawCenteredString(matrices, client.textRenderer, "64", pos.x() + getWidth() / 2, pos.y() + getHeight() - 10,
-				textColor.get(), shadow.get());
-		ItemUtil.renderGuiItemModel(getScale(), arrowTypes[0], pos.x() + 2, pos.y() + 2);
-	}
-
-	@Override
 	public List<Option<?>> getConfigurationOptions() {
 		List<Option<?>> options = super.getConfigurationOptions();
 		options.add(dynamic);
 		options.add(allArrowTypes);
 		return options;
-	}
-
-	@Override
-	public boolean movable() {
-		return true;
 	}
 
 	@Override

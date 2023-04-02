@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud;
 
+import java.util.List;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
@@ -36,8 +38,6 @@ import io.github.axolotlclient.modules.hud.util.DrawUtil;
 import io.github.axolotlclient.modules.hud.util.RenderUtil;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
-
-import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -61,13 +61,13 @@ public class CompassHud extends TextHudEntry implements DynamicallyPositionable 
 	private final BooleanOption invert = new BooleanOption("invert_direction", false);
 	private final BooleanOption showDegrees = new BooleanOption("showdegrees", true);
 
+	public CompassHud() {
+		super(240, 33, false);
+	}
+
 	private void updateWidth(int newWidth) {
 		setWidth(newWidth);
 		onBoundsUpdate();
-	}
-
-	public CompassHud() {
-		super(240, 33, false);
 	}
 
 	@Override
@@ -110,7 +110,7 @@ public class CompassHud extends TextHudEntry implements DynamicallyPositionable 
 		RenderUtil.drawRectangle(matrices, pos.x() + (int) halfWidth - 1, pos.y(), 3, 11, lookingBox.get());
 		if (showDegrees.get()) {
 			DrawUtil.drawCenteredString(matrices, client.textRenderer, String.valueOf((int) degrees),
-					x + (int) halfWidth, y + 20, degreesColor.get(), shadow.get());
+				x + (int) halfWidth, y + 20, degreesColor.get(), shadow.get());
 		}
 		float shift = (startIndicator - start) / 15f * dist;
 		if (invert.get()) {
@@ -143,14 +143,14 @@ public class CompassHud extends TextHudEntry implements DynamicallyPositionable 
 				color = color.withAlpha((int) (color.getAlpha() * targetOpacity));
 				if (color.getAlpha() > 0) {
 					DrawUtil.drawCenteredString(matrices, client.textRenderer, getCardString(indicator, d), innerX + 1,
-							y + 10, color, shadow.get());
+						y + 10, color, shadow.get());
 				}
 			} else if (indicator == Indicator.SEMI_CARDINAL) {
 				Color color = semiCardinalColor.get();
 				color = color.withAlpha((int) (color.getAlpha() * targetOpacity));
 				if (color.getAlpha() > 0) {
 					DrawUtil.drawCenteredString(matrices, client.textRenderer, getCardString(indicator, d), innerX + 1,
-							y + 1, color, shadow.get());
+						y + 1, color, shadow.get());
 				}
 			} else {
 				// We have to call .color() here so that transparency stays

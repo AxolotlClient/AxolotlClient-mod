@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.modules.auth;
 
+import java.util.UUID;
+
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ScreenTexts;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -30,26 +32,14 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
 
-import java.util.UUID;
-
 public class AddOfflineScreen extends Screen {
 
-	private TextFieldWidget nameInput;
 	private final Screen parent;
+	private TextFieldWidget nameInput;
 
 	public AddOfflineScreen(Screen parent) {
 		super(new TranslatableText("auth.add.offline"));
 		this.parent = parent;
-	}
-
-	@Override
-	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-		return super.keyPressed(keyCode, scanCode, modifiers) || nameInput.keyPressed(keyCode, scanCode, modifiers);
-	}
-
-	@Override
-	public void tick() {
-		nameInput.tick();
 	}
 
 	@Override
@@ -67,6 +57,11 @@ public class AddOfflineScreen extends Screen {
 	}
 
 	@Override
+	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+		return super.keyPressed(keyCode, scanCode, modifiers) || nameInput.keyPressed(keyCode, scanCode, modifiers);
+	}
+
+	@Override
 	public void init() {
 		addChild(nameInput = new TextFieldWidget(textRenderer, width / 2 - 100, height / 2 - 10, 200, 20, LiteralText.EMPTY));
 
@@ -75,5 +70,10 @@ public class AddOfflineScreen extends Screen {
 			Auth.getInstance().addAccount(new MSAccount(nameInput.getText(), UUID.randomUUID().toString(), MSAccount.OFFLINE_TOKEN));
 			client.openScreen(parent);
 		}));
+	}
+
+	@Override
+	public void tick() {
+		nameInput.tick();
 	}
 }

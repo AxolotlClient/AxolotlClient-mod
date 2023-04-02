@@ -22,11 +22,6 @@
 
 package io.github.axolotlclient.modules.auth;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import io.github.axolotlclient.util.GsonHelper;
-import io.github.axolotlclient.util.Logger;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -34,6 +29,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import io.github.axolotlclient.util.GsonHelper;
+import io.github.axolotlclient.util.Logger;
 
 public abstract class Accounts {
 
@@ -91,9 +91,31 @@ public abstract class Accounts {
 		save();
 	}
 
+	public void removeSkinFile(MSAccount account) {
+		try {
+			Files.delete(getSkinFile(account).toPath());
+		} catch (IOException e) {
+			getLogger().error("Failed to clean up skin file for " + account.getName());
+		}
+	}
+
+	public void save() {
+		JsonArray array = new JsonArray();
+		accounts.forEach(account -> array.add(account.serialize()));
+		JsonObject object = new JsonObject();
+		object.add("accounts", array);
+		try {
+			Files.write(getAccountsSaveFile(), GsonHelper.GSON.toJson(object).getBytes(StandardCharsets.UTF_8));
+		} catch (IOException e) {
+			getLogger().error("Failed to save acounts config!", e);
+		}
+	}
+
 	public File getSkinFile(MSAccount account) {
 		return getSkinFile(account.getUuid());
 	}
+
+	protected abstract Logger getLogger();
 
 	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public File getSkinFile(String uuid) {
@@ -109,31 +131,9 @@ public abstract class Accounts {
 		return f;
 	}
 
-	public void removeSkinFile(MSAccount account) {
-		try {
-			Files.delete(getSkinFile(account).toPath());
-		} catch (IOException e) {
-			getLogger().error("Failed to clean up skin file for " + account.getName());
-		}
-	}
-
 	public String getSkinTextureId(MSAccount account) {
 		return "accounts_" + account.getUuid();
 	}
-
-	public void save() {
-		JsonArray array = new JsonArray();
-		accounts.forEach(account -> array.add(account.serialize()));
-		JsonObject object = new JsonObject();
-		object.add("accounts", array);
-		try {
-			Files.write(getAccountsSaveFile(), GsonHelper.GSON.toJson(object).getBytes(StandardCharsets.UTF_8));
-		} catch (IOException e) {
-			getLogger().error("Failed to save acounts config!", e);
-		}
-	}
-
-	protected abstract Logger getLogger();
 
 	protected boolean isContained(String uuid) {
 		return accounts.stream().anyMatch(account -> account.getUuid().equals(uuid));

@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.modules.blur;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
@@ -43,9 +46,6 @@ import net.minecraft.resource.Resource;
 import net.minecraft.util.Identifier;
 import org.apache.commons.io.IOUtils;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 /**
  * Totally not stolen from Sol.
  * License: GPL-3.0
@@ -58,10 +58,8 @@ public class MenuBlur extends AbstractModule {
 
 	@Getter
 	private static final MenuBlur Instance = new MenuBlur();
-
-	private final Identifier shaderLocation = new Identifier("minecraft:shaders/post/menu_blur.json");
-
 	public final BooleanOption enabled = new BooleanOption("enabled", false);
+	private final Identifier shaderLocation = new Identifier("minecraft:shaders/post/menu_blur.json");
 	private final IntegerOption strength = new IntegerOption("strength", 8, 0, 100);
 	private final IntegerOption fadeTime = new IntegerOption("fadeTime", 1, 0, 10);
 	private final ColorOption bgColor = new ColorOption("bgcolor", 0x64000000);
@@ -88,14 +86,10 @@ public class MenuBlur extends AbstractModule {
 	public boolean renderScreen() {
 		if (enabled.get() && !(MinecraftClient.getInstance().currentScreen instanceof ChatScreen) && shader != null) {
 			DrawableHelper.fill(0, 0, Util.getWindow().getWidth(), Util.getWindow().getHeight(),
-					Color.blend(black, bgColor.get(), getProgress()).getAsInt());
+				Color.blend(black, bgColor.get(), getProgress()).getAsInt());
 			return true;
 		}
 		return false;
-	}
-
-	public void renderBlur() {
-		shader.render(((MinecraftClientAccessor) MinecraftClient.getInstance()).getTicker().tickDelta);
 	}
 
 	private float getProgress() {
@@ -105,10 +99,10 @@ public class MenuBlur extends AbstractModule {
 	public void updateBlur() {
 		if (enabled.get() && MinecraftClient.getInstance().currentScreen != null && !(MinecraftClient.getInstance().currentScreen instanceof ChatScreen)) {
 			if ((shader == null || client.width != lastWidth || client.height != lastHeight) && client.height != 0
-					&& client.width != 0) {
+				&& client.width != 0) {
 				try {
 					shader = new ShaderEffect(client.getTextureManager(), client.getResourceManager(),
-							client.getFramebuffer(), shaderLocation);
+						client.getFramebuffer(), shaderLocation);
 					shader.setupDimensions(client.width, client.height);
 				} catch (IOException e) {
 					AxolotlClient.LOGGER.error("Failed to load Menu Blur: ", e);
@@ -141,6 +135,10 @@ public class MenuBlur extends AbstractModule {
 		}
 	}
 
+	public void renderBlur() {
+		shader.render(((MinecraftClientAccessor) MinecraftClient.getInstance()).getTicker().tickDelta);
+	}
+
 	public void onScreenOpen() {
 		openTime = System.currentTimeMillis();
 	}
@@ -155,31 +153,31 @@ public class MenuBlur extends AbstractModule {
 		@Override
 		public InputStream getInputStream() {
 			return IOUtils.toInputStream("{\n" + "    \"targets\": [\n" + "        \"swap\"\n" + "    ],\n"
-					+ "    \"passes\": [\n" + "        {\n" + "            \"name\": \"menu_blur\",\n"
-					+ "            \"intarget\": \"minecraft:main\",\n" + "            \"outtarget\": \"swap\",\n"
-					+ "            \"uniforms\": [\n" + "                {\n"
-					+ "                    \"name\": \"BlurDir\",\n" + "                    \"values\": [ 1.0, 0.0 ]\n"
-					+ "                },\n" + "                {\n" + "                    \"name\": \"Radius\",\n"
-					+ "                    \"values\": [ 0.0 ]\n" + "                }\n" + "            ]\n"
-					+ "        },\n" + "        {\n" + "            \"name\": \"menu_blur\",\n"
-					+ "            \"intarget\": \"swap\",\n" + "            \"outtarget\": \"minecraft:main\",\n"
-					+ "            \"uniforms\": [\n" + "                {\n"
-					+ "                    \"name\": \"BlurDir\",\n" + "                    \"values\": [ 0.0, 1.0 ]\n"
-					+ "                },\n" + "                {\n" + "                    \"name\": \"Radius\",\n"
-					+ "                    \"values\": [ 0.0 ]\n" + "                }\n" + "            ]\n"
-					+ "        },\n" + "        {\n" + "            \"name\": \"menu_blur\",\n"
-					+ "            \"intarget\": \"minecraft:main\",\n" + "            \"outtarget\": \"swap\",\n"
-					+ "            \"uniforms\": [\n" + "                {\n"
-					+ "                    \"name\": \"BlurDir\",\n" + "                    \"values\": [ 1.0, 0.0 ]\n"
-					+ "                },\n" + "                {\n" + "                    \"name\": \"Radius\",\n"
-					+ "                    \"values\": [ 0.0 ]\n" + "                }\n" + "            ]\n"
-					+ "        },\n" + "        {\n" + "            \"name\": \"menu_blur\",\n"
-					+ "            \"intarget\": \"swap\",\n" + "            \"outtarget\": \"minecraft:main\",\n"
-					+ "            \"uniforms\": [\n" + "                {\n"
-					+ "                    \"name\": \"BlurDir\",\n" + "                    \"values\": [ 0.0, 1.0 ]\n"
-					+ "                },\n" + "                {\n" + "                    \"name\": \"Radius\",\n"
-					+ "                    \"values\": [ 0.0 ]\n" + "                }\n" + "            ]\n"
-					+ "        }\n" + "    ]\n" + "}");
+				+ "    \"passes\": [\n" + "        {\n" + "            \"name\": \"menu_blur\",\n"
+				+ "            \"intarget\": \"minecraft:main\",\n" + "            \"outtarget\": \"swap\",\n"
+				+ "            \"uniforms\": [\n" + "                {\n"
+				+ "                    \"name\": \"BlurDir\",\n" + "                    \"values\": [ 1.0, 0.0 ]\n"
+				+ "                },\n" + "                {\n" + "                    \"name\": \"Radius\",\n"
+				+ "                    \"values\": [ 0.0 ]\n" + "                }\n" + "            ]\n"
+				+ "        },\n" + "        {\n" + "            \"name\": \"menu_blur\",\n"
+				+ "            \"intarget\": \"swap\",\n" + "            \"outtarget\": \"minecraft:main\",\n"
+				+ "            \"uniforms\": [\n" + "                {\n"
+				+ "                    \"name\": \"BlurDir\",\n" + "                    \"values\": [ 0.0, 1.0 ]\n"
+				+ "                },\n" + "                {\n" + "                    \"name\": \"Radius\",\n"
+				+ "                    \"values\": [ 0.0 ]\n" + "                }\n" + "            ]\n"
+				+ "        },\n" + "        {\n" + "            \"name\": \"menu_blur\",\n"
+				+ "            \"intarget\": \"minecraft:main\",\n" + "            \"outtarget\": \"swap\",\n"
+				+ "            \"uniforms\": [\n" + "                {\n"
+				+ "                    \"name\": \"BlurDir\",\n" + "                    \"values\": [ 1.0, 0.0 ]\n"
+				+ "                },\n" + "                {\n" + "                    \"name\": \"Radius\",\n"
+				+ "                    \"values\": [ 0.0 ]\n" + "                }\n" + "            ]\n"
+				+ "        },\n" + "        {\n" + "            \"name\": \"menu_blur\",\n"
+				+ "            \"intarget\": \"swap\",\n" + "            \"outtarget\": \"minecraft:main\",\n"
+				+ "            \"uniforms\": [\n" + "                {\n"
+				+ "                    \"name\": \"BlurDir\",\n" + "                    \"values\": [ 0.0, 1.0 ]\n"
+				+ "                },\n" + "                {\n" + "                    \"name\": \"Radius\",\n"
+				+ "                    \"values\": [ 0.0 ]\n" + "                }\n" + "            ]\n"
+				+ "        }\n" + "    ]\n" + "}");
 		}
 
 		@Override

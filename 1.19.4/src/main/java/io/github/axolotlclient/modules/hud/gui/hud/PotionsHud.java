@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.EnumOption;
@@ -40,9 +43,6 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectUtil;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.Identifier;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -63,28 +63,6 @@ public class PotionsHud extends TextHudEntry implements DynamicallyPositionable 
 
 	public PotionsHud() {
 		super(50, 200, false);
-	}
-
-	private int calculateWidth(List<StatusEffectInstance> effects) {
-		if (CardinalOrder.valueOf(order.get()).isXAxis()) {
-			if (iconsOnly.get()) {
-				return 20 * effects.size() + 2;
-			}
-			return 50 * effects.size() + 2;
-		} else {
-			if (iconsOnly.get()) {
-				return 20;
-			}
-			return 50;
-		}
-	}
-
-	private int calculateHeight(List<StatusEffectInstance> effects) {
-		if (CardinalOrder.valueOf(order.get()).isXAxis()) {
-			return 22;
-		} else {
-			return 20 * effects.size() + 2;
-		}
 	}
 
 	@Override
@@ -129,6 +107,28 @@ public class PotionsHud extends TextHudEntry implements DynamicallyPositionable 
 		}
 	}
 
+	private int calculateWidth(List<StatusEffectInstance> effects) {
+		if (CardinalOrder.valueOf(order.get()).isXAxis()) {
+			if (iconsOnly.get()) {
+				return 20 * effects.size() + 2;
+			}
+			return 50 * effects.size() + 2;
+		} else {
+			if (iconsOnly.get()) {
+				return 20;
+			}
+			return 50;
+		}
+	}
+
+	private int calculateHeight(List<StatusEffectInstance> effects) {
+		if (CardinalOrder.valueOf(order.get()).isXAxis()) {
+			return 22;
+		} else {
+			return 20 * effects.size() + 2;
+		}
+	}
+
 	private void renderPotion(MatrixStack matrices, StatusEffectInstance effect, int x, int y) {
 		StatusEffect type = effect.getEffectType();
 		Sprite sprite = client.getStatusEffectSpriteManager().getSprite(type);
@@ -138,7 +138,7 @@ public class PotionsHud extends TextHudEntry implements DynamicallyPositionable 
 		DrawableHelper.drawSprite(matrices, x, y, 0, 18, 18, sprite);
 		if (!iconsOnly.get()) {
 			drawString(matrices, StatusEffectUtil.durationToString(effect, 1).getString(), x + 19, y + 5,
-					textColor.get().getAsInt(), shadow.get());
+				textColor.get().getAsInt(), shadow.get());
 		}
 	}
 

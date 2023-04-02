@@ -22,11 +22,11 @@
 
 package io.github.axolotlclient.modules.sky;
 
-import net.minecraft.client.util.math.MatrixStack;
-
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.function.Predicate;
+
+import net.minecraft.client.util.math.MatrixStack;
 
 /**
  * This implementation of custom skies is based on the FabricSkyBoxes mod by AMereBagatelle
@@ -38,17 +38,19 @@ import java.util.function.Predicate;
 public class SkyboxManager {
 
 	public static final double MINIMUM_ALPHA = 0.01;
-
+	private static final SkyboxManager INSTANCE = new SkyboxManager();
 	private final ArrayList<SkyboxInstance> skyboxes = new ArrayList<>();
 	private final ArrayList<SkyboxInstance> active_skies = new ArrayList<>();
 	private final Predicate<? super SkyboxInstance> renderPredicate = (skybox) -> !this.active_skies.contains(skybox)
-			&& skybox.getAlpha() >= MINIMUM_ALPHA;
+		&& skybox.getAlpha() >= MINIMUM_ALPHA;
+
+	public static SkyboxManager getInstance() {
+		return INSTANCE;
+	}
 
 	public void addSkybox(SkyboxInstance skybox) {
 		skyboxes.add(Objects.requireNonNull(skybox));
 	}
-
-	private static final SkyboxManager INSTANCE = new SkyboxManager();
 
 	public void renderSkyboxes(MatrixStack matrices, float tickDelta) {
 		this.skyboxes.stream().filter(this.renderPredicate).forEach(this.active_skies::add);
@@ -68,10 +70,6 @@ public class SkyboxManager {
 		this.skyboxes.remove(skybox);
 		if (this.active_skies.contains(skybox))
 			active_skies.remove(skybox);
-	}
-
-	public static SkyboxManager getInstance() {
-		return INSTANCE;
 	}
 
 	public boolean hasSkyBoxes() {

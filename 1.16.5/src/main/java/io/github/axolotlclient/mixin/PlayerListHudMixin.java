@@ -58,23 +58,22 @@ public abstract class PlayerListHudMixin {
 	private Text header;
 	@Shadow
 	private Text footer;
-
-	@Shadow
-	protected abstract Text applyGameModeFormatting(PlayerListEntry par1, MutableText par2);
-
 	private GameProfile profile;
 
 	@Inject(method = "getPlayerName", at = @At("HEAD"), cancellable = true)
 	public void axolotlclient$nickHider(PlayerListEntry playerEntry, CallbackInfoReturnable<Text> cir) {
 		assert MinecraftClient.getInstance().player != null;
 		if (playerEntry.getProfile().equals(MinecraftClient.getInstance().player.getGameProfile())
-				&& NickHider.getInstance().hideOwnName.get()) {
+			&& NickHider.getInstance().hideOwnName.get()) {
 			cir.setReturnValue(this.applyGameModeFormatting(playerEntry, new LiteralText(NickHider.getInstance().hiddenNameSelf.get())));
 		} else if (!playerEntry.getProfile().equals(MinecraftClient.getInstance().player.getGameProfile())
-				&& NickHider.getInstance().hideOtherNames.get()) {
+			&& NickHider.getInstance().hideOtherNames.get()) {
 			cir.setReturnValue(this.applyGameModeFormatting(playerEntry, new LiteralText(NickHider.getInstance().hiddenNameOthers.get())));
 		}
 	}
+
+	@Shadow
+	protected abstract Text applyGameModeFormatting(PlayerListEntry par1, MutableText par2);
 
 	@ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;getPlayerName(Lnet/minecraft/client/network/PlayerListEntry;)Lnet/minecraft/text/Text;"))
 	public PlayerListEntry axolotlclient$getPlayer(PlayerListEntry playerEntry) {
