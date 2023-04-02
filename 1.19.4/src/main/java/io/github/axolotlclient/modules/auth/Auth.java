@@ -114,7 +114,7 @@ public class Auth extends Accounts implements Module {
 				((MinecraftClientAccessor) client).setChatReportingContext(ChatReportingContext.create(ReportEnvironment.createLocal(), service));
 				save();
 				current = account;
-				Notifications.getInstance().addStatus(Text.translatable("auth.notif.title"), Text.translatable("auth.notif.login.successful", current.getName()));
+				Notifications.getInstance().addStatus(Text.translatable("auth.notif.title"), Text.translatable("auth.notif.login.successful", (Object) current.getName()));
 			} catch (AuthenticationException e) {
 				e.printStackTrace();
 				Notifications.getInstance().addStatus(Text.translatable("auth.notif.title"), Text.translatable("auth.notif.login.failed"));
@@ -122,7 +122,7 @@ public class Auth extends Accounts implements Module {
 		};
 
 		if (account.isExpired() && !account.isOffline()) {
-			Notifications.getInstance().addStatus(Text.translatable("auth.notif.title"), Text.translatable("auth.notif.refreshing", account.getName()));
+			Notifications.getInstance().addStatus(Text.translatable("auth.notif.title"), Text.translatable("auth.notif.refreshing", (Object) account.getName()));
 			account.refresh(auth, runnable);
 		} else {
 			runnable.run();

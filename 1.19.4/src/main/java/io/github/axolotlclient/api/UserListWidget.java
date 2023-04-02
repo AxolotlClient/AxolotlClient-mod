@@ -27,6 +27,7 @@ import io.github.axolotlclient.api.types.User;
 import io.github.axolotlclient.modules.auth.Auth;
 import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.MutableText;
@@ -38,9 +39,9 @@ import java.util.List;
 
 public class UserListWidget extends AlwaysSelectedEntryListWidget<UserListWidget.UserListEntry> {
 
-	private final FriendsScreen screen;
+	private final UserListScreen screen;
 
-	public UserListWidget(FriendsScreen screen, MinecraftClient client, int width, int height, int top, int bottom, int entryHeight) {
+	public UserListWidget(UserListScreen screen, MinecraftClient client, int width, int height, int top, int bottom, int entryHeight) {
 		super(client, width, height, top, bottom, entryHeight);
 		this.screen = screen;
 	}
@@ -77,7 +78,7 @@ public class UserListWidget extends AlwaysSelectedEntryListWidget<UserListWidget
 		private final MinecraftClient client;
 
 		private Text note;
-		private FriendsScreen screen;
+		private UserListScreen screen;
 
 		public UserListEntry(User user) {
 			this.client = MinecraftClient.getInstance();
@@ -89,7 +90,7 @@ public class UserListWidget extends AlwaysSelectedEntryListWidget<UserListWidget
 			this.note = note.formatted(Formatting.ITALIC);
 		}
 
-		public UserListEntry init(FriendsScreen screen) {
+		public UserListEntry init(UserListScreen screen) {
 			this.screen = screen;
 			return this;
 		}

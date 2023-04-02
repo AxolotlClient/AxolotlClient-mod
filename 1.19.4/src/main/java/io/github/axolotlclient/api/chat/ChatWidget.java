@@ -41,6 +41,7 @@ public class ChatWidget extends DrawableHelper implements Element, Drawable {
 		this.y = y;
 		this.width = width;
 		this.height = height;
+		Arrays.stream(channel.getMessages()).forEach(this::addMessage);
 
 		ChatHandler.getInstance().setMessagesConsumer(chatMessages -> chatMessages.forEach(this::addMessage));
 		ChatHandler.getInstance().setMessageConsumer(this::addMessage);
@@ -48,7 +49,7 @@ public class ChatWidget extends DrawableHelper implements Element, Drawable {
 	}
 
 	private void addMessage(ChatMessage message){
-		List<OrderedText> list = client.textRenderer.wrapLines(Text.of(message.getContent()), width);
+		List<OrderedText> list = client.textRenderer.wrapLines(Text.of(message.getContent()), width-23);
 
 		if(messages.size() > 0) {
 			ChatMessage prev = messages.get(messages.size() - 1);
@@ -78,11 +79,10 @@ public class ChatWidget extends DrawableHelper implements Element, Drawable {
 			loadMessages();
 		}
 
-		int y = this.y+height - client.textRenderer.fontHeight*lines.size();
+		int y = this.y+height - client.textRenderer.fontHeight*lines.size() - 10;
 
 		for (ChatLine line : lines) {
-			line.render(matrices, x+22, y, -1, mouseX, mouseY);
-			y += client.textRenderer.fontHeight;
+			y = line.render(matrices, x+22, y, -1, mouseX, mouseY);
 			if(y > this.y+this.height){
 				break;
 			}

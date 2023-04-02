@@ -23,9 +23,10 @@
 package io.github.axolotlclient.api.chat;
 
 import com.mojang.blaze3d.platform.InputUtil;
+import io.github.axolotlclient.api.UserListScreen;
+import io.github.axolotlclient.api.UserListWidget;
 import io.github.axolotlclient.api.handlers.ChatHandler;
 import io.github.axolotlclient.api.types.Channel;
-import io.github.axolotlclient.api.types.User;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -33,18 +34,21 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.ScreenTexts;
 import net.minecraft.text.Text;
 
-public class ChatScreen extends Screen {
+public class ChatScreen extends UserListScreen {
 	private final Channel channel;
 	private final Screen parent;
 
 	private ChatWidget widget;
-
+	private UserListWidget users;
 	private TextFieldWidget input;
 
 	public ChatScreen(Screen parent, Channel channel) {
 		super(Text.translatable("api.screen.chat"));
 		this.channel = channel;
 		this.parent = parent;
+		if(!channel.isDM()){
+			users = new UserListWidget(this, client, 50, height-20, 10, 10, 25);
+		}
 	}
 
 	@Override
@@ -74,10 +78,10 @@ public class ChatScreen extends Screen {
 			}
 		});
 
-		input.setSuggestion(Text.translatable("api.chat.messageUser", channel.getName()).getString());
+		input.setSuggestion(Text.translatable("api.chat.messageUser", (Object) channel.getName()).getString());
 		input.setChangedListener(s -> {
 			if(s.isEmpty()){
-				input.setSuggestion(Text.translatable("api.chat.messageUser", channel.getName()).getString());
+				input.setSuggestion(Text.translatable("api.chat.messageUser", (Object) channel.getName()).getString());
 			} else {
 				input.setSuggestion("");
 			}
@@ -108,5 +112,10 @@ public class ChatScreen extends Screen {
 		if(widget != null) {
 			widget.remove();
 		}
+	}
+
+	@Override
+	protected UserListWidget getWidget() {
+		return users;
 	}
 }

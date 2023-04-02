@@ -27,7 +27,7 @@ import io.github.axolotlclient.api.util.UUIDHelper;
 import lombok.*;
 
 @Getter @Setter
-@ToString
+@ToString @AllArgsConstructor
 public class User {
 
 	public User(String uuid, Status status) {
