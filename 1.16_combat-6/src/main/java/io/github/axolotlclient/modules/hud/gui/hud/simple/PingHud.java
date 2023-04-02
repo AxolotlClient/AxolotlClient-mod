@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.simple;
 
+import java.net.InetAddress;
+import java.util.List;
+
 import io.github.axolotlclient.AxolotlClientConfig.options.IntegerOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.Option;
 import io.github.axolotlclient.modules.hud.gui.entry.SimpleTextHudEntry;
@@ -40,9 +43,6 @@ import net.minecraft.network.packet.s2c.query.QueryResponseS2CPacket;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-import java.net.InetAddress;
-import java.util.List;
-
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
@@ -53,23 +53,12 @@ import java.util.List;
 public class PingHud extends SimpleTextHudEntry {
 
 	public static final Identifier ID = new Identifier("kronhud", "pinghud");
-
-	private int currentServerPing;
-
 	private final IntegerOption refreshDelay = new IntegerOption("refreshTime", 4, 1, 15);
+	private int currentServerPing;
+	private int second;
 
 	public PingHud() {
 		super();
-	}
-
-	@Override
-	public String getValue() {
-		return currentServerPing + " ms";
-	}
-
-	@Override
-	public String getPlaceholder() {
-		return "68 ms";
 	}
 
 	@Override
@@ -80,6 +69,15 @@ public class PingHud extends SimpleTextHudEntry {
 	@Override
 	public boolean tickable() {
 		return true;
+	}
+
+	@Override
+	public void tick() {
+		if (second >= refreshDelay.get() * 20) {
+			updatePing();
+			second = 0;
+		} else
+			second++;
 	}
 
 	private void updatePing() {
@@ -94,24 +92,6 @@ public class PingHud extends SimpleTextHudEntry {
 		}
 	}
 
-	private int second;
-
-	@Override
-	public void tick() {
-		if (second >= refreshDelay.get() * 20) {
-			updatePing();
-			second = 0;
-		} else
-			second++;
-	}
-
-	@Override
-	public List<Option<?>> getConfigurationOptions() {
-		List<Option<?>> options = super.getConfigurationOptions();
-		options.add(refreshDelay);
-		return options;
-	}
-
 	//Indicatia removed this feature...
 	//We still need it :(
 	private void getRealTimeServerPing(ServerInfo server) {
@@ -121,6 +101,8 @@ public class PingHud extends SimpleTextHudEntry {
 
 				final ClientConnection manager = ClientConnection.connect(InetAddress.getByName(address.getAddress()), address.getPort(), false);
 				manager.setPacketListener(new ClientQueryPacketListener() {
+
+					private long currentSystemTime = 0L;
 
 					@Override
 					public void onResponse(QueryResponseS2CPacket packet) {
@@ -135,8 +117,6 @@ public class PingHud extends SimpleTextHudEntry {
 						currentServerPing = (int) (latency - time);
 						manager.disconnect(Text.of(""));
 					}
-
-					private long currentSystemTime = 0L;
 
 					@Override
 					public void onDisconnected(Text reason) {
@@ -153,5 +133,22 @@ public class PingHud extends SimpleTextHudEntry {
 			} catch (Exception ignored) {
 			}
 		});
+	}
+
+	@Override
+	public List<Option<?>> getConfigurationOptions() {
+		List<Option<?>> options = super.getConfigurationOptions();
+		options.add(refreshDelay);
+		return options;
+	}
+
+	@Override
+	public String getValue() {
+		return currentServerPing + " ms";
+	}
+
+	@Override
+	public String getPlaceholder() {
+		return "68 ms";
 	}
 }

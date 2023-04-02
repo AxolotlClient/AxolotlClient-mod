@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.modules.hud.gui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
@@ -39,9 +42,6 @@ import lombok.Setter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.math.MathHelper;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
@@ -53,39 +53,25 @@ public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
 
 	protected final BooleanOption enabled = DefaultOptions.getEnabled();
 	protected final DoubleOption scale = DefaultOptions.getScale(this);
+	protected final MinecraftClient client = MinecraftClient.getInstance();
 	private final DoubleOption x = DefaultOptions.getX(getDefaultX(), this);
 	private final DoubleOption y = DefaultOptions.getY(getDefaultY(), this);
-
-	private Rectangle trueBounds = null;
-	private Rectangle renderBounds = null;
-	private DrawPosition truePosition = null;
-	private DrawPosition renderPosition;
-
 	@Setter
 	@Getter
 	protected int width;
 	@Setter
 	@Getter
 	protected int height;
-
 	@Setter
 	protected boolean hovered = false;
-	protected final MinecraftClient client = MinecraftClient.getInstance();
+	private Rectangle trueBounds = null;
+	private Rectangle renderBounds = null;
+	private DrawPosition truePosition = null;
+	private DrawPosition renderPosition;
 
 	public AbstractHudEntry(int width, int height) {
 		this.width = width;
 		this.height = height;
-	}
-
-	public static int floatToInt(float percent, int max, int offset) {
-		return MathHelper.clamp(Math.round((max - offset) * percent), 0, max);
-	}
-
-	public static float intToFloat(int current, int max, int offset) {
-		return MathHelper.clamp((float) (current) / (max - offset), 0, 1);
-	}
-
-	public void init() {
 	}
 
 	public void renderPlaceholderBackground() {
@@ -97,12 +83,36 @@ public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
 		outlineRect(getTrueBounds(), Color.BLACK);
 	}
 
-	public int getRawX() {
-		return getPos().x;
+	public void scale() {
+		float scale = getScale();
+		GlStateManager.scale(scale, scale, 1);
+	}
+
+	@Override
+	public int getRawTrueX() {
+		return truePosition.x();
 	}
 
 	public void setX(int x) {
 		this.x.set((double) intToFloat(x, (int) Util.getWindow().getScaledWidth(), 0));
+	}
+
+	public static float intToFloat(int current, int max, int offset) {
+		return MathHelper.clamp((float) (current) / (max - offset), 0, 1);
+	}
+
+	@Override
+	public float getScale() {
+		return scale.get().floatValue();
+	}
+
+	public int getRawX() {
+		return getPos().x;
+	}
+
+	@Override
+	public int getRawTrueY() {
+		return truePosition.y();
 	}
 
 	public int getRawY() {
@@ -111,10 +121,6 @@ public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
 
 	public void setY(int y) {
 		this.y.set((double) intToFloat(y, (int) Util.getWindow().getScaledHeight(), 0));
-	}
-
-	public Rectangle getTrueBounds() {
-		return trueBounds;
 	}
 
 	/**
@@ -127,42 +133,17 @@ public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
 	}
 
 	@Override
-	public float getScale() {
-		return scale.get().floatValue();
-	}
-
-	public void scale() {
-		float scale = getScale();
-		GlStateManager.scale(scale, scale, 1);
-	}
-
-	@Override
 	public DrawPosition getPos() {
 		return renderPosition;
+	}
+
+	public Rectangle getTrueBounds() {
+		return trueBounds;
 	}
 
 	@Override
 	public DrawPosition getTruePos() {
 		return truePosition;
-	}
-
-	@Override
-	public void onBoundsUpdate() {
-		setBounds();
-	}
-
-	public void setBounds() {
-		setBounds(getScale());
-	}
-
-	@Override
-	public int getRawTrueX() {
-		return truePosition.x();
-	}
-
-	@Override
-	public int getRawTrueY() {
-		return truePosition.y();
 	}
 
 	@Override
@@ -181,6 +162,19 @@ public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
 		return trueBounds.height();
 	}
 
+	@Override
+	public void onBoundsUpdate() {
+		setBounds();
+	}
+
+	public void setBounds() {
+		setBounds(getScale());
+	}
+
+	public static int floatToInt(float percent, int max, int offset) {
+		return MathHelper.clamp(Math.round((max - offset) * percent), 0, max);
+	}
+
 	public void setBounds(float scale) {
 		if (Util.getWindow() == null) {
 			truePosition = new DrawPosition(0, 0);
@@ -191,7 +185,7 @@ public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
 		}
 		int scaledX = floatToInt(x.get().floatValue(), (int) Util.getWindow().getScaledWidth(), 0) - offsetTrueWidth();
 		int scaledY = floatToInt(y.get().floatValue(), (int) Util.getWindow().getScaledHeight(), 0)
-				- offsetTrueHeight();
+			- offsetTrueHeight();
 		if (scaledX < 0) {
 			scaledX = 0;
 		}
@@ -204,7 +198,7 @@ public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
 		}
 		int trueHeight = (int) (getHeight() * getScale());
 		if (trueHeight < Util.getWindow().getScaledHeight()
-				&& scaledY + trueHeight > Util.getWindow().getScaledHeight()) {
+			&& scaledY + trueHeight > Util.getWindow().getScaledHeight()) {
 			scaledY = (int) (Util.getWindow().getScaledHeight() - trueHeight);
 		}
 		truePosition.x = scaledX;
@@ -214,17 +208,11 @@ public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
 		trueBounds = new Rectangle(scaledX, scaledY, (int) (getWidth() * getScale()), (int) (getHeight() * getScale()));
 	}
 
-	/**
-	 * Returns a list of options that should be shown in configuration screens
-	 *
-	 * @return List of options
-	 */
-	@Override
-	public List<Option<?>> getConfigurationOptions() {
-		List<Option<?>> options = new ArrayList<>();
-		options.add(enabled);
-		options.add(scale);
-		return options;
+	public OptionCategory getAllOptions() {
+		List<Option<?>> options = getSaveOptions();
+		OptionCategory cat = new OptionCategory(getNameKey());
+		cat.add(options);
+		return cat;
 	}
 
 	/**
@@ -240,16 +228,22 @@ public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
 		return options;
 	}
 
+	/**
+	 * Returns a list of options that should be shown in configuration screens
+	 *
+	 * @return List of options
+	 */
+	@Override
+	public List<Option<?>> getConfigurationOptions() {
+		List<Option<?>> options = new ArrayList<>();
+		options.add(enabled);
+		options.add(scale);
+		return options;
+	}
+
 	public OptionCategory getOptionsAsCategory() {
 		OptionCategory cat = new OptionCategory(getNameKey(), false);
 		cat.add(getConfigurationOptions());
-		return cat;
-	}
-
-	public OptionCategory getAllOptions() {
-		List<Option<?>> options = getSaveOptions();
-		OptionCategory cat = new OptionCategory(getNameKey());
-		cat.add(options);
 		return cat;
 	}
 
@@ -261,5 +255,8 @@ public abstract class AbstractHudEntry extends DrawUtil implements HudEntry {
 	@Override
 	public void setEnabled(boolean value) {
 		enabled.set(value);
+	}
+
+	public void init() {
 	}
 }

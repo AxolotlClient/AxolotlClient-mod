@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.item;
 
+import java.util.List;
+
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.Option;
 import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
@@ -33,8 +35,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 
-import java.util.List;
-
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
@@ -45,9 +45,9 @@ import java.util.List;
 public class ArrowHud extends TextHudEntry {
 
 	public static final Identifier ID = new Identifier("kronhud", "arrowhud");
-	private int arrows = 0;
 	private final BooleanOption dynamic = new BooleanOption("dynamic", false);
 	private final ItemStack currentArrow = new ItemStack(Items.ARROW);
+	private int arrows = 0;
 
 	public ArrowHud() {
 		super(20, 30, true);
@@ -58,7 +58,7 @@ public class ArrowHud extends TextHudEntry {
 		if (dynamic.get()) {
 			ClientPlayerEntity player = client.player;
 			if (player == null || player.getMainHandStack() == null
-					|| !(player.getMainHandStack().getItem() instanceof BowItem)) {
+				|| !(player.getMainHandStack().getItem() instanceof BowItem)) {
 				return;
 			}
 		}
@@ -69,8 +69,21 @@ public class ArrowHud extends TextHudEntry {
 	public void renderComponent(float delta) {
 		DrawPosition pos = getPos();
 		drawCenteredString(client.textRenderer, String.valueOf(arrows), pos.x() + getWidth() / 2,
-				pos.y() + getHeight() - 10, textColor.get(), shadow.get());
+			pos.y() + getHeight() - 10, textColor.get(), shadow.get());
 		ItemUtil.renderGuiItemModel(currentArrow, pos.x() + 2, pos.y() + 2);
+	}
+
+	@Override
+	public void renderPlaceholderComponent(float delta) {
+		DrawPosition pos = getPos();
+		drawCenteredString(client.textRenderer, "64", pos.x() + getWidth() / 2, pos.y() + getHeight() - 10,
+			textColor.get(), shadow.get());
+		ItemUtil.renderGuiItemModel(new ItemStack(Items.ARROW), pos.x() + 2, pos.y() + 2);
+	}
+
+	@Override
+	public boolean movable() {
+		return true;
 	}
 
 	@Override
@@ -84,23 +97,10 @@ public class ArrowHud extends TextHudEntry {
 	}
 
 	@Override
-	public void renderPlaceholderComponent(float delta) {
-		DrawPosition pos = getPos();
-		drawCenteredString(client.textRenderer, "64", pos.x() + getWidth() / 2, pos.y() + getHeight() - 10,
-				textColor.get(), shadow.get());
-		ItemUtil.renderGuiItemModel(new ItemStack(Items.ARROW), pos.x() + 2, pos.y() + 2);
-	}
-
-	@Override
 	public List<Option<?>> getConfigurationOptions() {
 		List<Option<?>> options = super.getConfigurationOptions();
 		options.add(dynamic);
 		return options;
-	}
-
-	@Override
-	public boolean movable() {
-		return true;
 	}
 
 	@Override

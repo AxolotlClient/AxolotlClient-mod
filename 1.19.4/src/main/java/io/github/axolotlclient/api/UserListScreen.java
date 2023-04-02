@@ -15,8 +15,6 @@ public abstract class UserListScreen extends Screen {
 		super(title);
 	}
 
-	protected abstract UserListWidget getWidget();
-
 	public void openChat() {
 		UserListWidget.UserListEntry entry = getWidget().getSelectedOrNull();
 		if (entry != null) {
@@ -29,6 +27,8 @@ public abstract class UserListScreen extends Screen {
 			//		entry.getUser().getUuid(), ChannelRequest.Include.MESSAGES));
 		}
 	}
+
+	protected abstract UserListWidget getWidget();
 
 	public void select(UserListWidget.UserListEntry userListEntry) {
 	}

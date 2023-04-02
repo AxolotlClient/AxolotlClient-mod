@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud;
 
+import java.util.List;
+
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.ColorOption;
@@ -41,8 +43,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
-import java.util.List;
-
 public class ChatHud extends TextHudEntry {
 
 	public static final Identifier ID = new Identifier("axolotlclient", "chathud");
@@ -54,6 +54,7 @@ public class ChatHud extends TextHudEntry {
 	public final IntegerOption lineSpacing = new IntegerOption("lineSpacing", 0, 0, 10);
 
 	public int ticks;
+	private int lastHeight;
 
 	public ChatHud() {
 		super(320, 80, false);
@@ -93,12 +94,12 @@ public class ChatHud extends TextHudEntry {
 								int y = pos.y + getHeight() - (m * (9 + lineSpacing.get()));
 								if (background.get()) {
 									fill(pos.x, y - (9 + lineSpacing.get()), pos.x + l + 4, y,
-											bgColor.get().withAlpha(chatOpacity / 2).getAsInt());
+										bgColor.get().withAlpha(chatOpacity / 2).getAsInt());
 								}
 								String string = chatHudLine.getText().asFormattedString();
 								GlStateManager.enableBlend();
 								DrawUtil.drawString(client.textRenderer, string, pos.x, (y - 8),
-										16777215 + (chatOpacity << 24), shadow.get());
+									16777215 + (chatOpacity << 24), shadow.get());
 								GlStateManager.disableAlphaTest();
 								GlStateManager.disableBlend();
 							}
@@ -113,7 +114,7 @@ public class ChatHud extends TextHudEntry {
 					int n = j * m + j;
 					int y = (pos.y + getHeight()) - scrolledLines * n / k;
 					if (((ChatHudAccessor) client.inGameHud.getChatHud()).getMessages()
-							.size() > getVisibleLineCount()) {
+						.size() > getVisibleLineCount()) {
 						int height = n * n / r;
 						fillRect(pos.x, y, 2, -height, scrollbarColor.get().getAsInt());
 					}
@@ -129,6 +130,43 @@ public class ChatHud extends TextHudEntry {
 	public void renderComponent(float delta) {
 	}
 
+	@Override
+	public void renderPlaceholderComponent(float delta) {
+		DrawPosition pos = getPos();
+		if (MinecraftClient.getInstance().player != null) {
+			client.textRenderer.drawWithShadow("<" + MinecraftClient.getInstance().player.getName().asFormattedString()
+				+ "> OOh! There's my Chat now!", pos.x + 1, pos.y + getHeight() - 9, -1);
+		} else {
+			client.textRenderer.drawWithShadow("This is where your new and fresh looking chat will be!", pos.x + 1,
+				pos.y + getHeight() - 9, -1);
+		}
+	}
+
+	@Override
+	public boolean movable() {
+		return true;
+	}
+
+	public int getVisibleLineCount() {
+		return getHeight(
+			this.isChatFocused() ? this.client.options.chatHeightFocused : this.client.options.chatHeightUnfocused)
+			/ 9;
+	}
+
+	public boolean isChatFocused() {
+		return this.client.currentScreen instanceof ChatScreen;
+	}
+
+	protected int getFontHeight() {
+		return MathHelper.floor(MinecraftClient.getInstance().textRenderer.fontHeight);
+	}
+
+	public static int getHeight(float chatHeight) {
+		int i = 180;
+		int j = 20;
+		return MathHelper.floor(chatHeight * (float) (i - j) + (float) j);
+	}
+
 	public Text getTextAt(int x, int y) {
 		List<ChatHudLine> visibleMessages = ((ChatHudAccessor) client.inGameHud.getChatHud()).getVisibleMessages();
 
@@ -140,7 +178,7 @@ public class ChatHud extends TextHudEntry {
 		if (offsetOnHudX >= 0 && offsetOnHudY >= 0) {
 			int l = Math.min(this.getVisibleLineCount(), visibleMessages.size());
 			if (offsetOnHudX <= MathHelper.floor((float) this.getWidth() / this.getScale())
-					&& offsetOnHudY < (getFontHeight() + lineSpacing.get()) * l + l) {
+				&& offsetOnHudY < (getFontHeight() + lineSpacing.get()) * l + l) {
 				int m = offsetOnHudY / (getFontHeight() + lineSpacing.get()) + scrolledLines;
 				if (m >= 0 && m < visibleMessages.size()) {
 					ChatHudLine chatHudLine = visibleMessages.get(m);
@@ -149,7 +187,7 @@ public class ChatHud extends TextHudEntry {
 					for (Text text : chatHudLine.getText()) {
 						if (text instanceof LiteralText) {
 							n += this.client.textRenderer.getStringWidth(
-									Texts.getRenderChatMessage(((LiteralText) text).getRawString(), false));
+								Texts.getRenderChatMessage(((LiteralText) text).getRawString(), false));
 							if (n > offsetOnHudX) {
 								return text;
 							}
@@ -159,6 +197,26 @@ public class ChatHud extends TextHudEntry {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public boolean tickable() {
+		return true;
+	}
+
+	@Override
+	public boolean overridesF3() {
+		return true;
+	}
+
+	@Override
+	public void tick() {
+		//setWidth((int) (client.options.chatWidth*320));
+		if (lastHeight != getHeight(client.options.chatHeightUnfocused)) {
+			setHeight(getHeight(this.client.options.chatHeightUnfocused));//int) (client.options.chatHeightUnfocused*180)+11);this.isChatFocused() ? this.client.options.chatHeightFocused
+			onBoundsUpdate();
+			lastHeight = getHeight();
+		}
 	}
 
 	@Override
@@ -172,42 +230,8 @@ public class ChatHud extends TextHudEntry {
 	}
 
 	@Override
-	public boolean tickable() {
-		return true;
-	}
-
-	private int lastHeight;
-
-	@Override
-	public void tick() {
-		//setWidth((int) (client.options.chatWidth*320));
-		if (lastHeight != getHeight(client.options.chatHeightUnfocused)) {
-			setHeight(getHeight(this.client.options.chatHeightUnfocused));//int) (client.options.chatHeightUnfocused*180)+11);this.isChatFocused() ? this.client.options.chatHeightFocused
-			onBoundsUpdate();
-			lastHeight = getHeight();
-		}
-	}
-
-	@Override
-	public void renderPlaceholderComponent(float delta) {
-		DrawPosition pos = getPos();
-		if (MinecraftClient.getInstance().player != null) {
-			client.textRenderer.drawWithShadow("<" + MinecraftClient.getInstance().player.getName().asFormattedString()
-					+ "> OOh! There's my Chat now!", pos.x + 1, pos.y + getHeight() - 9, -1);
-		} else {
-			client.textRenderer.drawWithShadow("This is where your new and fresh looking chat will be!", pos.x + 1,
-					pos.y + getHeight() - 9, -1);
-		}
-	}
-
-	@Override
 	public Identifier getId() {
 		return ID;
-	}
-
-	@Override
-	public boolean movable() {
-		return true;
 	}
 
 	@Override
@@ -219,30 +243,5 @@ public class ChatHud extends TextHudEntry {
 		options.add(scrollbarColor);
 		options.add(chatHistory);
 		return options;
-	}
-
-	public boolean isChatFocused() {
-		return this.client.currentScreen instanceof ChatScreen;
-	}
-
-	public static int getHeight(float chatHeight) {
-		int i = 180;
-		int j = 20;
-		return MathHelper.floor(chatHeight * (float) (i - j) + (float) j);
-	}
-
-	protected int getFontHeight() {
-		return MathHelper.floor(MinecraftClient.getInstance().textRenderer.fontHeight);
-	}
-
-	public int getVisibleLineCount() {
-		return getHeight(
-				this.isChatFocused() ? this.client.options.chatHeightFocused : this.client.options.chatHeightUnfocused)
-				/ 9;
-	}
-
-	@Override
-	public boolean overridesF3() {
-		return true;
 	}
 }

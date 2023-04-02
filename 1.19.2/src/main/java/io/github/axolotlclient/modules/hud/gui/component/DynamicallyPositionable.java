@@ -34,6 +34,16 @@ import io.github.axolotlclient.modules.hud.gui.layout.AnchorPoint;
  */
 public interface DynamicallyPositionable extends Positionable {
 
+	@Override
+	default int getTrueX() {
+		return getAnchor().getX(getRawTrueX(), getTrueWidth());
+	}
+
+	@Override
+	default int getX() {
+		return getAnchor().getX(getRawX(), getWidth());
+	}
+
 	/**
 	 * Get the direction that this object is anchored in
 	 *
@@ -42,23 +52,13 @@ public interface DynamicallyPositionable extends Positionable {
 	AnchorPoint getAnchor();
 
 	@Override
-	default int getX() {
-		return getAnchor().getX(getRawX(), getWidth());
+	default int getTrueY() {
+		return getAnchor().getY(getRawTrueY(), getTrueHeight());
 	}
 
 	@Override
 	default int getY() {
 		return getAnchor().getY(getRawY(), getHeight());
-	}
-
-	@Override
-	default int getTrueX() {
-		return getAnchor().getX(getRawTrueX(), getTrueWidth());
-	}
-
-	@Override
-	default int getTrueY() {
-		return getAnchor().getY(getRawTrueY(), getTrueHeight());
 	}
 
 	@Override

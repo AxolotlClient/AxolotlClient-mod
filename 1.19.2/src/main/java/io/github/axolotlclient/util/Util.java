@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.util;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.glfw.Window;
@@ -39,13 +42,28 @@ import net.minecraft.util.math.Vec3d;
 import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.opengl.GL11;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
 public class Util {
 
+	private static final ChatPreview preview = new ChatPreview(MinecraftClient.getInstance());
+	private final static TreeMap<Integer, String> map = new TreeMap<>();
 	public static String lastgame;
 	public static String game;
+
+	static {
+		map.put(1000, "M");
+		map.put(900, "CM");
+		map.put(500, "D");
+		map.put(400, "CD");
+		map.put(100, "C");
+		map.put(90, "XC");
+		map.put(50, "L");
+		map.put(40, "XL");
+		map.put(10, "X");
+		map.put(9, "IX");
+		map.put(5, "V");
+		map.put(4, "IV");
+		map.put(1, "I");
+	}
 
 	/**
 	 * Gets the amount of ticks in between start and end, on a 24000 tick system.
@@ -66,11 +84,11 @@ public class Util {
 		if (sidebar.isEmpty())
 			game = "";
 		else if (MinecraftClient.getInstance().getCurrentServerEntry() != null
-				&& MinecraftClient.getInstance().getCurrentServerEntry().address.toLowerCase()
-				.contains(sidebar.get(0).toLowerCase())) {
+			&& MinecraftClient.getInstance().getCurrentServerEntry().address.toLowerCase()
+			.contains(sidebar.get(0).toLowerCase())) {
 			if (sidebar.get(sidebar.size() - 1).toLowerCase(Locale.ROOT)
-					.contains(MinecraftClient.getInstance().getCurrentServerEntry().address.toLowerCase(Locale.ROOT))
-					|| sidebar.get(sidebar.size() - 1).contains("Playtime")) {
+				.contains(MinecraftClient.getInstance().getCurrentServerEntry().address.toLowerCase(Locale.ROOT))
+				|| sidebar.get(sidebar.size() - 1).contains("Playtime")) {
 				game = "In Lobby";
 			} else {
 				if (sidebar.get(sidebar.size() - 1).contains("--------")) {
@@ -93,6 +111,45 @@ public class Util {
 		}
 
 		return game;
+	}
+
+	public static List<String> getSidebar() {
+		List<String> lines = new ArrayList<>();
+		MinecraftClient client = MinecraftClient.getInstance();
+		if (client.world == null)
+			return lines;
+
+		Scoreboard scoreboard = client.world.getScoreboard();
+		if (scoreboard == null)
+			return lines;
+		ScoreboardObjective sidebar = scoreboard.getObjectiveForSlot(1);
+		if (sidebar == null)
+			return lines;
+
+		Collection<ScoreboardPlayerScore> scores = scoreboard.getAllPlayerScores(sidebar);
+		List<ScoreboardPlayerScore> list = scores.stream().filter(
+				input -> input != null && input.getPlayerName() != null && !input.getPlayerName().startsWith("#"))
+			.collect(Collectors.toList());
+
+		if (list.size() > 15) {
+			scores = Lists.newArrayList(Iterables.skip(list, scores.size() - 15));
+		} else {
+			scores = list;
+		}
+
+		for (ScoreboardPlayerScore score : scores) {
+			Team team = scoreboard.getPlayerTeam(score.getPlayerName());
+			if (team == null)
+				return lines;
+			String text = team.getPrefix().getString() + team.getSuffix().getString();
+			if (text.trim().length() > 0)
+				lines.add(text);
+		}
+
+		lines.add(sidebar.getDisplayName().getString());
+		Collections.reverse(lines);
+
+		return lines;
 	}
 
 	public static Text formatFromCodes(String formattedString) {
@@ -129,8 +186,6 @@ public class Util {
 		return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2) + Math.pow(z2 - z1, 2));
 	}
 
-	private static final ChatPreview preview = new ChatPreview(MinecraftClient.getInstance());
-
 	public static void sendChatMessage(String msg) {
 		msg = ChatUtil.cutString(StringUtils.normalizeSpace(msg.trim()));
 		assert MinecraftClient.getInstance().player != null;
@@ -146,73 +201,16 @@ public class Util {
 		MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(msg);
 	}
 
-	public static List<String> getSidebar() {
-		List<String> lines = new ArrayList<>();
-		MinecraftClient client = MinecraftClient.getInstance();
-		if (client.world == null)
-			return lines;
-
-		Scoreboard scoreboard = client.world.getScoreboard();
-		if (scoreboard == null)
-			return lines;
-		ScoreboardObjective sidebar = scoreboard.getObjectiveForSlot(1);
-		if (sidebar == null)
-			return lines;
-
-		Collection<ScoreboardPlayerScore> scores = scoreboard.getAllPlayerScores(sidebar);
-		List<ScoreboardPlayerScore> list = scores.stream().filter(
-						input -> input != null && input.getPlayerName() != null && !input.getPlayerName().startsWith("#"))
-				.collect(Collectors.toList());
-
-		if (list.size() > 15) {
-			scores = Lists.newArrayList(Iterables.skip(list, scores.size() - 15));
-		} else {
-			scores = list;
-		}
-
-		for (ScoreboardPlayerScore score : scores) {
-			Team team = scoreboard.getPlayerTeam(score.getPlayerName());
-			if (team == null)
-				return lines;
-			String text = team.getPrefix().getString() + team.getSuffix().getString();
-			if (text.trim().length() > 0)
-				lines.add(text);
-		}
-
-		lines.add(sidebar.getDisplayName().getString());
-		Collections.reverse(lines);
-
-		return lines;
-	}
-
 	public static void applyScissor(int x, int y, int width, int height) {
 		GL11.glEnable(GL11.GL_SCISSOR_TEST);
 		Window window = MinecraftClient.getInstance().getWindow();
 		double scale = window.getScaleFactor();
 		GL11.glScissor((int) (x * scale), (int) ((window.getScaledHeight() - height - y) * scale),
-				(int) (width * scale), (int) (height * scale));
+			(int) (width * scale), (int) (height * scale));
 	}
 
 	public static double lerp(double start, double end, double percent) {
 		return start + ((end - start) * percent);
-	}
-
-	private final static TreeMap<Integer, String> map = new TreeMap<>();
-
-	static {
-		map.put(1000, "M");
-		map.put(900, "CM");
-		map.put(500, "D");
-		map.put(400, "CD");
-		map.put(100, "C");
-		map.put(90, "XC");
-		map.put(50, "L");
-		map.put(40, "XL");
-		map.put(10, "X");
-		map.put(9, "IX");
-		map.put(5, "V");
-		map.put(4, "IV");
-		map.put(1, "I");
 	}
 
 	// https://stackoverflow.com/questions/12967896/converting-integers-to-roman-numerals-java

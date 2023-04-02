@@ -55,34 +55,6 @@ import net.minecraft.util.math.MathHelper;
 @UtilityClass
 public class ItemUtil {
 
-	public static List<ItemStorage> storageFromItem(List<ItemStack> items) {
-		ArrayList<ItemStorage> storage = new ArrayList<>();
-		for (ItemStack item : items) {
-			if (item.isEmpty()) {
-				continue;
-			}
-			Optional<ItemStorage> s = getItemFromItem(item, storage);
-			if (s.isPresent()) {
-				ItemUtil.ItemStorage store = s.get();
-				store.incrementTimes(item.getCount());
-			} else {
-				storage.add(new ItemUtil.ItemStorage(item, item.getCount()));
-			}
-		}
-		return storage;
-	}
-
-	public static List<ItemStack> getItems(MinecraftClient client) {
-		ArrayList<ItemStack> items = new ArrayList<>();
-		if (client.player == null) {
-			return null;
-		}
-		items.addAll(client.player.getInventory().armor);
-		items.addAll(client.player.getInventory().offHand);
-		items.addAll(client.player.getInventory().main);
-		return items;
-	}
-
 	public static ArrayList<ItemUtil.TimedItemStorage> removeOld(List<ItemUtil.TimedItemStorage> list, int time) {
 		ArrayList<ItemUtil.TimedItemStorage> stored = new ArrayList<>();
 		for (ItemUtil.TimedItemStorage storage : list) {
@@ -99,17 +71,6 @@ public class ItemUtil {
 			timed.add(stack.timed());
 		}
 		return timed;
-	}
-
-	public static Optional<ItemUtil.ItemStorage> getItemFromItem(ItemStack item, List<ItemUtil.ItemStorage> list) {
-		ItemStack compare = item.copy();
-		compare.setCount(1);
-		for (ItemUtil.ItemStorage storage : list) {
-			if (storage.stack.isItemEqualIgnoreDamage(compare)) {
-				return Optional.of(storage);
-			}
-		}
-		return Optional.empty();
 	}
 
 	public static Optional<ItemUtil.TimedItemStorage> getTimedItemFromItem(ItemStack item,
@@ -132,6 +93,45 @@ public class ItemUtil {
 		List<ItemUtil.ItemStorage> items = ItemUtil.storageFromItem(item);
 		Optional<ItemUtil.ItemStorage> stor = ItemUtil.getItemFromItem(stack, items);
 		return stor.map(itemStorage -> itemStorage.times).orElse(0);
+	}
+
+	public static List<ItemStack> getItems(MinecraftClient client) {
+		ArrayList<ItemStack> items = new ArrayList<>();
+		if (client.player == null) {
+			return null;
+		}
+		items.addAll(client.player.getInventory().armor);
+		items.addAll(client.player.getInventory().offHand);
+		items.addAll(client.player.getInventory().main);
+		return items;
+	}
+
+	public static List<ItemStorage> storageFromItem(List<ItemStack> items) {
+		ArrayList<ItemStorage> storage = new ArrayList<>();
+		for (ItemStack item : items) {
+			if (item.isEmpty()) {
+				continue;
+			}
+			Optional<ItemStorage> s = getItemFromItem(item, storage);
+			if (s.isPresent()) {
+				ItemUtil.ItemStorage store = s.get();
+				store.incrementTimes(item.getCount());
+			} else {
+				storage.add(new ItemUtil.ItemStorage(item, item.getCount()));
+			}
+		}
+		return storage;
+	}
+
+	public static Optional<ItemUtil.ItemStorage> getItemFromItem(ItemStack item, List<ItemUtil.ItemStorage> list) {
+		ItemStack compare = item.copy();
+		compare.setCount(1);
+		for (ItemUtil.ItemStorage storage : list) {
+			if (storage.stack.isItemEqualIgnoreDamage(compare)) {
+				return Optional.of(storage);
+			}
+		}
+		return Optional.empty();
 	}
 
 	/**
@@ -180,14 +180,14 @@ public class ItemUtil {
 		MatrixStack nextStack = new MatrixStack();
 
 		VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders()
-				.getEntityVertexConsumers();
+			.getEntityVertexConsumers();
 		boolean bl = !model.isSideLit();
 		if (bl) {
 			DiffuseLighting.setupFlatGuiLighting();
 		}
 
 		client.getItemRenderer().renderItem(stack, ModelTransformationMode.GUI, false, nextStack, immediate, 15728880,
-				OverlayTexture.DEFAULT_UV, model);
+			OverlayTexture.DEFAULT_UV, model);
 		immediate.draw();
 		RenderSystem.enableDepthTest();
 		if (bl) {
@@ -209,7 +209,7 @@ public class ItemUtil {
 			String string = countLabel == null ? String.valueOf(stack.getCount()) : countLabel;
 			matrices.translate(0.0, 0.0, ItemRenderer.ITEM_COUNT_BLIT_OFFSET + 200.0F);
 			DrawUtil.drawString(matrices, string, (x + 19 - 2 - renderer.getWidth(string)), (y + 6 + 3), textColor,
-					shadow);
+				shadow);
 		}
 
 		if (stack.isItemBarVisible()) {
@@ -220,7 +220,7 @@ public class ItemUtil {
 			int j = stack.getItemBarColor();
 			DrawUtil.fillRect(matrices, x + 2, y + 13, 13, 2, Color.BLACK.getAsInt());
 			DrawUtil.fillRect(matrices, x + 2, y + 13, i, 1,
-					new Color(j >> 16 & 255, j >> 8 & 255, j & 255, 255).getAsInt());
+				new Color(j >> 16 & 255, j >> 8 & 255, j & 255, 255).getAsInt());
 			RenderSystem.enableBlend();
 			//RenderSystem.enableTexture();
 			RenderSystem.enableDepthTest();
@@ -228,15 +228,15 @@ public class ItemUtil {
 
 		ClientPlayerEntity clientPlayerEntity = MinecraftClient.getInstance().player;
 		float f = clientPlayerEntity == null ? 0.0F
-				: clientPlayerEntity.getItemCooldownManager().getCooldownProgress(stack.getItem(),
-				MinecraftClient.getInstance().getTickDelta());
+			: clientPlayerEntity.getItemCooldownManager().getCooldownProgress(stack.getItem(),
+			MinecraftClient.getInstance().getTickDelta());
 		if (f > 0.0F) {
 			RenderSystem.disableDepthTest();
 			//RenderSystem.disableTexture();
 			RenderSystem.enableBlend();
 			RenderSystem.defaultBlendFunc();
 			DrawUtil.fillRect(matrices, x, y + MathHelper.floor(16.0F * (1.0F - f)), 16, MathHelper.ceil(16.0F * f),
-					Color.WHITE.withAlpha(127).getAsInt());
+				Color.WHITE.withAlpha(127).getAsInt());
 			//RenderSystem.enableTexture();
 			RenderSystem.enableDepthTest();
 		}

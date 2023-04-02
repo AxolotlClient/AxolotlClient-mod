@@ -39,10 +39,8 @@ public abstract class Options implements Module {
 	public final BooleanOption statusUpdateNotifs = new BooleanOption("statusUpdateNotifs", true);
 	public final BooleanOption friendRequestsEnabled = new BooleanOption("friendRequestsEnabled", true);
 	public final BooleanOption detailedLogging = new BooleanOption("detailedLogging", false);
-
-	public KeyBindOption openSidebar;
-
 	protected final OptionCategory category = new OptionCategory("api.category");
+	public KeyBindOption openSidebar;
 
 	@Override
 	public void init() {

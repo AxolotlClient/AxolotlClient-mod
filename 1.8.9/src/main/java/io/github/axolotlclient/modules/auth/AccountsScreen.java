@@ -108,29 +108,6 @@ public class AccountsScreen extends Screen {
 		}
 	}
 
-	public void select(int index) {
-		this.accountsListWidget.setSelected(index);
-		this.updateButtonActivationStates();
-	}
-
-	private void login() {
-		AccountsListWidget.Entry entry = accountsListWidget.getSelectedEntry();
-		if (entry != null) {
-			Auth.getInstance().login(entry.getAccount());
-		}
-	}
-
-	private void refreshAccount() {
-		AccountsListWidget.Entry entry = accountsListWidget.getSelectedEntry();
-		if (entry != null) {
-			entry.getAccount().refresh(Auth.getInstance().getAuth(), () -> client.execute(() -> {
-				Auth.getInstance().save();
-				refresh();
-				return null;
-			}));
-		}
-	}
-
 	@Override
 	protected void mouseClicked(int i, int j, int k) {
 		super.mouseClicked(i, j, k);
@@ -188,10 +165,10 @@ public class AccountsScreen extends Screen {
 
 
 		this.buttons.add(refreshButton = new ButtonWidget(4, this.width / 2 - 154, this.height - 28, 100, 20,
-				I18n.translate("auth.refresh")));
+			I18n.translate("auth.refresh")));
 
 		this.buttons.add(new ButtonWidget(0, this.width / 2 + 4 + 50, this.height - 28, 100, 20,
-				I18n.translate("gui.back")));
+			I18n.translate("gui.back")));
 		updateButtonActivationStates();
 	}
 
@@ -217,15 +194,13 @@ public class AccountsScreen extends Screen {
 		}
 	}
 
-	private void initMSAuth() {
-		Auth.getInstance().getAuth().startAuth(() -> client.execute(() -> {
-			refresh();
-			return null;
-		}));
-	}
-
 	private void refresh() {
 		this.client.setScreen(new AccountsScreen(this.parent));
+	}
+
+	public void select(int index) {
+		this.accountsListWidget.setSelected(index);
+		this.updateButtonActivationStates();
 	}
 
 	private void updateButtonActivationStates() {
@@ -234,6 +209,31 @@ public class AccountsScreen extends Screen {
 			loginButton.active = deleteButton.active = refreshButton.active = true;
 		} else {
 			loginButton.active = deleteButton.active = refreshButton.active = false;
+		}
+	}
+
+	private void login() {
+		AccountsListWidget.Entry entry = accountsListWidget.getSelectedEntry();
+		if (entry != null) {
+			Auth.getInstance().login(entry.getAccount());
+		}
+	}
+
+	private void initMSAuth() {
+		Auth.getInstance().getAuth().startAuth(() -> client.execute(() -> {
+			refresh();
+			return null;
+		}));
+	}
+
+	private void refreshAccount() {
+		AccountsListWidget.Entry entry = accountsListWidget.getSelectedEntry();
+		if (entry != null) {
+			entry.getAccount().refresh(Auth.getInstance().getAuth(), () -> client.execute(() -> {
+				Auth.getInstance().save();
+				refresh();
+				return null;
+			}));
 		}
 	}
 }

@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.api;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.api.types.User;
 import io.github.axolotlclient.modules.auth.Auth;
@@ -31,15 +34,11 @@ import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.widget.EntryListWidget;
 import net.minecraft.util.Formatting;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class UserListWidget extends EntryListWidget {
 
 	private final FriendsScreen screen;
-	private int selectedEntry = -1;
-
 	private final List<UserListEntry> entries = new ArrayList<>();
+	private int selectedEntry = -1;
 
 	public UserListWidget(FriendsScreen screen, MinecraftClient client, int width, int height, int top, int bottom, int entryHeight) {
 		super(client, width, height, top, bottom, entryHeight);
@@ -69,17 +68,9 @@ public class UserListWidget extends EntryListWidget {
 		return super.getScrollbarPosition() + 30;
 	}
 
-	public void setSelected(int i) {
-		this.selectedEntry = i;
-	}
-
 	@Override
 	protected boolean isEntrySelected(int i) {
 		return i == this.selectedEntry;
-	}
-
-	public int getSelected() {
-		return this.selectedEntry;
 	}
 
 	@Override
@@ -94,25 +85,31 @@ public class UserListWidget extends EntryListWidget {
 		return entries.get(getSelected());
 	}
 
+	public int getSelected() {
+		return this.selectedEntry;
+	}
+
+	public void setSelected(int i) {
+		this.selectedEntry = i;
+	}
+
 	public static class UserListEntry extends DrawableHelper implements EntryListWidget.Entry {
 
 		@Getter
 		private final User user;
-		private long time;
-
 		private final MinecraftClient client;
-
+		private long time;
 		private String note;
 		private FriendsScreen screen;
-
-		public UserListEntry(User user) {
-			this.client = MinecraftClient.getInstance();
-			this.user = user;
-		}
 
 		public UserListEntry(User user, String note) {
 			this(user);
 			this.note = Formatting.ITALIC + note;
+		}
+
+		public UserListEntry(User user) {
+			this.client = MinecraftClient.getInstance();
+			this.user = user;
 		}
 
 		public UserListEntry init(FriendsScreen screen) {

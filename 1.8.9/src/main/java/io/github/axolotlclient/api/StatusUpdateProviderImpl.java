@@ -22,6 +22,11 @@
 
 package io.github.axolotlclient.api;
 
+import java.time.Instant;
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
+
 import com.google.gson.JsonObject;
 import io.github.axolotlclient.api.requests.StatusUpdate;
 import io.github.axolotlclient.api.util.StatusUpdateProvider;
@@ -34,11 +39,6 @@ import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.level.LevelInfo;
-
-import java.time.Instant;
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class StatusUpdateProviderImpl implements StatusUpdateProvider {
 
@@ -72,7 +72,7 @@ public class StatusUpdateProviderImpl implements StatusUpdateProvider {
 						String map = getOrEmpty(object, "map");
 						int maxPlayers = MinecraftClient.getInstance().world.playerEntities.size();
 						int players = MinecraftClient.getInstance().world.playerEntities.stream()
-								.filter(e -> getGameMode(e) != LevelInfo.GameMode.CREATIVE && getGameMode(e) != LevelInfo.GameMode.SPECTATOR).mapToInt(value -> 1).reduce(0, Integer::sum);
+							.filter(e -> getGameMode(e) != LevelInfo.GameMode.CREATIVE && getGameMode(e) != LevelInfo.GameMode.SPECTATOR).mapToInt(value -> 1).reduce(0, Integer::sum);
 						return StatusUpdate.inGame(server, gameType.toString(), gameMode, map, players, maxPlayers, Instant.now().getEpochSecond() - time.getEpochSecond());
 					}
 				}
@@ -84,6 +84,14 @@ public class StatusUpdateProviderImpl implements StatusUpdateProvider {
 		}
 
 		return StatusUpdate.dummy();
+	}
+
+	private String getOrEmpty(JsonObject object, String name) {
+		return object.has(name) ? object.get(name).getAsString() : "";
+	}
+
+	private LevelInfo.GameMode getGameMode(PlayerEntity entity) {
+		return MinecraftClient.getInstance().getNetworkHandler().getPlayerListEntry(entity.getUuid()).getGameMode();
 	}
 
 	private String getGameModeString(PlayerEntity entity) {
@@ -99,13 +107,5 @@ public class StatusUpdateProviderImpl implements StatusUpdateProvider {
 			default:
 				return "";
 		}
-	}
-
-	private LevelInfo.GameMode getGameMode(PlayerEntity entity) {
-		return MinecraftClient.getInstance().getNetworkHandler().getPlayerListEntry(entity.getUuid()).getGameMode();
-	}
-
-	private String getOrEmpty(JsonObject object, String name) {
-		return object.has(name) ? object.get(name).getAsString() : "";
 	}
 }

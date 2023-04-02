@@ -28,6 +28,11 @@ import lombok.RequiredArgsConstructor;
 
 public class APIError {
 
+	public static void display(JsonObject object) {
+		API.getInstance().getLogger().debug("APIError: " + object);
+		API.getInstance().getNotificationProvider().addStatus("api.error.requestGeneric", fromResponse(object));
+	}
+
 	public static String fromResponse(JsonObject object) {
 		return fromCode(object.get("data").getAsJsonObject().get("message").getAsString());
 	}
@@ -40,11 +45,6 @@ public class APIError {
 			API.getInstance().getLogger().error("Error code " + errorCode + " not found! Report this IMMEDIATELY!");
 			return errorCode;
 		}
-	}
-
-	public static void display(JsonObject object) {
-		API.getInstance().getLogger().debug("APIError: " + object);
-		API.getInstance().getNotificationProvider().addStatus("api.error.requestGeneric", fromResponse(object));
 	}
 
 	@RequiredArgsConstructor

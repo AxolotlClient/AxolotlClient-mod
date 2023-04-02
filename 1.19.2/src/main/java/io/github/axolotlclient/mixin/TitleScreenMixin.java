@@ -68,22 +68,22 @@ public abstract class TitleScreenMixin extends Screen {
 
 	@ModifyArgs(method = "initWidgetsNormal", at =
 	@At(value = "INVOKE",
-			target = "Lnet/minecraft/client/gui/widget/ButtonWidget;<init>(IIIILnet/minecraft/text/Text;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;Lnet/minecraft/client/gui/widget/ButtonWidget$TooltipSupplier;)V",
-			ordinal = 1))
+		target = "Lnet/minecraft/client/gui/widget/ButtonWidget;<init>(IIIILnet/minecraft/text/Text;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;Lnet/minecraft/client/gui/widget/ButtonWidget$TooltipSupplier;)V",
+		ordinal = 1))
 	public void axolotlclient$noRealmsbutOptionsButton(Args args) {
 		if (!QuiltLoader.isModLoaded("modmenu")) {
 			args.set(4, Text.translatable("config"));
 			args.set(5, (ButtonWidget.PressAction) buttonWidget -> MinecraftClient.getInstance()
-					.setScreen(new HudEditScreen(this)));
+				.setScreen(new HudEditScreen(this)));
 		}
 	}
 
 	@ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;drawStringWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V"), index = 2)
 	public String axolotlclient$setVersionText(String s) {
 		return "Minecraft " + SharedConstants.getGameVersion().getName() + "/AxolotlClient "
-				+ (QuiltLoader.getModContainer("axolotlclient").isPresent()
-				? QuiltLoader.getModContainer("axolotlclient").get().metadata().version().raw()
-				: "");
+			+ (QuiltLoader.getModContainer("axolotlclient").isPresent()
+			? QuiltLoader.getModContainer("axolotlclient").get().metadata().version().raw()
+			: "");
 	}
 
 	@Inject(method = "areRealmsNotificationsEnabled", at = @At("HEAD"), cancellable = true)
@@ -116,10 +116,10 @@ public abstract class TitleScreenMixin extends Screen {
 					MinecraftClient.getInstance().stop();
 				}
 			}, Text.literal("Axolotlclient warning").formatted(Formatting.RED), Text.literal("The mod ")
-					.append(Text.literal(AxolotlClient.badmod.name()).formatted(Formatting.BOLD, Formatting.DARK_RED))
-					.append(" is known to ").append(description.toString())
-					.append("AxolotlClient will not be responsible for any punishment or crashes you will encounter while using it.\n Proceed with Caution!"),
-					Text.translatable("gui.proceed"), Text.translatable("menu.quit")));
+				.append(Text.literal(AxolotlClient.badmod.name()).formatted(Formatting.BOLD, Formatting.DARK_RED))
+				.append(" is known to ").append(description.toString())
+				.append("AxolotlClient will not be responsible for any punishment or crashes you will encounter while using it.\n Proceed with Caution!"),
+				Text.translatable("gui.proceed"), Text.translatable("menu.quit")));
 		}
 	}
 
@@ -127,9 +127,9 @@ public abstract class TitleScreenMixin extends Screen {
 	public void axolotlclient$addDisclaimer(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
 		if (AxolotlClient.titleDisclaimer) {
 			TitleScreen.drawCenteredText(matrices, this.textRenderer,
-					"You are playing at your own risk with unsupported Mods", this.width / 2, 5, 0xFFCC8888);
+				"You are playing at your own risk with unsupported Mods", this.width / 2, 5, 0xFFCC8888);
 			TitleScreen.drawCenteredText(matrices, this.textRenderer, "Things could break!", this.width / 2, 15,
-					0xFFCC8888);
+				0xFFCC8888);
 		}
 	}
 }

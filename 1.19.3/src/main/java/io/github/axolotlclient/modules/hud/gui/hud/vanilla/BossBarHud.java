@@ -22,6 +22,11 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.vanilla;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.EnumOption;
@@ -41,11 +46,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
@@ -58,35 +58,21 @@ public class BossBarHud extends TextHudEntry implements DynamicallyPositionable 
 	public static final Identifier ID = new Identifier("kronhud", "bossbarhud");
 	private static final Identifier BARS_TEXTURE = new Identifier("textures/gui/bars.png");
 	private final BossBar placeholder = new CustomBossBar(Text.literal("Boss bar"), BossBar.Color.WHITE,
-			BossBar.Style.PROGRESS);
+		BossBar.Style.PROGRESS);
 	private final BossBar placeholder2 = Util.make(() -> {
 		BossBar boss = new CustomBossBar(Text.literal("More boss bars..."), BossBar.Color.PURPLE,
-				BossBar.Style.PROGRESS);
+			BossBar.Style.PROGRESS);
 		boss.setPercent(0.45F);
 		return boss;
 	});
-
-	private Map<UUID, ClientBossBar> bossBars = new HashMap<>();
 	private final BooleanOption text = new BooleanOption("text", true);
 	private final BooleanOption bar = new BooleanOption("bar", true);
 	// TODO custom color
 	private final EnumOption anchor = DefaultOptions.getAnchorPoint();
+	private Map<UUID, ClientBossBar> bossBars = new HashMap<>();
 
 	public BossBarHud() {
 		super(184, 80, false);
-	}
-
-	public void setBossBars() {
-		int prevLength = bossBars.size();
-		bossBars = ((BossBarHudAccessor) client.inGameHud.getBossBarHud()).getBossBars();
-		if (bossBars != null && bossBars.size() != prevLength) {
-			if (bossBars.size() == 0) {
-				// Just leave it alone, it's not rendering anyway
-				return;
-			}
-			// Update height
-			setHeight(12 + prevLength * 19);
-		}
 	}
 
 	@Override
@@ -106,11 +92,17 @@ public class BossBarHud extends TextHudEntry implements DynamicallyPositionable 
 		}
 	}
 
-	@Override
-	public void renderPlaceholderComponent(MatrixStack matrices, float delta) {
-		DrawPosition pos = getPos();
-		renderBossBar(matrices, pos.x(), pos.y() + 12, placeholder);
-		renderBossBar(matrices, pos.x(), pos.y() + 31, placeholder2);
+	public void setBossBars() {
+		int prevLength = bossBars.size();
+		bossBars = ((BossBarHudAccessor) client.inGameHud.getBossBarHud()).getBossBars();
+		if (bossBars != null && bossBars.size() != prevLength) {
+			if (bossBars.size() == 0) {
+				// Just leave it alone, it's not rendering anyway
+				return;
+			}
+			// Update height
+			setHeight(12 + prevLength * 19);
+		}
 	}
 
 	private void renderBossBar(MatrixStack matrices, int x, int y, BossBar bossBar) {
@@ -119,7 +111,7 @@ public class BossBarHud extends TextHudEntry implements DynamicallyPositionable 
 			DrawableHelper.drawTexture(matrices, x, y, 0, bossBar.getColor().ordinal() * 5 * 2, 182, 5, 256, 256);
 			if (bossBar.getStyle() != BossBar.Style.PROGRESS) {
 				DrawableHelper.drawTexture(matrices, x, y, 0, 80 + (bossBar.getStyle().ordinal() - 1) * 5 * 2, 182, 5,
-						256, 256);
+					256, 256);
 			}
 
 			int i = (int) (bossBar.getPercent() * 183.0F);
@@ -127,7 +119,7 @@ public class BossBarHud extends TextHudEntry implements DynamicallyPositionable 
 				DrawableHelper.drawTexture(matrices, x, y, 0, bossBar.getColor().ordinal() * 5 * 2 + 5, i, 5, 256, 256);
 				if (bossBar.getStyle() != BossBar.Style.PROGRESS) {
 					DrawableHelper.drawTexture(matrices, x, y, 0, 80 + (bossBar.getStyle().ordinal() - 1) * 5 * 2 + 5,
-							i, 5, 256, 256);
+						i, 5, 256, 256);
 				}
 			}
 		}
@@ -144,13 +136,20 @@ public class BossBarHud extends TextHudEntry implements DynamicallyPositionable 
 	}
 
 	@Override
-	public Identifier getId() {
-		return ID;
+	public void renderPlaceholderComponent(MatrixStack matrices, float delta) {
+		DrawPosition pos = getPos();
+		renderBossBar(matrices, pos.x(), pos.y() + 12, placeholder);
+		renderBossBar(matrices, pos.x(), pos.y() + 31, placeholder2);
 	}
 
 	@Override
 	public boolean movable() {
 		return true;
+	}
+
+	@Override
+	public Identifier getId() {
+		return ID;
 	}
 
 	@Override
@@ -162,15 +161,15 @@ public class BossBarHud extends TextHudEntry implements DynamicallyPositionable 
 		return options;
 	}
 
+	@Override
+	public AnchorPoint getAnchor() {
+		return AnchorPoint.valueOf(anchor.get());
+	}
+
 	public static class CustomBossBar extends BossBar {
 
 		public CustomBossBar(Text name, Color color, Style style) {
 			super(MathHelper.randomUuid(), name, color, style);
 		}
-	}
-
-	@Override
-	public AnchorPoint getAnchor() {
-		return AnchorPoint.valueOf(anchor.get());
 	}
 }

@@ -22,6 +22,10 @@
 
 package io.github.axolotlclient.api;
 
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+
 import io.github.axolotlclient.api.handlers.ChatHandler;
 import io.github.axolotlclient.api.handlers.FriendHandler;
 import io.github.axolotlclient.api.types.User;
@@ -40,16 +44,11 @@ import net.minecraft.util.Formatting;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
-
 public class FriendsSidebar extends Screen {
 
-	private final Screen parent;
-
-	private int sidebarAnimX;
 	private static final int ANIM_STEP = 5;
+	private final Screen parent;
+	private int sidebarAnimX;
 	private int sidebarWidth;
 	private boolean remove;
 	private boolean hasChat;
@@ -63,103 +62,115 @@ public class FriendsSidebar extends Screen {
 	}
 
 	@Override
-	protected void init() {
-		sidebarWidth = 70;
-		sidebarAnimX = -sidebarWidth;
-
-		if(parent != null) {
-			parent.children().stream().filter(element -> element instanceof AbstractButtonWidget)
-					.map(e -> (AbstractButtonWidget) e).filter(e -> e.getMessage().equals(new TranslatableText("api.friends"))).forEach(e -> e.visible = false);
-		}
-
-
-		FriendHandler.getInstance().getFriends(list -> addChild(this.list = new ListWidget(list, 10, 30, 50, height-70)));
-
-		addButton(new ButtonWidget(10-sidebarWidth, height-30, 50, 20, ScreenTexts.BACK, buttonWidget -> remove()));
-	}
-
-	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-		if(parent != null) {
+		if (parent != null) {
 			parent.render(matrices, mouseX, mouseY, delta);
 		}
 		fill(matrices, sidebarAnimX, 0, sidebarWidth + sidebarAnimX, height, 0x99000000);
 
-		client.textRenderer.drawWithShadow(matrices, new TranslatableText("api.friends"), 10+sidebarAnimX, 10, -1);
+		client.textRenderer.drawWithShadow(matrices, new TranslatableText("api.friends"), 10 + sidebarAnimX, 10, -1);
 
 		super.render(matrices, mouseX, mouseY, delta);
 
-		if(list != null){
+		if (list != null) {
 			list.render(matrices, mouseX, mouseY, delta);
 		}
 
-		if(hasChat){
-			drawVerticalLine(matrices, 70+sidebarAnimX, 0, height, 0xFF000000);
-			client.textRenderer.drawWithShadow(matrices, chatUser.getName(), sidebarAnimX+75, 20, -1);
-			client.textRenderer.drawWithShadow(matrices, Formatting.ITALIC+chatUser.getStatus().getTitle()+":"+chatUser.getStatus().getDescription(),
-					sidebarAnimX+80, 30, 8421504);
+		if (hasChat) {
+			drawVerticalLine(matrices, 70 + sidebarAnimX, 0, height, 0xFF000000);
+			client.textRenderer.drawWithShadow(matrices, chatUser.getName(), sidebarAnimX + 75, 20, -1);
+			client.textRenderer.drawWithShadow(matrices, Formatting.ITALIC + chatUser.getStatus().getTitle() + ":" + chatUser.getStatus().getDescription(),
+				sidebarAnimX + 80, 30, 8421504);
 		}
 
 		animate();
 	}
 
-	private void animate(){
-		if(sidebarAnimX<0 && !remove){
-			if(sidebarAnimX > -ANIM_STEP){
+	@Override
+	protected void init() {
+		sidebarWidth = 70;
+		sidebarAnimX = -sidebarWidth;
+
+		if (parent != null) {
+			parent.children().stream().filter(element -> element instanceof AbstractButtonWidget)
+				.map(e -> (AbstractButtonWidget) e).filter(e -> e.getMessage().equals(new TranslatableText("api.friends"))).forEach(e -> e.visible = false);
+		}
+
+
+		FriendHandler.getInstance().getFriends(list -> addChild(this.list = new ListWidget(list, 10, 30, 50, height - 70)));
+
+		addButton(new ButtonWidget(10 - sidebarWidth, height - 30, 50, 20, ScreenTexts.BACK, buttonWidget -> remove()));
+	}
+
+	public void remove() {
+		remove = true;
+
+	}
+
+	@Override
+	public void tick() {
+		if (input != null) {
+			input.tick();
+		}
+	}
+
+	@Override
+	public boolean isPauseScreen() {
+		return parent != null && parent.isPauseScreen();
+	}
+
+	private void animate() {
+		if (sidebarAnimX < 0 && !remove) {
+			if (sidebarAnimX > -ANIM_STEP) {
 				sidebarAnimX = -ANIM_STEP;
 			}
-			sidebarAnimX+=ANIM_STEP;
-			if(list != null) {
+			sidebarAnimX += ANIM_STEP;
+			if (list != null) {
 				list.visible = false;
 			}
 			getButtons().forEach(button -> button.x += ANIM_STEP);
-		} else if (remove){
-			if(sidebarAnimX < -sidebarWidth){
+		} else if (remove) {
+			if (sidebarAnimX < -sidebarWidth) {
 				close();
 			}
-			sidebarAnimX-=ANIM_STEP;
-			if(list != null) {
+			sidebarAnimX -= ANIM_STEP;
+			if (list != null) {
 				list.setX(list.getX() - ANIM_STEP);
 			}
-			getButtons().forEach(button -> button.x -=ANIM_STEP);
+			getButtons().forEach(button -> button.x -= ANIM_STEP);
 		} else {
-			if(list != null) {
+			if (list != null) {
 				list.visible = true;
 			}
 		}
 	}
 
-	public void remove(){
-		remove = true;
-
-	}
-
-	private void close(){
-		client.openScreen(parent);
-	}
-
-	public List<AbstractButtonWidget> getButtons(){
+	public List<AbstractButtonWidget> getButtons() {
 		return children().stream().filter(element -> element instanceof AbstractButtonWidget).map(element -> (AbstractButtonWidget) element).collect(Collectors.toList());
+	}
+
+	private void close() {
+		client.openScreen(parent);
 	}
 
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
-		if(mouseX > sidebarWidth){
+		if (mouseX > sidebarWidth) {
 			remove();
 			return true;
 		}
 		return super.mouseClicked(mouseX, mouseY, button);
 	}
 
-	private void addChat(User user){
+	private void addChat(User user) {
 		// TODO implement Chat
 		hasChat = true;
 		chatUser = user;
-		sidebarWidth = Math.max(width*5/12, client.textRenderer.getWidth(chatUser.getStatus().getTitle()+":"+chatUser.getStatus().getDescription())+5);
-		addButton(input = new TextFieldWidget(textRenderer, 75, height-30, sidebarWidth-80, 20, new TranslatableText("api.friends.chat.input")){
+		sidebarWidth = Math.max(width * 5 / 12, client.textRenderer.getWidth(chatUser.getStatus().getTitle() + ":" + chatUser.getStatus().getDescription()) + 5);
+		addButton(input = new TextFieldWidget(textRenderer, 75, height - 30, sidebarWidth - 80, 20, new TranslatableText("api.friends.chat.input")) {
 			@Override
 			public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-				if(keyCode == GLFW.GLFW_KEY_ENTER){
+				if (keyCode == GLFW.GLFW_KEY_ENTER) {
 					// TODO send chat message
 					ChatHandler.getInstance().sendMessage(chatUser, input.getText());
 					input.setText("");
@@ -170,74 +181,11 @@ public class FriendsSidebar extends Screen {
 		});
 	}
 
-	@Override
-	public void tick() {
-		if(input != null){
-			input.tick();
-		}
-	}
-
-	@Override
-	public boolean isPauseScreen() {
-		return parent != null && parent.isPauseScreen();
-	}
-
-	public class ListWidget extends EntryListWidget<ButtonEntry> {
-		private final int entryHeight = 25;
-		private boolean visible;
-
-		public ListWidget(List<User> list, int x, int y, int width, int height){
-			super(FriendsSidebar.this.client, width, height, y, y+height, 25);
-			left = x;
-			right = x+width;
-			top = y;
-			bottom = y+height;
-			this.setRenderHeader(false, 0);
-
-			setRenderSelection(false);
-			AtomicInteger buttonY = new AtomicInteger(y);
-			list.stream().sorted((u1, u2) -> new AlphabeticalComparator().compare(u1.getName(), u2.getName()))
-					.map(user -> new ButtonWidget(x, buttonY.getAndAdd(entryHeight), width, entryHeight-5,
-					Text.of(user.getName()), buttonWidget -> addChat(user))).forEach(b -> addEntry(new ButtonEntry(b)));
-		}
-
-		@Override
-		protected void renderList(MatrixStack matrices, int x, int y, int mouseX, int mouseY, float delta) {
-			Util.applyScissor(left, top, right, height);
-			super.renderList(matrices, x, y, mouseX, mouseY, delta);
-			GL11.glDisable(GL11.GL_SCISSOR_TEST);
-		}
-
-		@Override
-		public int getRowLeft() {
-			return left;
-		}
-
-		@Override
-		public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-			if (visible) {
-				this.renderBackground(matrices);
-				int k = this.getRowLeft();
-				int l = this.top + 4 - (int) this.getScrollAmount();
-				this.renderList(matrices, k, l, mouseX, mouseY, delta);
-			}
-		}
-
-		public void setX(int x){
-			left = x;
-			right = x+width;
-		}
-
-		public int getX(){
-			return left;
-		}
-	}
-
 	public static class ButtonEntry extends EntryListWidget.Entry<ButtonEntry> {
 
 		private final ButtonWidget widget;
 
-		public ButtonEntry(ButtonWidget widget){
+		public ButtonEntry(ButtonWidget widget) {
 			this.widget = widget;
 		}
 
@@ -253,6 +201,57 @@ public class FriendsSidebar extends Screen {
 		@Override
 		public boolean mouseClicked(double mouseX, double mouseY, int button) {
 			return widget.mouseClicked(mouseX, mouseY, button);
+		}
+	}
+
+	public class ListWidget extends EntryListWidget<ButtonEntry> {
+		private final int entryHeight = 25;
+		private boolean visible;
+
+		public ListWidget(List<User> list, int x, int y, int width, int height) {
+			super(FriendsSidebar.this.client, width, height, y, y + height, 25);
+			left = x;
+			right = x + width;
+			top = y;
+			bottom = y + height;
+			this.setRenderHeader(false, 0);
+
+			setRenderSelection(false);
+			AtomicInteger buttonY = new AtomicInteger(y);
+			list.stream().sorted((u1, u2) -> new AlphabeticalComparator().compare(u1.getName(), u2.getName()))
+				.map(user -> new ButtonWidget(x, buttonY.getAndAdd(entryHeight), width, entryHeight - 5,
+					Text.of(user.getName()), buttonWidget -> addChat(user))).forEach(b -> addEntry(new ButtonEntry(b)));
+		}
+
+		@Override
+		public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+			if (visible) {
+				this.renderBackground(matrices);
+				int k = this.getRowLeft();
+				int l = this.top + 4 - (int) this.getScrollAmount();
+				this.renderList(matrices, k, l, mouseX, mouseY, delta);
+			}
+		}
+
+		@Override
+		protected void renderList(MatrixStack matrices, int x, int y, int mouseX, int mouseY, float delta) {
+			Util.applyScissor(left, top, right, height);
+			super.renderList(matrices, x, y, mouseX, mouseY, delta);
+			GL11.glDisable(GL11.GL_SCISSOR_TEST);
+		}
+
+		@Override
+		public int getRowLeft() {
+			return left;
+		}
+
+		public int getX() {
+			return left;
+		}
+
+		public void setX(int x) {
+			left = x;
+			right = x + width;
 		}
 	}
 }

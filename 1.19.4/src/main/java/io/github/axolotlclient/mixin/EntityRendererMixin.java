@@ -69,9 +69,9 @@ public abstract class EntityRendererMixin<T extends Entity> {
 									   CallbackInfo ci) {
 		if (entity instanceof AbstractClientPlayerEntity) {
 			if (MinecraftClient.getInstance().getCurrentServerEntry() != null
-					&& MinecraftClient.getInstance().getCurrentServerEntry().address.contains("hypixel.net")) {
+				&& MinecraftClient.getInstance().getCurrentServerEntry().address.contains("hypixel.net")) {
 				if (HypixelAbstractionLayer.hasValidAPIKey() && LevelHead.getInstance().enabled.get()
-						&& string.getString().contains(entity.getName().getString())) {
+					&& string.getString().contains(entity.getName().getString())) {
 					TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
 					String text = "Level: " + HypixelAbstractionLayer.getPlayerLevel(String.valueOf(entity.getUuid()), LevelHead.getInstance().mode.get());
 
@@ -80,9 +80,9 @@ public abstract class EntityRendererMixin<T extends Entity> {
 
 					Matrix4f matrix4f = matrices.peek().getModel();
 					MinecraftClient.getInstance().textRenderer.computeVertices(text, x, y,
-							LevelHead.getInstance().textColor.get().getAsInt(), AxolotlClient.CONFIG.useShadows.get(),
-							matrix4f, vertexConsumers, TextRenderer.TextLayerType.NORMAL, LevelHead.getInstance().background.get() ? 127 : 0,
-							light);
+						LevelHead.getInstance().textColor.get().getAsInt(), AxolotlClient.CONFIG.useShadows.get(),
+						matrix4f, vertexConsumers, TextRenderer.TextLayerType.NORMAL, LevelHead.getInstance().background.get() ? 127 : 0,
+						light);
 				} else if (!HypixelAbstractionLayer.hasValidAPIKey()) {
 					HypixelAbstractionLayer.loadApiKey();
 				}

@@ -78,23 +78,23 @@ public class AccountsScreen extends Screen {
 		accountsListWidget.setAccounts(Auth.getInstance().getAccounts());
 
 		addButton(loginButton = new ButtonWidget(this.width / 2 - 154, this.height - 52, 150, 20, new TranslatableText("auth.login"),
-				buttonWidget -> login()));
+			buttonWidget -> login()));
 
 		this.addButton(new ButtonWidget(this.width / 2 + 4, this.height - 52, 150, 20, new TranslatableText("auth.add"),
-				button -> {
-					if (!Auth.getInstance().allowOfflineAccounts()) {
-						initMSAuth();
-					} else {
-						client.openScreen(new ConfirmScreen(result -> {
-							if (!result) {
-								initMSAuth();
-								client.openScreen(this);
-							} else {
-								client.openScreen(new AddOfflineScreen(this));
-							}
-						}, new TranslatableText("auth.add.choose"), LiteralText.EMPTY, new TranslatableText("auth.add.offline"), new TranslatableText("auth.add.ms")));
-					}
-				}));
+			button -> {
+				if (!Auth.getInstance().allowOfflineAccounts()) {
+					initMSAuth();
+				} else {
+					client.openScreen(new ConfirmScreen(result -> {
+						if (!result) {
+							initMSAuth();
+							client.openScreen(this);
+						} else {
+							client.openScreen(new AddOfflineScreen(this));
+						}
+					}, new TranslatableText("auth.add.choose"), LiteralText.EMPTY, new TranslatableText("auth.add.offline"), new TranslatableText("auth.add.ms")));
+				}
+			}));
 
 		this.deleteButton = this.addButton(new ButtonWidget(this.width / 2 - 50, this.height - 28, 100, 20, new TranslatableText("selectServer.delete"), button -> {
 			AccountsListWidget.Entry entry = this.accountsListWidget.getSelected();
@@ -106,10 +106,10 @@ public class AccountsScreen extends Screen {
 
 
 		this.addButton(refreshButton = new ButtonWidget(this.width / 2 - 154, this.height - 28, 100, 20,
-				new TranslatableText("auth.refresh"), button -> refreshAccount()));
+			new TranslatableText("auth.refresh"), button -> refreshAccount()));
 
 		this.addButton(new ButtonWidget(this.width / 2 + 4 + 50, this.height - 28, 100, 20,
-				ScreenTexts.BACK, button -> this.client.openScreen(this.parent)));
+			ScreenTexts.BACK, button -> this.client.openScreen(this.parent)));
 		updateButtonActivationStates();
 	}
 
@@ -118,19 +118,8 @@ public class AccountsScreen extends Screen {
 		Auth.getInstance().save();
 	}
 
-	private void login() {
-		AccountsListWidget.Entry entry = accountsListWidget.getSelected();
-		if (entry != null) {
-			Auth.getInstance().login(entry.getAccount());
-		}
-	}
-
 	private void initMSAuth() {
 		Auth.getInstance().getAuth().startAuth(() -> client.execute(this::refresh));
-	}
-
-	private void refresh() {
-		this.client.openScreen(new AccountsScreen(this.parent));
 	}
 
 	private void refreshAccount() {
@@ -149,6 +138,17 @@ public class AccountsScreen extends Screen {
 			loginButton.active = deleteButton.active = refreshButton.active = true;
 		} else {
 			loginButton.active = deleteButton.active = refreshButton.active = false;
+		}
+	}
+
+	private void refresh() {
+		this.client.openScreen(new AccountsScreen(this.parent));
+	}
+
+	private void login() {
+		AccountsListWidget.Entry entry = accountsListWidget.getSelected();
+		if (entry != null) {
+			Auth.getInstance().login(entry.getAccount());
 		}
 	}
 

@@ -58,6 +58,10 @@ public abstract class TitleScreenMixin extends Screen {
 		}
 	}
 
+	private boolean axolotlclient$alternateLayout() {
+		return FabricLoader.getInstance().isModLoaded("modmenu") && !FabricLoader.getInstance().isModLoaded("axolotlclient-modmenu");
+	}
+
 	@Inject(method = "initWidgetsNormal", at = @At("TAIL"))
 	private void axolotlclient$addOptionsButton(int y, int spacingY, CallbackInfo ci) {
 		if (axolotlclient$alternateLayout()) {
@@ -85,15 +89,11 @@ public abstract class TitleScreenMixin extends Screen {
 	public void axolotlclient$customBranding(TitleScreen instance, TextRenderer textRenderer, String s, int x, int y, int color) {
 		if (FabricLoader.getInstance().getModContainer("axolotlclient").isPresent()) {
 			instance.drawWithShadow(textRenderer,
-					"Minecraft 1.8.9/" + ClientBrandRetriever.getClientModName() + " " + FabricLoader.getInstance()
-							.getModContainer("axolotlclient").get().getMetadata().getVersion().getFriendlyString(),
-					x, y, color);
+				"Minecraft 1.8.9/" + ClientBrandRetriever.getClientModName() + " " + FabricLoader.getInstance()
+					.getModContainer("axolotlclient").get().getMetadata().getVersion().getFriendlyString(),
+				x, y, color);
 		} else {
 			instance.drawWithShadow(textRenderer, s, x, y, color);
 		}
-	}
-
-	private boolean axolotlclient$alternateLayout() {
-		return FabricLoader.getInstance().isModLoaded("modmenu") && !FabricLoader.getInstance().isModLoaded("axolotlclient-modmenu");
 	}
 }

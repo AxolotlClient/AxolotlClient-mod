@@ -128,9 +128,9 @@ public abstract class InGameHudMixin {
 		HotbarHUD hud = (HotbarHUD) HudManager.getInstance().get(HotbarHUD.ID);
 		if (hud.isEnabled()) {
 			args.set(2, ((Integer) hud.getX()).floatValue() + ((hud.getWidth() * hud.getScale())
-					- MinecraftClient.getInstance().textRenderer.getWidth((StringVisitable) args.get(1))) / 2);
+				- MinecraftClient.getInstance().textRenderer.getWidth((StringVisitable) args.get(1))) / 2);
 			args.set(3, ((Integer) hud.getY()).floatValue() - 36
-					+ (!MinecraftClient.getInstance().interactionManager.hasStatusBars() ? 14 : 0));
+				+ (!MinecraftClient.getInstance().interactionManager.hasStatusBars() ? 14 : 0));
 		}
 	}
 

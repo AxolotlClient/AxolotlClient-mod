@@ -22,9 +22,9 @@
 
 package io.github.axolotlclient.modules.hypixel;
 
-import io.github.axolotlclient.util.Util;
-
 import java.util.function.Consumer;
+
+import io.github.axolotlclient.util.Util;
 
 public class HypixelLocation {
 

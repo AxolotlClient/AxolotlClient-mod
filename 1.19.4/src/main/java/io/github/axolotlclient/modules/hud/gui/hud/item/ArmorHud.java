@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.item;
 
+import java.util.List;
+
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.Option;
 import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
@@ -33,8 +35,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.util.Identifier;
-
-import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -48,6 +48,9 @@ public class ArmorHud extends TextHudEntry {
 	public static final Identifier ID = new Identifier("kronhud", "armorhud");
 
 	protected final BooleanOption showProtLvl = new BooleanOption("showProtectionLevel", false);
+	private final ItemStack[] placeholderStacks = new ItemStack[]{new ItemStack(Items.IRON_BOOTS),
+		new ItemStack(Items.IRON_LEGGINGS), new ItemStack(Items.IRON_CHESTPLATE), new ItemStack(Items.IRON_HELMET),
+		new ItemStack(Items.IRON_SWORD)};
 
 	public ArmorHud() {
 		super(20, 100, true);
@@ -78,11 +81,6 @@ public class ArmorHud extends TextHudEntry {
 		}
 	}
 
-	public void renderItem(MatrixStack matrices, ItemStack stack, int x, int y) {
-		client.getItemRenderer().renderInGui(matrices, stack, x, y);
-		client.getItemRenderer().method_4025(matrices, client.textRenderer, stack, x, y);
-	}
-
 	public void renderMainItem(MatrixStack matrices, ItemStack stack, int x, int y) {
 		client.getItemRenderer().renderInGui(matrices, stack, x, y);
 		String total = String.valueOf(ItemUtil.getTotal(client, stack));
@@ -92,9 +90,10 @@ public class ArmorHud extends TextHudEntry {
 		client.getItemRenderer().method_4022(matrices, client.textRenderer, stack, x, y, total);
 	}
 
-	private final ItemStack[] placeholderStacks = new ItemStack[]{new ItemStack(Items.IRON_BOOTS),
-			new ItemStack(Items.IRON_LEGGINGS), new ItemStack(Items.IRON_CHESTPLATE), new ItemStack(Items.IRON_HELMET),
-			new ItemStack(Items.IRON_SWORD)};
+	public void renderItem(MatrixStack matrices, ItemStack stack, int x, int y) {
+		client.getItemRenderer().renderInGui(matrices, stack, x, y);
+		client.getItemRenderer().method_4025(matrices, client.textRenderer, stack, x, y);
+	}
 
 	@Override
 	public void renderPlaceholderComponent(MatrixStack matrices, float delta) {

@@ -22,6 +22,14 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.simple;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Random;
+
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.KeyBindOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.Option;
@@ -34,14 +42,6 @@ import net.minecraft.client.resource.language.I18n;
 import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
-
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
@@ -52,8 +52,8 @@ import java.util.Random;
 public class ToggleSprintHud extends SimpleTextHudEntry {
 
 	public static final Identifier ID = new Identifier("kronhud", "togglesprint");
-	private final BooleanOption toggleSprint = new BooleanOption("toggleSprint", ID.getPath(), false);
 	public final BooleanOption toggleSneak = new BooleanOption("toggleSneak", ID.getPath(), false);
+	private final BooleanOption toggleSprint = new BooleanOption("toggleSprint", ID.getPath(), false);
 	private final BooleanOption randomPlaceholder = new BooleanOption("randomPlaceholder", ID.getPath(), false);
 	private final StringOption placeholder = new StringOption("placeholder", ID.getPath(), "No keys pressed");
 
@@ -66,77 +66,20 @@ public class ToggleSprintHud extends SimpleTextHudEntry {
 
 	@Getter
 	private final BooleanOption sprintToggled = new BooleanOption("sprintToggled", ID.getPath(), false);
-	private boolean sprintWasPressed = false;
 	@Getter
 	private final BooleanOption sneakToggled = new BooleanOption("sneakToggled", ID.getPath(), false);
-	private boolean sneakWasPressed = false;
-
 	private final List<String> texts = new ArrayList<>();
+	private boolean sprintWasPressed = false;
+	private boolean sneakWasPressed = false;
 	private String text = "";
 
 	public ToggleSprintHud() {
 		super(100, 20, false);
 	}
 
-	private void loadRandomPlaceholder() {
-		try {
-			BufferedReader bufferedReader = new BufferedReader(
-					new InputStreamReader(
-							MinecraftClient.getInstance().getResourceManager()
-									.getResource(new Identifier("texts/splashes.txt")).getInputStream(),
-							StandardCharsets.UTF_8));
-			String string;
-			while ((string = bufferedReader.readLine()) != null) {
-				string = string.trim();
-				if (!string.isEmpty()) {
-					texts.add(string);
-				}
-			}
-
-			text = texts.get(new Random().nextInt(texts.size()));
-		} catch (Exception e) {
-			text = "";
-		}
-	}
-
-	private String getRandomPlaceholder() {
-		if (Objects.equals(text, "")) {
-			loadRandomPlaceholder();
-		}
-		return text;
-	}
-
-	@Override
-	public String getPlaceholder() {
-		return randomPlaceholder.get() ? getRandomPlaceholder() : placeholder.get();
-	}
-
 	@Override
 	public Identifier getId() {
 		return ID;
-	}
-
-	@Override
-	public boolean movable() {
-		return true;
-	}
-
-	@Override
-	public String getValue() {
-		if (client.options.keySneak.isPressed()) {
-			return I18n.translate("sneaking_pressed");
-		}
-		if (client.options.keySprint.isPressed()) {
-			return I18n.translate("sprinting_pressed");
-		}
-
-		if (toggleSneak.get() && sneakToggled.get()) {
-			return I18n.translate("sneaking_toggled");
-		}
-		if (toggleSprint.get() && sprintToggled.get()) {
-			return I18n.translate("sprinting_toggled");
-		}
-		return getPlaceholder();
 	}
 
 	@Override
@@ -170,6 +113,62 @@ public class ToggleSprintHud extends SimpleTextHudEntry {
 		options.add(randomPlaceholder);
 		options.add(placeholder);
 		return options;
+	}
+
+	@Override
+	public boolean movable() {
+		return true;
+	}
+
+	@Override
+	public String getValue() {
+		if (client.options.keySneak.isPressed()) {
+			return I18n.translate("sneaking_pressed");
+		}
+		if (client.options.keySprint.isPressed()) {
+			return I18n.translate("sprinting_pressed");
+		}
+
+		if (toggleSneak.get() && sneakToggled.get()) {
+			return I18n.translate("sneaking_toggled");
+		}
+		if (toggleSprint.get() && sprintToggled.get()) {
+			return I18n.translate("sprinting_toggled");
+		}
+		return getPlaceholder();
+	}
+
+	private String getRandomPlaceholder() {
+		if (Objects.equals(text, "")) {
+			loadRandomPlaceholder();
+		}
+		return text;
+	}
+
+	private void loadRandomPlaceholder() {
+		try {
+			BufferedReader bufferedReader = new BufferedReader(
+				new InputStreamReader(
+					MinecraftClient.getInstance().getResourceManager()
+						.getResource(new Identifier("texts/splashes.txt")).getInputStream(),
+					StandardCharsets.UTF_8));
+			String string;
+			while ((string = bufferedReader.readLine()) != null) {
+				string = string.trim();
+				if (!string.isEmpty()) {
+					texts.add(string);
+				}
+			}
+
+			text = texts.get(new Random().nextInt(texts.size()));
+		} catch (Exception e) {
+			text = "";
+		}
+	}
+
+	@Override
+	public String getPlaceholder() {
+		return randomPlaceholder.get() ? getRandomPlaceholder() : placeholder.get();
 	}
 
 	@Override

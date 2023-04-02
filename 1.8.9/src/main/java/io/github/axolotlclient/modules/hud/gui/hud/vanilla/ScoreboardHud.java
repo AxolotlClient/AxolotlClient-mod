@@ -22,6 +22,12 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.vanilla;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -36,12 +42,6 @@ import io.github.axolotlclient.util.Util;
 import net.minecraft.scoreboard.*;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -102,7 +102,7 @@ public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionab
 		}
 
 		ScoreboardObjective scoreboardObjective2 = scoreboardObjective != null ? scoreboardObjective
-				: scoreboard.getObjectiveForSlot(1);
+			: scoreboard.getObjectiveForSlot(1);
 		if (scoreboardObjective2 != null) {
 			this.renderScoreboardSidebar(scoreboardObjective2, false);
 		}
@@ -113,14 +113,19 @@ public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionab
 		renderScoreboardSidebar(placeholder, true);
 	}
 
+	@Override
+	public boolean movable() {
+		return true;
+	}
+
 	// Abusing this could break some stuff/could allow for unfair advantages. The goal is not to do this, so it won't
 	// show any more information than it would have in vanilla.
 	private void renderScoreboardSidebar(ScoreboardObjective objective, boolean placeholder) {
 		Scoreboard scoreboard = objective.getScoreboard();
 		Collection<ScoreboardPlayerScore> scores = scoreboard.getAllPlayerScores(objective);
 		List<ScoreboardPlayerScore> filteredScores = scores.stream()
-				.filter((testScore) -> testScore.getPlayerName() != null && !testScore.getPlayerName().startsWith("#"))
-				.collect(Collectors.toList());
+			.filter((testScore) -> testScore.getPlayerName() != null && !testScore.getPlayerName().startsWith("#"))
+			.collect(Collectors.toList());
 
 		if (filteredScores.size() > 15) {
 			scores = Lists.newArrayList(Iterables.skip(filteredScores, scores.size() - 15));
@@ -137,12 +142,12 @@ public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionab
 		ScoreboardPlayerScore scoreboardPlayerScore;
 		String formattedText;
 		for (Iterator<ScoreboardPlayerScore> scoresIterator = scores.iterator(); scoresIterator
-				.hasNext(); maxWidth = Math
-				.max(maxWidth,
-						client.textRenderer.getStringWidth(formattedText) + (this.scores.get()
-								? spacerWidth + client.textRenderer
-								.getStringWidth(Integer.toString(scoreboardPlayerScore.getScore()))
-								: 0))) {
+			.hasNext(); maxWidth = Math
+			.max(maxWidth,
+				client.textRenderer.getStringWidth(formattedText) + (this.scores.get()
+					? spacerWidth + client.textRenderer
+					.getStringWidth(Integer.toString(scoreboardPlayerScore.getScore()))
+					: 0))) {
 			scoreboardPlayerScore = scoresIterator.next();
 			Team team = scoreboard.getPlayerTeam(scoreboardPlayerScore.getPlayerName());
 			formattedText = Team.decorateName(team, scoreboardPlayerScore.getPlayerName());
@@ -201,13 +206,13 @@ public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionab
 			}
 			if (this.scores.get()) {
 				drawString(score, (float) (scoreX + maxWidth - client.textRenderer.getStringWidth(score) - 6),
-						(float) relativeY, scoreColor.get().getAsInt(), shadow.get());
+					(float) relativeY, scoreColor.get().getAsInt(), shadow.get());
 			}
 			if (num == scoresSize) {
 				// Draw the title
 				if (background.get() && !placeholder) {
 					RenderUtil.drawRectangle(textOffset, relativeY - 10 - topPadding.get() * 2 - 1, maxWidth,
-							10 + topPadding.get() * 2, topColor.get());
+						10 + topPadding.get() * 2, topColor.get());
 				}
 				float title = (renderX + (maxWidth - displayNameWidth) / 2F);
 				if (shadow.get()) {
@@ -246,11 +251,6 @@ public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionab
 	@Override
 	public Identifier getId() {
 		return ID;
-	}
-
-	@Override
-	public boolean movable() {
-		return true;
 	}
 
 	@Override

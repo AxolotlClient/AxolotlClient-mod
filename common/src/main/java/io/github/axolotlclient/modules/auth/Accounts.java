@@ -22,17 +22,17 @@
 
 package io.github.axolotlclient.modules.auth;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import io.github.axolotlclient.util.GsonHelper;
-import io.github.axolotlclient.util.Logger;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import io.github.axolotlclient.util.GsonHelper;
+import io.github.axolotlclient.util.Logger;
 
 public abstract class Accounts {
 

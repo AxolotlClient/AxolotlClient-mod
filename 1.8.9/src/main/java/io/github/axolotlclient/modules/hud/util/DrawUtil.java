@@ -41,12 +41,12 @@ public class DrawUtil extends DrawableHelper {
 		fillRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height, color.getAsInt());
 	}
 
-	public static void fillRect(int x, int y, int width, int height, Color color) {
-		fillRect(x, y, x + width, y + height, color.getAsInt());
-	}
-
 	public static void fillRect(int x, int y, int width, int height, int color) {
 		DrawableHelper.fill(x, y, x + width, y + height, color);
+	}
+
+	public static void fillRect(int x, int y, int width, int height, Color color) {
+		fillRect(x, y, x + width, y + height, color.getAsInt());
 	}
 
 	public static void outlineRect(Rectangle rectangle, Color color) {
@@ -69,16 +69,16 @@ public class DrawUtil extends DrawableHelper {
 		drawString(text, (float) (x - renderer.getStringWidth(text) / 2), (float) y, color, shadow);
 	}
 
+	public static void drawString(String text, float x, float y, int color, boolean shadow) {
+		GlStateManager.enableTexture();
+		MinecraftClient.getInstance().textRenderer.draw(text, x, y, color, shadow);
+	}
+
 	public static void drawString(String text, float x, float y, Color color, boolean shadow) {
 		drawString(text, x, y, color.getAsInt(), shadow);
 	}
 
 	public static void drawString(TextRenderer textRenderer, String text, float x, float y, int color, boolean shadow) {
 		drawString(text, x, y, color, shadow);
-	}
-
-	public static void drawString(String text, float x, float y, int color, boolean shadow) {
-		GlStateManager.enableTexture();
-		MinecraftClient.getInstance().textRenderer.draw(text, x, y, color, shadow);
 	}
 }

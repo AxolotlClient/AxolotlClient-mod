@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.modules.hypixel.autotip;
 
+import java.util.regex.Pattern;
+
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.hypixel.AbstractHypixelMod;
@@ -29,8 +31,6 @@ import io.github.axolotlclient.util.Util;
 import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
-
-import java.util.regex.Pattern;
 
 public class AutoTip implements AbstractHypixelMod {
 
@@ -63,7 +63,7 @@ public class AutoTip implements AbstractHypixelMod {
 	public void tick() {
 		if (init) {
 			if (System.currentTimeMillis() - lastTime > 1200000 && Util.getCurrentServerAddress() != null
-					&& Util.currentServerAddressContains("hypixel") && enabled.get()) {
+				&& Util.currentServerAddressContains("hypixel") && enabled.get()) {
 				if (MinecraftClient.getInstance().player != null) {
 					MinecraftClient.getInstance().player.sendChatMessage("/tip all");
 					lastTime = System.currentTimeMillis();
@@ -72,13 +72,13 @@ public class AutoTip implements AbstractHypixelMod {
 		}
 	}
 
-	public boolean onChatMessage(Text text) {
-		return enabled.get() && hideMessages.get() &&
-				(messagePattern.matcher(text.asUnformattedString()).matches() || tippedPattern.matcher(text.asUnformattedString()).matches());
-	}
-
 	@Override
 	public boolean tickable() {
 		return true;
+	}
+
+	public boolean onChatMessage(Text text) {
+		return enabled.get() && hideMessages.get() &&
+			(messagePattern.matcher(text.asUnformattedString()).matches() || tippedPattern.matcher(text.asUnformattedString()).matches());
 	}
 }

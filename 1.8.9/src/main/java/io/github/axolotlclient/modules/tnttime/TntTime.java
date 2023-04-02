@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.modules.tnttime;
 
+import java.text.DecimalFormat;
+
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.IntegerOption;
@@ -32,18 +34,14 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-import java.text.DecimalFormat;
-
 public class TntTime extends AbstractModule {
 
 	private static final TntTime Instance = new TntTime();
-
+	public final BooleanOption enabled = new BooleanOption("enabled", false);
+	private final OptionCategory category = new OptionCategory("tnttime");
+	private final IntegerOption decimalPlaces = new IntegerOption("decimalplaces", 2, 0, 6);
 	private DecimalFormat format = new DecimalFormat("##");
 	private int decimals;
-
-	private final OptionCategory category = new OptionCategory("tnttime");
-	public final BooleanOption enabled = new BooleanOption("enabled", false);
-	private final IntegerOption decimalPlaces = new IntegerOption("decimalplaces", 2, 0, 6);
 
 	public static TntTime getInstance() {
 		return Instance;

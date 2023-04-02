@@ -22,6 +22,12 @@
 
 package io.github.axolotlclient.api;
 
+import java.io.IOException;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
 import com.google.gson.JsonObject;
 import io.github.axolotlclient.api.handlers.*;
 import io.github.axolotlclient.api.types.Status;
@@ -38,12 +44,6 @@ import jakarta.websocket.DeploymentException;
 import jakarta.websocket.Session;
 import lombok.Getter;
 import org.glassfish.tyrus.container.grizzly.client.GrizzlyContainerProvider;
-
-import java.io.IOException;
-import java.net.URI;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
 
 public class API {
 
@@ -63,13 +63,13 @@ public class API {
 	@Getter
 	private final TranslationProvider translationProvider;
 	private final StatusUpdateProvider statusUpdateProvider;
+	@Getter
+	private final Options apiOptions;
 	private Session session;
 	@Getter
 	private String uuid;
 	@Getter
 	private User self;
-	@Getter
-	private final Options apiOptions;
 
 	public API(Logger logger, NotificationProvider notificationProvider, TranslationProvider translationProvider, StatusUpdateProvider statusUpdateProvider, Options apiOptions) {
 		this.logger = logger;
@@ -86,12 +86,115 @@ public class API {
 		addHandler(ChatHandler.getInstance());
 	}
 
+	public void addHandler(RequestHandler handler) {
+		handlers.add(handler);
+	}
+
+	public void onOpen(Session session) {
+		this.session = session;
+		logger.debug("API connected!");
+		sendHandshake(uuid);
+	}
+
+	private void sendHandshake(String uuid) {
+		logger.debug("Starting Handshake");
+		Request request = new Request("handshake", object -> {
+			if (requestFailed(object)) {
+				logger.error("Handshake failed, closing API!");
+				if (apiOptions.detailedLogging.get()) {
+					notificationProvider.addStatus("api.error.handshake", APIError.fromResponse(object));
+				}
+				shutdown();
+			} else {
+				logger.debug("Handshake successful!");
+				if (apiOptions.detailedLogging.get()) {
+					notificationProvider.addStatus("api.success.handshake", "api.success.handshake.desc");
+				}
+			}
+		}, "uuid", uuid);
+		send(request);
+	}
+
+	public boolean requestFailed(JsonObject object) {
+		return !object.has("type") || (object.has("type") && object.get("type").getAsString().equals("error"));
+	}
+
+	public void shutdown() {
+		try {
+			if (session != null && session.isOpen()) {
+				session.close(new CloseReason(CloseReason.CloseCodes.NORMAL_CLOSURE, "API shutdown procedure"));
+			}
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public void send(Request request) {
+		if (isConnected()) {
+			if (!request.equals(Request.DUMMY) && !TESTING) {
+				requests.put(request.getId(), request);
+				ThreadExecuter.scheduleTask(() -> {
+					String text = request.getJson();
+					logDetailed("Sending Request: " + text);
+					try {
+						session.getBasicRemote().sendText(text);
+					} catch (IOException e) {
+						logger.error("Failed to send Request! Request: ", text, e);
+					}
+				});
+			}
+		} else {
+			logger.warn("Not sending request because API is closed: " + request.getJson());
+		}
+	}
+
 	public boolean isConnected() {
 		return session != null && session.isOpen();
 	}
 
-	public void addHandler(RequestHandler handler) {
-		handlers.add(handler);
+	public void logDetailed(String message, Object... args) {
+		if (apiOptions.detailedLogging.get()) {
+			logger.debug("[DETAIL] " + message, args);
+		}
+	}
+
+	public void onMessage(String message) {
+		logDetailed("Handling response: " + message);
+		handleResponse(message);
+	}
+
+	private void handleResponse(String response) {
+		try {
+			JsonObject object = GsonHelper.GSON.fromJson(response, JsonObject.class);
+
+			String id = "";
+			if (object.has("id") && !object.get("id").isJsonNull()) id = object.get("id").getAsString();
+
+			if (requests.containsKey(id)) {
+				requests.get(id).getHandler().accept(object);
+				requests.remove(id);
+
+			} else if (id == null || id.isEmpty()) {
+				handlers.stream().filter(handler -> handler.isApplicable(object)).forEach(handler -> handler.handle(object));
+			} else {
+				logger.error("Unknown response: " + response);
+			}
+
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			logger.error("Invalid response: " + response);
+		}
+	}
+
+	public void onError(Throwable throwable) {
+		logger.error("Error while handling API traffic!", throwable);
+	}
+
+	public void onClose(CloseReason reason) {
+		logDetailed("Session closed! Reason: " + reason.getReasonPhrase() + " Code: " + reason.getCloseCode());
+		logDetailed("Restarting API session...");
+		session = createSession();
+		logDetailed("Restarted API session!");
 	}
 
 	private Session createSession() {
@@ -101,6 +204,10 @@ public class API {
 			logger.error("Error while starting API!", e);
 			return null;
 		}
+	}
+
+	public void restart() {
+		startup(uuid);
 	}
 
 	public void startup(String uuid) {
@@ -133,117 +240,10 @@ public class API {
 		}
 	}
 
-	public void onOpen(Session session) {
-		this.session = session;
-		logger.debug("API connected!");
-		sendHandshake(uuid);
-	}
-
-	private void sendHandshake(String uuid) {
-		logger.debug("Starting Handshake");
-		Request request = new Request("handshake", object -> {
-			if (requestFailed(object)) {
-				logger.error("Handshake failed, closing API!");
-				if(apiOptions.detailedLogging.get()) {
-					notificationProvider.addStatus("api.error.handshake", APIError.fromResponse(object));
-				}
-				shutdown();
-			} else {
-				logger.debug("Handshake successful!");
-				if(apiOptions.detailedLogging.get()) {
-					notificationProvider.addStatus("api.success.handshake", "api.success.handshake.desc");
-				}
-			}
-		}, "uuid", uuid);
-		send(request);
-	}
-
-	public boolean requestFailed(JsonObject object) {
-		return !object.has("type") || (object.has("type") && object.get("type").getAsString().equals("error"));
-	}
-
-	public void shutdown() {
-		try {
-			if (session != null && session.isOpen()) {
-				session.close(new CloseReason(CloseReason.CloseCodes.NORMAL_CLOSURE, "API shutdown procedure"));
-			}
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
 	public String sanitizeUUID(String uuid) {
 		if (uuid.contains("-")) {
 			return uuid.replace("-", "");
 		}
 		return uuid;
-	}
-
-	public void send(Request request) {
-		if (isConnected()) {
-			if(!request.equals(Request.DUMMY) && !TESTING) {
-				requests.put(request.getId(), request);
-				ThreadExecuter.scheduleTask(() -> {
-					String text = request.getJson();
-					logDetailed("Sending Request: " + text);
-					try {
-						session.getBasicRemote().sendText(text);
-					} catch (IOException e) {
-						logger.error("Failed to send Request! Request: ", text, e);
-					}
-				});
-			}
-		} else {
-			logger.warn("Not sending request because API is closed: " + request.getJson());
-		}
-	}
-
-	public void onMessage(String message) {
-		logDetailed("Handling response: " + message);
-		handleResponse(message);
-	}
-
-	public void onError(Throwable throwable) {
-		logger.error("Error while handling API traffic!", throwable);
-	}
-
-	private void handleResponse(String response) {
-		try {
-			JsonObject object = GsonHelper.GSON.fromJson(response, JsonObject.class);
-
-			String id = "";
-			if(object.has("id") && !object.get("id").isJsonNull()) id = object.get("id").getAsString();
-
-			if (requests.containsKey(id)) {
-				requests.get(id).getHandler().accept(object);
-				requests.remove(id);
-
-			} else if (id == null || id.isEmpty()) {
-				handlers.stream().filter(handler -> handler.isApplicable(object)).forEach(handler -> handler.handle(object));
-			} else {
-				logger.error("Unknown response: " + response);
-			}
-
-		} catch (RuntimeException e) {
-			e.printStackTrace();
-			logger.error("Invalid response: " + response);
-		}
-	}
-
-	public void onClose(CloseReason reason) {
-		logDetailed("Session closed! Reason: " + reason.getReasonPhrase() + " Code: " + reason.getCloseCode());
-		logDetailed("Restarting API session...");
-		session = createSession();
-		logDetailed("Restarted API session!");
-	}
-
-	public void restart() {
-		startup(uuid);
-	}
-
-	public void logDetailed(String message, Object... args) {
-		if (apiOptions.detailedLogging.get()) {
-			logger.debug("[DETAIL] " + message, args);
-		}
 	}
 }

@@ -10,25 +10,24 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.text.TextColor;
 
 @Getter
 public class ChatLine extends DrawableHelper {
+	protected final MinecraftClient client = MinecraftClient.getInstance();
 	private final OrderedText content;
 	private final ChatMessage origin;
-	protected final MinecraftClient client = MinecraftClient.getInstance();
 
 	public ChatLine(OrderedText content, ChatMessage origin) {
 		this.content = content;
 		this.origin = origin;
 	}
 
-	public int render(MatrixStack matrices, int x, int y, int color, int mouseX, int mouseY){
+	public int render(MatrixStack matrices, int x, int y, int color, int mouseX, int mouseY) {
 		MinecraftClient.getInstance().textRenderer.draw(matrices, content, x, y, color);
 		return renderExtras(matrices, x, y, color, mouseX, mouseY) + MinecraftClient.getInstance().textRenderer.fontHeight;
 	}
 
-	protected int renderExtras(MatrixStack matrices, int x, int y, int color, int mouseX, int mouseY){
+	protected int renderExtras(MatrixStack matrices, int x, int y, int color, int mouseX, int mouseY) {
 		return y;
 	}
 
@@ -40,15 +39,15 @@ public class ChatLine extends DrawableHelper {
 
 		@Override
 		public int render(MatrixStack matrices, int x, int y, int color, int mouseX, int mouseY) {
-			return super.render(matrices, x, y+4, color, mouseX, mouseY);
+			return super.render(matrices, x, y + 4, color, mouseX, mouseY);
 		}
 
 		@Override
 		protected int renderExtras(MatrixStack matrices, int x, int y, int color, int mouseX, int mouseY) {
 			RenderSystem.setShaderTexture(0, Auth.getInstance().getSkinTexture(getOrigin().getSender().getUuid(),
-					getOrigin().getSender().getName()));
-			drawTexture(matrices, x-20, y, 18, 18, 8, 8, 8, 8, 64, 64);
-			drawTexture(matrices, x-20, y, 18, 18, 40, 8, 8, 8, 64, 64);
+				getOrigin().getSender().getName()));
+			drawTexture(matrices, x - 20, y, 18, 18, 8, 8, 8, 8, 64, 64);
+			drawTexture(matrices, x - 20, y, 18, 18, 40, 8, 8, 8, 64, 64);
 			return y;
 		}
 	}

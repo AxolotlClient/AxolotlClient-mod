@@ -57,8 +57,8 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity> extends 
 	@Inject(method = "hasLabel*", at = @At("HEAD"), cancellable = true)
 	private void axolotlclient$showOwnNametag(LivingEntity livingEntity, CallbackInfoReturnable<Boolean> cir) {
 		if (AxolotlClient.CONFIG.showOwnNametag.get()
-				&& livingEntity.getEntityId() == MinecraftClient.getInstance().player.getEntityId()
-				&& !PlayerHud.isCurrentlyRendering()) {
+			&& livingEntity.getEntityId() == MinecraftClient.getInstance().player.getEntityId()
+			&& !PlayerHud.isCurrentlyRendering()) {
 			cir.setReturnValue(true);
 		}
 	}
@@ -69,7 +69,7 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity> extends 
 			if (NickHider.getInstance().hideOwnName.get() && instance.equals(MinecraftClient.getInstance().player)) {
 				return new LiteralText(NickHider.getInstance().hiddenNameSelf.get());
 			} else if (NickHider.getInstance().hideOtherNames.get()
-					&& !instance.equals(MinecraftClient.getInstance().player)) {
+				&& !instance.equals(MinecraftClient.getInstance().player)) {
 				return new LiteralText(NickHider.getInstance().hiddenNameOthers.get());
 			}
 		}

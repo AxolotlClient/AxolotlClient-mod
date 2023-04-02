@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.mixin;
 
+import java.nio.FloatBuffer;
+
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClient;
@@ -62,32 +64,21 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import java.nio.FloatBuffer;
-
 @Mixin(GameRenderer.class)
 public abstract class GameRendererMixin {
 
 	@Shadow
-	protected abstract FloatBuffer updateFogColorBuffer(float red, float green, float blue, float alpha);
-
-	@Shadow
 	private MinecraftClient client;
-
 	@Shadow
 	private float viewDistance;
-
 	@Shadow
 	private float fogRed;
-
 	@Shadow
 	private float fogGreen;
-
 	@Shadow
 	private float fogBlue;
-
 	@Shadow
 	private boolean thickFog;
-
 	private float cachedMouseFactor;
 
 	@Inject(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MouseInput;x:I"), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
@@ -117,7 +108,7 @@ public abstract class GameRendererMixin {
 	@Inject(method = "renderFog", at = @At("HEAD"), cancellable = true)
 	public void axolotlclient$noFog(int i, float tickDelta, CallbackInfo ci) {
 		if (MinecraftClient.getInstance().world.dimension.canPlayersSleep() && AxolotlClient.CONFIG.customSky.get()
-				&& SkyboxManager.getInstance().hasSkyBoxes()) {
+			&& SkyboxManager.getInstance().hasSkyBoxes()) {
 			this.viewDistance = (float) (this.viewDistance * 2 + MinecraftClient.getInstance().player.getPos().y);
 			Entity entity = this.client.getCameraEntity();
 
@@ -150,7 +141,7 @@ public abstract class GameRendererMixin {
 			} else if (block.getMaterial() == Material.WATER) {
 				GlStateManager.fogMode(2048);
 				if (entity instanceof LivingEntity
-						&& ((LivingEntity) entity).hasStatusEffect(StatusEffect.WATER_BREATHING)) {
+					&& ((LivingEntity) entity).hasStatusEffect(StatusEffect.WATER_BREATHING)) {
 					GlStateManager.fogDensity(0.01F);
 				} else {
 					GlStateManager.fogDensity(0.1F - (float) EnchantmentHelper.getRespiration(entity) * 0.03F);
@@ -176,6 +167,9 @@ public abstract class GameRendererMixin {
 			ci.cancel();
 		}
 	}
+
+	@Shadow
+	protected abstract FloatBuffer updateFogColorBuffer(float red, float green, float blue, float alpha);
 
 	@Inject(method = "getFov", at = @At(value = "RETURN", ordinal = 1), cancellable = true)
 	public void axolotlclient$setZoom(float tickDelta, boolean changingFov, CallbackInfoReturnable<Float> cir) {
@@ -214,7 +208,7 @@ public abstract class GameRendererMixin {
 	public void axolotlclient$customCrosshairF3(float tickDelta, CallbackInfo ci) {
 		CrosshairHud hud = (CrosshairHud) HudManager.getInstance().get(CrosshairHud.ID);
 		if (hud.isEnabled() && this.client.options.debugEnabled && !this.client.options.hudHidden
-				&& hud.overridesF3()) {
+			&& hud.overridesF3()) {
 			ci.cancel();
 		}
 	}

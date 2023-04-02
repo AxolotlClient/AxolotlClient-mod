@@ -45,13 +45,6 @@ public enum Justification {
 		return getXOffset(MinecraftClient.getInstance().textRenderer.getWidth(text), width);
 	}
 
-	public int getXOffset(String text, int width) {
-		if (this == LEFT) {
-			return 0;
-		}
-		return getXOffset(MinecraftClient.getInstance().textRenderer.getWidth(text), width);
-	}
-
 	public int getXOffset(int textWidth, int width) {
 		if (this == LEFT) {
 			return 0;
@@ -60,5 +53,12 @@ public enum Justification {
 			return width - textWidth;
 		}
 		return (width - textWidth) / 2;
+	}
+
+	public int getXOffset(String text, int width) {
+		if (this == LEFT) {
+			return 0;
+		}
+		return getXOffset(MinecraftClient.getInstance().textRenderer.getWidth(text), width);
 	}
 }

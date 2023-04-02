@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.modules.particles;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.AxolotlClientConfig.options.*;
@@ -33,9 +36,6 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.Registries;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
 public class Particles extends AbstractModule {
 
 	private static final Particles Instance = new Particles();
@@ -45,10 +45,6 @@ public class Particles extends AbstractModule {
 
 	private final OptionCategory cat = new OptionCategory("particles");
 	private final BooleanOption enabled = new BooleanOption("enabled", false);
-
-	public static Particles getInstance() {
-		return Instance;
-	}
 
 	@Override
 	public void init() {
@@ -62,13 +58,13 @@ public class Particles extends AbstractModule {
 		for (ParticleType<?> type : Registries.PARTICLE_TYPE.stream().sorted(new AlphabeticalComparator()).toList()) {
 			if (Registries.PARTICLE_TYPE.getId(type) != null) {
 				OptionCategory category = new OptionCategory(
-						Arrays.stream(Registries.PARTICLE_TYPE.getId(type).getPath().split("_"))
-								.map(StringUtils::capitalize).collect(Collectors.joining(" ")),
-						false);
+					Arrays.stream(Registries.PARTICLE_TYPE.getId(type).getPath().split("_"))
+						.map(StringUtils::capitalize).collect(Collectors.joining(" ")),
+					false);
 				HashMap<String, Option<?>> optionsByKey = new LinkedHashMap<>();
 
 				populateMap(optionsByKey, new BooleanOption("showParticle", true), new IntegerOption("count", 1, 1, 20),
-						new BooleanOption("customColor", false), new ColorOption("color", "particles", Color.WHITE));
+					new BooleanOption("customColor", false), new ColorOption("color", "particles", Color.WHITE));
 
 				if (type == ParticleTypes.CRIT || type == ParticleTypes.ENCHANTED_HIT) {
 					populateMap(optionsByKey, new BooleanOption("alwaysCrit", false));
@@ -111,13 +107,17 @@ public class Particles extends AbstractModule {
 
 	public boolean getAlwaysOn(ParticleType<?> type) {
 		return enabled.get()
-				&& ((BooleanOption) Particles.getInstance().particleOptions.get(type).get("alwaysCrit")).get();
+			&& ((BooleanOption) Particles.getInstance().particleOptions.get(type).get("alwaysCrit")).get();
+	}
+
+	public static Particles getInstance() {
+		return Instance;
 	}
 
 	public boolean getShowParticle(ParticleType<?> type) {
 		return enabled.get()
-				? ((BooleanOption) Particles.getInstance().particleOptions.get(type).get("showParticle")).get()
-				: true;
+			? ((BooleanOption) Particles.getInstance().particleOptions.get(type).get("showParticle")).get()
+			: true;
 	}
 
 	protected static class AlphabeticalComparator implements Comparator<ParticleType<?>> {

@@ -22,11 +22,11 @@
 
 package io.github.axolotlclient.api.util;
 
+import java.io.IOException;
+
 import com.google.gson.JsonElement;
 import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.util.NetworkUtil;
-
-import java.io.IOException;
 
 public class UUIDHelper {
 

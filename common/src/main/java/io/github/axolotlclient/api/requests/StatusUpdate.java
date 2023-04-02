@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.api.requests;
 
+import java.util.regex.Pattern;
+
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import io.github.axolotlclient.api.API;
@@ -30,13 +32,11 @@ import io.github.axolotlclient.api.Request;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.util.regex.Pattern;
-
 public class StatusUpdate extends Request {
 
 	protected StatusUpdate(Type updateType, JsonObject updateData) {
 		super("statusUpdate", object -> {
-			if(API.getInstance().requestFailed(object)){
+			if (API.getInstance().requestFailed(object)) {
 				APIError.display(object);
 			}
 			// no explixit response handling necessary

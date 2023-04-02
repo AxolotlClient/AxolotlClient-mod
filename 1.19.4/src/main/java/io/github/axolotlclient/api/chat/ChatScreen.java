@@ -46,8 +46,8 @@ public class ChatScreen extends UserListScreen {
 		super(Text.translatable("api.screen.chat"));
 		this.channel = channel;
 		this.parent = parent;
-		if(!channel.isDM()){
-			users = new UserListWidget(this, client, 50, height-20, 10, 10, 25);
+		if (!channel.isDM()) {
+			users = new UserListWidget(this, client, 50, height - 20, 10, 10, 25);
 		}
 	}
 
@@ -61,10 +61,10 @@ public class ChatScreen extends UserListScreen {
 
 	@Override
 	protected void init() {
-		addDrawable(widget = new ChatWidget(channel, 50, 30, width-100, height-90));
+		addDrawable(widget = new ChatWidget(channel, 50, 30, width - 100, height - 90));
 
-		addDrawableChild(input = new TextFieldWidget(client.textRenderer, width/2-150, height-50,
-				300, 20, Text.translatable("api.chat.enterMessage")) {
+		addDrawableChild(input = new TextFieldWidget(client.textRenderer, width / 2 - 150, height - 50,
+			300, 20, Text.translatable("api.chat.enterMessage")) {
 
 			@Override
 			public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
@@ -80,7 +80,7 @@ public class ChatScreen extends UserListScreen {
 
 		input.setSuggestion(Text.translatable("api.chat.messageUser", (Object) channel.getName()).getString());
 		input.setChangedListener(s -> {
-			if(s.isEmpty()){
+			if (s.isEmpty()) {
 				input.setSuggestion(Text.translatable("api.chat.messageUser", (Object) channel.getName()).getString());
 			} else {
 				input.setSuggestion("");
@@ -89,8 +89,8 @@ public class ChatScreen extends UserListScreen {
 		input.setMaxLength(1024);
 
 		this.addDrawableChild(ButtonWidget.builder(ScreenTexts.BACK, button -> this.client.setScreen(this.parent))
-						.positionAndSize(this.width / 2 - 75, this.height - 28, 150, 20)
-						.build()
+			.positionAndSize(this.width / 2 - 75, this.height - 28, 150, 20)
+			.build()
 		);
 	}
 
@@ -100,18 +100,18 @@ public class ChatScreen extends UserListScreen {
 	}
 
 	@Override
-	public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
-		if(widget != null){
-			return widget.mouseScrolled(mouseX, mouseY, amount);
+	public void removed() {
+		if (widget != null) {
+			widget.remove();
 		}
-		return super.mouseScrolled(mouseX, mouseY, amount);
 	}
 
 	@Override
-	public void removed() {
-		if(widget != null) {
-			widget.remove();
+	public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
+		if (widget != null) {
+			return widget.mouseScrolled(mouseX, mouseY, amount);
 		}
+		return super.mouseScrolled(mouseX, mouseY, amount);
 	}
 
 	@Override

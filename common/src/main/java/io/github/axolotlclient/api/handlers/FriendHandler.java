@@ -22,6 +22,12 @@
 
 package io.github.axolotlclient.api.handlers;
 
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import io.github.axolotlclient.api.API;
@@ -33,18 +39,11 @@ import io.github.axolotlclient.api.util.RequestHandler;
 import io.github.axolotlclient.api.util.UUIDHelper;
 import lombok.Getter;
 
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-
 public class FriendHandler implements RequestHandler {
-
-	private final API api;
 
 	@Getter
 	private final static FriendHandler Instance = new FriendHandler();
+	private final API api;
 
 	protected FriendHandler() {
 		this.api = API.getInstance();
@@ -106,7 +105,7 @@ public class FriendHandler implements RequestHandler {
 						startedAt = Instant.ofEpochSecond(0);
 					}
 					Status status = new Status(s.get("online").getAsBoolean(), s.get("title").getAsString(),
-							s.get("description").getAsString(), s.get("icon").getAsString(), startedAt);
+						s.get("description").getAsString(), s.get("icon").getAsString(), startedAt);
 					list.add(new User(e.getAsJsonObject().get("uuid").getAsString(), status));
 				});
 				responseConsumer.accept(list);
@@ -168,9 +167,9 @@ public class FriendHandler implements RequestHandler {
 	@Override
 	public boolean isApplicable(JsonObject object) {
 		return object.has("type") &&
-				object.get("type").getAsString().equals("friends") &&
-				object.has("data") &&
-				(object.get("data").getAsJsonObject().has("from"));
+			object.get("type").getAsString().equals("friends") &&
+			object.has("data") &&
+			(object.get("data").getAsJsonObject().has("from"));
 	}
 
 	@Override

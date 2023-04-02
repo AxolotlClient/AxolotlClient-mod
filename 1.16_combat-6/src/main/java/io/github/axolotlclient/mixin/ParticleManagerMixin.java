@@ -22,6 +22,10 @@
 
 package io.github.axolotlclient.mixin;
 
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Queue;
+
 import io.github.axolotlclient.modules.particles.Particles;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleManager;
@@ -39,15 +43,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Queue;
-
 @Mixin(ParticleManager.class)
 public abstract class ParticleManagerMixin {
-
-	@Shadow
-	protected abstract void tickParticle(Particle particle);
 
 	private ParticleType<?> cachedType;
 
@@ -77,6 +74,9 @@ public abstract class ParticleManagerMixin {
 		}
 		tickParticle(particle);
 	}
+
+	@Shadow
+	protected abstract void tickParticle(Particle particle);
 
 	@Redirect(method = "tick", at = @At(value = "INVOKE", target = "Ljava/util/Queue;removeAll(Ljava/util/Collection;)Z"))
 	public boolean axolotlclient$removeEmitterParticlesWhenRemoved(Queue<Particle> instance, Collection<Particle> collection) {

@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.mixin;
 
+import java.util.Objects;
+
 import io.github.axolotlclient.api.FriendsSidebar;
 import io.github.axolotlclient.modules.hud.HudEditScreen;
 import io.github.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
@@ -40,8 +42,6 @@ import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
-import java.util.Objects;
-
 @Mixin(GameMenuScreen.class)
 public abstract class GameMenuScreenMixin extends Screen {
 
@@ -54,8 +54,8 @@ public abstract class GameMenuScreenMixin extends Screen {
 
 		if (MinecraftClient.getInstance().isInSingleplayer() && !this.client.getServer().isPublished()) {
 			buttons.add(new ButtonWidget(20, width / 2 - 100,
-					height / 4 + 82,
-					I18n.translate("config")));
+				height / 4 + 82,
+				I18n.translate("config")));
 			for (ButtonWidget button : buttons) {
 				if (button.y >= this.height / 4 - 16 + 24 * 4 - 1 && button.id < 20) {
 					button.y += 24;
@@ -71,14 +71,18 @@ public abstract class GameMenuScreenMixin extends Screen {
 		}
 	}
 
+	private static boolean axolotlclient$hasModMenu() {
+		return FabricLoader.getInstance().isModLoaded("modmenu") && !FabricLoader.getInstance().isModLoaded("axolotlclient-modmenu");
+	}
+
 	@ModifyArgs(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget;<init>(IIIIILjava/lang/String;)V", ordinal = 1))
 	public void axolotlclient$addOptionsButton(Args args) {
 		if (axolotlclient$hasModMenu())
 			return;
 
 		if ((MinecraftClient.getInstance().getServer() != null
-				&& MinecraftClient.getInstance().getServer().isPublished())
-				|| MinecraftClient.getInstance().getCurrentServerEntry() != null) {
+			&& MinecraftClient.getInstance().getServer().isPublished())
+			|| MinecraftClient.getInstance().getCurrentServerEntry() != null) {
 			args.set(0, 20);
 			args.set(5, I18n.translate("title_short"));
 		}
@@ -91,16 +95,12 @@ public abstract class GameMenuScreenMixin extends Screen {
 		} else if (button.id == 1) {
 			FeatureDisabler.clear();
 			if (HypixelMods.getInstance().cacheMode.get() != null
-					&& Objects.equals(HypixelMods.getInstance().cacheMode.get(),
-					HypixelMods.HypixelApiCacheMode.ON_CLIENT_DISCONNECT.toString())) {
+				&& Objects.equals(HypixelMods.getInstance().cacheMode.get(),
+				HypixelMods.HypixelApiCacheMode.ON_CLIENT_DISCONNECT.toString())) {
 				HypixelAbstractionLayer.clearPlayerData();
 			}
 		} else if (button.id == 234) {
 			MinecraftClient.getInstance().setScreen(new FriendsSidebar(this));
 		}
-	}
-
-	private static boolean axolotlclient$hasModMenu() {
-		return FabricLoader.getInstance().isModLoaded("modmenu") && !FabricLoader.getInstance().isModLoaded("axolotlclient-modmenu");
 	}
 }

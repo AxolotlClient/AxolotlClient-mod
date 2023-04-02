@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud;
 
+import java.util.List;
+
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
@@ -35,8 +37,6 @@ import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
 import io.github.axolotlclient.modules.hud.util.RenderUtil;
 import net.minecraft.util.Identifier;
-
-import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -55,20 +55,20 @@ public class CompassHud extends TextHudEntry implements DynamicallyPositionable 
 	private final ColorOption degreesColor = new ColorOption("degreescolor", new Color(-1));
 	private final ColorOption majorIndicatorColor = new ColorOption("majorindicator", new Color(-1));
 	private final ColorOption minorIndicatorColor = new ColorOption("minorindicator",
-			new Color(0xCCFFFFFF));
+		new Color(0xCCFFFFFF));
 	private final ColorOption cardinalColor = new ColorOption("cardinalcolor", Color.WHITE);
 	private final ColorOption semiCardinalColor = new ColorOption("semicardinalcolor",
-			new Color(0xFFAAAAAA));
+		new Color(0xFFAAAAAA));
 	private final BooleanOption invert = new BooleanOption("invert_direction", false);
 	private final BooleanOption showDegrees = new BooleanOption("showdegrees", true);
+
+	public CompassHud() {
+		super(240, 33, false);
+	}
 
 	private void updateWidth(int newWidth) {
 		setWidth(newWidth);
 		onBoundsUpdate();
-	}
-
-	public CompassHud() {
-		super(240, 33, false);
 	}
 
 	@Override
@@ -111,7 +111,7 @@ public class CompassHud extends TextHudEntry implements DynamicallyPositionable 
 		RenderUtil.drawRectangle(pos.x() + (int) halfWidth - 1, pos.y(), 3, 11, lookingBox.get());
 		if (showDegrees.get()) {
 			DrawUtil.drawCenteredString(client.textRenderer, String.valueOf((int) degrees), x + (int) halfWidth, y + 20,
-					degreesColor.get(), shadow.get());
+				degreesColor.get(), shadow.get());
 		}
 		float shift = (startIndicator - start) / 15f * dist;
 		if (invert.get()) {
@@ -141,24 +141,24 @@ public class CompassHud extends TextHudEntry implements DynamicallyPositionable 
 			if (indicator == Indicator.CARDINAL) {
 				// We have to call .color() here so that transparency stays
 				RenderUtil.drawRectangle(innerX, y, 1, 9, majorIndicatorColor.get()
-						.withAlpha((int) (majorIndicatorColor.get().getAlpha() * targetOpacity)).getAsInt());
+					.withAlpha((int) (majorIndicatorColor.get().getAlpha() * targetOpacity)).getAsInt());
 				Color color = cardinalColor.get();
 				color = color.withAlpha((int) (color.getAlpha() * targetOpacity));
 				if (color.getAlpha() > 0) {
 					DrawUtil.drawCenteredString(client.textRenderer, getCardString(indicator, d), innerX + 1, y + 10,
-							color, shadow.get());
+						color, shadow.get());
 				}
 			} else if (indicator == Indicator.SEMI_CARDINAL) {
 				Color color = semiCardinalColor.get();
 				color = color.withAlpha((int) (color.getAlpha() * targetOpacity));
 				if (color.getAlpha() > 0) {
 					DrawUtil.drawCenteredString(client.textRenderer, getCardString(indicator, d), innerX + 1, y + 1,
-							color, shadow.get());
+						color, shadow.get());
 				}
 			} else {
 				// We have to call .color() here so that transparency stays
 				RenderUtil.drawRectangle(innerX, y, 1, 5, minorIndicatorColor.get()
-						.withAlpha((int) (minorIndicatorColor.get().getAlpha() * targetOpacity)).getAsInt());
+					.withAlpha((int) (minorIndicatorColor.get().getAlpha() * targetOpacity)).getAsInt());
 			}
 		}
 		GlStateManager.color(1, 1, 1, 1);

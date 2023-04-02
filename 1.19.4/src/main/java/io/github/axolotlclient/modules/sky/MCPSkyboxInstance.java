@@ -75,6 +75,18 @@ public class MCPSkyboxInstance extends SkyboxInstance {
 		showSun = true;
 	}
 
+	protected int convertToTicks(int hourFormat) {
+		hourFormat *= 10;
+		hourFormat -= 6000;
+		if (hourFormat < 0) {
+			hourFormat += 24000;
+		}
+		if (hourFormat >= 24000) {
+			hourFormat -= 24000;
+		}
+		return hourFormat;
+	}
+
 	@Override
 	public void renderSkybox(MatrixStack matrices) {
 		this.alpha = getAlpha();
@@ -131,17 +143,5 @@ public class MCPSkyboxInstance extends SkyboxInstance {
 				matrices.pop();
 			}
 		}
-	}
-
-	protected int convertToTicks(int hourFormat) {
-		hourFormat *= 10;
-		hourFormat -= 6000;
-		if (hourFormat < 0) {
-			hourFormat += 24000;
-		}
-		if (hourFormat >= 24000) {
-			hourFormat -= 24000;
-		}
-		return hourFormat;
 	}
 }

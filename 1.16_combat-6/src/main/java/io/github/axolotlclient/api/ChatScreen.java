@@ -24,7 +24,6 @@ package io.github.axolotlclient.api;
 
 import io.github.axolotlclient.api.types.User;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 
 public class ChatScreen extends Screen {

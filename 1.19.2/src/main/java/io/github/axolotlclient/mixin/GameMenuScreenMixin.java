@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.mixin;
 
+import java.util.Objects;
+
 import io.github.axolotlclient.api.FriendsSidebar;
 import io.github.axolotlclient.modules.hud.HudEditScreen;
 import io.github.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
@@ -40,8 +42,6 @@ import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
-import java.util.Objects;
-
 @Mixin(GameMenuScreen.class)
 public abstract class GameMenuScreenMixin extends Screen {
 
@@ -52,7 +52,7 @@ public abstract class GameMenuScreenMixin extends Screen {
 	@Inject(method = "initWidgets", at = @At("TAIL"))
 	private void axolotlclient$friendsSidebarButton(CallbackInfo ci) {
 		addDrawableChild(new ButtonWidget(10, height - 30, 75, 20, Text.translatable("api.friends"),
-				buttonWidget -> client.setScreen(new FriendsSidebar(this))));
+			buttonWidget -> client.setScreen(new FriendsSidebar(this))));
 	}
 
 	@ModifyArgs(method = "initWidgets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget;<init>(IIIILnet/minecraft/text/Text;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;)V", ordinal = 3))
@@ -62,21 +62,21 @@ public abstract class GameMenuScreenMixin extends Screen {
 
 		args.set(4, Text.translatable("title_short"));
 		args.set(5, (ButtonWidget.PressAction) (buttonWidget) -> MinecraftClient.getInstance()
-				.setScreen(new HudEditScreen(((GameMenuScreen) (Object) this))));
+			.setScreen(new HudEditScreen(((GameMenuScreen) (Object) this))));
+	}
+
+	private static boolean axolotlclient$hasModMenu() {
+		return QuiltLoader.isModLoaded("modmenu") && !QuiltLoader.isModLoaded("axolotlclient-modmenu");
 	}
 
 	@ModifyArg(method = "initWidgets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget;<init>(IIIILnet/minecraft/text/Text;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;)V", ordinal = 1), index = 5)
 	private ButtonWidget.PressAction axolotlclient$clearFeatureRestrictions(ButtonWidget.PressAction onPress) {
 		return (buttonWidget) -> {
 			if (Objects.equals(HypixelMods.getInstance().cacheMode.get(),
-					HypixelMods.HypixelCacheMode.ON_CLIENT_DISCONNECT.toString())) {
+				HypixelMods.HypixelCacheMode.ON_CLIENT_DISCONNECT.toString())) {
 				HypixelAbstractionLayer.clearPlayerData();
 			}
 			onPress.onPress(buttonWidget);
 		};
-	}
-
-	private static boolean axolotlclient$hasModMenu() {
-		return QuiltLoader.isModLoaded("modmenu") && !QuiltLoader.isModLoaded("axolotlclient-modmenu");
 	}
 }

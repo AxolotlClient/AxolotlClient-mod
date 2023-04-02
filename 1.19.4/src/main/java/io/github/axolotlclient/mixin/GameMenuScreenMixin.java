@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.mixin;
 
+import java.util.Objects;
+import java.util.function.Supplier;
+
 import io.github.axolotlclient.api.FriendsSidebar;
 import io.github.axolotlclient.modules.hud.HudEditScreen;
 import io.github.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
@@ -40,17 +43,8 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Objects;
-import java.util.function.Supplier;
-
 @Mixin(GameMenuScreen.class)
 public abstract class GameMenuScreenMixin extends Screen {
-
-	@Shadow
-	protected abstract ButtonWidget createLinkConfirmationButton(Text par1, String par2);
-
-	@Shadow
-	protected abstract ButtonWidget createButton(Text par1, Supplier<Screen> par2);
 
 	protected GameMenuScreenMixin(Text title) {
 		super(title);
@@ -59,7 +53,7 @@ public abstract class GameMenuScreenMixin extends Screen {
 	@Inject(method = "initWidgets", at = @At("TAIL"))
 	private void axolotlclient$addFriendsSidebarButton(CallbackInfo ci) {
 		addDrawableChild(ButtonWidget.builder(Text.translatable("api.friends"),
-				button -> MinecraftClient.getInstance().setScreen(new FriendsSidebar(this))).positionAndSize(10, height - 30, 75, 20).build());
+			button -> MinecraftClient.getInstance().setScreen(new FriendsSidebar(this))).positionAndSize(10, height - 30, 75, 20).build());
 	}
 
 	@Redirect(method = "initWidgets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/GameMenuScreen;createLinkConfirmationButton(Lnet/minecraft/text/Text;Ljava/lang/String;)Lnet/minecraft/client/gui/widget/ButtonWidget;", ordinal = 1))
@@ -70,18 +64,24 @@ public abstract class GameMenuScreenMixin extends Screen {
 		return createButton(Text.translatable("title_short"), () -> new HudEditScreen(this));
 	}
 
+	private static boolean axolotlclient$hasModMenu() {
+		return QuiltLoader.isModLoaded("modmenu") && !QuiltLoader.isModLoaded("axolotlclient-modmenu");
+	}
+
+	@Shadow
+	protected abstract ButtonWidget createLinkConfirmationButton(Text par1, String par2);
+
+	@Shadow
+	protected abstract ButtonWidget createButton(Text par1, Supplier<Screen> par2);
+
 	@ModifyArg(method = "initWidgets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget;builder(Lnet/minecraft/text/Text;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;)Lnet/minecraft/client/gui/widget/ButtonWidget$Builder;", ordinal = 1), index = 1)
 	private ButtonWidget.PressAction axolotlclient$clearFeatureRestrictions(ButtonWidget.PressAction onPress) {
 		return (buttonWidget) -> {
 			if (Objects.equals(HypixelMods.getInstance().cacheMode.get(),
-					HypixelMods.HypixelCacheMode.ON_CLIENT_DISCONNECT.toString())) {
+				HypixelMods.HypixelCacheMode.ON_CLIENT_DISCONNECT.toString())) {
 				HypixelAbstractionLayer.clearPlayerData();
 			}
 			onPress.onPress(buttonWidget);
 		};
-	}
-
-	private static boolean axolotlclient$hasModMenu() {
-		return QuiltLoader.isModLoaded("modmenu") && !QuiltLoader.isModLoaded("axolotlclient-modmenu");
 	}
 }

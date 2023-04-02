@@ -89,7 +89,7 @@ public abstract class ItemEntityRendererMixin extends EntityRenderer<ItemEntity>
 				}
 
 				this.itemRenderer
-						.renderItem(itemStack, ModelTransformationMode.GROUND, false, matrixStack, vertexConsumerProvider, i, OverlayTexture.DEFAULT_UV, bakedModel);
+					.renderItem(itemStack, ModelTransformationMode.GROUND, false, matrixStack, vertexConsumerProvider, i, OverlayTexture.DEFAULT_UV, bakedModel);
 				matrixStack.pop();
 				if (!bl) {
 					matrixStack.translate(0.0F * o, 0.0F * p, 0.09375F * q);

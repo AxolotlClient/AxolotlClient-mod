@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.api;
 
+import java.util.stream.Collectors;
+
 import io.github.axolotlclient.api.chat.ChatScreen;
 import io.github.axolotlclient.api.handlers.FriendHandler;
 import io.github.axolotlclient.api.util.AlphabeticalComparator;
@@ -30,8 +32,6 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.ScreenTexts;
 import net.minecraft.text.Text;
-
-import java.util.stream.Collectors;
 
 public class FriendsScreen extends Screen {
 
@@ -44,14 +44,14 @@ public class FriendsScreen extends Screen {
 
 	private Tab current = Tab.ONLINE;
 
-	protected FriendsScreen(Screen parent) {
-		super(Text.translatable("api.screen.friends"));
-		this.parent = parent;
-	}
-
 	protected FriendsScreen(Screen parent, Tab tab) {
 		this(parent);
 		current = tab;
+	}
+
+	protected FriendsScreen(Screen parent) {
+		super(Text.translatable("api.screen.friends"));
+		this.parent = parent;
 	}
 
 	@Override
@@ -63,12 +63,31 @@ public class FriendsScreen extends Screen {
 	}
 
 	@Override
+	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+		if (super.keyPressed(keyCode, scanCode, modifiers)) {
+			return true;
+		} else if (keyCode == 294) {
+			this.refresh();
+			return true;
+		} else if (this.widget.getSelectedOrNull() != null) {
+			if (keyCode != 257 && keyCode != 335) {
+				return this.widget.keyPressed(keyCode, scanCode, modifiers);
+			} else {
+				this.openChat();
+				return true;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	@Override
 	protected void init() {
 		addSelectableChild(widget = new UserListWidget(this, client, width, height, 32, height - 64, 35));
 
 		if (current == Tab.ALL || current == Tab.ONLINE) {
 			FriendHandler.getInstance().getFriends(list -> widget.setUsers(list.stream().sorted((u1, u2) ->
-					new AlphabeticalComparator().compare(u1.getName(), u2.getName())).filter(user -> {
+				new AlphabeticalComparator().compare(u1.getName(), u2.getName())).filter(user -> {
 				if (current == Tab.ONLINE) {
 					return user.getStatus().isOnline();
 				}
@@ -78,34 +97,34 @@ public class FriendsScreen extends Screen {
 			FriendHandler.getInstance().getFriendRequests((in, out) -> {
 
 				in.stream().sorted((u1, u2) -> new AlphabeticalComparator().compare(u1.getName(), u2.getName()))
-						.forEach(user -> widget.addEntry(new UserListWidget.UserListEntry(user, Text.translatable("api.friends.pending.incoming"))));
+					.forEach(user -> widget.addEntry(new UserListWidget.UserListEntry(user, Text.translatable("api.friends.pending.incoming"))));
 				out.stream().sorted((u1, u2) -> new AlphabeticalComparator().compare(u1.getName(), u2.getName()))
-						.forEach(user -> widget.addEntry(new UserListWidget.UserListEntry(user, Text.translatable("api.friends.pending.outgoing"))));
+					.forEach(user -> widget.addEntry(new UserListWidget.UserListEntry(user, Text.translatable("api.friends.pending.outgoing"))));
 			});
 		} else if (current == Tab.BLOCKED) {
 			FriendHandler.getInstance().getBlocked(list -> widget.setUsers(list.stream().sorted((u1, u2) ->
-					new AlphabeticalComparator().compare(u1.getName(), u2.getName())).toList()));
+				new AlphabeticalComparator().compare(u1.getName(), u2.getName())).toList()));
 		}
 
 		this.addDrawableChild(blockedTab = ButtonWidget.builder(Text.translatable("api.friends.tab.blocked"), button ->
-						client.setScreen(new FriendsScreen(parent, Tab.BLOCKED)))
-				.positionAndSize(this.width / 2 + 24, this.height - 52, 57, 20).build());
+				client.setScreen(new FriendsScreen(parent, Tab.BLOCKED)))
+			.positionAndSize(this.width / 2 + 24, this.height - 52, 57, 20).build());
 
 		this.addDrawableChild(pendingTab = ButtonWidget.builder(Text.translatable("api.friends.tab.pending"), button ->
-						client.setScreen(new FriendsScreen(parent, Tab.PENDING)))
-				.positionAndSize(this.width / 2 - 34, this.height - 52, 57, 20).build());
+				client.setScreen(new FriendsScreen(parent, Tab.PENDING)))
+			.positionAndSize(this.width / 2 - 34, this.height - 52, 57, 20).build());
 
 		this.addDrawableChild(allTab = ButtonWidget.builder(Text.translatable("api.friends.tab.all"), button ->
-						client.setScreen(new FriendsScreen(parent, Tab.ALL)))
-				.positionAndSize(this.width / 2 - 94, this.height - 52, 57, 20).build());
+				client.setScreen(new FriendsScreen(parent, Tab.ALL)))
+			.positionAndSize(this.width / 2 - 94, this.height - 52, 57, 20).build());
 
 		this.addDrawableChild(onlineTab = ButtonWidget.builder(Text.translatable("api.friends.tab.online"), button ->
-						client.setScreen(new FriendsScreen(parent, Tab.ONLINE)))
-				.positionAndSize(this.width / 2 - 154, this.height - 52, 57, 20).build());
+				client.setScreen(new FriendsScreen(parent, Tab.ONLINE)))
+			.positionAndSize(this.width / 2 - 154, this.height - 52, 57, 20).build());
 
 		this.addDrawableChild(ButtonWidget.builder(Text.translatable("api.friends.add"),
-						button -> client.setScreen(new AddFriendScreen(this)))
-				.positionAndSize(this.width / 2 + 88, this.height - 52, 66, 20).build());
+				button -> client.setScreen(new AddFriendScreen(this)))
+			.positionAndSize(this.width / 2 + 88, this.height - 52, 66, 20).build());
 
 		this.removeButton = this.addDrawableChild(ButtonWidget.builder(Text.translatable("api.friends.remove"), button -> {
 			UserListWidget.UserListEntry entry = this.widget.getSelectedOrNull();
@@ -116,29 +135,26 @@ public class FriendsScreen extends Screen {
 		}).positionAndSize(this.width / 2 - 50, this.height - 28, 100, 20).build());
 
 		addDrawableChild(denyButton = new ButtonWidget.Builder(Text.translatable("api.friends.request.deny"),
-				button -> denyRequest()).positionAndSize(this.width / 2 - 50, this.height - 28, 48, 20).build());
+			button -> denyRequest()).positionAndSize(this.width / 2 - 50, this.height - 28, 48, 20).build());
 
 		addDrawableChild(acceptButton = new ButtonWidget.Builder(Text.translatable("api.friends.request.accept"),
-				button -> acceptRequest()).positionAndSize(this.width / 2 + 2, this.height - 28, 48, 20).build());
+			button -> acceptRequest()).positionAndSize(this.width / 2 + 2, this.height - 28, 48, 20).build());
 
 		this.addDrawableChild(chatButton = ButtonWidget.builder(Text.translatable("api.friends.chat"), button -> openChat())
-				.positionAndSize(this.width / 2 - 154, this.height - 28, 100, 20)
-				.build()
+			.positionAndSize(this.width / 2 - 154, this.height - 28, 100, 20)
+			.build()
 		);
 
 		this.addDrawableChild(
-				ButtonWidget.builder(ScreenTexts.BACK, button -> this.client.setScreen(this.parent))
-						.positionAndSize(this.width / 2 + 4 + 50, this.height - 28, 100, 20)
-						.build()
+			ButtonWidget.builder(ScreenTexts.BACK, button -> this.client.setScreen(this.parent))
+				.positionAndSize(this.width / 2 + 4 + 50, this.height - 28, 100, 20)
+				.build()
 		);
 		updateButtonActivationStates();
 	}
 
-	public void openChat() {
-		UserListWidget.UserListEntry entry = widget.getSelectedOrNull();
-		if (entry != null) {
-			client.setScreen(new ChatScreen(this, entry.getUser()));
-		}
+	private void refresh() {
+		client.setScreen(new FriendsScreen(parent));
 	}
 
 	private void denyRequest() {
@@ -157,8 +173,11 @@ public class FriendsScreen extends Screen {
 		refresh();
 	}
 
-	private void refresh() {
-		client.setScreen(new FriendsScreen(parent));
+	public void openChat() {
+		UserListWidget.UserListEntry entry = widget.getSelectedOrNull();
+		if (entry != null) {
+			client.setScreen(new ChatScreen(this, entry.getUser()));
+		}
 	}
 
 	private void updateButtonActivationStates() {
@@ -187,25 +206,6 @@ public class FriendsScreen extends Screen {
 		} else if (current == Tab.BLOCKED) {
 			blockedTab.active = false;
 			onlineTab.active = allTab.active = pendingTab.active = true;
-		}
-	}
-
-	@Override
-	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-		if (super.keyPressed(keyCode, scanCode, modifiers)) {
-			return true;
-		} else if (keyCode == 294) {
-			this.refresh();
-			return true;
-		} else if (this.widget.getSelectedOrNull() != null) {
-			if (keyCode != 257 && keyCode != 335) {
-				return this.widget.keyPressed(keyCode, scanCode, modifiers);
-			} else {
-				this.openChat();
-				return true;
-			}
-		} else {
-			return false;
 		}
 	}
 

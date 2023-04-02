@@ -38,7 +38,7 @@ public abstract class GlStateManagerMixin {
 	private static void axolotlclient$nightMode(float red, float green, float blue, float alpha, CallbackInfo ci) {
 		if (AxolotlClient.CONFIG.nightMode.get()) {
 			if (red != Util.GlColor.red || green != Util.GlColor.green || blue != Util.GlColor.blue
-					|| alpha != Util.GlColor.alpha) {
+				|| alpha != Util.GlColor.alpha) {
 				Util.GlColor.red = red;
 				Util.GlColor.green = green;
 				Util.GlColor.blue = blue;

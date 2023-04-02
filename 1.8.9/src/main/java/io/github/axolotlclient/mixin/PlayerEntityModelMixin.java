@@ -40,10 +40,27 @@ public abstract class PlayerEntityModelMixin {
 		startTranslucency();
 	}
 
+	private void startTranslucency() {
+		GlStateManager.pushMatrix();
+
+		GlStateManager.enableCull();
+		//GlStateManager.enableRescaleNormal();
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+	}
+
 	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;popMatrix()V"))
 	public void axolotlclient$translucencyStop(Entity entity, float f, float g, float h, float i, float j, float scale,
 											   CallbackInfo ci) {
 		stopTranslucency();
+	}
+
+	private void stopTranslucency() {
+		GlStateManager.disableBlend();
+		//GlStateManager.disableRescaleNormal();
+		GlStateManager.disableCull();
+		GlStateManager.popMatrix();
+		GlStateManager.enableBlend();
 	}
 
 	@Inject(method = "renderRightArm", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/ModelPart;render(F)V", ordinal = 1))
@@ -64,22 +81,5 @@ public abstract class PlayerEntityModelMixin {
 	@Inject(method = "renderLeftArm", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/ModelPart;render(F)V", ordinal = 1, shift = At.Shift.AFTER))
 	public void axolotlclient$handTranslucentLEftStop(CallbackInfo ci) {
 		stopTranslucency();
-	}
-
-	private void startTranslucency() {
-		GlStateManager.pushMatrix();
-
-		GlStateManager.enableCull();
-		//GlStateManager.enableRescaleNormal();
-		GlStateManager.enableBlend();
-		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-	}
-
-	private void stopTranslucency() {
-		GlStateManager.disableBlend();
-		//GlStateManager.disableRescaleNormal();
-		GlStateManager.disableCull();
-		GlStateManager.popMatrix();
-		GlStateManager.enableBlend();
 	}
 }

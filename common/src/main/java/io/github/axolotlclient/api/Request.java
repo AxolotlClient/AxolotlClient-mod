@@ -22,14 +22,14 @@
 
 package io.github.axolotlclient.api;
 
+import java.util.function.Consumer;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import java.util.function.Consumer;
 
 @Getter
 @RequiredArgsConstructor
@@ -81,13 +81,13 @@ public class Request {
 			}
 		}
 
+		public Data addElement(String name, String object) {
+			return addElement(name, new JsonPrimitive(object));
+		}
+
 		public Data addElement(String name, JsonElement object) {
 			elements.add(name, object);
 			return this;
-		}
-
-		public Data addElement(String name, String object) {
-			return addElement(name, new JsonPrimitive(object));
 		}
 
 		public Data removeElement(String name) {

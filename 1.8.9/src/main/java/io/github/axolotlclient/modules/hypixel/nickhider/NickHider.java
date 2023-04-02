@@ -36,15 +36,13 @@ public class NickHider implements AbstractHypixelMod {
 
 	@Getter
 	private static final NickHider Instance = new NickHider();
-
-	private final OptionCategory category = new OptionCategory("nickhider");
-
 	public final StringOption hiddenNameSelf = new StringOption("hiddenNameSelf", "You");
 	public final StringOption hiddenNameOthers = new StringOption("hiddenNameOthers", "Player");
 	public final BooleanOption hideOwnName = new BooleanOption("hideOwnName", false);
 	public final BooleanOption hideOtherNames = new BooleanOption("hideOtherNames", false);
 	public final BooleanOption hideOwnSkin = new BooleanOption("hideOwnSkin", false);
 	public final BooleanOption hideOtherSkins = new BooleanOption("hideOtherSkins", false);
+	private final OptionCategory category = new OptionCategory("nickhider");
 
 	@Override
 	public void init() {
@@ -54,6 +52,11 @@ public class NickHider implements AbstractHypixelMod {
 		category.add(hideOtherNames);
 		category.add(hideOwnSkin);
 		category.add(hideOtherSkins);
+	}
+
+	@Override
+	public OptionCategory getCategory() {
+		return category;
 	}
 
 	public Text editMessage(Text message) {
@@ -75,10 +78,5 @@ public class NickHider implements AbstractHypixelMod {
 			return new LiteralText(msg).setStyle(message.getStyle().deepCopy());
 		}
 		return message;
-	}
-
-	@Override
-	public OptionCategory getCategory() {
-		return category;
 	}
 }

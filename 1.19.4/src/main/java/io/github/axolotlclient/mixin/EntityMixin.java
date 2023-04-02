@@ -43,12 +43,6 @@ public abstract class EntityMixin {
 		}
 	}
 
-	@Shadow
-	public abstract float getPitch();
-
-	@Shadow
-	public abstract float getYaw();
-
 	@Inject(method = "changeLookDirection", at = @At("HEAD"))
 	private void axolotlclient$updateLookDirection(double mouseDeltaX, double mouseDeltaY, CallbackInfo ci) {
 		if (mouseDeltaX == 0 && mouseDeltaY == 0) {
@@ -62,4 +56,10 @@ public abstract class EntityMixin {
 		pitch = MathHelper.clamp(pitch, -90.0F, 90.0F);
 		Hooks.PLAYER_DIRECTION_CHANGE.invoker().onChange(prevPitch, prevYaw, pitch, yaw);
 	}
+
+	@Shadow
+	public abstract float getPitch();
+
+	@Shadow
+	public abstract float getYaw();
 }

@@ -22,6 +22,10 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.item;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.AxolotlClientConfig.options.IntegerOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.Option;
@@ -40,10 +44,6 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Language;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
@@ -54,25 +54,15 @@ import java.util.Optional;
 public class ItemUpdateHud extends TextHudEntry {
 
 	public static final Identifier ID = new Identifier("kronhud", "itemupdatehud");
-
+	private final IntegerOption timeout = new IntegerOption("timeout", ID.getPath(), 6, 1, 60);
 	private List<ItemUtil.ItemStorage> oldItems = new ArrayList<>();
 	private ArrayList<ItemUtil.TimedItemStorage> removed;
 	private ArrayList<ItemUtil.TimedItemStorage> added;
-
-	private final IntegerOption timeout = new IntegerOption("timeout", ID.getPath(), 6, 1, 60);
 
 	public ItemUpdateHud() {
 		super(200, 11 * 6 - 2, true);
 		removed = new ArrayList<>();
 		added = new ArrayList<>();
-	}
-
-	public void update() {
-		this.removed = ItemUtil.removeOld(removed, timeout.get() * 1000);
-		this.added = ItemUtil.removeOld(added, timeout.get() * 1000);
-		updateAdded();
-		updateRemoved();
-		oldItems = ItemUtil.storageFromItem(ItemUtil.getItems(client));
 	}
 
 	@Override
@@ -87,9 +77,17 @@ public class ItemUpdateHud extends TextHudEntry {
 		}
 	}
 
+	public void update() {
+		this.removed = ItemUtil.removeOld(removed, timeout.get() * 1000);
+		this.added = ItemUtil.removeOld(added, timeout.get() * 1000);
+		updateAdded();
+		updateRemoved();
+		oldItems = ItemUtil.storageFromItem(ItemUtil.getItems(client));
+	}
+
 	private void updateAdded() {
 		List<ItemUtil.ItemStorage> added = ItemUtil.compare(ItemUtil.storageFromItem(ItemUtil.getItems(client)),
-				oldItems);
+			oldItems);
 		ArrayList<ItemUtil.TimedItemStorage> timedAdded = new ArrayList<>();
 		for (ItemUtil.ItemStorage stack : added) {
 			timedAdded.add(stack.timed());
@@ -110,7 +108,7 @@ public class ItemUpdateHud extends TextHudEntry {
 
 	private void updateRemoved() {
 		List<ItemUtil.ItemStorage> removed = ItemUtil.compare(oldItems,
-				ItemUtil.storageFromItem(ItemUtil.getItems(client)));
+			ItemUtil.storageFromItem(ItemUtil.getItems(client)));
 		List<ItemUtil.TimedItemStorage> timed = ItemUtil.untimedToTimed(removed);
 		for (ItemUtil.TimedItemStorage stack : timed) {
 			if (stack.stack.isEmpty()) {
@@ -138,15 +136,15 @@ public class ItemUpdateHud extends TextHudEntry {
 			TextCollector message = new TextCollector();
 			message.add(new LiteralText("+ "));
 			message.add(
-					new LiteralText("[").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(Color.DARK_GRAY.getAsInt()))));
+				new LiteralText("[").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(Color.DARK_GRAY.getAsInt()))));
 			message.add(new LiteralText(item.times + "").setStyle(Style.EMPTY.withColor(Formatting.WHITE)));
 			message.add(
-					new LiteralText("] ").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(Color.DARK_GRAY.getAsInt()))));
+				new LiteralText("] ").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(Color.DARK_GRAY.getAsInt()))));
 			message.add(item.stack.getName());
 			OrderedText text = Language.getInstance().reorder(message.getCombined());
 			if (shadow.get()) {
 				client.textRenderer.drawWithShadow(matrices, text, pos.x(), pos.y() + lastY,
-						Color.SELECTOR_GREEN.getAsInt());
+					Color.SELECTOR_GREEN.getAsInt());
 			} else {
 				client.textRenderer.draw(matrices, text, pos.x(), pos.y() + lastY, Color.SELECTOR_GREEN.getAsInt());
 			}
@@ -160,15 +158,15 @@ public class ItemUpdateHud extends TextHudEntry {
 			TextCollector message = new TextCollector();
 			message.add(new LiteralText("- "));
 			message.add(
-					new LiteralText("[").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(Color.DARK_GRAY.getAsInt()))));
+				new LiteralText("[").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(Color.DARK_GRAY.getAsInt()))));
 			message.add(new LiteralText(item.times + "").setStyle(Style.EMPTY.withColor(Formatting.WHITE)));
 			message.add(
-					new LiteralText("] ").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(Color.DARK_GRAY.getAsInt()))));
+				new LiteralText("] ").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(Color.DARK_GRAY.getAsInt()))));
 			message.add(item.stack.getName());
 			OrderedText text = Language.getInstance().reorder(message.getCombined());
 			if (shadow.get()) {
 				client.textRenderer.drawWithShadow(matrices, text, pos.x(), pos.y() + lastY,
-						Formatting.RED.getColorValue());
+					Formatting.RED.getColorValue());
 			} else {
 				client.textRenderer.draw(matrices, text, pos.x(), pos.y() + lastY, Formatting.RED.getColorValue());
 			}
@@ -191,7 +189,7 @@ public class ItemUpdateHud extends TextHudEntry {
 			client.textRenderer.drawWithShadow(matrices, addText, pos.x(), pos.y(), Formatting.RED.getColorValue());
 		} else {
 			client.textRenderer.draw(matrices, addText, pos.x(), pos.y() + client.textRenderer.fontHeight + 2,
-					Formatting.RED.getColorValue());
+				Formatting.RED.getColorValue());
 		}
 		TextCollector removeM = new TextCollector();
 		removeM.add(new LiteralText("- "));
@@ -202,11 +200,16 @@ public class ItemUpdateHud extends TextHudEntry {
 		OrderedText removeText = Language.getInstance().reorder(removeM.getCombined());
 		if (shadow.get()) {
 			client.textRenderer.drawWithShadow(matrices, removeText, pos.x(),
-					pos.y() + client.textRenderer.fontHeight + 2, Formatting.RED.getColorValue());
+				pos.y() + client.textRenderer.fontHeight + 2, Formatting.RED.getColorValue());
 		} else {
 			client.textRenderer.draw(matrices, removeText, pos.x(), pos.y() + client.textRenderer.fontHeight + 3,
-					Formatting.RED.getColorValue());
+				Formatting.RED.getColorValue());
 		}
+	}
+
+	@Override
+	public boolean movable() {
+		return true;
 	}
 
 	@Override
@@ -220,10 +223,5 @@ public class ItemUpdateHud extends TextHudEntry {
 	@Override
 	public Identifier getId() {
 		return ID;
-	}
-
-	@Override
-	public boolean movable() {
-		return true;
 	}
 }

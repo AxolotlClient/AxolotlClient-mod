@@ -22,6 +22,10 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.simple;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.util.List;
+
 import com.google.common.util.concurrent.AtomicDouble;
 import io.github.axolotlclient.AxolotlClientConfig.options.IntegerOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.Option;
@@ -34,10 +38,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
-
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.util.List;
 
 // https://github.com/AxolotlClient/AxolotlClient-mod/blob/4ae2678bfe9e0908be1a7a34e61e689c8005ae0a/src/main/java/io/github/axolotlclient/modules/hud/gui/hud/ReachDisplayHud.java
 // https://github.com/DarkKronicle/KronHUD/blob/703b87a7c938ba25da9105d731b70d3bc66efd1e/src/main/java/io/github/darkkronicle/kronhud/gui/hud/simple/ReachHud.java
@@ -52,60 +52,6 @@ public class ReachHud extends SimpleTextHudEntry {
 	@Override
 	public Identifier getId() {
 		return ID;
-	}
-
-	@Override
-	public String getValue() {
-		if (currentDist == null) {
-			return "0 " + I18n.translate("blocks");
-		} else if (lastTime + 2000 < MinecraftClient.getTime()) {
-			currentDist = null;
-			return "0 " + I18n.translate("blocks");
-		}
-		return currentDist;
-	}
-
-	@Override
-	public String getPlaceholder() {
-		return "3.45 " + I18n.translate("blocks");
-	}
-
-	private static Vec3d compareTo(Vec3d compare, Vec3d test, AtomicDouble max) {
-		double dist = compare.distanceTo(test);
-		if (dist > max.get()) {
-			max.set(dist);
-			return test;
-		}
-		return compare;
-	}
-
-	public static double getAttackDistance(Entity attacking, Entity receiving) {
-		Vec3d camera = attacking.getCameraPosVec(1);
-		Vec3d rotation = attacking.getRotationVector(1);
-
-		Vec3d maxPos = receiving.getPos();
-		AtomicDouble max = new AtomicDouble(0);
-
-		maxPos = compareTo(camera, maxPos.add(0, 0, receiving.getBoundingBox().maxZ), max);
-		maxPos = compareTo(camera, maxPos.add(0, 0, receiving.getBoundingBox().minZ), max);
-		maxPos = compareTo(camera, maxPos.add(0, receiving.getBoundingBox().maxY, 0), max);
-		maxPos = compareTo(camera, maxPos.add(0, receiving.getBoundingBox().minY, 0), max);
-		maxPos = compareTo(camera, maxPos.add(receiving.getBoundingBox().maxX, 0, 0), max);
-		maxPos = compareTo(camera, maxPos.add(receiving.getBoundingBox().minX, 0, 0), max);
-
-		// Max reach distance that want to account for
-		double d = max.get() + .5;
-		Vec3d possibleHits = camera.add(rotation.x * d, rotation.y * d, rotation.z * d);
-		Box box = attacking.getBoundingBox().stretch(rotation.x * d, rotation.y * d, rotation.z * d).expand(1.0, 1.0,
-				1.0);
-
-		BlockHitResult result = Util.raycast(attacking, camera, possibleHits, box,
-				entity -> entity.getEntityId() == receiving.getEntityId(), d);
-		if (result.entity == null) {
-			// This should not happen...
-			return -1;
-		}
-		return camera.distanceTo(result.pos);
 	}
 
 	public void updateDistance(Entity attacking, Entity receiving) {
@@ -130,10 +76,64 @@ public class ReachHud extends SimpleTextHudEntry {
 		lastTime = MinecraftClient.getTime();
 	}
 
+	public static double getAttackDistance(Entity attacking, Entity receiving) {
+		Vec3d camera = attacking.getCameraPosVec(1);
+		Vec3d rotation = attacking.getRotationVector(1);
+
+		Vec3d maxPos = receiving.getPos();
+		AtomicDouble max = new AtomicDouble(0);
+
+		maxPos = compareTo(camera, maxPos.add(0, 0, receiving.getBoundingBox().maxZ), max);
+		maxPos = compareTo(camera, maxPos.add(0, 0, receiving.getBoundingBox().minZ), max);
+		maxPos = compareTo(camera, maxPos.add(0, receiving.getBoundingBox().maxY, 0), max);
+		maxPos = compareTo(camera, maxPos.add(0, receiving.getBoundingBox().minY, 0), max);
+		maxPos = compareTo(camera, maxPos.add(receiving.getBoundingBox().maxX, 0, 0), max);
+		maxPos = compareTo(camera, maxPos.add(receiving.getBoundingBox().minX, 0, 0), max);
+
+		// Max reach distance that want to account for
+		double d = max.get() + .5;
+		Vec3d possibleHits = camera.add(rotation.x * d, rotation.y * d, rotation.z * d);
+		Box box = attacking.getBoundingBox().stretch(rotation.x * d, rotation.y * d, rotation.z * d).expand(1.0, 1.0,
+			1.0);
+
+		BlockHitResult result = Util.raycast(attacking, camera, possibleHits, box,
+			entity -> entity.getEntityId() == receiving.getEntityId(), d);
+		if (result.entity == null) {
+			// This should not happen...
+			return -1;
+		}
+		return camera.distanceTo(result.pos);
+	}
+
+	private static Vec3d compareTo(Vec3d compare, Vec3d test, AtomicDouble max) {
+		double dist = compare.distanceTo(test);
+		if (dist > max.get()) {
+			max.set(dist);
+			return test;
+		}
+		return compare;
+	}
+
 	@Override
 	public List<Option<?>> getConfigurationOptions() {
 		List<Option<?>> options = super.getConfigurationOptions();
 		options.add(decimalPlaces);
 		return options;
+	}
+
+	@Override
+	public String getValue() {
+		if (currentDist == null) {
+			return "0 " + I18n.translate("blocks");
+		} else if (lastTime + 2000 < MinecraftClient.getTime()) {
+			currentDist = null;
+			return "0 " + I18n.translate("blocks");
+		}
+		return currentDist;
+	}
+
+	@Override
+	public String getPlaceholder() {
+		return "3.45 " + I18n.translate("blocks");
 	}
 }

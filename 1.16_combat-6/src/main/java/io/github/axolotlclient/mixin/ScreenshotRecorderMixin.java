@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.mixin;
 
+import java.io.File;
+import java.util.function.Consumer;
+
 import io.github.axolotlclient.modules.screenshotUtils.ScreenshotUtils;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.text.MutableText;
@@ -31,9 +34,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.io.File;
-import java.util.function.Consumer;
 
 @Mixin(net.minecraft.client.util.ScreenshotUtils.class)
 public abstract class ScreenshotRecorderMixin {

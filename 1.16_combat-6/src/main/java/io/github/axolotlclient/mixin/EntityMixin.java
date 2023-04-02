@@ -36,12 +36,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Entity.class)
 public abstract class EntityMixin {
 
-	@Shadow
-	public abstract float getYaw(float par1);
-
-	@Shadow
-	public abstract float getPitch(float par1);
-
 	@Inject(method = "changeLookDirection", at = @At("HEAD"), cancellable = true)
 	public void axolotlclient$interceptMovement(double cursorDeltaX, double cursorDeltaY, CallbackInfo callback) {
 		if (Freelook.getInstance().consumeRotation(cursorDeltaX, cursorDeltaY) || Skyblock.getInstance().rotationLocked.get()) {
@@ -62,4 +56,10 @@ public abstract class EntityMixin {
 		pitch = MathHelper.clamp(pitch, -90.0F, 90.0F);
 		Hooks.PLAYER_DIRECTION_CHANGE.invoker().onChange(prevPitch, prevYaw, pitch, yaw);
 	}
+
+	@Shadow
+	public abstract float getPitch(float par1);
+
+	@Shadow
+	public abstract float getYaw(float par1);
 }

@@ -40,7 +40,7 @@ public class APIOptions extends Options {
 		super.init();
 
 		openSidebar = new KeyBindOption("api.friends.sidebar.open", new KeyBinding("api.friends.sidebar.open", Keyboard.KEY_O, "category.axolotlclient"), keyBind ->
-				MinecraftClient.getInstance().setScreen(new FriendsSidebar(MinecraftClient.getInstance().currentScreen)));
+			MinecraftClient.getInstance().setScreen(new FriendsSidebar(MinecraftClient.getInstance().currentScreen)));
 		category.add(openSidebar);
 		category.add(new GenericOption("viewFriends", "clickToOpen", (mX, mY) -> MinecraftClient.getInstance().setScreen(new FriendsScreen(MinecraftClient.getInstance().currentScreen))));
 		AxolotlClient.CONFIG.addCategory(category);

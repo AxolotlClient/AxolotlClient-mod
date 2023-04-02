@@ -34,11 +34,11 @@ public class AxolotlClientTest implements ClientModInitializer {
 	public void onInitializeClient(ModContainer mod) {
 
 		ClientCommandRegistrationCallback.EVENT.register((dispatcher, buildContext, environment) ->
-				ClientCommandManager.getDispatcher().register(ClientCommandManager.literal("apisend")
-						.then(ClientCommandManager.argument("sample response", StringArgumentType.greedyString()).executes(context -> {
-			API.getInstance().onMessage(context.getArgument("sample response", String.class));
-			return 1;
-		}))));
+			ClientCommandManager.getDispatcher().register(ClientCommandManager.literal("apisend")
+				.then(ClientCommandManager.argument("sample response", StringArgumentType.greedyString()).executes(context -> {
+					API.getInstance().onMessage(context.getArgument("sample response", String.class));
+					return 1;
+				}))));
 
 	}
 }

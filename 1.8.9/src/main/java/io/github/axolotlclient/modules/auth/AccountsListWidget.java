@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.modules.auth;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
 import net.fabricmc.api.EnvType;
@@ -29,9 +32,6 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.EntryListWidget;
 import net.minecraft.util.Identifier;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class AccountsListWidget extends EntryListWidget {
 
@@ -64,21 +64,13 @@ public class AccountsListWidget extends EntryListWidget {
 	}
 
 	@Override
-	public EntryListWidget.Entry getEntry(int i) {
-		return entries.get(i);
-	}
-
-	public void setSelected(int i) {
-		this.selectedEntry = i;
-	}
-
-	@Override
 	protected boolean isEntrySelected(int i) {
 		return i == this.selectedEntry;
 	}
 
-	public int getSelected() {
-		return this.selectedEntry;
+	@Override
+	public EntryListWidget.Entry getEntry(int i) {
+		return entries.get(i);
 	}
 
 	public Entry getSelectedEntry() {
@@ -86,6 +78,14 @@ public class AccountsListWidget extends EntryListWidget {
 			return null;
 		}
 		return entries.get(getSelected());
+	}
+
+	public int getSelected() {
+		return this.selectedEntry;
+	}
+
+	public void setSelected(int i) {
+		this.selectedEntry = i;
 	}
 
 	@Environment(EnvType.CLIENT)

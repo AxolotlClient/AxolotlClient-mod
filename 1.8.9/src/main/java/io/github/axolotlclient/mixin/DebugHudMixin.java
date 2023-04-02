@@ -36,7 +36,7 @@ public abstract class DebugHudMixin {
 	public String axolotlclient$nicerVersionString() {
 		if (FabricLoader.getInstance().getModContainer("axolotlclient").isPresent()) {
 			return ClientBrandRetriever.getClientModName() + "/" + FabricLoader.getInstance()
-					.getModContainer("axolotlclient").get().getMetadata().getVersion().getFriendlyString();
+				.getModContainer("axolotlclient").get().getMetadata().getVersion().getFriendlyString();
 		}
 		return ClientBrandRetriever.getClientModName();
 	}

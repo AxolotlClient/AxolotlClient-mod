@@ -38,6 +38,7 @@ public class FriendRequestAcceptedHandler implements RequestHandler {
 	public void handle(JsonObject object) {
 		String fromUUID = object.get("data").getAsJsonObject().get("from").getAsString();
 		API.getInstance().getNotificationProvider().addStatus("api.friends", "api.friends.request.accepted", UUIDHelper.getUsername(fromUUID));
-		API.getInstance().send(ChannelRequest.createDM(o -> {}, fromUUID));
+		API.getInstance().send(ChannelRequest.createDM(o -> {
+		}, fromUUID));
 	}
 }

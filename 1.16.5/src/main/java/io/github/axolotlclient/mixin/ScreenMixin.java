@@ -47,7 +47,7 @@ public abstract class ScreenMixin {
 	public void axolotlclient$modifyTooltipPosition(Args args) {
 		if (ScrollableTooltips.getInstance().enabled.get()) {
 			if ((MinecraftClient.getInstance().currentScreen instanceof CreativeInventoryScreen)
-					&& ((CreativeInventoryScreen) MinecraftClient.getInstance().currentScreen).getSelectedTab() != ItemGroup.INVENTORY.getIndex()) {
+				&& ((CreativeInventoryScreen) MinecraftClient.getInstance().currentScreen).getSelectedTab() != ItemGroup.INVENTORY.getIndex()) {
 				return;
 			}
 

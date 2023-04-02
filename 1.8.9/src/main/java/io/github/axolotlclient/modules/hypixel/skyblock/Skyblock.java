@@ -27,18 +27,15 @@ import io.github.axolotlclient.AxolotlClientConfig.options.KeyBindOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.hypixel.AbstractHypixelMod;
 import lombok.Getter;
-import net.minecraft.client.option.KeyBinding;
 
 public class Skyblock implements AbstractHypixelMod {
 
 	@Getter
 	private final static Skyblock Instance = new Skyblock();
-
-	private final OptionCategory category = new OptionCategory("skyblock");
-
 	public final BooleanOption rotationLocked = new BooleanOption("rotationLocked", false);
+	private final OptionCategory category = new OptionCategory("skyblock");
 	private final KeyBindOption lock = new KeyBindOption("lockRotation", 25,
-			keyBinding -> rotationLocked.toggle());
+		keyBinding -> rotationLocked.toggle());
 
 	@Override
 	public void init() {

@@ -79,24 +79,24 @@ public class AccountsScreen extends Screen {
 		accountsListWidget.setAccounts(Auth.getInstance().getAccounts());
 
 		addDrawableChild(loginButton = new ButtonWidget.Builder(Text.translatable("auth.login"),
-				buttonWidget -> login()).positionAndSize(this.width / 2 - 154, this.height - 52, 150, 20).build());
+			buttonWidget -> login()).positionAndSize(this.width / 2 - 154, this.height - 52, 150, 20).build());
 
 		this.addDrawableChild(ButtonWidget.builder(Text.translatable("auth.add"),
-						button -> {
-							if (!Auth.getInstance().allowOfflineAccounts()) {
+				button -> {
+					if (!Auth.getInstance().allowOfflineAccounts()) {
+						initMSAuth();
+					} else {
+						client.setScreen(new ConfirmScreen(result -> {
+							if (!result) {
 								initMSAuth();
+								client.setScreen(this);
 							} else {
-								client.setScreen(new ConfirmScreen(result -> {
-									if (!result) {
-										initMSAuth();
-										client.setScreen(this);
-									} else {
-										client.setScreen(new AddOfflineScreen(this));
-									}
-								}, Text.translatable("auth.add.choose"), Text.empty(), Text.translatable("auth.add.offline"), Text.translatable("auth.add.ms")));
+								client.setScreen(new AddOfflineScreen(this));
 							}
-						})
-				.positionAndSize(this.width / 2 + 4, this.height - 52, 150, 20).build());
+						}, Text.translatable("auth.add.choose"), Text.empty(), Text.translatable("auth.add.offline"), Text.translatable("auth.add.ms")));
+					}
+				})
+			.positionAndSize(this.width / 2 + 4, this.height - 52, 150, 20).build());
 
 		this.deleteButton = this.addDrawableChild(ButtonWidget.builder(Text.translatable("selectServer.delete"), button -> {
 			AccountsListWidget.Entry entry = this.accountsListWidget.getSelectedOrNull();
@@ -108,31 +108,20 @@ public class AccountsScreen extends Screen {
 
 
 		this.addDrawableChild(refreshButton = ButtonWidget.builder(Text.translatable("auth.refresh"), button -> refreshAccount())
-				.positionAndSize(this.width / 2 - 154, this.height - 28, 100, 20)
-				.build()
+			.positionAndSize(this.width / 2 - 154, this.height - 28, 100, 20)
+			.build()
 		);
 
 		this.addDrawableChild(
-				ButtonWidget.builder(ScreenTexts.BACK, button -> this.client.setScreen(this.parent))
-						.positionAndSize(this.width / 2 + 4 + 50, this.height - 28, 100, 20)
-						.build()
+			ButtonWidget.builder(ScreenTexts.BACK, button -> this.client.setScreen(this.parent))
+				.positionAndSize(this.width / 2 + 4 + 50, this.height - 28, 100, 20)
+				.build()
 		);
 		updateButtonActivationStates();
 	}
 
-	private void login() {
-		AccountsListWidget.Entry entry = accountsListWidget.getSelectedOrNull();
-		if (entry != null) {
-			Auth.getInstance().login(entry.getAccount());
-		}
-	}
-
 	private void initMSAuth() {
 		Auth.getInstance().getAuth().startAuth(() -> client.execute(this::refresh));
-	}
-
-	private void refresh() {
-		this.client.setScreen(new AccountsScreen(this.parent));
 	}
 
 	private void refreshAccount() {
@@ -151,6 +140,17 @@ public class AccountsScreen extends Screen {
 			loginButton.active = deleteButton.active = refreshButton.active = true;
 		} else {
 			loginButton.active = deleteButton.active = refreshButton.active = false;
+		}
+	}
+
+	private void refresh() {
+		this.client.setScreen(new AccountsScreen(this.parent));
+	}
+
+	private void login() {
+		AccountsListWidget.Entry entry = accountsListWidget.getSelectedOrNull();
+		if (entry != null) {
+			Auth.getInstance().login(entry.getAccount());
 		}
 	}
 

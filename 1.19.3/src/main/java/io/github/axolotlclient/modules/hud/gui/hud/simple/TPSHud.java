@@ -22,11 +22,11 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.simple;
 
-import io.github.axolotlclient.modules.hud.gui.entry.SimpleTextHudEntry;
-import net.minecraft.util.Identifier;
-
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+
+import io.github.axolotlclient.modules.hud.gui.entry.SimpleTextHudEntry;
+import net.minecraft.util.Identifier;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -37,12 +37,11 @@ import java.text.NumberFormat;
 
 public class TPSHud extends SimpleTextHudEntry {
 
+	public final static Identifier ID = new Identifier("kronhud", "tpshud");
+	private final static NumberFormat FORMATTER = new DecimalFormat("#0.00");
 	private long lastTick = -1;
 	private long lastUpdate = -1;
 	private double tps = -1;
-	private final static NumberFormat FORMATTER = new DecimalFormat("#0.00");
-
-	public final static Identifier ID = new Identifier("kronhud", "tpshud");
 
 	@Override
 	public Identifier getId() {

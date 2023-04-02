@@ -22,10 +22,10 @@
 
 package io.github.axolotlclient.credits;
 
-import lombok.Getter;
-
 import java.util.LinkedHashSet;
 import java.util.Set;
+
+import lombok.Getter;
 
 public class Credits {
 

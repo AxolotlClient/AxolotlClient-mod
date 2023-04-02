@@ -22,15 +22,15 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.simple;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.Option;
 import io.github.axolotlclient.modules.hud.gui.entry.SimpleTextHudEntry;
 import io.github.axolotlclient.util.Hooks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -80,6 +80,19 @@ public class CPSHud extends SimpleTextHudEntry {
 	}
 
 	@Override
+	public Identifier getId() {
+		return ID;
+	}
+
+	@Override
+	public List<Option<?>> getConfigurationOptions() {
+		List<Option<?>> options = super.getConfigurationOptions();
+		options.add(fromKeybindings);
+		options.add(rmb);
+		return options;
+	}
+
+	@Override
 	public String getValue() {
 		if (rmb.get()) {
 			return ClickList.LEFT.clicks() + " | " + ClickList.RIGHT.clicks() + " CPS";
@@ -95,19 +108,6 @@ public class CPSHud extends SimpleTextHudEntry {
 		} else {
 			return "0 CPS";
 		}
-	}
-
-	@Override
-	public Identifier getId() {
-		return ID;
-	}
-
-	@Override
-	public List<Option<?>> getConfigurationOptions() {
-		List<Option<?>> options = super.getConfigurationOptions();
-		options.add(fromKeybindings);
-		options.add(rmb);
-		return options;
 	}
 
 	public static class ClickList {

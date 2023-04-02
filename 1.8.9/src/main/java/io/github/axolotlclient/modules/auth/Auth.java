@@ -22,6 +22,10 @@
 
 package io.github.axolotlclient.modules.auth;
 
+import java.nio.file.Path;
+import java.util.*;
+import java.util.stream.Collectors;
+
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.util.UUIDTypeAdapter;
@@ -41,10 +45,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.DefaultSkinHelper;
 import net.minecraft.client.util.Session;
 import net.minecraft.util.Identifier;
-
-import java.nio.file.Path;
-import java.util.*;
-import java.util.stream.Collectors;
 
 public class Auth extends Accounts implements Module {
 
@@ -122,10 +122,10 @@ public class Auth extends Accounts implements Module {
 	@Override
 	public void loadTextures(String uuid, String name) {
 		if (!textures.containsKey(uuid) && !loadingTexture.contains(uuid)) {
-			ThreadExecuter.scheduleTask(()-> {
+			ThreadExecuter.scheduleTask(() -> {
 				loadingTexture.add(uuid);
 				GameProfile gameProfile;
-				if(profileCache.containsKey(uuid)){
+				if (profileCache.containsKey(uuid)) {
 					gameProfile = profileCache.get(uuid);
 				} else {
 					try {
@@ -152,7 +152,7 @@ public class Auth extends Accounts implements Module {
 		return getSkinTexture(account.getUuid(), account.getName());
 	}
 
-	public Identifier getSkinTexture(String uuid, String name){
+	public Identifier getSkinTexture(String uuid, String name) {
 		loadTextures(uuid, name);
 		Identifier id;
 		if ((id = textures.get(uuid)) != null) {

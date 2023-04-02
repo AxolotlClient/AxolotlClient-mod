@@ -22,6 +22,11 @@
 
 package io.github.axolotlclient;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
+
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClientConfig.AxolotlClientConfigManager;
 import io.github.axolotlclient.AxolotlClientConfig.DefaultConfigManager;
@@ -55,7 +60,6 @@ import io.github.axolotlclient.modules.zoom.Zoom;
 import io.github.axolotlclient.util.FeatureDisabler;
 import io.github.axolotlclient.util.Logger;
 import io.github.axolotlclient.util.LoggerImpl;
-import io.github.axolotlclient.util.NetworkHelper;
 import io.github.axolotlclient.util.notifications.Notifications;
 import io.github.axolotlclient.util.translation.Translations;
 import net.fabricmc.api.ClientModInitializer;
@@ -68,30 +72,61 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.resource.Resource;
 import net.minecraft.util.Identifier;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
-
 public class AxolotlClient implements ClientModInitializer {
 
 	public static final String modid = "AxolotlClient";
-
-	public static AxolotlClientConfig CONFIG;
-	public static ConfigManager configManager;
 	public static final HashMap<UUID, Boolean> playerCache = new HashMap<>();
-
 	public static final HashMap<Identifier, Resource> runtimeResources = new HashMap<>();
-
 	public static final Identifier badgeIcon = new Identifier("axolotlclient", "textures/badge.png");
-
 	public static final OptionCategory config = new OptionCategory("storedOptions");
 	public static final BooleanOption someNiceBackground = new BooleanOption("defNoSecret", false);
 	public static final List<Module> modules = new ArrayList<>();
-
+	public static final Logger LOGGER = new LoggerImpl();
+	public static AxolotlClientConfig CONFIG;
+	public static ConfigManager configManager;
 	private static int tickTime = 0;
 
-	public static final Logger LOGGER = new LoggerImpl();
+	public static void addBadge(Entity entity) {
+		if (entity instanceof PlayerEntity && !entity.isSneaking()) {
+			if (AxolotlClient.CONFIG.showBadges.get() && AxolotlClient.isUsingClient(entity.getUuid())) {
+				GlStateManager.alphaFunc(516, 0.1F);
+				GlStateManager.enableDepthTest();
+				GlStateManager.enableAlphaTest();
+				MinecraftClient.getInstance().getTextureManager().bindTexture(AxolotlClient.badgeIcon);
+
+				int x = -(MinecraftClient.getInstance().textRenderer
+					.getStringWidth(entity.getUuid() == MinecraftClient.getInstance().player.getUuid()
+						? (NickHider.getInstance().hideOwnName.get() ? NickHider.getInstance().hiddenNameSelf.get()
+						: entity.getName().asFormattedString())
+						: (NickHider.getInstance().hideOtherNames.get() ? NickHider.getInstance().hiddenNameOthers.get()
+						: entity.getName().asFormattedString()))
+					/ 2
+					+ (AxolotlClient.CONFIG.customBadge.get() ? MinecraftClient.getInstance().textRenderer
+					.getStringWidth(" " + AxolotlClient.CONFIG.badgeText.get()) : 10));
+
+				GlStateManager.color(1, 1, 1, 1);
+
+				if (AxolotlClient.CONFIG.customBadge.get())
+					MinecraftClient.getInstance().textRenderer.draw(AxolotlClient.CONFIG.badgeText.get(), x, 0, -1,
+						AxolotlClient.CONFIG.useShadows.get());
+				else
+					DrawableHelper.drawTexture(x, 0, 0, 0, 8, 8, 8, 8);
+			}
+		}
+	}
+
+	public static boolean isUsingClient(UUID uuid) {
+		if (uuid == null) {
+			return false;
+		}
+
+		assert MinecraftClient.getInstance().player != null;
+		if (uuid == MinecraftClient.getInstance().player.getUuid()) {
+			return true;
+		} else {
+			return User.getOnline(API.getInstance().sanitizeUUID(uuid.toString()));
+		}
+	}
 
 	@Override
 	public void onInitializeClient() {
@@ -110,7 +145,7 @@ public class AxolotlClient implements ClientModInitializer {
 		CONFIG.config.add(config);
 
 		AxolotlClientConfigManager.getInstance().registerConfig(modid, CONFIG, configManager = new DefaultConfigManager(modid,
-				FabricLoader.getInstance().getConfigDir().resolve("AxolotlClient.json"), CONFIG.config));
+			FabricLoader.getInstance().getConfigDir().resolve("AxolotlClient.json"), CONFIG.config));
 		AxolotlClientConfigManager.getInstance().addIgnoredName(modid, "x");
 		AxolotlClientConfigManager.getInstance().addIgnoredName(modid, "y");
 
@@ -154,19 +189,6 @@ public class AxolotlClient implements ClientModInitializer {
 		modules.addAll(ModuleLoader.loadExternalModules());
 	}
 
-	public static boolean isUsingClient(UUID uuid) {
-		if (uuid == null) {
-			return false;
-		}
-
-		assert MinecraftClient.getInstance().player != null;
-		if (uuid == MinecraftClient.getInstance().player.getUuid()) {
-			return true;
-		} else {
-			return User.getOnline(API.getInstance().sanitizeUUID(uuid.toString()));
-		}
-	}
-
 	public static void tickClient() {
 		modules.forEach(Module::tick);
 
@@ -178,34 +200,5 @@ public class AxolotlClient implements ClientModInitializer {
 			tickTime = 0;
 		}
 		tickTime++;
-	}
-
-	public static void addBadge(Entity entity) {
-		if (entity instanceof PlayerEntity && !entity.isSneaking()) {
-			if (AxolotlClient.CONFIG.showBadges.get() && AxolotlClient.isUsingClient(entity.getUuid())) {
-				GlStateManager.alphaFunc(516, 0.1F);
-				GlStateManager.enableDepthTest();
-				GlStateManager.enableAlphaTest();
-				MinecraftClient.getInstance().getTextureManager().bindTexture(AxolotlClient.badgeIcon);
-
-				int x = -(MinecraftClient.getInstance().textRenderer
-						.getStringWidth(entity.getUuid() == MinecraftClient.getInstance().player.getUuid()
-								? (NickHider.getInstance().hideOwnName.get() ? NickHider.getInstance().hiddenNameSelf.get()
-								: entity.getName().asFormattedString())
-								: (NickHider.getInstance().hideOtherNames.get() ? NickHider.getInstance().hiddenNameOthers.get()
-								: entity.getName().asFormattedString()))
-						/ 2
-						+ (AxolotlClient.CONFIG.customBadge.get() ? MinecraftClient.getInstance().textRenderer
-						.getStringWidth(" " + AxolotlClient.CONFIG.badgeText.get()) : 10));
-
-				GlStateManager.color(1, 1, 1, 1);
-
-				if (AxolotlClient.CONFIG.customBadge.get())
-					MinecraftClient.getInstance().textRenderer.draw(AxolotlClient.CONFIG.badgeText.get(), x, 0, -1,
-							AxolotlClient.CONFIG.useShadows.get());
-				else
-					DrawableHelper.drawTexture(x, 0, 0, 0, 8, 8, 8, 8);
-			}
-		}
 	}
 }

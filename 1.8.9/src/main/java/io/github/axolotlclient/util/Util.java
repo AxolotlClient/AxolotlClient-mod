@@ -22,6 +22,12 @@
 
 package io.github.axolotlclient.util;
 
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import io.github.axolotlclient.mixin.MinecraftClientAccessor;
@@ -40,12 +46,6 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.ApiStatus;
 import org.lwjgl.opengl.GL11;
-
-import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public class Util {
 
@@ -137,10 +137,10 @@ public class Util {
 		if (sidebar.isEmpty())
 			game = "";
 		else if (Util.getCurrentServerAddress() != null
-				&& Util.getCurrentServerAddress().toLowerCase().contains(sidebar.get(0).toLowerCase())) {
+			&& Util.getCurrentServerAddress().toLowerCase().contains(sidebar.get(0).toLowerCase())) {
 			if (sidebar.get(sidebar.size() - 1).toLowerCase(Locale.ROOT)
-					.contains(Util.getCurrentServerAddress().toLowerCase(Locale.ROOT))
-					|| sidebar.get(sidebar.size() - 1).contains("Playtime")) {
+				.contains(Util.getCurrentServerAddress().toLowerCase(Locale.ROOT))
+				|| sidebar.get(sidebar.size() - 1).contains("Playtime")) {
 				game = "In Lobby";
 			} else {
 				if (sidebar.get(sidebar.size() - 1).contains("--------")) {
@@ -163,6 +163,58 @@ public class Util {
 		}
 
 		return Formatting.strip(game);
+	}
+
+	public static List<String> getSidebar() {
+		List<String> lines = new ArrayList<>();
+		MinecraftClient client = MinecraftClient.getInstance();
+		if (client.world == null)
+			return lines;
+
+		Scoreboard scoreboard = client.world.getScoreboard();
+		if (scoreboard == null)
+			return lines;
+		ScoreboardObjective sidebar = scoreboard.getObjectiveForSlot(1);
+		if (sidebar == null)
+			return lines;
+
+		Collection<ScoreboardPlayerScore> scores = scoreboard.getAllPlayerScores(sidebar);
+		List<ScoreboardPlayerScore> list = scores.stream().filter(
+				input -> input != null && input.getPlayerName() != null && !input.getPlayerName().startsWith("#"))
+			.collect(Collectors.toList());
+
+		if (list.size() > 15) {
+			scores = Lists.newArrayList(Iterables.skip(list, scores.size() - 15));
+		} else {
+			scores = list;
+		}
+
+		for (ScoreboardPlayerScore score : scores) {
+			Team team = scoreboard.getPlayerTeam(score.getPlayerName());
+			if (team == null)
+				return lines;
+			String text = team.getPrefix() + team.getSuffix();
+			if (text.trim().length() > 0)
+				lines.add(text);
+		}
+
+		lines.add(sidebar.getDisplayName());
+		Collections.reverse(lines);
+
+		return lines;
+	}
+
+	public static String getCurrentServerAddress() {
+		if (MinecraftClient.getInstance().isInSingleplayer()) {
+			return null;
+		}
+
+		if (MinecraftClient.getInstance().getCurrentServerEntry() != null) {
+			return MinecraftClient.getInstance().getCurrentServerEntry().address;
+		}
+		return ((MinecraftClientAccessor) MinecraftClient.getInstance()).getServerAddress() != null
+			? ((MinecraftClientAccessor) MinecraftClient.getInstance()).getServerAddress()
+			: null;
 	}
 
 	public static double calculateDistance(Vec3d pos1, Vec3d pos2) {
@@ -228,66 +280,37 @@ public class Util {
 
 	public static boolean currentServerAddressContains(String address) {
 		if (MinecraftClient.getInstance().isInSingleplayer()
-				|| MinecraftClient.getInstance().isIntegratedServerRunning()) {
+			|| MinecraftClient.getInstance().isIntegratedServerRunning()) {
 			return false;
 		}
 		if (MinecraftClient.getInstance().getCurrentServerEntry() != null) {
 			return MinecraftClient.getInstance().getCurrentServerEntry().address.contains(address);
 		}
 		return ((MinecraftClientAccessor) MinecraftClient.getInstance()).getServerAddress() != null
-				&& ((MinecraftClientAccessor) MinecraftClient.getInstance()).getServerAddress().contains(address);
+			&& ((MinecraftClientAccessor) MinecraftClient.getInstance()).getServerAddress().contains(address);
 	}
 
-	public static String getCurrentServerAddress() {
-		if (MinecraftClient.getInstance().isInSingleplayer()) {
-			return null;
-		}
-
-		if (MinecraftClient.getInstance().getCurrentServerEntry() != null) {
-			return MinecraftClient.getInstance().getCurrentServerEntry().address;
-		}
-		return ((MinecraftClientAccessor) MinecraftClient.getInstance()).getServerAddress() != null
-				? ((MinecraftClientAccessor) MinecraftClient.getInstance()).getServerAddress()
-				: null;
+	public static void applyScissor(int x, int y, int width, int height) {
+		GL11.glEnable(GL11.GL_SCISSOR_TEST);
+		Window window = new Window(MinecraftClient.getInstance());
+		int scale = window.getScaleFactor();
+		GL11.glScissor(x * scale, (int) ((window.getScaledHeight() - height - y) * scale), width * scale,
+			height * scale);
 	}
 
-	public static List<String> getSidebar() {
-		List<String> lines = new ArrayList<>();
-		MinecraftClient client = MinecraftClient.getInstance();
-		if (client.world == null)
-			return lines;
+	public static float lerp(float start, float end, float percent) {
+		return start + ((end - start) * percent);
+	}
 
-		Scoreboard scoreboard = client.world.getScoreboard();
-		if (scoreboard == null)
-			return lines;
-		ScoreboardObjective sidebar = scoreboard.getObjectiveForSlot(1);
-		if (sidebar == null)
-			return lines;
-
-		Collection<ScoreboardPlayerScore> scores = scoreboard.getAllPlayerScores(sidebar);
-		List<ScoreboardPlayerScore> list = scores.stream().filter(
-						input -> input != null && input.getPlayerName() != null && !input.getPlayerName().startsWith("#"))
-				.collect(Collectors.toList());
-
-		if (list.size() > 15) {
-			scores = Lists.newArrayList(Iterables.skip(list, scores.size() - 15));
-		} else {
-			scores = list;
+	// https://stackoverflow.com/questions/12967896/converting-integers-to-roman-numerals-java
+	public static String toRoman(int number) {
+		if (number > 0) {
+			return String.join("", Collections.nCopies(number, "I")).replace("IIIII", "V").replace("IIII", "IV")
+				.replace("VV", "X").replace("VIV", "IX").replace("XXXXX", "L").replace("XXXX", "XL")
+				.replace("LL", "C").replace("LXL", "XC").replace("CCCCC", "D").replace("CCCC", "CD")
+				.replace("DD", "M").replace("DCD", "CM");
 		}
-
-		for (ScoreboardPlayerScore score : scores) {
-			Team team = scoreboard.getPlayerTeam(score.getPlayerName());
-			if (team == null)
-				return lines;
-			String text = team.getPrefix() + team.getSuffix();
-			if (text.trim().length() > 0)
-				lines.add(text);
-		}
-
-		lines.add(sidebar.getDisplayName());
-		Collections.reverse(lines);
-
-		return lines;
+		return "";
 	}
 
 	public static class Color {
@@ -306,28 +329,5 @@ public class Util {
 			this.blue = blue;
 			this.alpha = alpha;
 		}
-	}
-
-	public static void applyScissor(int x, int y, int width, int height) {
-		GL11.glEnable(GL11.GL_SCISSOR_TEST);
-		Window window = new Window(MinecraftClient.getInstance());
-		int scale = window.getScaleFactor();
-		GL11.glScissor(x * scale, (int) ((window.getScaledHeight() - height - y) * scale), width * scale,
-				height * scale);
-	}
-
-	public static float lerp(float start, float end, float percent) {
-		return start + ((end - start) * percent);
-	}
-
-	// https://stackoverflow.com/questions/12967896/converting-integers-to-roman-numerals-java
-	public static String toRoman(int number) {
-		if (number > 0) {
-			return String.join("", Collections.nCopies(number, "I")).replace("IIIII", "V").replace("IIII", "IV")
-					.replace("VV", "X").replace("VIV", "IX").replace("XXXXX", "L").replace("XXXX", "XL")
-					.replace("LL", "C").replace("LXL", "XC").replace("CCCCC", "D").replace("CCCC", "CD")
-					.replace("DD", "M").replace("DCD", "CM");
-		}
-		return "";
 	}
 }

@@ -25,7 +25,6 @@ package io.github.axolotlclient.api.chat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.api.handlers.ChatHandler;
@@ -38,7 +37,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.ScreenTexts;
 import net.minecraft.text.Text;
-import net.minecraft.util.math.MathHelper;
 
 public class ChatScreen extends Screen {
 	private final User user;
@@ -64,25 +62,25 @@ public class ChatScreen extends Screen {
 
 		drawCenteredText(matrices, this.textRenderer, user.getName(), this.width / 2, 20, 16777215);
 
-		enableScissor(0, 30, width, height-30);
+		enableScissor(0, 30, width, height - 30);
 		int y = 30 - client.textRenderer.fontHeight; // counting from the bottom
-		for(int i=firstVisibleMessage; i<messages.size(); i++){
-			List<OrderedText> list = client.textRenderer.wrapLines(Text.of(messages.get(i).getContent()), width-80);
+		for (int i = firstVisibleMessage; i < messages.size(); i++) {
+			List<OrderedText> list = client.textRenderer.wrapLines(Text.of(messages.get(i).getContent()), width - 80);
 
 			for (OrderedText text : list) {
-				if(y>=visibleHeight+30){
+				if (y >= visibleHeight + 30) {
 					break;
 				}
 
 				client.textRenderer.draw(matrices, text, 40, height - y, -1);
-				y+=client.textRenderer.fontHeight;
+				y += client.textRenderer.fontHeight;
 			}
 
-			if(y>=visibleHeight+30){
+			if (y >= visibleHeight + 30) {
 				break;
 			}
 		}
-		if(y < visibleHeight+30){
+		if (y < visibleHeight + 30) {
 			loadMessages();
 		}
 		disableScissor();
@@ -90,8 +88,8 @@ public class ChatScreen extends Screen {
 
 	private void loadMessages() {
 		long before;
-		if(messages.size() != 0){
-			before = messages.get(Math.max(messages.size()-1, 0)).getTimestamp();
+		if (messages.size() != 0) {
+			before = messages.get(Math.max(messages.size() - 1, 0)).getTimestamp();
 		} else {
 			before = Instant.now().getEpochSecond();
 		}
@@ -108,8 +106,8 @@ public class ChatScreen extends Screen {
 		visibleHeight = height - 60;
 		ChatHandler.getInstance().setMessagesConsumer(messages::addAll);
 
-		addDrawableChild(input = new TextFieldWidget(client.textRenderer, width/2-150, height-50,
-				300, 20, Text.translatable("api.chat.enterMessage")) {
+		addDrawableChild(input = new TextFieldWidget(client.textRenderer, width / 2 - 150, height - 50,
+			300, 20, Text.translatable("api.chat.enterMessage")) {
 
 			@Override
 			public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
@@ -124,7 +122,7 @@ public class ChatScreen extends Screen {
 		});
 
 		input.setChangedListener(s -> {
-			if(s.isEmpty()){
+			if (s.isEmpty()) {
 				input.setSuggestion(Text.translatable("api.chat.messageUser", user.getName()).getString());
 			} else {
 				input.setSuggestion("");
@@ -132,9 +130,9 @@ public class ChatScreen extends Screen {
 		});
 
 		this.addDrawableChild(
-				ButtonWidget.builder(ScreenTexts.BACK, button -> this.client.setScreen(this.parent))
-						.positionAndSize(this.width / 2 - 75, this.height - 28, 150, 20)
-						.build()
+			ButtonWidget.builder(ScreenTexts.BACK, button -> this.client.setScreen(this.parent))
+				.positionAndSize(this.width / 2 - 75, this.height - 28, 150, 20)
+				.build()
 		);
 	}
 

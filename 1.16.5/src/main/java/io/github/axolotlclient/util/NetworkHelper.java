@@ -22,11 +22,11 @@
 
 package io.github.axolotlclient.util;
 
+import java.io.IOException;
+
 import com.google.gson.JsonElement;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-
-import java.io.IOException;
 
 public class NetworkHelper {
 

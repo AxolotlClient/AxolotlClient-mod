@@ -51,12 +51,12 @@ public class iconHud extends BoxHudEntry {
 	}
 
 	@Override
-	public Identifier getId() {
-		return ID;
+	public boolean movable() {
+		return true;
 	}
 
 	@Override
-	public boolean movable() {
-		return true;
+	public Identifier getId() {
+		return ID;
 	}
 }

@@ -32,8 +32,8 @@ public class AuthWidget extends ButtonWidget {
 
 	public AuthWidget() {
 		super(10, 10,
-				MinecraftClient.getInstance().textRenderer.getWidth(Auth.getInstance().getCurrent().getName()) + 28,
-				20, Text.of( "    " + Auth.getInstance().getCurrent().getName()), buttonWidget -> MinecraftClient.getInstance().setScreen(new AccountsScreen(MinecraftClient.getInstance().currentScreen)), DEFAULT_NARRATION);
+			MinecraftClient.getInstance().textRenderer.getWidth(Auth.getInstance().getCurrent().getName()) + 28,
+			20, Text.of("    " + Auth.getInstance().getCurrent().getName()), buttonWidget -> MinecraftClient.getInstance().setScreen(new AccountsScreen(MinecraftClient.getInstance().currentScreen)), DEFAULT_NARRATION);
 	}
 
 	@Override

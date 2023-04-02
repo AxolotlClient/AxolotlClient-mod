@@ -39,7 +39,6 @@ import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.texture.TextureManager;
 import net.minecraft.client.util.Window;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.player.ClientPlayerEntity;
 import net.minecraft.world.level.LevelInfo;
 import org.apache.logging.log4j.Logger;
@@ -58,21 +57,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MinecraftClientMixin {
 
 	@Shadow
-	@Final
-	private String gameVersion;
-
-	@Shadow
 	public GameOptions options;
-
 	@Shadow
 	public ClientPlayerEntity player;
+	@Shadow
+	@Final
+	private String gameVersion;
+	@Shadow
+	private TextureManager textureManager;
 
 	protected MinecraftClientMixin(TextureManager textureManager) {
 		this.textureManager = textureManager;
 	}
-
-	@Shadow
-	private TextureManager textureManager;
 
 	@SuppressWarnings("EmptyMethod")
 	@Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;info(Ljava/lang/String;)V", ordinal = 1), remap = false)
@@ -113,17 +109,17 @@ public abstract class MinecraftClientMixin {
 	@Redirect(method = "loadLogo", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/BufferBuilder;color(IIII)Lnet/minecraft/client/render/BufferBuilder;"))
 	public BufferBuilder axolotlclient$loadingScreenColor(BufferBuilder instance, int red, int green, int blue, int alpha) {
 		return instance.color(AxolotlClient.CONFIG.loadingScreenColor.get().getRed(),
-				AxolotlClient.CONFIG.loadingScreenColor.get().getGreen(),
-				AxolotlClient.CONFIG.loadingScreenColor.get().getBlue(),
-				AxolotlClient.CONFIG.loadingScreenColor.get().getAlpha());
+			AxolotlClient.CONFIG.loadingScreenColor.get().getGreen(),
+			AxolotlClient.CONFIG.loadingScreenColor.get().getBlue(),
+			AxolotlClient.CONFIG.loadingScreenColor.get().getAlpha());
 	}
 
 	@Redirect(method = "drawLogo", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/BufferBuilder;color(IIII)Lnet/minecraft/client/render/BufferBuilder;"))
 	public BufferBuilder axolotlclient$loadingScreenBg(BufferBuilder instance, int red, int green, int blue, int alpha) {
 		return instance.color(AxolotlClient.CONFIG.loadingScreenColor.get().getRed(),
-				AxolotlClient.CONFIG.loadingScreenColor.get().getGreen(),
-				AxolotlClient.CONFIG.loadingScreenColor.get().getBlue(),
-				AxolotlClient.CONFIG.loadingScreenColor.get().getAlpha());
+			AxolotlClient.CONFIG.loadingScreenColor.get().getGreen(),
+			AxolotlClient.CONFIG.loadingScreenColor.get().getBlue(),
+			AxolotlClient.CONFIG.loadingScreenColor.get().getAlpha());
 	}
 
 	@Inject(method = "initializeGame", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/texture/TextureManager;close(Lnet/minecraft/util/Identifier;)V"))

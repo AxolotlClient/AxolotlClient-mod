@@ -32,13 +32,16 @@ import io.github.axolotlclient.modules.hypixel.AbstractHypixelMod;
 public class LevelHead implements AbstractHypixelMod {
 
 	private static final LevelHead Instance = new LevelHead();
-
-	private final OptionCategory category = new OptionCategory("levelhead");
 	public final BooleanOption enabled = new BooleanOption("enabled", false);
 	public final BooleanOption background = new BooleanOption("background", false);
 	public final ColorOption textColor = new ColorOption("textcolor", Color.GOLD);
 	public final EnumOption mode = new EnumOption("levelHeadMode", LevelHeadMode.values(),
-			LevelHeadMode.NETWORK.toString());
+		LevelHeadMode.NETWORK.toString());
+	private final OptionCategory category = new OptionCategory("levelhead");
+
+	public static LevelHead getInstance() {
+		return Instance;
+	}
 
 	@Override
 	public void init() {
@@ -46,10 +49,6 @@ public class LevelHead implements AbstractHypixelMod {
 		category.add(textColor);
 		category.add(background);
 		category.add(mode);
-	}
-
-	public static LevelHead getInstance() {
-		return Instance;
 	}
 
 	@Override

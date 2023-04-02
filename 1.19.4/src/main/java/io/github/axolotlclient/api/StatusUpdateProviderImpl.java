@@ -22,6 +22,12 @@
 
 package io.github.axolotlclient.api;
 
+import java.time.Instant;
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
+
 import com.google.gson.JsonObject;
 import io.github.axolotlclient.api.requests.StatusUpdate;
 import io.github.axolotlclient.api.util.StatusUpdateProvider;
@@ -34,12 +40,6 @@ import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.entity.player.PlayerEntity;
-
-import java.time.Instant;
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 public class StatusUpdateProviderImpl implements StatusUpdateProvider {
 
@@ -86,6 +86,10 @@ public class StatusUpdateProviderImpl implements StatusUpdateProvider {
 		return StatusUpdate.dummy();
 	}
 
+	private String getOrEmpty(JsonObject object, String name) {
+		return object.has(name) ? object.get(name).getAsString() : "";
+	}
+
 	private String getGameMode(PlayerEntity entity) {
 		PlayerListEntry entry = MinecraftClient.getInstance().getNetworkHandler().getPlayerListEntry(entity.getUuid());
 		switch (entry.getGameMode()) {
@@ -100,9 +104,5 @@ public class StatusUpdateProviderImpl implements StatusUpdateProvider {
 			default:
 				return "";
 		}
-	}
-
-	private String getOrEmpty(JsonObject object, String name) {
-		return object.has(name) ? object.get(name).getAsString() : "";
 	}
 }

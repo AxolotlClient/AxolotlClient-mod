@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.modules.auth;
 
+import java.nio.file.Path;
+import java.util.*;
+
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.exceptions.AuthenticationException;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
@@ -50,15 +53,12 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.quiltmc.loader.api.QuiltLoader;
 
-import java.nio.file.Path;
-import java.util.*;
-
 public class Auth extends Accounts implements Module {
 
 	@Getter
 	private final static Auth Instance = new Auth();
-	private final MinecraftClient client = MinecraftClient.getInstance();
 	public final BooleanOption showButton = new BooleanOption("auth.showButton", false);
+	private final MinecraftClient client = MinecraftClient.getInstance();
 	private final GenericOption viewAccounts = new GenericOption("viewAccounts", "clickToOpen", (x, y) -> client.setScreen(new AccountsScreen(client.currentScreen)));
 
 	private final Map<String, Identifier> textures = new HashMap<>();
@@ -99,8 +99,8 @@ public class Auth extends Accounts implements Module {
 			try {
 				API.getInstance().shutdown();
 				((MinecraftClientAccessor) client).setSession(new Session(account.getName(), account.getUuid(), account.getAuthToken(),
-						Optional.empty(), Optional.empty(),
-						Session.AccountType.MSA));
+					Optional.empty(), Optional.empty(),
+					Session.AccountType.MSA));
 				UserApiService service;
 				if (account.isOffline()) {
 					service = UserApiService.OFFLINE;
@@ -136,7 +136,7 @@ public class Auth extends Accounts implements Module {
 
 	@Override
 	public void loadTextures(final String uuid, final String name) {
-		if(!textures.containsKey(uuid) && !loadingTexture.contains(uuid)) {
+		if (!textures.containsKey(uuid) && !loadingTexture.contains(uuid)) {
 			ThreadExecuter.scheduleTask(() -> {
 				loadingTexture.add(uuid);
 				GameProfile gameProfile;
@@ -166,7 +166,7 @@ public class Auth extends Accounts implements Module {
 		return getSkinTexture(account.getUuid(), account.getName());
 	}
 
-	public Identifier getSkinTexture(String uuid, String name){
+	public Identifier getSkinTexture(String uuid, String name) {
 		loadTextures(uuid, name);
 		Identifier id;
 		if ((id = textures.get(uuid)) != null) {

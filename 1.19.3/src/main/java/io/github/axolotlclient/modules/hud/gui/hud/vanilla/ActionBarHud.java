@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.vanilla;
 
+import java.util.List;
+
 import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.IntegerOption;
@@ -31,8 +33,6 @@ import lombok.Getter;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-
-import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -47,12 +47,11 @@ public class ActionBarHud extends TextHudEntry {
 
 	public final IntegerOption timeShown = new IntegerOption("timeshown", ID.getPath(), 60, 40, 300);
 	public final BooleanOption customTextColor = new BooleanOption("customtextcolor", ID.getPath(), false);
-
+	private final String placeholder = "Action Bar";
 	@Getter
 	private Text actionBar;
 	private int ticksShown;
 	private int color;
-	private final String placeholder = "Action Bar";
 
 	public ActionBarHud() {
 		super(115, 13, false);
@@ -72,28 +71,28 @@ public class ActionBarHud extends TextHudEntry {
 		if (this.actionBar != null) {
 			if (shadow.get()) {
 				client.textRenderer
-						.drawWithShadow(matrices, actionBar,
-								(float) getPos().x() + Math.round((float) getWidth() / 2)
-										- (float) client.textRenderer.getWidth(actionBar) / 2,
-								(float) getPos().y() + 3,
-								customTextColor.get()
-										? (textColor.get().getAlpha() == 255
-										? new Color(textColor.get().getRed(), textColor.get().getGreen(),
-										textColor.get().getBlue(), vanillaColor.getAlpha()).getAsInt()
-										: textColor.get().getAsInt())
-										: color);
+					.drawWithShadow(matrices, actionBar,
+						(float) getPos().x() + Math.round((float) getWidth() / 2)
+							- (float) client.textRenderer.getWidth(actionBar) / 2,
+						(float) getPos().y() + 3,
+						customTextColor.get()
+							? (textColor.get().getAlpha() == 255
+							? new Color(textColor.get().getRed(), textColor.get().getGreen(),
+							textColor.get().getBlue(), vanillaColor.getAlpha()).getAsInt()
+							: textColor.get().getAsInt())
+							: color);
 			} else {
 				client.textRenderer
-						.draw(matrices, actionBar,
-								(float) getPos().x() + Math.round((float) getWidth() / 2)
-										- ((float) client.textRenderer.getWidth(actionBar) / 2),
-								(float) getPos().y() + 3,
-								customTextColor.get()
-										? (textColor.get().getAlpha() == 255
-										? new Color(textColor.get().getRed(), textColor.get().getGreen(),
-										textColor.get().getBlue(), vanillaColor.getAlpha()).getAsInt()
-										: textColor.get().getAsInt())
-										: color);
+					.draw(matrices, actionBar,
+						(float) getPos().x() + Math.round((float) getWidth() / 2)
+							- ((float) client.textRenderer.getWidth(actionBar) / 2),
+						(float) getPos().y() + 3,
+						customTextColor.get()
+							? (textColor.get().getAlpha() == 255
+							? new Color(textColor.get().getRed(), textColor.get().getGreen(),
+							textColor.get().getBlue(), vanillaColor.getAlpha()).getAsInt()
+							: textColor.get().getAsInt())
+							: color);
 			}
 			ticksShown++;
 		} else {
@@ -104,7 +103,7 @@ public class ActionBarHud extends TextHudEntry {
 	@Override
 	public void renderPlaceholderComponent(MatrixStack matrices, float delta) {
 		client.textRenderer.draw(matrices, placeholder, (float) getPos().x() + Math.round((float) getWidth() / 2)
-				- (float) client.textRenderer.getWidth(placeholder) / 2, (float) getPos().y() + 3, -1);
+			- (float) client.textRenderer.getWidth(placeholder) / 2, (float) getPos().y() + 3, -1);
 	}
 
 	@Override

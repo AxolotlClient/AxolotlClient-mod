@@ -32,17 +32,17 @@ package io.github.axolotlclient.modules.hypixel;
 public class ExpCalculator {
 
 	private static final int[] EASY_LEVEL_EXP = {0, // Level 1
-			20, //20
-			50, //70
-			80, //150
-			100, //250
-			250, //500
-			500, //1000
-			1000, //2000
-			1500, //3500
-			2500, //6000
-			4000, //10000
-			5000//15000
+		20, //20
+		50, //70
+		80, //150
+		100, //250
+		250, //500
+		500, //1000
+		1000, //2000
+		1500, //3500
+		2500, //6000
+		4000, //10000
+		5000//15000
 	};
 	private static final int EXP_PER_LEVEL = 10000;
 
@@ -67,14 +67,6 @@ public class ExpCalculator {
 		return easyLevelsCount + extraLevels;
 	}
 
-	public static int getExpForLevel(int level) {
-		if (level <= EASY_LEVEL_EXP.length) {
-			return EASY_LEVEL_EXP[level - 1];
-		}
-
-		return EXP_PER_LEVEL;
-	}
-
 	public static int getTotalExpForLevel(float level) {
 		int easyLevelsCount = EASY_LEVEL_EXP.length;
 
@@ -89,5 +81,13 @@ public class ExpCalculator {
 			totalExp += (extraLevels * EXP_PER_LEVEL);
 		}
 		return totalExp;
+	}
+
+	public static int getExpForLevel(int level) {
+		if (level <= EASY_LEVEL_EXP.length) {
+			return EASY_LEVEL_EXP[level - 1];
+		}
+
+		return EXP_PER_LEVEL;
 	}
 }

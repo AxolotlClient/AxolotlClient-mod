@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.modules.hud.gui.entry;
 
+import java.util.List;
+
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
@@ -35,8 +37,6 @@ import io.github.axolotlclient.modules.hud.util.DefaultOptions;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import net.minecraft.client.util.math.MatrixStack;
 
-import java.util.List;
-
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
@@ -47,7 +47,7 @@ import java.util.List;
 public abstract class SimpleTextHudEntry extends TextHudEntry implements DynamicallyPositionable {
 
 	protected final EnumOption justification = new EnumOption("justification", Justification.values(),
-			Justification.CENTER.toString());
+		Justification.CENTER.toString());
 	protected final EnumOption anchor = DefaultOptions.getAnchorPoint();
 
 	private final IntegerOption minWidth;
@@ -56,21 +56,21 @@ public abstract class SimpleTextHudEntry extends TextHudEntry implements Dynamic
 		this(53, 13, true);
 	}
 
-	protected SimpleTextHudEntry(int width, int height) {
-		this(width, height, true);
-	}
-
 	protected SimpleTextHudEntry(int width, int height, boolean backgroundAllowed) {
 		super(width, height, backgroundAllowed);
 		minWidth = new IntegerOption("minwidth", width, 1, 300);
+	}
+
+	protected SimpleTextHudEntry(int width, int height) {
+		this(width, height, true);
 	}
 
 	@Override
 	public void renderComponent(MatrixStack matrices, float delta) {
 		RenderSystem.enableBlend();
 		RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
-				GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
-				GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+			GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
+			GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 		DrawPosition pos = getPos();
 		String value = getValue();
 
@@ -88,13 +88,9 @@ public abstract class SimpleTextHudEntry extends TextHudEntry implements Dynamic
 			onBoundsUpdate();
 		}
 		drawString(matrices, value,
-				pos.x() + Justification.valueOf(justification.get()).getXOffset(valueWidth, getWidth() - 4) + 2,
-				pos.y() + (Math.round((float) getHeight() / 2)) - 4, getTextColor().getAsInt(), shadow.get());
+			pos.x() + Justification.valueOf(justification.get()).getXOffset(valueWidth, getWidth() - 4) + 2,
+			pos.y() + (Math.round((float) getHeight() / 2)) - 4, getTextColor().getAsInt(), shadow.get());
 		RenderSystem.disableBlend();
-	}
-
-	public Color getTextColor() {
-		return textColor.get();
 	}
 
 	@Override
@@ -102,8 +98,21 @@ public abstract class SimpleTextHudEntry extends TextHudEntry implements Dynamic
 		DrawPosition pos = getPos();
 		String value = getPlaceholder();
 		drawString(matrices, value,
-				pos.x() + Justification.valueOf(justification.get()).getXOffset(value, getWidth() - 4) + 2,
-				pos.y() + (Math.round((float) getHeight() / 2)) - 4, textColor.get().getAsInt(), shadow.get());
+			pos.x() + Justification.valueOf(justification.get()).getXOffset(value, getWidth() - 4) + 2,
+			pos.y() + (Math.round((float) getHeight() / 2)) - 4, textColor.get().getAsInt(), shadow.get());
+	}
+
+	@Override
+	public boolean movable() {
+		return true;
+	}
+
+	public abstract String getPlaceholder();
+
+	public abstract String getValue();
+
+	public Color getTextColor() {
+		return textColor.get();
 	}
 
 	@Override
@@ -114,15 +123,6 @@ public abstract class SimpleTextHudEntry extends TextHudEntry implements Dynamic
 		options.add(minWidth);
 		return options;
 	}
-
-	@Override
-	public boolean movable() {
-		return true;
-	}
-
-	public abstract String getValue();
-
-	public abstract String getPlaceholder();
 
 	@Override
 	public AnchorPoint getAnchor() {

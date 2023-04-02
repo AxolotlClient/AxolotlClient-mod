@@ -22,20 +22,19 @@
 
 package io.github.axolotlclient.api;
 
+import java.util.List;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.api.types.User;
 import io.github.axolotlclient.modules.auth.Auth;
 import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Util;
-
-import java.util.List;
 
 public class UserListWidget extends AlwaysSelectedEntryListWidget<UserListWidget.UserListEntry> {
 
@@ -50,13 +49,13 @@ public class UserListWidget extends AlwaysSelectedEntryListWidget<UserListWidget
 		users.forEach(user -> addEntry(new UserListEntry(user)));
 	}
 
-	public int addEntry(UserListEntry entry) {
-		return super.addEntry(entry.init(screen));
-	}
-
 	@Override
 	public int getRowWidth() {
 		return super.getRowWidth() + 85;
+	}
+
+	public int addEntry(UserListEntry entry) {
+		return super.addEntry(entry.init(screen));
 	}
 
 	@Override
@@ -73,21 +72,19 @@ public class UserListWidget extends AlwaysSelectedEntryListWidget<UserListWidget
 
 		@Getter
 		private final User user;
-		private long time;
-
 		private final MinecraftClient client;
-
+		private long time;
 		private Text note;
 		private UserListScreen screen;
-
-		public UserListEntry(User user) {
-			this.client = MinecraftClient.getInstance();
-			this.user = user;
-		}
 
 		public UserListEntry(User user, MutableText note) {
 			this(user);
 			this.note = note.formatted(Formatting.ITALIC);
+		}
+
+		public UserListEntry(User user) {
+			this.client = MinecraftClient.getInstance();
+			this.user = user;
 		}
 
 		public UserListEntry init(UserListScreen screen) {

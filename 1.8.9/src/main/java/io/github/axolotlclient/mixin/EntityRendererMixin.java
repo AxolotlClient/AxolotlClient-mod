@@ -76,7 +76,7 @@ public abstract class EntityRendererMixin<T extends Entity> {
 		if (entity instanceof AbstractClientPlayerEntity) {
 			if (Util.currentServerAddressContains("hypixel.net")) {
 				if (HypixelAbstractionLayer.hasValidAPIKey() && LevelHead.getInstance().enabled.get()
-						&& string.contains(entity.getName().asFormattedString())) {
+					&& string.contains(entity.getName().asFormattedString())) {
 					TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
 					String text = "Level: " + HypixelAbstractionLayer.getPlayerLevel(String.valueOf(entity.getUuid()), LevelHead.getInstance().mode.get());
 
@@ -97,7 +97,7 @@ public abstract class EntityRendererMixin<T extends Entity> {
 					}
 
 					textRenderer.draw(text, -x, y, LevelHead.getInstance().textColor.get().getAsInt(),
-							AxolotlClient.CONFIG.useShadows.get());
+						AxolotlClient.CONFIG.useShadows.get());
 				} else if (!HypixelAbstractionLayer.hasValidAPIKey()) {
 					HypixelAbstractionLayer.loadApiKey();
 				}

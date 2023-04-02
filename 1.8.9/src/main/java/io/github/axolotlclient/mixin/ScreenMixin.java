@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.mixin;
 
+import java.net.URI;
+
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.blur.MenuBlur;
 import io.github.axolotlclient.modules.screenshotUtils.ScreenshotUtils;
@@ -40,8 +42,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
-import java.net.URI;
-
 @Mixin(Screen.class)
 public abstract class ScreenMixin {
 
@@ -52,8 +52,8 @@ public abstract class ScreenMixin {
 	public void axolotlclient$modifyTooltipPosition(Args args) {
 		if (ScrollableTooltips.getInstance().enabled.get()) {
 			if ((MinecraftClient.getInstance().currentScreen instanceof CreativeInventoryScreen)
-					&& ((CreativeInventoryScreen) MinecraftClient.getInstance().currentScreen)
-					.getSelectedTab() != ItemGroup.INVENTORY.getIndex()) {
+				&& ((CreativeInventoryScreen) MinecraftClient.getInstance().currentScreen)
+				.getSelectedTab() != ItemGroup.INVENTORY.getIndex()) {
 				return;
 			}
 

@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.api;
 
+import java.util.UUID;
+
 import io.github.axolotlclient.api.handlers.FriendHandler;
 import io.github.axolotlclient.api.util.UUIDHelper;
 import io.github.axolotlclient.util.notifications.Notifications;
@@ -32,26 +34,14 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.ScreenTexts;
 import net.minecraft.text.Text;
 
-import java.util.UUID;
-
 public class AddFriendScreen extends Screen {
 
-	private TextFieldWidget nameInput;
 	private final Screen parent;
+	private TextFieldWidget nameInput;
 
 	public AddFriendScreen(Screen parent) {
 		super(Text.translatable("api.screen.friends.add"));
 		this.parent = parent;
-	}
-
-	@Override
-	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-		return super.keyPressed(keyCode, scanCode, modifiers) || nameInput.keyPressed(keyCode, scanCode, modifiers);
-	}
-
-	@Override
-	public void tick() {
-		nameInput.tick();
 	}
 
 	@Override
@@ -66,6 +56,11 @@ public class AddFriendScreen extends Screen {
 		textRenderer.drawWithShadow(matrices, Text.translatable("api.screen.friends.add.name"), width / 2F - 100, height / 2f - 20, -1);
 		drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 20, 16777215);
 		nameInput.render(matrices, i, j, f);
+	}
+
+	@Override
+	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+		return super.keyPressed(keyCode, scanCode, modifiers) || nameInput.keyPressed(keyCode, scanCode, modifiers);
 	}
 
 	@Override
@@ -88,5 +83,10 @@ public class AddFriendScreen extends Screen {
 				client.setScreen(parent);
 			}
 		}).positionAndSize(width / 2 + 5, height - 50, 150, 20).build());
+	}
+
+	@Override
+	public void tick() {
+		nameInput.tick();
 	}
 }

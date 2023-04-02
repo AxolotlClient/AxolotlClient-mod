@@ -22,6 +22,11 @@
 
 package io.github.axolotlclient.modules.screenshotUtils;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.nio.file.Files;
+import java.util.Base64;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.blaze3d.texture.NativeImage;
@@ -38,24 +43,13 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.quiltmc.loader.api.QuiltLoader;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.nio.file.Files;
-import java.util.Base64;
-
 public class ImageShare {
-
-	private final String separator = ";";//"ⓢ¢€ⓢ¢";
 
 	@Getter
 	private static final ImageShare Instance = new ImageShare();
+	private final String separator = ";";//"ⓢ¢€ⓢ¢";
 
 	private ImageShare() {
-	}
-
-	private CloseableHttpClient createHttpClient() {
-		String modVer = QuiltLoader.getModContainer("axolotlclient").orElseThrow(RuntimeException::new).metadata().version().raw();
-		return HttpClients.custom().setUserAgent("AxolotlClient/" + modVer + " ImageShare").build();
 	}
 
 	public void uploadImage(String url, File file) {
@@ -66,11 +60,11 @@ public class ImageShare {
 			Util.sendChatMessage(Text.translatable("imageUploadFailure"));
 		} else {
 			Util.sendChatMessage(Text.translatable("imageUploadSuccess").append(" ")
-					.append(Text.literal(url + "/" + downloadUrl)
-							.setStyle(Style.EMPTY
-									.withFormatting(Formatting.UNDERLINE, Formatting.DARK_PURPLE)
-									.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, url + "/" + downloadUrl))
-									.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.translatable("clickToCopy"))))));
+				.append(Text.literal(url + "/" + downloadUrl)
+					.setStyle(Style.EMPTY
+						.withFormatting(Formatting.UNDERLINE, Formatting.DARK_PURPLE)
+						.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, url + "/" + downloadUrl))
+						.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.translatable("clickToCopy"))))));
 		}
 	}
 
@@ -86,6 +80,20 @@ public class ImageShare {
 		}
 
 		return "";
+	}
+
+	private CloseableHttpClient createHttpClient() {
+		String modVer = QuiltLoader.getModContainer("axolotlclient").orElseThrow(RuntimeException::new).metadata().version().raw();
+		return HttpClients.custom().setUserAgent("AxolotlClient/" + modVer + " ImageShare").build();
+	}
+
+	private String encodeB64(File file) {
+		try {
+			return file.getName() + separator + Base64.getEncoder().encodeToString(Files.readAllBytes(file.toPath()));
+		} catch (Exception ignored) {
+		}
+
+		return "Encoding failed!";
 	}
 
 	public ImageInstance downloadImage(String id) {
@@ -111,15 +119,6 @@ public class ImageShare {
 			}
 		}
 		return null;
-	}
-
-	private String encodeB64(File file) {
-		try {
-			return file.getName() + separator + Base64.getEncoder().encodeToString(Files.readAllBytes(file.toPath()));
-		} catch (Exception ignored) {
-		}
-
-		return "Encoding failed!";
 	}
 
 	private ImageInstance decodeB64(String data) {

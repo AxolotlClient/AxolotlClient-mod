@@ -40,7 +40,7 @@ public class FriendRequestHandler implements RequestHandler {
 	public void handle(JsonObject object) {
 		JsonObject data = object.get("data").getAsJsonObject();
 		String fromUUID = data.get("from").getAsString();
-		if(API.getInstance().getApiOptions().friendRequestsEnabled.get()) {
+		if (API.getInstance().getApiOptions().friendRequestsEnabled.get()) {
 			API.getInstance().getNotificationProvider().addStatus("api.friends", "api.friends.request", UUIDHelper.getUsername(fromUUID));
 		} else {
 			API.getInstance().send(new Friends(o -> {

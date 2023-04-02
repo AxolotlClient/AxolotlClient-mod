@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.item;
 
+import java.util.List;
+
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.Option;
 import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
@@ -32,8 +34,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.util.Identifier;
-
-import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -47,6 +47,9 @@ public class ArmorHud extends TextHudEntry {
 	public static final Identifier ID = new Identifier("kronhud", "armorhud");
 
 	protected final BooleanOption showProtLvl = new BooleanOption("showProtectionLevel", false);
+	private final ItemStack[] placeholderStacks = new ItemStack[]{new ItemStack(Items.IRON_BOOTS),
+		new ItemStack(Items.IRON_LEGGINGS), new ItemStack(Items.IRON_CHESTPLATE), new ItemStack(Items.IRON_HELMET),
+		new ItemStack(Items.IRON_SWORD)};
 
 	public ArmorHud() {
 		super(20, 100, true);
@@ -80,11 +83,6 @@ public class ArmorHud extends TextHudEntry {
 		}
 	}
 
-	public void renderItem(ItemStack stack, int x, int y) {
-		ItemUtil.renderGuiItemModel(stack, x, y);
-		ItemUtil.renderGuiItemOverlay(client.textRenderer, stack, x, y, null, textColor.get().getAsInt(), shadow.get());
-	}
-
 	public void renderMainItem(ItemStack stack, int x, int y) {
 		ItemUtil.renderGuiItemModel(stack, x, y);
 		String total = String.valueOf(ItemUtil.getTotal(client, stack));
@@ -92,12 +90,13 @@ public class ArmorHud extends TextHudEntry {
 			total = null;
 		}
 		ItemUtil.renderGuiItemOverlay(client.textRenderer, stack, x, y, total, textColor.get().getAsInt(),
-				shadow.get());
+			shadow.get());
 	}
 
-	private final ItemStack[] placeholderStacks = new ItemStack[]{new ItemStack(Items.IRON_BOOTS),
-			new ItemStack(Items.IRON_LEGGINGS), new ItemStack(Items.IRON_CHESTPLATE), new ItemStack(Items.IRON_HELMET),
-			new ItemStack(Items.IRON_SWORD)};
+	public void renderItem(ItemStack stack, int x, int y) {
+		ItemUtil.renderGuiItemModel(stack, x, y);
+		ItemUtil.renderGuiItemOverlay(client.textRenderer, stack, x, y, null, textColor.get().getAsInt(), shadow.get());
+	}
 
 	@Override
 	public void renderPlaceholderComponent(float delta) {

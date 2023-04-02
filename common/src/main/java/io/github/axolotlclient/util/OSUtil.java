@@ -69,12 +69,20 @@ public class OSUtil {
 
 		final String[] s;
 
+		OperatingSystem(String... detection) {
+			this.s = detection;
+		}
+
 		public String[] getStrings() {
 			return s;
 		}
 
-		OperatingSystem(String... detection) {
-			this.s = detection;
+		public void open(URI uri, Logger logger) {
+			try {
+				this.open(uri.toURL(), logger);
+			} catch (MalformedURLException var3) {
+				logger.error("Couldn't open uri '{}'", uri, var3);
+			}
 		}
 
 		private void open(URL url, Logger logger) {
@@ -85,14 +93,6 @@ public class OSUtil {
 				process.getOutputStream().close();
 			} catch (IOException var3) {
 				logger.error("Couldn't open url '{}'", url, var3);
-			}
-		}
-
-		public void open(URI uri, Logger logger) {
-			try {
-				this.open(uri.toURL(), logger);
-			} catch (MalformedURLException var3) {
-				logger.error("Couldn't open uri '{}'", uri, var3);
 			}
 		}
 

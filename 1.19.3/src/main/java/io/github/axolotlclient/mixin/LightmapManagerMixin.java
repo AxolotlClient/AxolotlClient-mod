@@ -37,7 +37,7 @@ public abstract class LightmapManagerMixin {
 	public Option<Double> axolotlclient$fullBright(GameOptions instance) {
 		if (AxolotlClient.CONFIG.fullBright.get())
 			return new Option<>("options.gamma", Option.emptyTooltip(), (optionText, value) -> optionText,
-					Option.UnitDoubleValueSet.INSTANCE, 15D, value -> {
+				Option.UnitDoubleValueSet.INSTANCE, 15D, value -> {
 			});
 		return instance.getGamma();
 	}

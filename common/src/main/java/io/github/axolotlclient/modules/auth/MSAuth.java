@@ -22,6 +22,18 @@
 
 package io.github.axolotlclient.modules.auth;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.InetSocketAddress;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.sun.net.httpserver.HttpServer;
@@ -36,18 +48,6 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.InetSocketAddress;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 // Partly oriented on In-Game-Account-Switcher by The-Fireplace, VidTu
 public class MSAuth {
@@ -68,11 +68,11 @@ public class MSAuth {
 	public void startAuth(Runnable whenFinished) {
 		try {
 			OSUtil.getOS().open(new URI("https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize" +
-					"?client_id=" + CLIENT_ID +
-					"&response_type=code" +
-					"&scope=XboxLive.signin%20XboxLive.offline_access" +
-					"&redirect_uri=http://localhost:" + PORT +
-					"&prompt=select_account"), logger);
+				"?client_id=" + CLIENT_ID +
+				"&response_type=code" +
+				"&scope=XboxLive.signin%20XboxLive.offline_access" +
+				"&redirect_uri=http://localhost:" + PORT +
+				"&prompt=select_account"), logger);
 			msAuthCode(whenFinished);
 		} catch (URISyntaxException e) {
 			throw new RuntimeException(e);
@@ -148,9 +148,9 @@ public class MSAuth {
 		form.add(new BasicNameValuePair("redirect_uri", "http://localhost:" + PORT));
 		form.add(new BasicNameValuePair("grant_type", "authorization_code"));
 		RequestBuilder requestBuilder = RequestBuilder.post()
-				.setUri("https://login.microsoftonline.com/consumers/oauth2/v2.0/token")
-				.addHeader("ContentType", "application/x-www-form-urlencoded")
-				.setEntity(new UrlEncodedFormEntity(form, StandardCharsets.UTF_8));
+			.setUri("https://login.microsoftonline.com/consumers/oauth2/v2.0/token")
+			.addHeader("ContentType", "application/x-www-form-urlencoded")
+			.setEntity(new UrlEncodedFormEntity(form, StandardCharsets.UTF_8));
 		JsonObject response = NetworkUtil.request(requestBuilder.build(), getHttpClient(), true).getAsJsonObject();
 
 		return new AbstractMap.SimpleImmutableEntry<>(response.get("access_token").getAsString(), response.get("refresh_token").getAsString());
@@ -166,10 +166,10 @@ public class MSAuth {
 		object.add("RelyingParty", new JsonPrimitive("http://auth.xboxlive.com"));
 		object.add("TokenType", new JsonPrimitive("JWT"));
 		RequestBuilder requestBuilder = RequestBuilder.post()
-				.setUri("https://user.auth.xboxlive.com/user/authenticate")
-				.setEntity(new StringEntity(object.toString(), ContentType.APPLICATION_JSON))
-				.addHeader("Content-Type", "application/json")
-				.addHeader("Accept", "application/json");
+			.setUri("https://user.auth.xboxlive.com/user/authenticate")
+			.setEntity(new StringEntity(object.toString(), ContentType.APPLICATION_JSON))
+			.addHeader("Content-Type", "application/json")
+			.addHeader("Accept", "application/json");
 
 		JsonObject response = NetworkUtil.request(requestBuilder.build(), getHttpClient(), true).getAsJsonObject();
 		return response.get("Token").getAsString();
@@ -177,37 +177,37 @@ public class MSAuth {
 
 	public Map.Entry<String, String> authXstsMC(String xblToken) throws IOException {
 		String body = "{" +
-				"    \"Properties\": {" +
-				"        \"SandboxId\": \"RETAIL\"," +
-				"        \"UserTokens\": [" +
-				"            \"" + xblToken + "\"" +
-				"        ]" +
-				"    }," +
-				"    \"RelyingParty\": \"rp://api.minecraftservices.com/\"," +
-				"    \"TokenType\": \"JWT\"" +
-				" }";
+			"    \"Properties\": {" +
+			"        \"SandboxId\": \"RETAIL\"," +
+			"        \"UserTokens\": [" +
+			"            \"" + xblToken + "\"" +
+			"        ]" +
+			"    }," +
+			"    \"RelyingParty\": \"rp://api.minecraftservices.com/\"," +
+			"    \"TokenType\": \"JWT\"" +
+			" }";
 		JsonObject response = NetworkUtil.postRequest("https://xsts.auth.xboxlive.com/xsts/authorize", body, getHttpClient(), true).getAsJsonObject();
 		return new AbstractMap.SimpleImmutableEntry<>(response.get("Token").getAsString(), response.get("DisplayClaims").getAsJsonObject().get("xui").getAsJsonArray().get(0).getAsJsonObject().get("uhs").getAsString());
 	}
 
 	public String authMC(String userhash, String xsts) throws IOException {
 		return NetworkUtil.postRequest("https://api.minecraftservices.com/authentication/login_with_xbox",
-				"{\"identityToken\": \"XBL3.0 x=" + userhash + ";" + xsts + "\"\n}",
-				getHttpClient(), true).getAsJsonObject().get("access_token").getAsString();
+			"{\"identityToken\": \"XBL3.0 x=" + userhash + ";" + xsts + "\"\n}",
+			getHttpClient(), true).getAsJsonObject().get("access_token").getAsString();
 	}
 
 	public boolean checkOwnership(String accessToken) throws IOException {
 		JsonObject response = NetworkUtil.request(RequestBuilder.get()
-				.setUri("https://api.minecraftservices.com/entitlements/mcstore")
-				.addHeader("Authorization", "Bearer " + accessToken).build(), getHttpClient(), true).getAsJsonObject();
+			.setUri("https://api.minecraftservices.com/entitlements/mcstore")
+			.addHeader("Authorization", "Bearer " + accessToken).build(), getHttpClient(), true).getAsJsonObject();
 
 		return response.get("items").getAsJsonArray().size() != 0;
 	}
 
 	public JsonObject getMCProfile(String accessToken) throws IOException {
 		return NetworkUtil.request(RequestBuilder.get()
-				.setUri("https://api.minecraftservices.com/minecraft/profile")
-				.addHeader("Authorization", "Bearer " + accessToken).build(), getHttpClient(), true).getAsJsonObject();
+			.setUri("https://api.minecraftservices.com/minecraft/profile")
+			.addHeader("Authorization", "Bearer " + accessToken).build(), getHttpClient(), true).getAsJsonObject();
 	}
 
 	private CloseableHttpClient getHttpClient() {
@@ -223,10 +223,10 @@ public class MSAuth {
 			form.add(new BasicNameValuePair("scope", "XboxLive.signin XboxLive.offline_access"));
 			form.add(new BasicNameValuePair("grant_type", "refresh_token"));
 			RequestBuilder requestBuilder = RequestBuilder.post()
-					.setUri("https://login.microsoftonline.com/consumers/oauth2/v2.0/token")
-					.addHeader("Content-Type", "application/x-www-form-urlencoded")
-					.setEntity(new UrlEncodedFormEntity(form))
-					.addHeader("Accept", "application/json");
+				.setUri("https://login.microsoftonline.com/consumers/oauth2/v2.0/token")
+				.addHeader("Content-Type", "application/x-www-form-urlencoded")
+				.setEntity(new UrlEncodedFormEntity(form))
+				.addHeader("Accept", "application/json");
 
 			JsonObject response = NetworkUtil.request(requestBuilder.build(), getHttpClient(), true).getAsJsonObject();
 			String refreshToken = response.get("refresh_token").getAsString();

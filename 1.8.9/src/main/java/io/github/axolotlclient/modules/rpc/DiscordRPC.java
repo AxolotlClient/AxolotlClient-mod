@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.modules.rpc;
 
+import java.time.Instant;
+import java.util.Optional;
+
 import de.jcm.discordgamesdk.Core;
 import de.jcm.discordgamesdk.CreateParams;
 import de.jcm.discordgamesdk.DiscordEventAdapter;
@@ -40,9 +43,6 @@ import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.resource.language.I18n;
 
-import java.time.Instant;
-import java.util.Optional;
-
 /**
  * This DiscordRPC module is derived from <a href="https://github.com/DeDiamondPro/HyCord">HyCord</a>.
  *
@@ -55,19 +55,18 @@ public class DiscordRPC extends AbstractModule {
 	public static Activity currentActivity;
 	public static Core discordRPC;
 	private static DiscordRPC Instance;
-	public final BooleanOption enabled = new BooleanOption("enabled", value -> {
+	private static String modVersion;	public final BooleanOption enabled = new BooleanOption("enabled", value -> {
 		if (value) {
 			initRPC();
 		} else {
 			shutdown();
 		}
 	}, false);
-	private static String modVersion;
 	private static boolean running;
 	public final OptionCategory category = new OptionCategory("rpc");
 	public final BooleanOption showActivity = new BooleanOption("showActivity", true);
 	public final EnumOption showServerNameMode = new EnumOption("showServerNameMode",
-			new String[]{"showIp", "showName", "off"}, "off");
+		new String[]{"showIp", "showName", "off"}, "off");
 	public final BooleanOption showTime = new BooleanOption("showTime", true);
 	private final Instant time = Instant.now();
 
@@ -103,14 +102,14 @@ public class DiscordRPC extends AbstractModule {
 		switch (showServerNameMode.get()) {
 			case "showIp":
 				state = MinecraftClient.getInstance().world == null ? "In the menu"
-						: (Util.getCurrentServerAddress() == null ? "Singleplayer" : Util.getCurrentServerAddress());
+					: (Util.getCurrentServerAddress() == null ? "Singleplayer" : Util.getCurrentServerAddress());
 				break;
 			case "showName":
 				state = MinecraftClient.getInstance().world == null ? "In the menu"
-						: (MinecraftClient.getInstance().getCurrentServerEntry() == null
-						? (Util.getCurrentServerAddress() == null ? "Singleplayer"
-						: Util.getCurrentServerAddress())
-						: MinecraftClient.getInstance().getCurrentServerEntry().name);
+					: (MinecraftClient.getInstance().getCurrentServerEntry() == null
+					? (Util.getCurrentServerAddress() == null ? "Singleplayer"
+					: Util.getCurrentServerAddress())
+					: MinecraftClient.getInstance().getCurrentServerEntry().name);
 				break;
 			case "off":
 			default:
@@ -219,6 +218,8 @@ public class DiscordRPC extends AbstractModule {
 			}
 		}
 	}
+
+
 
 
 }

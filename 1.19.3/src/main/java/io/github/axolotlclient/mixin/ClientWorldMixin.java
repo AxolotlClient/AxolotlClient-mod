@@ -39,17 +39,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ClientWorld.class)
 public abstract class ClientWorldMixin {
 
-	@Shadow
-	protected abstract EntityLookup<Entity> getEntityLookup();
-
 	@Inject(method = "removeEntity", at = @At("HEAD"))
 	public void axolotlclient$onEntityRemoved(int entityId, Entity.RemovalReason removalReason, CallbackInfo ci) {
 		Entity entity = this.getEntityLookup().get(entityId);
 		if (entity instanceof PlayerEntity && HypixelMods.getInstance().cacheMode.get()
-				.equals(HypixelMods.HypixelCacheMode.ON_PLAYER_DISCONNECT.toString())) {
+			.equals(HypixelMods.HypixelCacheMode.ON_PLAYER_DISCONNECT.toString())) {
 			HypixelAbstractionLayer.handleDisconnectEvents(entity.getUuid());
 		}
 	}
+
+	@Shadow
+	protected abstract EntityLookup<Entity> getEntityLookup();
 
 	@ModifyArg(method = "setTimeOfDay", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld$Properties;setTimeOfDay(J)V"))
 	public long axolotlclient$timeChanger(long time) {
