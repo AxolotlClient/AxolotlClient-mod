@@ -67,12 +67,11 @@ public class HudManager extends AbstractModule {
 	private HudManager() {
 		this.entries = new LinkedHashMap<>();
 		client = MinecraftClient.getInstance();
-		KeyBind key = new KeyBind("key.openHud", InputUtil.KEY_RIGHT_SHIFT_CODE, "category.axolotlclient");
-		hudCategory.add(new KeyBindOption("key.openHud", key, keyBind -> MinecraftClient.getInstance().setScreen(new HudEditScreen())));
+		hudCategory.add(new KeyBindOption("key.openHud", InputUtil.KEY_RIGHT_SHIFT_CODE,
+			keyBind -> MinecraftClient.getInstance().setScreen(new HudEditScreen())));
 	}
 
 	public void init() {
-		//KeyBindingHelper.registerKeyBinding(key);
 
 		AxolotlClient.CONFIG.addCategory(hudCategory);
 

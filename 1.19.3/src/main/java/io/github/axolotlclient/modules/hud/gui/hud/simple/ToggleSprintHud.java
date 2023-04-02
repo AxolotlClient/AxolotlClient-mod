@@ -22,6 +22,15 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.simple;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Random;
+
+import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.KeyBindOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.Option;
@@ -32,15 +41,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBind;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.util.Identifier;
-import org.lwjgl.glfw.GLFW;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import net.minecraft.util.Util;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -57,11 +58,19 @@ public class ToggleSprintHud extends SimpleTextHudEntry {
 	private final BooleanOption randomPlaceholder = new BooleanOption("randomPlaceholder", ID.getPath(), false);
 	private final StringOption placeholder = new StringOption("placeholder", ID.getPath(), "No keys pressed");
 
-	private final KeyBind sprintToggle = new KeyBind("key.toggleSprint", GLFW.GLFW_KEY_K, "category.axolotlclient");
-	private final KeyBindOption sprintKey = new KeyBindOption("key.toggleSprint", sprintToggle, (key) -> {
+	private KeyBind sprintToggle;
+	private final KeyBindOption sprintKey = Util.make(()-> {
+		KeyBindOption o = new KeyBindOption("key.toggleSprint", InputUtil.KEY_K_CODE, (key) -> {
+		});
+		sprintToggle = o.get();
+		return o;
 	});
-	private final KeyBind sneakToggle = new KeyBind("key.toggleSneak", GLFW.GLFW_KEY_I, "category.axolotlclient");
-	private final KeyBindOption sneakKey = new KeyBindOption("key.toggleSneak", sneakToggle, (key) -> {
+	private KeyBind sneakToggle;
+	private final KeyBindOption sneakKey = Util.make(() -> {
+		KeyBindOption o = new KeyBindOption("key.toggleSneak", InputUtil.KEY_I_CODE, (key) -> {
+		});
+		sneakToggle = o.get();
+		return o;
 	});
 
 	@Getter
@@ -76,12 +85,6 @@ public class ToggleSprintHud extends SimpleTextHudEntry {
 
 	public ToggleSprintHud() {
 		super(100, 20, false);
-	}
-
-	@Override
-	public void init() {
-		//KeyBindingHelper.registerKeyBinding(sprintToggle);
-		//KeyBindingHelper.registerKeyBinding(sneakToggle);
 	}
 
 	private void loadRandomPlaceholder() {
@@ -120,11 +123,6 @@ public class ToggleSprintHud extends SimpleTextHudEntry {
 	@Override
 	public Identifier getId() {
 		return ID;
-	}
-
-	@Override
-	public boolean movable() {
-		return true;
 	}
 
 	@Override
