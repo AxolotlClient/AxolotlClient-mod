@@ -29,7 +29,7 @@ import lombok.Getter;
 @Getter
 public class ChatMessage {
 
-	private final String content;
 	private User sender;
+	private final String content;
 	private long timestamp;
 }

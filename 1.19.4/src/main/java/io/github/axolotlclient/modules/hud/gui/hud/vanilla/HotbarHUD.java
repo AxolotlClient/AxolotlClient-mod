@@ -86,7 +86,7 @@ public class HotbarHUD extends TextHudEntry {
 				int k = pos.x + n * 20 + 3;
 				int l = pos.y + 3;
 				MinecraftClient.getInstance().getItemRenderer()
-					.renderInGui(matrices, playerEntity.getInventory().main.get(n), k, l);
+					.renderItemInGui(matrices, playerEntity.getInventory().main.get(n), k, l);
 				ItemUtil.renderGuiItemModel(getScale(), playerEntity.getInventory().main.get(n), k, l);
 				ItemUtil.renderGuiItemOverlay(matrices, client.textRenderer, playerEntity.getInventory().main.get(n), k,
 					l, null, -1, true);
@@ -116,8 +116,8 @@ public class HotbarHUD extends TextHudEntry {
 					RenderSystem.setShaderTexture(0, DrawableHelper.GUI_ICONS_TEXTURE);
 					int q = (int) (f * 19.0F);
 					RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-					this.drawTexture(matrices, p, o, 0, 94, 18, 18);
-					this.drawTexture(matrices, p, o + 18 - q, 18, 112 - q, 18, q);
+					drawTexture(matrices, p, o, 0, 94, 18, 18);
+					drawTexture(matrices, p, o + 18 - q, 18, 112 - q, 18, q);
 				}
 			}
 
@@ -132,11 +132,6 @@ public class HotbarHUD extends TextHudEntry {
 
 		drawCenteredString(matrices, MinecraftClient.getInstance().textRenderer, getName(), pos.x + width / 2,
 			pos.y + height / 2 - 4, -1, true);
-	}
-
-	@Override
-	public boolean movable() {
-		return true;
 	}
 
 	@Override

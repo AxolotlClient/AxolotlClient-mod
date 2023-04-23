@@ -173,7 +173,7 @@ public class FriendsSidebar extends Screen {
 			public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 				if (keyCode == InputUtil.KEY_ENTER_CODE) {
 					// TODO send chat message
-					ChatHandler.getInstance().sendMessage(chatUser, input.getText());
+					//ChatHandler.getInstance().sendMessage(chatUser, input.getText());
 					input.setText("");
 					return true;
 				}

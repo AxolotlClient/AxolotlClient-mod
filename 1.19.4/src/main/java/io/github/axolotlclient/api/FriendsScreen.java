@@ -38,7 +38,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.ScreenTexts;
 import net.minecraft.text.Text;
 
-public class FriendsScreen extends UserListScreen {
+public class FriendsScreen extends Screen {
 
 	private final Screen parent;
 
@@ -207,11 +207,6 @@ public class FriendsScreen extends UserListScreen {
 		}
 	}
 
-	@Override
-	protected UserListWidget getWidget() {
-		return widget;
-	}
-
 	public void openChat() {
 		UserListWidget.UserListEntry entry = widget.getSelectedOrNull();
 		if (entry != null) {
@@ -219,7 +214,10 @@ public class FriendsScreen extends UserListScreen {
 			User u2 = new User("U2", UUID.randomUUID().toString(), Status.UNKNOWN);
 			User self = API.getInstance().getSelf();
 			client.setScreen(new ChatScreen(this, new Channel.Group("aaaa",
-				new User[]{self, u1, u2}, "Group!!", new ChatMessage[]{new ChatMessage(u1, "AHHHHHHHHH!!", 16835345), new ChatMessage(self, "hhhhhh", 16835348)})));
+				new User[]{self, u1, u2}, "Group!!", new ChatMessage[]{
+					new ChatMessage(u1, "AHHHHHHHHH!!", 16835345),
+				new ChatMessage(u2, "skjdfgnkfdsjkd", 14232325),
+				new ChatMessage(self, "hhhhhh", 16835348)})));
 			//API.getInstance().send(ChannelRequest.getDM(c -> client.setScreen(new ChatScreen(this, c)),
 			//		entry.getUser().getUuid(), ChannelRequest.Include.MESSAGES));
 		}

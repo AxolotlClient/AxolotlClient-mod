@@ -28,7 +28,8 @@ import java.util.stream.Collectors;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.api.handlers.ChatHandler;
-import io.github.axolotlclient.api.handlers.FriendHandler;
+import io.github.axolotlclient.api.requests.ChannelRequest;
+import io.github.axolotlclient.api.types.Channel;
 import io.github.axolotlclient.api.types.User;
 import io.github.axolotlclient.api.util.AlphabeticalComparator;
 import io.github.axolotlclient.mixin.ScreenAccessor;
@@ -51,7 +52,7 @@ public class FriendsSidebar extends Screen {
 	private int sidebarWidth;
 	private boolean remove;
 	private boolean hasChat;
-	private User chatUser;
+	private Channel channel;
 	private ListWidget list;
 	private TextFieldWidget input;
 
@@ -80,9 +81,13 @@ public class FriendsSidebar extends Screen {
 
 		if (hasChat) {
 			drawVerticalLine(70 + sidebarAnimX, 0, height, 0xFF000000);
-			client.textRenderer.drawWithShadow(chatUser.getName(), sidebarAnimX + 75, 20, -1);
-			client.textRenderer.drawWithShadow(Formatting.ITALIC + chatUser.getStatus().getTitle() + ":" + chatUser.getStatus().getDescription(),
-				sidebarAnimX + 80, 30, 8421504);
+			client.textRenderer.drawWithShadow(channel.getName(), sidebarAnimX + 75, 20, -1);
+			if (channel.isDM()) {
+				client.textRenderer.drawWithShadow(Formatting.ITALIC + ((Channel.DM) channel).getReceiver().getStatus().getTitle() + ":" + ((Channel.DM) channel).getReceiver().getStatus().getDescription(),
+					sidebarAnimX + 80, 30, 8421504);
+			}
+
+			//chatWidget.render(mouseX, mouseY, delta);
 		}
 
 		animate();
@@ -168,7 +173,7 @@ public class FriendsSidebar extends Screen {
 		}
 
 
-		FriendHandler.getInstance().getFriends(list -> this.list = new ListWidget(list, 10, 30, 50, height - 70));
+		ChannelRequest.getChannelList(list -> this.list = new ListWidget(list, 10, 30, 50, height - 70), API.getInstance().getUuid(), ChannelRequest.SortBy.LAST_MESSAGE, ChannelRequest.Include.USER_STATUS);
 
 		buttons.add(new ButtonWidget(0, 10 - sidebarWidth, height - 30, 50, 20, I18n.translate("gui.back")));
 		Keyboard.enableRepeatEvents(true);
@@ -198,18 +203,26 @@ public class FriendsSidebar extends Screen {
 		remove = true;
 	}
 
-	private void addChat(User user) {
+	private void addChat(Channel channel) {
 		// TODO implement Chat
 		hasChat = true;
-		chatUser = user;
-		sidebarWidth = Math.max(width * 5 / 12, client.textRenderer.getStringWidth(chatUser.getStatus().getTitle() + ":" + chatUser.getStatus().getDescription()) + 5);
+		this.channel = channel;
+		int w;
+		if (channel.isDM()) {
+			User chatUser = ((Channel.DM) channel).getReceiver();
+			w = Math.max(client.textRenderer.getStringWidth(chatUser.getStatus().getTitle() + ":" + chatUser.getStatus().getDescription()),
+				client.textRenderer.getStringWidth(channel.getName()));
+		} else {
+			w = client.textRenderer.getStringWidth(channel.getName());
+		}
+		sidebarWidth = Math.max(width * 5 / 12, w + 5);
 		input = new TextFieldWidget(2, textRenderer, 75, height - 30, sidebarWidth - 80, 20) {
 
 			@Override
 			public boolean keyPressed(char c, int i) {
 				if (i == Keyboard.KEY_RETURN) {
 					// TODO send chat message
-					ChatHandler.getInstance().sendMessage(chatUser, input.getText());
+					ChatHandler.getInstance().sendMessage(FriendsSidebar.this.channel, input.getText());
 					input.setText("");
 					return true;
 				}
@@ -227,7 +240,7 @@ public class FriendsSidebar extends Screen {
 		private final int entryHeight = 25;
 		private boolean visible;
 
-		public ListWidget(List<User> list, int x, int y, int width, int height) {
+		public ListWidget(List<Channel> list, int x, int y, int width, int height) {
 			super(MinecraftClient.getInstance(), width, height, y, FriendsSidebar.this.height - y, 25);
 			xStart = x;
 			xEnd = x + width;
@@ -235,8 +248,8 @@ public class FriendsSidebar extends Screen {
 			yEnd = y + height;
 			AtomicInteger buttonY = new AtomicInteger(y);
 			elements = list.stream().sorted((u1, u2) -> new AlphabeticalComparator().compare(u1.getName(), u2.getName()))
-				.map(user -> new UserButton(x, buttonY.getAndAdd(entryHeight), width, entryHeight - 5,
-					user.getName(), buttonWidget -> addChat(user))).collect(Collectors.toList());
+				.map(channel -> new UserButton(x, buttonY.getAndAdd(entryHeight), width, entryHeight - 5,
+					channel.getName(), buttonWidget -> addChat(channel))).collect(Collectors.toList());
 		}
 
 		public int getX() {

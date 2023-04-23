@@ -38,9 +38,9 @@ import net.minecraft.util.Util;
 
 public class UserListWidget extends AlwaysSelectedEntryListWidget<UserListWidget.UserListEntry> {
 
-	private final UserListScreen screen;
+	private final FriendsScreen screen;
 
-	public UserListWidget(UserListScreen screen, MinecraftClient client, int width, int height, int top, int bottom, int entryHeight) {
+	public UserListWidget(FriendsScreen screen, MinecraftClient client, int width, int height, int top, int bottom, int entryHeight) {
 		super(client, width, height, top, bottom, entryHeight);
 		this.screen = screen;
 	}
@@ -75,7 +75,7 @@ public class UserListWidget extends AlwaysSelectedEntryListWidget<UserListWidget
 		private final MinecraftClient client;
 		private long time;
 		private Text note;
-		private UserListScreen screen;
+		private FriendsScreen screen;
 
 		public UserListEntry(User user, MutableText note) {
 			this(user);
@@ -87,7 +87,7 @@ public class UserListWidget extends AlwaysSelectedEntryListWidget<UserListWidget
 			this.user = user;
 		}
 
-		public UserListEntry init(UserListScreen screen) {
+		public UserListEntry init(FriendsScreen screen) {
 			this.screen = screen;
 			return this;
 		}

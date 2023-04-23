@@ -82,17 +82,17 @@ public class ArmorHud extends TextHudEntry {
 	}
 
 	public void renderMainItem(MatrixStack matrices, ItemStack stack, int x, int y) {
-		client.getItemRenderer().renderInGui(matrices, stack, x, y);
+		client.getItemRenderer().renderItemInGui(matrices, stack, x, y);
 		String total = String.valueOf(ItemUtil.getTotal(client, stack));
 		if (total.equals("1")) {
 			total = null;
 		}
-		client.getItemRenderer().method_4022(matrices, client.textRenderer, stack, x, y, total);
+		client.getItemRenderer().renderGuiItemDecorations(matrices, client.textRenderer, stack, x, y, total);
 	}
 
 	public void renderItem(MatrixStack matrices, ItemStack stack, int x, int y) {
-		client.getItemRenderer().renderInGui(matrices, stack, x, y);
-		client.getItemRenderer().method_4025(matrices, client.textRenderer, stack, x, y);
+		client.getItemRenderer().renderItemInGui(matrices, stack, x, y);
+		client.getItemRenderer().renderGuiItemDecorations(matrices, client.textRenderer, stack, x, y);
 	}
 
 	@Override
@@ -106,11 +106,6 @@ public class ArmorHud extends TextHudEntry {
 			renderItem(matrices, item, pos.x() + 2, lastY + pos.y());
 			lastY = lastY - 20;
 		}
-	}
-
-	@Override
-	public boolean movable() {
-		return true;
 	}
 
 	@Override

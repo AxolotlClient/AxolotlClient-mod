@@ -35,8 +35,7 @@ public class Skyblock implements AbstractHypixelMod {
 	private final static Skyblock Instance = new Skyblock();
 	public final BooleanOption rotationLocked = new BooleanOption("rotationLocked", false);
 	private final OptionCategory category = new OptionCategory("skyblock");
-	private final KeyBindOption lock = new KeyBindOption("lockRotation",
-		new KeyBinding("lockRotation", 25, "category.axolotlclient"),
+	private final KeyBindOption lock = new KeyBindOption("lockRotation", 25,
 		keyBinding -> rotationLocked.toggle());
 
 	@Override

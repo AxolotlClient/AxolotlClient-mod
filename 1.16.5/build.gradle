@@ -3,6 +3,8 @@ plugins {
 	id "fabric-loom" version "1.0.+"
 }
 
+apply plugin: 'io.github.p03w.machete'
+
 group = maven_group
 version = "${project.version}+${project.minecraft_1165}"
 archivesBaseName = "AxolotlClient"

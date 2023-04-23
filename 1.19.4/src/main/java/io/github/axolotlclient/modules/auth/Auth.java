@@ -125,7 +125,7 @@ public class Auth extends Accounts implements Module {
 			Notifications.getInstance().addStatus(Text.translatable("auth.notif.title"), Text.translatable("auth.notif.refreshing", (Object) account.getName()));
 			account.refresh(auth, runnable);
 		} else {
-			runnable.run();
+			new Thread(runnable).start();
 		}
 	}
 

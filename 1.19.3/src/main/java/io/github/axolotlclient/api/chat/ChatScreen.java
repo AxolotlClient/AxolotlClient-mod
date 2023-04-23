@@ -93,7 +93,7 @@ public class ChatScreen extends Screen {
 		} else {
 			before = Instant.now().getEpochSecond();
 		}
-		ChatHandler.getInstance().getMessagesBefore(user, before);
+		//ChatHandler.getInstance().getMessagesBefore(user, before);
 	}
 
 	@Override
@@ -113,7 +113,7 @@ public class ChatScreen extends Screen {
 			public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 				if (keyCode == InputUtil.KEY_ENTER_CODE) {
 					// TODO send chat message
-					ChatHandler.getInstance().sendMessage(user, getText());
+					//ChatHandler.getInstance().sendMessage(user, getText());
 					setText("");
 					return true;
 				}

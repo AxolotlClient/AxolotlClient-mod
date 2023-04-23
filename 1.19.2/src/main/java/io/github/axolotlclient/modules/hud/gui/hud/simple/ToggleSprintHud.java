@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
+import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.KeyBindOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.Option;
@@ -40,6 +41,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBind;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Util;
 import org.lwjgl.glfw.GLFW;
 
 /**
@@ -57,11 +59,19 @@ public class ToggleSprintHud extends SimpleTextHudEntry {
 	private final BooleanOption randomPlaceholder = new BooleanOption("randomPlaceholder", ID.getPath(), false);
 	private final StringOption placeholder = new StringOption("placeholder", ID.getPath(), "No keys pressed");
 
-	private final KeyBind sprintToggle = new KeyBind("key.toggleSprint", GLFW.GLFW_KEY_K, "category.axolotlclient");
-	private final KeyBindOption sprintKey = new KeyBindOption("key.toggleSprint", sprintToggle, (key) -> {
+	private KeyBind sprintToggle;
+	private final KeyBindOption sprintKey = Util.make(() -> {
+		KeyBindOption o = new KeyBindOption("key.toggleSprint", InputUtil.KEY_K_CODE, (key) -> {
+		});
+		sprintToggle = o.get();
+		return o;
 	});
-	private final KeyBind sneakToggle = new KeyBind("key.toggleSneak", GLFW.GLFW_KEY_I, "category.axolotlclient");
-	private final KeyBindOption sneakKey = new KeyBindOption("key.toggleSneak", sneakToggle, (key) -> {
+	private KeyBind sneakToggle;
+	private final KeyBindOption sneakKey = Util.make(() -> {
+		KeyBindOption o = new KeyBindOption("key.toggleSneak", InputUtil.KEY_I_CODE, (key) -> {
+		});
+		sneakToggle = o.get();
+		return o;
 	});
 
 	@Getter

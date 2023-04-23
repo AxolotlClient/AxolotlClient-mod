@@ -27,7 +27,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import com.mojang.blaze3d.platform.InputUtil;
-import io.github.axolotlclient.api.handlers.ChatHandler;
 import io.github.axolotlclient.api.handlers.FriendHandler;
 import io.github.axolotlclient.api.types.User;
 import io.github.axolotlclient.api.util.AlphabeticalComparator;
@@ -170,7 +169,7 @@ public class FriendsSidebar extends Screen {
 			public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 				if (keyCode == InputUtil.KEY_ENTER_CODE) {
 					// TODO send chat message
-					ChatHandler.getInstance().sendMessage(chatUser, input.getText());
+					//ChatHandler.getInstance().sendMessage(chatUser, input.getText());
 					input.setText("");
 					return true;
 				}

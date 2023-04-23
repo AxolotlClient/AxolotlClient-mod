@@ -23,8 +23,9 @@
 package io.github.axolotlclient.api.chat;
 
 import com.mojang.blaze3d.platform.InputUtil;
-import io.github.axolotlclient.api.UserListScreen;
-import io.github.axolotlclient.api.UserListWidget;
+import io.github.axolotlclient.api.ContextMenu;
+import io.github.axolotlclient.api.ContextMenuContainer;
+import io.github.axolotlclient.api.ContextMenuScreen;
 import io.github.axolotlclient.api.handlers.ChatHandler;
 import io.github.axolotlclient.api.types.Channel;
 import net.minecraft.client.gui.screen.Screen;
@@ -34,26 +35,32 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.ScreenTexts;
 import net.minecraft.text.Text;
 
-public class ChatScreen extends UserListScreen {
+import java.util.Arrays;
+
+public class ChatScreen extends Screen implements ContextMenuScreen {
+
+	private ContextMenuContainer contextMenu = new ContextMenuContainer();
 	private final Channel channel;
 	private final Screen parent;
 
 	private ChatWidget widget;
-	private UserListWidget users;
+	private ChatUserListWidget users;
 	private TextFieldWidget input;
 
 	public ChatScreen(Screen parent, Channel channel) {
 		super(Text.translatable("api.screen.chat"));
 		this.channel = channel;
 		this.parent = parent;
-		if (!channel.isDM()) {
-			users = new UserListWidget(this, client, 50, height - 20, 10, 10, 25);
-		}
 	}
 
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		renderBackground(matrices);
+
+		if(users != null){
+			users.render(matrices, mouseX, mouseY, delta);
+		}
+
 		super.render(matrices, mouseX, mouseY, delta);
 
 		drawCenteredText(matrices, this.textRenderer, channel.getName(), this.width / 2, 20, 16777215);
@@ -61,7 +68,15 @@ public class ChatScreen extends UserListScreen {
 
 	@Override
 	protected void init() {
-		addDrawable(widget = new ChatWidget(channel, 50, 30, width - 100, height - 90));
+
+		if(!channel.isDM()){
+			users = new ChatUserListWidget(this, client, 75, height - 20, 30, height - 60, 25);
+			users.setLeftPos(width-80);
+			users.setUsers(Arrays.asList(channel.getUsers()));
+			addSelectableChild(users);
+		}
+
+		addDrawable(widget = new ChatWidget(channel, 50, 30, width - (!channel.isDM() ? 140 : 100), height - 90));
 
 		addDrawableChild(input = new TextFieldWidget(client.textRenderer, width / 2 - 150, height - 50,
 			300, 20, Text.translatable("api.chat.enterMessage")) {
@@ -92,6 +107,8 @@ public class ChatScreen extends UserListScreen {
 			.positionAndSize(this.width / 2 - 75, this.height - 28, 150, 20)
 			.build()
 		);
+
+		addDrawableChild(contextMenu);
 	}
 
 	@Override
@@ -107,15 +124,41 @@ public class ChatScreen extends UserListScreen {
 	}
 
 	@Override
+	public boolean mouseClicked(double mouseX, double mouseY, int button) {
+		if(contextMenu.getMenu() != null){
+			if(contextMenu.mouseClicked(mouseX, mouseY, button)){
+				return true;
+			}
+			//remove(contextMenu);
+			contextMenu.setMenu(null);
+		}
+		return super.mouseClicked(mouseX, mouseY, button);
+	}
+
+	@Override
 	public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
 		if (widget != null) {
-			return widget.mouseScrolled(mouseX, mouseY, amount);
+			return super.mouseScrolled(mouseX, mouseY, amount) || widget.mouseScrolled(mouseX, mouseY, amount);
 		}
 		return super.mouseScrolled(mouseX, mouseY, amount);
 	}
 
+	public void select(ChatUserListWidget.UserListEntry userListEntry) {
+		users.setSelected(userListEntry);
+	}
+
 	@Override
-	protected UserListWidget getWidget() {
-		return users;
+	public void setContextMenu(ContextMenu menu) {
+		this.contextMenu.setMenu(menu);
+	}
+
+	@Override
+	public boolean hasContextMenu() {
+		return contextMenu.hasMenu();
+	}
+
+	@Override
+	public Screen getParent() {
+		return parent;
 	}
 }

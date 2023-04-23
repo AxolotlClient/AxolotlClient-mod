@@ -1,10 +1,26 @@
-package io.github.axolotlclient.api.chat;
+/*
+ * Copyright © 2021-2023 moehreag <moehreag@gmail.com> & Contributors
+ *
+ * This file is part of AxolotlClient.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ * For more information, see the LICENSE file.
+ */
 
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+package io.github.axolotlclient.api.chat;
 
 import io.github.axolotlclient.api.handlers.ChatHandler;
 import io.github.axolotlclient.api.types.Channel;
@@ -15,12 +31,20 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.Element;
+import net.minecraft.client.gui.Selectable;
+import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 
-public class ChatWidget extends DrawableHelper implements Element, Drawable {
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class ChatWidget extends DrawableHelper implements Element, Drawable, Selectable {
 
 	private final List<ChatMessage> messages = new ArrayList<>();
 	private final List<ChatLine> lines = new ArrayList<>();
@@ -68,7 +92,7 @@ public class ChatWidget extends DrawableHelper implements Element, Drawable {
 
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-		enableScissor(x, y, x + width, y + height);
+		enableScissor(x, y, x + width, y + height+2);
 
 		matrices.push();
 		matrices.translate(0, scrollAmount * (client.textRenderer.fontHeight / 2F), 0);
@@ -97,17 +121,23 @@ public class ChatWidget extends DrawableHelper implements Element, Drawable {
 		} else {
 			before = Instant.now().getEpochSecond();
 		}
-		ChatHandler.getInstance().getMessagesBefore(before);
-	}	@Override
+		//ChatHandler.getInstance().getMessagesBefore(before);
+	}
+
+	@Override
 	public void setFocused(boolean focused) {
 		this.focused = focused;
 	}
 
 	@Override
 	public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
-		scrollAmount = MathHelper.clamp(scrollAmount + (int) amount, -2, (lines.size() - (height / client.textRenderer.fontHeight)) * 2);
+
+		int visibleLineCount = (lines.size() - (height / client.textRenderer.fontHeight)) * 2;
+		scrollAmount = MathHelper.clamp(scrollAmount + (int) amount, Math.min(0, visibleLineCount), Math.max(0, visibleLineCount));
 		return true;
-	}	@Override
+	}
+
+	@Override
 	public boolean isFocused() {
 		return focused;
 	}
@@ -118,7 +148,13 @@ public class ChatWidget extends DrawableHelper implements Element, Drawable {
 		ChatHandler.getInstance().setEnableNotifications(ChatHandler.DEFAULT);
 	}
 
+	@Override
+	public SelectionType getType() {
+		return SelectionType.NONE;
+	}
 
+	@Override
+	public void appendNarrations(NarrationMessageBuilder builder) {
 
-
+	}
 }
