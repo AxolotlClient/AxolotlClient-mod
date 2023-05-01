@@ -22,8 +22,6 @@
 
 package io.github.axolotlclient.api;
 
-import java.util.UUID;
-
 import io.github.axolotlclient.api.handlers.FriendHandler;
 import io.github.axolotlclient.api.util.UUIDHelper;
 import io.github.axolotlclient.util.notifications.Notifications;
@@ -34,6 +32,8 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
+
+import java.util.UUID;
 
 public class AddFriendScreen extends Screen {
 

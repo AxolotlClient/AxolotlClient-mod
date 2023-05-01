@@ -22,15 +22,23 @@
 
 package io.github.axolotlclient.api;
 
-import java.util.stream.Collectors;
-
+import io.github.axolotlclient.api.chat.ChatScreen;
 import io.github.axolotlclient.api.handlers.FriendHandler;
+import io.github.axolotlclient.api.types.Channel;
+import io.github.axolotlclient.api.types.ChatMessage;
+import io.github.axolotlclient.api.types.Status;
+import io.github.axolotlclient.api.types.User;
 import io.github.axolotlclient.api.util.AlphabeticalComparator;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ScreenTexts;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.TranslatableText;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class FriendsScreen extends Screen {
 
@@ -84,6 +92,8 @@ public class FriendsScreen extends Screen {
 	protected void init() {
 		addChild(widget = new UserListWidget(this, client, width, height, 32, height - 64, 35));
 
+		widget.children().clear();
+
 		if (current == Tab.ALL || current == Tab.ONLINE) {
 			FriendHandler.getInstance().getFriends(list -> widget.setUsers(list.stream().sorted((u1, u2) ->
 				new AlphabeticalComparator().compare(u1.getName(), u2.getName())).filter(user -> {
@@ -125,7 +135,7 @@ public class FriendsScreen extends Screen {
 			new TranslatableText("api.friends.add"),
 			button -> client.openScreen(new AddFriendScreen(this))));
 
-		this.addButton(removeButton = new ButtonWidget(this.width / 2 - 50, this.height - 28, 100, 20,
+		this.removeButton = this.addButton(new ButtonWidget(this.width / 2 - 50, this.height - 28, 100, 20,
 			new TranslatableText("api.friends.remove"), button -> {
 			UserListWidget.UserListEntry entry = this.widget.getSelected();
 			if (entry != null) {
@@ -171,10 +181,6 @@ public class FriendsScreen extends Screen {
 		refresh();
 	}
 
-	public void openChat() {
-
-	}
-
 	private void updateButtonActivationStates() {
 		UserListWidget.UserListEntry entry = widget.getSelected();
 		if (entry != null) {
@@ -201,6 +207,30 @@ public class FriendsScreen extends Screen {
 		} else if (current == Tab.BLOCKED) {
 			blockedTab.active = false;
 			onlineTab.active = allTab.active = pendingTab.active = true;
+		}
+	}
+
+	public void openChat() {
+		UserListWidget.UserListEntry entry = widget.getSelected();
+		if (entry != null) {
+			// TODO get this actually done
+			User u1 = new User("u1", UUID.randomUUID().toString(), Status.UNKNOWN);
+			User u2 = new User("U2", UUID.randomUUID().toString(), Status.UNKNOWN);
+			User self = API.getInstance().getSelf();
+			List<User> us = new ArrayList<>();
+			us.add(u1);
+			us.add(u2);
+			us.add(self);
+			for(int i=0;i<25;i++){
+				us.add(new User("abc"+i, UUID.randomUUID().toString(), Status.UNKNOWN));
+			}
+			client.openScreen(new ChatScreen(this, new Channel.Group("aaaa",
+				us.toArray(new User[0]), "Group!!", new ChatMessage[]{
+					new ChatMessage(u1, "AHHHHHHHHH!!", 16835345),
+				new ChatMessage(u2, "skjdfgnkfdsjkd", 14232325),
+				new ChatMessage(self, "hhhhhh", 16835348)})));
+			//API.getInstance().send(ChannelRequest.getDM(c -> client.openScreen(new ChatScreen(this, c)),
+			//		entry.getUser().getUuid(), ChannelRequest.Include.MESSAGES));
 		}
 	}
 

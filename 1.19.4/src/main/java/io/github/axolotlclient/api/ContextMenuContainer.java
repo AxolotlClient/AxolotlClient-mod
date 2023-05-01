@@ -46,7 +46,7 @@ public class ContextMenuContainer implements Drawable, Selectable, Element {
 	@Override
 	public boolean isFocused() {
 		if(menu != null){
-			menu.isFocused();
+			return menu.isFocused();
 		}
 		return false;
 	}
@@ -54,7 +54,7 @@ public class ContextMenuContainer implements Drawable, Selectable, Element {
 	@Override
 	public SelectionType getType() {
 		if(menu != null){
-			menu.getType();
+			return menu.getType();
 		}
 		return SelectionType.NONE;
 	}
@@ -76,7 +76,7 @@ public class ContextMenuContainer implements Drawable, Selectable, Element {
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
 		if(menu != null){
-			menu.mouseClicked(mouseX, mouseY, button);
+			return menu.mouseClicked(mouseX, mouseY, button);
 		}
 		return false;
 	}

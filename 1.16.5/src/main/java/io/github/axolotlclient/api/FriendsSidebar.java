@@ -22,12 +22,10 @@
 
 package io.github.axolotlclient.api;
 
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
-
+import io.github.axolotlclient.api.chat.ChatWidget;
 import io.github.axolotlclient.api.handlers.ChatHandler;
-import io.github.axolotlclient.api.handlers.FriendHandler;
+import io.github.axolotlclient.api.requests.ChannelRequest;
+import io.github.axolotlclient.api.types.Channel;
 import io.github.axolotlclient.api.types.User;
 import io.github.axolotlclient.api.util.AlphabeticalComparator;
 import io.github.axolotlclient.util.Util;
@@ -44,7 +42,11 @@ import net.minecraft.util.Formatting;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
-public class FriendsSidebar extends Screen {
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+
+public class FriendsSidebar extends Screen implements ContextMenuScreen {
 
 	private static final int ANIM_STEP = 5;
 	private final Screen parent;
@@ -52,9 +54,13 @@ public class FriendsSidebar extends Screen {
 	private int sidebarWidth;
 	private boolean remove;
 	private boolean hasChat;
-	private User chatUser;
 	private ListWidget list;
 	private TextFieldWidget input;
+	private Channel channel;
+
+	private ChatWidget chatWidget;
+
+	private ContextMenuContainer contextMenu;
 
 	public FriendsSidebar(Screen parent) {
 		super(new TranslatableText("api.friends.sidebar"));
@@ -68,20 +74,24 @@ public class FriendsSidebar extends Screen {
 		}
 		fill(matrices, sidebarAnimX, 0, sidebarWidth + sidebarAnimX, height, 0x99000000);
 
+		list.render(matrices, mouseX, mouseY, delta);
+
 		client.textRenderer.drawWithShadow(matrices, new TranslatableText("api.friends"), 10 + sidebarAnimX, 10, -1);
 
 		super.render(matrices, mouseX, mouseY, delta);
 
-		if (list != null) {
-			list.render(matrices, mouseX, mouseY, delta);
-		}
-
 		if (hasChat) {
 			drawVerticalLine(matrices, 70 + sidebarAnimX, 0, height, 0xFF000000);
-			client.textRenderer.drawWithShadow(matrices, chatUser.getName(), sidebarAnimX + 75, 20, -1);
-			client.textRenderer.drawWithShadow(matrices, Formatting.ITALIC + chatUser.getStatus().getTitle() + ":" + chatUser.getStatus().getDescription(),
-				sidebarAnimX + 80, 30, 8421504);
+			client.textRenderer.drawWithShadow(matrices, channel.getName(), sidebarAnimX + 75, 20, -1);
+			if (channel.isDM()) {
+				client.textRenderer.drawWithShadow(matrices, Formatting.ITALIC + ((Channel.DM) channel).getReceiver().getStatus().getTitle() + ":" + ((Channel.DM) channel).getReceiver().getStatus().getDescription(),
+					sidebarAnimX + 80, 30, 8421504);
+			}
+
+			chatWidget.render(matrices, mouseX, mouseY, delta);
 		}
+
+		contextMenu.render(matrices, mouseX, mouseY, delta);
 
 		animate();
 	}
@@ -96,10 +106,12 @@ public class FriendsSidebar extends Screen {
 				.map(e -> (ClickableWidget) e).filter(e -> e.getMessage().equals(new TranslatableText("api.friends"))).forEach(e -> e.visible = false);
 		}
 
-
-		FriendHandler.getInstance().getFriends(list -> addChild(this.list = new ListWidget(list, 10, 30, 50, height - 70)));
+		API.getInstance().send(ChannelRequest.getChannelList(list ->
+				addChild(this.list = new ListWidget(list, 10, 30, 50, height - 60)),
+			API.getInstance().getUuid(), ChannelRequest.SortBy.LAST_MESSAGE, ChannelRequest.Include.USER_STATUS));
 
 		addButton(new ButtonWidget(10 - sidebarWidth, height - 30, 50, 20, ScreenTexts.BACK, buttonWidget -> remove()));
+		addChild(contextMenu = new ContextMenuContainer());
 	}
 
 	public void remove() {
@@ -111,6 +123,13 @@ public class FriendsSidebar extends Screen {
 	public void tick() {
 		if (input != null) {
 			input.tick();
+		}
+	}
+
+	@Override
+	public void removed() {
+		if (chatWidget != null) {
+			chatWidget.remove();
 		}
 	}
 
@@ -128,7 +147,7 @@ public class FriendsSidebar extends Screen {
 			if (list != null) {
 				list.visible = false;
 			}
-			getButtons().forEach(button -> button.x += ANIM_STEP);
+			getButtons().forEach(button -> button.x = (button.x + ANIM_STEP));
 		} else if (remove) {
 			if (sidebarAnimX < -sidebarWidth) {
 				close();
@@ -137,9 +156,12 @@ public class FriendsSidebar extends Screen {
 			if (list != null) {
 				list.setX(list.getX() - ANIM_STEP);
 			}
-			getButtons().forEach(button -> button.x -= ANIM_STEP);
+			getButtons().forEach(button -> button.x = (button.x - ANIM_STEP));
+			if (chatWidget != null) {
+				chatWidget.setX(chatWidget.getX() - ANIM_STEP);
+			}
 		} else {
-			if (list != null) {
+			if (list != null && !list.visible) {
 				list.visible = true;
 			}
 		}
@@ -151,10 +173,19 @@ public class FriendsSidebar extends Screen {
 
 	private void close() {
 		client.openScreen(parent);
+		if (chatWidget != null) {
+			chatWidget.remove();
+		}
 	}
 
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
+		if(contextMenu.getMenu() != null){
+			if(contextMenu.mouseClicked(mouseX, mouseY, button)){
+				return true;
+			}
+			contextMenu.removeMenu();
+		}
 		if (mouseX > sidebarWidth) {
 			remove();
 			return true;
@@ -162,23 +193,47 @@ public class FriendsSidebar extends Screen {
 		return super.mouseClicked(mouseX, mouseY, button);
 	}
 
-	private void addChat(User user) {
+	private void addChat(Channel channel) {
 		// TODO implement Chat
 		hasChat = true;
-		chatUser = user;
-		sidebarWidth = Math.max(width * 5 / 12, client.textRenderer.getWidth(chatUser.getStatus().getTitle() + ":" + chatUser.getStatus().getDescription()) + 5);
+		this.channel = channel;
+		int w;
+		if (channel.isDM()) {
+			User chatUser = ((Channel.DM) channel).getReceiver();
+			w = Math.max(client.textRenderer.getWidth(chatUser.getStatus().getTitle() + ":" + chatUser.getStatus().getDescription()),
+				client.textRenderer.getWidth(channel.getName()));
+		} else {
+			w = client.textRenderer.getWidth(channel.getName());
+		}
+		sidebarWidth = Math.max(width * 5 / 12, w + 5);
+		chatWidget = new ChatWidget(channel, 75, 50, sidebarWidth - 80, height - 60, this);
 		addButton(input = new TextFieldWidget(textRenderer, 75, height - 30, sidebarWidth - 80, 20, new TranslatableText("api.friends.chat.input")) {
 			@Override
 			public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 				if (keyCode == GLFW.GLFW_KEY_ENTER) {
 					// TODO send chat message
-					//ChatHandler.getInstance().sendMessage(chatUser, input.getText());
+					ChatHandler.getInstance().sendMessage(channel, input.getText());
 					input.setText("");
 					return true;
 				}
 				return super.keyPressed(keyCode, scanCode, modifiers);
 			}
 		});
+	}
+
+	@Override
+	public void setContextMenu(ContextMenu menu) {
+		contextMenu.setMenu(menu);
+	}
+
+	@Override
+	public boolean hasContextMenu() {
+		return contextMenu.hasMenu();
+	}
+
+	@Override
+	public Screen getParent() {
+		return parent;
 	}
 
 	public static class ButtonEntry extends EntryListWidget.Entry<ButtonEntry> {
@@ -208,7 +263,7 @@ public class FriendsSidebar extends Screen {
 		private final int entryHeight = 25;
 		private boolean visible;
 
-		public ListWidget(List<User> list, int x, int y, int width, int height) {
+		public ListWidget(List<Channel> list, int x, int y, int width, int height) {
 			super(FriendsSidebar.this.client, width, height, y, y + height, 25);
 			left = x;
 			right = x + width;

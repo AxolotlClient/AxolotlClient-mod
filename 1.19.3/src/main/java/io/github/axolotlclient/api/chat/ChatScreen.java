@@ -22,98 +22,72 @@
 
 package io.github.axolotlclient.api.chat;
 
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.mojang.blaze3d.platform.InputUtil;
+import io.github.axolotlclient.api.ContextMenu;
+import io.github.axolotlclient.api.ContextMenuContainer;
+import io.github.axolotlclient.api.ContextMenuScreen;
 import io.github.axolotlclient.api.handlers.ChatHandler;
-import io.github.axolotlclient.api.types.ChatMessage;
-import io.github.axolotlclient.api.types.User;
+import io.github.axolotlclient.api.types.Channel;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.OrderedText;
 import net.minecraft.text.ScreenTexts;
 import net.minecraft.text.Text;
 
-public class ChatScreen extends Screen {
-	private final User user;
+import java.util.Arrays;
+
+public class ChatScreen extends Screen implements ContextMenuScreen {
+
+	private ContextMenuContainer contextMenu = new ContextMenuContainer();
+	private final Channel channel;
 	private final Screen parent;
 
-	private final List<ChatMessage> messages = new ArrayList<>();
-	private int firstVisibleMessage;
-	private int visibleHeight;
-
+	private ChatWidget widget;
+	private ChatUserListWidget users;
 	private TextFieldWidget input;
 
-	public ChatScreen(Screen parent, User user) {
+	public ChatScreen(Screen parent, Channel channel) {
 		super(Text.translatable("api.screen.chat"));
-		this.user = user;
+		this.channel = channel;
 		this.parent = parent;
-		firstVisibleMessage = 0;
 	}
 
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		renderBackground(matrices);
+
+		if(users != null){
+			users.render(matrices, mouseX, mouseY, delta);
+		}
+
 		super.render(matrices, mouseX, mouseY, delta);
 
-		drawCenteredText(matrices, this.textRenderer, user.getName(), this.width / 2, 20, 16777215);
-
-		enableScissor(0, 30, width, height - 30);
-		int y = 30 - client.textRenderer.fontHeight; // counting from the bottom
-		for (int i = firstVisibleMessage; i < messages.size(); i++) {
-			List<OrderedText> list = client.textRenderer.wrapLines(Text.of(messages.get(i).getContent()), width - 80);
-
-			for (OrderedText text : list) {
-				if (y >= visibleHeight + 30) {
-					break;
-				}
-
-				client.textRenderer.draw(matrices, text, 40, height - y, -1);
-				y += client.textRenderer.fontHeight;
-			}
-
-			if (y >= visibleHeight + 30) {
-				break;
-			}
-		}
-		if (y < visibleHeight + 30) {
-			loadMessages();
-		}
-		disableScissor();
-	}
-
-	private void loadMessages() {
-		long before;
-		if (messages.size() != 0) {
-			before = messages.get(Math.max(messages.size() - 1, 0)).getTimestamp();
-		} else {
-			before = Instant.now().getEpochSecond();
-		}
-		//ChatHandler.getInstance().getMessagesBefore(user, before);
-	}
-
-	@Override
-	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-		return super.keyPressed(keyCode, scanCode, modifiers);
+		drawCenteredText(matrices, this.textRenderer, channel.getName(), this.width / 2, 20, 16777215);
 	}
 
 	@Override
 	protected void init() {
-		visibleHeight = height - 60;
-		ChatHandler.getInstance().setMessagesConsumer(messages::addAll);
+
+		addDrawableChild(new ChatListWidget(this, width, height, 0, 30, 50, height-90));
+
+		addDrawableChild(widget = new ChatWidget(channel, 50, 30, width - (!channel.isDM() ? 140 : 100), height - 90, this));
+
+		if(!channel.isDM()){
+			users = new ChatUserListWidget(this, client, 80, height - 20, 30, height - 60, 25);
+			users.setLeftPos(width-80);
+			users.setUsers(Arrays.asList(channel.getUsers()));
+			addSelectableChild(users);
+		}
 
 		addDrawableChild(input = new TextFieldWidget(client.textRenderer, width / 2 - 150, height - 50,
 			300, 20, Text.translatable("api.chat.enterMessage")) {
 
 			@Override
 			public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-				if (keyCode == InputUtil.KEY_ENTER_CODE) {
+				if (keyCode == InputUtil.KEY_ENTER_CODE && !getText().isEmpty()) {
 					// TODO send chat message
-					//ChatHandler.getInstance().sendMessage(user, getText());
+					ChatHandler.getInstance().sendMessage(channel, getText());
 					setText("");
 					return true;
 				}
@@ -121,30 +95,59 @@ public class ChatScreen extends Screen {
 			}
 		});
 
+		input.setSuggestion(Text.translatable("api.chat.messageUser", (Object) channel.getName()).getString());
 		input.setChangedListener(s -> {
 			if (s.isEmpty()) {
-				input.setSuggestion(Text.translatable("api.chat.messageUser", user.getName()).getString());
+				input.setSuggestion(Text.translatable("api.chat.messageUser", (Object) channel.getName()).getString());
 			} else {
 				input.setSuggestion("");
 			}
 		});
+		input.setMaxLength(1024);
 
-		this.addDrawableChild(
-			ButtonWidget.builder(ScreenTexts.BACK, button -> this.client.setScreen(this.parent))
-				.positionAndSize(this.width / 2 - 75, this.height - 28, 150, 20)
-				.build()
+		this.addDrawableChild(ButtonWidget.builder(ScreenTexts.BACK, button -> this.client.setScreen(this.parent))
+			.positionAndSize(this.width / 2 - 75, this.height - 28, 150, 20)
+			.build()
 		);
+
+		addDrawableChild(contextMenu);
 	}
 
 	@Override
 	public void tick() {
-		super.tick();
 		input.tick();
 	}
 
 	@Override
-	public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
-		firstVisibleMessage = Math.max(firstVisibleMessage + (int) amount, 0);
-		return super.mouseScrolled(mouseX, mouseY, amount);
+	public void removed() {
+		if (widget != null) {
+			widget.remove();
+		}
+	}
+
+	@Override
+	public boolean mouseClicked(double mouseX, double mouseY, int button) {
+		if(contextMenu.getMenu() != null){
+			if(contextMenu.mouseClicked(mouseX, mouseY, button)){
+				return true;
+			}
+			contextMenu.removeMenu();
+		}
+		return super.mouseClicked(mouseX, mouseY, button);
+	}
+
+	@Override
+	public void setContextMenu(ContextMenu menu) {
+		this.contextMenu.setMenu(menu);
+	}
+
+	@Override
+	public boolean hasContextMenu() {
+		return contextMenu.hasMenu();
+	}
+
+	@Override
+	public Screen getParent() {
+		return parent;
 	}
 }

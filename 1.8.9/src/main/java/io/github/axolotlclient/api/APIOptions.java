@@ -27,7 +27,6 @@ import io.github.axolotlclient.AxolotlClientConfig.options.GenericOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.KeyBindOption;
 import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.option.KeyBinding;
 import org.lwjgl.input.Keyboard;
 
 public class APIOptions extends Options {
@@ -38,11 +37,11 @@ public class APIOptions extends Options {
 	@Override
 	public void init() {
 		super.init();
-
 		openSidebar = new KeyBindOption("api.friends.sidebar.open", Keyboard.KEY_O, keyBind ->
 			MinecraftClient.getInstance().setScreen(new FriendsSidebar(MinecraftClient.getInstance().currentScreen)));
 		category.add(openSidebar);
-		category.add(new GenericOption("viewFriends", "clickToOpen", (mX, mY) -> MinecraftClient.getInstance().setScreen(new FriendsScreen(MinecraftClient.getInstance().currentScreen))));
+		category.add(new GenericOption("viewFriends", "clickToOpen", (mX, mY) -> MinecraftClient.getInstance()
+			.setScreen(new FriendsScreen(MinecraftClient.getInstance().currentScreen))));
 		AxolotlClient.CONFIG.addCategory(category);
 	}
 }

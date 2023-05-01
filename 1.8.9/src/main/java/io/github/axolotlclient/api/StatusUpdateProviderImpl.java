@@ -22,11 +22,6 @@
 
 package io.github.axolotlclient.api;
 
-import java.time.Instant;
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
-
 import com.google.gson.JsonObject;
 import io.github.axolotlclient.api.requests.StatusUpdate;
 import io.github.axolotlclient.api.util.StatusUpdateProvider;
@@ -36,9 +31,15 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
+import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.level.LevelInfo;
+
+import java.time.Instant;
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class StatusUpdateProviderImpl implements StatusUpdateProvider {
 
@@ -95,7 +96,8 @@ public class StatusUpdateProviderImpl implements StatusUpdateProvider {
 	}
 
 	private String getGameModeString(PlayerEntity entity) {
-		switch (getGameMode(entity)) {
+		PlayerListEntry entry = MinecraftClient.getInstance().getNetworkHandler().getPlayerListEntry(entity.getUuid());
+		switch (entry.getGameMode()) {
 			case CREATIVE:
 				return "Creative Mode";
 			case SURVIVAL:

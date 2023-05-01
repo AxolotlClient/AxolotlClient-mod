@@ -22,10 +22,6 @@
 
 package io.github.axolotlclient.modules.auth;
 
-import java.nio.file.Path;
-import java.util.*;
-import java.util.stream.Collectors;
-
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.util.UUIDTypeAdapter;
@@ -45,6 +41,10 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.DefaultSkinHelper;
 import net.minecraft.client.util.Session;
 import net.minecraft.util.Identifier;
+
+import java.nio.file.Path;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Auth extends Accounts implements Module {
 
@@ -110,7 +110,7 @@ public class Auth extends Accounts implements Module {
 			Notifications.getInstance().addStatus("auth.notif.title", "auth.notif.refreshing", account.getName());
 			account.refresh(auth, runnable);
 		} else {
-			runnable.run();
+			new Thread(runnable).start();
 		}
 	}
 

@@ -22,11 +22,8 @@
 
 package io.github.axolotlclient.api;
 
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
-
 import com.mojang.blaze3d.platform.GlStateManager;
+import io.github.axolotlclient.api.chat.ChatWidget;
 import io.github.axolotlclient.api.handlers.ChatHandler;
 import io.github.axolotlclient.api.requests.ChannelRequest;
 import io.github.axolotlclient.api.types.Channel;
@@ -44,7 +41,11 @@ import net.minecraft.util.Formatting;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-public class FriendsSidebar extends Screen {
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+
+public class FriendsSidebar extends Screen implements ContextMenuScreen {
 
 	private static final int ANIM_STEP = 5;
 	private final Screen parent;
@@ -52,9 +53,13 @@ public class FriendsSidebar extends Screen {
 	private int sidebarWidth;
 	private boolean remove;
 	private boolean hasChat;
-	private Channel channel;
 	private ListWidget list;
 	private TextFieldWidget input;
+	private Channel channel;
+
+	private ChatWidget chatWidget;
+
+	private ContextMenuContainer contextMenu;
 
 	public FriendsSidebar(Screen parent) {
 		super();
@@ -87,79 +92,12 @@ public class FriendsSidebar extends Screen {
 					sidebarAnimX + 80, 30, 8421504);
 			}
 
-			//chatWidget.render(mouseX, mouseY, delta);
+			chatWidget.render(mouseX, mouseY, delta);
 		}
+
+		contextMenu.render(client, mouseX, mouseY);
 
 		animate();
-	}
-
-	private void animate() {
-		if (sidebarAnimX < 0 && !remove) {
-			if (sidebarAnimX > -ANIM_STEP) {
-				sidebarAnimX = -ANIM_STEP;
-			}
-			sidebarAnimX += ANIM_STEP;
-			if (list != null) {
-				list.visible = false;
-			}
-			buttons.forEach(button -> button.x += ANIM_STEP);
-		} else if (remove) {
-			if (sidebarAnimX < -sidebarWidth) {
-				close();
-			}
-			sidebarAnimX -= ANIM_STEP;
-			if (list != null) {
-				list.setX(list.getX() - ANIM_STEP);
-			}
-			buttons.forEach(button -> button.x -= ANIM_STEP);
-		} else {
-			if (list != null) {
-				list.visible = true;
-			}
-		}
-	}
-
-	private void close() {
-		Keyboard.enableRepeatEvents(false);
-		client.setScreen(parent);
-	}
-
-	@Override
-	protected void keyPressed(char c, int i) {
-		if (input != null) {
-			input.keyPressed(c, i);
-		}
-	}
-
-	@Override
-	public void mouseClicked(int mouseX, int mouseY, int button) {
-		if (mouseX > sidebarWidth) {
-			remove();
-			return;
-		}
-		if (list != null) {
-			list.mouseClicked(mouseX, mouseY, button);
-		}
-
-		if (input != null) {
-			input.mouseClicked(mouseX, mouseY, button);
-		}
-		super.mouseClicked(mouseX, mouseY, button);
-	}
-
-	@Override
-	protected void mouseReleased(int i, int j, int k) {
-		super.mouseReleased(i, j, k);
-		if (list != null) {
-			list.mouseReleased(i, j, k);
-		}
-	}
-
-	@Override
-	protected void buttonClicked(ButtonWidget button) {
-		if (button.id == 0) {
-			remove();
-		}
 	}
 
 	@Override
@@ -177,14 +115,12 @@ public class FriendsSidebar extends Screen {
 
 		buttons.add(new ButtonWidget(0, 10 - sidebarWidth, height - 30, 50, 20, I18n.translate("gui.back")));
 		Keyboard.enableRepeatEvents(true);
+		contextMenu = new ContextMenuContainer();
 	}
 
-	@Override
-	public void handleMouse() {
-		super.handleMouse();
-		if (list != null) {
-			list.handleMouse();
-		}
+	public void remove() {
+		remove = true;
+
 	}
 
 	@Override
@@ -195,12 +131,73 @@ public class FriendsSidebar extends Screen {
 	}
 
 	@Override
+	public void removed() {
+		if (chatWidget != null) {
+			chatWidget.remove();
+		}
+	}
+
+	@Override
 	public boolean shouldPauseGame() {
 		return parent != null && parent.shouldPauseGame();
 	}
 
-	public void remove() {
-		remove = true;
+	private void animate() {
+		if (sidebarAnimX < 0 && !remove) {
+			if (sidebarAnimX > -ANIM_STEP) {
+				sidebarAnimX = -ANIM_STEP;
+			}
+			sidebarAnimX += ANIM_STEP;
+			if (list != null) {
+				list.visible = false;
+			}
+			buttons.forEach(button -> button.x = (button.x + ANIM_STEP));
+		} else if (remove) {
+			if (sidebarAnimX < -sidebarWidth) {
+				close();
+			}
+			sidebarAnimX -= ANIM_STEP;
+			if (list != null) {
+				list.setX(list.getX() - ANIM_STEP);
+			}
+			buttons.forEach(button -> button.x = (button.x - ANIM_STEP));
+			if (chatWidget != null) {
+				chatWidget.setX(chatWidget.getX() - ANIM_STEP);
+			}
+		} else {
+			if (list != null && !list.visible) {
+				list.visible = true;
+			}
+		}
+	}
+
+	private void close() {
+		client.setScreen(parent);
+		if (chatWidget != null) {
+			chatWidget.remove();
+		}
+	}
+
+	@Override
+	public void mouseClicked(int mouseX, int mouseY, int button) {
+		if(contextMenu.getMenu() != null){
+			if(contextMenu.mouseClicked(mouseX, mouseY, button)){
+				return;
+			}
+			contextMenu.removeMenu();
+		}
+		if (mouseX > sidebarWidth) {
+			remove();
+			return;
+		}
+		if (list != null) {
+			list.mouseClicked(mouseX, mouseY, button);
+		}
+
+		if (input != null) {
+			input.mouseClicked(mouseX, mouseY, button);
+		}
+		super.mouseClicked(mouseX, mouseY, button);
 	}
 
 	private void addChat(Channel channel) {
@@ -216,8 +213,8 @@ public class FriendsSidebar extends Screen {
 			w = client.textRenderer.getStringWidth(channel.getName());
 		}
 		sidebarWidth = Math.max(width * 5 / 12, w + 5);
+		chatWidget = new ChatWidget(channel, 75, 50, sidebarWidth - 80, height - 60, this);
 		input = new TextFieldWidget(2, textRenderer, 75, height - 30, sidebarWidth - 80, 20) {
-
 			@Override
 			public boolean keyPressed(char c, int i) {
 				if (i == Keyboard.KEY_RETURN) {
@@ -229,6 +226,21 @@ public class FriendsSidebar extends Screen {
 				return super.keyPressed(c, i);
 			}
 		};
+	}
+
+	@Override
+	public void setContextMenu(ContextMenu menu) {
+		contextMenu.setMenu(menu);
+	}
+
+	@Override
+	public boolean hasContextMenu() {
+		return contextMenu.hasMenu();
+	}
+
+	@Override
+	public Screen getParent() {
+		return parent;
 	}
 
 	public interface Action {

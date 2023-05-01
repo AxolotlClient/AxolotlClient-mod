@@ -69,7 +69,7 @@ public class ChatScreen extends Screen implements ContextMenuScreen {
 	@Override
 	protected void init() {
 
-		addDrawableChild(new ChatListWidget(this, 0, 30, 50, height-90));
+		addDrawableChild(new ChatListWidget(this, width, height, 0, 30, 50, height-90));
 
 		addDrawableChild(widget = new ChatWidget(channel, 50, 30, width - (!channel.isDM() ? 140 : 100), height - 90, this));
 

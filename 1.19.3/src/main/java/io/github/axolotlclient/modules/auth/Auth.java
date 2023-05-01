@@ -22,9 +22,6 @@
 
 package io.github.axolotlclient.modules.auth;
 
-import java.nio.file.Path;
-import java.util.*;
-
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.exceptions.AuthenticationException;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
@@ -52,6 +49,9 @@ import net.minecraft.client.util.Session;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.quiltmc.loader.api.QuiltLoader;
+
+import java.nio.file.Path;
+import java.util.*;
 
 public class Auth extends Accounts implements Module {
 
@@ -125,7 +125,7 @@ public class Auth extends Accounts implements Module {
 			Notifications.getInstance().addStatus(Text.translatable("auth.notif.title"), Text.translatable("auth.notif.refreshing", account.getName()));
 			account.refresh(auth, runnable);
 		} else {
-			runnable.run();
+			new Thread(runnable).start();
 		}
 	}
 
