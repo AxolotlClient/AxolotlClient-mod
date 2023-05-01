@@ -4,6 +4,8 @@ plugins {
 	id 'io.github.p03w.machete' version '2.+'
 }
 
+apply plugin: "io.github.p03w.machete"
+
 group = maven_group
 version = "${project.version}+${project.minecraft_1194}"
 archivesBaseName = "AxolotlClient"

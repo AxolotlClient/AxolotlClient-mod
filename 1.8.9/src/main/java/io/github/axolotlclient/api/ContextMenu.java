@@ -1,3 +1,25 @@
+/*
+ * Copyright © 2021-2023 moehreag <moehreag@gmail.com> & Contributors
+ *
+ * This file is part of AxolotlClient.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ * For more information, see the LICENSE file.
+ */
+
 package io.github.axolotlclient.api;
 
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -33,10 +55,6 @@ public class ContextMenu {
 		children.add(entry);
 	}
 
-	public List<ButtonWidget> entries(){
-		return children;
-	}
-
 	public void render(MinecraftClient client, int mouseX, int mouseY) {
 		if(!rendering){
 			y = mouseY;
@@ -64,13 +82,12 @@ public class ContextMenu {
 
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
 		List<ContextMenuEntryWidget> stream = children.stream().filter(b -> b instanceof ContextMenuEntryWidget)
-			.map(b -> (ContextMenuEntryWidget) b).filter(b -> b.isHovered()).collect(Collectors.toList());
+			.map(b -> (ContextMenuEntryWidget) b).filter(ButtonWidget::isHovered).collect(Collectors.toList());
 		boolean clicked = false;
 		for(ContextMenuEntryWidget c : stream){
 			c.onPress(mouseX, mouseY, button);
 			clicked = true;
 		}
-		System.out.println("Button in ContextMenu clicked: "+ clicked);
 		return clicked;
 	}
 
@@ -79,8 +96,6 @@ public class ContextMenu {
 	}
 
 	public static class Builder {
-
-		private final MinecraftClient client = MinecraftClient.getInstance();
 
 		private final List<ButtonWidget> elements = new ArrayList<>();
 
@@ -111,8 +126,6 @@ public class ContextMenu {
 
 	public static class ContextMenuEntrySpacer extends ButtonWidget {
 
-		private final MinecraftClient client = MinecraftClient.getInstance();
-
 		public ContextMenuEntrySpacer() {
 			super(0, 0, 0, 50, 11, "-----");
 		}
@@ -129,11 +142,6 @@ public class ContextMenu {
 
 		private final MinecraftClient client = MinecraftClient.getInstance();
 
-		protected ContextMenuEntryWidget(int x, int y, int width, int height, String message, PressAction onPress) {
-			super(0, x, y, width, height, message);
-			this.action = onPress;
-		}
-
 		public ContextMenuEntryWidget(String message, PressAction onPress) {
 			super(0, 0, 0, MinecraftClient.getInstance().textRenderer.getStringWidth(message)+4, 11, message);
 			this.action = onPress;
@@ -141,6 +149,7 @@ public class ContextMenu {
 
 		@Override
 		public void render(MinecraftClient client, int mouseX, int mouseY) {
+			this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 
 			if (isHovered()) {
 				fill(x, y, x + getWidth(), y + height, 0x55ffffff);
@@ -158,7 +167,8 @@ public class ContextMenu {
 		}
 
 		public void onPress(double mouseX, double mouseY, int button){
-			if(isMouseOver(client, (int) mouseX, (int) mouseY)) {
+			playDownSound(client.getSoundManager());
+			if(isMouseOver(client, (int) mouseX, (int) mouseY) && button == 0) {
 				action.onPress(this);
 			}
 		}

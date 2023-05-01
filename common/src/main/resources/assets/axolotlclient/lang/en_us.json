@@ -435,5 +435,6 @@
 	"api.chat.newMessageFrom": "Chat: %s",
 	"api.chat.enterMessage": "Enter Message",
 	"api.chat.messageUser": "Message @%s",
-	"api.error.requestGeneric": "API Error"
+	"api.error.requestGeneric": "API Error",
+	"action.copy": "Copy..."
 }
