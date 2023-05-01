@@ -89,7 +89,8 @@ public class ContextMenu implements ParentElement, Drawable, Selectable {
 			y += d.getHeight();
 			width = Math.max(width, d.getWidth());
 		}
-		DrawableHelper.fill(matrices, xStart, yStart, xStart + width + 1, y, 0xBB1E1F22);
+		DrawableHelper.fill(matrices, xStart, yStart, xStart + width + 1, y, 0xDD1E1F22);
+		DrawableHelper.drawOutline(matrices, xStart, yStart, width+1, y - yStart + 1, -1);
 		for (ClickableWidget c : children) {
 			c.setWidth(width);
 			c.render(matrices, mouseX, mouseY, delta);
@@ -121,6 +122,11 @@ public class ContextMenu implements ParentElement, Drawable, Selectable {
 			return this;
 		}
 
+		public Builder entry(ClickableWidget widget){
+			elements.add(widget);
+			return this;
+		}
+
 		public Builder spacer() {
 			elements.add(new ContextMenuEntrySpacer());
 			return this;
@@ -142,7 +148,7 @@ public class ContextMenu implements ParentElement, Drawable, Selectable {
 
 		@Override
 		public void drawWidget(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-			drawCenteredText(matrices, client.textRenderer, getMessage(), getX() + getWidth() / 2, getY(), 0x292B2F);
+			drawCenteredText(matrices, client.textRenderer, getMessage(), getX() + getWidth() / 2, getY(), 0xDDDDDD);
 		}
 
 		@Override

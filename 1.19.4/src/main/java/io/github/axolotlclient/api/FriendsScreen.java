@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.api;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -89,6 +91,8 @@ public class FriendsScreen extends Screen {
 	@Override
 	protected void init() {
 		addSelectableChild(widget = new UserListWidget(this, client, width, height, 32, height - 64, 35));
+
+		widget.children().clear();
 
 		if (current == Tab.ALL || current == Tab.ONLINE) {
 			FriendHandler.getInstance().getFriends(list -> widget.setUsers(list.stream().sorted((u1, u2) ->
@@ -210,11 +214,19 @@ public class FriendsScreen extends Screen {
 	public void openChat() {
 		UserListWidget.UserListEntry entry = widget.getSelectedOrNull();
 		if (entry != null) {
+			// TODO get this actually done
 			User u1 = new User("u1", UUID.randomUUID().toString(), Status.UNKNOWN);
 			User u2 = new User("U2", UUID.randomUUID().toString(), Status.UNKNOWN);
 			User self = API.getInstance().getSelf();
+			List<User> us = new ArrayList<>();
+			us.add(u1);
+			us.add(u2);
+			us.add(self);
+			for(int i=0;i<25;i++){
+				us.add(new User("abc"+i, UUID.randomUUID().toString(), Status.UNKNOWN));
+			}
 			client.setScreen(new ChatScreen(this, new Channel.Group("aaaa",
-				new User[]{self, u1, u2}, "Group!!", new ChatMessage[]{
+				us.toArray(User[]::new), "Group!!", new ChatMessage[]{
 					new ChatMessage(u1, "AHHHHHHHHH!!", 16835345),
 				new ChatMessage(u2, "skjdfgnkfdsjkd", 14232325),
 				new ChatMessage(self, "hhhhhh", 16835348)})));

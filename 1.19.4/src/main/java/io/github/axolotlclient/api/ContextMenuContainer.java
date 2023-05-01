@@ -14,11 +14,15 @@ import org.jetbrains.annotations.Nullable;
 
 public class ContextMenuContainer implements Drawable, Selectable, Element {
 
-	@Getter @Setter
+	@Getter @Setter @Nullable
 	private ContextMenu menu;
 
 	public ContextMenuContainer(){
 
+	}
+
+	public void removeMenu(){
+		menu = null;
 	}
 
 	public boolean hasMenu(){

@@ -69,14 +69,16 @@ public class ChatScreen extends Screen implements ContextMenuScreen {
 	@Override
 	protected void init() {
 
+		addDrawableChild(new ChatListWidget(this, 0, 30, 50, height-90));
+
+		addDrawableChild(widget = new ChatWidget(channel, 50, 30, width - (!channel.isDM() ? 140 : 100), height - 90, this));
+
 		if(!channel.isDM()){
-			users = new ChatUserListWidget(this, client, 75, height - 20, 30, height - 60, 25);
+			users = new ChatUserListWidget(this, client, 80, height - 20, 30, height - 60, 25);
 			users.setLeftPos(width-80);
 			users.setUsers(Arrays.asList(channel.getUsers()));
 			addSelectableChild(users);
 		}
-
-		addDrawable(widget = new ChatWidget(channel, 50, 30, width - (!channel.isDM() ? 140 : 100), height - 90));
 
 		addDrawableChild(input = new TextFieldWidget(client.textRenderer, width / 2 - 150, height - 50,
 			300, 20, Text.translatable("api.chat.enterMessage")) {
@@ -129,22 +131,9 @@ public class ChatScreen extends Screen implements ContextMenuScreen {
 			if(contextMenu.mouseClicked(mouseX, mouseY, button)){
 				return true;
 			}
-			//remove(contextMenu);
-			contextMenu.setMenu(null);
+			contextMenu.removeMenu();
 		}
 		return super.mouseClicked(mouseX, mouseY, button);
-	}
-
-	@Override
-	public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
-		if (widget != null) {
-			return super.mouseScrolled(mouseX, mouseY, amount) || widget.mouseScrolled(mouseX, mouseY, amount);
-		}
-		return super.mouseScrolled(mouseX, mouseY, amount);
-	}
-
-	public void select(ChatUserListWidget.UserListEntry userListEntry) {
-		users.setSelected(userListEntry);
 	}
 
 	@Override

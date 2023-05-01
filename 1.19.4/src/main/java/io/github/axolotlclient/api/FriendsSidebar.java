@@ -48,7 +48,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.MathHelper;
 
-public class FriendsSidebar extends Screen {
+public class FriendsSidebar extends Screen implements ContextMenuScreen {
 
 	private static final int ANIM_STEP = 5;
 	private final Screen parent;
@@ -61,6 +61,8 @@ public class FriendsSidebar extends Screen {
 	private Channel channel;
 
 	private ChatWidget chatWidget;
+
+	private ContextMenuContainer contextMenu;
 
 	public FriendsSidebar(Screen parent) {
 		super(Text.translatable("api.friends.sidebar"));
@@ -102,9 +104,12 @@ public class FriendsSidebar extends Screen {
 				.map(e -> (ClickableWidget) e).filter(e -> e.getMessage().equals(Text.translatable("api.friends"))).forEach(e -> e.visible = false);
 		}
 
-		ChannelRequest.getChannelList(list -> addDrawableChild(this.list = new ListWidget(list, 10, 30, 50, height - 60)), API.getInstance().getUuid(), ChannelRequest.SortBy.LAST_MESSAGE, ChannelRequest.Include.USER_STATUS);
+		API.getInstance().send(ChannelRequest.getChannelList(list ->
+				addDrawableChild(this.list = new ListWidget(list, 10, 30, 50, height - 60)),
+			API.getInstance().getUuid(), ChannelRequest.SortBy.LAST_MESSAGE, ChannelRequest.Include.USER_STATUS));
 
 		addDrawableChild(ButtonWidget.builder(ScreenTexts.BACK, buttonWidget -> remove()).positionAndSize(10 - sidebarWidth, height - 30, 50, 20).build());
+		addDrawableChild(contextMenu = new ContextMenuContainer());
 	}
 
 	public void remove() {
@@ -173,6 +178,12 @@ public class FriendsSidebar extends Screen {
 
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
+		if(contextMenu.getMenu() != null){
+			if(contextMenu.mouseClicked(mouseX, mouseY, button)){
+				return true;
+			}
+			contextMenu.removeMenu();
+		}
 		if (mouseX > sidebarWidth) {
 			remove();
 			return true;
@@ -193,7 +204,7 @@ public class FriendsSidebar extends Screen {
 			w = client.textRenderer.getWidth(channel.getName());
 		}
 		sidebarWidth = Math.max(width * 5 / 12, w + 5);
-		chatWidget = new ChatWidget(channel, 75, 50, sidebarWidth - 80, height - 60);
+		chatWidget = new ChatWidget(channel, 75, 50, sidebarWidth - 80, height - 60, this);
 		addDrawableChild(input = new TextFieldWidget(textRenderer, 75, height - 30, sidebarWidth - 80, 20, Text.translatable("api.friends.chat.input")) {
 			@Override
 			public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
@@ -206,6 +217,21 @@ public class FriendsSidebar extends Screen {
 				return super.keyPressed(keyCode, scanCode, modifiers);
 			}
 		});
+	}
+
+	@Override
+	public void setContextMenu(ContextMenu menu) {
+		contextMenu.setMenu(menu);
+	}
+
+	@Override
+	public boolean hasContextMenu() {
+		return contextMenu.hasMenu();
+	}
+
+	@Override
+	public Screen getParent() {
+		return parent;
 	}
 
 	private class ListWidget extends AbstractParentElement implements Drawable, Element, Selectable {

@@ -23,6 +23,7 @@
 package io.github.axolotlclient.api.chat;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.ContextMenu;
 import io.github.axolotlclient.api.requests.ChannelRequest;
 import io.github.axolotlclient.api.types.Channel;
@@ -33,11 +34,9 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
-import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.util.ChatUtil;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
@@ -69,7 +68,7 @@ public class ChatUserListWidget extends AlwaysSelectedEntryListWidget<ChatUserLi
 
 	@Override
 	protected int getScrollbarPositionX() {
-		return getRowLeft()+width;
+		return getRowLeft()+width-8;
 	}
 
 	@Override
@@ -157,15 +156,18 @@ public class ChatUserListWidget extends AlwaysSelectedEntryListWidget<ChatUserLi
 				}
 				this.time = Util.getMeasuringTimeMs();
 			} else if (button == 1){ // right click
-				ContextMenu menu = ContextMenu.builder()
-					.entry(Text.of(user.getName()), buttonWidget -> {})
-					.spacer()
-					.entry(Text.translatable("api.friends.chat"), buttonWidget -> {
-						Consumer<Channel> consumer = channel -> client.setScreen(new ChatScreen(screen.getParent(), channel));
-						ChannelRequest.getDM(consumer, user.getUuid(), ChannelRequest.Include.USER);
-					})
-					.build();
-				screen.setContextMenu(menu);
+
+
+				if(!user.equals(API.getInstance().getSelf())) {
+					ContextMenu.Builder menu = ContextMenu.builder()
+						.entry(Text.of(user.getName()), buttonWidget -> {})
+						.spacer()
+						.entry(Text.translatable("api.friends.chat"), buttonWidget -> {
+							Consumer<Channel> consumer = channel -> client.setScreen(new ChatScreen(screen.getParent(), channel));
+							ChannelRequest.getDM(consumer, user.getUuid(), ChannelRequest.Include.USER);
+						});
+					screen.setContextMenu(menu.build());
+				}
 			}
 
 			return false;
