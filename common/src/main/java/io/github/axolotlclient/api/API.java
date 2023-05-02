@@ -22,12 +22,6 @@
 
 package io.github.axolotlclient.api;
 
-import java.io.IOException;
-import java.net.URI;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-
 import com.google.gson.JsonObject;
 import io.github.axolotlclient.api.handlers.*;
 import io.github.axolotlclient.api.types.Status;
@@ -44,6 +38,12 @@ import jakarta.websocket.DeploymentException;
 import jakarta.websocket.Session;
 import lombok.Getter;
 import org.glassfish.tyrus.container.grizzly.client.GrizzlyContainerProvider;
+
+import java.io.IOException;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class API {
 
@@ -123,6 +123,7 @@ public class API {
 		try {
 			if (session != null && session.isOpen()) {
 				session.close(new CloseReason(CloseReason.CloseCodes.NORMAL_CLOSURE, "API shutdown procedure"));
+				session = null;
 			}
 		} catch (IOException e) {
 			throw new RuntimeException(e);
@@ -165,7 +166,7 @@ public class API {
 
 	private void handleResponse(String response) {
 		try {
-			JsonObject object = GsonHelper.GSON.fromJson(response, JsonObject.class);
+			JsonObject object = GsonHelper.fromJson(response);
 
 			String id = "";
 			if (object.has("id") && !object.get("id").isJsonNull()) id = object.get("id").getAsString();
@@ -207,13 +208,35 @@ public class API {
 	}
 
 	public void restart() {
-		startup(uuid);
+		if(isConnected()) {
+			shutdown();
+		}
+		if(uuid != null) {
+			startup(uuid);
+		} else {
+			apiOptions.enabled.set(false);
+		}
 	}
 
-	public void startup(String uuid) {
-		if (session == null || !session.isOpen()) {
-			this.uuid = sanitizeUUID(uuid);
-			self = new User(uuid, Status.UNKNOWN);
+	public void startup(String uuid){
+		this.uuid = uuid;
+		switch (apiOptions.privacyAccepted.get()) {
+			case "unset":
+				apiOptions.openPrivacyNoteScreen.accept(v -> {
+					if (v) startupAPI();
+				});
+				break;
+			case "accepted":
+				startupAPI();
+				break;
+			default:
+				break;
+		}
+	}
+
+	void startupAPI() {
+		if (!isConnected()) {
+			self = new User(this.uuid, Status.UNKNOWN);
 			logger.debug("Starting API...");
 			session = createSession();
 
@@ -225,7 +248,8 @@ public class API {
 					} catch (InterruptedException ignored) {
 					}
 					while (API.getInstance().isConnected()) {
-						send(statusUpdateProvider.getStatus());
+						Request statusUpdate = statusUpdateProvider.getStatus();
+						send(statusUpdate);
 						try {
 							//noinspection BusyWait
 							Thread.sleep(STATUS_UPDATE_DELAY * 1000);

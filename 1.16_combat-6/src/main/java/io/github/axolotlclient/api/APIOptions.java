@@ -37,10 +37,16 @@ public class APIOptions extends Options {
 	@Override
 	public void init() {
 		super.init();
+
+		MinecraftClient client = MinecraftClient.getInstance();
+
+		openPrivacyNoteScreen = n ->
+			client.execute(() -> client.openScreen(new PrivacyNoticeScreen(client.currentScreen, n)));
 		openSidebar = new KeyBindOption("api.friends.sidebar.open", GLFW.GLFW_KEY_O, keyBind ->
-			MinecraftClient.getInstance().openScreen(new FriendsSidebar(MinecraftClient.getInstance().currentScreen)));
+			client.openScreen(new FriendsSidebar(client.currentScreen)));
 		category.add(openSidebar);
 		category.add(new GenericOption("viewFriends", "clickToOpen", (mX, mY) -> MinecraftClient.getInstance().openScreen(new FriendsScreen(MinecraftClient.getInstance().currentScreen))));
 		AxolotlClient.CONFIG.addCategory(category);
+		AxolotlClient.config.add(privacyAccepted);
 	}
 }

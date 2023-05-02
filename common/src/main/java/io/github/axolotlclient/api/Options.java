@@ -23,17 +23,31 @@
 package io.github.axolotlclient.api;
 
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.EnumOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.KeyBindOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.Module;
+import io.github.axolotlclient.util.ThreadExecuter;
+
+import java.util.function.Consumer;
 
 public abstract class Options implements Module {
 
+	protected Consumer<Consumer<Boolean>> openPrivacyNoteScreen = v -> {};
+
+	public EnumOption privacyAccepted = new EnumOption("privacyPolicyAccepted", new String[]{"unset", "accepted", "denied"}, "unset");
+
 	public final BooleanOption enabled = new BooleanOption("enabled", value -> {
 		if (value) {
-			API.getInstance().restart();
+			if (!privacyAccepted.get().equals("accepted")) {
+				openPrivacyNoteScreen.accept(v -> {
+					if(v) ThreadExecuter.scheduleTask(() -> API.getInstance().restart());
+				});
+			} else {
+				ThreadExecuter.scheduleTask(() -> API.getInstance().restart());
+			}
 		} else {
-			API.getInstance().shutdown();
+			ThreadExecuter.scheduleTask(() -> API.getInstance().shutdown());
 		}
 	}, true);
 	public final BooleanOption statusUpdateNotifs = new BooleanOption("statusUpdateNotifs", true);
