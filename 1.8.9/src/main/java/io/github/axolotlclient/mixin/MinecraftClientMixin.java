@@ -178,4 +178,15 @@ public abstract class MinecraftClientMixin {
 			MenuBlur.getInstance().onScreenOpen();
 		}
 	}
+
+	@Inject(method = "tick", at = @At("HEAD"))
+	// fix MC-12410, where shift + 2 and shift + 6 are not registered properly
+	public void axolotlclient$keyCodeFix(CallbackInfo ci) {
+		switch (Keyboard.getEventCharacter()) {
+			case '^': // shift + 6
+				KeyBinding.onKeyPressed(Keyboard.KEY_6);
+			case '@': // shift + 2
+				KeyBinding.onKeyPressed(Keyboard.KEY_2);
+		}
+	}
 }
