@@ -71,7 +71,8 @@ public class API {
 	@Getter
 	private User self;
 
-	public API(Logger logger, NotificationProvider notificationProvider, TranslationProvider translationProvider, StatusUpdateProvider statusUpdateProvider, Options apiOptions) {
+	public API(Logger logger, NotificationProvider notificationProvider, TranslationProvider translationProvider,
+			   StatusUpdateProvider statusUpdateProvider, Options apiOptions) {
 		this.logger = logger;
 		this.notificationProvider = notificationProvider;
 		this.translationProvider = translationProvider;

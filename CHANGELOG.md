@@ -121,3 +121,11 @@
 - fix *more* bugs
 - re-instantiate modmenu compat on 1.16 versions
 - fix compatibility with darkloadingscreen
+
+### 3.1.0
+
+- Add a new Backend (made by gart)
+- Features:
+	- Friends
+	- Direct/Group Chats
+	- Status update notifications

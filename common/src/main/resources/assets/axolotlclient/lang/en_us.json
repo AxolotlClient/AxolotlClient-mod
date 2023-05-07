@@ -439,7 +439,9 @@
 	"action.copy": "Copy...",
 	"api.privacyNotice": "Privacy Notice",
 	"api.privacyNotice.accept": "Accept",
-	"api.privacyNotice.deny": "Deny",
+	"api.privacyNotice.deny": "Deny/Decide later",
 	"api.privacyNotice.openPolicy": "View Privacy Policy",
-	"api.privacyNotice.description": "The social features of AxolotlClient are subject to our privacy policy. You are free to accept or deny it, but in case of the latter some features will not be available."
+	"api.privacyNotice.description": "The social features of AxolotlClient are subject to our privacy policy. You are free to accept or deny it, but in case of the latter some features will not be available.",
+	"api.users.block": "Block User",
+	"api.users.unblock": "Unblock User"
 }

@@ -38,7 +38,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.util.math.MathHelper;
 
 import java.time.Instant;
 import java.util.*;

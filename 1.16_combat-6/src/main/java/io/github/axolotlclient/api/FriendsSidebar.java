@@ -74,7 +74,9 @@ public class FriendsSidebar extends Screen implements ContextMenuScreen {
 		}
 		fill(matrices, sidebarAnimX, 0, sidebarWidth + sidebarAnimX, height, 0x99000000);
 
-		list.render(matrices, mouseX, mouseY, delta);
+		if (list != null) {
+			list.render(matrices, mouseX, mouseY, delta);
+		}
 
 		client.textRenderer.drawWithShadow(matrices, new TranslatableText("api.friends"), 10 + sidebarAnimX, 10, -1);
 
