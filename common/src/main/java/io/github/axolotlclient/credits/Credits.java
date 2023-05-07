@@ -36,7 +36,7 @@ public class Credits {
 		contributor("moehreag", "Author, Programming", "https://github.com/moehreag");
 		contributor("YakisikliBaran", "Turkish Translation");
 		contributor("TheKodeToad", "Contributor", "Motion Blur", "Freelook", "Zoom");
-		contributor("DragonEggBedrockBreaking", "Bugfixing", "Inspiration of new Features");
+		contributor("DragonEggBedrockBreaking", "Bugfixes", "Inspiration of new Features");
 		contributor("gart", "gartbin dev and host", "Image sharing help", "https://gart.sh", "Backend developer");
 
 		otherPerson("DarkKronicle", "Author of KronHUD, the best HUD mod!");

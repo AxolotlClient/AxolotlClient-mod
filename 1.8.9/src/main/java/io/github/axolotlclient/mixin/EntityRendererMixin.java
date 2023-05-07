@@ -27,6 +27,7 @@ import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.freelook.Perspective;
 import io.github.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
 import io.github.axolotlclient.modules.hypixel.levelhead.LevelHead;
+import io.github.axolotlclient.util.BadgeRenderer;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -62,7 +63,7 @@ public abstract class EntityRendererMixin<T extends Entity> {
 	@Inject(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Ljava/lang/String;III)I"))
 	public void axolotlclient$addBadges(T entity, String string, double d, double e, double f, int i, CallbackInfo ci) {
 		if (entity instanceof AbstractClientPlayerEntity && string.contains(entity.getName().asFormattedString()))
-			AxolotlClient.addBadge(entity);
+			BadgeRenderer.renderNametagBadge(entity);
 	}
 
 	@Redirect(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;draw(Ljava/lang/String;III)I"))

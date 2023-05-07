@@ -27,7 +27,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClientConfig.AxolotlClientConfigManager;
 import io.github.axolotlclient.AxolotlClientConfig.DefaultConfigManager;
 import io.github.axolotlclient.AxolotlClientConfig.common.ConfigManager;
@@ -46,7 +45,6 @@ import io.github.axolotlclient.modules.blur.MotionBlur;
 import io.github.axolotlclient.modules.freelook.Freelook;
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hypixel.HypixelMods;
-import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
 import io.github.axolotlclient.modules.particles.Particles;
 import io.github.axolotlclient.modules.renderOptions.BeaconBeam;
 import io.github.axolotlclient.modules.rpc.DiscordRPC;
@@ -60,14 +58,7 @@ import io.github.axolotlclient.util.*;
 import io.github.axolotlclient.util.notifications.Notifications;
 import io.github.axolotlclient.util.translation.Translations;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.resource.Resource;
-import net.minecraft.scoreboard.Team;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.loader.api.QuiltLoader;
@@ -92,43 +83,6 @@ public class AxolotlClient implements ClientModInitializer {
 	public static boolean titleDisclaimer = false;
 	public static boolean showWarning = true;
 	private static int tickTime = 0;
-
-	public static void addBadge(Entity entity, MatrixStack matrices) {
-		if (entity instanceof PlayerEntity && !entity.isSneaky()) {
-			if (AxolotlClient.CONFIG.showBadges.get() && AxolotlClient.isUsingClient(entity.getUuid())) {
-				RenderSystem.enableDepthTest();
-				RenderSystem.setShaderTexture(0, AxolotlClient.badgeIcon);
-
-				assert MinecraftClient.getInstance().player != null;
-				int x = -(MinecraftClient.getInstance().textRenderer
-					.getWidth(
-						entity.getUuid() == MinecraftClient.getInstance().player.getUuid()
-							? (NickHider.getInstance().hideOwnName.get()
-							? NickHider.getInstance().hiddenNameSelf.get()
-							: Team.decorateName(entity.getScoreboardTeam(), entity.getName())
-							.getString())
-							: (NickHider.getInstance().hideOtherNames.get()
-							? NickHider.getInstance().hiddenNameOthers.get()
-							: Team.decorateName(entity.getScoreboardTeam(), entity.getName())
-							.getString()))
-					/ 2
-					+ (AxolotlClient.CONFIG.customBadge.get() ? MinecraftClient.getInstance().textRenderer
-					.getWidth(" " + Formatting.strip(AxolotlClient.CONFIG.badgeText.get())) : 10));
-
-				RenderSystem.setShaderColor(1, 1, 1, 1);
-
-				if (AxolotlClient.CONFIG.customBadge.get()) {
-					Text badgeText = Util.formatFromCodes(AxolotlClient.CONFIG.badgeText.get());
-					if (AxolotlClient.CONFIG.useShadows.get()) {
-						MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, badgeText, x, 0, -1);
-					} else {
-						MinecraftClient.getInstance().textRenderer.draw(matrices, badgeText, x, 0, -1);
-					}
-				} else
-					DrawableHelper.drawTexture(matrices, x, 0, 0, 0, 8, 8, 8, 8);
-			}
-		}
-	}
 
 	public static boolean isUsingClient(UUID uuid) {
 		assert MinecraftClient.getInstance().player != null;
