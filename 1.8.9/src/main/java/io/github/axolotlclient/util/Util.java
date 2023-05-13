@@ -22,30 +22,25 @@
 
 package io.github.axolotlclient.util;
 
-import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import io.github.axolotlclient.mixin.MinecraftClientAccessor;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.Window;
-import net.minecraft.entity.Entity;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.ScoreboardPlayerScore;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.ApiStatus;
 import org.lwjgl.opengl.GL11;
+
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class Util {
 
@@ -225,52 +220,8 @@ public class Util {
 		return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2) + Math.pow(z2 - z1, 2));
 	}
 
-	public static BlockHitResult raycast(Entity entity, Vec3d vec3d, Vec3d vec3d3, Box box, Predicate<Entity> predicate,
-										 double d) {
-		Entity targetedEntity = null;
-		Vec3d vec3d4 = null;
-		float f = 1.0F;
-		List<Entity> list = MinecraftClient.getInstance().world.getEntitiesIn(entity, box, predicate::test);
-		double g = d;
-
-		for (Entity entity2 : list) {
-			float h = entity2.getTargetingMargin();
-			Box box2 = entity2.getBoundingBox().expand(h, h, h);
-			BlockHitResult blockHitResult = box2.method_585(vec3d, vec3d3);
-			if (box2.contains(vec3d)) {
-				if (g >= 0.0) {
-					targetedEntity = entity2;
-					vec3d4 = blockHitResult == null ? vec3d : blockHitResult.pos;
-					g = 0.0;
-				}
-			} else if (blockHitResult != null) {
-				double k = vec3d.distanceTo(blockHitResult.pos);
-				if (k < g || g == 0.0) {
-					if (entity2 == entity.vehicle) {
-						if (g == 0.0) {
-							targetedEntity = entity2;
-							vec3d4 = blockHitResult.pos;
-						}
-					} else {
-						targetedEntity = entity2;
-						vec3d4 = blockHitResult.pos;
-						g = k;
-					}
-				}
-			}
-		}
-
-		if (targetedEntity != null && (g < d)) {
-			return new BlockHitResult(targetedEntity, vec3d4);
-		}
-		if (vec3d4 != null) {
-			return new BlockHitResult(BlockHitResult.Type.MISS, vec3d4, null, new BlockPos(vec3d4));
-		}
-		return new BlockHitResult(BlockHitResult.Type.MISS, new Vec3d(0, 0, 0), null, null);
-	}
-
 	public static <T> T make(Supplier<T> factory) {
-		return (T) factory.get();
+		return factory.get();
 	}
 
 	public static <T> T make(T object, Consumer<T> initializer) {
