@@ -48,8 +48,8 @@ public class ChatListWidget extends EntryListWidget {
 		API.getInstance().send(ChannelRequest.getChannelList(list ->
 			list.forEach(c -> {
 				entries.add(0, new ChatListEntry(c));
-			}),
-			API.getInstance().getUuid(), ChannelRequest.SortBy.LAST_MESSAGE, ChannelRequest.Include.USER_STATUS));
+			})
+		));
 	}
 
 	@Override

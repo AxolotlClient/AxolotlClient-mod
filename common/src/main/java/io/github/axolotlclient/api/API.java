@@ -170,12 +170,12 @@ public class API {
 			}
 
 			if (requests.containsKey(id)) {
-				requests.get(id).getHandler().accept(response.setIndex(0x09, 0).slice());
+				requests.get(id).getHandler().accept(response);
 				requests.remove(id);
 			} else if (id == null || id == 0) {
 				int type = response.getByte(0x03);
 				handlers.stream().filter(handler -> handler.isApplicable(type)).forEach(handler ->
-					handler.handle(response.setIndex(0x09, 0).slice()));
+					handler.handle(response));
 			} else {
 				logger.error("Unknown response: " + response.toString(StandardCharsets.UTF_8));
 			}

@@ -22,10 +22,10 @@
 
 package io.github.axolotlclient.api.requests;
 
-import com.google.common.base.Strings;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import io.github.axolotlclient.api.Request;
+import io.github.axolotlclient.api.util.BufferUtil;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -39,9 +39,9 @@ public class StatusUpdate {
 	private static Request createStatusUpdate(String titleString, String descriptionString, String iconString) {
 		return new Request(Request.Type.STATUS_UPDATE, byteBuf -> {
 		},
-			Strings.padEnd(titleString, 64, Character.MIN_VALUE).substring(0, 64),
-			Strings.padEnd(descriptionString, 64, Character.MIN_VALUE).substring(0, 64),
-			Strings.padEnd(iconString, 32, Character.MIN_VALUE).substring(0, 32)
+			BufferUtil.padString(titleString, 64),
+			BufferUtil.padString(descriptionString, 64),
+			BufferUtil.padString(iconString, 32)
 		);
 	}
 
@@ -52,24 +52,10 @@ public class StatusUpdate {
 	}
 
 	public static Request inGame(SupportedServer server, String gameType, String gameMode, String map, int players, int maxPlayers, long activityStartedEpochSecs) {
-		JsonObject object = new JsonObject();
-		object.addProperty("server", server.name);
-		object.addProperty("gameType", gameType);
-		object.addProperty("gameMode", gameMode);
-		object.addProperty("map", map);
-		object.addProperty("players", players);
-		object.addProperty("maxPlayers", maxPlayers);
-		object.addProperty("startedAt", activityStartedEpochSecs);
 		return createStatusUpdate(Type.IN_GAME.getIdentifier(), "[PLAYING_GAME_ON:" + gameType + ":" + gameMode + ":" + server.name + "]", "playing");
 	}
 
 	public static Request inGameUnknown(String server, String worldType, String worldName, String gamemode, long activityStartedEpochSecs) {
-		JsonObject object = new JsonObject();
-		object.addProperty("server", server);
-		object.addProperty("worldType", worldType);
-		object.addProperty("worldName", worldName);
-		object.addProperty("gamemode", gamemode);
-		object.addProperty("startedAt", activityStartedEpochSecs);
 		return createStatusUpdate(Type.IN_GAME_UNKNOWN.getIdentifier(), "[PLAYING_GAME]", "playing");
 	}
 

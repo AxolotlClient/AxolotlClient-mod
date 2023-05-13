@@ -109,8 +109,8 @@ public class FriendsSidebar extends Screen implements ContextMenuScreen {
 		}
 
 		API.getInstance().send(ChannelRequest.getChannelList(list ->
-				addChild(this.list = new ListWidget(list, 10, 30, 50, height - 60)),
-			API.getInstance().getUuid(), ChannelRequest.SortBy.LAST_MESSAGE, ChannelRequest.Include.USER_STATUS));
+			addChild(this.list = new ListWidget(list, 10, 30, 50, height - 60))
+		));
 
 		addButton(new ButtonWidget(10 - sidebarWidth, height - 30, 50, 20, ScreenTexts.BACK, buttonWidget -> remove()));
 		addChild(contextMenu = new ContextMenuContainer());

@@ -24,8 +24,6 @@ package io.github.axolotlclient.api.util;
 
 import io.netty.buffer.ByteBuf;
 
-import java.nio.charset.StandardCharsets;
-
 public interface RequestHandler {
 
 	default boolean isApplicable(int packetType) {
@@ -36,8 +34,6 @@ public interface RequestHandler {
 	}
 
 	default String getString(ByteBuf buffer, int index, int byteLength) {
-		byte[] bytes = new byte[byteLength];
-		buffer.getBytes(index, bytes);
-		return new String(bytes, StandardCharsets.UTF_8);
+		return BufferUtil.getString(buffer, index, byteLength);
 	}
 }

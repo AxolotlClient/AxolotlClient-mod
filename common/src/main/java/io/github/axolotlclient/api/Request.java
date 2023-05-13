@@ -74,7 +74,7 @@ public class Request {
 		this(type, handler, new Data(data));
 	}
 
-	public Request(Type type, Consumer<ByteBuf> handler, byte data) {
+	public Request(Type type, Consumer<ByteBuf> handler, byte... data) {
 		this(type, handler, new Data(data));
 	}
 
@@ -148,6 +148,11 @@ public class Request {
 		REMOVE_FRIEND(0x09),
 		INCOMING_FRIEND_REQUEST(0x0A),
 		STATUS_UPDATE(0x0B),
+		CREATE_CHAT(0x0C),
+		GET_CHANNEL(0x0D),
+		GET_MESSAGES(0x0E),
+		GET_CHANNEL_LIST(0x0F),
+		SEND_MESSAGE(0x10),
 		ERROR(0xFF);
 
 		private final int type;

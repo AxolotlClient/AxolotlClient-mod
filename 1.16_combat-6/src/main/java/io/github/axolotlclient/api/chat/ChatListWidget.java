@@ -43,8 +43,8 @@ public class ChatListWidget extends AlwaysSelectedEntryListWidget<ChatListWidget
 		API.getInstance().send(ChannelRequest.getChannelList(list ->
 			list.forEach(c -> {
 				children().add(0, new ChatListEntry(c));
-			}),
-			API.getInstance().getUuid(), ChannelRequest.SortBy.LAST_MESSAGE, ChannelRequest.Include.USER_STATUS));
+			})
+		));
 	}
 
 	public class ChatListEntry extends Entry<ChatListEntry> {

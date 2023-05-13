@@ -22,10 +22,6 @@
 
 package io.github.axolotlclient.api;
 
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
-
 import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.api.chat.ChatWidget;
 import io.github.axolotlclient.api.handlers.ChatHandler;
@@ -47,6 +43,10 @@ import net.minecraft.text.ScreenTexts;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.MathHelper;
+
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class FriendsSidebar extends Screen implements ContextMenuScreen {
 
@@ -105,8 +105,8 @@ public class FriendsSidebar extends Screen implements ContextMenuScreen {
 		}
 
 		API.getInstance().send(ChannelRequest.getChannelList(list ->
-				addDrawableChild(this.list = new ListWidget(list, 10, 30, 50, height - 60)),
-			API.getInstance().getUuid(), ChannelRequest.SortBy.LAST_MESSAGE, ChannelRequest.Include.USER_STATUS));
+			addDrawableChild(this.list = new ListWidget(list, 10, 30, 50, height - 60))
+		));
 
 		addDrawableChild(ButtonWidget.builder(ScreenTexts.BACK, buttonWidget -> remove()).positionAndSize(10 - sidebarWidth, height - 30, 50, 20).build());
 		addDrawableChild(contextMenu = new ContextMenuContainer());

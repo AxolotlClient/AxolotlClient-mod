@@ -22,15 +22,7 @@
 
 package io.github.axolotlclient.api.requests;
 
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.function.Consumer;
-
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import io.github.axolotlclient.api.API;
@@ -38,84 +30,87 @@ import io.github.axolotlclient.api.APIError;
 import io.github.axolotlclient.api.Request;
 import io.github.axolotlclient.api.types.Channel;
 import io.github.axolotlclient.api.types.ChatMessage;
-import io.github.axolotlclient.api.types.Status;
 import io.github.axolotlclient.api.types.User;
+import io.github.axolotlclient.api.util.BufferUtil;
+import io.netty.buffer.ByteBuf;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-public class ChannelRequest extends Request {
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 
-	public ChannelRequest(Consumer<JsonObject> handler, Data data) {
-		super("channel", handler, data);
+public class ChannelRequest {
+
+	public static Request getById(Consumer<Channel> handler, String id) {
+		return new Request(Request.Type.GET_CHANNEL, object -> handler.accept(parseChannelResponse(object)), id);
 	}
 
-	public static ChannelRequest getById(Consumer<Channel> handler, String id, Include include) {
-		return new ChannelRequest(object -> handler.accept(parseChannelResponse(object)), new Data("method", "get", "id", id, "include", include.getIdentifier()));
-	}
-
-	private static Channel parseChannelResponse(JsonObject object) {
+	private static Channel parseChannelResponse(ByteBuf object) {
 		if (API.getInstance().requestFailed(object)) {
 			APIError.display(object);
 			return null;
 		}
-		return parseChannel(object.get("data").getAsJsonObject().get("channel").getAsJsonObject());
+		return parseChannel(object);
 	}
 
-	private static Channel parseChannel(JsonObject channel) {
-		String id = channel.get("id").getAsString();
-		String type = channel.get("type").getAsString();
-		JsonArray u = channel.get("users").getAsJsonArray();
+	private static Channel parseChannel(ByteBuf channel) {
+		String id = BufferUtil.getString(channel, 0x09, 5);
+		String name = BufferUtil.getString(channel, 0x0E, 64).trim();
+
 		List<User> users = new ArrayList<>();
-		u.forEach(e -> {
-			JsonObject s = e.getAsJsonObject().get("status").getAsJsonObject();
-			Instant startedAt;
-			if (s.has("startedAt")) {
-				startedAt = Instant.ofEpochSecond(s.get("startedAt").getAsLong());
-			} else {
-				startedAt = Instant.ofEpochSecond(0);
-			}
-			Status status = new Status(s.get("online").getAsBoolean(), s.get("title").getAsString(),
-				s.get("description").getAsString(), s.get("icon").getAsString(), startedAt);
-			users.add(new User(e.getAsJsonObject().get("uuid").getAsString(), status));
-		});
+		int i = 0x4E;
+		while (i < channel.getInt(0x53)) {
+			String uuid = BufferUtil.getString(channel, i, 16);
+			io.github.axolotlclient.api.requests.User.get(users::add, uuid);
+			i += 16;
+		}
 		List<ChatMessage> messages = new ArrayList<>();
-		for (JsonElement element : channel.get("messages").getAsJsonArray()) {
-			JsonObject data = element.getAsJsonObject();
-			JsonObject s = data.get("from").getAsJsonObject().get("status").getAsJsonObject();
-			Instant startedAt;
-			if (s.has("startedAt")) {
-				startedAt = Instant.ofEpochSecond(s.get("startedAt").getAsLong());
-			} else {
-				startedAt = Instant.ofEpochSecond(0);
-			}
-			Status status = new Status(s.get("online").getAsBoolean(), s.get("title").getAsString(),
-				s.get("description").getAsString(), s.get("icon").getAsString(), startedAt);
-			User from = new User(data.get("from").getAsJsonObject().get("uuid").getAsString(), status);
-			messages.add(new ChatMessage(from, data.get("content").getAsString(), data.get("timestamp").getAsLong()));
+		int offset = i + 8;
+		while (i < channel.getInt(offset)) {
+			messages.add(parseMessage(channel.slice(i, 0x1D + channel.getInt(i + 0x19))));
+			i += 0x1D + channel.getInt(i + 0x19);
 		}
-		if (type.equals("dm")) {
 
+
+		if (users.size() == 1) {
 			return new Channel.DM(id, users.toArray(new User[0]), messages.toArray(new ChatMessage[0]));
-		} else if (type.equals("group")) {
-			return new Channel.Group(id, users.toArray(new User[0]), channel.get("name").getAsString(), messages.toArray(new ChatMessage[0]));
+		} else if (users.size() > 1) {
+			return new Channel.Group(id, users.toArray(new User[0]), name, messages.toArray(new ChatMessage[0]));
 		}
 
-		throw new UnsupportedOperationException("Unknown message channel type: " + type);
+		throw new UnsupportedOperationException("Unknown message channel type: " + channel.toString(StandardCharsets.UTF_8));
 	}
 
-	public static ChannelRequest getChannelList(Consumer<List<Channel>> handler, String uuid, SortBy sort, Include include) {
-		return new ChannelRequest(object -> handler.accept(parseChannels(object)), new Data("method", "get", "user", uuid, "sortBy",
-			sort.getIdentifier(), "include", include.getIdentifier()));
+	private static ChatMessage parseMessage(ByteBuf buf) {
+		AtomicReference<User> u = new AtomicReference<>();
+		io.github.axolotlclient.api.requests.User.get(u::set, BufferUtil.getString(buf, 0x00, 16));
+
+		return new ChatMessage(u.get(), BufferUtil.getString(buf, 0x1D, buf.getInt(0x19)),
+			ChatMessage.Type.fromCode(buf.getByte(0x18)), buf.getLong(0x10));
 	}
 
-	private static List<Channel> parseChannels(JsonObject object) {
+	public static Request getChannelList(Consumer<List<Channel>> handler) {
+		return new Request(Request.Type.GET_CHANNEL_LIST, object -> handler.accept(parseChannels(object)));
+	}
+
+	private static List<Channel> parseChannels(ByteBuf object) {
 		if (API.getInstance().requestFailed(object)) {
 			APIError.display(object);
 			return Collections.emptyList();
 		}
 		List<Channel> channelList = new ArrayList<>();
-		JsonArray channels = object.get("data").getAsJsonObject().get("channels").getAsJsonArray();
-		channels.forEach(e -> channelList.add(parseChannel(e.getAsJsonObject())));
+
+		int i = object.getInt(0x0D);
+		while (i < object.getInt(0x09)) {
+			API.getInstance().send(getById(channelList::add, BufferUtil.getString(object, i, 5)));
+			i += 5;
+		}
+
 		return channelList;
 	}
 

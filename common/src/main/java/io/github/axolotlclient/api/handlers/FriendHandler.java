@@ -26,7 +26,6 @@ import com.google.gson.JsonArray;
 import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.APIError;
 import io.github.axolotlclient.api.Request;
-import io.github.axolotlclient.api.requests.Friends;
 import io.github.axolotlclient.api.types.Status;
 import io.github.axolotlclient.api.types.User;
 import io.github.axolotlclient.api.util.RequestHandler;
@@ -126,20 +125,20 @@ public class FriendHandler implements RequestHandler {
 				List<User> in = new ArrayList<>();
 				List<User> out = new ArrayList<>();
 				int i = 0x0E;
-				while (i <= object.getInt(0x0A)) {
+				while (i < object.getInt(0x0A)) {
 					getFriendInfo(in::add, getString(object, i, 16));
 					i += 16;
 				}
 				int offset = i;
 				i += 4;
-				while (i <= object.getInt(0x1E + offset)) {
+				while (i < object.getInt(offset)) {
 					getFriendInfo(out::add, getString(object, i, 16));
 					i += 16;
 				}
 
 				responseConsumer.accept(in, out);
 			}
-		}, "getRequests"));
+		}));
 	}
 
 	public void getBlocked(Consumer<List<User>> responseConsumer) {
