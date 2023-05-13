@@ -22,11 +22,6 @@
 
 package io.github.axolotlclient.api.handlers;
 
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
@@ -39,8 +34,14 @@ import io.github.axolotlclient.api.types.ChatMessage;
 import io.github.axolotlclient.api.types.Status;
 import io.github.axolotlclient.api.types.User;
 import io.github.axolotlclient.api.util.RequestHandler;
+import io.netty.buffer.ByteBuf;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 
 public class ChatHandler implements RequestHandler {
 
@@ -59,12 +60,12 @@ public class ChatHandler implements RequestHandler {
 	private NotificationsEnabler enableNotifications = DEFAULT;
 
 	@Override
-	public boolean isApplicable(JsonObject object) {
-		return object.get("type").getAsString().equals("chat");
+	public boolean isApplicable(int packetType) {
+		return packetType == Request.Type..getType();
 	}
 
 	@Override
-	public void handle(JsonObject object) {
+	public void handle(ByteBuf object) {
 		// TODO implement chat handling
 		handleMessage(object, true);
 	}
@@ -103,7 +104,7 @@ public class ChatHandler implements RequestHandler {
 				new Request.Data("method", "get", "user", user.getUuid()).addElement("before", new JsonPrimitive(getBefore))));*/
 	}
 
-	private void handleMessages(JsonObject object) {
+	private void handleMessages(ByteBuf object) {
 		if (!API.getInstance().requestFailed(object)) {
 			List<ChatMessage> list = new ArrayList<>();
 			if (object.get("data").getAsJsonObject().get("method").getAsString().equals("messages")) {

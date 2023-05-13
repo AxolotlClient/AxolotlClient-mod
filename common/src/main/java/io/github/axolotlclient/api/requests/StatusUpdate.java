@@ -22,31 +22,33 @@
 
 package io.github.axolotlclient.api.requests;
 
-import java.util.regex.Pattern;
-
+import com.google.common.base.Strings;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import io.github.axolotlclient.api.API;
-import io.github.axolotlclient.api.APIError;
 import io.github.axolotlclient.api.Request;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-public class StatusUpdate extends Request {
+import java.util.Arrays;
+import java.util.Map;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
-	protected StatusUpdate(Type updateType, JsonObject updateData) {
-		super("statusUpdate", object -> {
-			if (API.getInstance().requestFailed(object)) {
-				APIError.display(object);
-			}
-			// no explixit response handling necessary
-		}, new Data("updateType", updateType.getIdentifier(), "uuid", API.getInstance().getUuid()).addElement("update", updateData));
+public class StatusUpdate {
+
+	private static Request createStatusUpdate(String titleString, String descriptionString, String iconString) {
+		return new Request(Request.Type.STATUS_UPDATE, byteBuf -> {
+		},
+			Strings.padEnd(titleString, 64, Character.MIN_VALUE).substring(0, 64),
+			Strings.padEnd(descriptionString, 64, Character.MIN_VALUE).substring(0, 64),
+			Strings.padEnd(iconString, 32, Character.MIN_VALUE).substring(0, 32)
+		);
 	}
 
 	public static Request online(MenuId menuId) {
 		JsonObject data = new JsonObject();
 		data.add("location", new JsonPrimitive(menuId.getIdentifier()));
-		return new StatusUpdate(Type.ONLINE, data);
+		return createStatusUpdate(Type.ONLINE.getIdentifier(), menuId.getIdentifier(), "online");
 	}
 
 	public static Request inGame(SupportedServer server, String gameType, String gameMode, String map, int players, int maxPlayers, long activityStartedEpochSecs) {
@@ -58,7 +60,7 @@ public class StatusUpdate extends Request {
 		object.addProperty("players", players);
 		object.addProperty("maxPlayers", maxPlayers);
 		object.addProperty("startedAt", activityStartedEpochSecs);
-		return new StatusUpdate(Type.IN_GAME, object);
+		return createStatusUpdate(Type.IN_GAME.getIdentifier(), "[PLAYING_GAME_ON:" + gameType + ":" + gameMode + ":" + server.name + "]", "playing");
 	}
 
 	public static Request inGameUnknown(String server, String worldType, String worldName, String gamemode, long activityStartedEpochSecs) {
@@ -68,22 +70,26 @@ public class StatusUpdate extends Request {
 		object.addProperty("worldName", worldName);
 		object.addProperty("gamemode", gamemode);
 		object.addProperty("startedAt", activityStartedEpochSecs);
-		return new StatusUpdate(Type.IN_GAME_UNKNOWN, object);
-	}
-
-	public static Request dummy() {
-		return Request.DUMMY;
+		return createStatusUpdate(Type.IN_GAME_UNKNOWN.getIdentifier(), "[PLAYING_GAME]", "playing");
 	}
 
 	@RequiredArgsConstructor
 	public enum Type {
-		ONLINE("online"),
-		OFFLINE("offline"),
-		IN_GAME("inGame"),
-		IN_GAME_UNKNOWN("inGameUnknown");
+		ONLINE("online", 0x1),
+		OFFLINE("offline", 0x2),
+		IN_GAME("inGame", 0x3),
+		IN_GAME_UNKNOWN("inGameUnknown", 0x4);
 
 		@Getter
 		private final String identifier;
+		@Getter
+		private final int code;
+
+		private static final Map<Integer, Type> CODES = Arrays.stream(values()).collect(Collectors.toMap(k -> k.code, k -> k));
+
+		public static Type fromCode(int code) {
+			return CODES.get(code);
+		}
 	}
 
 	@RequiredArgsConstructor

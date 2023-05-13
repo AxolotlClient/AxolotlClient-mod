@@ -22,81 +22,134 @@
 
 package io.github.axolotlclient.api;
 
-import java.util.function.Consumer;
-
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
+import java.nio.charset.StandardCharsets;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Consumer;
+
+/**
+ * Defines a generic request that can be sent to the backend API.
+ */
 @Getter
-@RequiredArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString
 public class Request {
 
-	public static final Request DUMMY = new Request(null, null);
+	private static final byte[] PACKET_MAGIC = "AXO".getBytes(StandardCharsets.UTF_8);
+	private static final int PROTOCOL_VERSION = 0x01;
 
 	@EqualsAndHashCode.Include
-	private final String id = randomKey(6);
-	private final String type;
-	private final Consumer<JsonObject> handler;
+	private final int type;
+	private final int id;
 	private final Data data;
 
-	public Request(String type, Consumer<JsonObject> handler, String... data) {
-		this.type = type;
-		this.data = new Data(data);
+	private final Consumer<ByteBuf> handler;
+
+	public Request(Type type, Consumer<ByteBuf> handler, Data data) {
+		this.type = type.getType();
+		id = generateId();
+		this.data = data;
 		this.handler = handler;
 	}
 
-	public static String randomKey(int length) {
-		final String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-		StringBuilder key = new StringBuilder();
-		for (int i = 0; i < length; i++) {
-			key.append(chars.charAt((int) Math.floor(Math.random() * chars.length())));
+	private int generateId() {
+		int id = 0;
+		while (id == 0) {
+			id = ThreadLocalRandom.current().nextInt();
 		}
-		return key.toString();
+		return id;
 	}
 
-	public String getJson() {
-		JsonObject object = new JsonObject();
-		object.add("id", new JsonPrimitive(id));
-		object.add("type", new JsonPrimitive(type));
-		object.add("data", data.getJson());
-		object.add("timestamp", new JsonPrimitive(System.currentTimeMillis()));
-		return object.toString();
+	public Request(Type type, Consumer<ByteBuf> handler, String... data) {
+		this(type, handler, new Data(data));
+	}
+
+	public Request(Type type, Consumer<ByteBuf> handler, byte data) {
+		this(type, handler, new Data(data));
+	}
+
+	public ByteBuf getData() {
+		return Unpooled.buffer()
+			.setBytes(0x00, PACKET_MAGIC)
+			.setByte(0x03, type)
+			.setByte(0x04, PROTOCOL_VERSION)
+			.setInt(0x05, id)
+			.setBytes(0x06, data.getData());
 	}
 
 	@Getter
+	@ToString
 	public static class Data {
-		private final JsonObject elements = new JsonObject();
+		private final List<Map.Entry<Integer, byte[]>> elements = new ArrayList<>();
 
 		public Data(String... data) {
-			if (data.length % 2 != 0) {
-				throw new IllegalArgumentException("Unequal count of arguments!");
-			}
-			for (int i = 0; i < data.length - 1; i += 2) {
-				elements.addProperty(data[i], data[i + 1]);
+			for (String s : data) {
+				add(s);
 			}
 		}
 
-		public Data addElement(String name, String object) {
-			return addElement(name, new JsonPrimitive(object));
+		public Data(byte b) {
+			add(b);
 		}
 
-		public Data addElement(String name, JsonElement object) {
-			elements.add(name, object);
+		public Data(byte[] data) {
+			add(data);
+		}
+
+		public Data add(String e) {
+			add(e.getBytes(StandardCharsets.UTF_8));
 			return this;
 		}
 
-		public Data removeElement(String name) {
-			elements.remove(name);
+		public Data add(byte b) {
+			return add(new byte[]{b});
+		}
+
+		public Data add(byte[] data) {
+			int size = elements.size();
+			int index = size + (size > 0 ? elements.get(size - 1).getValue().length : 0);
+			elements.add(new AbstractMap.SimpleImmutableEntry<>(index, data));
 			return this;
 		}
 
-		private JsonObject getJson() {
-			return elements;
+		private ByteBuf getData() {
+			ByteBuf buf = Unpooled.buffer();
+			for (Map.Entry<Integer, byte[]> e : elements) {
+				buf.setBytes(e.getKey(), e.getValue());
+			}
+			return buf;
 		}
+	}
+
+	/**
+	 * Defines human-readable names for all request types.
+	 */
+	@RequiredArgsConstructor
+	@Getter
+	public enum Type {
+		HANDSHAKE(0x01),
+		GLOBAL_DATA(0x02),
+		FRIENDS_LIST(0x03),
+		GET_FRIEND(0x04),
+		USER(0x05),
+		CREATE_FRIEND_REQUEST(0x06),
+		FRIEND_REQUEST_REACTION(0x07),
+		GET_FRIEND_REQUESTS(0x08),
+		REMOVE_FRIEND(0x09),
+		INCOMING_FRIEND_REQUEST(0x0A),
+		STATUS_UPDATE(0x0B),
+		ERROR(0xFF);
+
+		private final int type;
 	}
 }

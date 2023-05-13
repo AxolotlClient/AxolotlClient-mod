@@ -22,23 +22,30 @@
 
 package io.github.axolotlclient.api.handlers;
 
-import com.google.gson.JsonObject;
 import io.github.axolotlclient.api.API;
-import io.github.axolotlclient.api.requests.ChannelRequest;
+import io.github.axolotlclient.api.Request;
 import io.github.axolotlclient.api.util.RequestHandler;
 import io.github.axolotlclient.api.util.UUIDHelper;
+import io.netty.buffer.ByteBuf;
 
-public class FriendRequestAcceptedHandler implements RequestHandler {
+import java.nio.charset.StandardCharsets;
+
+public class FriendRequestReactionHandler implements RequestHandler {
 	@Override
-	public boolean isApplicable(JsonObject object) {
-		return object.get("type").getAsString().equals("friends") && object.get("data").getAsJsonObject().get("method").getAsString().equals("accept");
+	public boolean isApplicable(int packetType) {
+		return packetType == Request.Type.FRIEND_REQUEST_REACTION.getType();
 	}
 
 	@Override
-	public void handle(JsonObject object) {
-		String fromUUID = object.get("data").getAsJsonObject().get("from").getAsString();
-		API.getInstance().getNotificationProvider().addStatus("api.friends", "api.friends.request.accepted", UUIDHelper.getUsername(fromUUID));
-		API.getInstance().send(ChannelRequest.createDM(o -> {
-		}, fromUUID));
+	public void handle(ByteBuf object) {
+		byte[] uuid = new byte[16];
+		object.getBytes(0x09, uuid);
+		String fromUUID = new String(uuid, StandardCharsets.UTF_8);
+
+		if (object.getBoolean(0x19)) {
+			API.getInstance().getNotificationProvider().addStatus("api.friends", "api.friends.request.accepted", UUIDHelper.getUsername(fromUUID));
+		} else {
+			API.getInstance().getNotificationProvider().addStatus("api.friends", "api.friends.request.declined", UUIDHelper.getUsername(fromUUID));
+		}
 	}
 }

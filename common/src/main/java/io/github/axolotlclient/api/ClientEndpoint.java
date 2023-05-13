@@ -22,28 +22,71 @@
 
 package io.github.axolotlclient.api;
 
-import jakarta.websocket.*;
+import io.netty.bootstrap.Bootstrap;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.*;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
 
-@jakarta.websocket.ClientEndpoint
 public class ClientEndpoint {
 
-	@OnMessage
-	public void onMessage(String message) {
+	private static EventLoopGroup group;
+
+	public void run(String url, int port) {
+		group = new NioEventLoopGroup(3);
+
+		try {
+			Bootstrap b = new Bootstrap();
+			b.group(group).channel(NioSocketChannel.class)
+				.handler(new ChannelInitializer<SocketChannel>() {
+					@Override
+					protected void initChannel(SocketChannel ch) {
+						ChannelPipeline pipeline = ch.pipeline();
+						pipeline.addLast(new SimpleChannelInboundHandler<ByteBuf>() {
+							@Override
+							protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) {
+								onMessage(msg);
+							}
+						});
+					}
+
+
+				});
+			ChannelFuture f = b.connect(url, port).sync();
+
+			Channel channel = f.channel();
+			onOpen(channel);
+
+		} catch (Throwable e) {
+			onError(e);
+		} finally {
+			group.shutdownGracefully();
+			onClose();
+		}
+	}
+
+
+	public void onMessage(ByteBuf message) {
 		API.getInstance().onMessage(message);
 	}
 
-	@OnOpen
-	public void onOpen(Session session) {
-		API.getInstance().onOpen(session);
+	public void onOpen(Channel channel) {
+		API.getInstance().onOpen(channel);
 	}
 
-	@OnError
 	public void onError(Throwable throwable) {
 		API.getInstance().onError(throwable);
 	}
 
-	@OnClose
-	public void onClose(CloseReason reason) {
-		API.getInstance().onClose(reason);
+	public void onClose() {
+		API.getInstance().onClose();
+	}
+
+	public static void shutdown() {
+		if (group != null && !group.isTerminated()) {
+			group.shutdownGracefully();
+			group = null;
+		}
 	}
 }

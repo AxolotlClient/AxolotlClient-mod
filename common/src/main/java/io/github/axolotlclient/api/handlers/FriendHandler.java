@@ -23,9 +23,9 @@
 package io.github.axolotlclient.api.handlers;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.APIError;
+import io.github.axolotlclient.api.Request;
 import io.github.axolotlclient.api.requests.Friends;
 import io.github.axolotlclient.api.types.Status;
 import io.github.axolotlclient.api.types.User;
@@ -51,9 +51,10 @@ public class FriendHandler implements RequestHandler {
 	}
 
 	public void addFriend(String uuid) {
-		api.send(new Friends(object -> {
+		api.send(new Request(Request.Type.CREATE_FRIEND_REQUEST, object -> {
 			if (!API.getInstance().requestFailed(object)) {
-				api.getNotificationProvider().addStatus("api.success.requestSent", "api.success.requestSent.desc", UUIDHelper.getUsername(uuid));
+				api.getNotificationProvider()
+					.addStatus("api.success.requestSent", "api.success.requestSent.desc", UUIDHelper.getUsername(uuid));
 			} else {
 				APIError.display(object);
 			}
@@ -61,13 +62,13 @@ public class FriendHandler implements RequestHandler {
 	}
 
 	public void removeFriend(User user) {
-		api.send(new Friends(object -> {
+		api.send(new Request(Request.Type.REMOVE_FRIEND, object -> {
 			if (API.getInstance().requestFailed(object)) {
 				APIError.display(object);
 			} else {
 				api.getNotificationProvider().addStatus("api.success.removeFriend", "api.success.removeFriend.desc", user.getName());
 			}
-		}, "remove", API.getInstance().sanitizeUUID(user.getUuid())));
+		}, API.getInstance().sanitizeUUID(user.getUuid())));
 	}
 
 	public void blockUser(String uuid) {
@@ -91,41 +92,51 @@ public class FriendHandler implements RequestHandler {
 	}
 
 	public void getFriends(Consumer<List<User>> responseConsumer) {
-		api.send(new Friends(object -> {
+		api.send(new Request(Request.Type.FRIENDS_LIST, object -> {
 			if (API.getInstance().requestFailed(object)) {
 				APIError.display(object);
 			} else {
 				List<User> list = new ArrayList<>();
-				JsonArray friends = object.get("data").getAsJsonObject().get("friends").getAsJsonArray();
-				friends.forEach(e -> {
-					JsonObject s = e.getAsJsonObject().get("status").getAsJsonObject();
-					Instant startedAt;
-					if (s.has("startedAt")) {
-						startedAt = Instant.ofEpochSecond(s.get("startedAt").getAsLong());
-					} else {
-						startedAt = Instant.ofEpochSecond(0);
-					}
-					Status status = new Status(s.get("online").getAsBoolean(), s.get("title").getAsString(),
-						s.get("description").getAsString(), s.get("icon").getAsString(), startedAt);
-					list.add(new User(e.getAsJsonObject().get("uuid").getAsString(), status));
-				});
+				for (int i = 0x0E; i <= object.getInt(0x0A); i += 16) {
+					getFriendInfo(list::add, getString(object, i, 16));
+				}
 				responseConsumer.accept(list);
 			}
-		}, "get"));
+		}));
+	}
+
+	public void getFriendInfo(Consumer<User> responseConsumer, String uuid) {
+		api.send(new Request(Request.Type.GET_FRIEND, buf -> {
+
+			Instant startTime = Instant.ofEpochSecond(buf.getLong(0x09));
+
+			responseConsumer.accept(new User(uuid,
+				new Status(buf.getBoolean(0x0D),
+					getString(buf, 0x0E, 64).trim(),
+					getString(buf, 0x4E, 64).trim(),
+					getString(buf, 0x8E, 32).trim(), startTime)));
+		}, uuid));
 	}
 
 	public void getFriendRequests(BiConsumer<List<User>, List<User>> responseConsumer) {
-		api.send(new Friends(object -> {
+		api.send(new Request(Request.Type.GET_FRIEND_REQUESTS, object -> {
 			if (API.getInstance().requestFailed(object)) {
 				APIError.display(object);
 			} else {
-				JsonArray incoming = object.get("data").getAsJsonObject().get("incoming").getAsJsonArray();
-				JsonArray outgoing = object.get("data").getAsJsonObject().get("outgoing").getAsJsonArray();
-
 				List<User> in = new ArrayList<>();
 				List<User> out = new ArrayList<>();
-				incoming.forEach(e -> in.add(new User(e.getAsJsonObject().get("from").getAsString(), Status.UNKNOWN)));
-				outgoing.forEach(e -> out.add(new User(e.getAsJsonObject().get("to").getAsString(), Status.UNKNOWN)));
+				int i = 0x0E;
+				while (i <= object.getInt(0x0A)) {
+					getFriendInfo(in::add, getString(object, i, 16));
+					i += 16;
+				}
+				int offset = i;
+				i += 4;
+				while (i <= object.getInt(0x1E + offset)) {
+					getFriendInfo(out::add, getString(object, i, 16));
+					i += 16;
+				}
+
 				responseConsumer.accept(in, out);
 			}
 		}, "getRequests"));
@@ -152,43 +163,22 @@ public class FriendHandler implements RequestHandler {
 	}
 
 	public void acceptFriendRequest(User from) {
-		api.send(new Friends(object -> {
+		api.send(new Request(Request.Type.FRIEND_REQUEST_REACTION, object -> {
 			if (API.getInstance().requestFailed(object)) {
 				APIError.display(object);
 			} else {
 				api.getNotificationProvider().addStatus("api.success.acceptFriend", "api.success.acceptFriend.desc", from.getName());
 			}
-		}, "accept", from.getUuid()));
+		}, new Request.Data(from.getUuid()).add((byte) 1)));
 	}
 
-	public void denyFriendRequest(User uuid) {
-		api.send(new Friends(object -> {
+	public void denyFriendRequest(User from) {
+		api.send(new Request(Request.Type.FRIEND_REQUEST_REACTION, object -> {
 			if (API.getInstance().requestFailed(object)) {
 				APIError.display(object);
 			} else {
-				api.getNotificationProvider().addStatus("api.success.denyFriend", "api.success.denyFriend.desc", uuid.getName());
+				api.getNotificationProvider().addStatus("api.success.denyFriend", "api.success.denyFriend.desc", from.getName());
 			}
-		}, "decline", uuid.getUuid()));
-	}
-
-	@Override
-	public boolean isApplicable(JsonObject object) {
-		return object.has("type") &&
-			object.get("type").getAsString().equals("friends") &&
-			object.has("data") &&
-			(object.get("data").getAsJsonObject().has("from"));
-	}
-
-	@Override
-	public void handle(JsonObject object) {
-		String method = object.get("data").getAsJsonObject().get("method").getAsString();
-		if (object.get("data").getAsJsonObject().has("from")) {
-			String from = object.get("data").getAsJsonObject().get("from").getAsString();
-			if (method.equals("add")) {
-				API.getInstance().getNotificationProvider().addStatus("api.success.friendAccept", "api.success.friendAccept.desc.name", from);
-			} else if (method.equals("decline")) {
-				API.getInstance().getNotificationProvider().addStatus("api.success.friendDeclined", "api.success.friendDeclined.desc.name", from);
-			}
-		}
+		}, new Request.Data(from.getUuid()).add((byte) 0)));
 	}
 }

@@ -22,25 +22,20 @@
 
 package io.github.axolotlclient.api;
 
-import com.google.gson.JsonObject;
 import io.github.axolotlclient.api.handlers.*;
 import io.github.axolotlclient.api.types.Status;
 import io.github.axolotlclient.api.types.User;
 import io.github.axolotlclient.api.util.RequestHandler;
 import io.github.axolotlclient.api.util.StatusUpdateProvider;
-import io.github.axolotlclient.util.GsonHelper;
 import io.github.axolotlclient.util.Logger;
 import io.github.axolotlclient.util.ThreadExecuter;
 import io.github.axolotlclient.util.notifications.NotificationProvider;
 import io.github.axolotlclient.util.translation.TranslationProvider;
-import jakarta.websocket.CloseReason;
-import jakarta.websocket.DeploymentException;
-import jakarta.websocket.Session;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.Channel;
 import lombok.Getter;
-import org.glassfish.tyrus.container.grizzly.client.GrizzlyContainerProvider;
 
-import java.io.IOException;
-import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -48,13 +43,14 @@ import java.util.Set;
 public class API {
 
 	private static final String API_BASE = "wss://axolotlclient.xyz";
-	private static final URI API_URL = URI.create(API_BASE + "/api/ws");
+	private static final String API_URL = API_BASE + "/api/endpoint";
+	private static final int PORT = 2773;
 	private static final int STATUS_UPDATE_DELAY = 15; // The Delay between Status updates, in seconds. Discord uses 15 seconds so we will as well.
 	private static final boolean TESTING = false;
 
 	@Getter
 	private static API Instance;
-	private final HashMap<String, Request> requests = new HashMap<>();
+	private final HashMap<Integer, Request> requests = new HashMap<>();
 	private final Set<RequestHandler> handlers = new HashSet<>();
 	@Getter
 	private final Logger logger;
@@ -65,7 +61,7 @@ public class API {
 	private final StatusUpdateProvider statusUpdateProvider;
 	@Getter
 	private final Options apiOptions;
-	private Session session;
+	private Channel channel;
 	@Getter
 	private String uuid;
 	@Getter
@@ -80,8 +76,7 @@ public class API {
 		this.apiOptions = apiOptions;
 		Instance = this;
 		addHandler(new FriendRequestHandler());
-		addHandler(new FriendRequestAcceptedHandler());
-		addHandler(new FriendRequestDeniedHandler());
+		addHandler(new FriendRequestReactionHandler());
 		addHandler(FriendHandler.getInstance());
 		addHandler(new StatusUpdateHandler());
 		addHandler(ChatHandler.getInstance());
@@ -91,15 +86,15 @@ public class API {
 		handlers.add(handler);
 	}
 
-	public void onOpen(Session session) {
-		this.session = session;
+	public void onOpen(Channel channel) {
+		this.channel = channel;
 		logger.debug("API connected!");
 		sendHandshake(uuid);
 	}
 
 	private void sendHandshake(String uuid) {
 		logger.debug("Starting Handshake");
-		Request request = new Request("handshake", object -> {
+		Request request = new Request(Request.Type.HANDSHAKE, object -> {
 			if (requestFailed(object)) {
 				logger.error("Handshake failed, closing API!");
 				if (apiOptions.detailedLogging.get()) {
@@ -116,42 +111,41 @@ public class API {
 		send(request);
 	}
 
-	public boolean requestFailed(JsonObject object) {
-		return !object.has("type") || (object.has("type") && object.get("type").getAsString().equals("error"));
+	public boolean requestFailed(ByteBuf object) {
+		try {
+			return object.getByte(0x03) == Request.Type.ERROR.getType();
+		} catch (IndexOutOfBoundsException e) {
+			return true;
+		}
 	}
 
 	public void shutdown() {
-		try {
-			if (session != null && session.isOpen()) {
-				session.close(new CloseReason(CloseReason.CloseCodes.NORMAL_CLOSURE, "API shutdown procedure"));
-				session = null;
-			}
-		} catch (IOException e) {
-			throw new RuntimeException(e);
+		if (channel != null && channel.isOpen()) {
+			ClientEndpoint.shutdown();
+			channel = null;
 		}
 	}
 
 	public void send(Request request) {
 		if (isConnected()) {
-			if (!request.equals(Request.DUMMY) && !TESTING) {
+			if (!TESTING) {
 				requests.put(request.getId(), request);
 				ThreadExecuter.scheduleTask(() -> {
-					String text = request.getJson();
-					logDetailed("Sending Request: " + text);
-					try {
-						session.getBasicRemote().sendText(text);
-					} catch (IOException e) {
-						logger.error("Failed to send Request! Request: ", text, e);
+					ByteBuf buf = request.getData();
+					if (apiOptions.detailedLogging.get()) {
+						logDetailed("Sending Request: " + buf.toString(StandardCharsets.UTF_8));
 					}
+					channel.writeAndFlush(buf);
+					buf.release();
 				});
 			}
 		} else {
-			logger.warn("Not sending request because API is closed: " + request.getJson());
+			logger.warn("Not sending request because API is closed: " + request);
 		}
 	}
 
 	public boolean isConnected() {
-		return session != null && session.isOpen();
+		return channel != null && channel.isOpen();
 	}
 
 	public void logDetailed(String message, Object... args) {
@@ -160,59 +154,60 @@ public class API {
 		}
 	}
 
-	public void onMessage(String message) {
-		logDetailed("Handling response: " + message);
+	public void onMessage(ByteBuf message) {
+		if (apiOptions.detailedLogging.get()) {
+			logDetailed("Handling response: " + message.toString(StandardCharsets.UTF_8));
+		}
 		handleResponse(message);
 	}
 
-	private void handleResponse(String response) {
+	private void handleResponse(ByteBuf response) {
 		try {
-			JsonObject object = GsonHelper.fromJson(response);
-
-			String id = "";
-			if (object.has("id") && !object.get("id").isJsonNull()) id = object.get("id").getAsString();
+			Integer id = null;
+			try {
+				id = response.getInt(0x05);
+			} catch (IndexOutOfBoundsException ignored) {
+			}
 
 			if (requests.containsKey(id)) {
-				requests.get(id).getHandler().accept(object);
+				requests.get(id).getHandler().accept(response.setIndex(0x09, 0).slice());
 				requests.remove(id);
-
-			} else if (id == null || id.isEmpty()) {
-				handlers.stream().filter(handler -> handler.isApplicable(object)).forEach(handler -> handler.handle(object));
+			} else if (id == null || id == 0) {
+				int type = response.getByte(0x03);
+				handlers.stream().filter(handler -> handler.isApplicable(type)).forEach(handler ->
+					handler.handle(response.setIndex(0x09, 0).slice()));
 			} else {
-				logger.error("Unknown response: " + response);
+				logger.error("Unknown response: " + response.toString(StandardCharsets.UTF_8));
 			}
 
 		} catch (RuntimeException e) {
 			e.printStackTrace();
 			logger.error("Invalid response: " + response);
 		}
+
+		response.release();
 	}
 
 	public void onError(Throwable throwable) {
 		logger.error("Error while handling API traffic!", throwable);
 	}
 
-	public void onClose(CloseReason reason) {
-		logDetailed("Session closed! Reason: " + reason.getReasonPhrase() + " Code: " + reason.getCloseCode());
+	public void onClose() {
+		logDetailed("Session closed!");
 		logDetailed("Restarting API session...");
-		session = createSession();
+		createSession();
 		logDetailed("Restarted API session!");
 	}
 
-	private Session createSession() {
-		try {
-			return GrizzlyContainerProvider.getWebSocketContainer().connectToServer(ClientEndpoint.class, API_URL);
-		} catch (DeploymentException | IOException e) {
-			logger.error("Error while starting API!", e);
-			return null;
-		}
+	private void createSession() {
+		new ClientEndpoint().run(API_URL, PORT);
 	}
 
 	public void restart() {
-		if(isConnected()) {
+		if (isConnected()) {
 			shutdown();
 		}
-		if(uuid != null) {
+		if (uuid != null) {
 			startup(uuid);
 		} else {
 			apiOptions.enabled.set(false);
@@ -239,7 +234,16 @@ public class API {
 		if (!isConnected()) {
 			self = new User(this.uuid, Status.UNKNOWN);
 			logger.debug("Starting API...");
-			session = createSession();
+			createSession();
+
+			while (channel == null) {
+				try {
+					//noinspection BusyWait
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					throw new RuntimeException(e);
+				}
+			}
 
 			new Thread("Status Update Thread") {
 				@Override

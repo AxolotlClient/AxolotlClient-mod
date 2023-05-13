@@ -22,18 +22,14 @@
 
 package io.github.axolotlclient.api.requests;
 
-import java.util.function.Consumer;
-
-import com.google.gson.JsonObject;
 import io.github.axolotlclient.api.Request;
+import io.netty.buffer.ByteBuf;
+
+import java.util.function.Consumer;
 
 public class Friends extends Request {
 
-	public Friends(Consumer<JsonObject> consumer, String method, String uuid) {
-		super("friends", consumer, "method", method, "uuid", uuid);
-	}
-
-	public Friends(Consumer<JsonObject> consumer, String method) {
-		super("friends", consumer, "method", method);
+	public Friends(Consumer<ByteBuf> consumer, String method) {
+		super(Type.FRIENDS_LIST, consumer, "method", method);
 	}
 }

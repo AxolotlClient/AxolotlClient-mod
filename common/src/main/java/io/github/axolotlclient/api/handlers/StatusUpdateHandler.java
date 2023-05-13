@@ -22,29 +22,28 @@
 
 package io.github.axolotlclient.api.handlers;
 
-import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
-
-import com.google.gson.JsonObject;
 import io.github.axolotlclient.api.API;
+import io.github.axolotlclient.api.Request;
 import io.github.axolotlclient.api.requests.StatusUpdate;
 import io.github.axolotlclient.api.types.User;
 import io.github.axolotlclient.api.util.RequestHandler;
+import io.netty.buffer.ByteBuf;
+
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 public class StatusUpdateHandler implements RequestHandler {
 	@Override
-	public boolean isApplicable(JsonObject object) {
-		return object.get("type").getAsString().equals("statusUpdate") && API.getInstance().getApiOptions().statusUpdateNotifs.get();
+	public boolean isApplicable(int packetType) {
+		return packetType == Request.Type.STATUS_UPDATE.getType() && API.getInstance().getApiOptions().statusUpdateNotifs.get();
 	}
 
 	@Override
-	public void handle(JsonObject object) {
-		String uuid = object.get("data").getAsJsonObject().get("uuid").getAsString();
+	public void handle(ByteBuf object) {
+		String uuid = getString(object, 0x09, 16);
 		AtomicReference<User> user = new AtomicReference<>();
 		FriendHandler.getInstance().getFriends(list -> user.set(list.stream().filter(u -> u.getUuid().equals(uuid)).collect(Collectors.toList()).get(0)));
-		StatusUpdate.Type type = Arrays.stream(StatusUpdate.Type.values()).filter(u -> u.getIdentifier().equals(object.get("data").getAsJsonObject().get("updateType")
-			.getAsString())).collect(Collectors.toList()).get(0);
+		StatusUpdate.Type type = StatusUpdate.Type.fromCode(object.getByte(0x19));
 		if (type == StatusUpdate.Type.ONLINE) {
 			API.getInstance().getNotificationProvider()
 				.addStatus("api.friends", "api.friends.statusChange.online",

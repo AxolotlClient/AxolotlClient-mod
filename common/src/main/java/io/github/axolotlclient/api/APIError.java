@@ -22,40 +22,50 @@
 
 package io.github.axolotlclient.api;
 
-import com.google.gson.JsonObject;
+import io.netty.buffer.ByteBuf;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+
+import java.util.Arrays;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class APIError {
 
-	public static void display(JsonObject object) {
+	public static void display(ByteBuf object) {
 		API.getInstance().getLogger().debug("APIError: " + object);
 		API.getInstance().getNotificationProvider().addStatus("api.error.requestGeneric", fromResponse(object));
 	}
 
-	public static String fromResponse(JsonObject object) {
-		return fromCode(object.get("data").getAsJsonObject().get("message").getAsString());
+	public static String fromResponse(ByteBuf object) {
+		return fromCode(object.getInt(0x09));
 	}
 
-	public static String fromCode(String errorCode) {
+	public static String fromCode(int errorCode) {
 		try {
-			ErrorCodes code = ErrorCodes.valueOf(errorCode.split(":")[0]);
-			return API.getInstance().getTranslationProvider().translate(code.getTranslationKey());
+			return API.getInstance().getTranslationProvider().translate(ErrorCode.fromCode(errorCode).getTranslationKey());
 		} catch (IllegalArgumentException e) {
 			API.getInstance().getLogger().error("Error code " + errorCode + " not found! Report this IMMEDIATELY!");
-			return errorCode;
+			return String.valueOf(errorCode);
 		}
 	}
 
-	@RequiredArgsConstructor
-	private enum ErrorCodes {
-		USER_NOT_FOUND("api.error.userNotFound"),
-		FRIEND_REQUEST_NOT_FOUND("api.error.friendRequestNotFound"),
-		USER_BLOCKED("api.error.userBlocked"),
-		USER_ALREADY_BLOCKED("api.error.userAlreadyBlocked"),
-		USER_ALREADY_FRIENDS("api.error.userAlreadyFriends"),
-		MALFORMED_PACKET("api.error.packetMalformed");
+	@AllArgsConstructor
+	private enum ErrorCode {
+		USER_NOT_FOUND("api.error.userNotFound", 0x01),
+		FRIEND_REQUEST_NOT_FOUND("api.error.friendRequestNotFound", 0x02),
+		USER_BLOCKED("api.error.userBlocked", 0x03),
+		USER_ALREADY_BLOCKED("api.error.userAlreadyBlocked", 0x04),
+		USER_ALREADY_FRIENDS("api.error.userAlreadyFriends", 0x05),
+		MALFORMED_PACKET("api.error.packetMalformed", 0x06);
 		@Getter
 		private final String translationKey;
+		private final int code;
+
+		private static final Map<Integer, ErrorCode> CODES = Arrays.stream(values()).collect(Collectors.toMap(k -> k.code, k -> k));
+
+		public static ErrorCode fromCode(int code) {
+			return CODES.get(code);
+		}
 	}
 }

@@ -22,15 +22,15 @@
 
 package io.github.axolotlclient.api.requests;
 
-import java.util.function.Consumer;
-
 import com.google.gson.JsonObject;
 import io.github.axolotlclient.api.Request;
+
+import java.util.function.Consumer;
 
 public class ChatMessage extends Request {
 
 	public ChatMessage(Consumer<JsonObject> handler, String... data) {
-		super("chat", handler, data);
+		super("chat", handler, (Object[]) data);
 	}
 
 }

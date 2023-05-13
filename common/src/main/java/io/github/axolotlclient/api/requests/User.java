@@ -22,44 +22,17 @@
 
 package io.github.axolotlclient.api.requests;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Consumer;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.Request;
 
-public class User extends Request {
-	protected User(Consumer<JsonObject> handler, JsonArray uuids) {
-		super("user", handler, new Data("method", "get").addElement("users", uuids));
-	}
+import java.util.concurrent.atomic.AtomicBoolean;
+
+public class User {
 
 	public static boolean getOnline(String uuid) {
 		AtomicBoolean result = new AtomicBoolean();
-		API.getInstance().send(getUsers(map -> result.set(map.get(uuid)), uuid));
+		API.getInstance().send(new Request(Request.Type.USER, buf ->
+			result.set(buf.getBoolean(0x09)), uuid));
 		return result.get();
-	}
-
-	public static Request getUsers(Consumer<Map<String, Boolean>> result, String... uuids) {
-
-		JsonArray array = new JsonArray();
-		for (String s : uuids) {
-			array.add(new JsonPrimitive(s));
-		}
-		Consumer<JsonObject> consumer = object -> {
-			if (!API.getInstance().requestFailed(object)) {
-				Map<String, Boolean> res = new HashMap<>();
-				JsonArray users = object.get("data").getAsJsonObject().get("users").getAsJsonArray();
-				users.forEach(element ->
-					res.put(element.getAsJsonObject().get("uuid").getAsString(),
-						element.getAsJsonObject().get("online").getAsBoolean()));
-				result.accept(res);
-			}
-		};
-		return new User(consumer, array);
 	}
 }

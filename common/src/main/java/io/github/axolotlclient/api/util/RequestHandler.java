@@ -22,11 +22,22 @@
 
 package io.github.axolotlclient.api.util;
 
-import com.google.gson.JsonObject;
+import io.netty.buffer.ByteBuf;
+
+import java.nio.charset.StandardCharsets;
 
 public interface RequestHandler {
 
-	boolean isApplicable(JsonObject object);
+	default boolean isApplicable(int packetType) {
+		return false;
+	}
 
-	void handle(JsonObject object);
+	default void handle(ByteBuf object) {
+	}
+
+	default String getString(ByteBuf buffer, int index, int byteLength) {
+		byte[] bytes = new byte[byteLength];
+		buffer.getBytes(index, bytes);
+		return new String(bytes, StandardCharsets.UTF_8);
+	}
 }

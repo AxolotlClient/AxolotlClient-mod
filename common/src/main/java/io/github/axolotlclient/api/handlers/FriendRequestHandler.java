@@ -22,32 +22,35 @@
 
 package io.github.axolotlclient.api.handlers;
 
-import com.google.gson.JsonObject;
 import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.APIError;
-import io.github.axolotlclient.api.requests.Friends;
+import io.github.axolotlclient.api.Request;
 import io.github.axolotlclient.api.util.RequestHandler;
 import io.github.axolotlclient.api.util.UUIDHelper;
+import io.netty.buffer.ByteBuf;
+
+import java.nio.charset.StandardCharsets;
 
 public class FriendRequestHandler implements RequestHandler {
 
 	@Override
-	public boolean isApplicable(JsonObject object) {
-		return object.get("type").getAsString().equals("friends") && object.get("data").getAsJsonObject().get("method").getAsString().equals("request");
+	public boolean isApplicable(int packetType) {
+		return packetType == Request.Type.INCOMING_FRIEND_REQUEST.getType();
 	}
 
 	@Override
-	public void handle(JsonObject object) {
-		JsonObject data = object.get("data").getAsJsonObject();
-		String fromUUID = data.get("from").getAsString();
+	public void handle(ByteBuf object) {
 		if (API.getInstance().getApiOptions().friendRequestsEnabled.get()) {
+			byte[] uuid = new byte[16];
+			object.getBytes(0x09, uuid);
+			String fromUUID = new String(uuid, StandardCharsets.UTF_8);
 			API.getInstance().getNotificationProvider().addStatus("api.friends", "api.friends.request", UUIDHelper.getUsername(fromUUID));
 		} else {
-			API.getInstance().send(new Friends(o -> {
+			API.getInstance().send(new Request(Request.Type.FRIEND_REQUEST_REACTION, o -> {
 				if (API.getInstance().requestFailed(o)) {
 					APIError.display(o);
 				}
-			}, "decline", fromUUID));
+			}, (byte) 0));
 		}
 	}
 }
