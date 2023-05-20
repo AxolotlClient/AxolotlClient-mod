@@ -250,7 +250,9 @@ public class API {
 					}
 					while (API.getInstance().isConnected()) {
 						Request statusUpdate = statusUpdateProvider.getStatus();
-						send(statusUpdate);
+						if (statusUpdate != null) {
+							send(statusUpdate);
+						}
 						try {
 							//noinspection BusyWait
 							Thread.sleep(Constants.STATUS_UPDATE_DELAY * 1000);

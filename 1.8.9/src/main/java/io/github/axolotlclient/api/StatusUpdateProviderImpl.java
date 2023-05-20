@@ -84,7 +84,7 @@ public class StatusUpdateProviderImpl implements StatusUpdateProvider {
 
 		}
 
-		return StatusUpdate.dummy();
+		return null;
 	}
 
 	private String getOrEmpty(JsonObject object, String name) {

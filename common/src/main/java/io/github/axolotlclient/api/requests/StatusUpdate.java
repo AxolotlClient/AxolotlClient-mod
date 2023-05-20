@@ -26,8 +26,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import io.github.axolotlclient.api.Request;
 import io.github.axolotlclient.api.util.BufferUtil;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -59,15 +57,6 @@ public class StatusUpdate {
 
 	public static Request inGameUnknown(String server, String worldType, String worldName, String gamemode, long activityStartedEpochSecs) {
 		return createStatusUpdate(Type.IN_GAME_UNKNOWN.getIdentifier(), "[PLAYING_GAME]", "playing");
-	}
-
-	public static Request dummy() {
-		return new Request(Request.Type.STATUS_UPDATE, null, (Request.Data) null) {
-			@Override
-			public ByteBuf getData() {
-				return Unpooled.buffer(0);
-			}
-		};
 	}
 
 	@RequiredArgsConstructor

@@ -22,12 +22,6 @@
 
 package io.github.axolotlclient.api;
 
-import java.time.Instant;
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
-
 import com.google.gson.JsonObject;
 import io.github.axolotlclient.api.requests.StatusUpdate;
 import io.github.axolotlclient.api.util.StatusUpdateProvider;
@@ -40,6 +34,11 @@ import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.entity.player.PlayerEntity;
+
+import java.time.Instant;
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class StatusUpdateProviderImpl implements StatusUpdateProvider {
 
@@ -72,7 +71,7 @@ public class StatusUpdateProviderImpl implements StatusUpdateProvider {
 						String gameMode = getOrEmpty(object, "mode");
 						String map = getOrEmpty(object, "map");
 						int maxPlayers = MinecraftClient.getInstance().world.getPlayers().size();
-						int players = MinecraftClient.getInstance().world.getPlayers().stream().filter(e -> !(e.isCreative() || e.isSpectator())).collect(Collectors.toList()).size();
+						int players = MinecraftClient.getInstance().world.getPlayers().stream().filter(e -> !(e.isCreative() || e.isSpectator())).toList().size();
 						return StatusUpdate.inGame(server, gameType.toString(), gameMode, map, players, maxPlayers, Instant.now().getEpochSecond() - time.getEpochSecond());
 					}
 				}
@@ -83,7 +82,7 @@ public class StatusUpdateProviderImpl implements StatusUpdateProvider {
 
 		}
 
-		return StatusUpdate.dummy();
+		return null;
 	}
 
 	private String getOrEmpty(JsonObject object, String name) {
@@ -92,17 +91,11 @@ public class StatusUpdateProviderImpl implements StatusUpdateProvider {
 
 	private String getGameMode(PlayerEntity entity) {
 		PlayerListEntry entry = MinecraftClient.getInstance().getNetworkHandler().getPlayerListEntry(entity.getUuid());
-		switch (entry.getGameMode()) {
-			case CREATIVE:
-				return "Creative Mode";
-			case SURVIVAL:
-				return "Survival Mode";
-			case SPECTATOR:
-				return "Spectator Mode";
-			case ADVENTURE:
-				return "Adventure Mode";
-			default:
-				return "";
-		}
+		return switch (entry.getGameMode()) {
+			case CREATIVE -> "Creative Mode";
+			case SURVIVAL -> "Survival Mode";
+			case SPECTATOR -> "Spectator Mode";
+			case ADVENTURE -> "Adventure Mode";
+		};
 	}
 }
