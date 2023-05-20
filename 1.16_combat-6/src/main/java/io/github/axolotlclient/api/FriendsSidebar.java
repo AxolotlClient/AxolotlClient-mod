@@ -196,7 +196,6 @@ public class FriendsSidebar extends Screen implements ContextMenuScreen {
 	}
 
 	private void addChat(Channel channel) {
-		// TODO implement Chat
 		hasChat = true;
 		this.channel = channel;
 		int w;
@@ -213,7 +212,6 @@ public class FriendsSidebar extends Screen implements ContextMenuScreen {
 			@Override
 			public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 				if (keyCode == GLFW.GLFW_KEY_ENTER) {
-					// TODO send chat message
 					ChatHandler.getInstance().sendMessage(channel, input.getText());
 					input.setText("");
 					return true;

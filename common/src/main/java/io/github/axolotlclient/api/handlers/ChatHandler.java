@@ -72,15 +72,11 @@ public class ChatHandler implements RequestHandler {
 
 		if (enableNotifications.showNotification(message)) {
 			API.getInstance().getNotificationProvider().addStatus(API.getInstance().getTranslationProvider().translate("api.chat.newMessageFrom", message.getSender().getName()), message.getContent());
-			// TODO
 		}
 		messageConsumer.accept(message);
-
-		// TODO implement chat handling
 	}
 
 	public void sendMessage(Channel channel, String message) {
-		// TODO chat messages
 		API.getInstance().send(new Request(Request.Type.SEND_MESSAGE, buf -> {
 		},
 			new Request.Data(channel.getId()).add(
@@ -89,7 +85,6 @@ public class ChatHandler implements RequestHandler {
 	}
 
 	public void getMessagesBefore(Channel channel, long getBefore) {
-		// TODO wait for implementation on the server side
 		API.getInstance().send(new Request(Request.Type.GET_MESSAGES, this::handleMessages,
 			new Request.Data(channel.getId()).add((byte) 25).add((byte) getBefore).add((byte) 0x00)));
 	}

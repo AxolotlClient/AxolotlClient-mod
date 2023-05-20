@@ -86,7 +86,6 @@ public class ChatScreen extends Screen implements ContextMenuScreen {
 			@Override
 			public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 				if (keyCode == InputUtil.KEY_ENTER_CODE && !getText().isEmpty()) {
-					// TODO send chat message
 					ChatHandler.getInstance().sendMessage(channel, getText());
 					setText("");
 					return true;

@@ -126,7 +126,6 @@ public class ChatWidget extends EntryListWidget {
 		} else {
 			before = Instant.now().getEpochSecond();
 		}
-		// TODO wait for backend impl
 		ChatHandler.getInstance().getMessagesBefore(channel, before);
 	}
 
