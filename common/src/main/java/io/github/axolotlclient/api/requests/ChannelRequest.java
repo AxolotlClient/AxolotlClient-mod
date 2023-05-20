@@ -22,23 +22,18 @@
 
 package io.github.axolotlclient.api.requests;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.APIError;
+import io.github.axolotlclient.api.Constants;
 import io.github.axolotlclient.api.Request;
 import io.github.axolotlclient.api.types.Channel;
 import io.github.axolotlclient.api.types.ChatMessage;
 import io.github.axolotlclient.api.types.User;
 import io.github.axolotlclient.api.util.BufferUtil;
 import io.netty.buffer.ByteBuf;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -47,7 +42,7 @@ import java.util.function.Consumer;
 public class ChannelRequest {
 
 	public static Request getById(Consumer<Channel> handler, String id) {
-		return new Request(Request.Type.GET_CHANNEL, object -> handler.accept(parseChannelResponse(object)), id);
+		return new Request(Request.Type.GET_CHANNEL_BY_ID, object -> handler.accept(parseChannelResponse(object)), id);
 	}
 
 	private static Channel parseChannelResponse(ByteBuf object) {
@@ -59,7 +54,7 @@ public class ChannelRequest {
 	}
 
 	private static Channel parseChannel(ByteBuf channel) {
-		String id = BufferUtil.getString(channel, 0x09, 5);
+		String id = BufferUtil.getString(channel, 0x09, Constants.CHANNEL_ID_LENGTH);
 		String name = BufferUtil.getString(channel, 0x0E, 64).trim();
 
 		List<User> users = new ArrayList<>();
@@ -77,9 +72,9 @@ public class ChannelRequest {
 		}
 
 
-		if (users.size() == 1) {
+		if (users.size() == 2) {
 			return new Channel.DM(id, users.toArray(new User[0]), messages.toArray(new ChatMessage[0]));
-		} else if (users.size() > 1) {
+		} else if (users.size() > 2) {
 			return new Channel.Group(id, users.toArray(new User[0]), name, messages.toArray(new ChatMessage[0]));
 		}
 
@@ -107,45 +102,37 @@ public class ChannelRequest {
 
 		int i = object.getInt(0x0D);
 		while (i < object.getInt(0x09)) {
-			API.getInstance().send(getById(channelList::add, BufferUtil.getString(object, i, 5)));
-			i += 5;
+			API.getInstance().send(getById(channelList::add, BufferUtil.getString(object, i, Constants.CHANNEL_ID_LENGTH)));
+			i += Constants.CHANNEL_ID_LENGTH;
 		}
 
 		return channelList;
 	}
 
-	public static ChannelRequest getChannelForAllUsers(Consumer<List<Channel>> handler, String[] users, SortBy sort, Include include) {
+	/*public static ChannelRequest getChannelForAllUsers(Consumer<List<Channel>> handler, String[] users, SortBy sort, Include include) {
 		JsonArray u = new JsonArray();
 		Arrays.stream(users).map(JsonPrimitive::new).forEach(u::add);
 		return new ChannelRequest(object -> handler.accept(parseChannels(object)), new Data("method", "get")
 			.addElement("users", u)
 			.addElement("sortBy", sort.getIdentifier())
 			.addElement("include", include.getIdentifier()));
+	}*/
+
+	public static void getGroup(Consumer<Channel> handler, String... users) {
+		API.getInstance().send(new Request(Request.Type.GET_CHANNEL, b -> handler.accept(parseChannelResponse(b)),
+			new Request.Data((byte) users.length).add(users)));
 	}
 
-	public static ChannelRequest getDM(Consumer<Channel> handler, String uuid, Include include) {
-		return new ChannelRequest(object -> handler.accept(parseChannelResponse(object)), new Data("method", "getDM", "user", uuid, "include", include.getIdentifier()));
+	public static void getDM(Consumer<Channel> handler, String uuid) {
+		API.getInstance().send(new Request(Request.Type.GET_CHANNEL, b -> handler.accept(parseChannelResponse(b)),
+			new Request.Data((byte) 1).add(uuid)));
 	}
 
-	public static ChannelRequest getLatestMessages(Consumer<JsonObject> handler, int limit, String... include) {
+	/*public static ChannelRequest getLatestMessages(Consumer<JsonObject> handler, int limit, String... include) {
 		JsonArray array = new JsonArray();
 		Arrays.stream(include).map(JsonPrimitive::new).forEach(array::add);
 		return new ChannelRequest(handler, new Data("method", "messages")
 			.addElement("limit", new JsonPrimitive(limit)).addElement("include", array));
-	}
-
-	public static ChannelRequest getMessagesBefore(Consumer<JsonObject> handler, int limit, long before, Include include) {
-		return new ChannelRequest(handler, new Data("method", "messages")
-			.addElement("limit", new JsonPrimitive(limit))
-			.addElement("before", new JsonPrimitive(before))
-			.addElement("include", include.getIdentifier()));
-	}
-
-	public static ChannelRequest getMessagesAfter(Consumer<JsonObject> handler, int limit, long after, Include include) {
-		return new ChannelRequest(handler, new Data("method", "messages")
-			.addElement("limit", new JsonPrimitive(limit))
-			.addElement("after", new JsonPrimitive(after))
-			.addElement("include", include.getIdentifier()));
 	}
 
 	public static ChannelRequest createDM(Consumer<JsonObject> handler, String withUUID) {
@@ -153,42 +140,11 @@ public class ChannelRequest {
 		array.add(new JsonPrimitive(withUUID));
 		array.add(new JsonPrimitive(API.getInstance().getUuid()));
 		return new ChannelRequest(handler, new Data("method", "create", "type", "dm", "user", withUUID));
-	}
+	}*/
 
-	public static ChannelRequest createGroup(Consumer<JsonObject> handler, String... uuids) {
-		JsonArray array = new JsonArray();
-		Arrays.stream(uuids).map(JsonPrimitive::new).forEach(array::add);
-		array.add(new JsonPrimitive(API.getInstance().getUuid()));
-		return new ChannelRequest(handler, new Data("method", "create", "type", "group").addElement("users", array));
-	}
-
-	@RequiredArgsConstructor
-	public enum SortBy {
-		ALPHABETICAL("alphabetical"),
-		LAST_MESSAGE("lastMessage");
-
-		@Getter
-		private final String identifier;
-
-		@Override
-		public String toString() {
-			return getIdentifier();
-		}
-	}
-
-	@Getter
-	@RequiredArgsConstructor
-	public enum Include {
-
-		USER("user"),
-		USER_STATUS("user.status"),
-		MESSAGES("messages");
-
-		private final String identifier;
-
-		@Override
-		public String toString() {
-			return getIdentifier();
-		}
+	public static void createGroup(String... uuids) {
+		API.getInstance().send(new Request(Request.Type.CREATE_CHAT, b -> {
+		},
+			new Request.Data((byte) uuids.length).add(uuids)));
 	}
 }

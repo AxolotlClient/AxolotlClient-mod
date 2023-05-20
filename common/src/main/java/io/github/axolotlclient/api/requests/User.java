@@ -28,28 +28,39 @@ import io.github.axolotlclient.api.types.Status;
 import io.github.axolotlclient.api.util.BufferUtil;
 
 import java.time.Instant;
+import java.util.WeakHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 public class User {
 
+	private static final WeakHashMap<String, io.github.axolotlclient.api.types.User> userCache = new WeakHashMap<>();
+	private static final WeakHashMap<String, Boolean> onlineCache = new WeakHashMap<>();
+
 	public static boolean getOnline(String uuid) {
-		AtomicBoolean result = new AtomicBoolean();
-		API.getInstance().send(new Request(Request.Type.USER, buf ->
-			result.set(buf.getBoolean(0x09)), uuid));
-		return result.get();
+		return onlineCache.computeIfAbsent(uuid, u -> {
+			AtomicBoolean result = new AtomicBoolean();
+			API.getInstance().send(new Request(Request.Type.USER, buf ->
+				result.set(buf.getBoolean(0x09)), u));
+			return result.get();
+		});
 	}
 
 	public static void get(Consumer<io.github.axolotlclient.api.types.User> responseConsumer, String uuid) {
+		if (userCache.containsKey(uuid)) {
+			responseConsumer.accept(userCache.get(uuid));
+		}
 		API.getInstance().send(new Request(Request.Type.GET_FRIEND, buf -> {
 
 			Instant startTime = Instant.ofEpochSecond(buf.getLong(0x09));
 
-			responseConsumer.accept(new io.github.axolotlclient.api.types.User(uuid,
+			io.github.axolotlclient.api.types.User user = new io.github.axolotlclient.api.types.User(uuid,
 				new Status(buf.getBoolean(0x09),
 					BufferUtil.getString(buf, 0x0A, 64).trim(),
 					BufferUtil.getString(buf, 0x4A, 64).trim(),
-					BufferUtil.getString(buf, 0x8A, 32).trim(), startTime)));
+					BufferUtil.getString(buf, 0x8A, 32).trim(), startTime));
+			userCache.put(uuid, user);
+			responseConsumer.accept(user);
 		}, uuid));
 	}
 }

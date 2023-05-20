@@ -192,8 +192,9 @@ public class ChatWidget extends EntryListWidget {
 					.spacer()
 					.entry("api.friends.chat", buttonWidget -> {
 						Consumer<Channel> consumer = channel -> client.setScreen(new ChatScreen(screen.getParent(), channel));
-						ChannelRequest.getDM(consumer, origin.getSender().getUuid(), ChannelRequest.Include.USER);
+						ChannelRequest.getDM(consumer, origin.getSender().getUuid());
 					})
+					// TODO reporting
 					.spacer()
 					.entry("action.copy", buttonWidget -> {
 						Screen.setClipboard(origin.getContent());

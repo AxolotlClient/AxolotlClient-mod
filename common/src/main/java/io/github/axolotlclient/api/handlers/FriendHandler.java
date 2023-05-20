@@ -22,7 +22,6 @@
 
 package io.github.axolotlclient.api.handlers;
 
-import com.google.gson.JsonArray;
 import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.APIError;
 import io.github.axolotlclient.api.Request;
@@ -34,6 +33,7 @@ import lombok.Getter;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
@@ -71,23 +71,23 @@ public class FriendHandler implements RequestHandler {
 	}
 
 	public void blockUser(String uuid) {
-		api.send(new Friends(object -> {
+		/*api.send(new Friends(object -> {
 			if (API.getInstance().requestFailed(object)) {
 				APIError.display(object);
 			} else {
 				api.getNotificationProvider().addStatus("api.success.blockUser", "api.success.blockUser.desc", UUIDHelper.getUsername(uuid));
 			}
-		}, "block", uuid));
+		}, "block", uuid));*/
 	}
 
 	public void unblockUser(String uuid) {
-		api.send(new Friends(object -> {
+		/*api.send(new Friends(object -> {
 			if (API.getInstance().requestFailed(object)) {
 				APIError.display(object);
 			} else {
 				api.getNotificationProvider().addStatus("api.success.unblockUser", "api.success.unblockUser.desc", UUIDHelper.getUsername(uuid));
 			}
-		}, "unblock", uuid));
+		}, "unblock", uuid));*/
 	}
 
 	public void getFriends(Consumer<List<User>> responseConsumer) {
@@ -142,7 +142,7 @@ public class FriendHandler implements RequestHandler {
 	}
 
 	public void getBlocked(Consumer<List<User>> responseConsumer) {
-		api.send(new Friends(object -> {
+		/*api.send(new Friends(object -> {
 			if (API.getInstance().requestFailed(object)) {
 				APIError.display(object);
 			} else {
@@ -152,7 +152,8 @@ public class FriendHandler implements RequestHandler {
 				blocked.forEach(e -> bl.add(new User(e.getAsJsonObject().get("uuid").getAsString(), Status.UNKNOWN)));
 				responseConsumer.accept(bl);
 			}
-		}, "getBlocked"));
+		}, "getBlocked"));*/
+		responseConsumer.accept(Collections.emptyList());
 	}
 
 	public boolean isBlocked(String uuid) {

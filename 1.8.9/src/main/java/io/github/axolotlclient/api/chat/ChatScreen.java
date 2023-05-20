@@ -37,7 +37,7 @@ import java.util.Arrays;
 
 public class ChatScreen extends Screen implements ContextMenuScreen {
 
-	private ContextMenuContainer contextMenu = new ContextMenuContainer();
+	private final ContextMenuContainer contextMenu = new ContextMenuContainer();
 	private final Channel channel;
 	private final Screen parent;
 

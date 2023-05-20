@@ -22,15 +22,11 @@
 
 package io.github.axolotlclient.api.handlers;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.APIError;
 import io.github.axolotlclient.api.Request;
 import io.github.axolotlclient.api.types.Channel;
 import io.github.axolotlclient.api.types.ChatMessage;
-import io.github.axolotlclient.api.types.Status;
 import io.github.axolotlclient.api.types.User;
 import io.github.axolotlclient.api.util.BufferUtil;
 import io.github.axolotlclient.api.util.RequestHandler;
@@ -94,40 +90,38 @@ public class ChatHandler implements RequestHandler {
 
 	public void getMessagesBefore(Channel channel, long getBefore) {
 		// TODO wait for implementation on the server side
-		//API.getInstance().send(new Request(Request.Type.GET_MESSAGES, this::handleMessages, (byte) 25));
-		//API.getInstance().send(ChannelRequest.getMessagesBefore(this::handleMessages, 25, getBefore, ChannelRequest.Include.USER));
-		/*API.getInstance().send(new Request("chat", this::handleMessages,
-				new Request.Data("method", "get", "user", user.getUuid()).addElement("before", new JsonPrimitive(getBefore))));*/
+		API.getInstance().send(new Request(Request.Type.GET_MESSAGES, this::handleMessages,
+			new Request.Data(channel.getId()).add((byte) 25).add((byte) getBefore).add((byte) 0x00)));
 	}
 
 	private void handleMessages(ByteBuf object) {
 		if (!API.getInstance().requestFailed(object)) {
 			List<ChatMessage> list = new ArrayList<>();
-			if (object.get("data").getAsJsonObject().get("method").getAsString().equals("messages")) {
-				for (JsonElement element : object.get("data").getAsJsonObject().get("messages").getAsJsonArray()) {
-					JsonObject data = element.getAsJsonObject();
-					JsonObject s = data.get("from").getAsJsonObject().get("status").getAsJsonObject();
-					Instant startedAt;
-					if (s.has("startedAt")) {
-						startedAt = Instant.ofEpochSecond(s.get("startedAt").getAsLong());
-					} else {
-						startedAt = Instant.ofEpochSecond(0);
-					}
-					Status status = new Status(s.get("online").getAsBoolean(), s.get("title").getAsString(),
-						s.get("description").getAsString(), s.get("icon").getAsString(), startedAt);
-					User from = new User(data.get("from").getAsJsonObject().get("uuid").getAsString(), status);
-					list.add(new ChatMessage(from, data.get("content").getAsString(), data.get("timestamp").getAsLong()));
-				}
-				messagesConsumer.accept(list);
+
+			int i = 0x16;
+			while (i < object.getInt(0x0E)) {
+				int length = 0x1d + object.getInt(i + 0x19);
+				list.add(parseMessage(object.slice(i, length)));
+				i += length;
 			}
+			messagesConsumer.accept(list);
+
 		} else {
 			APIError.display(object);
 		}
 	}
 
-	public void getMessagesAfter(User user, long getAfter) {
-		API.getInstance().send(new Request("chat", this::handleMessages,
-			new Request.Data("method", "get", "user", user.getUuid()).addElement("after", new JsonPrimitive(getAfter))));
+	private ChatMessage parseMessage(ByteBuf buf) {
+		AtomicReference<User> u = new AtomicReference<>();
+		io.github.axolotlclient.api.requests.User.get(u::set, BufferUtil.getString(buf, 0x00, 16));
+
+		return new ChatMessage(u.get(), BufferUtil.getString(buf, 0x1D, buf.getInt(0x19)),
+			ChatMessage.Type.fromCode(buf.getByte(0x18)), buf.getLong(0x10));
+	}
+
+	public void getMessagesAfter(Channel channel, long getAfter) {
+		API.getInstance().send(new Request(Request.Type.GET_MESSAGES, this::handleMessages,
+			new Request.Data(channel.getId()).add((byte) 25).add((byte) getAfter).add((byte) 0x01)));
 	}
 
 	public interface NotificationsEnabler {

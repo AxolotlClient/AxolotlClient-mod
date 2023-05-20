@@ -143,7 +143,7 @@ public class ChatUserListWidget extends AlwaysSelectedEntryListWidget<ChatUserLi
 						.spacer()
 						.entry(new TranslatableText("api.friends.chat"), buttonWidget -> {
 							Consumer<Channel> consumer = channel -> client.openScreen(new ChatScreen(screen.getParent(), channel));
-							ChannelRequest.getDM(consumer, user.getUuid(), ChannelRequest.Include.USER);
+							ChannelRequest.getDM(consumer, user.getUuid());
 						});
 					if (FriendHandler.getInstance().isBlocked(user.getUuid())) {
 						menu.entry(new TranslatableText("api.users.block"), buttonWidget ->

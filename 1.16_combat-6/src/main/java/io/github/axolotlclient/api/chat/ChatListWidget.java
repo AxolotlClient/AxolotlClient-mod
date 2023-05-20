@@ -29,29 +29,37 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.EntryListWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
+
+import java.util.function.Predicate;
 
 public class ChatListWidget extends AlwaysSelectedEntryListWidget<ChatListWidget.ChatListEntry> {
 
 	protected final Screen screen;
-	public ChatListWidget(Screen screen, int screenWidth, int screenHeight, int x, int y, int width, int height) {
-		super(MinecraftClient.getInstance(), screenWidth, screenHeight, y, y+height, 25);
+
+	public ChatListWidget(Screen screen, int screenWidth, int screenHeight, int x, int y, int width, int height, Predicate<Channel> predicate) {
+		super(MinecraftClient.getInstance(), screenWidth, screenHeight, y, y + height, 25);
 		left = x;
-		right = width;
+		right = x + width;
 		this.screen = screen;
 		API.getInstance().send(ChannelRequest.getChannelList(list ->
-			list.forEach(c -> {
-				children().add(0, new ChatListEntry(c));
-			})
+			list.stream().filter(predicate).forEach(c ->
+				children().add(0, new ChatListEntry(c)))
 		));
 	}
 
-	public class ChatListEntry extends Entry<ChatListEntry> {
+	public ChatListWidget(Screen screen, int screenWidth, int screenHeight, int x, int y, int width, int height) {
+		this(screen, screenWidth, screenHeight, x, y, width, height, c -> true);
+	}
+
+	public class ChatListEntry extends EntryListWidget.Entry<ChatListEntry> {
 
 		private final Channel channel;
 		private final ButtonWidget widget;
-		public ChatListEntry(Channel channel){
+
+		public ChatListEntry(Channel channel) {
 			this.channel = channel;
 			widget = new ButtonWidget(0, 0, getRowWidth(), 20, Text.of(channel.getName()),
 				buttonWidget -> client.openScreen(new ChatScreen(client.currentScreen, channel)));

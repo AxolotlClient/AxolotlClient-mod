@@ -25,6 +25,7 @@ package io.github.axolotlclient.api;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.GenericOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.KeyBindOption;
+import io.github.axolotlclient.api.chat.ChatListScreen;
 import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
 import org.lwjgl.input.Keyboard;
@@ -44,8 +45,10 @@ public class APIOptions extends Options {
 		openSidebar = new KeyBindOption("api.friends.sidebar.open", Keyboard.KEY_O, keyBind ->
 			client.setScreen(new FriendsSidebar(client.currentScreen)));
 		category.add(openSidebar);
-		category.add(new GenericOption("viewFriends", "clickToOpen", (mX, mY) -> MinecraftClient.getInstance()
-			.setScreen(new FriendsScreen(MinecraftClient.getInstance().currentScreen))));
+		category.add(new GenericOption("viewFriends", "clickToOpen",
+			(mX, mY) -> MinecraftClient.getInstance().setScreen(new FriendsScreen(MinecraftClient.getInstance().currentScreen))));
+		category.add(new GenericOption("viewChats", "clickToOpen",
+			(mX, mY) -> MinecraftClient.getInstance().setScreen(new ChatListScreen(MinecraftClient.getInstance().currentScreen))));
 		AxolotlClient.CONFIG.addCategory(category);
 		AxolotlClient.config.add(privacyAccepted);
 	}

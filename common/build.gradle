@@ -53,7 +53,7 @@ dependencies {
 	})
 
 	shadow implementation('com.github.JnCrMx:discord-game-sdk4j:v0.5.5')
-	shadow implementation('io.netty:netty-all:4.0.22.Final')
+	shadow implementation('io.netty:netty-all:4.1.92.Final')
 }
 
 build {
@@ -77,8 +77,10 @@ tasks.withType(AbstractArchiveTask).configureEach {
 shadowJar {
 	archiveClassifier.set('')
 	minimize()
-	relocate 'net.hypixel', 'axolotlclient.shadow.hypixel'
+	relocate 'net.hypixel', 'io.github.axolotlclient.shadow.hypixel'
+	relocate 'io.netty', 'io.github.axolotlclient.shadow.netty'
 	append '../LICENSE'
+	mergeServiceFiles()
 }
 
 publishing {

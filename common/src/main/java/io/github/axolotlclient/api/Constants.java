@@ -20,24 +20,16 @@
  * For more information, see the LICENSE file.
  */
 
-package io.github.axolotlclient.api.util;
+package io.github.axolotlclient.api;
 
-import com.google.common.base.Strings;
-import io.netty.buffer.ByteBuf;
 import lombok.experimental.UtilityClass;
 
-import java.nio.charset.StandardCharsets;
-
 @UtilityClass
-public class BufferUtil {
-
-	public String getString(ByteBuf buffer, int index, int byteLength) {
-		byte[] bytes = new byte[byteLength];
-		buffer.getBytes(index, bytes);
-		return new String(bytes, StandardCharsets.UTF_8);
-	}
-
-	public String padString(String s, int length) {
-		return Strings.padEnd(s, length, Character.MIN_VALUE).substring(0, length);
-	}
+public class Constants {
+	public final String API_BASE = "wss://axolotlclient.xyz";
+	public final String API_URL = API_BASE + "/api/wss";
+	public final int PORT = 2773;
+	public final int STATUS_UPDATE_DELAY = 15; // The Delay between Status updates, in seconds. Discord uses 15 seconds so we will as well.
+	public final boolean TESTING = false;
+	public final int CHANNEL_ID_LENGTH = 5;
 }

@@ -42,12 +42,6 @@ import java.util.Set;
 
 public class API {
 
-	private static final String API_BASE = "wss://axolotlclient.xyz";
-	private static final String API_URL = API_BASE + "/api/endpoint";
-	private static final int PORT = 2773;
-	private static final int STATUS_UPDATE_DELAY = 15; // The Delay between Status updates, in seconds. Discord uses 15 seconds so we will as well.
-	private static final boolean TESTING = false;
-
 	@Getter
 	private static API Instance;
 	private final HashMap<Integer, Request> requests = new HashMap<>();
@@ -128,7 +122,7 @@ public class API {
 
 	public void send(Request request) {
 		if (isConnected()) {
-			if (!TESTING) {
+			if (!Constants.TESTING) {
 				requests.put(request.getId(), request);
 				ThreadExecuter.scheduleTask(() -> {
 					ByteBuf buf = request.getData();
@@ -189,7 +183,7 @@ public class API {
 	}
 
 	public void onError(Throwable throwable) {
-		logger.error("Error while handling API traffic!", throwable);
+		logger.error("Error while handling API traffic:", throwable);
 	}
 
 	public void onClose() {
@@ -200,7 +194,7 @@ public class API {
 	}
 
 	private void createSession() {
-		new ClientEndpoint().run(API_URL, PORT);
+		new ClientEndpoint().run(Constants.API_URL, Constants.PORT);
 	}
 
 	public void restart() {
@@ -214,19 +208,21 @@ public class API {
 		}
 	}
 
-	public void startup(String uuid){
+	public void startup(String uuid) {
 		this.uuid = uuid;
-		switch (apiOptions.privacyAccepted.get()) {
-			case "unset":
-				apiOptions.openPrivacyNoteScreen.accept(v -> {
-					if (v) startupAPI();
-				});
-				break;
-			case "accepted":
-				startupAPI();
-				break;
-			default:
-				break;
+		if (apiOptions.enabled.get()) {
+			switch (apiOptions.privacyAccepted.get()) {
+				case "unset":
+					apiOptions.openPrivacyNoteScreen.accept(v -> {
+						if (v) startupAPI();
+					});
+					break;
+				case "accepted":
+					startupAPI();
+					break;
+				default:
+					break;
+			}
 		}
 	}
 
@@ -257,7 +253,7 @@ public class API {
 						send(statusUpdate);
 						try {
 							//noinspection BusyWait
-							Thread.sleep(STATUS_UPDATE_DELAY * 1000);
+							Thread.sleep(Constants.STATUS_UPDATE_DELAY * 1000);
 						} catch (InterruptedException ignored) {
 
 						}

@@ -443,5 +443,12 @@
 	"api.privacyNotice.openPolicy": "View Privacy Policy",
 	"api.privacyNotice.description": "The social features of AxolotlClient are subject to our privacy policy. You are free to accept or deny it, but in case of the latter some features will not be available.",
 	"api.users.block": "Block User",
-	"api.users.unblock": "Unblock User"
+	"api.users.unblock": "Unblock User",
+	"api.friends.createGroup": "Create Group",
+	"viewChats": "View Chats",
+	"api.chats": "Chats",
+	"api.chat.dms": "Direct Messages",
+	"api.chat.groups": "Groups",
+	"api.chat.groups.create": "Create Group/DM",
+	"api.chat.groups.create.label": "Enter group member name(s) (Comma-separated list):"
 }

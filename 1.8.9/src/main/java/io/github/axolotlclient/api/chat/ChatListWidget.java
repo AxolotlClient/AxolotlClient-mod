@@ -33,6 +33,7 @@ import net.minecraft.client.gui.widget.EntryListWidget;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class ChatListWidget extends EntryListWidget {
 
@@ -40,16 +41,19 @@ public class ChatListWidget extends EntryListWidget {
 
 	private final List<ChatListEntry> entries = new ArrayList<>();
 
-	public ChatListWidget(Screen screen, int screenWidth, int screenHeight, int x, int y, int width, int height) {
-		super(MinecraftClient.getInstance(), screenWidth, screenHeight, y, y+height, 25);
+	public ChatListWidget(Screen screen, int screenWidth, int screenHeight, int x, int y, int width, int height, Predicate<Channel> predicate) {
+		super(MinecraftClient.getInstance(), screenWidth, screenHeight, y, y + height, 25);
 		xStart = x;
 		xEnd = x + width;
 		this.screen = screen;
 		API.getInstance().send(ChannelRequest.getChannelList(list ->
-			list.forEach(c -> {
-				entries.add(0, new ChatListEntry(c));
-			})
+			list.stream().filter(predicate).forEach(c ->
+				entries.add(0, new ChatListEntry(c)))
 		));
+	}
+
+	public ChatListWidget(Screen screen, int screenWidth, int screenHeight, int x, int y, int width, int height) {
+		this(screen, screenWidth, screenHeight, x, y, width, height, c -> true);
 	}
 
 	@Override
