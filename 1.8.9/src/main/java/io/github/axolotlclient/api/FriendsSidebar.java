@@ -201,7 +201,6 @@ public class FriendsSidebar extends Screen implements ContextMenuScreen {
 	}
 
 	private void addChat(Channel channel) {
-		// TODO implement Chat
 		hasChat = true;
 		this.channel = channel;
 		int w;
@@ -218,7 +217,6 @@ public class FriendsSidebar extends Screen implements ContextMenuScreen {
 			@Override
 			public boolean keyPressed(char c, int i) {
 				if (i == Keyboard.KEY_RETURN) {
-					// TODO send chat message
 					ChatHandler.getInstance().sendMessage(FriendsSidebar.this.channel, input.getText());
 					input.setText("");
 					return true;

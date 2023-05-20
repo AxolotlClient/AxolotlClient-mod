@@ -26,10 +26,8 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class Constants {
-	public final String API_BASE = "wss://axolotlclient.xyz";
-	public final String API_URL = API_BASE + "/api/wss";
-	public final int PORT = 2773;
+	public final String API_URL = "wss://axolotlclient.xyz" + "/api/wss"; // The URL of the endpoint
+	public final int PORT = 2773; // The port of the endpoint
 	public final int STATUS_UPDATE_DELAY = 15; // The Delay between Status updates, in seconds. Discord uses 15 seconds so we will as well.
-	public final boolean TESTING = false;
-	public final int CHANNEL_ID_LENGTH = 5;
+	public final boolean TESTING = false; // When set to true, no requests will be sent
 }

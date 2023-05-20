@@ -122,7 +122,6 @@ public class ChatWidget extends AlwaysSelectedEntryListWidget<ChatWidget.ChatLin
 		} else {
 			before = Instant.now().getEpochSecond();
 		}
-		// TODO wait for backend impl
 		ChatHandler.getInstance().getMessagesBefore(channel, before);
 	}
 

@@ -24,7 +24,6 @@ package io.github.axolotlclient.api.requests;
 
 import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.APIError;
-import io.github.axolotlclient.api.Constants;
 import io.github.axolotlclient.api.Request;
 import io.github.axolotlclient.api.types.Channel;
 import io.github.axolotlclient.api.types.ChatMessage;
@@ -54,7 +53,7 @@ public class ChannelRequest {
 	}
 
 	private static Channel parseChannel(ByteBuf channel) {
-		String id = BufferUtil.getString(channel, 0x09, Constants.CHANNEL_ID_LENGTH);
+		String id = BufferUtil.getString(channel, 0x09, 5);
 		String name = BufferUtil.getString(channel, 0x0E, 64).trim();
 
 		List<User> users = new ArrayList<>();
@@ -102,8 +101,8 @@ public class ChannelRequest {
 
 		int i = object.getInt(0x0D);
 		while (i < object.getInt(0x09)) {
-			API.getInstance().send(getById(channelList::add, BufferUtil.getString(object, i, Constants.CHANNEL_ID_LENGTH)));
-			i += Constants.CHANNEL_ID_LENGTH;
+			API.getInstance().send(getById(channelList::add, BufferUtil.getString(object, i, 5)));
+			i += 5;
 		}
 
 		return channelList;
