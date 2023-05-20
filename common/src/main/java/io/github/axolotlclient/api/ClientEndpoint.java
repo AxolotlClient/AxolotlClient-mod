@@ -22,26 +22,36 @@
 
 package io.github.axolotlclient.api;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.*;
+import io.netty.channel.epoll.Epoll;
+import io.netty.channel.epoll.EpollEventLoopGroup;
+import io.netty.channel.epoll.EpollSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import lombok.NonNull;
 
 public class ClientEndpoint {
 
 	private static EventLoopGroup group;
 
 	public void run(String url, int port) {
-		group = new NioEventLoopGroup(3);
+		boolean epollAvailable = Epoll.isAvailable();
+		group = epollAvailable ?
+			new EpollEventLoopGroup(0,
+				new ThreadFactoryBuilder().setNameFormat("AxolotlClient Netty Epoll Client IO #%d").setDaemon(true).build()) :
+			new NioEventLoopGroup(3,
+				new ThreadFactoryBuilder().setNameFormat("AxolotlClient Netty Client IO #%d").setDaemon(true).build());
 
 		try {
 			Bootstrap b = new Bootstrap();
-			b.group(group).channel(NioSocketChannel.class)
+			b.group(group).channel(epollAvailable ? EpollSocketChannel.class : NioSocketChannel.class)
 				.handler(new ChannelInitializer<SocketChannel>() {
 					@Override
-					protected void initChannel(SocketChannel ch) {
+					protected void initChannel(@NonNull SocketChannel ch) {
 						ChannelPipeline pipeline = ch.pipeline();
 						pipeline.addLast(new SimpleChannelInboundHandler<ByteBuf>() {
 							@Override
