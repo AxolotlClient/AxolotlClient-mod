@@ -64,7 +64,7 @@ public abstract class ItemEntityRendererMixin extends EntityRenderer<ItemEntity>
 		if (AxolotlClient.CONFIG.flatItems.get()) {
 			matrixStack.multiply(Axis.Z_POSITIVE.rotationDegrees(itemEntity.getPitch()));
 			matrixStack.multiply(Axis.X_POSITIVE.rotationDegrees(90));
-			if (!itemEntity.method_24828()) {
+			if (!itemEntity.isOnGround()) {
 				itemEntity.setPitch(itemEntity.getPitch() - 5);
 				matrixStack.multiply(Axis.X_POSITIVE.rotationDegrees(itemEntity.getPitch()));
 				matrixStack.multiply(Axis.Y_POSITIVE.rotationDegrees(itemEntity.getPitch()));

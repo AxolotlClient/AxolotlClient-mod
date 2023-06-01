@@ -22,9 +22,7 @@
 
 package io.github.axolotlclient.mixin;
 
-import java.util.Objects;
-import java.util.function.Supplier;
-
+import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.FriendsSidebar;
 import io.github.axolotlclient.modules.hud.HudEditScreen;
 import io.github.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
@@ -43,6 +41,9 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Objects;
+import java.util.function.Supplier;
+
 @Mixin(GameMenuScreen.class)
 public abstract class GameMenuScreenMixin extends Screen {
 
@@ -52,8 +53,10 @@ public abstract class GameMenuScreenMixin extends Screen {
 
 	@Inject(method = "initWidgets", at = @At("TAIL"))
 	private void axolotlclient$addFriendsSidebarButton(CallbackInfo ci) {
-		addDrawableChild(ButtonWidget.builder(Text.translatable("api.friends"),
-			button -> MinecraftClient.getInstance().setScreen(new FriendsSidebar(this))).positionAndSize(10, height - 30, 75, 20).build());
+		if (API.getInstance().isConnected()) {
+			addDrawableChild(ButtonWidget.builder(Text.translatable("api.friends"),
+				button -> MinecraftClient.getInstance().setScreen(new FriendsSidebar(this))).positionAndSize(10, height - 30, 75, 20).build());
+		}
 	}
 
 	@Redirect(method = "initWidgets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/GameMenuScreen;m_rkfzqxdi(Lnet/minecraft/text/Text;Ljava/lang/String;)Lnet/minecraft/client/gui/widget/ButtonWidget;", ordinal = 1))

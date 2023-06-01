@@ -22,8 +22,7 @@
 
 package io.github.axolotlclient.mixin;
 
-import java.util.Objects;
-
+import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.FriendsSidebar;
 import io.github.axolotlclient.modules.hud.HudEditScreen;
 import io.github.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
@@ -42,12 +41,16 @@ import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
+import java.util.Objects;
+
 @Mixin(GameMenuScreen.class)
 public abstract class GameMenuScreenMixin extends Screen {
 
 	@Inject(method = "init", at = @At("RETURN"))
 	public void axolotlclient$addConfigButton(CallbackInfo ci) {
-		buttons.add(new ButtonWidget(234, 10, height - 30, 75, 20, I18n.translate("api.friends")));
+		if (API.getInstance().isConnected()) {
+			buttons.add(new ButtonWidget(234, 10, height - 30, 75, 20, I18n.translate("api.friends")));
+		}
 
 		if (axolotlclient$hasModMenu())
 			return;

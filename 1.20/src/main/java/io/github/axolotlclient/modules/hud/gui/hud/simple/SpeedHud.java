@@ -65,7 +65,7 @@ public class SpeedHud extends SimpleTextHudEntry {
 		}
 		Entity entity = client.player.getVehicle() == null ? client.player : client.player.getVehicle();
 		Vec3d vec = entity.getVelocity();
-		if (entity.method_24828() && vec.y < 0) {
+		if (entity.isOnGround() && vec.y < 0) {
 			vec = new Vec3d(vec.x, 0, vec.z);
 		}
 		double speed;

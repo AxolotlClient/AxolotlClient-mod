@@ -22,8 +22,7 @@
 
 package io.github.axolotlclient.mixin;
 
-import java.util.Objects;
-
+import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.FriendsSidebar;
 import io.github.axolotlclient.modules.hud.HudEditScreen;
 import io.github.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
@@ -43,6 +42,8 @@ import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
+import java.util.Objects;
+
 @Mixin(GameMenuScreen.class)
 public abstract class GameMenuScreenMixin extends Screen {
 
@@ -52,8 +53,10 @@ public abstract class GameMenuScreenMixin extends Screen {
 
 	@Inject(method = "initWidgets", at = @At("TAIL"))
 	private void axolotlclient$friendsSidebarButton(CallbackInfo ci) {
-		addButton(new ButtonWidget(10, height - (axolotlclient$hasModMenu() ? 50 : 30), 75, 20, new TranslatableText("api.friends"),
-			buttonWidget -> client.openScreen(new FriendsSidebar(this))));
+		if (API.getInstance().isConnected()) {
+			addButton(new ButtonWidget(10, height - (axolotlclient$hasModMenu() ? 50 : 30), 75, 20, new TranslatableText("api.friends"),
+				buttonWidget -> client.openScreen(new FriendsSidebar(this))));
+		}
 	}
 
 	private static boolean axolotlclient$hasModMenu() {
