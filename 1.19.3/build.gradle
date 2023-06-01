@@ -1,6 +1,6 @@
 plugins {
 	id 'java'
-	id "org.quiltmc.loom" version "1.0.+"
+	id "org.quiltmc.loom" version "1.2.+"
 }
 
 group = maven_group
