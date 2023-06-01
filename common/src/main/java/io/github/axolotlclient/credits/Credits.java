@@ -22,10 +22,10 @@
 
 package io.github.axolotlclient.credits;
 
+import lombok.Getter;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
-
-import lombok.Getter;
 
 public class Credits {
 
@@ -38,6 +38,7 @@ public class Credits {
 		contributor("TheKodeToad", "Contributor", "Motion Blur", "Freelook", "Zoom");
 		contributor("DragonEggBedrockBreaking", "Bugfixes", "Inspiration of new Features");
 		contributor("gart", "gartbin dev and host", "Image sharing help", "https://gart.sh", "Backend developer");
+		contributor("xlingy", "Website author");
 
 		otherPerson("DarkKronicle", "Author of KronHUD, the best HUD mod!");
 		otherPerson("AMereBagatelle", "Author of the excellent FabricSkyBoxes Mod");
