@@ -24,6 +24,7 @@ package io.github.axolotlclient.api.handlers;
 
 import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.APIError;
+import io.github.axolotlclient.api.Keyword;
 import io.github.axolotlclient.api.Request;
 import io.github.axolotlclient.api.types.Status;
 import io.github.axolotlclient.api.types.User;
@@ -111,9 +112,9 @@ public class FriendHandler implements RequestHandler {
 
 			responseConsumer.accept(new User(uuid,
 				new Status(buf.getBoolean(0x0D),
-					getString(buf, 0x0E, 64).trim(),
-					getString(buf, 0x4E, 64).trim(),
-					getString(buf, 0x8E, 32).trim(), startTime)));
+					Keyword.get(getString(buf, 0x0E, 64).trim()),
+					Keyword.get(getString(buf, 0x4E, 64).trim()),
+					Keyword.get(getString(buf, 0x8E, 32).trim()), startTime)));
 		}, uuid));
 	}
 
