@@ -30,6 +30,7 @@ dependencies {
 	}
 	modCompileOnlyApi("com.terraformersmc:modmenu:5.0.2")
 	include "io.github.axolotlclient:AxolotlClient-config:${project.config}+${project.minecraft_1193}"
+	modImplementation "io.github.axolotlclient.AxolotlClient-config:AxolotlClientConfig-common:${project.config}"
 
 	implementation include(project(path: ":common", configuration: 'shadow'))
 

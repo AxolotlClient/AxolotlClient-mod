@@ -28,6 +28,7 @@ dependencies {
 	modImplementation("io.github.axolotlclient:AxolotlClient-config:${project.config}+${project.minecraft_1194}") {
 		exclude group: "com.terraformersmc"
 	}
+	modImplementation "io.github.axolotlclient.AxolotlClient-config:AxolotlClientConfig-common:${project.config}"
 	modCompileOnlyApi("com.terraformersmc:modmenu:5.0.2")
 	include "io.github.axolotlclient:AxolotlClient-config:${project.config}+${project.minecraft_1194}"
 

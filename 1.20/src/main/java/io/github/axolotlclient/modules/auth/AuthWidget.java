@@ -47,7 +47,7 @@ public class AuthWidget extends ButtonWidget {
 		super.drawWidget(graphics, mouseX, mouseY, delta);
 		if (!Auth.getInstance().getCurrent().isOffline()) {
 			RenderSystem.enableBlend();
-			graphics.drawTexture(skinId, +1, getY() + 1, getHeight() - 2, getHeight() - 2, 8, 8, 8, 8, 64, 64);
+			graphics.drawTexture(skinId, getX() + 1, getY() + 1, getHeight() - 2, getHeight() - 2, 8, 8, 8, 8, 64, 64);
 			graphics.drawTexture(skinId, getX() + 1, getY() + 1, getHeight() - 2, getHeight() - 2, 40, 8, 8, 8, 64, 64);
 			RenderSystem.disableBlend();
 		}
