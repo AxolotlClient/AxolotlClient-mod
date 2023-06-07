@@ -122,6 +122,12 @@
 - re-instantiate modmenu compat on 1.16 versions
 - fix compatibility with darkloadingscreen
 
+### 3.0.3
+
+- update to 1.20
+- update Chinese translations (HowardZHY)
+- fix a reach hud bug on 1.8.9
+
 ### 3.1.0
 
 - Add a new Backend (made by gart)
@@ -129,3 +135,4 @@
 	- Friends
 	- Direct/Group Chats
 	- Status update notifications
+
