@@ -54,7 +54,7 @@ public class PrivacyNoticeScreen extends Screen {
 		renderBackground(graphics);
 		super.render(graphics, mouseX, mouseY, delta);
 		graphics.drawCenteredShadowedText(this.textRenderer, this.title, this.width / 2, getTitleY(), -1);
-		message.method_30888(graphics, width / 2, getMessageY());
+		message.render(graphics, width / 2, getMessageY());
 	}
 
 	@Override
