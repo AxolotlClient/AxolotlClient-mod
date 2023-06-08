@@ -137,12 +137,12 @@ public abstract class MinecraftClientMixin {
 
 	@Inject(method = "startIntegratedServer", at = @At("HEAD"))
 	public void axolotlclient$startup(String worldFileName, String worldName, LevelInfo levelInfo, CallbackInfo ci) {
-		DiscordRPC.setWorld(worldFileName);
+		DiscordRPC.getInstance().setWorld(worldFileName);
 	}
 
 	@Inject(method = "stop", at = @At("HEAD"))
 	public void axolotlclient$stop(CallbackInfo ci) {
-		DiscordRPC.shutdown();
+		DiscordRPC.getInstance().shutdown();
 	}
 
 	@Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lorg/lwjgl/input/Mouse;getEventDWheel()I"), remap = false)

@@ -65,7 +65,7 @@ public abstract class MinecraftClientMixin {
 
 	@Inject(method = "stop", at = @At("HEAD"))
 	public void axolotlclient$stop(CallbackInfo ci) {
-		DiscordRPC.shutdown();
+		DiscordRPC.getInstance().shutdown();
 	}
 
 	@Inject(method = "openScreen", at = @At("HEAD"))

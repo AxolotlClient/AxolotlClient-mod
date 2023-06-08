@@ -28,7 +28,6 @@ repositories {
 
 	mavenLocal()
 	mavenCentral()
-	maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -52,8 +51,10 @@ dependencies {
 		exclude group: "org.apache.httpcomponents", module: "httpclient"
 	})
 
-	shadow implementation('com.github.JnCrMx:discord-game-sdk4j:v0.5.5')
-	shadow implementation('io.netty:netty-all:4.1.92.Final')
+	shadow implementation("io.github.CDAGaming:DiscordIPC:0.6.5")
+	shadow implementation("com.kohlschutter.junixsocket:junixsocket-core:2.6.2")
+
+	shadow implementation("io.netty:netty-all:4.1.92.Final")
 }
 
 build {
@@ -102,4 +103,4 @@ publishing {
 	}
 }
 
-tasks.modrinth.enabled = false
+tasks.modrinth.setEnabled(false)

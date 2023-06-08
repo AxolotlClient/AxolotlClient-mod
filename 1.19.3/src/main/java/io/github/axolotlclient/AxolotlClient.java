@@ -72,8 +72,8 @@ import java.util.UUID;
 
 public class AxolotlClient implements ClientModInitializer {
 
-	public static final String modid = "AxolotlClient";
-	public static final HashMap<UUID, Boolean> playerCache = new HashMap<>();
+	public static final String MODID = "axolotlclient";
+	public static String VERSION;
 	public static final HashMap<Identifier, Resource> runtimeResources = new HashMap<>();
 	public static final Identifier badgeIcon = new Identifier("axolotlclient", "textures/badge.png");
 	public static final OptionCategory config = new OptionCategory("storedOptions");
@@ -85,7 +85,6 @@ public class AxolotlClient implements ClientModInitializer {
 	public static UnsupportedMod badmod;
 	public static boolean titleDisclaimer = false;
 	public static boolean showWarning = true;
-	private static int tickTime = 0;
 
 	public static boolean isUsingClient(UUID uuid) {
 		assert MinecraftClient.getInstance().player != null;
@@ -98,6 +97,9 @@ public class AxolotlClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient(ModContainer container) {
+
+		VERSION = QuiltLoader.getModContainer(MODID).orElseThrow().metadata().version().raw();
+
 		if (QuiltLoader.isModLoaded("ares")) {
 			badmod = new UnsupportedMod("Ares Client", UnsupportedMod.UnsupportedReason.BAN_REASON);
 		} else if (QuiltLoader.isModLoaded("inertia")) {
@@ -135,10 +137,10 @@ public class AxolotlClient implements ClientModInitializer {
 		CONFIG.getConfig().addAll(CONFIG.getCategories());
 		CONFIG.getConfig().add(config);
 
-		AxolotlClientConfigManager.getInstance().registerConfig(modid, CONFIG, configManager = new DefaultConfigManager(modid,
+		AxolotlClientConfigManager.getInstance().registerConfig(MODID, CONFIG, configManager = new DefaultConfigManager(MODID,
 			QuiltLoader.getConfigDir().resolve("AxolotlClient.json"), CONFIG.getConfig()));
-		AxolotlClientConfigManager.getInstance().addIgnoredName(modid, "x");
-		AxolotlClientConfigManager.getInstance().addIgnoredName(modid, "y");
+		AxolotlClientConfigManager.getInstance().addIgnoredName(MODID, "x");
+		AxolotlClientConfigManager.getInstance().addIgnoredName(MODID, "y");
 
 		modules.forEach(Module::lateInit);
 
@@ -178,14 +180,5 @@ public class AxolotlClient implements ClientModInitializer {
 
 	public static void tickClient() {
 		modules.forEach(Module::tick);
-
-		if (tickTime >= 6000) {
-			//System.out.println("Cleared Cache of Other Players!");
-			if (playerCache.values().size() > 500) {
-				playerCache.clear();
-			}
-			tickTime = 0;
-		}
-		tickTime++;
 	}
 }
