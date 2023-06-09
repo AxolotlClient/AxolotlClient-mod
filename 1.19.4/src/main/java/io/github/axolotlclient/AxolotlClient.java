@@ -72,7 +72,7 @@ import java.util.UUID;
 
 public class AxolotlClient implements ClientModInitializer {
 
-	public static final String MODID = "AxolotlClient";
+	public static final String MODID = "axolotlclient";
 	public static String VERSION;
 	public static final HashMap<Identifier, Resource> runtimeResources = new HashMap<>();
 	public static final Identifier badgeIcon = new Identifier("axolotlclient", "textures/badge.png");

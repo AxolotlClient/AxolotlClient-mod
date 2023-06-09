@@ -76,7 +76,7 @@ public class AxolotlClient implements ClientModInitializer {
 	public static final OptionCategory config = new OptionCategory("storedOptions");
 	public static final BooleanOption someNiceBackground = new BooleanOption("defNoSecret", false);
 	public static final List<Module> modules = new ArrayList<>();
-	public static final Logger LOGGER = new LoggerImpl();
+	public static Logger LOGGER;
 	public static AxolotlClientConfig CONFIG;
 	public static ConfigManager configManager;
 	public static UnsupportedMod badmod;
@@ -94,6 +94,8 @@ public class AxolotlClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
+
+		LOGGER = new LoggerImpl();
 
 		VERSION = FabricLoader.getInstance().getModContainer(MODID).orElseThrow(IllegalStateException::new)
 			.getMetadata().getVersion().getFriendlyString();

@@ -42,10 +42,7 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.ModifyArgs;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
@@ -77,6 +74,13 @@ public abstract class TitleScreenMixin extends Screen {
 			args.set(4, new TranslatableText("config"));
 			args.set(5, (ButtonWidget.PressAction) buttonWidget -> MinecraftClient.getInstance()
 				.openScreen(new HudEditScreen(this)));
+		}
+	}
+
+	@Redirect(method = "initWidgetsNormal", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/widget/ButtonWidget;active:Z", ordinal = 1))
+	private void axolotlclient$activateIfModSettings(ButtonWidget instance, boolean value) {
+		if (FabricLoader.getInstance().isModLoaded("modmenu")) {
+			instance.active = value;
 		}
 	}
 

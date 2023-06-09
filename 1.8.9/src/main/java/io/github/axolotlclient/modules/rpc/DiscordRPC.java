@@ -73,8 +73,9 @@ public class DiscordRPC extends RPCCommon {
 
 		if (showActivity.get() && MinecraftClient.getInstance().getCurrentServerEntry() != null) {
 			builder.setDetails(Util.getGame());
-		} else if (showActivity.get() && !currentWorld.isEmpty()){
+		} else if (showActivity.get() && !currentWorld.isEmpty() && state.equals("Singleplayer")) {
 			builder.setDetails(currentWorld);
+		} else if (!state.equals("Singleplayer")) {
 			currentWorld = "";
 		}
 

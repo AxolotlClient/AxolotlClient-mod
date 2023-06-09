@@ -30,7 +30,7 @@ import net.minecraft.client.MinecraftClient;
 public class DiscordRPC extends RPCCommon {
 	private static DiscordRPC Instance;
 
-	public DiscordRPC() {
+	private DiscordRPC() {
 		super(AxolotlClient.LOGGER);
 	}
 
