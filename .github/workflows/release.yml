@@ -23,12 +23,12 @@ jobs:
         with:
           distribution: "temurin"
           java-version: 17
-          cache: 'gradle'
 
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v2
         with:
           arguments: build
+          cache-read-only: true
 
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:

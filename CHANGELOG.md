@@ -135,4 +135,5 @@
 	- Friends
 	- Direct/Group Chats
 	- Status update notifications
+- rewrite DiscordRPC
 
