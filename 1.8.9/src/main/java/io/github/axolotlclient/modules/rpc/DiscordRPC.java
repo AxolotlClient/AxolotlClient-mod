@@ -22,7 +22,6 @@
 
 package io.github.axolotlclient.modules.rpc;
 
-import com.jagrosh.discordipc.entities.RichPresence;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
@@ -47,9 +46,7 @@ public class DiscordRPC extends RPCCommon {
 	}
 
 	@Override
-	protected RichPresence getPresence() {
-
-		RichPresence.Builder builder = getPresenceBuilder(AxolotlClient.VERSION);
+	protected void createRichPresence() {
 
 		String state;
 		switch (showServerNameMode.get()) {
@@ -69,17 +66,18 @@ public class DiscordRPC extends RPCCommon {
 				state = "";
 				break;
 		}
-		builder.setState(state);
 
+		String details;
 		if (showActivity.get() && MinecraftClient.getInstance().getCurrentServerEntry() != null) {
-			builder.setDetails(Util.getGame());
-		} else if (showActivity.get() && !currentWorld.isEmpty() && state.equals("Singleplayer")) {
-			builder.setDetails(currentWorld);
-		} else if (!state.equals("Singleplayer")) {
+			details = (Util.getGame());
+		} else if (showActivity.get() && !currentWorld.isEmpty()){
+			details = (currentWorld);
 			currentWorld = "";
+		} else {
+			details = "";
 		}
 
-		return builder.build();
+		setRichPresence(createRichPresence(AxolotlClient.VERSION, state, details));
 	}
 
 	public void init() {

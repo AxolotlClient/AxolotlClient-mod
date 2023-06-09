@@ -87,19 +87,25 @@ public abstract class RPCCommon implements Module {
 		}
 	}
 
-	protected RichPresence.Builder getPresenceBuilder(String gameVersion){
+	protected RichPresence createRichPresence(String gameVersion, String state, String details){
 		RichPresence.Builder builder = new RichPresence.Builder();
 		builder.setLargeImage("icon", "AxolotlClient " + gameVersion);
 		if(showTime.get()) {
 			builder.setStartTimestamp(time.getEpochSecond());
 		}
-		return builder;
+		builder.setState(state)
+			.setDetails(details);
+		return builder.build();
 	}
 
-	protected abstract RichPresence getPresence();
+	protected abstract void createRichPresence();
+
+	protected void setRichPresence(RichPresence presence){
+		client.sendRichPresence(presence);
+	}
 
 	private void updateRPC(){
-		client.sendRichPresence(getPresence());
+		createRichPresence();
 	}
 
 	public void initRPC() {
@@ -134,7 +140,7 @@ public abstract class RPCCommon implements Module {
 
 					@Override
 					public void onReady(IPCClient client) {
-						client.sendRichPresence(getPresence());
+						createRichPresence();
 					}
 
 					@Override

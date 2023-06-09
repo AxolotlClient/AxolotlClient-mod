@@ -47,11 +47,9 @@ public class DiscordRPC extends RPCCommon {
 	}
 
 	@Override
-	protected RichPresence getPresence() {
+	protected void createRichPresence() {
 
-		RichPresence.Builder builder = getPresenceBuilder(AxolotlClient.VERSION);
-
-		builder.setState(switch (showServerNameMode.get()) {
+		String state = switch (showServerNameMode.get()) {
 			case "showIp" -> MinecraftClient.getInstance().world == null ? "In the menu"
 				: (MinecraftClient.getInstance().getCurrentServerEntry() == null ? "Singleplayer"
 				: MinecraftClient.getInstance().getCurrentServerEntry().address);
@@ -59,16 +57,19 @@ public class DiscordRPC extends RPCCommon {
 				: (MinecraftClient.getInstance().getCurrentServerEntry() == null ? "Singleplayer"
 				: MinecraftClient.getInstance().getCurrentServerEntry().name);
 			default -> "";
-		});
+		};
 
+		String details;
 		if (showActivity.get() && MinecraftClient.getInstance().getCurrentServerEntry() != null) {
-			builder.setDetails(Util.getGame());
+			details = (Util.getGame());
 		} else if (showActivity.get() && !currentWorld.isEmpty()){
-			builder.setDetails(currentWorld);
+			details = (currentWorld);
 			currentWorld = "";
+		} else {
+			details = "";
 		}
 
-		return builder.build();
+		setRichPresence(createRichPresence(AxolotlClient.VERSION, state, details));
 	}
 
 	public void init() {
