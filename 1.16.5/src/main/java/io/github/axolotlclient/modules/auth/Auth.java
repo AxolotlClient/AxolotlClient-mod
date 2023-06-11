@@ -100,7 +100,7 @@ public class Auth extends Accounts implements Module {
 				((MinecraftClientAccessor) client).setSocialInteractionsService(service);
 				((MinecraftClientAccessor) client).setSocialInteractionsManager(new SocialInteractionsManager(client, service));
 				if (!account.isOffline()) {
-					API.getInstance().startup(account.getUuid());
+					API.getInstance().startup(account);
 				}
 				save();
 				current = account;

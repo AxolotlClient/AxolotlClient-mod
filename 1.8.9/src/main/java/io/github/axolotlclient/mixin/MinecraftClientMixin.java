@@ -126,7 +126,7 @@ public abstract class MinecraftClientMixin {
 	private void axolotlclient$onLaunch(CallbackInfo ci) {
 		HudManager.getInstance().refreshAllBounds();
 		if (!API.getInstance().isConnected() && !Auth.getInstance().getCurrent().isOffline()) {
-			API.getInstance().startup(Auth.getInstance().getCurrent().getUuid());
+			API.getInstance().startup(Auth.getInstance().getCurrent());
 		}
 	}
 

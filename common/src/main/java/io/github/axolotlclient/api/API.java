@@ -25,8 +25,10 @@ package io.github.axolotlclient.api;
 import io.github.axolotlclient.api.handlers.*;
 import io.github.axolotlclient.api.types.Status;
 import io.github.axolotlclient.api.types.User;
+import io.github.axolotlclient.api.util.MojangAuth;
 import io.github.axolotlclient.api.util.RequestHandler;
 import io.github.axolotlclient.api.util.StatusUpdateProvider;
+import io.github.axolotlclient.modules.auth.Account;
 import io.github.axolotlclient.util.Logger;
 import io.github.axolotlclient.util.ThreadExecuter;
 import io.github.axolotlclient.util.notifications.NotificationProvider;
@@ -39,6 +41,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class API {
 
@@ -60,6 +64,7 @@ public class API {
 	private String uuid;
 	@Getter
 	private User self;
+	private Account account;
 
 	public API(Logger logger, NotificationProvider notificationProvider, TranslationProvider translationProvider,
 			   StatusUpdateProvider statusUpdateProvider, Options apiOptions) {
@@ -83,26 +88,45 @@ public class API {
 	public void onOpen(Channel channel) {
 		this.channel = channel;
 		logger.debug("API connected!");
-		sendHandshake(uuid);
+		sendHandshake(account);
 	}
 
-	private void sendHandshake(String uuid) {
+	private void sendHandshake(Account account) {
 		logger.debug("Starting Handshake");
-		Request request = new Request(Request.Type.HANDSHAKE, object -> {
-			if (requestFailed(object)) {
-				logger.error("Handshake failed, closing API!");
-				if (apiOptions.detailedLogging.get()) {
-					notificationProvider.addStatus("api.error.handshake", APIError.fromResponse(object));
-				}
+		logger.debug("Authenticating with Mojang");
+
+		AtomicBoolean mojangAuthSuccessful = new AtomicBoolean();
+		AtomicReference<String> serverId = new AtomicReference<>();
+
+		send(new Request(Request.Type.GET_PUBLIC_KEY, buf -> {
+			MojangAuth.Result result = MojangAuth.authenticate(account, buf.slice(0x09, buf.readableBytes() - 9).array());
+			if (result.getStatus() != MojangAuth.Status.SUCCESS) {
+				logger.error("Authentication with Mojang failed, aborting!");
 				shutdown();
 			} else {
-				logger.debug("Handshake successful!");
-				if (apiOptions.detailedLogging.get()) {
-					notificationProvider.addStatus("api.success.handshake", "api.success.handshake.desc");
-				}
+				mojangAuthSuccessful.set(true);
+				serverId.set(result.getServerId());
 			}
-		}, "uuid", uuid);
-		send(request);
+		}));
+
+		if (mojangAuthSuccessful.get()) {
+			Request request = new Request(Request.Type.HANDSHAKE, object -> {
+				if (requestFailed(object)) {
+					logger.error("Handshake failed, closing API!");
+					if (apiOptions.detailedLogging.get()) {
+						notificationProvider.addStatus("api.error.handshake", APIError.fromResponse(object));
+					}
+					shutdown();
+				} else if (object.getByte(0x09) == 0) {
+
+					logger.debug("Handshake successful!");
+					if (apiOptions.detailedLogging.get()) {
+						notificationProvider.addStatus("api.success.handshake", "api.success.handshake.desc");
+					}
+				}
+			}, account.getUuid(), serverId.get(), account.getName());
+			send(request);
+		}
 	}
 
 	public boolean requestFailed(ByteBuf object) {
@@ -201,15 +225,16 @@ public class API {
 		if (isConnected()) {
 			shutdown();
 		}
-		if (uuid != null) {
-			startup(uuid);
+		if (account != null) {
+			startup(account);
 		} else {
 			apiOptions.enabled.set(false);
 		}
 	}
 
-	public void startup(String uuid) {
-		this.uuid = uuid;
+	public void startup(Account account) {
+		this.uuid = account.getUuid();
+		this.account = account;
 		if (apiOptions.enabled.get()) {
 			switch (apiOptions.privacyAccepted.get()) {
 				case "unset":

@@ -22,9 +22,6 @@
 
 package io.github.axolotlclient.modules.auth;
 
-import java.nio.file.Path;
-import java.util.*;
-
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.exceptions.AuthenticationException;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
@@ -52,6 +49,9 @@ import net.minecraft.client.util.Session;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.quiltmc.loader.api.QuiltLoader;
+
+import java.nio.file.Path;
+import java.util.*;
 
 public class Auth extends Accounts implements Module {
 
@@ -106,7 +106,7 @@ public class Auth extends Accounts implements Module {
 					service = UserApiService.OFFLINE;
 				} else {
 					service = ((YggdrasilMinecraftSessionService) MinecraftClient.getInstance().getSessionService()).getAuthenticationService().createUserApiService(client.getSession().getAccessToken());
-					API.getInstance().startup(account.getUuid());
+					API.getInstance().startup(account);
 				}
 				((MinecraftClientAccessor) client).setUserApiService(service);
 				((MinecraftClientAccessor) client).setSocialInteractionsManager(new SocialInteractionsManager(client, service));

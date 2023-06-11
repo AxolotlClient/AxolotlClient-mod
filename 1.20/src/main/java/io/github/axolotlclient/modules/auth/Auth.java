@@ -106,7 +106,7 @@ public class Auth extends Accounts implements Module {
 					service = UserApiService.OFFLINE;
 				} else {
 					service = ((YggdrasilMinecraftSessionService) MinecraftClient.getInstance().getSessionService()).getAuthenticationService().createUserApiService(client.getSession().getAccessToken());
-					API.getInstance().startup(account.getUuid());
+					API.getInstance().startup(account);
 				}
 				((MinecraftClientAccessor) client).setUserApiService(service);
 				((MinecraftClientAccessor) client).setSocialInteractionsManager(new SocialInteractionsManager(client, service));
