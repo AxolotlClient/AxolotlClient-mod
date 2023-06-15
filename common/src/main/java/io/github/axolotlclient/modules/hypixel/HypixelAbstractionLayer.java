@@ -22,6 +22,12 @@
 
 package io.github.axolotlclient.modules.hypixel;
 
+import io.github.axolotlclient.modules.hypixel.levelhead.LevelHeadMode;
+import io.github.axolotlclient.util.ThreadExecuter;
+import net.hypixel.api.HypixelAPI;
+import net.hypixel.api.apache.ApacheHttpClient;
+import net.hypixel.api.reply.PlayerReply;
+
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
@@ -31,12 +37,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
-
-import io.github.axolotlclient.modules.hypixel.levelhead.LevelHeadMode;
-import io.github.axolotlclient.util.ThreadExecuter;
-import net.hypixel.api.HypixelAPI;
-import net.hypixel.api.apache.ApacheHttpClient;
-import net.hypixel.api.reply.PlayerReply;
 
 /**
  * Based on Osmium by Intro-Dev
@@ -68,12 +68,12 @@ public class HypixelAbstractionLayer {
 		}
 		if (loadPlayerDataIfAbsent(uuid)) {
 			try {
-				if (Objects.equals(mode, LevelHeadMode.NETWORK.toString())) {
+				if (mode.equals(LevelHeadMode.NETWORK.toString())) {
 					return (int) cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer().getNetworkLevel();
-				} else if (Objects.equals(mode, LevelHeadMode.BEDWARS.toString())) {
-					return cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer()
-						.getIntProperty("achievements.bedwars_level", 0);
-				} else if (Objects.equals(mode, LevelHeadMode.SKYWARS.toString())) {
+				} else if (mode.equals(LevelHeadMode.BEDWARS.toString())) {
+					return (int) cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer()
+						.getFloatProperty("achievements.bedwars_level", 0F);
+				} else if (mode.equals(LevelHeadMode.SKYWARS.toString())) {
 					int exp = cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer()
 						.getIntProperty("stats.SkyWars.skywars_experience", 0);
 					return Math.round(ExpCalculator.getLevelForExp(exp));

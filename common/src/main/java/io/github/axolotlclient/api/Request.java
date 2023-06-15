@@ -66,20 +66,20 @@ public class Request {
 		this(type, handler, new Data());
 	}
 
-	private int generateId() {
-		int id = 0;
-		while (id == 0) {
-			id = ThreadLocalRandom.current().nextInt();
-		}
-		return id;
-	}
-
 	public Request(Type type, Consumer<ByteBuf> handler, String... data) {
 		this(type, handler, new Data(data));
 	}
 
 	public Request(Type type, Consumer<ByteBuf> handler, byte... data) {
 		this(type, handler, new Data(data));
+	}
+
+	private int generateId() {
+		int id = 0;
+		while (id == 0) {
+			id = ThreadLocalRandom.current().nextInt();
+		}
+		return id;
 	}
 
 	public ByteBuf getData() {

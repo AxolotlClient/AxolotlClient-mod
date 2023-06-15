@@ -22,8 +22,6 @@
 
 package io.github.axolotlclient.modules.auth;
 
-import java.util.List;
-
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
@@ -32,6 +30,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import org.quiltmc.loader.api.minecraft.ClientOnly;
+
+import java.util.List;
 
 public class AccountsListWidget extends AlwaysSelectedEntryListWidget<AccountsListWidget.Entry> {
 
@@ -87,10 +87,10 @@ public class AccountsListWidget extends AlwaysSelectedEntryListWidget<AccountsLi
 		public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
 			if (Auth.getInstance().getCurrent().equals(account)) {
 				RenderSystem.setShaderTexture(0, checkmark);
-				drawTexture(matrices, x - 35, y + 1, 0, 0, 25, 25, 25, 25);
+				drawTexture(matrices, x - 35, y + 1, 0, 0, 32, 32, 32, 32);
 			} else if (account.isExpired()) {
 				RenderSystem.setShaderTexture(0, warningSign);
-				drawTexture(matrices, x - 35, y + 1, 0, 0, 25, 25, 25, 25);
+				drawTexture(matrices, x - 35, y + 1, 0, 0, 32, 32, 32, 32);
 			}
 			RenderSystem.setShaderTexture(0, Auth.getInstance().getSkinTexture(account));
 			RenderSystem.enableBlend();

@@ -22,8 +22,6 @@
 
 package io.github.axolotlclient.modules.auth;
 
-import java.util.List;
-
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
@@ -33,6 +31,8 @@ import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
+
+import java.util.List;
 
 public class AccountsListWidget extends AlwaysSelectedEntryListWidget<AccountsListWidget.Entry> {
 
@@ -84,10 +84,10 @@ public class AccountsListWidget extends AlwaysSelectedEntryListWidget<AccountsLi
 			GlStateManager.color4f(1, 1, 1, 1);
 			if (Auth.getInstance().getCurrent().equals(account)) {
 				client.getTextureManager().bindTexture(checkmark);
-				drawTexture(matrices, x - 35, y + 1, 0, 0, 25, 25, 25, 25);
+				drawTexture(matrices, x - 35, y + 1, 0, 0, 32, 32, 32, 32);
 			} else if (account.isExpired()) {
 				client.getTextureManager().bindTexture(warningSign);
-				drawTexture(matrices, x - 35, y + 1, 0, 0, 25, 25, 25, 25);
+				drawTexture(matrices, x - 35, y + 1, 0, 0, 32, 32, 32, 32);
 			}
 			client.getTextureManager().bindTexture(Auth.getInstance().getSkinTexture(account));
 			RenderSystem.enableBlend();

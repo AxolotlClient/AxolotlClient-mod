@@ -85,13 +85,13 @@ public class AccountsListWidget extends AlwaysSelectedEntryListWidget<AccountsLi
 
 		@Override
 		public void render(GuiGraphics graphics, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+			RenderSystem.enableBlend();
 			if (Auth.getInstance().getCurrent().equals(account)) {
-				graphics.drawTexture(checkmark, x - 35, y + 1, 0, 0, 25, 25, 25, 25);
+				graphics.drawTexture(checkmark, x - 35, y + 1, 0, 0, 32, 32, 32, 32);
 			} else if (account.isExpired()) {
-				graphics.drawTexture(warningSign, x - 35, y + 1, 0, 0, 25, 25, 25, 25);
+				graphics.drawTexture(warningSign, x - 35, y + 1, 0, 0, 32, 32, 32, 32);
 			}
 			Identifier texture = Auth.getInstance().getSkinTexture(account);
-			RenderSystem.enableBlend();
 			graphics.drawTexture(texture, x - 1, y - 1, 33, 33, 8, 8, 8, 8, 64, 64);
 			graphics.drawTexture(texture, x - 1, y - 1, 33, 33, 40, 8, 8, 8, 64, 64);
 			RenderSystem.disableBlend();

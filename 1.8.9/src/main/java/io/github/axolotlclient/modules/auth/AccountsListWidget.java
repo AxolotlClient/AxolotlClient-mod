@@ -22,9 +22,6 @@
 
 package io.github.axolotlclient.modules.auth;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
 import net.fabricmc.api.EnvType;
@@ -32,6 +29,9 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.EntryListWidget;
 import net.minecraft.util.Identifier;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AccountsListWidget extends EntryListWidget {
 
@@ -117,10 +117,10 @@ public class AccountsListWidget extends EntryListWidget {
 			GlStateManager.color(1, 1, 1, 1);
 			if (Auth.getInstance().getCurrent().equals(account)) {
 				client.getTextureManager().bindTexture(checkmark);
-				drawTexture(x - 35, y + 1, 0, 0, 25, 25, 25, 25);
+				drawTexture(x - 35, y + 1, 0, 0, 32, 32, 32, 32);
 			} else if (account.isExpired()) {
 				client.getTextureManager().bindTexture(warningSign);
-				drawTexture(x - 35, y + 1, 0, 0, 25, 25, 25, 25);
+				drawTexture(x - 35, y + 1, 0, 0, 32, 32, 32, 32);
 			}
 			GlStateManager.color(1, 1, 1, 1);
 			client.getTextureManager().bindTexture(Auth.getInstance().getSkinTexture(account));
