@@ -30,8 +30,7 @@ import net.minecraft.util.profiler.Profiler;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -39,19 +38,14 @@ import java.util.List;
 
 @Mixin(SplashTextResourceSupplier.class)
 public class SplashTextResourceSupplierMixin {
+	private static final Identifier AXOLOTLCLIENT$EXTRA_SPLASHES = new Identifier("axolotlclient", "texts/splashes.txt");
 
-	private static final Identifier EXTRA_SPLASHES = new Identifier("axolotlclient", "texts/splashes.txt");
-
-	@Inject(method = "prepare(Lnet/minecraft/resource/ResourceManager;Lnet/minecraft/util/profiler/Profiler;)Ljava/util/List;",
-		at = @At(value = "RETURN"), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
-	private void axolotlclient$injectCustomSplashes(ResourceManager resourceManager, Profiler profiler, CallbackInfoReturnable<List<String>> cir,
-													BufferedReader mcReader, List<String> splashes) {
+	@Inject(method = "apply(Ljava/util/List;Lnet/minecraft/resource/ResourceManager;Lnet/minecraft/util/profiler/Profiler;)V", at = @At("HEAD"))
+	private void axolotlclient$addCustomSplashes(List<String> list, ResourceManager resourceManager, Profiler profiler, CallbackInfo ci){
 		try {
-			try (BufferedReader reader = MinecraftClient.getInstance().getResourceManager().openAsReader(EXTRA_SPLASHES)) {
-				splashes.addAll(reader.lines().toList());
+			try (BufferedReader reader = MinecraftClient.getInstance().getResourceManager().openAsReader(AXOLOTLCLIENT$EXTRA_SPLASHES)) {
+				list.addAll(reader.lines().toList());
 			}
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+		} catch (IOException ignored) {}
 	}
 }

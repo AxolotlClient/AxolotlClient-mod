@@ -50,14 +50,14 @@ public abstract class MinecraftClientMixin {
 	}
 
 	@Inject(method = "getVersionType", at = @At("HEAD"), cancellable = true)
-	public void axolotlclient$noVersionType(CallbackInfoReturnable<String> cir) {
+	private void axolotlclient$noVersionType(CallbackInfoReturnable<String> cir) {
 		if (QuiltLoader.getModContainer("axolotlclient").isPresent()) {
 			cir.setReturnValue(QuiltLoader.getModContainer("axolotlclient").get().metadata().version().raw());
 		}
 	}
 
 	@Inject(method = "stop", at = @At("HEAD"))
-	public void axolotlclient$stop(CallbackInfo ci) {
+	private void axolotlclient$stop(CallbackInfo ci) {
 		DiscordRPC.getInstance().shutdown();
 	}
 

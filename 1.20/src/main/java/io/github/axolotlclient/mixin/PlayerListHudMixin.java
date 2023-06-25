@@ -57,7 +57,7 @@ public abstract class PlayerListHudMixin {
 	private GameProfile profile;
 
 	@Inject(method = "getPlayerName", at = @At("HEAD"), cancellable = true)
-	public void axolotlclient$nickHider(PlayerListEntry playerEntry, CallbackInfoReturnable<Text> cir) {
+	private void axolotlclient$nickHider(PlayerListEntry playerEntry, CallbackInfoReturnable<Text> cir) {
 		assert MinecraftClient.getInstance().player != null;
 		if (playerEntry.getProfile().equals(MinecraftClient.getInstance().player.getGameProfile())
 			&& NickHider.getInstance().hideOwnName.get()) {
@@ -72,20 +72,20 @@ public abstract class PlayerListHudMixin {
 	protected abstract Text applyGameModeFormatting(PlayerListEntry entry, MutableText name);
 
 	@ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;getPlayerName(Lnet/minecraft/client/network/PlayerListEntry;)Lnet/minecraft/text/Text;"))
-	public PlayerListEntry axolotlclient$getPlayer(PlayerListEntry playerEntry) {
+	private PlayerListEntry axolotlclient$getPlayer(PlayerListEntry playerEntry) {
 		profile = playerEntry.getProfile();
 		return playerEntry;
 	}
 
 	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;getWidth(Lnet/minecraft/text/StringVisitable;)I"))
-	public int axolotlclient$moveName(TextRenderer instance, StringVisitable text) {
+	private int axolotlclient$moveName(TextRenderer instance, StringVisitable text) {
 		if (profile != null && AxolotlClient.CONFIG.showBadges.get() && AxolotlClient.isUsingClient(profile.getId()))
 			return instance.getWidth(text) + 10;
 		return instance.getWidth(text);
 	}
 
 	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;drawShadowedText(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;III)I"))
-	public int axolotlclient$moveName2(GuiGraphics instance, TextRenderer renderer, Text text, int x, int y, int color) {
+	private int axolotlclient$moveName2(GuiGraphics instance, TextRenderer renderer, Text text, int x, int y, int color) {
 		if (profile != null && AxolotlClient.CONFIG.showBadges.get() && AxolotlClient.isUsingClient(profile.getId())) {
 			RenderSystem.setShaderColor(1, 1, 1, 1);
 
@@ -98,7 +98,7 @@ public abstract class PlayerListHudMixin {
 	}
 
 	@ModifyArg(method = "getPlayerName", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;applyGameModeFormatting(Lnet/minecraft/client/network/PlayerListEntry;Lnet/minecraft/text/MutableText;)Lnet/minecraft/text/Text;"), index = 1)
-	public MutableText axolotlclient$hideNames(MutableText name) {
+	private MutableText axolotlclient$hideNames(MutableText name) {
 		if (NickHider.getInstance().hideOwnName.get()) {
 			return Text.literal(NickHider.getInstance().hiddenNameSelf.get());
 		}

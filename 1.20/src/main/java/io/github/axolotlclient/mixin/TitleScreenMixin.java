@@ -63,7 +63,7 @@ public abstract class TitleScreenMixin extends Screen {
 	}
 
 	@Inject(method = "initWidgetsNormal", at = @At("HEAD"))
-	public void axolotlclient$inMenu(int y, int spacingY, CallbackInfo ci) {
+	private void axolotlclient$inMenu(int y, int spacingY, CallbackInfo ci) {
 		if (MinecraftClient.getInstance().options.saveToolbarActivatorKey.keyEquals(Zoom.key.get())) {
 			MinecraftClient.getInstance().options.saveToolbarActivatorKey.setBoundKey(InputUtil.UNKNOWN_KEY);
 			AxolotlClient.LOGGER.info("Unbound \"Save Toolbar Activator\" to resolve conflict with the zoom key!");
@@ -82,7 +82,7 @@ public abstract class TitleScreenMixin extends Screen {
 	@ModifyArgs(method = "initWidgetsNormal",
 		at = @At(value = "INVOKE",
 			target = "Lnet/minecraft/client/gui/widget/ButtonWidget;builder(Lnet/minecraft/text/Text;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;)Lnet/minecraft/client/gui/widget/ButtonWidget$Builder;", ordinal = 2))
-	public void axolotlclient$noRealmsbutOptionsButton(Args args) {
+	private void axolotlclient$noRealmsbutOptionsButton(Args args) {
 		if (!QuiltLoader.isModLoaded("modmenu")) {
 			args.set(0, Text.translatable("config"));
 			args.set(1, (ButtonWidget.PressAction) buttonWidget -> MinecraftClient.getInstance()
@@ -91,7 +91,7 @@ public abstract class TitleScreenMixin extends Screen {
 	}
 
 	@ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;drawShadowedText(Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)I"), index = 1)
-	public String axolotlclient$setVersionText(String s) {
+	private String axolotlclient$setVersionText(String s) {
 		return "Minecraft " + SharedConstants.getGameVersion().getName() + "/AxolotlClient "
 			+ (QuiltLoader.getModContainer("axolotlclient").isPresent()
 			? QuiltLoader.getModContainer("axolotlclient").get().metadata().version().raw()
@@ -99,12 +99,12 @@ public abstract class TitleScreenMixin extends Screen {
 	}
 
 	@Inject(method = "areRealmsNotificationsEnabled", at = @At("HEAD"), cancellable = true)
-	public void axolotlclient$noRealmsIcons(CallbackInfoReturnable<Boolean> cir) {
+	private void axolotlclient$noRealmsIcons(CallbackInfoReturnable<Boolean> cir) {
 		cir.setReturnValue(false);
 	}
 
 	@Inject(method = "init", at = @At("HEAD"))
-	public void axolotlclient$showBadModsScreen(CallbackInfo ci) {
+	private void axolotlclient$showBadModsScreen(CallbackInfo ci) {
 		if (AxolotlClient.showWarning) {
 			StringBuilder description = new StringBuilder();
 			for (int i = 0; i < AxolotlClient.badmod.reason().length; i++) {
@@ -136,7 +136,7 @@ public abstract class TitleScreenMixin extends Screen {
 	}
 
 	@Inject(method = "render", at = @At("TAIL"))
-	public void axolotlclient$addDisclaimer(GuiGraphics graphics, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+	private void axolotlclient$addDisclaimer(GuiGraphics graphics, int mouseX, int mouseY, float delta, CallbackInfo ci) {
 		if (AxolotlClient.titleDisclaimer) {
 			graphics.drawCenteredShadowedText(textRenderer,
 				"You are playing at your own risk with unsupported Mods", this.width / 2, 5, 0xFFCC8888);

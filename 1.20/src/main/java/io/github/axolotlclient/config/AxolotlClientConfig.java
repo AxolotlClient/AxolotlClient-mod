@@ -61,7 +61,7 @@ public class AxolotlClientConfig extends ConfigHolder {
 	public final ColorOption hitColor = new ColorOption("hitColor",
 		value -> {
 			try { // needed because apparently someone created a bug that makes this be called when the config is loaded. Will be fixed with the next release.
-				NativeImageBackedTexture texture = ((OverlayTextureAccessor) MinecraftClient.getInstance().gameRenderer.getOverlayTexture()).getTexture();
+				NativeImageBackedTexture texture = ((OverlayTextureAccessor) MinecraftClient.getInstance().gameRenderer.getOverlayTexture()).axolotlclient$getTexture();
 				NativeImage nativeImage = texture.getImage();
 				if (nativeImage != null) {
 					int color = 255 - value.getAlpha();

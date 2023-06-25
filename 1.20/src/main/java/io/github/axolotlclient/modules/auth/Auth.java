@@ -98,7 +98,7 @@ public class Auth extends Accounts implements Module {
 		Runnable runnable = () -> {
 			try {
 				API.getInstance().shutdown();
-				((MinecraftClientAccessor) client).setSession(new Session(account.getName(), account.getUuid(), account.getAuthToken(),
+				((MinecraftClientAccessor) client).axolotlclient$setSession(new Session(account.getName(), account.getUuid(), account.getAuthToken(),
 					Optional.empty(), Optional.empty(),
 					Session.AccountType.MSA));
 				UserApiService service;
@@ -108,10 +108,10 @@ public class Auth extends Accounts implements Module {
 					service = ((YggdrasilMinecraftSessionService) MinecraftClient.getInstance().getSessionService()).getAuthenticationService().createUserApiService(client.getSession().getAccessToken());
 					API.getInstance().startup(account);
 				}
-				((MinecraftClientAccessor) client).setUserApiService(service);
-				((MinecraftClientAccessor) client).setSocialInteractionsManager(new SocialInteractionsManager(client, service));
-				((MinecraftClientAccessor) client).setPlayerKeyPairManager(PlayerKeyPairManager.create(service, client.getSession(), client.runDirectory.toPath()));
-				((MinecraftClientAccessor) client).setChatReportingContext(ChatReportingContext.create(ReportEnvironment.createLocal(), service));
+				((MinecraftClientAccessor) client).axolotlclient$setUserApiService(service);
+				((MinecraftClientAccessor) client).axolotlclient$setSocialInteractionsManager(new SocialInteractionsManager(client, service));
+				((MinecraftClientAccessor) client).axolotlclient$setPlayerKeyPairManager(PlayerKeyPairManager.create(service, client.getSession(), client.runDirectory.toPath()));
+				((MinecraftClientAccessor) client).axolotlclient$setChatReportingContext(ChatReportingContext.create(ReportEnvironment.createLocal(), service));
 				save();
 				current = account;
 				Notifications.getInstance().addStatus(Text.translatable("auth.notif.title"), Text.translatable("auth.notif.login.successful", (Object) current.getName()));

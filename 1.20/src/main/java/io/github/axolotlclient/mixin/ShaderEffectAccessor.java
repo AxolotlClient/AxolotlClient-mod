@@ -32,6 +32,6 @@ import java.util.List;
 @Mixin(ShaderEffect.class)
 public interface ShaderEffectAccessor {
 
-	@Accessor
-	List<PostProcessShader> getPasses();
+	@Accessor("passes")
+	List<PostProcessShader> axolotlclient$getPasses();
 }
