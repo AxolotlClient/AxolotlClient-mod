@@ -31,6 +31,7 @@ import io.github.axolotlclient.util.Util;
 import net.legacyfabric.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
+import org.lwjgl.input.Keyboard;
 
 /**
  * Based on
@@ -151,7 +152,7 @@ public class Zoom extends AbstractModule {
 
 		AxolotlClient.CONFIG.rendering.addSubCategory(zoom);
 
-		keyBinding = new KeyBinding("key.zoom", 46, "category.axolotlclient");
+		keyBinding = new KeyBinding("key.zoom", Keyboard.KEY_C, "category.axolotlclient");
 		KeyBindingHelper.registerKeyBinding(keyBinding);
 		active = false;
 	}
