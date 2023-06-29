@@ -78,7 +78,7 @@ To build:
 ```
 ./gradlew build
 ```
-Use `-Pversion_name=true` to add a version to the build. Add `.Pall=true` to build everything!
+Use `-Pversion_name=true` to add a version to the build. Add `-Pall=true` to build everything!
 
 ### Licensing
 
