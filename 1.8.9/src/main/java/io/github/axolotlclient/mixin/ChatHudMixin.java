@@ -22,25 +22,25 @@
 
 package io.github.axolotlclient.mixin;
 
-import java.util.List;
-
 import io.github.axolotlclient.modules.hud.HudManager;
-import io.github.axolotlclient.modules.hypixel.autoboop.AutoBoop;
-import io.github.axolotlclient.modules.hypixel.autogg.AutoGG;
-import io.github.axolotlclient.modules.hypixel.autotip.AutoTip;
 import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
+import io.github.axolotlclient.util.Hooks;
 import io.github.axolotlclient.util.Util;
+import io.github.axolotlclient.util.events.impl.ReceiveChatMessageEvent;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.client.gui.hud.ChatHudLine;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.List;
 
 @Mixin(ChatHud.class)
 public abstract class ChatHudMixin {
@@ -51,12 +51,22 @@ public abstract class ChatHudMixin {
 
 	@Inject(method = "addMessage(Lnet/minecraft/text/Text;IIZ)V", at = @At("HEAD"), cancellable = true)
 	public void axolotlclient$autoGG(Text message, int messageId, int timestamp, boolean bl, CallbackInfo ci) {
-		AutoGG.getInstance().onMessage(message);
-		AutoBoop.getInstance().onMessage(message);
 
-		if (AutoTip.getInstance().onChatMessage(message)) {
+		if(message == null){
 			ci.cancel();
 		}
+	}
+
+	@ModifyVariable(method = "addMessage(Lnet/minecraft/text/Text;IIZ)V", at = @At("HEAD"), argsOnly = true)
+	private Text axolotlclient$onChatMessage(Text message){
+		ReceiveChatMessageEvent event = new ReceiveChatMessageEvent(false, Formatting.strip(message.asFormattedString()), message);
+		Hooks.RECEIVE_CHAT_MESSAGE_EVENT.invoker().invoke(event);
+		if(event.isCancelled()){
+			return null;
+		} else if(event.getNewMessage() != null){
+			return event.getNewMessage();
+		}
+		return message;
 	}
 
 	@ModifyArg(method = "addMessage(Lnet/minecraft/text/Text;I)V", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;info(Ljava/lang/String;)V"), remap = false)

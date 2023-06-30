@@ -22,9 +22,14 @@
 
 package io.github.axolotlclient.util;
 
+import io.github.axolotlclient.util.events.impl.ReceiveChatMessageEvent;
+import io.github.axolotlclient.util.events.impl.ScoreboardRenderEvent;
+import io.github.axolotlclient.util.events.impl.WorldLoadEvent;
 import net.legacyfabric.fabric.api.event.Event;
 import net.legacyfabric.fabric.api.event.EventFactory;
 import net.minecraft.client.option.KeyBinding;
+
+import java.util.Arrays;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -59,6 +64,20 @@ public class Hooks {
 				listener.onChange(prevPitch, prevYaw, pitch, yaw);
 			}
 		}));
+
+	public static final Event<EventCallback<ScoreboardRenderEvent>> SCOREBOARD_RENDER_EVENT = createEvent();
+	public static final Event<EventCallback<ReceiveChatMessageEvent>> RECEIVE_CHAT_MESSAGE_EVENT = createEvent();
+	public static final Event<EventCallback<WorldLoadEvent>> WORLD_LOAD_EVENT = createEvent();
+
+	private static <T> Event<EventCallback<T>> createEvent(){
+		return EventFactory
+			.createArrayBacked(EventCallback.class, listeners -> (event) ->
+				Arrays.stream(listeners).forEach(l -> l.invoke(event)));
+	}
+
+	public interface EventCallback<T> {
+		void invoke(T parameters);
+	}
 
 	public interface MouseInputCallback {
 

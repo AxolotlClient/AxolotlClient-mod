@@ -22,12 +22,14 @@
 
 package io.github.axolotlclient.modules.hypixel.autoboop;
 
+import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.hypixel.AbstractHypixelMod;
+import io.github.axolotlclient.util.Hooks;
 import io.github.axolotlclient.util.Util;
+import io.github.axolotlclient.util.events.impl.ReceiveChatMessageEvent;
 import lombok.Getter;
-import net.minecraft.text.Text;
 
 public class AutoBoop implements AbstractHypixelMod {
 
@@ -40,6 +42,7 @@ public class AutoBoop implements AbstractHypixelMod {
 	@Override
 	public void init() {
 		cat.add(enabled);
+		Hooks.RECEIVE_CHAT_MESSAGE_EVENT.register(this::onMessage);
 	}
 
 	@Override
@@ -47,13 +50,16 @@ public class AutoBoop implements AbstractHypixelMod {
 		return cat;
 	}
 
-	public void onMessage(Text message) {
-		if (enabled.get() && message.asUnformattedString().contains("Friend >")
-			&& message.asUnformattedString().contains("joined.")) {
-			String player = message.asUnformattedString().substring(message.asFormattedString().indexOf(">"),
-				message.asUnformattedString().lastIndexOf(" "));
+	public void onMessage(ReceiveChatMessageEvent event) {
+		String message = event.getOriginalMessage().trim();
+		if (enabled.get() && message.contains("Friend >")
+			&& message.contains("joined.")) {
+			System.out.println(message);
+			String player = message.substring(message.indexOf("Friend >"),
+				message.lastIndexOf(" "));
+			System.out.println(player);
 			Util.sendChatMessage("/boop " + player);
-			System.out.println("Booped " + player);
+			AxolotlClient.LOGGER.info("Booped " + player);
 		}
 	}
 }

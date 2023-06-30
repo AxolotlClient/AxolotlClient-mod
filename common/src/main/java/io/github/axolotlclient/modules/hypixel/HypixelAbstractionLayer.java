@@ -32,6 +32,8 @@ import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import io.github.axolotlclient.modules.hypixel.levelhead.LevelHeadMode;
 import io.github.axolotlclient.util.ThreadExecuter;
 import net.hypixel.api.HypixelAPI;
@@ -62,6 +64,13 @@ public class HypixelAbstractionLayer {
 		return validApiKey;
 	}
 
+	public static JsonElement getPlayerProperty(String uuid, String stat){
+		if(loadPlayerDataIfAbsent(uuid)){
+			return getPlayer(uuid).getProperty(stat);
+		}
+		return new JsonObject();
+	}
+
 	public static int getPlayerLevel(String uuid, String mode) {
 		if (api == null) {
 			loadApiKey();
@@ -83,6 +92,19 @@ public class HypixelAbstractionLayer {
 			}
 		}
 		return 0;
+	}
+
+	private static PlayerReply.Player getPlayer(String uuid){
+		if (api == null) {
+			loadApiKey();
+		}
+		if (loadPlayerDataIfAbsent(uuid)) {
+			try {
+					return cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer();
+			} catch (TimeoutException | InterruptedException | ExecutionException ignored) {
+			}
+		}
+		return null;
 	}
 
 	public static void loadApiKey() {

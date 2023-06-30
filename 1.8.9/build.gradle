@@ -32,12 +32,7 @@ dependencies {
 	mappings "net.legacyfabric:yarn:${project.mappings_18}"
 
 	modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader}"
-
-	annotationProcessor "org.ow2.asm:asm:${project.asmVersion}"
-	annotationProcessor "org.ow2.asm:asm-analysis:${project.asmVersion}"
-	annotationProcessor "org.ow2.asm:asm-commons:${project.asmVersion}"
-	annotationProcessor "org.ow2.asm:asm-tree:${project.asmVersion}"
-	annotationProcessor "org.ow2.asm:asm-util:${project.asmVersion}"
+	modImplementation("net.fabricmc:dev-launch-injector:0.2.1+build.8")
 
 	modImplementation "io.github.axolotlclient:AxolotlClient-config:${project.config}+${project.minecraft_18}"
 	include "io.github.axolotlclient:AxolotlClient-config:${project.config}+${project.minecraft_18}"

@@ -26,6 +26,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.freelook.Perspective;
 import io.github.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
+import io.github.axolotlclient.modules.hypixel.bedwars.BedwarsMod;
 import io.github.axolotlclient.modules.hypixel.levelhead.LevelHead;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
@@ -75,34 +76,46 @@ public abstract class EntityRendererMixin<T extends Entity> {
 	public void axolotlclient$addLevel(T entity, String string, double d, double e, double f, int i, CallbackInfo ci) {
 		if (entity instanceof AbstractClientPlayerEntity) {
 			if (Util.currentServerAddressContains("hypixel.net")) {
-				if (HypixelAbstractionLayer.hasValidAPIKey() && LevelHead.getInstance().enabled.get()
+				if (BedwarsMod.getInstance().isEnabled() &&
+					BedwarsMod.getInstance().inGame() &&
+					BedwarsMod.getInstance().bedwarsLevelHead.get()) {
+					String levelhead = BedwarsMod.getInstance().getGame().get().getLevelHead((AbstractClientPlayerEntity) entity);
+					if (levelhead != null) {
+						axolotlclient$drawLevelHead(levelhead);
+					}
+				} else if (HypixelAbstractionLayer.hasValidAPIKey() && LevelHead.getInstance().enabled.get()
 					&& string.contains(entity.getName().asFormattedString())) {
-					TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
 					String text = "Level: " + HypixelAbstractionLayer.getPlayerLevel(String.valueOf(entity.getUuid()), LevelHead.getInstance().mode.get());
 
-					float x = textRenderer.getStringWidth(text) / 2F;
-					int y = string.contains("deadmau5") ? -20 : -10;
-
-					if (LevelHead.getInstance().background.get()) {
-						Tessellator tessellator = Tessellator.getInstance();
-						BufferBuilder bufferBuilder = tessellator.getBuffer();
-						GlStateManager.disableTexture();
-						bufferBuilder.begin(7, VertexFormats.POSITION_COLOR);
-						bufferBuilder.vertex(-x - 1, -1 + y, 0.0).color(0.0F, 0.0F, 0.0F, 0.25F).next();
-						bufferBuilder.vertex(-x - 1, 8 + y, 0.0).color(0.0F, 0.0F, 0.0F, 0.25F).next();
-						bufferBuilder.vertex(x + 1, 8 + y, 0.0).color(0.0F, 0.0F, 0.0F, 0.25F).next();
-						bufferBuilder.vertex(x + 1, -1 + y, 0.0).color(0.0F, 0.0F, 0.0F, 0.25F).next();
-						tessellator.draw();
-						GlStateManager.enableTexture();
-					}
-
-					textRenderer.draw(text, -x, y, LevelHead.getInstance().textColor.get().getAsInt(),
-						AxolotlClient.CONFIG.useShadows.get());
+					axolotlclient$drawLevelHead(text);
 				} else if (!HypixelAbstractionLayer.hasValidAPIKey()) {
 					HypixelAbstractionLayer.loadApiKey();
 				}
 			}
 		}
+	}
+
+	private void axolotlclient$drawLevelHead(String text){
+		TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
+
+		float x = textRenderer.getStringWidth(text) / 2F;
+		int y = text.contains("deadmau5") ? -20 : -10;
+
+		if (LevelHead.getInstance().background.get()) {
+			Tessellator tessellator = Tessellator.getInstance();
+			BufferBuilder bufferBuilder = tessellator.getBuffer();
+			GlStateManager.disableTexture();
+			bufferBuilder.begin(7, VertexFormats.POSITION_COLOR);
+			bufferBuilder.vertex(-x - 1, -1 + y, 0.0).color(0.0F, 0.0F, 0.0F, 0.25F).next();
+			bufferBuilder.vertex(-x - 1, 8 + y, 0.0).color(0.0F, 0.0F, 0.0F, 0.25F).next();
+			bufferBuilder.vertex(x + 1, 8 + y, 0.0).color(0.0F, 0.0F, 0.0F, 0.25F).next();
+			bufferBuilder.vertex(x + 1, -1 + y, 0.0).color(0.0F, 0.0F, 0.0F, 0.25F).next();
+			tessellator.draw();
+			GlStateManager.enableTexture();
+		}
+
+		textRenderer.draw(text, -x, y, LevelHead.getInstance().textColor.get().getAsInt(),
+			AxolotlClient.CONFIG.useShadows.get());
 	}
 
 	@Redirect(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/BufferBuilder;vertex(DDD)Lnet/minecraft/client/render/BufferBuilder;"))

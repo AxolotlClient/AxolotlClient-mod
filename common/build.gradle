@@ -41,6 +41,7 @@ dependencies {
 	compileOnly("org.apache.httpcomponents:httpclient:4.3.3")
 	compileOnly("com.google.code.gson:gson:2.2.4")
 	compileOnly("commons-io:commons-io:2.4")
+	compileOnly("org.apache.commons:commons-lang3:3.3.2")
 
 	shadow(implementation("net.hypixel:hypixel-api-core:4.1") {
 		exclude group: "com.google.code.gson", module: "gson"
