@@ -74,6 +74,12 @@ A Complete (nearly) mod to have various features on various Minecraft versions
 - if you have a feature or a new/updated translation, feel free to open a pull request.
 - note your changes in CHANGELOG.md to be added to the next version's changelog.
 
+To build:
+```
+./gradlew build
+```
+Use `-Pversion_name=true` to add a version to the build. Add `-Pall=true` to build everything!
+
 ### Licensing
 
 - This mod is licensed under the LGPL-3.0 License.
