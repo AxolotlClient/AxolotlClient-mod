@@ -170,6 +170,7 @@ public class Request {
 		SEND_MESSAGE(0x10),
 		GET_CHANNEL_BY_ID(0x11),
 		GET_PUBLIC_KEY(0x12),
+		GET_HYPIXEL_API_KEY(0x13),
 		ERROR(0xFF);
 
 		private final int type;

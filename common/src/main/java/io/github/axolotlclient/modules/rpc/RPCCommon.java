@@ -101,7 +101,9 @@ public abstract class RPCCommon implements Module {
 	protected abstract void createRichPresence();
 
 	protected void setRichPresence(RichPresence presence){
-		client.sendRichPresence(presence);
+		if(running && client != null) {
+			client.sendRichPresence(presence);
+		}
 	}
 
 	private void updateRPC(){
@@ -146,11 +148,12 @@ public abstract class RPCCommon implements Module {
 					@Override
 					public void onClose(IPCClient client, JsonObject json) {
 						logger.info("RPC Closed");
+						running = false;
 					}
 
 					@Override
 					public void onDisconnect(IPCClient client, Throwable t) {
-
+						running = false;
 					}
 				});
 			}
