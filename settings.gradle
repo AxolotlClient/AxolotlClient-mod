@@ -17,24 +17,26 @@ pluginManagement {
 }
 
 boolean checkProp(String property) {
-	if (!hasProperty(property))
-		return false
 
-	String value = getProperty(property).toLowerCase()
-	return !(value.isEmpty() || value == "false" || value == "f")
+	String value = getProperties().get("axolotlclient.modules."+property)
+	return !(value == null || value.isEmpty() || value == "false" || value == "f")
 }
 
 void optional(String project) {
 	if (checkProp(project) || checkProp("all"))
+		System.out.println("Adding "+project)
 		include project
 }
 
-optional '1.8.9'
 include 'common'
+
+System.out.println("Adding submodules..")
+
+optional '1.8.9'
 optional '1.19.3'
 optional '1.19.2'
 optional '1.16_combat-6'
 optional '1.16.5'
 optional '1.19.4'
-include '1.20'
+optional '1.20'
 
