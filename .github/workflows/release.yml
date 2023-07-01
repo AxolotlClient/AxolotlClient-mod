@@ -22,7 +22,7 @@ jobs:
       - name: Grant execute permission
         run: chmod +x ./gradlew
       - name: Build with Gradle
-        run: ./gradlew build --no-daemon -Pall=true
+        run: ./gradlew build --no-daemon
 
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
