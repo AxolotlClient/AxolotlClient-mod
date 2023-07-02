@@ -128,7 +128,7 @@ public class KeystrokeHud extends TextHudEntry {
 					(stroke.getFGColor().getAsInt() & 16579836) >> 2 | stroke.getFGColor().getAsInt() & -16777216));
 			}
 		}));
-		KeyBind.unpressAll();
+		KeyBind.resetAll();
 		KeyBind.updatePressedStates();
 
 		onMouseMovementOption(mouseMovement.get());
