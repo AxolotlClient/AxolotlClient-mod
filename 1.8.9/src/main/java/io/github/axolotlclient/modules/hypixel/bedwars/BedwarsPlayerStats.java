@@ -101,12 +101,12 @@ public class BedwarsPlayerStats {
         int losses = getAsIntElse(bedwars, "losses_bedwars", 0);
         int wins = getAsIntElse(bedwars, "wins_bedwars", 0);
         int winstreak = getAsIntElse(bedwars, "winstreak", 0);
-        JsonObject achievements = HypixelAbstractionLayer.getPlayerProperty(uuid, "achievements").getAsJsonObject();//getObjectSafe(player.getRaw().getAsJsonObject(), "achievements");
+        JsonObject achievements = HypixelAbstractionLayer.getPlayerProperty(uuid, "achievements").getAsJsonObject();
         int stars = 1;
         if (achievements != null) {
             stars = getAsIntElse(achievements, "bedwars_level", 1);
         }
-        return  new BedwarsPlayerStats(finalKills, finalDeaths, bedsBroken, deaths, kills, 0, 0, 0, 0, 0, losses, wins, winstreak, stars);
+        return new BedwarsPlayerStats(finalKills, finalDeaths, bedsBroken, deaths, kills, 0, 0, 0, 0, 0, losses, wins, winstreak, stars);
     }
 
     public static int getAsIntElse(JsonObject obj, String key, int other) {
