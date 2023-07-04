@@ -26,7 +26,7 @@ import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.hypixel.AbstractHypixelMod;
-import io.github.axolotlclient.util.Hooks;
+import io.github.axolotlclient.util.events.Events;
 import io.github.axolotlclient.util.Util;
 import io.github.axolotlclient.util.events.impl.ReceiveChatMessageEvent;
 import lombok.Getter;
@@ -42,7 +42,7 @@ public class AutoBoop implements AbstractHypixelMod {
 	@Override
 	public void init() {
 		cat.add(enabled);
-		Hooks.RECEIVE_CHAT_MESSAGE_EVENT.register(this::onMessage);
+		Events.RECEIVE_CHAT_MESSAGE_EVENT.register(this::onMessage);
 	}
 
 	@Override

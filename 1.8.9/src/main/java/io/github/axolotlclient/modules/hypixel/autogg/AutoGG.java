@@ -31,12 +31,11 @@ import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.AxolotlClientConfig.options.StringOption;
 import io.github.axolotlclient.modules.hypixel.AbstractHypixelMod;
-import io.github.axolotlclient.util.Hooks;
+import io.github.axolotlclient.util.events.Events;
 import io.github.axolotlclient.util.Util;
 import io.github.axolotlclient.util.events.impl.ReceiveChatMessageEvent;
 import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Text;
 
 /**
  * Based on <a href="https://github.com/DragonEggBedrockBreaking/AutoGG/blob/trunk/src/main/java/uk/debb/autogg/mixin/MixinChatHud.java">DragonEggBedrockBreaking's AutoGG Mod</a>
@@ -91,7 +90,7 @@ public class AutoGG implements AbstractHypixelMod {
 		category.add(onPVPL);
 		category.add(onMMC);
 
-		Hooks.RECEIVE_CHAT_MESSAGE_EVENT.register(this::onMessage);
+		Events.RECEIVE_CHAT_MESSAGE_EVENT.register(this::onMessage);
 	}
 
 	@Override

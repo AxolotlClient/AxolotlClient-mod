@@ -20,7 +20,7 @@
  * For more information, see the LICENSE file.
  */
 
-package io.github.axolotlclient.util;
+package io.github.axolotlclient.util.events;
 
 import io.github.axolotlclient.util.events.impl.ReceiveChatMessageEvent;
 import io.github.axolotlclient.util.events.impl.ScoreboardRenderEvent;
@@ -31,14 +31,7 @@ import net.minecraft.client.option.KeyBinding;
 
 import java.util.Arrays;
 
-/**
- * This implementation of Hud modules is based on KronHUD.
- * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
- *
- * @license GPL-3.0
- */
-
-public class Hooks {
+public class Events {
 
 	public static final Event<MouseInputCallback> MOUSE_INPUT = EventFactory.createArrayBacked(MouseInputCallback.class,
 		listeners -> (button -> {
@@ -78,6 +71,8 @@ public class Hooks {
 	public interface EventCallback<T> {
 		void invoke(T parameters);
 	}
+
+	// TODO migrate all of these to the system above
 
 	public interface MouseInputCallback {
 

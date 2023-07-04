@@ -25,7 +25,7 @@ package io.github.axolotlclient.modules.hypixel.bedwars;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.hypixel.AbstractHypixelMod;
-import io.github.axolotlclient.util.Hooks;
+import io.github.axolotlclient.util.events.Events;
 import io.github.axolotlclient.util.events.impl.ReceiveChatMessageEvent;
 import io.github.axolotlclient.util.events.impl.ScoreboardRenderEvent;
 import io.github.axolotlclient.util.events.impl.WorldLoadEvent;
@@ -105,9 +105,9 @@ public class BedwarsMod implements AbstractHypixelMod {
 
     	instance = this;
 
-		Hooks.RECEIVE_CHAT_MESSAGE_EVENT.register(this::onMessage);
-		Hooks.SCOREBOARD_RENDER_EVENT.register(this::onScoreboardRender);
-		Hooks.WORLD_LOAD_EVENT.register(this::onWorldLoad);
+		Events.RECEIVE_CHAT_MESSAGE_EVENT.register(this::onMessage);
+		Events.SCOREBOARD_RENDER_EVENT.register(this::onScoreboardRender);
+		Events.WORLD_LOAD_EVENT.register(this::onWorldLoad);
     }
 
 	public boolean isEnabled(){

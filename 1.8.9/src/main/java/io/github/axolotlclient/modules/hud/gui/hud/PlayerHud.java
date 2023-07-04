@@ -30,7 +30,7 @@ import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.DoubleOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.Option;
 import io.github.axolotlclient.modules.hud.gui.entry.BoxHudEntry;
-import io.github.axolotlclient.util.Hooks;
+import io.github.axolotlclient.util.events.Events;
 import lombok.Getter;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.render.DiffuseLighting;
@@ -61,7 +61,7 @@ public class PlayerHud extends BoxHudEntry {
 
 	public PlayerHud() {
 		super(62, 94, true);
-		Hooks.PLAYER_DIRECTION_CHANGE.register(this::onPlayerDirectionChange);
+		Events.PLAYER_DIRECTION_CHANGE.register(this::onPlayerDirectionChange);
 	}
 
 	public void onPlayerDirectionChange(float prevPitch, float prevYaw, float pitch, float yaw) {

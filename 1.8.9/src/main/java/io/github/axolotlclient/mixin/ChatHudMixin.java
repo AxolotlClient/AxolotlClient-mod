@@ -24,7 +24,7 @@ package io.github.axolotlclient.mixin;
 
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
-import io.github.axolotlclient.util.Hooks;
+import io.github.axolotlclient.util.events.Events;
 import io.github.axolotlclient.util.Util;
 import io.github.axolotlclient.util.events.impl.ReceiveChatMessageEvent;
 import net.minecraft.client.gui.DrawableHelper;
@@ -60,7 +60,7 @@ public abstract class ChatHudMixin {
 	@ModifyVariable(method = "addMessage(Lnet/minecraft/text/Text;IIZ)V", at = @At("HEAD"), argsOnly = true)
 	private Text axolotlclient$onChatMessage(Text message){
 		ReceiveChatMessageEvent event = new ReceiveChatMessageEvent(false, Formatting.strip(message.asFormattedString()), message);
-		Hooks.RECEIVE_CHAT_MESSAGE_EVENT.invoker().invoke(event);
+		Events.RECEIVE_CHAT_MESSAGE_EVENT.invoker().invoke(event);
 		if(event.isCancelled()){
 			return null;
 		} else if(event.getNewMessage() != null){

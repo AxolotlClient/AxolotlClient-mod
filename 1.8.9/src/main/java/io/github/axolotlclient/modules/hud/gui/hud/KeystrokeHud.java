@@ -36,7 +36,7 @@ import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
-import io.github.axolotlclient.util.Hooks;
+import io.github.axolotlclient.util.events.Events;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.GameOptions;
@@ -89,8 +89,8 @@ public class KeystrokeHud extends TextHudEntry {
 
 	public KeystrokeHud() {
 		super(53, 61, true);
-		Hooks.KEYBIND_CHANGE.register(key -> setKeystrokes());
-		Hooks.PLAYER_DIRECTION_CHANGE.register(this::onPlayerDirectionChange);
+		Events.KEYBIND_CHANGE.register(key -> setKeystrokes());
+		Events.PLAYER_DIRECTION_CHANGE.register(this::onPlayerDirectionChange);
 	}
 
 	public void setKeystrokes() {
