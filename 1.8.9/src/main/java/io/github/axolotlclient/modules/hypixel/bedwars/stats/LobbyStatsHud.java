@@ -29,6 +29,10 @@ import net.minecraft.util.Identifier;
 
 import java.util.List;
 
+/**
+ *
+ * @author DarkKronicle
+ */
 
 public class LobbyStatsHud implements HudEntry {
 

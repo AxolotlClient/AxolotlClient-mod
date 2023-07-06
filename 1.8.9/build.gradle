@@ -1,7 +1,7 @@
 plugins {
 	id 'java'
 	id 'io.github.juuxel.loom-quiltflower' version '1.8.+'
-	id "fabric-loom" version "1.0-SNAPSHOT"
+	id "fabric-loom" version "1.0.+"
 }
 
 group = maven_group
@@ -36,6 +36,9 @@ dependencies {
 
 	modImplementation "io.github.axolotlclient:AxolotlClient-config:${project.config}+${project.minecraft_18}"
 	include "io.github.axolotlclient:AxolotlClient-config:${project.config}+${project.minecraft_18}"
+	modImplementation "io.github.axolotlclient.AxolotlClient-config:AxolotlClientConfig-common:${project.config}"
+
+	modImplementation "net.legacyfabric.legacy-fabric-api:legacy-fabric-api:${project.lfapi}+${project.minecraft_18}"
 
 	modCompileOnlyApi(files("libs/legacy-modmenu-1.2.0+1.8.9-dev.jar"))
 

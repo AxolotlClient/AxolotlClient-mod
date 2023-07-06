@@ -25,6 +25,11 @@ package io.github.axolotlclient.modules.hypixel.bedwars.upgrades;
 
 import java.util.regex.Pattern;
 
+/**
+ *
+ * @author DarkKronicle
+ */
+
 public class BedwarsTeamUpgrades {
 
     public final TrapUpgrade trap = new TrapUpgrade();

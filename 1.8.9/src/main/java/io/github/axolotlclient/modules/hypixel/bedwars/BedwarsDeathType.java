@@ -28,6 +28,11 @@ import lombok.Getter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ *
+ * @author DarkKronicle
+ */
+
 @AllArgsConstructor
 public enum BedwarsDeathType {
     COMBAT("rekt", BedwarsMessages.COMBAT_KILL),

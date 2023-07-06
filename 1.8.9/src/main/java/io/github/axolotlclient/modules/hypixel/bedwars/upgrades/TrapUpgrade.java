@@ -32,6 +32,11 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ *
+ * @author DarkKronicle
+ */
+
 public class TrapUpgrade extends TeamUpgrade {
 
     private final static Pattern[] REGEX = {

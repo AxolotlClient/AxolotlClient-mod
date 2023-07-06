@@ -22,13 +22,16 @@
 
 package io.github.axolotlclient.modules.hypixel.bedwars;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.Locale;
 import java.util.Optional;
 
+/**
+ *
+ * @author DarkKronicle
+ */
 
 @AllArgsConstructor
 public enum BedwarsTeam {

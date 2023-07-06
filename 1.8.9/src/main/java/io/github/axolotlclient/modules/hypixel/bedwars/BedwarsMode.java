@@ -24,6 +24,10 @@ package io.github.axolotlclient.modules.hypixel.bedwars;
 
 import lombok.Getter;
 
+/**
+ *
+ * @author DarkKronicle
+ */
 
 public enum BedwarsMode {
     SOLO(BedwarsTeam.values()),

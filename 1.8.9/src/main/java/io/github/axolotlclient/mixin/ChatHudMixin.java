@@ -24,15 +24,14 @@ package io.github.axolotlclient.mixin;
 
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
-import io.github.axolotlclient.util.events.Events;
 import io.github.axolotlclient.util.Util;
+import io.github.axolotlclient.util.events.Events;
 import io.github.axolotlclient.util.events.impl.ReceiveChatMessageEvent;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.client.gui.hud.ChatHudLine;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -49,17 +48,16 @@ public abstract class ChatHudMixin {
 	@Final
 	private List<ChatHudLine> visibleMessages;
 
-	@Inject(method = "addMessage(Lnet/minecraft/text/Text;IIZ)V", at = @At("HEAD"), cancellable = true)
-	public void axolotlclient$autoGG(Text message, int messageId, int timestamp, boolean bl, CallbackInfo ci) {
-
+	@Inject(method = "addMessage(Lnet/minecraft/text/Text;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;addMessage(Lnet/minecraft/text/Text;IIZ)V"), cancellable = true)
+	public void axolotlclient$autoGG(Text message, int messageId, CallbackInfo ci) {
 		if(message == null){
 			ci.cancel();
 		}
 	}
 
-	@ModifyVariable(method = "addMessage(Lnet/minecraft/text/Text;IIZ)V", at = @At("HEAD"), argsOnly = true)
+	@ModifyVariable(method = "addMessage(Lnet/minecraft/text/Text;I)V", at = @At("HEAD"), argsOnly = true)
 	private Text axolotlclient$onChatMessage(Text message){
-		ReceiveChatMessageEvent event = new ReceiveChatMessageEvent(false, Formatting.strip(message.asFormattedString()), message);
+		ReceiveChatMessageEvent event = new ReceiveChatMessageEvent(false, message.asUnformattedString(), message);
 		Events.RECEIVE_CHAT_MESSAGE_EVENT.invoker().invoke(event);
 		if(event.isCancelled()){
 			return null;

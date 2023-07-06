@@ -28,6 +28,11 @@ import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ *
+ * @author DarkKronicle
+ */
+
 public class BedwarsMessages {
 
     public final static Pattern[] COMBAT_KILL = convert(

@@ -48,6 +48,7 @@ import net.minecraft.util.Formatting;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -57,13 +58,15 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 @Mixin(PlayerListHud.class)
 public abstract class PlayerListHudMixin extends DrawableHelper {
 
-	@Shadow @Final
+	@Final
+	@Shadow
 	private final MinecraftClient client = MinecraftClient.getInstance();
 	@Shadow
 	private Text header;
 	@Shadow
 	private Text footer;
-	private PlayerListEntry playerListEntry;
+	@Unique
+	private PlayerListEntry axolotlclient$playerListEntry;
 
 	@Inject(method = "getPlayerName", at = @At("HEAD"), cancellable = true)
 	public void axolotlclient$nickHider(PlayerListEntry playerEntry, CallbackInfoReturnable<String> cir) {
@@ -78,13 +81,13 @@ public abstract class PlayerListHudMixin extends DrawableHelper {
 
 	@ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;getPlayerName(Lnet/minecraft/client/network/PlayerListEntry;)Ljava/lang/String;"))
 	public PlayerListEntry axolotlclient$getPlayer(PlayerListEntry playerEntry) {
-		playerListEntry = playerEntry;
+		axolotlclient$playerListEntry = playerEntry;
 		return playerEntry;
 	}
 
 	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;getStringWidth(Ljava/lang/String;)I", ordinal = 0))
 	public int axolotlclient$moveName(TextRenderer instance, String text) {
-		if (AxolotlClient.CONFIG.showBadges.get() && AxolotlClient.isUsingClient(playerListEntry.getProfile().getId()))
+		if (AxolotlClient.CONFIG.showBadges.get() && AxolotlClient.isUsingClient(axolotlclient$playerListEntry.getProfile().getId()))
 			return instance.getStringWidth(text) + 10;
 		return instance.getStringWidth(text);
 	}
@@ -94,7 +97,7 @@ public abstract class PlayerListHudMixin extends DrawableHelper {
 		float x = args.get(1);
 		float y = args.get(2);
 		if (AxolotlClient.CONFIG.showBadges.get()
-			&& AxolotlClient.isUsingClient(playerListEntry.getProfile().getId())) {
+			&& AxolotlClient.isUsingClient(axolotlclient$playerListEntry.getProfile().getId())) {
 			client.getTextureManager().bindTexture(AxolotlClient.badgeIcon);
 			DrawableHelper.drawTexture((int) x, (int) y, 0, 0, 8, 8, 8, 8);
 			args.set(1, x + 10);
@@ -106,7 +109,7 @@ public abstract class PlayerListHudMixin extends DrawableHelper {
 		float x = args.get(1);
 		float y = args.get(2);
 		if (AxolotlClient.CONFIG.showBadges.get()
-			&& AxolotlClient.isUsingClient(playerListEntry.getProfile().getId())) {
+			&& AxolotlClient.isUsingClient(axolotlclient$playerListEntry.getProfile().getId())) {
 			client.getTextureManager().bindTexture(AxolotlClient.badgeIcon);
 			DrawableHelper.drawTexture((int) x, (int) y, 0, 0, 8, 8, 8, 8);
 			args.set(1, x + 10);

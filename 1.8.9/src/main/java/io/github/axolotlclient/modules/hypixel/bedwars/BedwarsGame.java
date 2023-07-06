@@ -40,6 +40,11 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
+/**
+ *
+ * @author DarkKronicle
+ */
+
 public class BedwarsGame {
 
     private static final int DIAMOND_START = 30;

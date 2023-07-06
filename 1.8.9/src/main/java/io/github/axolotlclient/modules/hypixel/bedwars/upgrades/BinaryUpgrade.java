@@ -27,6 +27,11 @@ import io.github.axolotlclient.modules.hypixel.bedwars.BedwarsMode;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ *
+ * @author DarkKronicle
+ */
+
 public class BinaryUpgrade extends TeamUpgrade {
 
     private boolean purchased = false;

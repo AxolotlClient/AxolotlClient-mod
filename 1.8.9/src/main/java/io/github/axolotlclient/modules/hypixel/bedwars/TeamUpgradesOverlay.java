@@ -35,6 +35,11 @@ import net.minecraft.util.Identifier;
 
 import java.util.List;
 
+/**
+ *
+ * @author DarkKronicle
+ */
+
 public class TeamUpgradesOverlay extends BoxHudEntry {
 
     public final static Identifier ID = new Identifier("axolotlclient","bedwars_teamupgrades");

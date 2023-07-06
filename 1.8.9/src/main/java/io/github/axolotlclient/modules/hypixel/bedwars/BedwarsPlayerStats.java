@@ -29,6 +29,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ *
+ * @author DarkKronicle
+ */
 
 @AllArgsConstructor
 public class BedwarsPlayerStats {

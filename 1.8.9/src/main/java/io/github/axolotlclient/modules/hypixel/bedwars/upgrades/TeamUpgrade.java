@@ -29,6 +29,12 @@ import lombok.Getter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ *
+ * @author DarkKronicle
+ */
+
+
 public abstract class TeamUpgrade {
     @Getter
     protected final String name;

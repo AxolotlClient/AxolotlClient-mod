@@ -28,6 +28,11 @@ import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.PlayerListEntry;
 
+/**
+ *
+ * @author DarkKronicle
+ */
+
 @Data
 public class BedwarsPlayer {
 

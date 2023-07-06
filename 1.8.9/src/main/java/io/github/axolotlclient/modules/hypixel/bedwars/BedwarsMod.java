@@ -129,10 +129,10 @@ public class BedwarsMod implements AbstractHypixelMod {
 
     public void onMessage(ReceiveChatMessageEvent event) {
         // Remove formatting
-        String rawMessage = event.getOriginalMessage().replaceAll("§.", "");
+        String rawMessage = event.getFormattedMessage().asUnformattedString();
         if (currentGame != null) {
             currentGame.onChatMessage(rawMessage, event);
-            String time = "§7" + currentGame.getFormattedTime() + " ";
+            String time = "§7" + currentGame.getFormattedTime() + Formatting.RESET + " ";
             if (!event.isCancelled() && showChatTime.get()) {
                 // Add time to every message received in game
                 if (event.getNewMessage() != null) {
@@ -151,7 +151,12 @@ public class BedwarsMod implements AbstractHypixelMod {
         return currentGame == null ? Optional.empty() : Optional.of(currentGame);
     }
 
-    @Override
+	@Override
+	public boolean tickable() {
+		return true;
+	}
+
+	@Override
     public void tick() {
         if (currentGame != null) {
             waiting = false;

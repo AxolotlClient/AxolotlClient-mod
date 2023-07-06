@@ -28,6 +28,11 @@ import lombok.Getter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ *
+ * @author DarkKronicle
+ */
+
 public class TieredUpgrade extends TeamUpgrade {
 
     private final int[] doublesPrice;
