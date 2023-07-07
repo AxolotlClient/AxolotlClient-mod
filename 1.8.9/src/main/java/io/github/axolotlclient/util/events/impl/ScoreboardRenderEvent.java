@@ -25,9 +25,8 @@ package io.github.axolotlclient.util.events.impl;
 import io.github.axolotlclient.util.events.types.CancellableEvent;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import net.minecraft.client.util.Window;
 import net.minecraft.scoreboard.ScoreboardObjective;
-
-import java.awt.*;
 
 @RequiredArgsConstructor
 @Getter

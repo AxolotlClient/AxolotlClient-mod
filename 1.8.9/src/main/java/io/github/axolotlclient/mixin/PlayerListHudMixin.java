@@ -22,9 +22,6 @@
 
 package io.github.axolotlclient.mixin;
 
-import java.util.List;
-import java.util.UUID;
-
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
@@ -54,6 +51,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
+
+import java.util.List;
+import java.util.UUID;
 
 @Mixin(PlayerListHud.class)
 public abstract class PlayerListHudMixin extends DrawableHelper {
@@ -118,7 +118,9 @@ public abstract class PlayerListHudMixin extends DrawableHelper {
 
 	@Inject(method = "renderLatencyIcon", at = @At("HEAD"), cancellable = true)
 	private void axolotlclient$numericalPing(int width, int x, int y, PlayerListEntry entry, CallbackInfo ci) {
-		if (Tablist.getInstance().renderNumericPing(width, x, y, entry)) {
+		if (BedwarsMod.getInstance().isEnabled() && BedwarsMod.getInstance().blockLatencyIcon() && (BedwarsMod.getInstance().isWaiting() || BedwarsMod.getInstance().inGame())) {
+			ci.cancel();
+		} else if (Tablist.getInstance().renderNumericPing(width, x, y, entry)) {
 			ci.cancel();
 		}
 	}
@@ -190,17 +192,6 @@ public abstract class PlayerListHudMixin extends DrawableHelper {
 			(float) y,
 			-1
 		);
-	}
-
-	@Inject(
-		method = "renderLatencyIcon",
-		at = @At("HEAD"),
-		cancellable = true
-	)
-	public void axolotlclient$cancelLatencyIcon(int width, int x, int y, PlayerListEntry playerEntry, CallbackInfo ci) {
-		if (BedwarsMod.getInstance().isEnabled() && BedwarsMod.getInstance().blockLatencyIcon() && (BedwarsMod.getInstance().isWaiting() || BedwarsMod.getInstance().inGame())) {
-			ci.cancel();
-		}
 	}
 
 	@Inject(

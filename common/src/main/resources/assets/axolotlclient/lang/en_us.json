@@ -49,7 +49,7 @@
 	"allocated": "Allocated",
 	"alwaysCrit": "Always Show",
 	"alwaysCrit.tooltip": "Whether to always emit these particles when hitting.",
-	"alwaysShowHatLayer": "Always show Hat Layer",
+	"alwaysShowHeadLayer": "Always show Hat Layer",
 	"anchorpoint": "Anchorpoint",
 	"applyBlend": "Apply Blending",
 	"armorhud": "Armor HUD",
@@ -374,5 +374,15 @@
 	"zoomScrollStep": "Scroll Step",
 	"zoomScrolling": "Zoom Scrolling",
 	"zoomScrolling.tooltip": "Whether to allow scrolling to modify the zoom factor.",
-	"zoomSpeed": "Animation Speed"
+	"zoomSpeed": "Animation Speed",
+	"bedwars": "Bedwars",
+	"bedwars.hardcoreHearts": "Hardcore Hearts",
+	"bedwars.showHunger": "Show Hunger Bar",
+	"bedwars.displayArmor": "Display Armor",
+	"bedwars.bedwarsLevelHead": "Bedwars Level Head",
+	"bedwars.removeAnnoyingMessages": "Remove Annoying Messages",
+	"bedwars.tabRenderLatencyIcon": "Render Tablist Latency Icon",
+	"bedwars.showChatTime": "Show Chat Time",
+	"bedwars.overrideMessages": "Override Messages",
+	"bedwars_teamupgrades": "Bedwars Team Upgrades HUD"
 }

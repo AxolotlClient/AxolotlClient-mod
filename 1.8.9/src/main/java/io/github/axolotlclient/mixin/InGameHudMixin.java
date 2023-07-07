@@ -26,6 +26,8 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hud.gui.hud.vanilla.*;
 import io.github.axolotlclient.modules.hypixel.bedwars.BedwarsMod;
+import io.github.axolotlclient.util.events.Events;
+import io.github.axolotlclient.util.events.impl.ScoreboardRenderEvent;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.hud.InGameHud;
@@ -50,7 +52,9 @@ public abstract class InGameHudMixin {
 	@Inject(method = "renderScoreboardObjective", at = @At("HEAD"), cancellable = true)
 	public void axolotlclient$customScoreBoard(ScoreboardObjective objective, Window window, CallbackInfo ci) {
 		ScoreboardHud hud = (ScoreboardHud) HudManager.getInstance().get(ScoreboardHud.ID);
-		if (hud.isEnabled()) {
+		ScoreboardRenderEvent event = new ScoreboardRenderEvent(window, objective);
+		Events.SCOREBOARD_RENDER_EVENT.invoker().invoke(event);
+		if (event.isCancelled() || hud.isEnabled()) {
 			ci.cancel();
 		}
 	}

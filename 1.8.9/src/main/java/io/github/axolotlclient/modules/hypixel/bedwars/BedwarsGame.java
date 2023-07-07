@@ -65,7 +65,6 @@ public class BedwarsGame {
     private Text topBarText = new LiteralText("");
     private Text bottomBarText = new LiteralText("");
 
-
     private BedwarsPlayer me = null;
 
     private final Map<String, BedwarsPlayer> players = new HashMap<>(16);
@@ -391,15 +390,15 @@ public class BedwarsGame {
         }
     }
 
-    private int getDiamondTimerTier(int tier) {
-        if (tier <= 1) {
-            return DIAMOND_1;
-        }
-        if (tier == 2) {
-            return DIAMOND_2;
-        }
-        return DIAMOND_3;
-    }
+    private int getDiamondTier(int tier) {
+		if (tier <= 1) {
+			return DIAMOND_1;
+		}
+		if (tier == 2) {
+			return DIAMOND_2;
+		}
+		return DIAMOND_3;
+	}
 
     private int getEmeraldTier(int tier) {
         if (tier <= 1) {
@@ -431,7 +430,7 @@ public class BedwarsGame {
 		}
         if (diamondsTimer <= 0) {
             int secondsTillUpgrade = (((minutes) / 12 + 1)) * 12 * 60 - 6 * 60 - seconds;
-            diamondsTimer = Math.min(getDiamondTimerTier(diamondTier), secondsTillUpgrade);
+			diamondsTimer = Math.min(getDiamondTier(diamondTier), secondsTillUpgrade);
         }
         if (emeraldsTimer <= 0) {
             int secondsTillUpgrade = ((minutes / 12 + 1)) * 12 * 60 - seconds;

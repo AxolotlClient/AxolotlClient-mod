@@ -22,110 +22,31 @@
 
 package io.github.axolotlclient.modules.hypixel.bedwars.stats;
 
-import io.github.axolotlclient.AxolotlClientConfig.options.Option;
-import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
-import io.github.axolotlclient.modules.hud.gui.component.HudEntry;
+import io.github.axolotlclient.modules.hud.gui.entry.BoxHudEntry;
 import net.minecraft.util.Identifier;
 
-import java.util.List;
-
 /**
- *
  * @author DarkKronicle
  */
 
-public class LobbyStatsHud implements HudEntry {
+public class LobbyStatsHud extends BoxHudEntry {
 
-    public LobbyStatsHud() {
-
-    }
-
-    public void update() {
-
-    }
-
-	@Override
-	public void setX(int x) {
-
-	}
-
-	@Override
-    public float getScale() {
-        return 0;
-    }
-
-	@Override
-	public int getRawX() {
-		return 0;
-	}
-
-	@Override
-	public int getRawY() {
-		return 0;
-	}
-
-	@Override
-	public void setY(int y) {
-
-	}
-
-	@Override
-	public int getWidth() {
-		return 0;
-	}
-
-	@Override
-	public int getHeight() {
-		return 0;
-	}
-
-	@Override
-	public void setHeight(int height) {
-
-	}
-
-	@Override
-	public void setWidth(int width) {
-
-	}
-
-	@Override
-	public List<Option<?>> getConfigurationOptions() {
-		return null;
-	}
-
-	@Override
-	public OptionCategory getOptionsAsCategory() {
-		return null;
-	}
-
-	@Override
-	public boolean isEnabled() {
-		return false;
-	}
-
-	@Override
-	public void setEnabled(boolean value) {
-
-	}
-
-	@Override
-	public void render(float delta) {
-
-	}
-
-	@Override
-	public void renderPlaceholder(float delta) {
-
-	}
-
-	@Override
-	public void setHovered(boolean hovered) {
-
+	public LobbyStatsHud(int width, int height, boolean backgroundAllowed) {
+		super(width, height, backgroundAllowed);
 	}
 
 	@Override
 	public Identifier getId() {
 		return null;
+	}
+
+	@Override
+	public void renderComponent(float delta) {
+
+	}
+
+	@Override
+	public void renderPlaceholderComponent(float delta) {
+
 	}
 }

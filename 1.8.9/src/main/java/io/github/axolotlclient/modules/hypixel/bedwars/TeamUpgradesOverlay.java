@@ -23,7 +23,6 @@
 package io.github.axolotlclient.modules.hypixel.bedwars;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.axolotlclient.AxolotlClientConfig.options.Option;
 import io.github.axolotlclient.modules.hud.gui.entry.BoxHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hypixel.bedwars.upgrades.BedwarsTeamUpgrades;
@@ -32,8 +31,6 @@ import io.github.axolotlclient.modules.hypixel.bedwars.upgrades.TrapUpgrade;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.util.Identifier;
-
-import java.util.List;
 
 /**
  *
@@ -67,8 +64,11 @@ public class TeamUpgradesOverlay extends BoxHudEntry {
 		if (upgrades == null && !editMode) {
 			return;
 		}
+
 		int x = position.x() + 1;
 		int y = position.y() + 2;
+		GlStateManager.enableAlphaTest();
+		GlStateManager.enableBlend();
 		GlStateManager.color(1, 1, 1);
 		boolean normalUpgrades = false;
 		if (upgrades != null) {
@@ -100,7 +100,11 @@ public class TeamUpgradesOverlay extends BoxHudEntry {
 
 	@Override
 	public void renderComponent(float delta) {
-		drawOverlay(getPos(), false);
+		if (mod.isWaiting()) {
+
+		} else {
+			drawOverlay(getPos(), false);
+		}
 	}
 
 	@Override
