@@ -22,14 +22,11 @@
 
 package io.github.axolotlclient.util.events.types;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
-@RequiredArgsConstructor
-public class CancellableEvent {
+@Data
+public abstract class CancellableEvent {
 
-	@Getter @Setter
 	private boolean cancelled;
 
 }

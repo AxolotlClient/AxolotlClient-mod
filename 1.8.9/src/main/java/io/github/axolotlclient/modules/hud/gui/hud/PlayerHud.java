@@ -22,8 +22,6 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud;
 
-import java.util.List;
-
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
@@ -31,12 +29,15 @@ import io.github.axolotlclient.AxolotlClientConfig.options.DoubleOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.Option;
 import io.github.axolotlclient.modules.hud.gui.entry.BoxHudEntry;
 import io.github.axolotlclient.util.events.Events;
+import io.github.axolotlclient.util.events.impl.PlayerDirectionChangeEvent;
 import lombok.Getter;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.entity.player.ClientPlayerEntity;
 import net.minecraft.util.Identifier;
+
+import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -64,8 +65,8 @@ public class PlayerHud extends BoxHudEntry {
 		Events.PLAYER_DIRECTION_CHANGE.register(this::onPlayerDirectionChange);
 	}
 
-	public void onPlayerDirectionChange(float prevPitch, float prevYaw, float pitch, float yaw) {
-		yawOffset += (yaw - prevYaw) / 2;
+	public void onPlayerDirectionChange(PlayerDirectionChangeEvent event) {
+		yawOffset += (event.getYaw() - event.getPrevYaw()) / 2;
 	}
 
 	@Override

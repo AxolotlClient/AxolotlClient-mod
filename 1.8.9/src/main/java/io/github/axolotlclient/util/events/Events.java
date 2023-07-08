@@ -22,42 +22,18 @@
 
 package io.github.axolotlclient.util.events;
 
-import io.github.axolotlclient.util.events.impl.ReceiveChatMessageEvent;
-import io.github.axolotlclient.util.events.impl.ScoreboardRenderEvent;
-import io.github.axolotlclient.util.events.impl.WorldLoadEvent;
+import io.github.axolotlclient.util.events.impl.*;
 import net.legacyfabric.fabric.api.event.Event;
 import net.legacyfabric.fabric.api.event.EventFactory;
-import net.minecraft.client.option.KeyBinding;
 
 import java.util.Arrays;
 
 public class Events {
 
-	public static final Event<MouseInputCallback> MOUSE_INPUT = EventFactory.createArrayBacked(MouseInputCallback.class,
-		listeners -> (button -> {
-			for (MouseInputCallback listener : listeners) {
-				listener.onMouseButton(button);
-			}
-		}));
-	public static final Event<ChangeBind> KEYBIND_CHANGE = EventFactory.createArrayBacked(ChangeBind.class,
-		listeners -> ((key) -> {
-			for (ChangeBind listener : listeners) {
-				listener.setBoundKey(key);
-			}
-		}));
-	public static final Event<OnPress> KEYBIND_PRESS = EventFactory.createArrayBacked(OnPress.class,
-		listeners -> ((key) -> {
-			for (OnPress listener : listeners) {
-				listener.onPress(key);
-			}
-		}));
-	public static final Event<PlayerDirectionCallback> PLAYER_DIRECTION_CHANGE = EventFactory
-		.createArrayBacked(PlayerDirectionCallback.class, listeners -> ((prevPitch, prevYaw, pitch, yaw) -> {
-			for (PlayerDirectionCallback listener : listeners) {
-				listener.onChange(prevPitch, prevYaw, pitch, yaw);
-			}
-		}));
-
+	public static final Event<EventCallback<MouseInputEvent>> MOUSE_INPUT = createEvent();
+	public static final Event<EventCallback<KeyBindChangeEvent>> KEYBIND_CHANGE = createEvent();
+	public static final Event<EventCallback<KeyPressEvent>> KEY_PRESS = createEvent();
+	public static final Event<EventCallback<PlayerDirectionChangeEvent>> PLAYER_DIRECTION_CHANGE = createEvent();
 	public static final Event<EventCallback<ScoreboardRenderEvent>> SCOREBOARD_RENDER_EVENT = createEvent();
 	public static final Event<EventCallback<ReceiveChatMessageEvent>> RECEIVE_CHAT_MESSAGE_EVENT = createEvent();
 	public static final Event<EventCallback<WorldLoadEvent>> WORLD_LOAD_EVENT = createEvent();
@@ -70,27 +46,5 @@ public class Events {
 
 	public interface EventCallback<T> {
 		void invoke(T parameters);
-	}
-
-	// TODO migrate all of these to the system above
-
-	public interface MouseInputCallback {
-
-		void onMouseButton(int button);
-	}
-
-	public interface ChangeBind {
-
-		void setBoundKey(int boundKey);
-	}
-
-	public interface OnPress {
-
-		void onPress(KeyBinding binding);
-	}
-
-	public interface PlayerDirectionCallback {
-
-		void onChange(float prevPitch, float prevYaw, float pitch, float yaw);
 	}
 }

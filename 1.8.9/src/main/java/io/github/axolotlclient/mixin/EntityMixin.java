@@ -23,6 +23,7 @@
 package io.github.axolotlclient.mixin;
 
 import io.github.axolotlclient.util.events.Events;
+import io.github.axolotlclient.util.events.impl.PlayerDirectionChangeEvent;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Mixin;
@@ -51,6 +52,6 @@ public abstract class EntityMixin {
 		pitch = (float) ((double) prevPitch - (double) pitch * 0.15);
 		yaw = (float) ((double) prevYaw + (double) yaw * 0.15);
 		pitch = MathHelper.clamp(pitch, -90.0F, 90.0F);
-		Events.PLAYER_DIRECTION_CHANGE.invoker().onChange(prevPitch, prevYaw, pitch, yaw);
+		Events.PLAYER_DIRECTION_CHANGE.invoker().invoke(new PlayerDirectionChangeEvent(prevPitch, prevYaw, pitch, yaw));
 	}
 }
