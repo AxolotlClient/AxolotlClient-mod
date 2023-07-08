@@ -80,7 +80,7 @@ public class TeamUpgradesOverlay extends BoxHudEntry {
 				}
 				String texture;
 				texture = u.getTexture()[0];
-				mc.getTextureManager().bindTexture(new Identifier("axolotlclient", "textures/bedwars/" + texture + ".png"));
+				RenderSystem.setShaderTexture(0, new Identifier("axolotlclient", "textures/bedwars/" + texture + ".png"));
 				DrawableHelper.drawTexture(stack, x, y, 0, 0, 16, 16, 16, 16);
 				x += 17;
 				normalUpgrades = true;
@@ -91,7 +91,7 @@ public class TeamUpgradesOverlay extends BoxHudEntry {
 			y += 17;
 		}
 		for (String texture : (editMode ? trapEdit : upgrades.trap.getTexture())) {
-			mc.getTextureManager().bindTexture(new Identifier("axolotlclient", "textures/bedwars/" + texture + ".png"));
+			RenderSystem.setShaderTexture(0, new Identifier("axolotlclient", "textures/bedwars/" + texture + ".png"));
 			DrawableHelper.drawTexture(stack, x, y, 0, 0, 16, 16, 16, 16);
 			x += 17;
 		}

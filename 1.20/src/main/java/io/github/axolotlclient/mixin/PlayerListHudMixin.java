@@ -37,7 +37,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.hud.PlayerListHud;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.scoreboard.Scoreboard;
@@ -175,8 +174,8 @@ public abstract class PlayerListHudMixin {
 	)
 	public void axolotlclient$renderWithoutObjective(
 		GuiGraphics graphics, int scaledWindowWidth, Scoreboard scoreboard, @Nullable ScoreboardObjective objective, CallbackInfo ci,
-		ClientPlayNetworkHandler clientPlayNetworkHandler, List list, int i, int j, int l, int m, int k,
-		boolean bl, int n, int o, int p, int q, int r, List list2, int t, int u, int s, int v, int y, PlayerListEntry playerListEntry2
+		List list, int i, int j, int l, int m, int k,
+		boolean bl, int n, int o, int p, int q, int r, List list2, int t, int u, int s, int v, int y, int z, PlayerListEntry playerListEntry2
 	) {
 		if (!BedwarsMod.getInstance().isEnabled() || !BedwarsMod.getInstance().isWaiting()) {
 			return;
@@ -285,7 +284,7 @@ public abstract class PlayerListHudMixin {
 		cir.setReturnValue(player.getTabListDisplay());
 	}
 
-	@ModifyVariable(method = "getVisibleEntries", at = @At(value = "INVOKE_ASSIGN", target = "Ljava/util/stream/Stream;toList()Ljava/util/List;", remap = false))
+	@ModifyVariable(method = "render", at = @At(value = "STORE"), ordinal = 0)
 	public List<PlayerListEntry> axolotlclient$overrideSortedPlayers(List<PlayerListEntry> original) {
 		if (!BedwarsMod.getInstance().inGame()) {
 			return original;

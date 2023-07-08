@@ -29,8 +29,7 @@ import io.github.axolotlclient.modules.hypixel.bedwars.upgrades.BedwarsTeamUpgra
 import io.github.axolotlclient.modules.hypixel.bedwars.upgrades.TeamUpgrade;
 import io.github.axolotlclient.modules.hypixel.bedwars.upgrades.TrapUpgrade;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.Identifier;
 
 /**
@@ -60,7 +59,7 @@ public class TeamUpgradesOverlay extends BoxHudEntry {
 		upgrades = null;
 	}
 
-	public void drawOverlay(MatrixStack stack, DrawPosition position, boolean editMode) {
+	public void drawOverlay(GuiGraphics graphics, DrawPosition position, boolean editMode) {
 		if (upgrades == null && !editMode) {
 			return;
 		}
@@ -80,8 +79,7 @@ public class TeamUpgradesOverlay extends BoxHudEntry {
 				}
 				String texture;
 				texture = u.getTexture()[0];
-				mc.getTextureManager().bindTexture(new Identifier("axolotlclient", "textures/bedwars/" + texture + ".png"));
-				DrawableHelper.drawTexture(stack, x, y, 0, 0, 16, 16, 16, 16);
+				graphics.drawTexture(new Identifier("axolotlclient", "textures/bedwars/" + texture + ".png"), x, y, 0, 0, 16, 16, 16, 16);
 				x += 17;
 				normalUpgrades = true;
 			}
@@ -91,14 +89,13 @@ public class TeamUpgradesOverlay extends BoxHudEntry {
 			y += 17;
 		}
 		for (String texture : (editMode ? trapEdit : upgrades.trap.getTexture())) {
-			mc.getTextureManager().bindTexture(new Identifier("axolotlclient", "textures/bedwars/" + texture + ".png"));
-			DrawableHelper.drawTexture(stack, x, y, 0, 0, 16, 16, 16, 16);
+			graphics.drawTexture(new Identifier("axolotlclient", "textures/bedwars/" + texture + ".png"), x, y, 0, 0, 16, 16, 16, 16);
 			x += 17;
 		}
 	}
 
 	@Override
-	public void renderComponent(MatrixStack stack, float delta) {
+	public void renderComponent(GuiGraphics stack, float delta) {
 		if (mod.isWaiting()) {
 
 		} else {
@@ -107,7 +104,7 @@ public class TeamUpgradesOverlay extends BoxHudEntry {
 	}
 
 	@Override
-	public void renderPlaceholderComponent(MatrixStack stack, float delta) {
+	public void renderPlaceholderComponent(GuiGraphics stack, float delta) {
 		drawOverlay(stack, getPos(), true);
 	}
 

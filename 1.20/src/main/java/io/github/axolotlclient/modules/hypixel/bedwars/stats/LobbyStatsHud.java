@@ -23,7 +23,7 @@
 package io.github.axolotlclient.modules.hypixel.bedwars.stats;
 
 import io.github.axolotlclient.modules.hud.gui.entry.BoxHudEntry;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.Identifier;
 
 /**
@@ -37,12 +37,12 @@ public class LobbyStatsHud extends BoxHudEntry {
 	}
 
 	@Override
-	public void renderComponent(MatrixStack matrices, float delta) {
+	public void renderComponent(GuiGraphics graphics, float delta) {
 
 	}
 
 	@Override
-	public void renderPlaceholderComponent(MatrixStack matrices, float delta) {
+	public void renderPlaceholderComponent(GuiGraphics graphics, float delta) {
 
 	}
 

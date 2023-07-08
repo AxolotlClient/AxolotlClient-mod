@@ -208,7 +208,7 @@ public abstract class InGameHudMixin {
 		method = "renderStatusBars",
 		at = @At(
 			value = "STORE"
-		), ordinal = 22
+		), ordinal = 15
 	)
 	public int axolotlclient$dontHunger(int heartCount) {
 		if (heartCount == 0 && BedwarsMod.getInstance().isEnabled() &&

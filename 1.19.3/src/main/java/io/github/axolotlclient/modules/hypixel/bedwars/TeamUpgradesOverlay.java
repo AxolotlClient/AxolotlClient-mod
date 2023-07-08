@@ -28,7 +28,6 @@ import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hypixel.bedwars.upgrades.BedwarsTeamUpgrades;
 import io.github.axolotlclient.modules.hypixel.bedwars.upgrades.TeamUpgrade;
 import io.github.axolotlclient.modules.hypixel.bedwars.upgrades.TrapUpgrade;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
@@ -43,13 +42,11 @@ public class TeamUpgradesOverlay extends BoxHudEntry {
 
 	private BedwarsTeamUpgrades upgrades = null;
 	private final BedwarsMod mod;
-	private final MinecraftClient mc;
 	private final static String[] trapEdit = {"trap/minerfatigue", "trap/itsatrap"};
 
 	public TeamUpgradesOverlay(BedwarsMod mod) {
 		super(60, 40, true);
 		this.mod = mod;
-		this.mc = MinecraftClient.getInstance();
 	}
 
 	public void onStart(BedwarsTeamUpgrades newUpgrades) {
@@ -80,7 +77,7 @@ public class TeamUpgradesOverlay extends BoxHudEntry {
 				}
 				String texture;
 				texture = u.getTexture()[0];
-				mc.getTextureManager().bindTexture(new Identifier("axolotlclient", "textures/bedwars/" + texture + ".png"));
+				RenderSystem.setShaderTexture(0, new Identifier("axolotlclient", "textures/bedwars/" + texture + ".png"));
 				DrawableHelper.drawTexture(stack, x, y, 0, 0, 16, 16, 16, 16);
 				x += 17;
 				normalUpgrades = true;
@@ -91,7 +88,7 @@ public class TeamUpgradesOverlay extends BoxHudEntry {
 			y += 17;
 		}
 		for (String texture : (editMode ? trapEdit : upgrades.trap.getTexture())) {
-			mc.getTextureManager().bindTexture(new Identifier("axolotlclient", "textures/bedwars/" + texture + ".png"));
+			RenderSystem.setShaderTexture(0, new Identifier("axolotlclient", "textures/bedwars/" + texture + ".png"));
 			DrawableHelper.drawTexture(stack, x, y, 0, 0, 16, 16, 16, 16);
 			x += 17;
 		}
