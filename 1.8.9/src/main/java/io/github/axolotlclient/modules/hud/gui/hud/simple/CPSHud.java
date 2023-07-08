@@ -49,11 +49,11 @@ public class CPSHud extends SimpleTextHudEntry {
 
 	public CPSHud() {
 		super();
-		Events.MOUSE_INPUT.register(button -> {
+		Events.MOUSE_INPUT.register(event -> {
 			if (!fromKeybindings.get()) {
-				if (button == 0) {
+				if (event.getButton() == 0) {
 					ClickList.LEFT.click();
-				} else if (button == 1) {
+				} else if (event.getButton() == 1) {
 					ClickList.RIGHT.click();
 				}
 			}
