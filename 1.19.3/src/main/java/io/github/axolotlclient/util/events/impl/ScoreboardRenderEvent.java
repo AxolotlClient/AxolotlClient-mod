@@ -22,7 +22,6 @@
 
 package io.github.axolotlclient.util.events.impl;
 
-import com.mojang.blaze3d.glfw.Window;
 import io.github.axolotlclient.util.events.types.CancellableEvent;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -32,6 +31,5 @@ import net.minecraft.scoreboard.ScoreboardObjective;
 @Data
 public class ScoreboardRenderEvent extends CancellableEvent {
 
-	private final Window window;
 	private final ScoreboardObjective objective;
 }

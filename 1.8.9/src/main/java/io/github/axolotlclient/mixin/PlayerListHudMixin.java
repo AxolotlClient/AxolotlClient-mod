@@ -42,7 +42,6 @@ import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -57,10 +56,8 @@ import java.util.UUID;
 
 @Mixin(PlayerListHud.class)
 public abstract class PlayerListHudMixin extends DrawableHelper {
-
-	@Final
-	@Shadow
-	private final MinecraftClient client = MinecraftClient.getInstance();
+	@Unique
+	private final MinecraftClient axolotlclient$client = MinecraftClient.getInstance();
 	@Shadow
 	private Text header;
 	@Shadow
@@ -98,7 +95,7 @@ public abstract class PlayerListHudMixin extends DrawableHelper {
 		float y = args.get(2);
 		if (AxolotlClient.CONFIG.showBadges.get()
 			&& AxolotlClient.isUsingClient(axolotlclient$playerListEntry.getProfile().getId())) {
-			client.getTextureManager().bindTexture(AxolotlClient.badgeIcon);
+			axolotlclient$client.getTextureManager().bindTexture(AxolotlClient.badgeIcon);
 			DrawableHelper.drawTexture((int) x, (int) y, 0, 0, 8, 8, 8, 8);
 			args.set(1, x + 10);
 		}
@@ -110,7 +107,7 @@ public abstract class PlayerListHudMixin extends DrawableHelper {
 		float y = args.get(2);
 		if (AxolotlClient.CONFIG.showBadges.get()
 			&& AxolotlClient.isUsingClient(axolotlclient$playerListEntry.getProfile().getId())) {
-			client.getTextureManager().bindTexture(AxolotlClient.badgeIcon);
+			axolotlclient$client.getTextureManager().bindTexture(AxolotlClient.badgeIcon);
 			DrawableHelper.drawTexture((int) x, (int) y, 0, 0, 8, 8, 8, 8);
 			args.set(1, x + 10);
 		}
@@ -186,9 +183,9 @@ public abstract class PlayerListHudMixin extends DrawableHelper {
 		} catch (Exception e) {
 			return;
 		}
-		this.client.textRenderer.drawWithShadow(
+		this.axolotlclient$client.textRenderer.drawWithShadow(
 			render,
-			(float)(endX - this.client.textRenderer.getStringWidth(render)) + 20,
+			(float) (endX - this.axolotlclient$client.textRenderer.getStringWidth(render)) + 20,
 			(float) y,
 			-1
 		);
@@ -223,7 +220,7 @@ public abstract class PlayerListHudMixin extends DrawableHelper {
 			if (bedwarsPlayer.isDisconnected()) {
 				return;
 			}
-			int tickTillLive = Math.max(0, bedwarsPlayer.getTickAlive() - this.client.inGameHud.getTicks());
+			int tickTillLive = Math.max(0, bedwarsPlayer.getTickAlive() - this.axolotlclient$client.inGameHud.getTicks());
 			float secondsTillLive = tickTillLive / 20f;
 			render = String.format("%.1f", secondsTillLive) + "s";
 			color = new Color(200, 200, 200).getAsInt();
@@ -233,9 +230,9 @@ public abstract class PlayerListHudMixin extends DrawableHelper {
 			render = String.valueOf(health);
 		}
 		// Health
-		this.client.textRenderer.drawWithShadow(
+		this.axolotlclient$client.textRenderer.drawWithShadow(
 			render,
-			(float)(endX - this.client.textRenderer.getStringWidth(render)),
+			(float) (endX - this.axolotlclient$client.textRenderer.getStringWidth(render)),
 			(float) y,
 			color
 		);

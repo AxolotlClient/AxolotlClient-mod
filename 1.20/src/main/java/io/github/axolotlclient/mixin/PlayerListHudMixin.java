@@ -25,12 +25,19 @@ package io.github.axolotlclient.mixin;
 import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.AxolotlClientConfig.Color;
+import io.github.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
+import io.github.axolotlclient.modules.hypixel.bedwars.BedwarsGame;
+import io.github.axolotlclient.modules.hypixel.bedwars.BedwarsMod;
+import io.github.axolotlclient.modules.hypixel.bedwars.BedwarsPlayer;
+import io.github.axolotlclient.modules.hypixel.levelhead.LevelHeadMode;
 import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
 import io.github.axolotlclient.modules.tablist.Tablist;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.hud.PlayerListHud;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.scoreboard.Scoreboard;
@@ -38,14 +45,19 @@ import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
+import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+
+import java.util.List;
+import java.util.UUID;
 
 @Mixin(PlayerListHud.class)
 public abstract class PlayerListHudMixin {
@@ -54,7 +66,8 @@ public abstract class PlayerListHudMixin {
 	private Text header;
 	@Shadow
 	private Text footer;
-	private GameProfile profile;
+	@Unique
+	private GameProfile axolotlclient$profile;
 
 	@Inject(method = "getPlayerName", at = @At("HEAD"), cancellable = true)
 	public void axolotlclient$nickHider(PlayerListEntry playerEntry, CallbackInfoReturnable<Text> cir) {
@@ -71,29 +84,33 @@ public abstract class PlayerListHudMixin {
 	@Shadow
 	protected abstract Text applyGameModeFormatting(PlayerListEntry entry, MutableText name);
 
+	@Shadow
+	@Final
+	private MinecraftClient client;
+
 	@ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;getPlayerName(Lnet/minecraft/client/network/PlayerListEntry;)Lnet/minecraft/text/Text;"))
 	public PlayerListEntry axolotlclient$getPlayer(PlayerListEntry playerEntry) {
-		profile = playerEntry.getProfile();
+		axolotlclient$profile = playerEntry.getProfile();
 		return playerEntry;
 	}
 
 	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;getWidth(Lnet/minecraft/text/StringVisitable;)I"))
 	public int axolotlclient$moveName(TextRenderer instance, StringVisitable text) {
-		if (profile != null && AxolotlClient.CONFIG.showBadges.get() && AxolotlClient.isUsingClient(profile.getId()))
+		if (axolotlclient$profile != null && AxolotlClient.CONFIG.showBadges.get() && AxolotlClient.isUsingClient(axolotlclient$profile.getId()))
 			return instance.getWidth(text) + 10;
 		return instance.getWidth(text);
 	}
 
 	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;drawShadowedText(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;III)I"))
 	public int axolotlclient$moveName2(GuiGraphics instance, TextRenderer renderer, Text text, int x, int y, int color) {
-		if (profile != null && AxolotlClient.CONFIG.showBadges.get() && AxolotlClient.isUsingClient(profile.getId())) {
+		if (axolotlclient$profile != null && AxolotlClient.CONFIG.showBadges.get() && AxolotlClient.isUsingClient(axolotlclient$profile.getId())) {
 			RenderSystem.setShaderColor(1, 1, 1, 1);
 
 			instance.drawTexture(AxolotlClient.badgeIcon, x, y, 8, 8, 0, 0, 8, 8, 8, 8);
 
 			x += 9;
 		}
-		profile = null;
+		axolotlclient$profile = null;
 		return instance.drawShadowedText(renderer, text, x, y, color);
 	}
 
@@ -110,7 +127,9 @@ public abstract class PlayerListHudMixin {
 
 	@Inject(method = "renderLatencyIcon", at = @At("HEAD"), cancellable = true)
 	private void axolotlclient$numericalPing(GuiGraphics graphics, int width, int x, int y, PlayerListEntry entry, CallbackInfo ci) {
-		if (Tablist.getInstance().renderNumericPing(graphics, width, x, y, entry)) {
+		if (BedwarsMod.getInstance().isEnabled() && BedwarsMod.getInstance().blockLatencyIcon() && (BedwarsMod.getInstance().isWaiting() || BedwarsMod.getInstance().inGame())) {
+			ci.cancel();
+		} else if (Tablist.getInstance().renderNumericPing(graphics, width, x, y, entry)) {
 			ci.cancel();
 		}
 	}
@@ -144,5 +163,155 @@ public abstract class PlayerListHudMixin {
 	@ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/PlayerFaceRenderer;draw(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/util/Identifier;IIIZZ)V"), index = 5)
 	private boolean axolotlclient$renderHatLayer(boolean drawHat) {
 		return Tablist.getInstance().alwaysShowHeadLayer.get() || drawHat;
+	}
+
+	@Inject(
+		method = "render",
+		at = @At(
+			value = "INVOKE",
+			target = "Lnet/minecraft/client/gui/hud/PlayerListHud;renderLatencyIcon(Lnet/minecraft/client/gui/GuiGraphics;IIILnet/minecraft/client/network/PlayerListEntry;)V"
+		),
+		locals = LocalCapture.CAPTURE_FAILHARD
+	)
+	public void axolotlclient$renderWithoutObjective(
+		GuiGraphics graphics, int scaledWindowWidth, Scoreboard scoreboard, @Nullable ScoreboardObjective objective, CallbackInfo ci,
+		ClientPlayNetworkHandler clientPlayNetworkHandler, List list, int i, int j, int l, int m, int k,
+		boolean bl, int n, int o, int p, int q, int r, List list2, int t, int u, int s, int v, int y, PlayerListEntry playerListEntry2
+	) {
+		if (!BedwarsMod.getInstance().isEnabled() || !BedwarsMod.getInstance().isWaiting()) {
+			return;
+		}
+		int startX = v + i + 1;
+		int endX = startX + n;
+		String render;
+		try {
+			if (playerListEntry2.getProfile().getName().contains(Formatting.OBFUSCATED.toString())) {
+				return;
+			}
+
+			render = String.valueOf(HypixelAbstractionLayer.getPlayerLevel(playerListEntry2
+					.getProfile().getId().toString().replace("-", ""),
+				LevelHeadMode.BEDWARS.toString()));
+		} catch (Exception e) {
+			return;
+		}
+		graphics.drawShadowedText(client.textRenderer,
+			render,
+			(endX - this.client.textRenderer.getWidth(render)) + 20,
+			y,
+			-1
+		);
+	}
+
+	@Inject(
+		method = "renderScoreboardObjective",
+		at = @At(
+			value = "INVOKE",
+			target = "Lnet/minecraft/client/gui/GuiGraphics;drawShadowedText(Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)I"
+		),
+		cancellable = true
+	)
+	private void axolotlclient$renderCustomScoreboardObjective(
+		ScoreboardObjective objective, int y, String player, int startX, int endX, UUID uuid, GuiGraphics graphics, CallbackInfo ci
+	) {
+		if (!BedwarsMod.getInstance().isEnabled()) {
+			return;
+		}
+
+		BedwarsGame game = BedwarsMod.getInstance().getGame().orElse(null);
+		if (game == null) {
+			return;
+		}
+		BedwarsPlayer bedwarsPlayer = game.getPlayer(player).orElse(null);
+		if (bedwarsPlayer == null) {
+			return;
+		}
+		ci.cancel();
+		String render;
+		int color;
+		if (!bedwarsPlayer.isAlive()) {
+			if (bedwarsPlayer.isDisconnected()) {
+				return;
+			}
+			int tickTillLive = Math.max(0, bedwarsPlayer.getTickAlive() - this.client.inGameHud.getTicks());
+			float secondsTillLive = tickTillLive / 20f;
+			render = String.format("%.1f", secondsTillLive) + "s";
+			color = new Color(200, 200, 200).getAsInt();
+		} else {
+			int health = objective.getScoreboard().getPlayerScore(player, objective).getScore();
+			color = Color.blend(new Color(255, 255, 255), new Color(215, 0, 64), (int) (1 - (health / 20f) * 100)).getAsInt();
+			render = String.valueOf(health);
+		}
+		// Health
+		graphics.drawShadowedText(client.textRenderer,
+			render,
+			(endX - this.client.textRenderer.getWidth(render)),
+			y,
+			color
+		);
+
+	}
+
+	@ModifyVariable(
+		method = "render",
+		at = @At(
+			value = "STORE"
+		),
+		ordinal = 7
+	)
+	public int axolotlclient$changeWidth(int value) {
+		if (BedwarsMod.getInstance().isEnabled() && BedwarsMod.getInstance().blockLatencyIcon() && (BedwarsMod.getInstance().isWaiting() || BedwarsMod.getInstance().inGame())) {
+			value -= 9;
+		}
+		if (BedwarsMod.getInstance().isEnabled() && BedwarsMod.getInstance().isWaiting()) {
+			value += 20;
+		}
+		return value;
+	}
+
+	@Inject(method = "getPlayerName", at = @At("HEAD"), cancellable = true)
+	public void axolotlclient$getPlayerName(PlayerListEntry playerEntry, CallbackInfoReturnable<String> cir) {
+		if (!BedwarsMod.getInstance().isEnabled()) {
+			return;
+		}
+		BedwarsGame game = BedwarsMod.getInstance().getGame().orElse(null);
+		if (game == null || !game.isStarted()) {
+			return;
+		}
+		BedwarsPlayer player = game.getPlayer(playerEntry.getProfile().getName()).orElse(null);
+		if (player == null) {
+			return;
+		}
+		cir.setReturnValue(player.getTabListDisplay());
+	}
+
+	@ModifyVariable(method = "getVisibleEntries", at = @At(value = "INVOKE_ASSIGN", target = "Ljava/util/stream/Stream;toList()Ljava/util/List;", remap = false))
+	public List<PlayerListEntry> axolotlclient$overrideSortedPlayers(List<PlayerListEntry> original) {
+		if (!BedwarsMod.getInstance().inGame()) {
+			return original;
+		}
+		List<PlayerListEntry> players = BedwarsMod.getInstance().getGame().get().getTabPlayerList(original);
+		if (players == null) {
+			return original;
+		}
+		return players;
+	}
+
+	@Inject(method = "setHeader", at = @At("HEAD"), cancellable = true)
+	public void axolotlclient$changeHeader(Text header, CallbackInfo ci) {
+		if (!BedwarsMod.getInstance().inGame()) {
+			return;
+		}
+		this.header = BedwarsMod.getInstance().getGame().get().getTopBarText();
+		ci.cancel();
+	}
+
+	@Inject(method = "setFooter", at = @At("HEAD"), cancellable = true)
+	public void axolotlclient$changeFooter(Text header, CallbackInfo ci) {
+		if (!BedwarsMod.getInstance().inGame()) {
+			return;
+		}
+		this.footer = BedwarsMod.getInstance().getGame().get().getBottomBarText();
+		ci.cancel();
 	}
 }

@@ -26,11 +26,14 @@ import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.blur.MenuBlur;
 import io.github.axolotlclient.modules.rpc.DiscordRPC;
 import io.github.axolotlclient.util.NetworkHelper;
+import io.github.axolotlclient.util.events.Events;
+import io.github.axolotlclient.util.events.impl.WorldLoadEvent;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.world.ClientWorld;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -82,5 +85,10 @@ public abstract class MinecraftClientMixin {
 	@Inject(method = "isModded", at = @At("HEAD"), cancellable = true)
 	private void axolotlclient$noModdedSigns(CallbackInfoReturnable<Boolean> cir) {
 		cir.setReturnValue(false);
+	}
+
+	@Inject(method = "joinWorld", at = @At("HEAD"))
+	private void axolotlclient$onWorldLoad(ClientWorld world, CallbackInfo ci) {
+		Events.WORLD_LOAD_EVENT.invoker().invoke(new WorldLoadEvent(world));
 	}
 }

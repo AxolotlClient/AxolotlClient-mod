@@ -177,7 +177,7 @@ public abstract class InGameHudMixin {
 		boolean hardcore = BedwarsMod.getInstance().isEnabled() &&
 			BedwarsMod.getInstance().inGame() && BedwarsMod.getInstance().hardcoreHearts.get() &&
 			!BedwarsMod.getInstance().getGame().get().getSelf().isBed();
-		return hardcore ? 5 : 0;
+		return hardcore ? 5 : offset;
 	}
 
 	@ModifyVariable(

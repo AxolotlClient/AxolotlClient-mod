@@ -27,10 +27,13 @@ import io.github.axolotlclient.modules.blur.MenuBlur;
 import io.github.axolotlclient.modules.rpc.DiscordRPC;
 import io.github.axolotlclient.modules.sky.SkyResourceManager;
 import io.github.axolotlclient.util.NetworkHelper;
+import io.github.axolotlclient.util.events.Events;
+import io.github.axolotlclient.util.events.impl.WorldLoadEvent;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.resource.ResourceType;
 import org.quiltmc.loader.api.QuiltLoader;
 import org.quiltmc.qsl.resource.loader.api.ResourceLoader;
@@ -81,5 +84,10 @@ public abstract class MinecraftClientMixin {
 		if (MinecraftClient.getInstance().currentScreen == null) {
 			MenuBlur.getInstance().onScreenOpen();
 		}
+	}
+
+	@Inject(method = "joinWorld", at = @At("HEAD"))
+	private void axolotlclient$onWorldLoad(ClientWorld world, CallbackInfo ci) {
+		Events.WORLD_LOAD_EVENT.invoker().invoke(new WorldLoadEvent(world));
 	}
 }

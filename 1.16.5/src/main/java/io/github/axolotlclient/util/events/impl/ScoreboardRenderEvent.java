@@ -25,13 +25,11 @@ package io.github.axolotlclient.util.events.impl;
 import io.github.axolotlclient.util.events.types.CancellableEvent;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import net.minecraft.client.util.Window;
 import net.minecraft.scoreboard.ScoreboardObjective;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class ScoreboardRenderEvent extends CancellableEvent {
 
-	private final Window window;
 	private final ScoreboardObjective objective;
 }
