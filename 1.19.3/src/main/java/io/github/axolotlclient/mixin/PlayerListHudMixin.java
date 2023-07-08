@@ -56,6 +56,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.List;
+import java.util.UUID;
 
 @Mixin(PlayerListHud.class)
 public abstract class PlayerListHudMixin {
@@ -210,8 +211,7 @@ public abstract class PlayerListHudMixin {
 		cancellable = true
 	)
 	private void axolotlclient$renderCustomScoreboardObjective(
-		ScoreboardObjective objective, int y, String player, int startX, int endX,
-		PlayerListEntry playerEntry, MatrixStack matrices, CallbackInfo ci
+		ScoreboardObjective objective, int y, String player, int startX, int endX, UUID uuid, MatrixStack matrices, CallbackInfo ci
 	) {
 		if (!BedwarsMod.getInstance().isEnabled()) {
 			return;
@@ -221,7 +221,7 @@ public abstract class PlayerListHudMixin {
 		if (game == null) {
 			return;
 		}
-		BedwarsPlayer bedwarsPlayer = game.getPlayer(playerEntry.getProfile().getName()).orElse(null);
+		BedwarsPlayer bedwarsPlayer = game.getPlayer(player).orElse(null);
 		if (bedwarsPlayer == null) {
 			return;
 		}

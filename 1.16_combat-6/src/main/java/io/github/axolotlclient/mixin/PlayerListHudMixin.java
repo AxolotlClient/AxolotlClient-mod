@@ -180,7 +180,7 @@ public abstract class PlayerListHudMixin {
 	public void axolotlclient$renderWithoutObjective(
 		MatrixStack matrixStack, int argY, Scoreboard scoreboard, ScoreboardObjective scoreboardObjective, CallbackInfo ci,
 		ClientPlayNetworkHandler clientPlayNetworkHandler, List list, int i, int j, int l, int m, int k,
-		boolean bl, int n, int o, int p, int q, int r, List list2, int t, int u, int s, int v, int y, PlayerListEntry playerListEntry2
+		boolean bl, int n, int o, int p, int q, int r, List list2, int t, int u, int s, int v, int y, int z, PlayerListEntry playerListEntry2
 	) {
 		if (!BedwarsMod.getInstance().isEnabled() || !BedwarsMod.getInstance().isWaiting()) {
 			return;

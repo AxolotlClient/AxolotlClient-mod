@@ -22,9 +22,6 @@
 
 package io.github.axolotlclient.modules.hud;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
 import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.KeyBindOption;
@@ -39,10 +36,14 @@ import io.github.axolotlclient.modules.hud.gui.hud.item.ItemUpdateHud;
 import io.github.axolotlclient.modules.hud.gui.hud.simple.*;
 import io.github.axolotlclient.modules.hud.gui.hud.vanilla.*;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
+import io.github.axolotlclient.modules.hypixel.bedwars.BedwarsMod;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBind;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -100,6 +101,7 @@ public class HudManager extends AbstractModule {
 		add(new TPSHud());
 		add(new ComboHud());
 		add(new PlayerHud());
+		entries.put(BedwarsMod.getInstance().getUpgradesOverlay().getId(), BedwarsMod.getInstance().getUpgradesOverlay());
 
 		entries.values().forEach(HudEntry::init);
 
