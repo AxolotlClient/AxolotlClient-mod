@@ -22,10 +22,10 @@
 
 package io.github.axolotlclient.credits;
 
-import lombok.Getter;
-
 import java.util.LinkedHashSet;
 import java.util.Set;
+
+import lombok.Getter;
 
 public class Credits {
 
@@ -39,8 +39,9 @@ public class Credits {
 		contributor("DragonEggBedrockBreaking", "Bugfixes", "Inspiration of new Features");
 		contributor("gart", "gartbin dev and host", "Image sharing help", "https://gart.sh", "Backend developer");
 		contributor("xlingy", "Website author");
+		contributor("DarkKronicle", "Bedwars Overlay", "Author of KronHUD, the best HUD mod!");
 
-		otherPerson("DarkKronicle", "Author of KronHUD, the best HUD mod!");
+		otherPerson("Sybillian", "Bedwars Overlay Texture author", "https://github.com/sybillian");
 		otherPerson("AMereBagatelle", "Author of the excellent FabricSkyBoxes Mod");
 	}
 
