@@ -22,11 +22,11 @@
 
 package io.github.axolotlclient.modules.hypixel.bedwars;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 import java.util.Locale;
 import java.util.Optional;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * @author DarkKronicle
@@ -34,46 +34,46 @@ import java.util.Optional;
 
 @AllArgsConstructor
 public enum BedwarsTeam {
-    RED('c', 'R'),
-    BLUE('9', 'B'),
-    GREEN('a', 'G'),
-    YELLOW('e', 'Y'),
-    AQUA('b', 'A'),
-    WHITE('f', 'W'),
-    PINK('d', 'P'),
-    GRAY('8', 'S'),
-    ;
+	RED('c', 'R'),
+	BLUE('9', 'B'),
+	GREEN('a', 'G'),
+	YELLOW('e', 'Y'),
+	AQUA('b', 'A'),
+	WHITE('f', 'W'),
+	PINK('d', 'P'),
+	GRAY('8', 'S'),
+	;
 
-    @Getter
-    private final char code;
+	@Getter
+	private final char code;
 
-    @Getter
-    private final char prefix;
+	@Getter
+	private final char prefix;
 
-    public String getColorSection() {
-        return "§" + code;
-    }
+	public String getColorSection() {
+		return "§" + code;
+	}
 
-    public static Optional<BedwarsTeam> fromPrefix(char prefix) {
-        for (BedwarsTeam t : values()) {
-            if (t.getPrefix() == prefix) {
-                return Optional.of(t);
-            }
-        }
-        return Optional.empty();
-    }
+	public static Optional<BedwarsTeam> fromPrefix(char prefix) {
+		for (BedwarsTeam t : values()) {
+			if (t.getPrefix() == prefix) {
+				return Optional.of(t);
+			}
+		}
+		return Optional.empty();
+	}
 
-    public static Optional<BedwarsTeam> fromName(String name) {
-        for (BedwarsTeam t : values()) {
-            if (name.equalsIgnoreCase(t.name())) {
-                return Optional.of(t);
-            }
-        }
-        return Optional.empty();
-    }
+	public static Optional<BedwarsTeam> fromName(String name) {
+		for (BedwarsTeam t : values()) {
+			if (name.equalsIgnoreCase(t.name())) {
+				return Optional.of(t);
+			}
+		}
+		return Optional.empty();
+	}
 
-    public String getName() {
-        return name().substring(0, 1).toUpperCase(Locale.ROOT) + name().substring(1).toLowerCase(Locale.ROOT);
-    }
+	public String getName() {
+		return name().substring(0, 1).toUpperCase(Locale.ROOT) + name().substring(1).toLowerCase(Locale.ROOT);
+	}
 
 }

@@ -22,10 +22,10 @@
 
 package io.github.axolotlclient.util;
 
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
-
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 public class ThreadExecuter {
 

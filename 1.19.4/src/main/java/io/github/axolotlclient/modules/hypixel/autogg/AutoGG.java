@@ -22,6 +22,10 @@
 
 package io.github.axolotlclient.modules.hypixel.autogg;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.AxolotlClientConfig.options.StringOption;
@@ -31,10 +35,6 @@ import io.github.axolotlclient.util.events.Events;
 import io.github.axolotlclient.util.events.impl.ReceiveChatMessageEvent;
 import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * Based on <a href="https://github.com/DragonEggBedrockBreaking/AutoGG/blob/trunk/src/main/java/uk/debb/autogg/mixin/MixinChatHud.java">DragonEggBedrockBreaking's AutoGG Mod</a>

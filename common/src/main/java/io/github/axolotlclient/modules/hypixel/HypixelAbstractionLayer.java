@@ -64,8 +64,8 @@ public class HypixelAbstractionLayer {
 		return validApiKey;
 	}
 
-	public static JsonElement getPlayerProperty(String uuid, String stat){
-		if(loadPlayerDataIfAbsent(uuid)){
+	public static JsonElement getPlayerProperty(String uuid, String stat) {
+		if (loadPlayerDataIfAbsent(uuid)) {
 			return getPlayer(uuid).getProperty(stat);
 		}
 		return new JsonObject();
@@ -94,13 +94,13 @@ public class HypixelAbstractionLayer {
 		return 0;
 	}
 
-	private static PlayerReply.Player getPlayer(String uuid){
+	private static PlayerReply.Player getPlayer(String uuid) {
 		if (api == null) {
 			loadApiKey();
 		}
 		if (loadPlayerDataIfAbsent(uuid)) {
 			try {
-					return cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer();
+				return cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer();
 			} catch (TimeoutException | InterruptedException | ExecutionException ignored) {
 			}
 		}

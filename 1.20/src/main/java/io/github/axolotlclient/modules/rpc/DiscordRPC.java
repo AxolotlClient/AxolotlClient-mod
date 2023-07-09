@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.modules.rpc;
 
+import java.time.Instant;
+
 import de.jcm.discordgamesdk.Core;
 import de.jcm.discordgamesdk.CreateParams;
 import de.jcm.discordgamesdk.DiscordEventAdapter;
@@ -36,8 +38,6 @@ import io.github.axolotlclient.modules.rpc.gameSdk.GameSdkDownloader;
 import io.github.axolotlclient.util.OSUtil;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
-
-import java.time.Instant;
 
 /**
  * This DiscordRPC module is derived from <a href="https://github.com/DeDiamondPro/HyCord">HyCord</a>.

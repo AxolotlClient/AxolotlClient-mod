@@ -85,7 +85,7 @@ public abstract class MinecraftClientMixin {
 	}
 
 	@Inject(method = "connect(Lnet/minecraft/client/world/ClientWorld;Ljava/lang/String;)V", at = @At("HEAD"))
-	private void axolotlclient$onWorldLoad(ClientWorld clientWorld, String string, CallbackInfo ci){
+	private void axolotlclient$onWorldLoad(ClientWorld clientWorld, String string, CallbackInfo ci) {
 		Events.WORLD_LOAD_EVENT.invoker().invoke(new WorldLoadEvent(clientWorld));
 	}
 

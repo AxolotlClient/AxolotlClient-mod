@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.mixin;
 
+import java.util.List;
+import java.util.UUID;
+
 import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClient;
@@ -54,9 +57,6 @@ import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-
-import java.util.List;
-import java.util.UUID;
 
 @Mixin(PlayerListHud.class)
 public abstract class PlayerListHudMixin {

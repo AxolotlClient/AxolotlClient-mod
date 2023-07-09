@@ -22,6 +22,12 @@
 
 package io.github.axolotlclient.modules.hypixel.bedwars;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.EnumOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
@@ -40,26 +46,20 @@ import net.minecraft.scoreboard.Team;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Formatting;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-
 /**
  * @author DarkKronicle
  */
 
 public class BedwarsMod implements AbstractHypixelMod {
 
-    private final static Pattern[] GAME_START = {
-            Pattern.compile("^\\s*?Protect your bed and destroy the enemy beds\\.\\s*?$"),
-            Pattern.compile("^\\s*?Bed Wars Lucky Blocks\\s*?$"),
-            Pattern.compile("^\\s*?Bed Wars Swappage\\s*?$")
-    };
+	private final static Pattern[] GAME_START = {
+		Pattern.compile("^\\s*?Protect your bed and destroy the enemy beds\\.\\s*?$"),
+		Pattern.compile("^\\s*?Bed Wars Lucky Blocks\\s*?$"),
+		Pattern.compile("^\\s*?Bed Wars Swappage\\s*?$")
+	};
 
 	@Getter
-    private static BedwarsMod instance = new BedwarsMod();
+	private static BedwarsMod instance = new BedwarsMod();
 
 	@Getter
 	private final OptionCategory category = new OptionCategory("bedwars");
@@ -90,20 +90,20 @@ public class BedwarsMod implements AbstractHypixelMod {
 
 	private final BooleanOption showChatTime = new BooleanOption(getTranslationKey("showChatTime"), true);
 
-    protected final BooleanOption overrideMessages = new BooleanOption(getTranslationKey("overrideMessages"), true);
-    private int targetTick = -1;
-    private boolean waiting = false;
+	protected final BooleanOption overrideMessages = new BooleanOption(getTranslationKey("overrideMessages"), true);
+	private int targetTick = -1;
+	private boolean waiting = false;
 
-    public BedwarsMod() {
-        upgradesOverlay = new TeamUpgradesOverlay(this);
-    }
+	public BedwarsMod() {
+		upgradesOverlay = new TeamUpgradesOverlay(this);
+	}
 
-    public String getDetail() {
-        return I18n.translate("sol_client.mod.screen.by", "DarkKronicle") + I18n.translate("sol_client.mod.screen.textures_by", "Sybillian");
-    }
+	public String getDetail() {
+		return I18n.translate("sol_client.mod.screen.by", "DarkKronicle") + I18n.translate("sol_client.mod.screen.textures_by", "Sybillian");
+	}
 
-    @Override
-    public void init() {
+	@Override
+	public void init() {
 		category.add(enabled, hardcoreHearts, showHunger, displayArmor, bedwarsLevelHead, bedwarsLevelHeadMode,
 			removeAnnoyingMessages, tabRenderLatencyIcon, showChatTime, overrideMessages);
 		category.add(upgradesOverlay.getAllOptions());
@@ -115,46 +115,46 @@ public class BedwarsMod implements AbstractHypixelMod {
 		Events.WORLD_LOAD_EVENT.register(this::onWorldLoad);
 	}
 
-	public boolean isEnabled(){
+	public boolean isEnabled() {
 		return enabled.get();
 	}
 
-    public void onWorldLoad(WorldLoadEvent event) {
-        if (currentGame != null) {
-            gameEnd();
-        }
-    }
+	public void onWorldLoad(WorldLoadEvent event) {
+		if (currentGame != null) {
+			gameEnd();
+		}
+	}
 
-    public boolean isWaiting() {
-        if (inGame()) {
-            waiting = false;
-        }
-        return waiting;
-    }
+	public boolean isWaiting() {
+		if (inGame()) {
+			waiting = false;
+		}
+		return waiting;
+	}
 
-    public void onMessage(ReceiveChatMessageEvent event) {
-        // Remove formatting
-        String rawMessage = event.getFormattedMessage().asUnformattedString();
-        if (currentGame != null) {
-            currentGame.onChatMessage(rawMessage, event);
-            String time = "§7" + currentGame.getFormattedTime() + Formatting.RESET + " ";
-            if (!event.isCancelled() && showChatTime.get()) {
-                // Add time to every message received in game
-                if (event.getNewMessage() != null) {
-                    event.setNewMessage(new LiteralText(time).append(event.getNewMessage()));
-                } else {
-                    event.setNewMessage(new LiteralText(time).append(event.getFormattedMessage()));
-                }
-            }
-        } else if (targetTick < 0 && BedwarsMessages.matched(GAME_START, rawMessage).isPresent()) {
-            // Give time for Hypixel to sync
-            targetTick = MinecraftClient.getInstance().inGameHud.getTicks() + 10;
-        }
-    }
+	public void onMessage(ReceiveChatMessageEvent event) {
+		// Remove formatting
+		String rawMessage = event.getFormattedMessage().asUnformattedString();
+		if (currentGame != null) {
+			currentGame.onChatMessage(rawMessage, event);
+			String time = "§7" + currentGame.getFormattedTime() + Formatting.RESET + " ";
+			if (!event.isCancelled() && showChatTime.get()) {
+				// Add time to every message received in game
+				if (event.getNewMessage() != null) {
+					event.setNewMessage(new LiteralText(time).append(event.getNewMessage()));
+				} else {
+					event.setNewMessage(new LiteralText(time).append(event.getFormattedMessage()));
+				}
+			}
+		} else if (targetTick < 0 && BedwarsMessages.matched(GAME_START, rawMessage).isPresent()) {
+			// Give time for Hypixel to sync
+			targetTick = MinecraftClient.getInstance().inGameHud.getTicks() + 10;
+		}
+	}
 
-    public Optional<BedwarsGame> getGame() {
-        return currentGame == null ? Optional.empty() : Optional.of(currentGame);
-    }
+	public Optional<BedwarsGame> getGame() {
+		return currentGame == null ? Optional.empty() : Optional.of(currentGame);
+	}
 
 	@Override
 	public boolean tickable() {
@@ -162,72 +162,72 @@ public class BedwarsMod implements AbstractHypixelMod {
 	}
 
 	@Override
-    public void tick() {
-        if (currentGame != null) {
-            waiting = false;
-            if (currentGame.isStarted()) {
-                // Trigger setting the header
-                MinecraftClient.getInstance().inGameHud.getPlayerListWidget().setHeader(null);
-                currentGame.tick();
-            } else {
-                if (checkReady()) {
-                    currentGame.onStart();
-                }
-            }
-        } else {
-            if (targetTick > 0 && MinecraftClient.getInstance().inGameHud.getTicks() > targetTick) {
-                currentGame = new BedwarsGame(this);
-                targetTick = -1;
-            }
-        }
-    }
+	public void tick() {
+		if (currentGame != null) {
+			waiting = false;
+			if (currentGame.isStarted()) {
+				// Trigger setting the header
+				MinecraftClient.getInstance().inGameHud.getPlayerListWidget().setHeader(null);
+				currentGame.tick();
+			} else {
+				if (checkReady()) {
+					currentGame.onStart();
+				}
+			}
+		} else {
+			if (targetTick > 0 && MinecraftClient.getInstance().inGameHud.getTicks() > targetTick) {
+				currentGame = new BedwarsGame(this);
+				targetTick = -1;
+			}
+		}
+	}
 
-    private boolean checkReady() {
-        for (PlayerListEntry player : MinecraftClient.getInstance().player.networkHandler.getPlayerList()) {
-            String name = MinecraftClient.getInstance().inGameHud.getPlayerListWidget().getPlayerName(player).replaceAll("§.", "");
-            if (name.charAt(1) == ' ') {
-                return true;
-            }
-        }
-        return false;
-    }
+	private boolean checkReady() {
+		for (PlayerListEntry player : MinecraftClient.getInstance().player.networkHandler.getPlayerList()) {
+			String name = MinecraftClient.getInstance().inGameHud.getPlayerListWidget().getPlayerName(player).replaceAll("§.", "");
+			if (name.charAt(1) == ' ') {
+				return true;
+			}
+		}
+		return false;
+	}
 
-    public boolean inGame() {
-        return currentGame != null && currentGame.isStarted();
-    }
+	public boolean inGame() {
+		return currentGame != null && currentGame.isStarted();
+	}
 
-    public void onScoreboardRender(ScoreboardRenderEvent event) {
-        if (inGame()) {
-            waiting = false;
-            currentGame.onScoreboardRender(event);
-            return;
-        }
-        if (!Formatting.strip(event.getObjective().getDisplayName()).contains("BED WARS")) {
-            return;
-        }
-        Scoreboard scoreboard = event.getObjective().getScoreboard();
-        Collection<ScoreboardPlayerScore> scores = scoreboard.getAllPlayerScores(event.getObjective());
-        List<ScoreboardPlayerScore> filteredScores = scores.stream()
-                                                           .filter(p_apply_1_ -> p_apply_1_.getPlayerName() != null && !p_apply_1_.getPlayerName().startsWith("#"))
-                                                           .collect(Collectors.toList());
-        waiting = filteredScores.stream().anyMatch(score -> {
-            Team team = scoreboard.getPlayerTeam(score.getPlayerName());
-            String format = Formatting.strip(Team.decorateName(team, score.getPlayerName())).replaceAll("[^A-z0-9 .:]", "");
-            return format.contains("Waiting...") || format.contains("Starting in");
-        });
-    }
+	public void onScoreboardRender(ScoreboardRenderEvent event) {
+		if (inGame()) {
+			waiting = false;
+			currentGame.onScoreboardRender(event);
+			return;
+		}
+		if (!Formatting.strip(event.getObjective().getDisplayName()).contains("BED WARS")) {
+			return;
+		}
+		Scoreboard scoreboard = event.getObjective().getScoreboard();
+		Collection<ScoreboardPlayerScore> scores = scoreboard.getAllPlayerScores(event.getObjective());
+		List<ScoreboardPlayerScore> filteredScores = scores.stream()
+			.filter(p_apply_1_ -> p_apply_1_.getPlayerName() != null && !p_apply_1_.getPlayerName().startsWith("#"))
+			.collect(Collectors.toList());
+		waiting = filteredScores.stream().anyMatch(score -> {
+			Team team = scoreboard.getPlayerTeam(score.getPlayerName());
+			String format = Formatting.strip(Team.decorateName(team, score.getPlayerName())).replaceAll("[^A-z0-9 .:]", "");
+			return format.contains("Waiting...") || format.contains("Starting in");
+		});
+	}
 
-    public void gameEnd() {
-        upgradesOverlay.onEnd();
-        currentGame = null;
-    }
+	public void gameEnd() {
+		upgradesOverlay.onEnd();
+		currentGame = null;
+	}
 
-    public boolean blockLatencyIcon() {
-        return !tabRenderLatencyIcon.get();
-    }
+	public boolean blockLatencyIcon() {
+		return !tabRenderLatencyIcon.get();
+	}
 
-	private String getTranslationKey(String name){
-		return "bedwars."+name;
+	private String getTranslationKey(String name) {
+		return "bedwars." + name;
 	}
 
 }

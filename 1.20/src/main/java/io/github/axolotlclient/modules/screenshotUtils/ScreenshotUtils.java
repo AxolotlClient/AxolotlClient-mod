@@ -22,6 +22,14 @@
 
 package io.github.axolotlclient.modules.screenshotUtils;
 
+import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.io.File;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
+
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.*;
 import io.github.axolotlclient.modules.AbstractModule;
@@ -32,14 +40,6 @@ import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Util;
 import org.jetbrains.annotations.Nullable;
-
-import java.awt.*;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.io.File;
-import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ScreenshotUtils extends AbstractModule {
 

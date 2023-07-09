@@ -16,42 +16,42 @@ Ein (fast) vollständiger mod mit verschiedene Funktionen auf verschiedenen Mine
 - Screenshot Werkzeuge
 - Zoom
 - Verschiede Hud Module (teile von [KronHUD](https://github.com/DarkKronicle/KronHUD), aber mit zusätzlichen Funktionen)
-    - zusätzlich, aber nich aussschließlich:
-        - Ping
-        - FPS
-        - CPS
-        - Rüstung
-        - Tränke
-        - Tastenanschläge
-        - ToggleModifiers
-        - Server IP
-        - Icon
-        - Geschwindigkeit
-        - Scoreboard
-        - Fadenkreuz
-        - Koordinaten
-        - Aktions Anzeige
-        - Boss Anzeige
-        - Pfeile
-        - Item Update
-        - Pack Anzeige
-        - Echtzeit
-        - Reichweite
-        - Hotbar
-        - Speicher
-        - Spielerzahl
-        - Kompass
-        - TPS (Ticks pro Sekunde)
-        - Combo
-        - Spieler
-        - Chat
+	- zusätzlich, aber nicht aussschließlich:
+		- Ping
+		- FPS
+		- CPS
+		- Rüstung
+		- Tränke
+		- Tastenanschläge
+		- ToggleModifiers
+		- Server IP
+		- Icon
+		- Geschwindigkeit
+		- Scoreboard
+		- Fadenkreuz
+		- Koordinaten
+		- Aktions Anzeige
+		- Boss Anzeige
+		- Pfeile
+		- Item Update
+		- Pack Anzeige
+		- Echtzeit
+		- Reichweite
+		- Hotbar
+		- Speicher
+		- Spielerzahl
+		- Kompass
+		- TPS (Ticks pro Sekunde)
+		- Combo
+		- Spieler
+		- Chat
 - Hypixel Funktionen
-    - AutoGG / GF / GLHF
-    - LevelHead
-    - Spitznamen Verstecker
-    - Skyblock
-    - Autotippen
-    - AutoBoop
+	- AutoGG / GF / GLHF
+	- LevelHead
+	- Spitznamen Verstecker
+	- Skyblock
+	- Autotippen
+	- AutoBoop
 - Eigene Blockränder
 - Zeitwechsler
 - Volle Helligkeit
@@ -78,7 +78,7 @@ Ein (fast) vollständiger mod mit verschiedene Funktionen auf verschiedenen Mine
 
 - Dieser Mod ist lizensiert unter der LGPL-3.0 Lizenz.
 - Die deutsche Übersetzung des Lizenztextes unten ist nicht rechtlich bindend.
-	Die rechtlich bindende Version ist die [vollständige Englische Version](../LICENSE)
+  Die rechtlich bindende Version ist die [vollständige Englische Version](../LICENSE)
 
 ```
 AxolotlClient-mod

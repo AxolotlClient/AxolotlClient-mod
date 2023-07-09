@@ -399,5 +399,7 @@
 	"LOSSES": "Losses",
 	"WINS": "Wins",
 	"WINSTREAK": "Winstreak",
-	"STARS": "Stars"
+	"STARS": "Stars",
+	"FKDR": "Final Kill/Lose Ratio",
+	"BBLR": "Bed Break/Lose Ratio"
 }

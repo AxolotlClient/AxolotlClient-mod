@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.mixin;
 
+import java.io.File;
+import java.util.function.Consumer;
+
 import com.mojang.blaze3d.framebuffer.Framebuffer;
 import com.mojang.blaze3d.texture.NativeImage;
 import io.github.axolotlclient.modules.screenshotUtils.ScreenshotUtils;
@@ -39,9 +42,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-
-import java.io.File;
-import java.util.function.Consumer;
 
 @Mixin(ScreenshotRecorder.class)
 public abstract class ScreenshotRecorderMixin {

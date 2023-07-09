@@ -22,14 +22,14 @@
 
 package io.github.axolotlclient.modules.auth;
 
+import java.util.UUID;
+
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.text.CommonTexts;
 import net.minecraft.text.Text;
-
-import java.util.UUID;
 
 public class AddOfflineScreen extends Screen {
 

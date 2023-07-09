@@ -22,6 +22,11 @@
 
 package io.github.axolotlclient.modules.hypixel.bedwars;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.regex.Pattern;
+
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.EnumOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
@@ -39,11 +44,6 @@ import net.minecraft.scoreboard.ScoreboardPlayerScore;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.regex.Pattern;
 
 /**
  * @author DarkKronicle

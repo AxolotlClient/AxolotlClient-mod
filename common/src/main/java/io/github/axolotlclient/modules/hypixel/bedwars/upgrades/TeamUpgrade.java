@@ -22,12 +22,12 @@
 
 package io.github.axolotlclient.modules.hypixel.bedwars.upgrades;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import io.github.axolotlclient.modules.hypixel.bedwars.BedwarsMessages;
 import io.github.axolotlclient.modules.hypixel.bedwars.BedwarsMode;
 import lombok.Getter;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author DarkKronicle

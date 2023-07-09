@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.modules.hud;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.KeyBindOption;
@@ -42,9 +45,6 @@ import net.minecraft.client.option.KeyBind;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
 /**
  * This implementation of Hud modules is based on KronHUD.
  * <a href="https://github.com/DarkKronicle/KronHUD">Github Link.</a>
@@ -58,6 +58,7 @@ public class HudManager extends AbstractModule {
 	private final OptionCategory hudCategory = new OptionCategory("hud", false);
 	private final Map<Identifier, HudEntry> entries;
 	private final MinecraftClient client;
+
 	private HudManager() {
 		this.entries = new LinkedHashMap<>();
 		client = MinecraftClient.getInstance();

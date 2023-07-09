@@ -22,6 +22,11 @@
 
 package io.github.axolotlclient.modules.screenshotUtils;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.nio.file.Files;
+import java.util.Base64;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.blaze3d.texture.NativeImage;
@@ -37,11 +42,6 @@ import net.minecraft.util.Formatting;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.quiltmc.loader.api.QuiltLoader;
-
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.nio.file.Files;
-import java.util.Base64;
 
 public class ImageShare {
 

@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.mixin;
 
+import java.util.List;
+
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
 import io.github.axolotlclient.util.Util;
@@ -39,8 +41,6 @@ import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.List;
-
 @Mixin(ChatHud.class)
 public abstract class ChatHudMixin {
 
@@ -50,18 +50,18 @@ public abstract class ChatHudMixin {
 
 	@Inject(method = "addMessage(Lnet/minecraft/text/Text;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;addMessage(Lnet/minecraft/text/Text;IIZ)V"), cancellable = true)
 	public void axolotlclient$autoGG(Text message, int messageId, CallbackInfo ci) {
-		if(message == null){
+		if (message == null) {
 			ci.cancel();
 		}
 	}
 
 	@ModifyVariable(method = "addMessage(Lnet/minecraft/text/Text;I)V", at = @At("HEAD"), argsOnly = true)
-	private Text axolotlclient$onChatMessage(Text message){
+	private Text axolotlclient$onChatMessage(Text message) {
 		ReceiveChatMessageEvent event = new ReceiveChatMessageEvent(false, message.asUnformattedString(), message);
 		Events.RECEIVE_CHAT_MESSAGE_EVENT.invoker().invoke(event);
-		if(event.isCancelled()){
+		if (event.isCancelled()) {
 			return null;
-		} else if(event.getNewMessage() != null){
+		} else if (event.getNewMessage() != null) {
 			return event.getNewMessage();
 		}
 		return message;

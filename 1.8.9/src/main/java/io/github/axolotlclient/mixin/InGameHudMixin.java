@@ -169,7 +169,7 @@ public abstract class InGameHudMixin {
 	@ModifyVariable(
 		method = "renderStatusBars",
 		at = @At(
-			value="STORE"
+			value = "STORE"
 		),
 		ordinal = 18
 	)
@@ -183,7 +183,7 @@ public abstract class InGameHudMixin {
 	@ModifyVariable(
 		method = "renderStatusBars",
 		at = @At(
-			value="STORE"
+			value = "STORE"
 		),
 		ordinal = 0
 	)

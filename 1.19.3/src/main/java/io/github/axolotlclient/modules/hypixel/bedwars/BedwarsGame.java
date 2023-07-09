@@ -22,6 +22,10 @@
 
 package io.github.axolotlclient.modules.hypixel.bedwars;
 
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.stream.Collectors;
+
 import io.github.axolotlclient.modules.hypixel.bedwars.upgrades.BedwarsTeamUpgrades;
 import io.github.axolotlclient.util.events.impl.ReceiveChatMessageEvent;
 import io.github.axolotlclient.util.events.impl.ScoreboardRenderEvent;
@@ -34,10 +38,6 @@ import net.minecraft.scoreboard.ScoreboardPlayerScore;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.stream.Collectors;
 
 /**
  * @author DarkKronicle
@@ -121,7 +121,10 @@ public class BedwarsGame {
 	}
 
 	private String calculateBottomBarText() {
-		return "";
+		return "Top 3 Killers: \n" + players.values().stream()
+			.sorted(Comparator.comparingInt(o -> o.getStats().getKills())).limit(3)
+			.map(p -> p.getColoredName() + ": " + p.getStats().getKills())
+			.collect(Collectors.joining("\n"));
 	}
 
 	public String getFormattedTime() {

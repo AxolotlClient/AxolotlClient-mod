@@ -94,7 +94,7 @@ public abstract class EntityRendererMixin<T extends Entity> {
 		}
 	}
 
-	private void axolotlclient$drawLevelHead(String text){
+	private void axolotlclient$drawLevelHead(String text) {
 		TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
 
 		float x = textRenderer.getStringWidth(text) / 2F;

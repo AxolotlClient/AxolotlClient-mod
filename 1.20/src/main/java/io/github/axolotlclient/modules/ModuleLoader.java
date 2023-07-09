@@ -22,15 +22,15 @@
 
 package io.github.axolotlclient.modules;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.config.screen.CreditsScreen;
 import org.quiltmc.loader.api.ModContributor;
 import org.quiltmc.loader.api.ModMetadata;
 import org.quiltmc.loader.api.QuiltLoader;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class ModuleLoader {
 

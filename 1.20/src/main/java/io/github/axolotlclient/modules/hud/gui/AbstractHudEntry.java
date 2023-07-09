@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.modules.hud.gui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.DoubleOption;
@@ -38,9 +41,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.

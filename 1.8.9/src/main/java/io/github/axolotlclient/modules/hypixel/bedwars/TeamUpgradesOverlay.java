@@ -33,34 +33,33 @@ import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.util.Identifier;
 
 /**
- *
  * @author DarkKronicle
  */
 
 public class TeamUpgradesOverlay extends BoxHudEntry {
 
-    public final static Identifier ID = new Identifier("axolotlclient","bedwars_teamupgrades");
+	public final static Identifier ID = new Identifier("axolotlclient", "bedwars_teamupgrades");
 
-    private BedwarsTeamUpgrades upgrades = null;
-    private final BedwarsMod mod;
-    private final MinecraftClient mc;
-    private final static String[] trapEdit = {"trap/minerfatigue", "trap/itsatrap"};
+	private BedwarsTeamUpgrades upgrades = null;
+	private final BedwarsMod mod;
+	private final MinecraftClient mc;
+	private final static String[] trapEdit = {"trap/minerfatigue", "trap/itsatrap"};
 
-    public TeamUpgradesOverlay(BedwarsMod mod) {
+	public TeamUpgradesOverlay(BedwarsMod mod) {
 		super(60, 40, true);
 		this.mod = mod;
-        this.mc = MinecraftClient.getInstance();
-    }
+		this.mc = MinecraftClient.getInstance();
+	}
 
-    public void onStart(BedwarsTeamUpgrades newUpgrades) {
-        upgrades = newUpgrades;
-    }
+	public void onStart(BedwarsTeamUpgrades newUpgrades) {
+		upgrades = newUpgrades;
+	}
 
-    public void onEnd() {
-        upgrades = null;
-    }
+	public void onEnd() {
+		upgrades = null;
+	}
 
-    public void drawOverlay(DrawPosition position, boolean editMode) {
+	public void drawOverlay(DrawPosition position, boolean editMode) {
 		if (upgrades == null && !editMode) {
 			return;
 		}
@@ -96,7 +95,7 @@ public class TeamUpgradesOverlay extends BoxHudEntry {
 			DrawableHelper.drawTexture(x, y, 0, 0, 16, 16, 16, 16);
 			x += 17;
 		}
-    }
+	}
 
 	@Override
 	public void renderComponent(float delta) {

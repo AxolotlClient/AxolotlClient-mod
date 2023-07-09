@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.mixin;
 
+import java.util.List;
+import java.util.UUID;
+
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
@@ -50,9 +53,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
-
-import java.util.List;
-import java.util.UUID;
 
 @Mixin(PlayerListHud.class)
 public abstract class PlayerListHudMixin extends DrawableHelper {
@@ -173,7 +173,7 @@ public abstract class PlayerListHudMixin extends DrawableHelper {
 		int endX = startX + n;
 		String render;
 		try {
-			if(playerListEntry2.getProfile().getName().contains(Formatting.OBFUSCATED.toString())){
+			if (playerListEntry2.getProfile().getName().contains(Formatting.OBFUSCATED.toString())) {
 				return;
 			}
 
@@ -194,7 +194,7 @@ public abstract class PlayerListHudMixin extends DrawableHelper {
 	@Inject(
 		method = "renderScoreboardObjective",
 		at = @At(
-			value="INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Ljava/lang/String;FFI)I", ordinal=1
+			value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Ljava/lang/String;FFI)I", ordinal = 1
 		),
 		cancellable = true
 	)
@@ -226,7 +226,7 @@ public abstract class PlayerListHudMixin extends DrawableHelper {
 			color = new Color(200, 200, 200).getAsInt();
 		} else {
 			int health = objective.getScoreboard().getPlayerScore(player, objective).getScore();
-			color = Color.blend(new Color(255,255,255), new Color(215, 0, 64), (int) (1 - (health / 20f)*100)).getAsInt();
+			color = Color.blend(new Color(255, 255, 255), new Color(215, 0, 64), (int) (1 - (health / 20f) * 100)).getAsInt();
 			render = String.valueOf(health);
 		}
 		// Health
@@ -242,7 +242,7 @@ public abstract class PlayerListHudMixin extends DrawableHelper {
 	@ModifyVariable(
 		method = "render",
 		at = @At(
-			value="STORE"
+			value = "STORE"
 		),
 		ordinal = 7
 	)

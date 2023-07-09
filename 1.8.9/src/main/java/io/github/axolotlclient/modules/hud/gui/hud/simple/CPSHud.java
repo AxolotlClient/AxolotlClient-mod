@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.simple;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.Option;
 import io.github.axolotlclient.modules.hud.gui.entry.SimpleTextHudEntry;
@@ -29,9 +32,6 @@ import io.github.axolotlclient.util.events.Events;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.util.Identifier;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.

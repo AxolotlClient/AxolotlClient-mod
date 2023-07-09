@@ -22,6 +22,10 @@
 
 package io.github.axolotlclient.modules.hud.util;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import com.mojang.blaze3d.lighting.DiffuseLighting;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -36,10 +40,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Util;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * This implementation of Hud modules is based on KronHUD.

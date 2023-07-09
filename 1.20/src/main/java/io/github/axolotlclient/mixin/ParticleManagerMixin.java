@@ -22,6 +22,10 @@
 
 package io.github.axolotlclient.mixin;
 
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Queue;
+
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.Tessellator;
 import io.github.axolotlclient.modules.particles.Particles;
@@ -42,10 +46,6 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Queue;
 
 @Mixin(ParticleManager.class)
 public abstract class ParticleManagerMixin {

@@ -22,11 +22,11 @@
 
 package io.github.axolotlclient.util.events;
 
+import java.util.Arrays;
+
 import io.github.axolotlclient.util.events.impl.*;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
-
-import java.util.Arrays;
 
 public class Events {
 
@@ -38,7 +38,7 @@ public class Events {
 	public static final Event<EventCallback<ReceiveChatMessageEvent>> RECEIVE_CHAT_MESSAGE_EVENT = createEvent();
 	public static final Event<EventCallback<WorldLoadEvent>> WORLD_LOAD_EVENT = createEvent();
 
-	private static <T> Event<EventCallback<T>> createEvent(){
+	private static <T> Event<EventCallback<T>> createEvent() {
 		return EventFactory
 			.createArrayBacked(EventCallback.class, listeners -> (event) ->
 				Arrays.stream(listeners).forEach(l -> l.invoke(event)));

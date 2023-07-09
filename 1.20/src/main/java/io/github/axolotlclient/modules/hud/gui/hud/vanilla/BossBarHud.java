@@ -22,6 +22,11 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.vanilla;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.EnumOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.Option;
@@ -38,11 +43,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 /**
  * This implementation of Hud modules is based on KronHUD.

@@ -51,7 +51,8 @@ public class DiscordRPC extends AbstractModule {
 	public static Activity currentActivity;
 	public static Core discordRPC;
 	private static DiscordRPC Instance;
-	private static boolean running;	public BooleanOption enabled = new BooleanOption("enabled", value -> {
+	private static boolean running;
+	public BooleanOption enabled = new BooleanOption("enabled", value -> {
 		if (value) {
 			initRPC();
 		} else {
@@ -204,8 +205,6 @@ public class DiscordRPC extends AbstractModule {
 			}
 		}
 	}
-
-
 
 
 }

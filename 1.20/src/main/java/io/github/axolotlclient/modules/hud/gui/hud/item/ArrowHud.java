@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.item;
 
+import java.util.List;
+
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.Option;
 import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
@@ -34,8 +36,6 @@ import net.minecraft.item.Items;
 import net.minecraft.item.RangedWeaponItem;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
-
-import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.

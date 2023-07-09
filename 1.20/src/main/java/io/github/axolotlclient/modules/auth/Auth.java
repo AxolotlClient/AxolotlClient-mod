@@ -22,6 +22,11 @@
 
 package io.github.axolotlclient.modules.auth;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Optional;
+
 import com.mojang.authlib.exceptions.AuthenticationException;
 import com.mojang.authlib.minecraft.UserApiService;
 import com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService;
@@ -45,11 +50,6 @@ import net.minecraft.client.util.Session;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.quiltmc.loader.api.QuiltLoader;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Optional;
 
 public class Auth extends Accounts implements Module {
 
