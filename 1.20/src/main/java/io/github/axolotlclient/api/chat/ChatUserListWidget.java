@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.api.chat;
 
+import java.util.List;
+import java.util.function.Consumer;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.ContextMenu;
@@ -40,9 +43,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
-
-import java.util.List;
-import java.util.function.Consumer;
 
 public class ChatUserListWidget extends AlwaysSelectedEntryListWidget<ChatUserListWidget.UserListEntry> {
 

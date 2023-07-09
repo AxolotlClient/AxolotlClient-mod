@@ -42,7 +42,6 @@ import net.minecraft.client.option.KeyBind;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
-import org.lwjgl.glfw.GLFW;
 
 /**
  * This implementation of Hud modules is based on KronHUD.

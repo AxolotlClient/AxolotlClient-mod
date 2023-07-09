@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.mixin;
 
+import java.util.function.IntSupplier;
+
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.api.API;
@@ -37,8 +39,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.function.IntSupplier;
 
 @Mixin(value = SplashOverlay.class, priority = 1100)
 public abstract class SplashOverlayMixin {

@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.modules.rpc;
 
+import java.time.Instant;
+
 import com.google.gson.JsonObject;
 import com.jagrosh.discordipc.IPCClient;
 import com.jagrosh.discordipc.IPCListener;
@@ -34,8 +36,6 @@ import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.Module;
 import io.github.axolotlclient.util.Logger;
 import io.github.axolotlclient.util.OSUtil;
-
-import java.time.Instant;
 
 public abstract class RPCCommon implements Module {
 
@@ -87,10 +87,10 @@ public abstract class RPCCommon implements Module {
 		}
 	}
 
-	protected RichPresence createRichPresence(String gameVersion, String state, String details){
+	protected RichPresence createRichPresence(String gameVersion, String state, String details) {
 		RichPresence.Builder builder = new RichPresence.Builder();
 		builder.setLargeImage("icon", "AxolotlClient " + gameVersion);
-		if(showTime.get()) {
+		if (showTime.get()) {
 			builder.setStartTimestamp(time.getEpochSecond());
 		}
 		builder.setState(state)
@@ -100,19 +100,19 @@ public abstract class RPCCommon implements Module {
 
 	protected abstract void createRichPresence();
 
-	protected void setRichPresence(RichPresence presence){
-		if(running && client != null) {
+	protected void setRichPresence(RichPresence presence) {
+		if (running && client != null) {
 			client.sendRichPresence(presence);
 		}
 	}
 
-	private void updateRPC(){
+	private void updateRPC() {
 		createRichPresence();
 	}
 
 	public void initRPC() {
 		if (enabled.get()) {
-			if(client == null) {
+			if (client == null) {
 				client = new IPCClient(CLIENT_ID);
 				client.setListener(new IPCListener() {
 					@Override

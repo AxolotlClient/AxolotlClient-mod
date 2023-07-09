@@ -38,6 +38,7 @@ public class User {
 	private String name;
 	private String uuid;
 	private Status status;
+
 	public User(String uuid, Status status) {
 		this.uuid = API.getInstance().sanitizeUUID(uuid);
 		this.status = status;

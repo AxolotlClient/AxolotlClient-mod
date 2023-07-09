@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.mixin;
 
+import java.util.Objects;
+import java.util.function.Supplier;
+
 import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.FriendsSidebar;
 import io.github.axolotlclient.modules.hud.HudEditScreen;
@@ -40,9 +43,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.Objects;
-import java.util.function.Supplier;
 
 @Mixin(GameMenuScreen.class)
 public abstract class GameMenuScreenMixin extends Screen {

@@ -22,6 +22,12 @@
 
 package io.github.axolotlclient.api.handlers;
 
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
+
 import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.APIError;
 import io.github.axolotlclient.api.Request;
@@ -33,12 +39,6 @@ import io.github.axolotlclient.api.util.RequestHandler;
 import io.netty.buffer.ByteBuf;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Consumer;
 
 public class ChatHandler implements RequestHandler {
 

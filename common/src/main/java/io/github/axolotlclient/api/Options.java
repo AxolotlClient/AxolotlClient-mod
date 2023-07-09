@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.api;
 
+import java.util.function.Consumer;
+
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.EnumOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.KeyBindOption;
@@ -29,11 +31,10 @@ import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.Module;
 import io.github.axolotlclient.util.ThreadExecuter;
 
-import java.util.function.Consumer;
-
 public abstract class Options implements Module {
 
-	protected Consumer<Consumer<Boolean>> openPrivacyNoteScreen = v -> {};
+	protected Consumer<Consumer<Boolean>> openPrivacyNoteScreen = v -> {
+	};
 
 	public EnumOption privacyAccepted = new EnumOption("privacyPolicyAccepted", new String[]{"unset", "accepted", "denied"}, "unset");
 
@@ -41,7 +42,7 @@ public abstract class Options implements Module {
 		if (value) {
 			if (!privacyAccepted.get().equals("accepted")) {
 				openPrivacyNoteScreen.accept(v -> {
-					if(v) ThreadExecuter.scheduleTask(() -> API.getInstance().restart());
+					if (v) ThreadExecuter.scheduleTask(() -> API.getInstance().restart());
 				});
 			} else {
 				ThreadExecuter.scheduleTask(() -> API.getInstance().restart());

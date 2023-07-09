@@ -22,6 +22,13 @@
 
 package io.github.axolotlclient.api.requests;
 
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
+
 import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.APIError;
 import io.github.axolotlclient.api.Request;
@@ -30,13 +37,6 @@ import io.github.axolotlclient.api.types.ChatMessage;
 import io.github.axolotlclient.api.types.User;
 import io.github.axolotlclient.api.util.BufferUtil;
 import io.netty.buffer.ByteBuf;
-
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Consumer;
 
 public class ChannelRequest {
 

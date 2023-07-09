@@ -22,6 +22,15 @@
 
 package io.github.axolotlclient.api.util;
 
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+
 import com.google.gson.JsonObject;
 import io.github.axolotlclient.modules.auth.Account;
 import io.github.axolotlclient.util.GsonHelper;
@@ -34,15 +43,6 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
-import java.io.IOException;
-import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 
 public class MojangAuth {
 

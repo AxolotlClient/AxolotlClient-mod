@@ -22,13 +22,13 @@
 
 package io.github.axolotlclient.api;
 
-import io.netty.buffer.ByteBuf;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import io.netty.buffer.ByteBuf;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 public class APIError {
 

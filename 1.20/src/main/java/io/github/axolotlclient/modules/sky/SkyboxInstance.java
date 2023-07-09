@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.modules.sky;
 
+import java.util.Locale;
+import java.util.Objects;
+
 import com.google.gson.JsonObject;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -38,9 +41,6 @@ import net.minecraft.util.math.Axis;
 import net.minecraft.util.math.MathHelper;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL14;
-
-import java.util.Locale;
-import java.util.Objects;
 
 /**
  * This implementation of custom skies is based on the FabricSkyBoxes mod by AMereBagatelle

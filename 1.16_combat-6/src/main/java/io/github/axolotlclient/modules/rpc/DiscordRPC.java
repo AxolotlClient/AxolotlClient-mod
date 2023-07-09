@@ -22,7 +22,6 @@
 
 package io.github.axolotlclient.modules.rpc;
 
-import com.jagrosh.discordipc.entities.RichPresence;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
@@ -71,7 +70,7 @@ public class DiscordRPC extends RPCCommon {
 		String details;
 		if (showActivity.get() && MinecraftClient.getInstance().getCurrentServerEntry() != null) {
 			details = (Util.getGame());
-		} else if (showActivity.get() && !currentWorld.isEmpty()){
+		} else if (showActivity.get() && !currentWorld.isEmpty()) {
 			details = (currentWorld);
 			currentWorld = "";
 		} else {

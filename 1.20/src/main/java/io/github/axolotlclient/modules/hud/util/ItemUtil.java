@@ -22,14 +22,14 @@
 
 package io.github.axolotlclient.modules.hud.util;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Util;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * This implementation of Hud modules is based on KronHUD.

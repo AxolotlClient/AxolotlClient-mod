@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.api.chat;
 
+import java.util.Arrays;
+
 import io.github.axolotlclient.api.ContextMenu;
 import io.github.axolotlclient.api.ContextMenuContainer;
 import io.github.axolotlclient.api.ContextMenuScreen;
@@ -32,8 +34,6 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.resource.language.I18n;
 import org.lwjgl.input.Keyboard;
-
-import java.util.Arrays;
 
 public class ChatScreen extends Screen implements ContextMenuScreen {
 
@@ -56,7 +56,7 @@ public class ChatScreen extends Screen implements ContextMenuScreen {
 	public void render(int mouseX, int mouseY, float delta) {
 		renderBackground();
 
-		if(users != null){
+		if (users != null) {
 			users.render(mouseX, mouseY, delta);
 		}
 
@@ -74,13 +74,13 @@ public class ChatScreen extends Screen implements ContextMenuScreen {
 	@Override
 	public void init() {
 
-		chatListWidget = new ChatListWidget(this, width, height, 0, 30, 50, height-90);
+		chatListWidget = new ChatListWidget(this, width, height, 0, 30, 50, height - 90);
 
 		widget = new ChatWidget(channel, 50, 30, width - (!channel.isDM() ? 140 : 100), height - 90, this);
 
-		if(!channel.isDM()){
+		if (!channel.isDM()) {
 			users = new ChatUserListWidget(this, client, 80, height, 30, height - 60, 25);
-			users.setXPos(width-80);
+			users.setXPos(width - 80);
 			users.setUsers(Arrays.asList(channel.getUsers()));
 		}
 
@@ -100,14 +100,14 @@ public class ChatScreen extends Screen implements ContextMenuScreen {
 			@Override
 			public void render() {
 				super.render();
-				if(getText().isEmpty()){
-					drawWithShadow(textRenderer, I18n.translate("api.chat.messageUser", channel.getName()), x+2, y+height/2, -8355712);
+				if (getText().isEmpty()) {
+					drawWithShadow(textRenderer, I18n.translate("api.chat.messageUser", channel.getName()), x + 2, y + height / 2, -8355712);
 				}
 			}
 		};
 		input.setMaxLength(1024);
 
-		this.buttons.add(new ButtonWidget(1,this.width / 2 - 75, this.height - 28, 150, 20,
+		this.buttons.add(new ButtonWidget(1, this.width / 2 - 75, this.height - 28, 150, 20,
 			I18n.translate("gui.back")));
 	}
 
@@ -125,15 +125,15 @@ public class ChatScreen extends Screen implements ContextMenuScreen {
 
 	@Override
 	protected void buttonClicked(ButtonWidget buttonWidget) {
-		if(buttonWidget.id == 1){
+		if (buttonWidget.id == 1) {
 			this.client.setScreen(this.parent);
 		}
 	}
 
 	@Override
 	public void mouseClicked(int mouseX, int mouseY, int button) {
-		if(contextMenu.getMenu() != null){
-			if(contextMenu.mouseClicked(mouseX, mouseY, button)){
+		if (contextMenu.getMenu() != null) {
+			if (contextMenu.mouseClicked(mouseX, mouseY, button)) {
 				return;
 			}
 			contextMenu.removeMenu();

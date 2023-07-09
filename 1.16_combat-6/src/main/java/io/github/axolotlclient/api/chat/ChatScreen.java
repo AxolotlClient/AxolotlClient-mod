@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.api.chat;
 
+import java.util.Arrays;
+
 import io.github.axolotlclient.api.ContextMenu;
 import io.github.axolotlclient.api.ContextMenuContainer;
 import io.github.axolotlclient.api.ContextMenuScreen;
@@ -34,8 +36,6 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.TranslatableText;
 import org.lwjgl.glfw.GLFW;
-
-import java.util.Arrays;
 
 public class ChatScreen extends Screen implements ContextMenuScreen {
 
@@ -58,7 +58,7 @@ public class ChatScreen extends Screen implements ContextMenuScreen {
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		renderBackground(matrices);
 
-		if(users != null){
+		if (users != null) {
 			users.render(matrices, mouseX, mouseY, delta);
 		}
 
@@ -75,13 +75,13 @@ public class ChatScreen extends Screen implements ContextMenuScreen {
 	@Override
 	protected void init() {
 
-		addChild(chatListWidget = new ChatListWidget(this, width, height, 0, 30, 50, height-90));
+		addChild(chatListWidget = new ChatListWidget(this, width, height, 0, 30, 50, height - 90));
 
 		addChild(widget = new ChatWidget(channel, 50, 30, width - (!channel.isDM() ? 140 : 100), height - 90, this));
 
-		if(!channel.isDM()){
+		if (!channel.isDM()) {
 			users = new ChatUserListWidget(this, client, 80, height - 20, 30, height - 60, 25);
-			users.setLeftPos(width-80);
+			users.setLeftPos(width - 80);
 			users.setUsers(Arrays.asList(channel.getUsers()));
 			addChild(users);
 		}
@@ -130,8 +130,8 @@ public class ChatScreen extends Screen implements ContextMenuScreen {
 
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
-		if(contextMenu.getMenu() != null){
-			if(contextMenu.mouseClicked(mouseX, mouseY, button)){
+		if (contextMenu.getMenu() != null) {
+			if (contextMenu.mouseClicked(mouseX, mouseY, button)) {
 				return true;
 			}
 			contextMenu.removeMenu();

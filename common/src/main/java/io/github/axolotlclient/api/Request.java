@@ -22,10 +22,6 @@
 
 package io.github.axolotlclient.api;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import lombok.*;
-
 import java.nio.charset.StandardCharsets;
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -34,6 +30,10 @@ import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import lombok.*;
 
 /**
  * Defines a generic request that can be sent to the backend API.

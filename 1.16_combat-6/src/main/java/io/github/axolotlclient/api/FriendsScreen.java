@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.api;
 
+import java.util.stream.Collectors;
+
 import io.github.axolotlclient.api.chat.ChatScreen;
 import io.github.axolotlclient.api.handlers.FriendHandler;
 import io.github.axolotlclient.api.requests.ChannelRequest;
@@ -31,8 +33,6 @@ import net.minecraft.client.gui.screen.ScreenTexts;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.TranslatableText;
-
-import java.util.stream.Collectors;
 
 public class FriendsScreen extends Screen {
 

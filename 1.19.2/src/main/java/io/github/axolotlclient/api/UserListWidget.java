@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.api;
 
+import java.util.List;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.api.types.User;
 import io.github.axolotlclient.modules.auth.Auth;
@@ -33,8 +35,6 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Util;
-
-import java.util.List;
 
 public class UserListWidget extends AlwaysSelectedEntryListWidget<UserListWidget.UserListEntry> {
 

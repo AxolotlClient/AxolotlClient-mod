@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.api;
 
+import java.net.URI;
+import java.util.function.Consumer;
+
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.util.OSUtil;
 import net.minecraft.client.font.MultilineText;
@@ -31,9 +34,6 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.CommonTexts;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
-
-import java.net.URI;
-import java.util.function.Consumer;
 
 public class PrivacyNoticeScreen extends Screen {
 

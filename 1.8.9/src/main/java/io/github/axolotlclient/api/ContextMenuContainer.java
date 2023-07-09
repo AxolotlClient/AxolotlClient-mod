@@ -30,36 +30,38 @@ import org.jetbrains.annotations.Nullable;
 
 public class ContextMenuContainer extends DrawableHelper {
 
-	@Getter @Setter @Nullable
+	@Getter
+	@Setter
+	@Nullable
 	private ContextMenu menu;
 
-	public ContextMenuContainer(){
+	public ContextMenuContainer() {
 
 	}
 
-	public void removeMenu(){
+	public void removeMenu() {
 		menu = null;
 	}
 
-	public boolean hasMenu(){
+	public boolean hasMenu() {
 		return menu != null;
 	}
 
 	public void render(MinecraftClient client, int mouseX, int mouseY) {
-		if(menu != null){
+		if (menu != null) {
 			menu.render(client, mouseX, mouseY);
 		}
 	}
 
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
-		if(menu != null){
+		if (menu != null) {
 			return menu.mouseClicked(mouseX, mouseY, button);
 		}
 		return false;
 	}
 
 	public boolean isMouseOver(double mouseX, double mouseY) {
-		if(menu != null){
+		if (menu != null) {
 			return menu.isMouseOver(mouseX, mouseY);
 		}
 		return false;

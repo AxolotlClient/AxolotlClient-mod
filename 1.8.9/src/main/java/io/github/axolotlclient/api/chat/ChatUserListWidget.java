@@ -22,6 +22,10 @@
 
 package io.github.axolotlclient.api.chat;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.ContextMenu;
@@ -37,10 +41,6 @@ import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.widget.EntryListWidget;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.util.Formatting;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
 
 public class ChatUserListWidget extends EntryListWidget {
 
@@ -58,7 +58,7 @@ public class ChatUserListWidget extends EntryListWidget {
 
 	@Override
 	protected int getScrollbarPosition() {
-		return this.xStart + this.width / 2 - this.getRowWidth() / 2 + 2+width-8;
+		return this.xStart + this.width / 2 - this.getRowWidth() / 2 + 2 + width - 8;
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public class ChatUserListWidget extends EntryListWidget {
 
 	@Override
 	public int getRowWidth() {
-		return width-5;
+		return width - 5;
 	}
 
 	public void addEntry(UserListEntry entry) {
@@ -119,14 +119,14 @@ public class ChatUserListWidget extends EntryListWidget {
 
 		@Override
 		public void render(int index, int x, int y, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered) {
-			if(hovered && !screen.hasContextMenu()){
-				DrawableHelper.fill(x-2, y-1, x+entryWidth-3, y+ entryHeight +1, 0x55ffffff);
+			if (hovered && !screen.hasContextMenu()) {
+				DrawableHelper.fill(x - 2, y - 1, x + entryWidth - 3, y + entryHeight + 1, 0x55ffffff);
 			}
 			DrawUtil.drawScrollableText(client.textRenderer, user.getName(), x + 3 + entryHeight,
-				y + 1, x + entryWidth - 6, y+1+client.textRenderer.fontHeight+2, -1);
+				y + 1, x + entryWidth - 6, y + 1 + client.textRenderer.fontHeight + 2, -1);
 			client.textRenderer.draw(user.getStatus().getTitle(), x + 3 + entryHeight, y + 12, 8421504);
 			if (user.getStatus().isOnline()) {
-				client.textRenderer.draw(user.getStatus().getDescription(), x + 3 + entryHeight +7, y + 23, 8421504);
+				client.textRenderer.draw(user.getStatus().getDescription(), x + 3 + entryHeight + 7, y + 23, 8421504);
 			}
 
 			if (note != null) {
@@ -144,15 +144,15 @@ public class ChatUserListWidget extends EntryListWidget {
 		@Override
 		public boolean mouseClicked(int index, int mouseX, int mouseY, int button, int x, int y) {
 			ChatUserListWidget.this.selectedEntry = index;
-			if(button == 0) { // left click
+			if (button == 0) { // left click
 				if (MinecraftClient.getTime() - this.time < 250L && client.world == null) { // left *double* click
 
 				}
 				this.time = MinecraftClient.getTime();
-			} else if (button == 1){ // right click
+			} else if (button == 1) { // right click
 
 
-				if(!user.equals(API.getInstance().getSelf())) {
+				if (!user.equals(API.getInstance().getSelf())) {
 					ContextMenu.Builder menu = ContextMenu.builder()
 						.entry(user.getName(), buttonWidget -> {
 						})

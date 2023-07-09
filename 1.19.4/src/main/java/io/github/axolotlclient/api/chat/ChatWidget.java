@@ -22,6 +22,11 @@
 
 package io.github.axolotlclient.api.chat;
 
+import java.time.Instant;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.api.ContextMenu;
 import io.github.axolotlclient.api.ContextMenuScreen;
@@ -39,11 +44,6 @@ import net.minecraft.text.OrderedText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
-import java.time.Instant;
-import java.util.*;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
-
 public class ChatWidget extends AlwaysSelectedEntryListWidget<ChatWidget.ChatLine> {
 
 	private final List<ChatMessage> messages = new ArrayList<>();
@@ -55,10 +55,10 @@ public class ChatWidget extends AlwaysSelectedEntryListWidget<ChatWidget.ChatLin
 	private final ContextMenuScreen screen;
 
 	public ChatWidget(Channel channel, int x, int y, int width, int height, ContextMenuScreen screen) {
-		super(MinecraftClient.getInstance(), width, height, y, y+height, 13);
+		super(MinecraftClient.getInstance(), width, height, y, y + height, 13);
 		this.channel = channel;
 		this.client = MinecraftClient.getInstance();
-		setLeftPos(x+5);
+		setLeftPos(x + 5);
 
 		setRenderHeader(false, 0);
 		this.screen = screen;
@@ -77,7 +77,7 @@ public class ChatWidget extends AlwaysSelectedEntryListWidget<ChatWidget.ChatLin
 
 	@Override
 	protected int getScrollbarPositionX() {
-		return x+width-5;
+		return x + width - 5;
 	}
 
 	private void addMessage(ChatMessage message) {
@@ -103,7 +103,7 @@ public class ChatWidget extends AlwaysSelectedEntryListWidget<ChatWidget.ChatLin
 
 		children().sort(Comparator.comparingLong(c -> c.getOrigin().getTimestamp()));
 
-		if(scrollToBottom){
+		if (scrollToBottom) {
 			setScrollAmount(getMaxScroll());
 		}
 		messages.sort(Comparator.comparingLong(ChatMessage::getTimestamp));
@@ -121,8 +121,8 @@ public class ChatWidget extends AlwaysSelectedEntryListWidget<ChatWidget.ChatLin
 
 	@Override
 	public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
-		double scrollAmount = (this.getScrollAmount() - amount * (double)this.itemHeight / 2.0);
-		if(scrollAmount < 0){
+		double scrollAmount = (this.getScrollAmount() - amount * (double) this.itemHeight / 2.0);
+		if (scrollAmount < 0) {
 			loadMessages();
 		}
 		setScrollAmount(scrollAmount);
@@ -140,7 +140,7 @@ public class ChatWidget extends AlwaysSelectedEntryListWidget<ChatWidget.ChatLin
 		int i = this.left + (this.width - entryWidth) / 2;
 		int j = this.left + (this.width + entryWidth) / 2;
 		fill(matrices, i, y - 2, j, y + entryHeight, borderColor);
-		fill(matrices, i + 1, y - 1, j - 1, y + entryHeight-1, fillColor);
+		fill(matrices, i + 1, y - 1, j - 1, y + entryHeight - 1, fillColor);
 	}
 
 	public class ChatLine extends AlwaysSelectedEntryListWidget.Entry<ChatLine> {
@@ -158,12 +158,13 @@ public class ChatWidget extends AlwaysSelectedEntryListWidget<ChatWidget.ChatLin
 
 		@Override
 		public boolean mouseClicked(double mouseX, double mouseY, int button) {
-			if(button == 0){
+			if (button == 0) {
 				ChatWidget.this.setSelected(this);
 			}
-			if(button == 1){
+			if (button == 1) {
 				ContextMenu.Builder builder = ContextMenu.builder()
-					.entry(Text.of(origin.getSender().getName()), buttonWidget -> {})
+					.entry(Text.of(origin.getSender().getName()), buttonWidget -> {
+					})
 					.spacer()
 					.entry(Text.translatable("api.friends.chat"), buttonWidget -> {
 						Consumer<Channel> consumer = channel -> client.setScreen(new ChatScreen(screen.getParent(), channel));
@@ -184,21 +185,21 @@ public class ChatWidget extends AlwaysSelectedEntryListWidget<ChatWidget.ChatLin
 
 		@Override
 		public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-			for(ChatLine l : children()) {
-				if(l.getOrigin().equals(origin)) {
-					if(Objects.equals(getHoveredEntry(), l)) {
+			for (ChatLine l : children()) {
+				if (l.getOrigin().equals(origin)) {
+					if (Objects.equals(getHoveredEntry(), l)) {
 						hovered = true;
 						break;
 					}
 				}
 			}
-			if(hovered && !screen.hasContextMenu()){
-				fill(matrices, x-2-22, y-2, x+entryWidth+20, y+entryHeight-1, 0x33FFFFFF);
-				if(index < children().size()-1 && children().get(index+1).getOrigin().equals(origin)){
-					fill(matrices, x-2-22, y+entryHeight-1, x+entryWidth+20, y+entryHeight+2, 0x33FFFFFF);
+			if (hovered && !screen.hasContextMenu()) {
+				fill(matrices, x - 2 - 22, y - 2, x + entryWidth + 20, y + entryHeight - 1, 0x33FFFFFF);
+				if (index < children().size() - 1 && children().get(index + 1).getOrigin().equals(origin)) {
+					fill(matrices, x - 2 - 22, y + entryHeight - 1, x + entryWidth + 20, y + entryHeight + 2, 0x33FFFFFF);
 				}
-				if((index < children().size()-1 && !children().get(index+1).getOrigin().equals(origin)) || index == children().size()-1){
-					fill(matrices, x-2-22, y+entryHeight-1, x+entryWidth+20, y+entryHeight, 0x33FFFFFF);
+				if ((index < children().size() - 1 && !children().get(index + 1).getOrigin().equals(origin)) || index == children().size() - 1) {
+					fill(matrices, x - 2 - 22, y + entryHeight - 1, x + entryWidth + 20, y + entryHeight, 0x33FFFFFF);
 				}
 			}
 			renderExtras(matrices, x, y, mouseX, mouseY);
@@ -210,6 +211,7 @@ public class ChatWidget extends AlwaysSelectedEntryListWidget<ChatWidget.ChatLin
 			return Text.of(origin.getContent());
 		}
 	}
+
 	public class NameChatLine extends ChatLine {
 
 		public NameChatLine(ChatMessage message) {

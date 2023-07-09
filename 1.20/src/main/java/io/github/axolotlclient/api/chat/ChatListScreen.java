@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.api.chat;
 
+import java.util.Arrays;
+
 import io.github.axolotlclient.api.SimpleTextInputScreen;
 import io.github.axolotlclient.api.requests.ChannelRequest;
 import io.github.axolotlclient.api.types.Channel;
@@ -30,8 +32,6 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.CommonTexts;
 import net.minecraft.text.Text;
-
-import java.util.Arrays;
 
 public class ChatListScreen extends Screen {
 

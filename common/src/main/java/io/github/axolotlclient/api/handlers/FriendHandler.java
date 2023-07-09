@@ -22,6 +22,14 @@
 
 package io.github.axolotlclient.api.handlers;
 
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+
 import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.APIError;
 import io.github.axolotlclient.api.Keyword;
@@ -31,14 +39,6 @@ import io.github.axolotlclient.api.types.User;
 import io.github.axolotlclient.api.util.RequestHandler;
 import io.github.axolotlclient.api.util.UUIDHelper;
 import lombok.Getter;
-
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 public class FriendHandler implements RequestHandler {
 

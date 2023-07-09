@@ -22,6 +22,11 @@
 
 package io.github.axolotlclient.api.chat;
 
+import java.time.Instant;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.api.ContextMenu;
 import io.github.axolotlclient.api.ContextMenuScreen;
@@ -39,11 +44,6 @@ import net.minecraft.text.OrderedText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-
-import java.time.Instant;
-import java.util.*;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 public class ChatWidget extends AlwaysSelectedEntryListWidget<ChatWidget.ChatLine> {
 

@@ -61,7 +61,7 @@ public class DiscordRPC extends RPCCommon {
 		String details;
 		if (showActivity.get() && MinecraftClient.getInstance().getCurrentServerEntry() != null) {
 			details = (Util.getGame());
-		} else if (showActivity.get() && !currentWorld.isEmpty()){
+		} else if (showActivity.get() && !currentWorld.isEmpty()) {
 			details = (currentWorld);
 			currentWorld = "";
 		} else {

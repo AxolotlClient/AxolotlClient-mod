@@ -22,6 +22,11 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.vanilla;
 
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
@@ -37,11 +42,6 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
-
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * This implementation of Hud modules is based on KronHUD.

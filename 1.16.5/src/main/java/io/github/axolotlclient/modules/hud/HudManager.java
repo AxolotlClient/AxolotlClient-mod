@@ -57,6 +57,7 @@ public class HudManager extends AbstractModule {
 	private final OptionCategory hudCategory = new OptionCategory("hud", false);
 	private final Map<Identifier, HudEntry> entries;
 	private final MinecraftClient client;
+
 	private HudManager() {
 		this.entries = new LinkedHashMap<>();
 		client = MinecraftClient.getInstance();

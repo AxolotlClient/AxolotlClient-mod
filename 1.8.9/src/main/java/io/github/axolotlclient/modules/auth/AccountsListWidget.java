@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.modules.auth;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
 import net.fabricmc.api.EnvType;
@@ -29,9 +32,6 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.EntryListWidget;
 import net.minecraft.util.Identifier;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class AccountsListWidget extends EntryListWidget {
 

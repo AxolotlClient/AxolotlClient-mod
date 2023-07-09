@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.api.chat;
 
+import java.util.function.Predicate;
+
 import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.requests.ChannelRequest;
 import io.github.axolotlclient.api.types.Channel;
@@ -31,8 +33,6 @@ import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
-
-import java.util.function.Predicate;
 
 public class ChatListWidget extends AlwaysSelectedEntryListWidget<ChatListWidget.ChatListEntry> {
 

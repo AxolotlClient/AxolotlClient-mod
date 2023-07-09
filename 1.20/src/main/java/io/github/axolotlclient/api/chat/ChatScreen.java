@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.api.chat;
 
+import java.util.Arrays;
+
 import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.api.ContextMenu;
 import io.github.axolotlclient.api.ContextMenuContainer;
@@ -34,8 +36,6 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.text.CommonTexts;
 import net.minecraft.text.Text;
-
-import java.util.Arrays;
 
 public class ChatScreen extends Screen implements ContextMenuScreen {
 

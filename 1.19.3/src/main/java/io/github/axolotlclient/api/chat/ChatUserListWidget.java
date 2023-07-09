@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.api.chat;
 
+import java.util.List;
+import java.util.function.Consumer;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.ContextMenu;
@@ -42,9 +45,6 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
 
-import java.util.List;
-import java.util.function.Consumer;
-
 public class ChatUserListWidget extends AlwaysSelectedEntryListWidget<ChatUserListWidget.UserListEntry> {
 
 	private final ChatScreen screen;
@@ -60,7 +60,7 @@ public class ChatUserListWidget extends AlwaysSelectedEntryListWidget<ChatUserLi
 
 	@Override
 	public int getRowWidth() {
-		return width-5;
+		return width - 5;
 	}
 
 	public int addEntry(UserListEntry entry) {
@@ -69,7 +69,7 @@ public class ChatUserListWidget extends AlwaysSelectedEntryListWidget<ChatUserLi
 
 	@Override
 	protected int getScrollbarPositionX() {
-		return getRowLeft()+width-8;
+		return getRowLeft() + width - 8;
 	}
 
 	@Override
@@ -109,14 +109,14 @@ public class ChatUserListWidget extends AlwaysSelectedEntryListWidget<ChatUserLi
 
 		@Override
 		public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-			if(hovered && !screen.hasContextMenu()){
-				DrawableHelper.fill(matrices, x-2, y-1, x+entryWidth-3, y+ entryHeight +1, 0x55ffffff);
+			if (hovered && !screen.hasContextMenu()) {
+				DrawableHelper.fill(matrices, x - 2, y - 1, x + entryWidth - 3, y + entryHeight + 1, 0x55ffffff);
 			}
 			drawScrollableText(matrices, client.textRenderer, Text.of(user.getName()), x + 3 + entryHeight,
-				y + 1, x + entryWidth - 6, y+1+client.textRenderer.fontHeight+2, -1);
+				y + 1, x + entryWidth - 6, y + 1 + client.textRenderer.fontHeight + 2, -1);
 			client.textRenderer.draw(matrices, user.getStatus().getTitle(), x + 3 + entryHeight, y + 12, 8421504);
 			if (user.getStatus().isOnline()) {
-				client.textRenderer.draw(matrices, user.getStatus().getDescription(), x + 3 + entryHeight +7, y + 23, 8421504);
+				client.textRenderer.draw(matrices, user.getStatus().getDescription(), x + 3 + entryHeight + 7, y + 23, 8421504);
 			}
 
 			if (note != null) {
@@ -136,12 +136,12 @@ public class ChatUserListWidget extends AlwaysSelectedEntryListWidget<ChatUserLi
 			int k = right - left;
 			if (i > k) {
 				int l = i - k;
-				double d = (double)Util.getMeasuringTimeMs() / 1000.0;
-				double e = Math.max((double)l * 0.5, 3.0);
+				double d = (double) Util.getMeasuringTimeMs() / 1000.0;
+				double e = Math.max((double) l * 0.5, 3.0);
 				double f = Math.sin((Math.PI / 2) * Math.cos((Math.PI * 2) * d / e)) / 2.0 + 0.5;
 				double g = MathHelper.lerp(f, 0.0, l);
 				enableScissor(left, top, right, bottom);
-				drawTextWithShadow(matrices, textRenderer, text, left - (int)g, j, color);
+				drawTextWithShadow(matrices, textRenderer, text, left - (int) g, j, color);
 				disableScissor();
 			} else {
 				drawTextWithShadow(matrices, textRenderer, text, left, j, color);
@@ -151,15 +151,15 @@ public class ChatUserListWidget extends AlwaysSelectedEntryListWidget<ChatUserLi
 		@Override
 		public boolean mouseClicked(double mouseX, double mouseY, int button) {
 			ChatUserListWidget.this.setSelected(this);
-			if(button == 0) { // left click
+			if (button == 0) { // left click
 				if (Util.getMeasuringTimeMs() - this.time < 250L && client.world == null) { // left *double* click
 
 				}
 				this.time = Util.getMeasuringTimeMs();
-			} else if (button == 1){ // right click
+			} else if (button == 1) { // right click
 
 
-				if(!user.equals(API.getInstance().getSelf())) {
+				if (!user.equals(API.getInstance().getSelf())) {
 					ContextMenu.Builder menu = ContextMenu.builder()
 						.entry(Text.of(user.getName()), buttonWidget -> {
 						})

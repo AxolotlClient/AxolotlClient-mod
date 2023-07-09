@@ -91,11 +91,11 @@ public class DrawUtil extends DrawableHelper {
 		if (i > k) {
 			int l = i - k;
 			double d = (double) MinecraftClient.getTime() / 1000.0;
-			double e = Math.max((double)l * 0.5, 3.0);
+			double e = Math.max((double) l * 0.5, 3.0);
 			double f = Math.sin((Math.PI / 2) * Math.cos((Math.PI * 2) * d / e)) / 2.0 + 0.5;
 			double g = f * l;
 			enableScissor(left, top, right, bottom);
-			textRenderer.drawWithShadow(text, left - (int)g, j, color);
+			textRenderer.drawWithShadow(text, left - (int) g, j, color);
 			disableScissor();
 		} else {
 			drawCenteredString(textRenderer, text, (left + right) / 2, j, color, true);
@@ -107,15 +107,15 @@ public class DrawUtil extends DrawableHelper {
 		Window window = io.github.axolotlclient.util.Util.getWindow();
 		int i = MinecraftClient.getInstance().height;
 		double d = window.getScaleFactor();
-		double e = (double)x1 * d;
-		double f = (double)i - (double)y2 * d;
-		double g = (double)(x2 - x1) * d;
-		double h = (double)(y2 - y1) * d;
+		double e = (double) x1 * d;
+		double f = (double) i - (double) y2 * d;
+		double g = (double) (x2 - x1) * d;
+		double h = (double) (y2 - y1) * d;
 		GL11.glEnable(GL11.GL_SCISSOR_TEST);
 		GL11.glScissor((int) e, (int) f, Math.max(0, (int) g), Math.max(0, (int) h));
 	}
 
-	public static void disableScissor(){
+	public static void disableScissor() {
 		GL11.glDisable(GL11.GL_SCISSOR_TEST);
 		GlStateManager.popMatrix();
 	}

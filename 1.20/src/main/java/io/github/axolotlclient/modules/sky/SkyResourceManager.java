@@ -22,6 +22,11 @@
 
 package io.github.axolotlclient.modules.sky;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -32,11 +37,6 @@ import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.quiltmc.qsl.resource.loader.api.reloader.SimpleSynchronousResourceReloader;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * This implementation of custom skies is based on the FabricSkyBoxes mod by AMereBagatelle

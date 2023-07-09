@@ -22,6 +22,11 @@
 
 package io.github.axolotlclient.api;
 
+import java.time.Instant;
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
+
 import com.google.gson.JsonObject;
 import io.github.axolotlclient.api.requests.StatusUpdate;
 import io.github.axolotlclient.api.util.StatusUpdateProvider;
@@ -35,11 +40,6 @@ import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.level.LevelInfo;
-
-import java.time.Instant;
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class StatusUpdateProviderImpl implements StatusUpdateProvider {
 

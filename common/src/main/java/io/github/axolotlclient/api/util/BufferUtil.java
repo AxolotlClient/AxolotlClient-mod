@@ -22,11 +22,11 @@
 
 package io.github.axolotlclient.api.util;
 
+import java.nio.charset.StandardCharsets;
+
 import com.google.common.base.Strings;
 import io.netty.buffer.ByteBuf;
 import lombok.experimental.UtilityClass;
-
-import java.nio.charset.StandardCharsets;
 
 @UtilityClass
 public class BufferUtil {

@@ -22,6 +22,19 @@
 
 package io.github.axolotlclient.modules.screenshotUtils;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.function.Supplier;
+
 import com.google.common.hash.Hashing;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.texture.NativeImage;
@@ -40,19 +53,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.quiltmc.loader.api.QuiltLoader;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.net.URI;
-import java.nio.file.Files;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.function.Supplier;
 
 public class ImageViewerScreen extends Screen {
 

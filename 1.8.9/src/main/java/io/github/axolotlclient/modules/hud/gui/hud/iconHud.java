@@ -39,7 +39,9 @@ public class iconHud extends BoxHudEntry {
 	@Override
 	public Identifier getId() {
 		return ID;
-	}	@Override
+	}
+
+	@Override
 	public void renderComponent(float delta) {
 		GlStateManager.color(1, 1, 1, 1);
 		MinecraftClient.getInstance().getTextureManager().bindTexture(AxolotlClient.badgeIcon);
@@ -61,7 +63,6 @@ public class iconHud extends BoxHudEntry {
 	@Override
 	public void renderPlaceholderComponent(float delta) {
 	}
-
 
 
 	@Override

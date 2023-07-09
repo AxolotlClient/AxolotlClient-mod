@@ -22,6 +22,11 @@
 
 package io.github.axolotlclient.mixin;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hud.gui.hud.PackDisplayHud;
@@ -37,17 +42,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
-
 @Mixin(ReloadableResourceManager.class)
 public abstract class ReloadableResourceManagerMixin {
 
 	@Inject(method = "reload", at = @At("TAIL"))
 	private void axolotlclient$reload(Executor prepareExecutor, Executor applyExecutor, CompletableFuture<Unit> initialStage,
-									 List<ResourcePack> resourcePacks, CallbackInfoReturnable<ResourceReload> cir) {
+									  List<ResourcePack> resourcePacks, CallbackInfoReturnable<ResourceReload> cir) {
 		HypixelAbstractionLayer.clearPlayerData();
 
 		PackDisplayHud hud = (PackDisplayHud) HudManager.getInstance().get(PackDisplayHud.ID);

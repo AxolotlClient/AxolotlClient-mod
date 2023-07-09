@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.modules.hud;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.KeyBindOption;
@@ -39,9 +42,6 @@ import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.Identifier;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * This implementation of Hud modules is based on KronHUD.

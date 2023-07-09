@@ -22,6 +22,10 @@
 
 package io.github.axolotlclient.api;
 
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+
 import io.github.axolotlclient.api.chat.ChatWidget;
 import io.github.axolotlclient.api.handlers.ChatHandler;
 import io.github.axolotlclient.api.requests.ChannelRequest;
@@ -41,10 +45,6 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
-
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 public class FriendsSidebar extends Screen implements ContextMenuScreen {
 
@@ -182,8 +182,8 @@ public class FriendsSidebar extends Screen implements ContextMenuScreen {
 
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
-		if(contextMenu.getMenu() != null){
-			if(contextMenu.mouseClicked(mouseX, mouseY, button)){
+		if (contextMenu.getMenu() != null) {
+			if (contextMenu.mouseClicked(mouseX, mouseY, button)) {
 				return true;
 			}
 			contextMenu.removeMenu();

@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.api;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
 import net.minecraft.client.MinecraftClient;
@@ -37,9 +40,6 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ContextMenu implements ParentElement, Drawable {
 
@@ -68,7 +68,7 @@ public class ContextMenu implements ParentElement, Drawable {
 		return children;
 	}
 
-	public List<AbstractButtonWidget> entries(){
+	public List<AbstractButtonWidget> entries() {
 		return children;
 	}
 
@@ -95,7 +95,7 @@ public class ContextMenu implements ParentElement, Drawable {
 
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-		if(!rendering){
+		if (!rendering) {
 			y = mouseY;
 			x = mouseX;
 			rendering = true;
@@ -111,7 +111,7 @@ public class ContextMenu implements ParentElement, Drawable {
 			width = Math.max(width, d.getWidth());
 		}
 		DrawableHelper.fill(matrices, xStart, yStart, xStart + width + 1, y, 0xDD1E1F22);
-		DrawUtil.outlineRect(matrices, xStart, yStart, width+1, y - yStart + 1, -1);
+		DrawUtil.outlineRect(matrices, xStart, yStart, width + 1, y - yStart + 1, -1);
 		for (AbstractButtonWidget c : children) {
 			c.setWidth(width);
 			c.render(matrices, mouseX, mouseY, delta);
@@ -133,7 +133,7 @@ public class ContextMenu implements ParentElement, Drawable {
 			return this;
 		}
 
-		public Builder entry(AbstractButtonWidget widget){
+		public Builder entry(AbstractButtonWidget widget) {
 			elements.add(widget);
 			return this;
 		}
@@ -177,7 +177,7 @@ public class ContextMenu implements ParentElement, Drawable {
 		}
 
 		public ContextMenuEntryWidget(Text message, PressAction onPress) {
-			super(0, 0, MinecraftClient.getInstance().textRenderer.getWidth(message)+4, 11, message, onPress);
+			super(0, 0, MinecraftClient.getInstance().textRenderer.getWidth(message) + 4, 11, message, onPress);
 		}
 
 		@Override

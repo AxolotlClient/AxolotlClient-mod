@@ -22,6 +22,13 @@
 
 package io.github.axolotlclient.api;
 
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
+
 import io.github.axolotlclient.api.handlers.*;
 import io.github.axolotlclient.api.types.Status;
 import io.github.axolotlclient.api.types.User;
@@ -36,13 +43,6 @@ import io.github.axolotlclient.util.translation.TranslationProvider;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import lombok.Getter;
-
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class API {
 

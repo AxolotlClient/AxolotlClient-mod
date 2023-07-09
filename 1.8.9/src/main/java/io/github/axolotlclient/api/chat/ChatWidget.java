@@ -22,6 +22,14 @@
 
 package io.github.axolotlclient.api.chat;
 
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.api.ContextMenu;
 import io.github.axolotlclient.api.ContextMenuScreen;
@@ -39,14 +47,6 @@ import net.minecraft.client.gui.widget.EntryListWidget;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Style;
 
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
-
 public class ChatWidget extends EntryListWidget {
 
 	private final List<ChatMessage> messages = new ArrayList<>();
@@ -59,10 +59,10 @@ public class ChatWidget extends EntryListWidget {
 	private final ContextMenuScreen screen;
 
 	public ChatWidget(Channel channel, int x, int y, int width, int height, ContextMenuScreen screen) {
-		super(MinecraftClient.getInstance(), width, height, y, y+height, 13);
+		super(MinecraftClient.getInstance(), width, height, y, y + height, 13);
 		this.channel = channel;
 		this.client = MinecraftClient.getInstance();
-		setXPos(x+5);
+		setXPos(x + 5);
 
 		setHeader(false, 0);
 		this.screen = screen;
@@ -82,7 +82,7 @@ public class ChatWidget extends EntryListWidget {
 
 	@Override
 	protected int getScrollbarPosition() {
-		return x+width-5;
+		return x + width - 5;
 	}
 
 	@Override
@@ -113,7 +113,7 @@ public class ChatWidget extends EntryListWidget {
 
 		entries.sort(Comparator.comparingLong(c -> c.getOrigin().getTimestamp()));
 
-		if(scrollToBottom){
+		if (scrollToBottom) {
 			scroll(getMaxScroll());
 		}
 		messages.sort(Comparator.comparingLong(ChatMessage::getTimestamp));
@@ -131,8 +131,8 @@ public class ChatWidget extends EntryListWidget {
 
 	@Override
 	public void scroll(int i) {
-		this.scrollAmount += (float)i;
-		if(scrollAmount < 0){
+		this.scrollAmount += (float) i;
+		if (scrollAmount < 0) {
 			loadMessages();
 		}
 		this.capYPosition();
@@ -147,7 +147,7 @@ public class ChatWidget extends EntryListWidget {
 
 	@Override
 	protected void renderList(int i, int j, int k, int l) {
-		DrawUtil.enableScissor(x, y, x+width, y+height);
+		DrawUtil.enableScissor(x, y, x + width, y + height);
 		super.renderList(i, j, k, l);
 		DrawUtil.disableScissor();
 	}
@@ -182,12 +182,13 @@ public class ChatWidget extends EntryListWidget {
 
 		@Override
 		public boolean mouseClicked(int index, int mouseX, int mouseY, int button, int x, int y) {
-			if(button == 0){
+			if (button == 0) {
 				ChatWidget.this.selectedEntry = index;
 			}
-			if(button == 1){
+			if (button == 1) {
 				ContextMenu.Builder builder = ContextMenu.builder()
-					.entry(origin.getSender().getName(), buttonWidget -> {})
+					.entry(origin.getSender().getName(), buttonWidget -> {
+					})
 					.spacer()
 					.entry("api.friends.chat", buttonWidget -> {
 						Consumer<Channel> consumer = channel -> client.setScreen(new ChatScreen(screen.getParent(), channel));
@@ -213,28 +214,29 @@ public class ChatWidget extends EntryListWidget {
 
 		@Override
 		public void render(int index, int x, int y, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered) {
-			for(int i=0;i<entries.size();i++) {
+			for (int i = 0; i < entries.size(); i++) {
 				ChatLine l = entries.get(i);
-				if(l.getOrigin().equals(origin)) {
-					if(getEntryAt(mouseX, mouseY) == i) {
+				if (l.getOrigin().equals(origin)) {
+					if (getEntryAt(mouseX, mouseY) == i) {
 						hovered = true;
 						break;
 					}
 				}
 			}
-			if(hovered && !screen.hasContextMenu()){
-				fill(x-2-22, y-2, x+entryWidth+20, y+entryHeight-1, 0x33FFFFFF);
-				if(index < entries.size()-1 && entries.get(index+1).getOrigin().equals(origin)){
-					fill(x-2-22, y+entryHeight-1, x+entryWidth+20, y+entryHeight+2, 0x33FFFFFF);
+			if (hovered && !screen.hasContextMenu()) {
+				fill(x - 2 - 22, y - 2, x + entryWidth + 20, y + entryHeight - 1, 0x33FFFFFF);
+				if (index < entries.size() - 1 && entries.get(index + 1).getOrigin().equals(origin)) {
+					fill(x - 2 - 22, y + entryHeight - 1, x + entryWidth + 20, y + entryHeight + 2, 0x33FFFFFF);
 				}
-				if((index < entries.size()-1 && !entries.get(index+1).getOrigin().equals(origin)) || index == entries.size()-1){
-					fill(x-2-22, y+entryHeight-1, x+entryWidth+20, y+entryHeight, 0x33FFFFFF);
+				if ((index < entries.size() - 1 && !entries.get(index + 1).getOrigin().equals(origin)) || index == entries.size() - 1) {
+					fill(x - 2 - 22, y + entryHeight - 1, x + entryWidth + 20, y + entryHeight, 0x33FFFFFF);
 				}
 			}
 			renderExtras(x, y, mouseX, mouseY);
 			MinecraftClient.getInstance().textRenderer.draw(content, x, y, -1);
 		}
 	}
+
 	public class NameChatLine extends ChatLine {
 
 		public NameChatLine(ChatMessage message) {

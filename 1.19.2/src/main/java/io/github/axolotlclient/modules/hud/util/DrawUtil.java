@@ -97,11 +97,11 @@ public class DrawUtil extends DrawableHelper {
 		if (i > k) {
 			int l = i - k;
 			double d = (double) Util.getMeasuringTimeMs() / 1000.0;
-			double e = Math.max((double)l * 0.5, 3.0);
+			double e = Math.max((double) l * 0.5, 3.0);
 			double f = Math.sin((Math.PI / 2) * Math.cos((Math.PI * 2) * d / e)) / 2.0 + 0.5;
-			double g = MathHelper.lerp(f, 0.0, (double)l);
+			double g = MathHelper.lerp(f, 0.0, (double) l);
 			enableScissor(left, top, right, bottom);
-			drawTextWithShadow(matrices, textRenderer, text, left - (int)g, j, color);
+			drawTextWithShadow(matrices, textRenderer, text, left - (int) g, j, color);
 			disableScissor();
 		} else {
 			drawCenteredText(matrices, textRenderer, text, (left + right) / 2, j, color);

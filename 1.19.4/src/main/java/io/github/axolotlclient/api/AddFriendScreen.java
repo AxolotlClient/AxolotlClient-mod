@@ -28,10 +28,6 @@ import io.github.axolotlclient.api.handlers.FriendHandler;
 import io.github.axolotlclient.api.util.UUIDHelper;
 import io.github.axolotlclient.util.notifications.Notifications;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.ScreenTexts;
 import net.minecraft.text.Text;
 
 public class AddFriendScreen extends SimpleTextInputScreen {

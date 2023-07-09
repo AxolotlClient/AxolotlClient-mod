@@ -22,6 +22,10 @@
 
 package io.github.axolotlclient.api;
 
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+
 import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.api.chat.ChatWidget;
 import io.github.axolotlclient.api.handlers.ChatHandler;
@@ -39,10 +43,6 @@ import net.minecraft.text.CommonTexts;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.MathHelper;
-
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 public class FriendsSidebar extends Screen implements ContextMenuScreen {
 

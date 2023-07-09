@@ -22,15 +22,15 @@
 
 package io.github.axolotlclient.api.requests;
 
-import io.github.axolotlclient.api.API;
-import io.github.axolotlclient.api.Request;
-import io.github.axolotlclient.api.types.Status;
-import io.github.axolotlclient.api.util.BufferUtil;
-
 import java.time.Instant;
 import java.util.WeakHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
+
+import io.github.axolotlclient.api.API;
+import io.github.axolotlclient.api.Request;
+import io.github.axolotlclient.api.types.Status;
+import io.github.axolotlclient.api.util.BufferUtil;
 
 public class User {
 

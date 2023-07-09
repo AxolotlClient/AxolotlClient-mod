@@ -22,6 +22,13 @@
 
 package io.github.axolotlclient.modules.hypixel;
 
+import java.util.HashMap;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Supplier;
+
 import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.Request;
 import io.github.axolotlclient.api.util.BufferUtil;
@@ -30,18 +37,12 @@ import net.hypixel.api.HypixelAPI;
 import net.hypixel.api.apache.ApacheHttpClient;
 import net.hypixel.api.reply.PlayerReply;
 
-import java.util.HashMap;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Supplier;
-
 /**
  * Based on Osmium by Intro-Dev
  * (<a href="https://github.com/Intro-Dev/Osmium">Github</a>)
  *
  * <p>Original License: CC0-1.0</p>
+ *
  * @implNote Provides a layer between the hypixel api and the client to obtain information with minimal api calls
  */
 
@@ -86,14 +87,14 @@ public class HypixelAbstractionLayer {
 
 	public static void loadApiKey() {
 		AtomicReference<String> apiKey = new AtomicReference<>(keySupplier.get());
-		if(apiKey.get().isEmpty()){
+		if (apiKey.get().isEmpty()) {
 			API.getInstance().send(new Request(Request.Type.GET_HYPIXEL_API_KEY,
 				buf -> {
 					api = new HypixelAPI(new ApacheHttpClient(
 						UUID.fromString(
 							BufferUtil.getString(buf, 0x9, 36))));
 					validApiKey = true;
-			}));
+				}));
 		} else {
 			try {
 				api = new HypixelAPI(new ApacheHttpClient(UUID.fromString(apiKey.get())));
@@ -115,7 +116,7 @@ public class HypixelAbstractionLayer {
 		return true;
 	}
 
-	private static PlayerReply processRateLimit(PlayerReply reply){
+	private static PlayerReply processRateLimit(PlayerReply reply) {
 		rateLimitRemaining = reply.getRateLimit().getRemaining();
 		return reply;
 	}

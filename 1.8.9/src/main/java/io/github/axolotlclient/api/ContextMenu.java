@@ -22,6 +22,10 @@
 
 package io.github.axolotlclient.api;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
 import net.minecraft.client.MinecraftClient;
@@ -29,10 +33,6 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.resource.language.I18n;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class ContextMenu {
 
@@ -56,7 +56,7 @@ public class ContextMenu {
 	}
 
 	public void render(MinecraftClient client, int mouseX, int mouseY) {
-		if(!rendering){
+		if (!rendering) {
 			y = mouseY;
 			x = mouseX;
 			rendering = true;
@@ -73,7 +73,7 @@ public class ContextMenu {
 		}
 		height = y;
 		DrawableHelper.fill(xStart, yStart, xStart + width + 1, y, 0xDD1E1F22);
-		DrawUtil.outlineRect(xStart, yStart, width+1, y - yStart + 1, -1);
+		DrawUtil.outlineRect(xStart, yStart, width + 1, y - yStart + 1, -1);
 		for (ButtonWidget c : children) {
 			c.setWidth(width);
 			c.render(MinecraftClient.getInstance(), mouseX, mouseY);
@@ -84,7 +84,7 @@ public class ContextMenu {
 		List<ContextMenuEntryWidget> stream = children.stream().filter(b -> b instanceof ContextMenuEntryWidget)
 			.map(b -> (ContextMenuEntryWidget) b).filter(ButtonWidget::isHovered).collect(Collectors.toList());
 		boolean clicked = false;
-		for(ContextMenuEntryWidget c : stream){
+		for (ContextMenuEntryWidget c : stream) {
 			c.onPress(mouseX, mouseY, button);
 			clicked = true;
 		}
@@ -92,7 +92,7 @@ public class ContextMenu {
 	}
 
 	public boolean isMouseOver(double mouseX, double mouseY) {
-		return mouseX >= x && mouseX <= x+width && mouseY >= y && mouseY <= y+height;
+		return mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height;
 	}
 
 	public static class Builder {
@@ -108,7 +108,7 @@ public class ContextMenu {
 			return this;
 		}
 
-		public Builder entry(ButtonWidget widget){
+		public Builder entry(ButtonWidget widget) {
 			elements.add(widget);
 			return this;
 		}
@@ -143,7 +143,7 @@ public class ContextMenu {
 		private final MinecraftClient client = MinecraftClient.getInstance();
 
 		public ContextMenuEntryWidget(String message, PressAction onPress) {
-			super(0, 0, 0, MinecraftClient.getInstance().textRenderer.getStringWidth(message)+4, 11, message);
+			super(0, 0, 0, MinecraftClient.getInstance().textRenderer.getStringWidth(message) + 4, 11, message);
 			this.action = onPress;
 		}
 
@@ -166,9 +166,9 @@ public class ContextMenu {
 			DrawUtil.drawScrollableText(textRenderer, message, x, this.y, xEnd, this.y + height, color);
 		}
 
-		public void onPress(double mouseX, double mouseY, int button){
+		public void onPress(double mouseX, double mouseY, int button) {
 			playDownSound(client.getSoundManager());
-			if(isMouseOver(client, (int) mouseX, (int) mouseY) && button == 0) {
+			if (isMouseOver(client, (int) mouseX, (int) mouseY) && button == 0) {
 				action.onPress(this);
 			}
 		}

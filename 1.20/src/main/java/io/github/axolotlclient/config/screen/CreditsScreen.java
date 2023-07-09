@@ -22,6 +22,10 @@
 
 package io.github.axolotlclient.config.screen;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import com.mojang.blaze3d.glfw.Window;
 import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.AxolotlClient;
@@ -51,10 +55,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class CreditsScreen extends Screen {
 

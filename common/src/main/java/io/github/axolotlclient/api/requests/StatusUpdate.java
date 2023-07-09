@@ -22,17 +22,17 @@
 
 package io.github.axolotlclient.api.requests;
 
+import java.util.Arrays;
+import java.util.Map;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import io.github.axolotlclient.api.Request;
 import io.github.axolotlclient.api.util.BufferUtil;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import java.util.Arrays;
-import java.util.Map;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class StatusUpdate {
 

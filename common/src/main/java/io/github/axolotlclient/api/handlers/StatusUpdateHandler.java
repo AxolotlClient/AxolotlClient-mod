@@ -22,15 +22,15 @@
 
 package io.github.axolotlclient.api.handlers;
 
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
+
 import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.Request;
 import io.github.axolotlclient.api.requests.StatusUpdate;
 import io.github.axolotlclient.api.types.User;
 import io.github.axolotlclient.api.util.RequestHandler;
 import io.netty.buffer.ByteBuf;
-
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 public class StatusUpdateHandler implements RequestHandler {
 	@Override

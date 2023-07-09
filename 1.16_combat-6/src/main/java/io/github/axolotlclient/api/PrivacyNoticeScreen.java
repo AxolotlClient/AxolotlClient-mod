@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.api;
 
+import java.net.URI;
+import java.util.function.Consumer;
+
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.util.OSUtil;
 import net.minecraft.class_5489;
@@ -31,9 +34,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.math.MathHelper;
 
-import java.net.URI;
-import java.util.function.Consumer;
-
 public class PrivacyNoticeScreen extends Screen {
 
 	private static final URI PRIVACY_POLICY_URL = URI.create("https://axolotlclient.xyz/privacy");
@@ -41,6 +41,7 @@ public class PrivacyNoticeScreen extends Screen {
 	private final Screen parent;
 	private class_5489 message;
 	private final Consumer<Boolean> accepted;
+
 	protected PrivacyNoticeScreen(Screen parent, Consumer<Boolean> accepted) {
 		super(new TranslatableText("api.privacyNotice"));
 		this.parent = parent;
@@ -52,38 +53,38 @@ public class PrivacyNoticeScreen extends Screen {
 		renderBackground(matrices);
 		super.render(matrices, mouseX, mouseY, delta);
 		drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, getTitleY(), -1);
-		message.method_30888(matrices, width/2, getMessageY());
+		message.method_30888(matrices, width / 2, getMessageY());
 	}
 
 	@Override
 	public String getNarrationMessage() {
-		return super.getNarrationMessage()+". " + new TranslatableText("api.privacyNotice.description").getString();
+		return super.getNarrationMessage() + ". " + new TranslatableText("api.privacyNotice.description").getString();
 	}
 
 	@Override
 	protected void init() {
 
 		message = class_5489.method_30890(client.textRenderer,
-			new TranslatableText("api.privacyNotice.description"), width-50);
+			new TranslatableText("api.privacyNotice.description"), width - 50);
 		int y = MathHelper.clamp(this.getMessageY() + this.getMessagesHeight() + 20, this.height / 6 + 96, this.height - 24);
 		this.addButtons(y);
 	}
 
-	private void addButtons(int y){
-		addButton(new ButtonWidget(width/2-50, y, 100, 20,
+	private void addButtons(int y) {
+		addButton(new ButtonWidget(width / 2 - 50, y, 100, 20,
 			new TranslatableText("api.privacyNotice.accept"), buttonWidget -> {
 			client.openScreen(parent);
 			APIOptions.getInstance().privacyAccepted.set("accepted");
 			accepted.accept(true);
 		}));
-		addButton(new ButtonWidget(width/2 + 55, y, 100, 20,
+		addButton(new ButtonWidget(width / 2 + 55, y, 100, 20,
 			new TranslatableText("api.privacyNotice.deny"), buttonWidget -> {
 			client.openScreen(parent);
 			APIOptions.getInstance().enabled.set(false);
 			APIOptions.getInstance().privacyAccepted.set("denied");
 			accepted.accept(false);
 		}));
-		addButton(new ButtonWidget(width/2 - 155, y, 100, 20,
+		addButton(new ButtonWidget(width / 2 - 155, y, 100, 20,
 			new TranslatableText("api.privacyNotice.openPolicy"), buttonWidget -> {
 			OSUtil.getOS().open(PRIVACY_POLICY_URL, AxolotlClient.LOGGER);
 		}));

@@ -22,16 +22,16 @@
 
 package io.github.axolotlclient.api;
 
+import java.net.URI;
+import java.util.List;
+import java.util.function.Consumer;
+
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.util.OSUtil;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.util.math.MathHelper;
-
-import java.net.URI;
-import java.util.List;
-import java.util.function.Consumer;
 
 public class PrivacyNoticeScreen extends Screen {
 
@@ -40,6 +40,7 @@ public class PrivacyNoticeScreen extends Screen {
 	private final Screen parent;
 	private List<String> message;
 	private final Consumer<Boolean> accepted;
+
 	protected PrivacyNoticeScreen(Screen parent, Consumer<Boolean> accepted) {
 		super();
 		this.parent = parent;
@@ -52,7 +53,7 @@ public class PrivacyNoticeScreen extends Screen {
 		drawCenteredString(this.textRenderer, I18n.translate("api.privacyNotice"), this.width / 2, getTitleY(), -1);
 		int k = 90;
 
-		for(String string : this.message) {
+		for (String string : this.message) {
 			this.drawCenteredString(this.textRenderer, string, this.width / 2, k, 16777215);
 			k += this.textRenderer.fontHeight;
 		}
@@ -63,23 +64,23 @@ public class PrivacyNoticeScreen extends Screen {
 	public void init() {
 
 		message = client.textRenderer.wrapLines(
-			I18n.translate("api.privacyNotice.description"), width-50);
+			I18n.translate("api.privacyNotice.description"), width - 50);
 		int y = MathHelper.clamp(this.getMessageY() + this.getMessagesHeight() + 20, this.height / 6 + 96, this.height - 24);
 		this.addButtons(y);
 	}
 
-	private void addButtons(int y){
-		buttons.add(new ButtonWidget(1, width/2-50, y, 100, 20,
+	private void addButtons(int y) {
+		buttons.add(new ButtonWidget(1, width / 2 - 50, y, 100, 20,
 			I18n.translate("api.privacyNotice.accept")));
-		buttons.add(new ButtonWidget(0, width/2 + 55, y, 100, 20,
+		buttons.add(new ButtonWidget(0, width / 2 + 55, y, 100, 20,
 			I18n.translate("api.privacyNotice.deny")));
-		buttons.add(new ButtonWidget(2, width/2 - 155, y, 100, 20,
+		buttons.add(new ButtonWidget(2, width / 2 - 155, y, 100, 20,
 			I18n.translate("api.privacyNotice.openPolicy")));
 	}
 
 	@Override
 	protected void buttonClicked(ButtonWidget buttonWidget) {
-		if(buttonWidget.id == 0){
+		if (buttonWidget.id == 0) {
 			client.setScreen(parent);
 			APIOptions.getInstance().enabled.set(false);
 			APIOptions.getInstance().privacyAccepted.set("denied");

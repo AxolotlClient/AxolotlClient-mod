@@ -22,14 +22,14 @@
 
 package io.github.axolotlclient.api.handlers;
 
+import java.nio.charset.StandardCharsets;
+
 import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.APIError;
 import io.github.axolotlclient.api.Request;
 import io.github.axolotlclient.api.util.RequestHandler;
 import io.github.axolotlclient.api.util.UUIDHelper;
 import io.netty.buffer.ByteBuf;
-
-import java.nio.charset.StandardCharsets;
 
 public class FriendRequestHandler implements RequestHandler {
 

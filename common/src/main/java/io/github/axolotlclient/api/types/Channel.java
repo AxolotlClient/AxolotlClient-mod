@@ -22,11 +22,11 @@
 
 package io.github.axolotlclient.api.types;
 
+import java.util.Arrays;
+
 import io.github.axolotlclient.api.API;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import java.util.Arrays;
 
 @RequiredArgsConstructor
 @Getter

@@ -22,6 +22,10 @@
 
 package io.github.axolotlclient.api.chat;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
 import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.requests.ChannelRequest;
 import io.github.axolotlclient.api.types.Channel;
@@ -30,10 +34,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.EntryListWidget;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Predicate;
 
 public class ChatListWidget extends EntryListWidget {
 
@@ -73,7 +73,7 @@ public class ChatListWidget extends EntryListWidget {
 
 	@Override
 	protected void renderList(int x, int y, int mouseX, int mouseY) {
-		DrawUtil.enableScissor(x, this.yStart, x+this.width, y+height);
+		DrawUtil.enableScissor(x, this.yStart, x + this.width, y + height);
 		super.renderList(x, y, mouseX, mouseY);
 		DrawUtil.disableScissor();
 	}
@@ -82,7 +82,8 @@ public class ChatListWidget extends EntryListWidget {
 
 		private final Channel channel;
 		private final ButtonWidget widget;
-		public ChatListEntry(Channel channel){
+
+		public ChatListEntry(Channel channel) {
 			this.channel = channel;
 			widget = new ButtonWidget(0, 0, 0, getRowWidth(), 20, channel.getName());
 		}
@@ -101,7 +102,7 @@ public class ChatListWidget extends EntryListWidget {
 
 		@Override
 		public boolean mouseClicked(int i, int j, int k, int l, int m, int n) {
-			if(widget.isHovered()){
+			if (widget.isHovered()) {
 				client.setScreen(new ChatScreen(client.currentScreen, channel));
 			}
 			return false;

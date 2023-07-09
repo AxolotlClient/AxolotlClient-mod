@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.texture.NativeImage;
 import io.github.axolotlclient.AxolotlClient;
@@ -36,9 +39,6 @@ import io.github.axolotlclient.mixin.OverlayTextureAccessor;
 import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.texture.NativeImageBackedTexture;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class AxolotlClientConfig extends ConfigHolder {
 
