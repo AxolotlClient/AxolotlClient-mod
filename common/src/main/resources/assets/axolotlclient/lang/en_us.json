@@ -384,5 +384,20 @@
 	"bedwars.tabRenderLatencyIcon": "Render Tablist Latency Icon",
 	"bedwars.showChatTime": "Show Chat Time",
 	"bedwars.overrideMessages": "Override Messages",
-	"bedwars_teamupgrades": "Team Upgrades HUD"
+	"bedwars_teamupgrades": "Team Upgrades HUD",
+	"bedwars.bedwarsLevelHeadMode": "LevelHead Mode",
+	"FINAL_KILLS": "Final Kills (Total)",
+	"FINAL_DEATHS": "Final Deaths (Total)",
+	"BEDS_BROKEN": "Beds Broken (Totak)",
+	"GAME_KILLS_GAME_DEATHS": "Kills (Game)/Deaths (Game)",
+	"KILLS": "Kills (Total)",
+	"DEATHS": "Deaths (Total)",
+	"GAME_FINAL_KILLS": "Final Kills (Game)",
+	"GAME_BEDS_BROKEN": "Beds Broken (Game)",
+	"GAME_DEATHS": "Deaths (Game)",
+	"GAME_KILLS": "Kills (Game)",
+	"LOSSES": "Losses",
+	"WINS": "Wins",
+	"WINSTREAK": "Winstreak",
+	"STARS": "Stars"
 }

@@ -127,3 +127,8 @@
 - update to 1.20
 - update Chinese translations (HowardZHY)
 - fix a reach hud bug on 1.8.9
+
+### 3.0.4
+
+- add DarkKronicle's Bedwars Overlay
+- fix the controls screen crashing in 1.8.9

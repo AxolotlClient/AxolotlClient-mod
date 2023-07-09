@@ -23,6 +23,7 @@
 package io.github.axolotlclient.modules.hypixel.bedwars;
 
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.EnumOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.hypixel.AbstractHypixelMod;
 import io.github.axolotlclient.util.events.Events;
@@ -71,6 +72,10 @@ public class BedwarsMod implements AbstractHypixelMod {
 	public final BooleanOption displayArmor = new BooleanOption(getTranslationKey("displayArmor"), true);
 
 	public final BooleanOption bedwarsLevelHead = new BooleanOption(getTranslationKey("bedwarsLevelHead"), true);
+	public final EnumOption bedwarsLevelHeadMode = new EnumOption(getTranslationKey("bedwarsLevelHeadMode"),
+		BedwarsLevelHeadMode.values(),
+		BedwarsLevelHeadMode.GAME_KILLS_GAME_DEATHS.toString());
+
 
 	protected BedwarsGame currentGame = null;
 
@@ -99,8 +104,8 @@ public class BedwarsMod implements AbstractHypixelMod {
 
 	@Override
 	public void init() {
-		category.add(enabled, hardcoreHearts, showHunger, displayArmor, bedwarsLevelHead, removeAnnoyingMessages,
-			tabRenderLatencyIcon, showChatTime, overrideMessages);
+		category.add(enabled, hardcoreHearts, showHunger, displayArmor, bedwarsLevelHead, bedwarsLevelHeadMode,
+			removeAnnoyingMessages, tabRenderLatencyIcon, showChatTime, overrideMessages);
 		category.add(upgradesOverlay.getAllOptions());
 
 		instance = this;

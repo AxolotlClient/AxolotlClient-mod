@@ -416,7 +416,8 @@ public class BedwarsGame {
 		if (stats == null) {
 			return null;
 		}
-		return "§7Kills: §f" + stats.getGameKills() + " §7Deaths: §f" + stats.getGameDeaths();
+		BedwarsLevelHeadMode mode = BedwarsLevelHeadMode.get(mod.bedwarsLevelHeadMode.get());
+		return mode.apply(stats);
 	}
 
 }

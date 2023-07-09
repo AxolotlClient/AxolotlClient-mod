@@ -411,15 +411,16 @@ public class BedwarsGame {
     }
 
     public String getLevelHead(AbstractClientPlayerEntity entity) {
-        BedwarsPlayer player = getPlayer(entity.getUuid()).orElse(null);
-        if (player == null) {
-            return null;
-        }
-        BedwarsPlayerStats stats = player.getStats();
-        if (stats == null) {
-            return null;
-        }
-        return "§7Kills: §f" + stats.getGameKills() + " §7Deaths: §f" + stats.getGameDeaths();
-    }
+		BedwarsPlayer player = getPlayer(entity.getUuid()).orElse(null);
+		if (player == null) {
+			return null;
+		}
+		BedwarsPlayerStats stats = player.getStats();
+		if (stats == null) {
+			return null;
+		}
+		BedwarsLevelHeadMode mode = BedwarsLevelHeadMode.get(mod.bedwarsLevelHeadMode.get());
+		return mode.apply(stats);
+	}
 
 }
