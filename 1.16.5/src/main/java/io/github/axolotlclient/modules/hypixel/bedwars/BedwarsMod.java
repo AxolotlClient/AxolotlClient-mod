@@ -108,6 +108,7 @@ public class BedwarsMod implements AbstractHypixelMod {
 		category.add(enabled, hardcoreHearts, showHunger, displayArmor, bedwarsLevelHead, bedwarsLevelHeadMode,
 			removeAnnoyingMessages, tabRenderLatencyIcon, showChatTime, overrideMessages);
 		category.add(upgradesOverlay.getAllOptions());
+		category.add(BedwarsDeathType.getOptions());
 
 		instance = this;
 

@@ -205,7 +205,7 @@ public class BedwarsGame {
 	}
 
 	private String formatDeath(BedwarsPlayer player, @Nullable BedwarsPlayer killer, BedwarsDeathType type, boolean finalDeath) {
-		String inner = type.getInner();
+		String inner = type.getInner().get();
 		if (finalDeath) {
 			inner = "§6§l/" + inner.toUpperCase(Locale.ROOT) + "/";
 		} else {

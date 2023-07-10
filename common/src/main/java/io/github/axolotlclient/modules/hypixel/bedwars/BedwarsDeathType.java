@@ -22,9 +22,12 @@
 
 package io.github.axolotlclient.modules.hypixel.bedwars;
 
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
+import io.github.axolotlclient.AxolotlClientConfig.options.StringOption;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -34,17 +37,17 @@ import lombok.Getter;
 
 @AllArgsConstructor
 public enum BedwarsDeathType {
-	COMBAT("rekt", BedwarsMessages.COMBAT_KILL),
-	VOID("yeeted into void", BedwarsMessages.VOID_KILL),
-	PROJECTILE("shot", BedwarsMessages.PROJECTILE_KILL),
-	FALL("fall", BedwarsMessages.FALL_KILL),
-	GOLEM("golem moment", BedwarsMessages.GOLEM_KILL),
-	SELF_VOID("voided", new Pattern[]{BedwarsMessages.SELF_VOID}),
-	SELF_UNKNOWN("died", new Pattern[]{BedwarsMessages.SELF_UNKNOWN}),
+	COMBAT(createOption("combat", "rekt"), BedwarsMessages.COMBAT_KILL),
+	VOID(createOption("void","yeeted into void"), BedwarsMessages.VOID_KILL),
+	PROJECTILE(createOption("projectile","shot"), BedwarsMessages.PROJECTILE_KILL),
+	FALL(createOption("fall","fall"), BedwarsMessages.FALL_KILL),
+	GOLEM(createOption("golem","golem moment"), BedwarsMessages.GOLEM_KILL),
+	SELF_VOID(createOption("self_void","voided"), new Pattern[]{BedwarsMessages.SELF_VOID}),
+	SELF_UNKNOWN(createOption("self_unknown","died"), new Pattern[]{BedwarsMessages.SELF_UNKNOWN}),
 	;
 
 	@Getter
-	private final String inner;
+	private final StringOption inner;
 
 	@Getter
 	private final Pattern[] patterns;
@@ -62,5 +65,16 @@ public enum BedwarsDeathType {
 
 		void onMatch(BedwarsDeathType type, Matcher matcher);
 
+	}
+
+	private static StringOption createOption(String type, String def){
+		return new StringOption("bedwars.deathType."+type, def);
+	}
+
+	@Getter
+	private static final OptionCategory options = new OptionCategory("bedwars.deathType");
+
+	static {
+		Arrays.stream(values()).map(BedwarsDeathType::getInner).forEach(options::add);
 	}
 }

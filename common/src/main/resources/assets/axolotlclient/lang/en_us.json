@@ -401,5 +401,13 @@
 	"WINSTREAK": "Winstreak",
 	"STARS": "Stars",
 	"FKDR": "Final Kill/Lose Ratio",
-	"BBLR": "Bed Break/Lose Ratio"
+	"BBLR": "Bed Break/Lose Ratio",
+	"bedwars.deathType": "Death Messages",
+	"bedwars.deathType.combat": "Combat",
+	"bedwars.deathType.void": "Void",
+	"bedwars.deathType.projectile": "Projectiles",
+	"bedwars.deathType.fall": "Fall",
+	"bedwars.deathType.golem": "Golems",
+	"bedwars.deathType.self_void": "Void (Self)",
+	"bedwars.deathType.self_unknown": "Unknown (Self)"
 }
