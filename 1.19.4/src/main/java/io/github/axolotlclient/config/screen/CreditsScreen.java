@@ -162,11 +162,12 @@ public class CreditsScreen extends Screen {
 		credits.add(new Credit("YakisikliBaran", "Turkish Translation"));
 		credits.add(new Credit("TheKodeToad", "Contributor", "Motion Blur", "Freelook", "Zoom"));
 		credits.add(new Credit("DragonEggBedrockBreaking", "Bugfixing", "Inspiration of new Features"));
+		credits.add(new Credit("DarkKronicle", "Bedwars Overlay", "Author of KronHUD, the best HUD mod!"));
 
 		credits.add(new SpacerTitle("- - - - - - " + I18n.translate("other_people") + " - - - - - -"));
 
+		credits.add(new Credit("Sybillian", "Bedwars Overlay Texture author", "https://github.com/sybillian"));
 		credits.add(new Credit("gart", "gartbin dev and host", "Image sharing help", "https://gart.sh"));
-		credits.add(new Credit("DarkKronicle", "Author of KronHUD, the best HUD mod!"));
 		credits.add(new Credit("AMereBagatelle", "Author of the excellent FabricSkyBoxes Mod"));
 
 		if (!externalModuleCredits.isEmpty()) {
