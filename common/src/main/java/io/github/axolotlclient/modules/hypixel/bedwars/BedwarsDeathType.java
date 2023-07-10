@@ -43,7 +43,7 @@ public enum BedwarsDeathType {
 	FALL(createOption("fall","fall"), BedwarsMessages.FALL_KILL),
 	GOLEM(createOption("golem","golem moment"), BedwarsMessages.GOLEM_KILL),
 	SELF_VOID(createOption("self_void","voided"), new Pattern[]{BedwarsMessages.SELF_VOID}),
-	SELF_UNKNOWN(createOption("self_unknown","died"), new Pattern[]{BedwarsMessages.SELF_UNKNOWN}),
+	SELF_UNKNOWN(createOption("self_unknown","died"), new Pattern[]{BedwarsMessages.SELF_UNKNOWN})
 	;
 
 	@Getter

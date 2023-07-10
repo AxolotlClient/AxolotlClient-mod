@@ -271,14 +271,7 @@ public class CreditsScreen extends Screen {
 		public void render(GuiGraphics graphics, int index, int y, int x, int entryWidth, int entryHeight, int mouseX,
 						   int mouseY, boolean hovered, float tickDelta) {
 			if (hovered || c.isFocused()) {
-				RenderUtil.drawVerticalLine(graphics, x - 100, y, y + 20,
-					Color.ERROR.getAsInt());
-				RenderUtil.drawVerticalLine(graphics, x + 100, y, y + 20,
-					Color.ERROR.getAsInt());
-				RenderUtil.drawHorizontalLine(graphics, x - 100, y + 20, x + 100,
-					Color.ERROR.getAsInt());
-				RenderUtil.drawHorizontalLine(graphics, x - 100, y, x + 100,
-					Color.ERROR.getAsInt());
+				RenderUtil.drawOutline(graphics, x-100, y, 200, 20, Color.ERROR.getAsInt());
 			}
 			this.hovered = hovered;
 			DrawUtil.drawCenteredString(graphics, MinecraftClient.getInstance().textRenderer, name, x, y + 5,

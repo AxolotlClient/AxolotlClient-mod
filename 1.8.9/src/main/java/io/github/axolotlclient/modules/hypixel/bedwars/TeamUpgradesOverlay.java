@@ -22,7 +22,11 @@
 
 package io.github.axolotlclient.modules.hypixel.bedwars;
 
+import java.util.List;
+
 import com.mojang.blaze3d.platform.GlStateManager;
+import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
+import io.github.axolotlclient.AxolotlClientConfig.options.Option;
 import io.github.axolotlclient.modules.hud.gui.entry.BoxHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hypixel.bedwars.upgrades.BedwarsTeamUpgrades;
@@ -39,6 +43,7 @@ import net.minecraft.util.Identifier;
 public class TeamUpgradesOverlay extends BoxHudEntry {
 
 	public final static Identifier ID = new Identifier("axolotlclient", "bedwars_teamupgrades");
+	private final BooleanOption renderWhenRelevant = new BooleanOption(ID.getPath()+".renderWhenRelevant", true);
 
 	private BedwarsTeamUpgrades upgrades = null;
 	private final BedwarsMod mod;
@@ -57,6 +62,13 @@ public class TeamUpgradesOverlay extends BoxHudEntry {
 
 	public void onEnd() {
 		upgrades = null;
+	}
+
+	@Override
+	public void render(float delta) {
+		if (!renderWhenRelevant.get() || mod.inGame()) {
+			super.render(delta);
+		}
 	}
 
 	public void drawOverlay(DrawPosition position, boolean editMode) {
@@ -99,11 +111,7 @@ public class TeamUpgradesOverlay extends BoxHudEntry {
 
 	@Override
 	public void renderComponent(float delta) {
-		if (mod.isWaiting()) {
-
-		} else {
-			drawOverlay(getPos(), false);
-		}
+		drawOverlay(getPos(), false);
 	}
 
 	@Override
@@ -114,5 +122,12 @@ public class TeamUpgradesOverlay extends BoxHudEntry {
 	@Override
 	public Identifier getId() {
 		return ID;
+	}
+
+	@Override
+	public List<Option<?>> getConfigurationOptions() {
+		List<Option<?>> options = super.getConfigurationOptions();
+		options.add(renderWhenRelevant);
+		return options;
 	}
 }
