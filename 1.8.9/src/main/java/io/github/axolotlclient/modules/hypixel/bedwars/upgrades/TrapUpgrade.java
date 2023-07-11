@@ -28,6 +28,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.modules.hypixel.bedwars.BedwarsMode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -85,14 +86,14 @@ public class TrapUpgrade extends TeamUpgrade {
 	}
 
 	@Override
-	public String[] getTexture() {
+	public TextureInfo[] getTexture() {
 		if (traps.size() == 0) {
-			return new String[]{"trap/empty"};
+			return new TextureInfo[]{new TextureInfo("textures/items/barrier.png", Color.DARK_GRAY)};
 		}
-		String[] trapTextures = new String[traps.size()];
+		TextureInfo[] trapTextures = new TextureInfo[traps.size()];
 		for (int i = 0; i < traps.size(); i++) {
 			TrapType type = traps.get(i);
-			trapTextures[i] = "trap/" + type.getTextureName();
+			trapTextures[i] = type.getTexInfo();
 		}
 		return trapTextures;
 	}
@@ -104,13 +105,13 @@ public class TrapUpgrade extends TeamUpgrade {
 
 	@AllArgsConstructor
 	public enum TrapType {
-		ITS_A_TRAP("itsatrap"),
-		COUNTER_OFFENSIVE("counteroffensive"),
-		ALARM("alarm"),
-		MINER_FATIGUE("minerfatigue");
+		ITS_A_TRAP(new TextureInfo("textures/gui/container/inventory.png", 5*18, 198 + 18, 256, 256,18, 18)),
+		COUNTER_OFFENSIVE(new TextureInfo("textures/gui/container/inventory.png", 0, 198, 256, 256, 18, 18)),
+		ALARM(new TextureInfo("textures/items/ender_eye.png")),
+		MINER_FATIGUE(new TextureInfo("textures/gui/container/inventory.png", 3 * 18, 198, 256, 256, 18, 18));
 
 		@Getter
-		private final String textureName;
+		private final TextureInfo texInfo;
 
 		public static TrapType getFuzzy(String s) {
 			s = s.toLowerCase(Locale.ROOT);

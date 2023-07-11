@@ -39,15 +39,18 @@ public class TieredUpgrade extends TeamUpgrade {
 	@Getter
 	private int level = 0;
 
-	public TieredUpgrade(String name, Pattern regex, int[] foursPrice, int[] doublesPrice) {
+	private final TextureInfo[] textures;
+
+	public TieredUpgrade(String name, Pattern regex, int[] foursPrice, int[] doublesPrice, TextureInfo[] textures) {
 		super(name, regex);
 		this.foursPrice = foursPrice;
 		this.doublesPrice = doublesPrice;
+		this.textures = textures;
 	}
 
 	@Override
-	public String[] getTexture() {
-		return new String[]{name + "_" + level};
+	public TextureInfo[] getTexture() {
+		return new TextureInfo[]{textures[level]};
 	}
 
 	@Override

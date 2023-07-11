@@ -24,13 +24,14 @@ package io.github.axolotlclient.modules.hypixel.bedwars;
 
 import java.util.List;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.Option;
 import io.github.axolotlclient.modules.hud.gui.entry.BoxHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hypixel.bedwars.upgrades.BedwarsTeamUpgrades;
 import io.github.axolotlclient.modules.hypixel.bedwars.upgrades.TeamUpgrade;
+import io.github.axolotlclient.modules.hypixel.bedwars.upgrades.TextureInfo;
 import io.github.axolotlclient.modules.hypixel.bedwars.upgrades.TrapUpgrade;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
@@ -50,7 +51,7 @@ public class TeamUpgradesOverlay extends BoxHudEntry {
 	private BedwarsTeamUpgrades upgrades = null;
 	private final BedwarsMod mod;
 	private final MinecraftClient mc;
-	private final static String[] trapEdit = {"trap/minerfatigue", "trap/itsatrap"};
+	private final static TextureInfo[] trapEdit = {TrapUpgrade.TrapType.MINER_FATIGUE.getTexInfo(), TrapUpgrade.TrapType.ITS_A_TRAP.getTexInfo()};
 
 	public TeamUpgradesOverlay(BedwarsMod mod) {
 		super(60, 40, true);
@@ -80,9 +81,9 @@ public class TeamUpgradesOverlay extends BoxHudEntry {
 
 		int x = position.x() + 1;
 		int y = position.y() + 2;
-		GlStateManager.enableAlphaTest();
-		GlStateManager.enableBlend();
-		GlStateManager.color4f(1, 1, 1, 1);
+		RenderSystem.enableAlphaTest();
+		RenderSystem.enableBlend();
+		RenderSystem.color4f(1, 1, 1, 1);
 		boolean normalUpgrades = false;
 		if (upgrades != null) {
 			for (TeamUpgrade u : upgrades.upgrades) {
@@ -92,10 +93,12 @@ public class TeamUpgradesOverlay extends BoxHudEntry {
 				if (u instanceof TrapUpgrade) {
 					continue;
 				}
-				String texture;
+				TextureInfo texture;
 				texture = u.getTexture()[0];
-				mc.getTextureManager().bindTexture(new Identifier("axolotlclient", "textures/bedwars/" + texture + ".png"));
-				DrawableHelper.drawTexture(stack, x, y, 0, 0, 16, 16, 16, 16);
+				RenderSystem.color4f(texture.getColor().getAlpha(), texture.getColor().getRed(), texture.getColor().getBlue(), texture.getColor().getGreen());
+				mc.getTextureManager().bindTexture(new Identifier("minecraft", texture.getTexture()));
+				DrawableHelper.drawTexture(stack, x, y, 16, 16, texture.getU(), texture.getV(), texture.getRegionWidth(), texture.getRegionHeight(), texture.getWidth(), texture.getHeight());
+				RenderSystem.color4f(1, 1, 1, 1);
 				x += 17;
 				normalUpgrades = true;
 			}
@@ -104,9 +107,11 @@ public class TeamUpgradesOverlay extends BoxHudEntry {
 		if (normalUpgrades) {
 			y += 17;
 		}
-		for (String texture : (editMode ? trapEdit : upgrades.trap.getTexture())) {
-			mc.getTextureManager().bindTexture(new Identifier("axolotlclient", "textures/bedwars/" + texture + ".png"));
-			DrawableHelper.drawTexture(stack, x, y, 0, 0, 16, 16, 16, 16);
+		for (TextureInfo texture : (editMode ? trapEdit : upgrades.trap.getTexture())) {
+			RenderSystem.color4f(texture.getColor().getAlpha(), texture.getColor().getRed(), texture.getColor().getBlue(), texture.getColor().getGreen());
+			mc.getTextureManager().bindTexture(new Identifier("minecraft", texture.getTexture()));
+			DrawableHelper.drawTexture(stack, x, y, 16, 16, texture.getU(), texture.getV(), texture.getRegionWidth(), texture.getRegionHeight(), texture.getWidth(), texture.getHeight());
+			RenderSystem.color4f(1, 1, 1, 1);
 			x += 17;
 		}
 	}

@@ -38,10 +38,14 @@ public class BinaryUpgrade extends TeamUpgrade {
 	private final int foursPrice;
 	private final int doublesPrice;
 
-	public BinaryUpgrade(String name, Pattern regex, int foursPrice, int doublesPrice) {
+	private final TextureInfo inactiveTexture, activeTexture;
+
+	public BinaryUpgrade(String name, Pattern regex, int foursPrice, int doublesPrice, TextureInfo inactiveTexture, TextureInfo activeTexture) {
 		super(name, regex);
 		this.foursPrice = foursPrice;
 		this.doublesPrice = doublesPrice;
+		this.inactiveTexture = inactiveTexture;
+		this.activeTexture = activeTexture;
 	}
 
 	@Override
@@ -50,8 +54,8 @@ public class BinaryUpgrade extends TeamUpgrade {
 	}
 
 	@Override
-	public String[] getTexture() {
-		return new String[]{name + "_" + (purchased ? "1" : "0")};
+	public TextureInfo[] getTexture() {
+		return new TextureInfo[]{(purchased ? activeTexture : inactiveTexture)};
 	}
 
 	@Override

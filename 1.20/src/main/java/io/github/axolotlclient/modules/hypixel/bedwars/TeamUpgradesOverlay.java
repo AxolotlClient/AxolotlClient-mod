@@ -31,6 +31,7 @@ import io.github.axolotlclient.modules.hud.gui.entry.BoxHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hypixel.bedwars.upgrades.BedwarsTeamUpgrades;
 import io.github.axolotlclient.modules.hypixel.bedwars.upgrades.TeamUpgrade;
+import io.github.axolotlclient.modules.hypixel.bedwars.upgrades.TextureInfo;
 import io.github.axolotlclient.modules.hypixel.bedwars.upgrades.TrapUpgrade;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.GuiGraphics;
@@ -49,7 +50,7 @@ public class TeamUpgradesOverlay extends BoxHudEntry {
 	private BedwarsTeamUpgrades upgrades = null;
 	private final BedwarsMod mod;
 	private final MinecraftClient mc;
-	private final static String[] trapEdit = {"trap/minerfatigue", "trap/itsatrap"};
+	private final static TextureInfo[] trapEdit = {TrapUpgrade.TrapType.MINER_FATIGUE.getTexInfo(), TrapUpgrade.TrapType.ITS_A_TRAP.getTexInfo()};
 
 	public TeamUpgradesOverlay(BedwarsMod mod) {
 		super(60, 40, true);
@@ -90,9 +91,11 @@ public class TeamUpgradesOverlay extends BoxHudEntry {
 				if (u instanceof TrapUpgrade) {
 					continue;
 				}
-				String texture;
+				TextureInfo texture;
 				texture = u.getTexture()[0];
-				graphics.drawTexture(new Identifier("axolotlclient", "textures/bedwars/" + texture + ".png"), x, y, 0, 0, 16, 16, 16, 16);
+				RenderSystem.setShaderColor(texture.getColor().getAlpha()/255F, texture.getColor().getRed()/255F, texture.getColor().getBlue()/255F, texture.getColor().getGreen()/255F);
+				graphics.drawTexture(new Identifier("minecraft", texture.getTexture()), x, y, 16, 16, texture.getU(), texture.getV(), texture.getWidth(), texture.getHeight(), texture.getRegionWidth(), texture.getRegionHeight());
+				RenderSystem.setShaderColor(1, 1, 1, 1);
 				x += 17;
 				normalUpgrades = true;
 			}
@@ -101,8 +104,10 @@ public class TeamUpgradesOverlay extends BoxHudEntry {
 		if (normalUpgrades) {
 			y += 17;
 		}
-		for (String texture : (editMode ? trapEdit : upgrades.trap.getTexture())) {
-			graphics.drawTexture(new Identifier("axolotlclient", "textures/bedwars/" + texture + ".png"), x, y, 0, 0, 16, 16, 16, 16);
+		for (TextureInfo texture : (editMode ? trapEdit : upgrades.trap.getTexture())) {
+			RenderSystem.setShaderColor(texture.getColor().getAlpha()/255F, texture.getColor().getRed()/255F, texture.getColor().getBlue()/255F, texture.getColor().getGreen()/255F);
+			graphics.drawTexture(new Identifier("minecraft", texture.getTexture()), x, y, 16, 16, texture.getU(), texture.getV(), texture.getWidth(), texture.getHeight(), texture.getRegionWidth(), texture.getRegionHeight());
+			RenderSystem.setShaderColor(1, 1, 1, 1);
 			x += 17;
 		}
 	}

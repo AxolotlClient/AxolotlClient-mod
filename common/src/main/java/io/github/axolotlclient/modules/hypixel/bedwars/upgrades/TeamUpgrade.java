@@ -52,7 +52,7 @@ public abstract class TeamUpgrade {
 		return BedwarsMessages.matched(regex, unformatedMessage, matcher -> onMatch(this, matcher));
 	}
 
-	public abstract String[] getTexture();
+	public abstract TextureInfo[] getTexture();
 
 	public boolean isMultiUpgrade() {
 		// Basically only trap
