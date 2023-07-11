@@ -294,11 +294,11 @@ public abstract class PlayerListHudMixin extends DrawableHelper {
 	}
 
 	@Inject(method = "setFooter", at = @At("HEAD"), cancellable = true)
-	public void axolotlclient$changeFooter(Text header, CallbackInfo ci) {
+	public void axolotlclient$changeFooter(Text footer, CallbackInfo ci) {
 		if (!BedwarsMod.getInstance().inGame()) {
 			return;
 		}
-		this.footer = BedwarsMod.getInstance().getGame().get().getBottomBarText();
+		this.footer = BedwarsMod.getInstance().getGame().get().getBottomBarText().append("\n").append(footer);
 		ci.cancel();
 	}
 }
