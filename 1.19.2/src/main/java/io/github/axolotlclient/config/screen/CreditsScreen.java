@@ -167,7 +167,6 @@ public class CreditsScreen extends Screen {
 
 		credits.add(new SpacerTitle("- - - - - - " + I18n.translate("other_people") + " - - - - - -"));
 
-		credits.add(new Credit("Sybillian", "Bedwars Overlay Texture author", "https://youtube.com/sybillian"));
 		credits.add(new Credit("gart", "gartbin dev and host", "Image sharing help", "https://gart.sh"));
 		credits.add(new Credit("AMereBagatelle", "Author of the excellent FabricSkyBoxes Mod"));
 
