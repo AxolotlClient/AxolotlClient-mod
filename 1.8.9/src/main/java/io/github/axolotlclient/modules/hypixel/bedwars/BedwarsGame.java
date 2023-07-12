@@ -122,7 +122,7 @@ public class BedwarsGame {
 
 	private String calculateBottomBarText() {
 		Comparator<BedwarsPlayer> comparator = Comparator.comparingInt(o -> o.getStats().getGameKills());
-		return "Top 3 Killers: \n" + players.values().stream()
+		return "Top 3 Killers: \n" + players.values().stream().filter(Objects::nonNull)
 			.sorted(comparator.reversed()).limit(3)
 			.map(p -> p.getColoredName() + ": " + p.getStats().getGameKills())
 			.collect(Collectors.joining("\n"));
