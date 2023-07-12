@@ -81,7 +81,7 @@ public class SkyResourceManager extends AbstractModule implements SimpleSynchron
 		}
 
 		for (Map.Entry<Identifier, Resource> entry : manager
-			.findResources("mcpatcher/sky", identifier -> identifier.getPath().endsWith(".properties"))
+			.findResources("mcpatcher/sky", identifier -> isMCPSky(identifier.getPath()))
 			.entrySet()) {
 			AxolotlClient.LOGGER.debug("Loading MCP sky from " + entry.getKey());
 			SkyboxManager.getInstance()
@@ -90,7 +90,7 @@ public class SkyResourceManager extends AbstractModule implements SimpleSynchron
 		}
 
 		for (Map.Entry<Identifier, Resource> entry : manager
-			.findResources("optifine/sky", identifier -> identifier.getPath().endsWith(".properties")).entrySet()) {
+			.findResources("optifine/sky", identifier -> isMCPSky(identifier.getPath())).entrySet()) {
 			AxolotlClient.LOGGER.debug("Loading OF sky from " + entry.getKey());
 			SkyboxManager.getInstance()
 				.addSkybox(new MCPSkyboxInstance(loadMCPSky("optifine", entry.getKey(), entry.getValue())));
@@ -98,6 +98,10 @@ public class SkyResourceManager extends AbstractModule implements SimpleSynchron
 		}
 
 		AxolotlClient.LOGGER.debug("Finished Loading Custom Skies!");
+	}
+
+	private boolean isMCPSky(String path){
+		return path.endsWith(".properties") && path.startsWith("sky");
 	}
 
 	private static JsonObject loadMCPSky(String loader, Identifier id, Resource resource) {
