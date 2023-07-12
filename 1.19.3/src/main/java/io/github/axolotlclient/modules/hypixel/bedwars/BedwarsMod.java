@@ -98,10 +98,6 @@ public class BedwarsMod implements AbstractHypixelMod {
 		upgradesOverlay = new TeamUpgradesOverlay(this);
 	}
 
-	public String getDetail() {
-		return I18n.translate("sol_client.mod.screen.by", "DarkKronicle") + I18n.translate("sol_client.mod.screen.textures_by", "Sybillian");
-	}
-
 	@Override
 	public void init() {
 		category.add(enabled, hardcoreHearts, showHunger, displayArmor, bedwarsLevelHead, bedwarsLevelHeadMode,
