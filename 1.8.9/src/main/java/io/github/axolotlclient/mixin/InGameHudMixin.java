@@ -23,6 +23,8 @@
 package io.github.axolotlclient.mixin;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.config.AxolotlClientConfig;
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hud.gui.hud.vanilla.*;
 import io.github.axolotlclient.modules.hypixel.bedwars.BedwarsMod;
@@ -37,6 +39,7 @@ import net.minecraft.entity.vehicle.MinecartEntity;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
@@ -164,6 +167,7 @@ public abstract class InGameHudMixin {
 		return instance.getWidth();
 	}
 
+	@Unique
 	private static final Entity axolotlclient$noHungerEntityTM = new MinecartEntity(null);
 
 	@ModifyVariable(
@@ -194,5 +198,12 @@ public abstract class InGameHudMixin {
 			return axolotlclient$noHungerEntityTM;
 		}
 		return normal;
+	}
+
+	@Inject(method = "renderVignetteOverlay", at = @At("HEAD"), cancellable = true)
+	private void axolotlclient$removeVignette(float f, Window window, CallbackInfo ci){
+		if(AxolotlClient.CONFIG.removeVignette.get()){
+			ci.cancel();
+		}
 	}
 }
