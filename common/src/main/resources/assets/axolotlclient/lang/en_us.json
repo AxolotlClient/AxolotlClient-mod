@@ -410,5 +410,6 @@
 	"bedwars.deathType.golem": "Golems",
 	"bedwars.deathType.self_void": "Void (Self)",
 	"bedwars.deathType.self_unknown": "Unknown (Self)",
-	"bedwars_teamupgrades.renderWhenRelevant": "Only Render When Relevant"
+	"bedwars_teamupgrades.renderWhenRelevant": "Only Render When Relevant",
+	"removeVignette": "Remove Vignette"
 }
