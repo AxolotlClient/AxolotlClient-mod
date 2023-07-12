@@ -95,7 +95,7 @@ public class TeamUpgradesOverlay extends BoxHudEntry {
 				texture = u.getTexture()[0];
 				GlStateManager.color(texture.getColor().getAlpha()/255F, texture.getColor().getRed()/255F, texture.getColor().getBlue()/255F, texture.getColor().getGreen()/255F);
 				mc.getTextureManager().bindTexture(new Identifier("minecraft", texture.getTexture()));
-				DrawableHelper.drawTexture(x, y, 16, 16, texture.getU(), texture.getV(), texture.getRegionWidth(), texture.getRegionHeight(), texture.getWidth(), texture.getHeight());
+				DrawableHelper.drawTexture(x, y, texture.getU(), texture.getV(), texture.getRegionHeight(), texture.getRegionHeight(), 16, 16, texture.getWidth(), texture.getHeight());
 				GlStateManager.color(1, 1, 1);
 				x += 17;
 				normalUpgrades = true;
@@ -109,7 +109,6 @@ public class TeamUpgradesOverlay extends BoxHudEntry {
 			GlStateManager.color(texture.getColor().getAlpha()/255F, texture.getColor().getRed()/255F, texture.getColor().getBlue()/255F, texture.getColor().getGreen()/255F);
 			mc.getTextureManager().bindTexture(new Identifier("minecraft", texture.getTexture()));
 			DrawableHelper.drawTexture(x, y, texture.getU(), texture.getV(), texture.getRegionHeight(), texture.getRegionHeight(), 16, 16, texture.getWidth(), texture.getHeight());
-			//DrawableHelper.drawTexture(x, y, 0, 198, 18, 18, 16, 16, 256, 256);
 			GlStateManager.color(1, 1, 1);
 			x += 17;
 		}
