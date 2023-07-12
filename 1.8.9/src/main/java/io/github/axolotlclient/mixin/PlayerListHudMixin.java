@@ -298,7 +298,7 @@ public abstract class PlayerListHudMixin extends DrawableHelper {
 		if (!BedwarsMod.getInstance().inGame()) {
 			return;
 		}
-		this.footer = BedwarsMod.getInstance().getGame().get().getBottomBarText().append("\n").append(footer);
+		this.footer = BedwarsMod.getInstance().getGame().get().getBottomBarText();
 		ci.cancel();
 	}
 }

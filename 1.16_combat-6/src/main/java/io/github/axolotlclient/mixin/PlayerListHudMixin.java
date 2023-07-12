@@ -317,7 +317,7 @@ public abstract class PlayerListHudMixin {
 		if (!BedwarsMod.getInstance().inGame()) {
 			return;
 		}
-		this.footer = BedwarsMod.getInstance().getGame().get().getBottomBarText().copy().append("\n").append(footer);
+		this.footer = BedwarsMod.getInstance().getGame().get().getBottomBarText();
 		ci.cancel();
 	}
 }
