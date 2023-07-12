@@ -112,6 +112,9 @@ public class PlayerHud extends BoxHudEntry {
 	}
 
 	public void renderPlayer(boolean placeholder, double x, double y, float delta) {
+		GlStateManager.popMatrix();
+		GlStateManager.pushMatrix();
+
 		if (client.player == null) {
 			return;
 		}
