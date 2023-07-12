@@ -75,7 +75,7 @@ public class BedwarsTeamUpgrades {
 	public final TeamUpgrade forge = new TieredUpgrade(
 		"forge", Pattern.compile("^\\b[A-Za-z0-9_§]{3,16}\\b purchased (?:Iron|Golden|Emerald|Molten) Forge\\s*$"),
 		new int[]{2, 4}, new int[]{4, 6}, new TextureInfo[]{
-		new TextureInfo("textures/blocks/furnace_front_off.png", 6*18, 198 + 18, 18, 18, Color.DARK_GRAY),
+		new TextureInfo("textures/blocks/furnace_front_off.png", 6*18, 198 + 18, 18, 18),
 		new TextureInfo("textures/blocks/furnace_front_on.png", 6*18, 198 + 18, 18, 18),
 		new TextureInfo("textures/blocks/furnace_front_on.png", 6*18, 198 + 18, 18, 18, Color.parse("#FFFF00")),
 		new TextureInfo("textures/blocks/furnace_front_on.png", 6*18, 198 + 18, 18, 18, Color.parse("#00FF00")),
