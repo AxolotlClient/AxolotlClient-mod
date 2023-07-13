@@ -37,6 +37,7 @@ import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardPlayerScore;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -60,6 +61,8 @@ public class BedwarsGame {
 	private final BedwarsMod mod;
 	@Getter
 	private final BedwarsTeamUpgrades upgrades = new BedwarsTeamUpgrades();
+	private BedwarsPlayer lastKill;
+	private BedwarsPlayer lastKiller;
 
 
 	public BedwarsGame(BedwarsMod mod) {
@@ -123,11 +126,14 @@ public class BedwarsGame {
 	}
 
 	private String calculateBottomBarText() {
-		Comparator<BedwarsPlayer> comparator = Comparator.comparingInt(o -> o.getStats().getGameKills());
+		return Formatting.DARK_AQUA + "Last Kill: "+ Formatting.RESET + (lastKill == null ? "N/A" : lastKill.getColoredName()) +
+			Formatting.DARK_AQUA + " Last Killed By: " + Formatting.RESET + (lastKiller == null ? "N/A" : lastKiller.getColoredName());
+		// left in here because it'll be useful later on
+		/*Comparator<BedwarsPlayer> comparator = Comparator.comparingInt(o -> o.getStats().getGameKills());
 		return "Top 3 Killers: \n" + players.values().stream().filter(Objects::nonNull)
 			.sorted(comparator.reversed()).limit(3)
 			.map(p -> p.getColoredName() + ": " + p.getStats().getGameKills())
-			.collect(Collectors.joining("\n"));
+			.collect(Collectors.joining("\n"));*/
 	}
 
 	public String getFormattedTime() {
@@ -161,6 +167,11 @@ public class BedwarsGame {
 		}
 		if (mod.overrideMessages.get()) {
 			event.setNewMessage(Text.literal(formatDeath(player, killer, type, finalDeath)));
+		}
+		if(me.equals(killer)){
+			lastKill = player;
+		} else if (me.equals(player)){
+			lastKiller = player;
 		}
 	}
 
