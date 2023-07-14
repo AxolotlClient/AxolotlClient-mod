@@ -23,6 +23,7 @@
 package io.github.axolotlclient.mixin;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -173,7 +174,7 @@ public abstract class PlayerListHudMixin {
 	)
 	public void axolotlclient$renderWithoutObjective(
 		MatrixStack matrixStack, int argY, Scoreboard scoreboard, ScoreboardObjective scoreboardObjective, CallbackInfo ci,
-		ClientPlayNetworkHandler clientPlayNetworkHandler, List list, int i, int j, int l, int m, int k,
+		List list, int i, int j, int l, int m, int k,
 		boolean bl, int n, int o, int p, int q, int r, List list2, int t, int u, int s, int v, int y, int z, PlayerListEntry playerListEntry2
 	) {
 		if (!BedwarsMod.getInstance().isEnabled() || !BedwarsMod.getInstance().isWaiting()) {
@@ -211,7 +212,7 @@ public abstract class PlayerListHudMixin {
 	)
 	private void axolotlclient$renderCustomScoreboardObjective(
 		ScoreboardObjective objective, int y, String player, int startX, int endX,
-		PlayerListEntry playerEntry, MatrixStack matrices, CallbackInfo ci
+		UUID uuid, MatrixStack matrices, CallbackInfo ci
 	) {
 		if (!BedwarsMod.getInstance().isEnabled()) {
 			return;
@@ -221,7 +222,7 @@ public abstract class PlayerListHudMixin {
 		if (game == null) {
 			return;
 		}
-		BedwarsPlayer bedwarsPlayer = game.getPlayer(playerEntry.getProfile().getName()).orElse(null);
+		BedwarsPlayer bedwarsPlayer = game.getPlayer(player).orElse(null);
 		if (bedwarsPlayer == null) {
 			return;
 		}
@@ -284,7 +285,7 @@ public abstract class PlayerListHudMixin {
 		cir.setReturnValue(player.getTabListDisplay());
 	}
 
-	@ModifyVariable(method = "method_48213", at = @At(value = "INVOKE_ASSIGN", target = "Ljava/util/stream/Stream;toList()Ljava/util/List;", remap = false))
+	@ModifyVariable(method = "render", at = @At(value = "STORE"), ordinal = 1)
 	public List<PlayerListEntry> axolotlclient$overrideSortedPlayers(List<PlayerListEntry> original) {
 		if (!BedwarsMod.getInstance().inGame()) {
 			return original;
