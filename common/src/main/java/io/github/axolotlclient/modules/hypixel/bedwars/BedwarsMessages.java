@@ -201,41 +201,41 @@ public class BedwarsMessages {
 		"{killed} was chased away by {player}'s Golem."
 	);
 
-	public final static Pattern[] BED_BREAK = {
-		Pattern.compile(formatPlaceholder("Bed was broken by {player}")),
-		Pattern.compile(formatPlaceholder("Bed was incinerated by {player}")),
-		Pattern.compile(formatPlaceholder("Bed was iced by {player}")),
-		Pattern.compile(formatPlaceholder("Bed had to raise the white flag to {player}")),
-		Pattern.compile(formatPlaceholder("Bed was dismantled by {player}")),
-		Pattern.compile(formatPlaceholder("Bed was deep fried by {player}")),
-		Pattern.compile(formatPlaceholder("Bed was ripped apart by {player}")),
-		Pattern.compile(formatPlaceholder("Bed was traded in for milk and cookies by {player}")),
-		Pattern.compile(formatPlaceholder("Bed was sacrificed by {player}")),
-		Pattern.compile(formatPlaceholder("Bed was gulped by {player}")),
-		Pattern.compile(formatPlaceholder("Bed was gulped by {player}")),
-		Pattern.compile(formatPlaceholder("Bed was squeaked apart by {player}")),
-		Pattern.compile(formatPlaceholder("Bed was stung by {player}")),
-		Pattern.compile(formatPlaceholder("Bed was impaled by {player}")),
-		Pattern.compile(formatPlaceholder("Bed be shot with cannon by {player}")),
-		Pattern.compile(formatPlaceholder("Bed got memed by {player}")),
-		Pattern.compile(formatPlaceholder("Bed was made into a snowman by {player}")),
-		Pattern.compile(formatPlaceholder("Bed was scrambled by {player}")),
-		Pattern.compile(formatPlaceholder("Bed was stuffed with tissue paper by {player}")),
-		Pattern.compile(formatPlaceholder("Bed was scrambled by {player}")),
-		Pattern.compile(formatPlaceholder("Bed was bed #{number} destroyed by {player}")),
-		Pattern.compile(formatPlaceholder("Bed was spooked by {player}")),
-		Pattern.compile(formatPlaceholder("Bed was dreadfully corrupted by {player}")),
-		Pattern.compile(formatPlaceholder("Bed was bed #{number} destroyed by {player}")),
-		Pattern.compile(formatPlaceholder("Bed exploded from a firework by {player}")),
-		Pattern.compile(formatPlaceholder("Bed was blasted to dust by {player}")),
-		Pattern.compile(formatPlaceholder("Bed was melted by {player}'s holiday spirit")),
-		Pattern.compile(formatPlaceholder("Bed was ripped to shreds by {player}")),
-		Pattern.compile(formatPlaceholder("Bed has left the game after seeing {player}")),
-		Pattern.compile(formatPlaceholder("Bed was spooked by {player}")),
-		Pattern.compile(formatPlaceholder("Bed was contaminated by {player}")),
-		Pattern.compile(formatPlaceholder("Bed was sold in a garage sale by {player}")),
-		Pattern.compile(formatPlaceholder("Bed was destroyed by {player}")),
-	};
+	public final static Pattern[] BED_BREAK = Arrays.stream(new String[]{
+		"Bed was broken by {player}",
+		"Bed was incinerated by {player}",
+		"Bed was iced by {player}",
+		"Bed had to raise the white flag to {player}",
+		"Bed was dismantled by {player}",
+		"Bed was deep fried by {player}",
+		"Bed was ripped apart by {player}",
+		"Bed was traded in for milk and cookies by {player}",
+		"Bed was sacrificed by {player}",
+		"Bed was gulped by {player}",
+		"Bed was gulped by {player}",
+		"Bed was squeaked apart by {player}",
+		"Bed was stung by {player}",
+		"Bed was impaled by {player}",
+		"Bed be shot with cannon by {player}",
+		"Bed got memed by {player}",
+		"Bed was made into a snowman by {player}",
+		"Bed was scrambled by {player}",
+		"Bed was stuffed with tissue paper by {player}",
+		"Bed was scrambled by {player}",
+		"Bed was bed #{number} destroyed by {player}",
+		"Bed was spooked by {player}",
+		"Bed was dreadfully corrupted by {player}",
+		"Bed was bed #{number} destroyed by {player}",
+		"Bed exploded from a firework by {player}",
+		"Bed was blasted to dust by {player}",
+		"Bed was melted by {player}'s holiday spirit",
+		"Bed was ripped to shreds by {player}",
+		"Bed has left the game after seeing {player}",
+		"Bed was spooked by {player}",
+		"Bed was contaminated by {player}",
+		"Bed was sold in a garage sale by {player}",
+		"Bed was destroyed by {player}"
+	}).map(BedwarsMessages::formatPlaceholder).map(Pattern::compile).toArray(Pattern[]::new);
 
 	public final static Pattern DISCONNECT = Pattern.compile("(\\b[A-Za-z0-9_§]{3,16}\\b) disconnected\\.$");
 	public final static Pattern RECONNECT = Pattern.compile("(\\b[A-Za-z0-9_§]{3,16}\\b) reconnected\\.$");
@@ -248,18 +248,18 @@ public class BedwarsMessages {
 	public final static Pattern SELF_VOID = Pattern.compile(formatPlaceholder("^{killed} fell into the void.(?: FINAL KILL!)?\\s*?"));
 	public final static Pattern SELF_UNKNOWN = Pattern.compile(formatPlaceholder("^{killed} died.(?: FINAL KILL!)?\\s*?"));
 
-	public final static Pattern[] ANNOYING_MESSAGES = {
-		Pattern.compile("^You will respawn in \\d* seconds!$"),
-		Pattern.compile("^You will respawn in \\d* second!$"),
-		Pattern.compile("^You purchased Wool$"),
-		Pattern.compile("^Cross-teaming is not allowed"),
-		Pattern.compile("^\\+\\d+ Coins!"),
-		Pattern.compile("^\\+\\d+ coins!"),
-		Pattern.compile("^Coins just earned DOUBLE"),
-		Pattern.compile("^\\+\\d+ Bed Wars Experience"),
-		Pattern.compile("^You have respawned"),
-		Pattern.compile("^If you get disconnected use /rejoin to join back in the game\\.$"),
-	};
+	public final static Pattern[] ANNOYING_MESSAGES = Arrays.stream(new String[]{
+		"^You will respawn in \\d* seconds!$",
+		"^You will respawn in \\d* second!$",
+		"^You purchased Wool$",
+		"^Cross-teaming is not allowed",
+		"^\\+\\d+ Coins!",
+		"^\\+\\d+ coins!",
+		"^Coins just earned DOUBLE",
+		"^\\+\\d+ Bed Wars Experience",
+		"^You have respawned",
+		"^If you get disconnected use /rejoin to join back in the game\\.$",
+	}).map(Pattern::compile).toArray(Pattern[]::new);
 
 	private static Pattern[] convert(String... input) {
 		return Arrays.stream(input).map(str -> Pattern.compile("^" + formatPlaceholder(str) + "(?: FINAL KILL!)?\\s*?")).toArray(Pattern[]::new);

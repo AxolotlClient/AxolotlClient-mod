@@ -227,4 +227,12 @@ public abstract class InGameHudMixin {
 			ci.cancel();
 		}
 	}
+
+	@ModifyVariable(method = "renderStatusBars", at = @At("STORE"), ordinal = 12)
+	private int axolotlclient$dontShowArmor(int armorValue){
+		if (BedwarsMod.getInstance().isEnabled() && BedwarsMod.getInstance().inGame() && !BedwarsMod.getInstance().displayArmor.get()) {
+			return 0;
+		}
+		return armorValue;
+	}
 }

@@ -67,22 +67,8 @@ public class BedwarsPlayerStats {
 
 
 	public static BedwarsPlayerStats generateFake() {
-		return new BedwarsPlayerStats(
-			0,
-			0,
-			0,
-			0,
-			0,
-			0,
-			0,
-			0,
-			0,
-			0,
-			0,
-			0,
-			0,
-			1
-		);
+		return new BedwarsPlayerStats(0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 1);
 	}
 
 	@Nullable
@@ -104,7 +90,7 @@ public class BedwarsPlayerStats {
 		int losses = getAsIntElse(bedwars, "losses_bedwars", 0);
 		int wins = getAsIntElse(bedwars, "wins_bedwars", 0);
 		int winstreak = getAsIntElse(bedwars, "winstreak", 0);
-		JsonObject achievements = HypixelAbstractionLayer.getPlayerProperty(uuid, "achievements").getAsJsonObject();
+		JsonObject achievements = HypixelAbstractionLayer.getPlayerProperty(uuid, "achievements");
 		int stars = 1;
 		if (achievements != null) {
 			stars = getAsIntElse(achievements, "bedwars_level", 1);

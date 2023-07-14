@@ -25,7 +25,6 @@ package io.github.axolotlclient.mixin;
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hud.gui.hud.simple.ComboHud;
 import io.github.axolotlclient.modules.hud.gui.hud.simple.ReachHud;
-import io.github.axolotlclient.modules.hypixel.bedwars.BedwarsMod;
 import io.github.axolotlclient.modules.particles.Particles;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
@@ -85,13 +84,5 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 			ComboHud comboHud = (ComboHud) HudManager.getInstance().get(ComboHud.ID);
 			comboHud.onEntityDamage(this);
 		}
-	}
-
-	@Override
-	public int getArmor() {
-		if (BedwarsMod.getInstance().isEnabled() && BedwarsMod.getInstance().inGame() && !BedwarsMod.getInstance().displayArmor.get()) {
-			return 0;
-		}
-		return super.getArmor();
 	}
 }

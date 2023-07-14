@@ -24,7 +24,9 @@ package io.github.axolotlclient.modules.hypixel.bedwars;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public enum BedwarsLevelHeadMode {
 	FINAL_KILLS(stats -> "§7Final Kills (Total): §f" + stats.getFinalKills()),
@@ -54,14 +56,13 @@ public enum BedwarsLevelHeadMode {
 		return titleSupplier.apply(stats);
 	}
 
-	private static final HashMap<String, BedwarsLevelHeadMode> modes;
+	private static final Map<String, BedwarsLevelHeadMode> modes;
 
 	static {
-		modes = new HashMap<>();
-		Arrays.stream(values()).forEach(m -> modes.put(m.toString(), m));
+		modes = Arrays.stream(values()).collect(Collectors.toMap(Enum::name, value -> value));
 	}
 
 	public static BedwarsLevelHeadMode get(String mode) {
-		return modes.getOrDefault(mode, null);
+		return modes.get(mode);
 	}
 }

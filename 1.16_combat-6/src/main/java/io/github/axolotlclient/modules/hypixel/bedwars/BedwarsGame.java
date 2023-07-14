@@ -54,8 +54,8 @@ public class BedwarsGame {
 
 	private BedwarsPlayer me = null;
 
-	private final Map<String, BedwarsPlayer> players = new HashMap<>(16);
-	private final Map<UUID, BedwarsPlayer> playersById = new HashMap<>(16);
+	private final Map<String, BedwarsPlayer> players = new HashMap<>();
+	private final Map<UUID, BedwarsPlayer> playersById = new HashMap<>();
 	private final MinecraftClient mc;
 	@Getter
 	private boolean started = false;
