@@ -75,7 +75,7 @@ public class ArrowHud extends TextHudEntry {
 		DrawPosition pos = getPos();
 		drawCenteredString(graphics, client.textRenderer, String.valueOf(arrows), pos.x() + getWidth() / 2,
 			pos.y() + getHeight() - 10, textColor.get(), shadow.get());
-		ItemUtil.renderGuiItemModel(getScale(), currentArrow, pos.x() + 2, pos.y() + 2);
+		graphics.drawItem(currentArrow, pos.x() + 2, pos.y() + 2);
 	}
 
 	@Override
