@@ -132,3 +132,7 @@
 
 - add DarkKronicle's Bedwars Overlay
 - fix the controls screen crashing in 1.8.9
+- add option to remove the vignette
+- fix the sky impl mistaking suns for skies
+- fix a client lockup issue on 1.8.9
+- fix PlayerHud scaling on 1.8.9
