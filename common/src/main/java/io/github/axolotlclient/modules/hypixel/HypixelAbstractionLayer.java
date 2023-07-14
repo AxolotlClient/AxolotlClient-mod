@@ -76,19 +76,17 @@ public class HypixelAbstractionLayer {
 			loadApiKey();
 		}
 		if (loadPlayerDataIfAbsent(uuid)) {
-			try {
+			PlayerReply.Player player = getPlayer(uuid);
+			if (player != null) {
 				if (Objects.equals(mode, LevelHeadMode.NETWORK.toString())) {
-					return (int) cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer().getNetworkLevel();
+					return (int) player.getNetworkLevel();
 				} else if (Objects.equals(mode, LevelHeadMode.BEDWARS.toString())) {
-					return cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer()
-						.getIntProperty("achievements.bedwars_level", 0);
+					return player.getIntProperty("achievements.bedwars_level", 0);
 				} else if (Objects.equals(mode, LevelHeadMode.SKYWARS.toString())) {
-					int exp = cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS).getPlayer()
+					int exp = player
 						.getIntProperty("stats.SkyWars.skywars_experience", 0);
 					return Math.round(ExpCalculator.getLevelForExp(exp));
 				}
-			} catch (TimeoutException | InterruptedException | ExecutionException e) {
-				return -1;
 			}
 		}
 		return 0;
