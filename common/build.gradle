@@ -3,8 +3,8 @@ plugins {
 	id 'com.github.johnrengelman.shadow' version '7.+'
 }
 
-group 'io.github.axolotlclient'
-archivesBaseName = project.archives_base_name
+group = maven_group
+base.archivesName = project.archives_base_name
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
