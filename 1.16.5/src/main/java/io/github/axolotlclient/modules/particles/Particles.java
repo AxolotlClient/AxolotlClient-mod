@@ -115,7 +115,7 @@ public class Particles extends AbstractModule {
 	}
 
 	public boolean getShowParticle(ParticleType<?> type) {
-		return enabled.get()
+		return enabled.get() && particleOptions.containsKey(type)
 			? ((BooleanOption) Particles.getInstance().particleOptions.get(type).get("showParticle")).get()
 			: true;
 	}
