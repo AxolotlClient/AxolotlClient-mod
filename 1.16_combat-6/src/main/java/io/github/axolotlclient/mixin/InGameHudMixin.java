@@ -35,8 +35,8 @@ import io.github.axolotlclient.util.events.impl.ScoreboardRenderEvent;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.hud.InGameHud;
-import net.minecraft.client.util.Window;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.Entity;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Text;
@@ -222,7 +222,7 @@ public abstract class InGameHudMixin {
 	}
 
 	@Inject(method = "renderVignetteOverlay", at = @At("HEAD"), cancellable = true)
-	private void axolotlclient$removeVignette(float f, Window window, CallbackInfo ci){
+	private void axolotlclient$removeVignette(Entity entity, CallbackInfo ci){
 		if(AxolotlClient.CONFIG.removeVignette.get()){
 			ci.cancel();
 		}
