@@ -175,7 +175,7 @@ public class BedwarsGame {
 		if(me.equals(killer)){
 			lastKill = player;
 		} else if (me.equals(player)){
-			lastKiller = player;
+			lastKiller = killer;
 		}
 	}
 
