@@ -42,19 +42,6 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 @Mixin(Screen.class)
 public abstract class ScreenMixin {
 
-	@ModifyArgs(method = "renderWithTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;drawTooltip(Lnet/minecraft/client/font/TextRenderer;Ljava/util/List;Lnet/minecraft/client/gui/tooltip/TooltipPositioner;II)V"))
-	public void axolotlclient$modifyTooltipPosition(Args args) {
-		if (ScrollableTooltips.getInstance().enabled.get()) {
-			if ((MinecraftClient.getInstance().currentScreen instanceof CreativeInventoryScreen)
-				&& ((CreativeInventoryScreen) MinecraftClient.getInstance().currentScreen).isInventoryOpen()) {
-				return;
-			}
-
-			args.set(3, (int) args.get(3) + ScrollableTooltips.getInstance().tooltipOffsetX);
-			args.set(4, (int) args.get(4) + ScrollableTooltips.getInstance().tooltipOffsetY);
-		}
-	}
-
 	@Inject(method = "handleTextClick", at = @At(value = "INVOKE", target = "Lnet/minecraft/text/ClickEvent;getAction()Lnet/minecraft/text/ClickEvent$Action;", ordinal = 0), cancellable = true)
 	public void axolotlclient$customClickEvents(Style style, CallbackInfoReturnable<Boolean> cir) {
 		ClickEvent event = style.getClickEvent();
