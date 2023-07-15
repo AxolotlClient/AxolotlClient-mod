@@ -233,7 +233,7 @@ public abstract class PlayerListHudMixin {
 		),
 		ordinal = 7
 	)
-	public int axolotlclient$changeWidth(int value, GuiGraphics graphics, int scaledWindowWidth, Scoreboard scoreboard, @Nullable ScoreboardObjective objective) {
+	public int axolotlclient$changeWidth(int value) {
 		if (BedwarsMod.getInstance().isEnabled() && BedwarsMod.getInstance().blockLatencyIcon() && (BedwarsMod.getInstance().isWaiting() || BedwarsMod.getInstance().inGame())) {
 			value -= 9;
 		}
