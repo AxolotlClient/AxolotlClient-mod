@@ -41,7 +41,6 @@ public class Credits {
 		contributor("xlingy", "Website author");
 		contributor("DarkKronicle", "Bedwars Overlay", "Author of KronHUD, the best HUD mod!");
 
-		otherPerson("Sybillian", "Bedwars Overlay Texture author", "https://github.com/sybillian");
 		otherPerson("AMereBagatelle", "Author of the excellent FabricSkyBoxes Mod");
 	}
 
