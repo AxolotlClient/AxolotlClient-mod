@@ -209,33 +209,10 @@ public abstract class PlayerListHudMixin extends DrawableHelper {
 		if (game == null) {
 			return;
 		}
-		BedwarsPlayer bedwarsPlayer = game.getPlayer(playerEntry.getProfile().getName()).orElse(null);
-		if (bedwarsPlayer == null) {
-			return;
-		}
+
+		game.renderCustomScoreboardObjective(playerEntry.getProfile().getName(), objective, y, endX);
 		ci.cancel();
-		String render;
-		int color;
-		if (!bedwarsPlayer.isAlive()) {
-			if (bedwarsPlayer.isDisconnected()) {
-				return;
-			}
-			int tickTillLive = Math.max(0, bedwarsPlayer.getTickAlive() - this.axolotlclient$client.inGameHud.getTicks());
-			float secondsTillLive = tickTillLive / 20f;
-			render = String.format("%.1f", secondsTillLive) + "s";
-			color = new Color(200, 200, 200).getAsInt();
-		} else {
-			int health = objective.getScoreboard().getPlayerScore(player, objective).getScore();
-			color = Color.blend(new Color(255, 255, 255), new Color(215, 0, 64), (int) (1 - (health / 20f) * 100)).getAsInt();
-			render = String.valueOf(health);
-		}
-		// Health
-		this.axolotlclient$client.textRenderer.drawWithShadow(
-			render,
-			(float) (endX - this.axolotlclient$client.textRenderer.getStringWidth(render)),
-			(float) y,
-			color
-		);
+
 
 	}
 

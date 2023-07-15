@@ -26,6 +26,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
+import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.modules.hypixel.bedwars.upgrades.BedwarsTeamUpgrades;
 import io.github.axolotlclient.util.events.impl.ReceiveChatMessageEvent;
 import io.github.axolotlclient.util.events.impl.ScoreboardRenderEvent;
@@ -33,7 +34,9 @@ import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.scoreboard.Scoreboard;
+import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.ScoreboardPlayerScore;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.text.Text;
@@ -439,4 +442,32 @@ public class BedwarsGame {
 		return mode.apply(stats);
 	}
 
+	public void renderCustomScoreboardObjective(MatrixStack matrices, String playerName, ScoreboardObjective objective, int y, int endX) {
+		BedwarsPlayer bedwarsPlayer = getPlayer(playerName).orElse(null);
+		if (bedwarsPlayer == null) {
+			return;
+		}
+		String render;
+		int color;
+		if (!bedwarsPlayer.isAlive()) {
+			if (bedwarsPlayer.isDisconnected()) {
+				return;
+			}
+			int tickTillLive = Math.max(0, bedwarsPlayer.getTickAlive() - mc.inGameHud.getTicks());
+			float secondsTillLive = tickTillLive / 20f;
+			render = String.format("%.1f", secondsTillLive) + "s";
+			color = new Color(200, 200, 200).getAsInt();
+		} else {
+			int health = objective.getScoreboard().getPlayerScore(playerName, objective).getScore();
+			color = Color.blend(new Color(255, 255, 255), new Color(215, 0, 64), (int) (1 - (health / 20f) * 100)).getAsInt();
+			render = String.valueOf(health);
+		}
+		// Health
+		mc.textRenderer.drawWithShadow(matrices,
+			render,
+			(float) (endX - mc.textRenderer.getWidth(render)),
+			(float) y,
+			color
+		);
+	}
 }

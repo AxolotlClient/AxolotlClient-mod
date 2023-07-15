@@ -222,34 +222,10 @@ public abstract class PlayerListHudMixin {
 		if (game == null) {
 			return;
 		}
-		BedwarsPlayer bedwarsPlayer = game.getPlayer(player).orElse(null);
-		if (bedwarsPlayer == null) {
-			return;
-		}
-		ci.cancel();
-		String render;
-		int color;
-		if (!bedwarsPlayer.isAlive()) {
-			if (bedwarsPlayer.isDisconnected()) {
-				return;
-			}
-			int tickTillLive = Math.max(0, bedwarsPlayer.getTickAlive() - this.client.inGameHud.getTicks());
-			float secondsTillLive = tickTillLive / 20f;
-			render = String.format("%.1f", secondsTillLive) + "s";
-			color = new Color(200, 200, 200).getAsInt();
-		} else {
-			int health = objective.getScoreboard().getPlayerScore(player, objective).getScore();
-			color = Color.blend(new Color(255, 255, 255), new Color(215, 0, 64), (int) (1 - (health / 20f) * 100)).getAsInt();
-			render = String.valueOf(health);
-		}
-		// Health
-		this.client.textRenderer.drawWithShadow(matrices,
-			render,
-			(float) (endX - this.client.textRenderer.getWidth(render)),
-			(float) y,
-			color
-		);
 
+		game.renderCustomScoreboardObjective(matrices, player, objective, y, endX);
+
+		ci.cancel();
 	}
 
 	@ModifyVariable(

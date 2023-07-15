@@ -52,8 +52,7 @@ public class BedwarsMod implements AbstractHypixelMod {
 
 	private final static Pattern[] GAME_START = {
 		Pattern.compile("^\\s*?Protect your bed and destroy the enemy beds\\.\\s*?$"),
-		Pattern.compile("^\\s*?Bed Wars Lucky Blocks\\s*?$"),
-		Pattern.compile("^\\s*?Bed Wars Swappage\\s*?$")
+		Pattern.compile("^\\s*?Bed Wars Lucky Blocks\\s*?$")
 	};
 
 	@Getter

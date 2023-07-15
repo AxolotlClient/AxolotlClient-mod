@@ -69,14 +69,16 @@ public class TrapUpgrade extends TeamUpgrade {
 	@Override
 	public int getPrice(BedwarsMode mode) {
 		switch (traps.size()) {
-			case 0:
+			case 0 -> {
 				return 1;
-			case 1:
+			}
+			case 1 -> {
 				return 2;
-			case 2:
+			}
+			case 2 -> {
 				return 4;
+			}
 		}
-		;
 		return 0;
 	}
 

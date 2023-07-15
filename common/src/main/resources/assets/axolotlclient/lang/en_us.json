@@ -411,5 +411,6 @@
 	"bedwars.deathType.self_void": "Void (Self)",
 	"bedwars.deathType.self_unknown": "Unknown (Self)",
 	"bedwars_teamupgrades.renderWhenRelevant": "Only Render When Relevant",
-	"removeVignette": "Remove Vignette"
+	"removeVignette": "Remove Vignette",
+	"bedwars.tabRenderLatencyIcon.tooltip": "This lets you remove the latency icon <br>since it's always 1 for others while in a game. <br>This is probably some kind of limitation of hypixel."
 }

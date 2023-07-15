@@ -28,7 +28,6 @@ import java.util.UUID;
 import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
 import io.github.axolotlclient.modules.hypixel.bedwars.BedwarsGame;
 import io.github.axolotlclient.modules.hypixel.bedwars.BedwarsMod;
@@ -188,9 +187,9 @@ public abstract class PlayerListHudMixin {
 				return;
 			}
 
-			render = String.valueOf(HypixelAbstractionLayer.getPlayerLevel(playerListEntry2
+			render = HypixelAbstractionLayer.getPlayerLevel(playerListEntry2
 					.getProfile().getId().toString().replace("-", ""),
-				LevelHeadMode.BEDWARS.toString()));
+				LevelHeadMode.BEDWARS.toString()) + "☆";
 		} catch (Exception e) {
 			return;
 		}
@@ -221,34 +220,10 @@ public abstract class PlayerListHudMixin {
 		if (game == null) {
 			return;
 		}
-		BedwarsPlayer bedwarsPlayer = game.getPlayer(player).orElse(null);
-		if (bedwarsPlayer == null) {
-			return;
-		}
-		ci.cancel();
-		String render;
-		int color;
-		if (!bedwarsPlayer.isAlive()) {
-			if (bedwarsPlayer.isDisconnected()) {
-				return;
-			}
-			int tickTillLive = Math.max(0, bedwarsPlayer.getTickAlive() - this.client.inGameHud.getTicks());
-			float secondsTillLive = tickTillLive / 20f;
-			render = String.format("%.1f", secondsTillLive) + "s";
-			color = new Color(200, 200, 200).getAsInt();
-		} else {
-			int health = objective.getScoreboard().getPlayerScore(player, objective).getScore();
-			color = Color.blend(new Color(255, 255, 255), new Color(215, 0, 64), (int) (1 - (health / 20f) * 100)).getAsInt();
-			render = String.valueOf(health);
-		}
-		// Health
-		graphics.drawShadowedText(client.textRenderer,
-			render,
-			(endX - this.client.textRenderer.getWidth(render)),
-			y,
-			color
-		);
 
+		game.renderCustomScoreboardObjective(graphics, player, objective, y, endX);
+
+		ci.cancel();
 	}
 
 	@ModifyVariable(
@@ -258,7 +233,7 @@ public abstract class PlayerListHudMixin {
 		),
 		ordinal = 7
 	)
-	public int axolotlclient$changeWidth(int value) {
+	public int axolotlclient$changeWidth(int value, GuiGraphics graphics, int scaledWindowWidth, Scoreboard scoreboard, @Nullable ScoreboardObjective objective) {
 		if (BedwarsMod.getInstance().isEnabled() && BedwarsMod.getInstance().blockLatencyIcon() && (BedwarsMod.getInstance().isWaiting() || BedwarsMod.getInstance().inGame())) {
 			value -= 9;
 		}
