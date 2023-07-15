@@ -95,7 +95,7 @@ public class Particles extends AbstractModule {
 	}
 
 	public int getMultiplier(ParticleType type) {
-		if (enabled.get()) {
+		if (enabled.get() && particleOptions.containsKey(type)) {
 			HashMap<String, Option<?>> options = particleOptions.get(type);
 
 			return ((IntegerOption) options.get("count")).get();
@@ -104,7 +104,7 @@ public class Particles extends AbstractModule {
 	}
 
 	public boolean getAlwaysOn(ParticleType type) {
-		return enabled.get()
+		return enabled.get() && particleOptions.containsKey(type)
 			&& ((BooleanOption) Particles.getInstance().particleOptions.get(type).get("alwaysCrit"))
 			.get();
 	}
