@@ -23,19 +23,24 @@
 package io.github.axolotlclient.mixin;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.config.AxolotlClientConfig;
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hud.gui.hud.vanilla.*;
+import io.github.axolotlclient.modules.hypixel.bedwars.BedwarsMod;
+import io.github.axolotlclient.util.events.Events;
+import io.github.axolotlclient.util.events.impl.ScoreboardRenderEvent;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.Window;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.vehicle.MinecartEntity;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArgs;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
@@ -50,7 +55,9 @@ public abstract class InGameHudMixin {
 	@Inject(method = "renderScoreboardObjective", at = @At("HEAD"), cancellable = true)
 	public void axolotlclient$customScoreBoard(ScoreboardObjective objective, Window window, CallbackInfo ci) {
 		ScoreboardHud hud = (ScoreboardHud) HudManager.getInstance().get(ScoreboardHud.ID);
-		if (hud.isEnabled()) {
+		ScoreboardRenderEvent event = new ScoreboardRenderEvent(window, objective);
+		Events.SCOREBOARD_RENDER_EVENT.invoker().invoke(event);
+		if (event.isCancelled() || hud.isEnabled()) {
 			ci.cancel();
 		}
 	}
@@ -158,5 +165,45 @@ public abstract class InGameHudMixin {
 			return hud.getX() * 2 + hud.getWidth();
 		}
 		return instance.getWidth();
+	}
+
+	@Unique
+	private static final Entity axolotlclient$noHungerEntityTM = new MinecartEntity(null);
+
+	@ModifyVariable(
+		method = "renderStatusBars",
+		at = @At(
+			value = "STORE"
+		),
+		ordinal = 18
+	)
+	public int axolotlclient$displayHardcoreHearts(int offset) {
+		boolean hardcore = BedwarsMod.getInstance().isEnabled() &&
+			BedwarsMod.getInstance().inGame() && BedwarsMod.getInstance().hardcoreHearts.get() &&
+			!BedwarsMod.getInstance().getGame().get().getSelf().isBed();
+		return hardcore ? 5 : offset;
+	}
+
+	@ModifyVariable(
+		method = "renderStatusBars",
+		at = @At(
+			value = "STORE"
+		),
+		ordinal = 0
+	)
+	public Entity axolotlclient$dontHunger(Entity normal) {
+		if (normal == null && BedwarsMod.getInstance().isEnabled() &&
+			BedwarsMod.getInstance().inGame() &&
+			!BedwarsMod.getInstance().showHunger.get()) {
+			return axolotlclient$noHungerEntityTM;
+		}
+		return normal;
+	}
+
+	@Inject(method = "renderVignetteOverlay", at = @At("HEAD"), cancellable = true)
+	private void axolotlclient$removeVignette(float f, Window window, CallbackInfo ci){
+		if(AxolotlClient.CONFIG.removeVignette.get()){
+			ci.cancel();
+		}
 	}
 }

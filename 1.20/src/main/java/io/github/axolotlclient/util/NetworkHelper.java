@@ -22,16 +22,16 @@
 
 package io.github.axolotlclient.util;
 
+import java.io.IOException;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import com.google.gson.JsonElement;
 import io.github.axolotlclient.AxolotlClient;
 import net.minecraft.client.MinecraftClient;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-
-import java.io.IOException;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class NetworkHelper {
 

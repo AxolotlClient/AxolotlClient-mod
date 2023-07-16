@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud;
 
+import java.util.List;
+
 import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.ColorOption;
@@ -37,8 +39,6 @@ import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.util.Identifier;
-
-import java.util.List;
 
 public class MemoryHud extends TextHudEntry implements DynamicallyPositionable {
 

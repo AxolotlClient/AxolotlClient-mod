@@ -22,12 +22,12 @@
 
 package io.github.axolotlclient.modules.sky;
 
-import net.minecraft.client.util.math.MatrixStack;
-import org.joml.Matrix4f;
-
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.function.Predicate;
+
+import net.minecraft.client.util.math.MatrixStack;
+import org.joml.Matrix4f;
 
 /**
  * This implementation of custom skies is based on the FabricSkyBoxes mod by AMereBagatelle

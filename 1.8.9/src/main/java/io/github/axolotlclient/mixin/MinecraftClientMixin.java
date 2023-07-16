@@ -27,9 +27,11 @@ import io.github.axolotlclient.modules.blur.MenuBlur;
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.rpc.DiscordRPC;
 import io.github.axolotlclient.modules.zoom.Zoom;
-import io.github.axolotlclient.util.Hooks;
 import io.github.axolotlclient.util.NetworkHelper;
 import io.github.axolotlclient.util.Util;
+import io.github.axolotlclient.util.events.Events;
+import io.github.axolotlclient.util.events.impl.MouseInputEvent;
+import io.github.axolotlclient.util.events.impl.WorldLoadEvent;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
 import net.minecraft.client.gui.screen.Screen;
@@ -80,6 +82,11 @@ public abstract class MinecraftClientMixin {
 	 */
 	@Redirect(method = "connect(Lnet/minecraft/client/world/ClientWorld;Ljava/lang/String;)V", at = @At(value = "INVOKE", target = "Ljava/lang/System;gc()V"))
 	public void axolotlclient$noWorldGC() {
+	}
+
+	@Inject(method = "connect(Lnet/minecraft/client/world/ClientWorld;Ljava/lang/String;)V", at = @At("HEAD"))
+	private void axolotlclient$onWorldLoad(ClientWorld clientWorld, String string, CallbackInfo ci) {
+		Events.WORLD_LOAD_EVENT.invoker().invoke(new WorldLoadEvent(clientWorld));
 	}
 
 	/**
@@ -155,7 +162,7 @@ public abstract class MinecraftClientMixin {
 	@Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getTime()J", ordinal = 0))
 	public void axolotlclient$onMouseButton(CallbackInfo ci) {
 		if (Mouse.getEventButtonState()) {
-			Hooks.MOUSE_INPUT.invoker().onMouseButton(Mouse.getEventButton());
+			Events.MOUSE_INPUT.invoker().invoke(new MouseInputEvent(Mouse.getEventButton()));
 		}
 	}
 

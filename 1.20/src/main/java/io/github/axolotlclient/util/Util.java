@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.util;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.glfw.Window;
@@ -37,9 +40,6 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.math.Vec3d;
 import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.opengl.GL11;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 public class Util {
 

@@ -22,6 +22,10 @@
 
 package io.github.axolotlclient.config.screen;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import com.mojang.blaze3d.glfw.Window;
 import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.AxolotlClient;
@@ -50,10 +54,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class CreditsScreen extends Screen {
 
@@ -161,11 +161,11 @@ public class CreditsScreen extends Screen {
 		credits.add(new Credit("YakisikliBaran", "Turkish Translation"));
 		credits.add(new Credit("TheKodeToad", "Contributor", "Motion Blur", "Freelook", "Zoom"));
 		credits.add(new Credit("DragonEggBedrockBreaking", "Bugfixing", "Inspiration of new Features"));
+		credits.add(new Credit("DarkKronicle", "Bedwars Overlay", "Author of KronHUD, the best HUD mod!"));
 
 		credits.add(new SpacerTitle("- - - - - - " + I18n.translate("other_people") + " - - - - - -"));
 
 		credits.add(new Credit("gart", "gartbin dev and host", "Image sharing help", "https://gart.sh"));
-		credits.add(new Credit("DarkKronicle", "Author of KronHUD, the best HUD mod!"));
 		credits.add(new Credit("AMereBagatelle", "Author of the excellent FabricSkyBoxes Mod"));
 
 		if (!externalModuleCredits.isEmpty()) {
@@ -270,14 +270,7 @@ public class CreditsScreen extends Screen {
 		public void render(GuiGraphics graphics, int index, int y, int x, int entryWidth, int entryHeight, int mouseX,
 						   int mouseY, boolean hovered, float tickDelta) {
 			if (hovered || c.isFocused()) {
-				RenderUtil.drawVerticalLine(graphics, x - 100, y, y + 20,
-					Color.ERROR.getAsInt());
-				RenderUtil.drawVerticalLine(graphics, x + 100, y, y + 20,
-					Color.ERROR.getAsInt());
-				RenderUtil.drawHorizontalLine(graphics, x - 100, y + 20, x + 100,
-					Color.ERROR.getAsInt());
-				RenderUtil.drawHorizontalLine(graphics, x - 100, y, x + 100,
-					Color.ERROR.getAsInt());
+				RenderUtil.drawOutline(graphics, x-100, y, 200, 20, Color.ERROR.getAsInt());
 			}
 			this.hovered = hovered;
 			DrawUtil.drawCenteredString(graphics, MinecraftClient.getInstance().textRenderer, name, x, y + 5,

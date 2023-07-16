@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.modules.hud.util;
 
+import java.util.function.Supplier;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
@@ -30,8 +32,6 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.ShaderProgram;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Matrix4f;
-
-import java.util.function.Supplier;
 
 /**
  * This implementation of Hud modules is based on KronHUD.

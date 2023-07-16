@@ -22,7 +22,9 @@
 
 package io.github.axolotlclient.mixin;
 
-import io.github.axolotlclient.util.Hooks;
+import io.github.axolotlclient.util.events.Events;
+import io.github.axolotlclient.util.events.impl.KeyBindChangeEvent;
+import io.github.axolotlclient.util.events.impl.KeyPressEvent;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.util.collection.IntObjectStorage;
@@ -49,7 +51,7 @@ public abstract class KeyBindingMixin {
 	@Inject(method = "setKeyPressed", at = @At(value = "FIELD", target = "Lnet/minecraft/client/option/KeyBinding;pressed:Z"))
 	private static void axolotlclient$onPress(int keyCode, boolean pressed, CallbackInfo ci) {
 		if (pressed) {
-			Hooks.KEYBIND_PRESS.invoker().onPress(KEY_MAP.get(keyCode));
+			Events.KEY_PRESS.invoker().invoke(new KeyPressEvent(KEY_MAP.get(keyCode)));
 		}
 	}
 
@@ -68,6 +70,6 @@ public abstract class KeyBindingMixin {
 
 	@Inject(method = "setCode", at = @At("RETURN"))
 	public void axolotlclient$boundKeySet(int code, CallbackInfo ci) {
-		Hooks.KEYBIND_CHANGE.invoker().setBoundKey(code);
+		Events.KEYBIND_CHANGE.invoker().invoke(new KeyBindChangeEvent(code));
 	}
 }

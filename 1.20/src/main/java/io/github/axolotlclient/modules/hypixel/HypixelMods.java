@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.modules.hypixel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.EnumOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
@@ -30,12 +33,10 @@ import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.modules.hypixel.autoboop.AutoBoop;
 import io.github.axolotlclient.modules.hypixel.autogg.AutoGG;
 import io.github.axolotlclient.modules.hypixel.autotip.AutoTip;
+import io.github.axolotlclient.modules.hypixel.bedwars.BedwarsMod;
 import io.github.axolotlclient.modules.hypixel.levelhead.LevelHead;
 import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
 import io.github.axolotlclient.modules.hypixel.skyblock.Skyblock;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class HypixelMods extends AbstractModule {
 
@@ -61,6 +62,7 @@ public class HypixelMods extends AbstractModule {
 		addSubModule(NickHider.getInstance());
 		addSubModule(AutoBoop.getInstance());
 		addSubModule(Skyblock.getInstance());
+		addSubModule(BedwarsMod.getInstance());
 
 		subModules.forEach(AbstractHypixelMod::init);
 

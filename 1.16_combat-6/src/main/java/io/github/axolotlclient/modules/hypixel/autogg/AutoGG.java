@@ -32,9 +32,10 @@ import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.AxolotlClientConfig.options.StringOption;
 import io.github.axolotlclient.modules.hypixel.AbstractHypixelMod;
 import io.github.axolotlclient.util.Util;
+import io.github.axolotlclient.util.events.Events;
+import io.github.axolotlclient.util.events.impl.ReceiveChatMessageEvent;
 import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Text;
 
 /**
  * Based on <a href="https://github.com/DragonEggBedrockBreaking/AutoGG/blob/trunk/src/main/java/uk/debb/autogg/mixin/MixinChatHud.java">DragonEggBedrockBreaking's AutoGG Mod</a>
@@ -88,6 +89,8 @@ public class AutoGG implements AbstractHypixelMod {
 		category.add(onBWP);
 		category.add(onPVPL);
 		category.add(onMMC);
+
+		Events.RECEIVE_CHAT_MESSAGE_EVENT.register(this::onMessage);
 	}
 
 	@Override
@@ -158,28 +161,28 @@ public class AutoGG implements AbstractHypixelMod {
 		return Arrays.stream(strings).collect(Collectors.toList());
 	}
 
-	public void onMessage(Text message) {
+	public void onMessage(ReceiveChatMessageEvent event) {
 		if (client.getCurrentServerEntry() != null) {
 			serverMap.keySet().forEach(s -> {
 				if (serverMap.get(s).get() && client.getCurrentServerEntry().address.contains(s)) {
 					if (gf.get()) {
-						processChat(message, gfStrings.get(s), gfString.get());
+						processChat(event.getOriginalMessage(), gfStrings.get(s), gfString.get());
 					}
 					if (gg.get()) {
-						processChat(message, ggStrings.get(s), ggString.get());
+						processChat(event.getOriginalMessage(), ggStrings.get(s), ggString.get());
 					}
 					if (glhf.get()) {
-						processChat(message, glhfStrings.get(s), glhfString.get());
+						processChat(event.getOriginalMessage(), glhfStrings.get(s), glhfString.get());
 					}
 				}
 			});
 		}
 	}
 
-	private void processChat(Text messageReceived, List<String> options, String messageToSend) {
+	private void processChat(String messageReceived, List<String> options, String messageToSend) {
 		if (System.currentTimeMillis() - this.lastTime > 3000 && options != null) {
 			for (String s : options) {
-				if (messageReceived.getString().contains(s)) {
+				if (messageReceived.contains(s)) {
 					Util.sendChatMessage(messageToSend);
 					this.lastTime = System.currentTimeMillis();
 					return;

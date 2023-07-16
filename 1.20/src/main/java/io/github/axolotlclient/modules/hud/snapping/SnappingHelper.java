@@ -22,6 +22,10 @@
 
 package io.github.axolotlclient.modules.hud.snapping;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+
 import com.mojang.blaze3d.glfw.Window;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
@@ -29,10 +33,6 @@ import io.github.axolotlclient.modules.hud.util.Rectangle;
 import lombok.Setter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.GuiGraphics;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * This implementation of Hud modules is based on KronHUD.

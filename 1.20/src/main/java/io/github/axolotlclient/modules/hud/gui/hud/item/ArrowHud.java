@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.item;
 
+import java.util.List;
+
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.Option;
 import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
@@ -34,8 +36,6 @@ import net.minecraft.item.Items;
 import net.minecraft.item.RangedWeaponItem;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
-
-import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -75,7 +75,7 @@ public class ArrowHud extends TextHudEntry {
 		DrawPosition pos = getPos();
 		drawCenteredString(graphics, client.textRenderer, String.valueOf(arrows), pos.x() + getWidth() / 2,
 			pos.y() + getHeight() - 10, textColor.get(), shadow.get());
-		ItemUtil.renderGuiItemModel(getScale(), currentArrow, pos.x() + 2, pos.y() + 2);
+		graphics.drawItem(currentArrow, pos.x() + 2, pos.y() + 2);
 	}
 
 	@Override

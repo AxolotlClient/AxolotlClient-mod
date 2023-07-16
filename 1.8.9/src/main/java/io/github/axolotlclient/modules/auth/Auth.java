@@ -86,6 +86,8 @@ public class Auth extends Accounts implements Module {
 		Runnable runnable = () -> {
 			try {
 				((MinecraftClientAccessor) client).setSession(new Session(account.getName(), account.getUuid(), account.getAuthToken(), Session.AccountType.MOJANG.name()));
+				client.getSessionProperties().clear();
+				client.getSessionProperties();
 				save();
 				current = account;
 				Notifications.getInstance().addStatus(I18n.translate("auth.notif.title"), I18n.translate("auth.notif.login.successful", current.getName()));

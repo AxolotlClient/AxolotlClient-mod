@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.item;
 
+import java.util.List;
+
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.Option;
 import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
@@ -33,8 +35,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.util.Identifier;
-
-import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -86,10 +86,12 @@ public class ArmorHud extends TextHudEntry {
 		if (total.equals("1")) {
 			total = null;
 		}
+		graphics.drawItem(stack, x, y);
 		graphics.drawItemInSlot(client.textRenderer, stack, x, y, total);
 	}
 
 	public void renderItem(GuiGraphics graphics, ItemStack stack, int x, int y) {
+		graphics.drawItem(stack, x, y);
 		graphics.drawItemInSlot(client.textRenderer, stack, x, y);
 	}
 

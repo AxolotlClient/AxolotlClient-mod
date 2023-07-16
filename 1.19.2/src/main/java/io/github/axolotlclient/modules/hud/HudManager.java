@@ -39,6 +39,7 @@ import io.github.axolotlclient.modules.hud.gui.hud.item.ItemUpdateHud;
 import io.github.axolotlclient.modules.hud.gui.hud.simple.*;
 import io.github.axolotlclient.modules.hud.gui.hud.vanilla.*;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
+import io.github.axolotlclient.modules.hypixel.bedwars.BedwarsMod;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBind;
 import net.minecraft.client.util.math.MatrixStack;
@@ -57,6 +58,7 @@ public class HudManager extends AbstractModule {
 	private final OptionCategory hudCategory = new OptionCategory("hud", false);
 	private final Map<Identifier, HudEntry> entries;
 	private final MinecraftClient client;
+
 	private HudManager() {
 		this.entries = new LinkedHashMap<>();
 		client = MinecraftClient.getInstance();
@@ -100,6 +102,7 @@ public class HudManager extends AbstractModule {
 		add(new TPSHud());
 		add(new ComboHud());
 		add(new PlayerHud());
+		entries.put(BedwarsMod.getInstance().getUpgradesOverlay().getId(), BedwarsMod.getInstance().getUpgradesOverlay());
 
 		entries.values().forEach(HudEntry::init);
 

@@ -24,6 +24,7 @@ package io.github.axolotlclient.mixin;
 
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
+import io.github.axolotlclient.modules.hypixel.bedwars.BedwarsMod;
 import io.github.axolotlclient.modules.hypixel.levelhead.LevelHead;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -69,10 +70,24 @@ public abstract class EntityRendererMixin<T extends Entity> {
 									   CallbackInfo ci) {
 		if (entity instanceof AbstractClientPlayerEntity) {
 			if (MinecraftClient.getInstance().getCurrentServerEntry() != null
-				&& MinecraftClient.getInstance().getCurrentServerEntry().address.contains("hypixel.net")) {
-				if (HypixelAbstractionLayer.hasValidAPIKey() && LevelHead.getInstance().enabled.get()
-					&& string.getString().contains(entity.getName().getString())) {
-					TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
+				&& MinecraftClient.getInstance().getCurrentServerEntry().address.contains("hypixel.net")
+				&& string.getString().contains(entity.getName().getString())) {
+				TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
+				if (BedwarsMod.getInstance().isEnabled() &&
+					BedwarsMod.getInstance().inGame() &&
+					BedwarsMod.getInstance().bedwarsLevelHead.get()) {
+					String text = BedwarsMod.getInstance().getGame().get().getLevelHead((AbstractClientPlayerEntity) entity);
+					if (text != null) {
+						float x = -textRenderer.getWidth(text) / 2F;
+						float y = string.getString().contains("deadmau5") ? -20 : -10;
+
+						Matrix4f matrix4f = matrices.peek().getModel();
+						MinecraftClient.getInstance().textRenderer.draw(text, x, y,
+							LevelHead.getInstance().textColor.get().getAsInt(), AxolotlClient.CONFIG.useShadows.get(),
+							matrix4f, vertexConsumers, TextRenderer.TextLayerType.NORMAL, LevelHead.getInstance().background.get() ? 127 : 0,
+							light);
+					}
+				} else if (HypixelAbstractionLayer.hasValidAPIKey() && LevelHead.getInstance().enabled.get()) {
 					String text = "Level: " + HypixelAbstractionLayer.getPlayerLevel(String.valueOf(entity.getUuid()), LevelHead.getInstance().mode.get());
 
 					float x = -textRenderer.getWidth(text) / 2F;

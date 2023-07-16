@@ -22,6 +22,11 @@
 
 package io.github.axolotlclient.modules.sky;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -32,11 +37,6 @@ import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.quiltmc.qsl.resource.loader.api.reloader.SimpleSynchronousResourceReloader;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * This implementation of custom skies is based on the FabricSkyBoxes mod by AMereBagatelle
@@ -81,7 +81,7 @@ public class SkyResourceManager extends AbstractModule implements SimpleSynchron
 		}
 
 		for (Map.Entry<Identifier, Resource> entry : manager
-			.findResources("mcpatcher/sky", identifier -> identifier.getPath().endsWith(".properties"))
+			.findResources("mcpatcher/sky", identifier -> isMCPSky(identifier.getPath()))
 			.entrySet()) {
 			AxolotlClient.LOGGER.debug("Loading MCP sky from " + entry.getKey());
 			SkyboxManager.getInstance()
@@ -90,7 +90,7 @@ public class SkyResourceManager extends AbstractModule implements SimpleSynchron
 		}
 
 		for (Map.Entry<Identifier, Resource> entry : manager
-			.findResources("optifine/sky", identifier -> identifier.getPath().endsWith(".properties")).entrySet()) {
+			.findResources("optifine/sky", identifier -> isMCPSky(identifier.getPath())).entrySet()) {
 			AxolotlClient.LOGGER.debug("Loading OF sky from " + entry.getKey());
 			SkyboxManager.getInstance()
 				.addSkybox(new MCPSkyboxInstance(loadMCPSky("optifine", entry.getKey(), entry.getValue())));
@@ -98,6 +98,10 @@ public class SkyResourceManager extends AbstractModule implements SimpleSynchron
 		}
 
 		AxolotlClient.LOGGER.debug("Finished Loading Custom Skies!");
+	}
+
+	private boolean isMCPSky(String path){
+		return path.endsWith(".properties") && path.startsWith("sky");
 	}
 
 	private static JsonObject loadMCPSky(String loader, Identifier id, Resource resource) {

@@ -9,19 +9,19 @@ Legacy Fabric 1.8.9'da çeşitli özelliklere sahip olmak için tamamlanmış (n
 - Bir Özel Gökyüzü uygulanımı
 - Zoom tuşu
 - çeşitli Arayüz modülleri ([KronHUD](https://github.com/DarkKronicle/KronHUD)'un bir alınımı)
-    - bunları içerir, ama bunlarla limitli değil:
-        - Sohbet
-        - Skor Tahtası
-        - CPS
-        - FPS
-        - Gecikme
-        - Can Barı Arayüzü
-        - Koordinatlar
-        - ve başka!
+	- bunları içerir, ama bunlarla limitli değil:
+		- Sohbet
+		- Skor Tahtası
+		- CPS
+		- FPS
+		- Gecikme
+		- Can Barı Arayüzü
+		- Koordinatlar
+		- ve başka!
 - Hypixel Modları
-    - OtomatikGG / GF / GLHF
-    - Seviye Etiketi
-    - Otomatik Bağış
+	- OtomatikGG / GF / GLHF
+	- Seviye Etiketi
+	- Otomatik Bağış
 - Özel Blok Anahatları
 - Discord RPC
 - Mod'u kullanan oyuncular için rozetler

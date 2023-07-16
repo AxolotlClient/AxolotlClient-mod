@@ -22,6 +22,10 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.simple;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.util.List;
+
 import com.google.common.util.concurrent.AtomicDouble;
 import io.github.axolotlclient.AxolotlClientConfig.options.IntegerOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.Option;
@@ -34,10 +38,6 @@ import net.minecraft.util.Util;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
-
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.util.List;
 
 /**
  * This implementation of Hud modules is based on KronHUD.

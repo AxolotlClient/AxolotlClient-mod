@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.modules.blur;
 
+import java.io.IOException;
+
 import com.mojang.blaze3d.shader.GlUniform;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
@@ -39,8 +41,6 @@ import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.resource.Resource;
 import net.minecraft.util.Identifier;
 import org.apache.commons.io.IOUtils;
-
-import java.io.IOException;
 
 /**
  * Totally not stolen from Sol.
