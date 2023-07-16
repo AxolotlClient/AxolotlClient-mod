@@ -161,8 +161,8 @@ public class BedwarsMod implements AbstractHypixelMod {
 			waiting = false;
 			if (currentGame.isStarted()) {
 				// Trigger setting the header
-				MinecraftClient.getInstance().inGameHud.getPlayerListHud().setHeader(null);
 				currentGame.tick();
+				MinecraftClient.getInstance().inGameHud.getPlayerListHud().setHeader(null);
 			} else {
 				if (checkReady()) {
 					currentGame.onStart();
