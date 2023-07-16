@@ -95,7 +95,7 @@ public class HypixelAbstractionLayer {
 				}
 			}
 		}
-		return (int) (new Random().nextGaussian()+150*30);
+		return (int) (new Random().nextGaussian()*30+150);
 	}
 
 	private static PlayerReply.Player getPlayer(String uuid) {
