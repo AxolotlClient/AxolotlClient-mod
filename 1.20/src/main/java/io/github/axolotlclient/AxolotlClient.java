@@ -91,45 +91,43 @@ public class AxolotlClient implements ClientModInitializer {
 	private static int tickTime = 0;
 
 	public static void addBadge(Entity entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
-		if (entity instanceof PlayerEntity && !entity.isSneaky()) {
-			if (!entity.isSneaky()) {
-				if (AxolotlClient.CONFIG.showBadges.get() && AxolotlClient.isUsingClient(entity.getUuid())) {
-					RenderSystem.enableDepthTest();
-					RenderSystem.setShaderTexture(0, AxolotlClient.badgeIcon);
+		if (!entity.isSneaky()) {
+			if (AxolotlClient.CONFIG.showBadges.get() && AxolotlClient.isUsingClient(entity.getUuid())) {
+				RenderSystem.enableDepthTest();
+				RenderSystem.setShaderTexture(0, AxolotlClient.badgeIcon);
 
-					assert MinecraftClient.getInstance().player != null;
-					int x = -(MinecraftClient.getInstance().textRenderer
-						.getWidth(
-							entity.getUuid() == MinecraftClient.getInstance().player.getUuid()
-								? (NickHider.getInstance().hideOwnName.get()
-								? NickHider.getInstance().hiddenNameSelf.get()
-								: Team.decorateName(entity.getScoreboardTeam(), entity.getName())
-								.getString())
-								: (NickHider.getInstance().hideOtherNames.get()
-								? NickHider.getInstance().hiddenNameOthers.get()
-								: Team.decorateName(entity.getScoreboardTeam(), entity.getName())
-								.getString()))
-						/ 2
-						+ (AxolotlClient.CONFIG.customBadge.get() ? MinecraftClient.getInstance().textRenderer
-						.getWidth(" " + Formatting.strip(AxolotlClient.CONFIG.badgeText.get())) : 10));
+				assert MinecraftClient.getInstance().player != null;
+				int x = -(MinecraftClient.getInstance().textRenderer
+					.getWidth(
+						entity.getUuid() == MinecraftClient.getInstance().player.getUuid()
+							? (NickHider.getInstance().hideOwnName.get()
+							? NickHider.getInstance().hiddenNameSelf.get()
+							: Team.decorateName(entity.getScoreboardTeam(), entity.getName())
+							.getString())
+							: (NickHider.getInstance().hideOtherNames.get()
+							? NickHider.getInstance().hiddenNameOthers.get()
+							: Team.decorateName(entity.getScoreboardTeam(), entity.getName())
+							.getString()))
+					/ 2
+					+ (AxolotlClient.CONFIG.customBadge.get() ? MinecraftClient.getInstance().textRenderer
+					.getWidth(" " + Formatting.strip(AxolotlClient.CONFIG.badgeText.get())) : 10));
 
-					RenderSystem.setShaderColor(1, 1, 1, 1);
+				RenderSystem.setShaderColor(1, 1, 1, 1);
 
-					if (AxolotlClient.CONFIG.customBadge.get()) {
-						Text badgeText = Util.formatFromCodes(AxolotlClient.CONFIG.badgeText.get());
-						MinecraftClient.getInstance().textRenderer.draw(badgeText, x, 0, -1, AxolotlClient.CONFIG.useShadows.get(),
-							matrices.peek().getModel(), vertexConsumers, TextRenderer.TextLayerType.NORMAL, 0, 15728880);
-					} else {
-						Tessellator tessellator = Tessellator.getInstance();
-						BufferBuilder builder = tessellator.getBufferBuilder();
-						Matrix4f matrix4f = matrices.peek().getModel();
-						builder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-						builder.vertex(matrix4f, x, 0, 0).uv(0, 0);
-						builder.vertex(matrix4f, x, 8, 0).uv(0, 8);
-						builder.vertex(matrix4f, x + 8, 0, 0).uv(8, 0);
-						builder.vertex(matrix4f, x + 8, 8, 0).uv(8, 8);
-						BufferRenderer.drawWithShader(builder.end());
-					}
+				if (AxolotlClient.CONFIG.customBadge.get()) {
+					Text badgeText = Util.formatFromCodes(AxolotlClient.CONFIG.badgeText.get());
+					MinecraftClient.getInstance().textRenderer.draw(badgeText, x, 0, -1, AxolotlClient.CONFIG.useShadows.get(),
+						matrices.peek().getModel(), vertexConsumers, TextRenderer.TextLayerType.NORMAL, 0, 15728880);
+				} else {
+					Tessellator tessellator = Tessellator.getInstance();
+					BufferBuilder builder = tessellator.getBufferBuilder();
+					Matrix4f matrix4f = matrices.peek().getModel();
+					builder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+					builder.vertex(matrix4f, x, 0, 0).uv(0, 0).next();
+					builder.vertex(matrix4f, x, 8, 0).uv(0, 8).next();
+					builder.vertex(matrix4f, x + 8, 0, 0).uv(8, 0).next();
+					builder.vertex(matrix4f, x + 8, 8, 0).uv(8, 8).next();
+					BufferRenderer.drawWithShader(builder.end());
 				}
 			}
 		}

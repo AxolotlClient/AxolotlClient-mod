@@ -122,7 +122,7 @@ public class BedwarsGame {
 	}
 
 	private String calculateTopBarText() {
-		return getFormattedTime()+"\n"+
+		return me == null ? "Waiting for game start..." : getFormattedTime()+"\n"+
 			"K: "+me.getStats().getGameKills()+
 			" D: "+me.getStats().getGameDeaths()+
 			" B: "+me.getStats().getGameBedsBroken();
