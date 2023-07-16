@@ -34,25 +34,38 @@ import net.minecraft.text.Style;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArgs;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Mixin(Screen.class)
 public abstract class ScreenMixin {
 
-	@ModifyArgs(method = "renderTooltip(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/item/ItemStack;II)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;renderTooltip(Lnet/minecraft/client/util/math/MatrixStack;Ljava/util/List;Ljava/util/Optional;II)V"))
-	public void axolotlclient$modifyTooltipPosition(Args args) {
+	@ModifyVariable(method = "renderTooltipFromComponents",
+		at = @At("STORE"), index = 8)
+	private int axolotlclient$scrollableTooltipsX(int x){
 		if (ScrollableTooltips.getInstance().enabled.get()) {
 			if ((MinecraftClient.getInstance().currentScreen instanceof CreativeInventoryScreen)
-				&& ((CreativeInventoryScreen) MinecraftClient.getInstance().currentScreen).m_zqfbkfzl()) {
-				return;
+				&& !((CreativeInventoryScreen) MinecraftClient.getInstance().currentScreen).m_zqfbkfzl()) {
+				return x;
 			}
 
-			args.set(3, (int) args.get(3) + ScrollableTooltips.getInstance().tooltipOffsetX);
-			args.set(4, (int) args.get(4) + ScrollableTooltips.getInstance().tooltipOffsetY);
+			return x + ScrollableTooltips.getInstance().tooltipOffsetX;
 		}
+		return x;
+	}
+
+	@ModifyVariable(method = "renderTooltipFromComponents",
+		at = @At("STORE"), index = 9)
+	private int axolotlclient$scrollableTooltipsY(int y){
+		if (ScrollableTooltips.getInstance().enabled.get()) {
+			if ((MinecraftClient.getInstance().currentScreen instanceof CreativeInventoryScreen)
+				&& !((CreativeInventoryScreen) MinecraftClient.getInstance().currentScreen).m_zqfbkfzl()) {
+				return y;
+			}
+			return y + ScrollableTooltips.getInstance().tooltipOffsetY;
+		}
+		return y;
 	}
 
 	@Inject(method = "handleTextClick", at = @At(value = "INVOKE", target = "Lnet/minecraft/text/ClickEvent;getAction()Lnet/minecraft/text/ClickEvent$Action;", ordinal = 0), cancellable = true)
