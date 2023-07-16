@@ -22,26 +22,18 @@
 
 package io.github.axolotlclient.mixin;
 
-import io.github.axolotlclient.modules.blur.MenuBlur;
-import io.github.axolotlclient.modules.screenshotUtils.ScreenshotUtils;
 import io.github.axolotlclient.modules.scrollableTooltips.ScrollableTooltips;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.Style;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(Screen.class)
-public abstract class ScreenMixin {
+@Mixin(GuiGraphics.class)
+public class GuiGraphicsMixin {
 
-	@ModifyVariable(method = "renderTooltipFromComponents",
+	@ModifyVariable(method = "drawTooltip(Lnet/minecraft/client/font/TextRenderer;Ljava/util/List;IILnet/minecraft/client/gui/tooltip/TooltipPositioner;)V",
 		at = @At("STORE"), index = 11)
 	private int axolotlclient$scrollableTooltipsX(int x){
 		if (ScrollableTooltips.getInstance().enabled.get()) {
@@ -55,7 +47,7 @@ public abstract class ScreenMixin {
 		return x;
 	}
 
-	@ModifyVariable(method = "renderTooltipFromComponents",
+	@ModifyVariable(method = "drawTooltip(Lnet/minecraft/client/font/TextRenderer;Ljava/util/List;IILnet/minecraft/client/gui/tooltip/TooltipPositioner;)V",
 		at = @At("STORE"), index = 12)
 	private int axolotlclient$scrollableTooltipsY(int y){
 		if (ScrollableTooltips.getInstance().enabled.get()) {
@@ -68,19 +60,4 @@ public abstract class ScreenMixin {
 		return y;
 	}
 
-	@Inject(method = "handleTextClick", at = @At(value = "INVOKE", target = "Lnet/minecraft/text/ClickEvent;getAction()Lnet/minecraft/text/ClickEvent$Action;", ordinal = 0), cancellable = true)
-	public void axolotlclient$customClickEvents(Style style, CallbackInfoReturnable<Boolean> cir) {
-		ClickEvent event = style.getClickEvent();
-		if (event instanceof ScreenshotUtils.CustomClickEvent) {
-			((ScreenshotUtils.CustomClickEvent) event).doAction();
-			cir.setReturnValue(true);
-		}
-	}
-
-	@Inject(method = "renderBackground", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;fillGradient(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V"), cancellable = true)
-	private void axolotlclient$menuBlur(MatrixStack matrices, CallbackInfo ci) {
-		if (MenuBlur.getInstance().renderScreen(matrices)) {
-			ci.cancel();
-		}
-	}
 }
