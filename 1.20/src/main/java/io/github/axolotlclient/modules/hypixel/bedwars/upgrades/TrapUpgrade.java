@@ -40,9 +40,7 @@ import lombok.Getter;
 public class TrapUpgrade extends TeamUpgrade {
 
 	private final static Pattern[] REGEX = {
-		Pattern.compile("^\\b[A-Za-z0-9_§]{3,16}\\b purchased (.+) Trap\\s*$"),
-		Pattern.compile("^\\b[A-Za-z0-9_§]{3,16}\\b purchased (.+) Trap\\s*$"),
-		Pattern.compile("^\\b[A-Za-z0-9_§]{3,16}\\b purchased (.+) Trap\\s*$"),
+		Pattern.compile("^\\b[A-Za-z0-9_§]{3,16}\\b purchased (.+) Trap.?\\s*$"),
 		Pattern.compile("Trap was set (off)!"),
 	};
 

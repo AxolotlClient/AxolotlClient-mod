@@ -92,7 +92,7 @@ public class BedwarsPlayerStats {
 	}
 
 	private static double getGaussian(Random random, float mean, float deviation){
-		return random.nextGaussian()+mean*deviation;
+		return Math.max(Math.min(random.nextGaussian()+mean*deviation, mean - deviation*3), mean + deviation*3);
 	}
 
 	@Nullable
