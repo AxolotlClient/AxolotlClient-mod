@@ -95,7 +95,7 @@ public class BedwarsPlayer {
 			try {
 				stats = BedwarsPlayerStats.fromAPI(profile.getProfile().getId().toString().replace("-", ""));
 			} catch (Exception e) {
-				stats = BedwarsPlayerStats.generateFake();
+				stats = BedwarsPlayerStats.generateFake(profile.getProfile().getName());
 			}
 		}
 		if (alive || tickAlive < 0) {

@@ -22,6 +22,9 @@
 
 package io.github.axolotlclient.modules.hypixel.bedwars;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Random;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.github.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
@@ -66,9 +69,30 @@ public class BedwarsPlayerStats {
 	private final int stars;
 
 
-	public static BedwarsPlayerStats generateFake() {
-		return new BedwarsPlayerStats(0, 0, 0, 0, 0, 0,
-			0, 0, 0, 0, 0, 0, 0, 1);
+	public static BedwarsPlayerStats generateFake(String name) {
+		long seed = 0;
+		for(int i = 0; i<name.length(); i++){
+			seed = (seed << 2) +  name.getBytes(StandardCharsets.UTF_8)[i];
+		}
+		Random random = new Random(seed);
+		int star = (int) getGaussian(random, 150, 30);
+		double fkdr = Math.min(getGaussian(random, 1.3F, 0.5F), 0.6F);
+		double bblr = (fkdr * 8) / getGaussian(random, 10, 2);
+		int wins = (int) (star * (fkdr * 4) * random.nextFloat(0.95F, 1.05F));
+		int losses = (int) (wins * (2/fkdr) * random.nextFloat(0.95F, 1.05F));
+		int beds = (int) (bblr * losses);
+		int finalDeaths = (int) (losses * random.nextFloat(1F, 1.03F));
+		int deaths = (int) (finalDeaths * random.nextFloat(8, 20));
+		int finalKills = (int) (deaths * fkdr);
+		int kills = (int) (finalKills * random.nextFloat(1, 2));
+
+		return new BedwarsPlayerStats(finalKills, finalDeaths, beds, deaths, kills,
+			0, 0, 0, 0, 0,
+			losses, wins, 0, star);
+	}
+
+	private static double getGaussian(Random random, float mean, float deviation){
+		return random.nextGaussian()+mean*deviation;
 	}
 
 	@Nullable

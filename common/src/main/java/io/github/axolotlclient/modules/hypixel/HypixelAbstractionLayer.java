@@ -24,6 +24,7 @@ package io.github.axolotlclient.modules.hypixel;
 
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -81,15 +82,20 @@ public class HypixelAbstractionLayer {
 				if (Objects.equals(mode, LevelHeadMode.NETWORK.toString())) {
 					return (int) player.getNetworkLevel();
 				} else if (Objects.equals(mode, LevelHeadMode.BEDWARS.toString())) {
-					return player.getIntProperty("achievements.bedwars_level", 0);
+					int level = player.getIntProperty("achievements.bedwars_level", -1);
+					if(level != -1){
+						return level;
+					}
 				} else if (Objects.equals(mode, LevelHeadMode.SKYWARS.toString())) {
 					int exp = player
-						.getIntProperty("stats.SkyWars.skywars_experience", 0);
-					return Math.round(ExpCalculator.getLevelForExp(exp));
+						.getIntProperty("stats.SkyWars.skywars_experience", -1);
+					if(exp != -1) {
+						return Math.round(ExpCalculator.getLevelForExp(exp));
+					}
 				}
 			}
 		}
-		return 0;
+		return (int) (new Random().nextGaussian()+150*30);
 	}
 
 	private static PlayerReply.Player getPlayer(String uuid) {
@@ -125,7 +131,7 @@ public class HypixelAbstractionLayer {
 	private static boolean loadPlayerDataIfAbsent(String uuid) {
 		if (cachedPlayerData.get(uuid) == null) {
 			// set at 115 to have a buffer in case of disparity between threads
-			if (hypixelApiCalls.get() <= 115) {
+			if (hypixelApiCalls.get() <= 55) {
 				cachedPlayerData.put(uuid, api.getPlayerByUuid(uuid));
 				hypixelApiCalls.incrementAndGet();
 				ThreadExecuter.scheduleTask(hypixelApiCalls::decrementAndGet, 1, TimeUnit.MINUTES);
