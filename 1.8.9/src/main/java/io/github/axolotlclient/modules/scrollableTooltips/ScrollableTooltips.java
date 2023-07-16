@@ -109,9 +109,9 @@ public class ScrollableTooltips extends AbstractModule {
 
 	public void alignToScreenBottom(List<String> tooltip, int y){
 		if(alignToBottom.get() && !alignedToBottom) {
-			int height = tooltip.size() * 10;
+			int height = tooltip.size() * 10 - 4;
 
-			if(height + y - 4 > Util.getWindow().getHeight()){
+			if(height + y > Util.getWindow().getHeight()){
 				tooltipOffsetY = Util.getWindow().getHeight() - y - height;
 			}
 
