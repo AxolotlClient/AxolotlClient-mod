@@ -30,8 +30,8 @@ import java.util.List;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
+import io.github.axolotlclient.AxolotlClientConfig.common.util.Rectangle;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
-import io.github.axolotlclient.modules.hud.util.RenderUtil;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Element;
@@ -326,14 +326,8 @@ public class CreditsScreen extends Screen {
 		public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX,
 						   int mouseY, boolean hovered, float tickDelta) {
 			if (hovered || c.isFocused()) {
-				drawVerticalLine(matrices, x - 100, y, y + 20,
-					io.github.axolotlclient.AxolotlClientConfig.Color.ERROR.getAsInt());
-				drawVerticalLine(matrices, x + 100, y, y + 20,
-					io.github.axolotlclient.AxolotlClientConfig.Color.ERROR.getAsInt());
-				drawHorizontalLine(matrices, x - 100, x + 100, y + 20,
-					io.github.axolotlclient.AxolotlClientConfig.Color.ERROR.getAsInt());
-				drawHorizontalLine(matrices, x - 100, x + 100, y,
-					io.github.axolotlclient.AxolotlClientConfig.Color.ERROR.getAsInt());
+				io.github.axolotlclient.AxolotlClientConfig.util.DrawUtil.getInstance().outlineRect(new Rectangle(x-100, y, 200, 20),
+					Color.ERROR.getAsInt(), 10);
 			}
 			this.hovered = hovered;
 			DrawUtil.drawCenteredString(matrices, MinecraftClient.getInstance().textRenderer, name, x, y + 5,
@@ -403,10 +397,9 @@ public class CreditsScreen extends Screen {
 		}
 
 		public void render(MatrixStack matrices) {
-			RenderUtil.drawRectangle(matrices, x, y, width, height,
-				io.github.axolotlclient.AxolotlClientConfig.Color.DARK_GRAY.withAlpha(127));
-			DrawUtil.outlineRect(matrices, x, y, width, height,
-				io.github.axolotlclient.AxolotlClientConfig.Color.BLACK.getAsInt());
+			Rectangle rect = new Rectangle(x, y, width, height);
+			io.github.axolotlclient.AxolotlClientConfig.util.DrawUtil.getInstance().drawRect(rect, Color.DARK_GRAY.withAlpha(127).getAsInt(), 10);
+			io.github.axolotlclient.AxolotlClientConfig.util.DrawUtil.getInstance().outlineRect(rect, Color.WHITE.getAsInt(), 10);
 
 			DrawUtil.drawCenteredString(matrices, MinecraftClient.getInstance().textRenderer, credit.name,
 				window.getScaledWidth() / 2, y + 7, -16784327, true);

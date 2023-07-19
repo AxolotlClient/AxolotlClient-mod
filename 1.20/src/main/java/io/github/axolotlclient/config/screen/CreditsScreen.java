@@ -30,8 +30,8 @@ import com.mojang.blaze3d.glfw.Window;
 import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
+import io.github.axolotlclient.AxolotlClientConfig.common.util.Rectangle;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
-import io.github.axolotlclient.modules.hud.util.RenderUtil;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Element;
@@ -270,7 +270,8 @@ public class CreditsScreen extends Screen {
 		public void render(GuiGraphics graphics, int index, int y, int x, int entryWidth, int entryHeight, int mouseX,
 						   int mouseY, boolean hovered, float tickDelta) {
 			if (hovered || c.isFocused()) {
-				RenderUtil.drawOutline(graphics, x-100, y, 200, 20, Color.ERROR.getAsInt());
+				io.github.axolotlclient.AxolotlClientConfig.util.DrawUtil.getInstance().outlineRect(new Rectangle(x-100, y, 200, 20),
+					Color.ERROR.getAsInt(), 10);
 			}
 			this.hovered = hovered;
 			DrawUtil.drawCenteredString(graphics, MinecraftClient.getInstance().textRenderer, name, x, y + 5,
@@ -345,10 +346,9 @@ public class CreditsScreen extends Screen {
 		}
 
 		public void render(GuiGraphics graphics) {
-			RenderUtil.drawRectangle(graphics, x, y, width, height,
-				Color.DARK_GRAY.withAlpha(127));
-			DrawUtil.outlineRect(graphics, x, y, width, height,
-				Color.BLACK.getAsInt());
+			Rectangle rect = new Rectangle(x, y, width, height);
+			io.github.axolotlclient.AxolotlClientConfig.util.DrawUtil.getInstance().drawRect(rect, Color.DARK_GRAY.withAlpha(127).getAsInt(), 10);
+			io.github.axolotlclient.AxolotlClientConfig.util.DrawUtil.getInstance().outlineRect(rect, Color.WHITE.getAsInt(), 10);
 
 			DrawUtil.drawCenteredString(graphics, MinecraftClient.getInstance().textRenderer, credit.name,
 				window.getScaledWidth() / 2, y + 7, -16784327, true);

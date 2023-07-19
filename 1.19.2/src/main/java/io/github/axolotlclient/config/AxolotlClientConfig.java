@@ -165,6 +165,7 @@ public class AxolotlClientConfig extends ConfigHolder {
 		general.add(AxolotlClientConfigConfig.showQuickToggles);
 		general.add(AxolotlClientConfigConfig.showOptionTooltips);
 		general.add(AxolotlClientConfigConfig.showCategoryTooltips);
+		general.add(AxolotlClientConfigConfig.roundedRects);
 		general.add(customWindowTitle);
 		general.add(openCredits);
 		general.add(debugLogOutput);
