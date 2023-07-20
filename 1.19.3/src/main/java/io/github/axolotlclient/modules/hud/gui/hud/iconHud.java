@@ -43,6 +43,9 @@ public class iconHud extends BoxHudEntry {
 		RenderSystem.setShaderTexture(0, AxolotlClient.badgeIcon);
 
 		drawTexture(matrices, pos.x, pos.y, 0, 0, width, height, width, height);
+
+		RenderSystem.disableTexture();
+		RenderSystem.enableBlend();
 	}
 
 	@Override

@@ -38,6 +38,7 @@ import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.json.ModelTransformation;
+import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.PlayerScreenHandler;
@@ -160,38 +161,41 @@ public class ItemUtil {
 	}
 
 	public void renderGuiItemModel(float scale, ItemStack stack, float x, float y) {
+		DiffuseLighting.disable();
 		MinecraftClient client = MinecraftClient.getInstance();
 		BakedModel model = client.getItemRenderer().getHeldItemModel(stack, null, null);
+		RenderSystem.pushMatrix();
+		RenderSystem.scalef(scale, scale, 1);
+		client.getTextureManager().bindTexture(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE);
 		client.getTextureManager().getTexture(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).setFilter(false, false);
-		MinecraftClient.getInstance().getTextureManager().bindTexture(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE);
+		RenderSystem.enableRescaleNormal();
+		RenderSystem.enableAlphaTest();
+		RenderSystem.defaultAlphaFunc();
 		RenderSystem.enableBlend();
 		RenderSystem.blendFunc(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA);
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		RenderSystem.pushMatrix();
-		RenderSystem.scalef(scale, scale, 0);
-		RenderSystem.translatef(x, y, (100.0F + client.getItemRenderer().zOffset));
-		RenderSystem.translated(8.0D, 8.0D, 0.0D);
+		RenderSystem.translatef(x, y, 100.0F + client.getItemRenderer().zOffset);
+		RenderSystem.translatef(8.0F, 8.0F, 0.0F);
 		RenderSystem.scalef(1.0F, -1.0F, 1.0F);
 		RenderSystem.scalef(16.0F, 16.0F, 16.0F);
-
-		MatrixStack nextStack = new MatrixStack();
-
-		VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders()
-			.getEntityVertexConsumers();
+		MatrixStack matrixStack = new MatrixStack();
+		VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
 		boolean bl = !model.isSideLit();
 		if (bl) {
 			DiffuseLighting.disableGuiDepthLighting();
 		}
 
-		client.getItemRenderer().renderItem(stack, ModelTransformation.Mode.GUI, false, nextStack, immediate, 15728880,
-			OverlayTexture.DEFAULT_UV, model);
+		MinecraftClient.getInstance().getItemRenderer().renderItem(stack, ModelTransformation.Mode.GUI, false, matrixStack, immediate, 15728880, OverlayTexture.DEFAULT_UV, model);
 		immediate.draw();
 		RenderSystem.enableDepthTest();
 		if (bl) {
 			DiffuseLighting.enableGuiDepthLighting();
 		}
 
+		RenderSystem.disableAlphaTest();
+		RenderSystem.disableRescaleNormal();
 		RenderSystem.popMatrix();
+		DiffuseLighting.disable();
 	}
 
 	public static void renderGuiItemOverlay(MatrixStack matrices, TextRenderer renderer, ItemStack stack, int x, int y,

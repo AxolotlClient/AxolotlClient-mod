@@ -37,7 +37,7 @@ import net.minecraft.client.gui.GuiGraphics;
 public class DrawUtil {
 
 	public static void fillRect(GuiGraphics graphics, Rectangle rectangle, Color color) {
-		fillRect(graphics, rectangle.x, rectangle.y, rectangle.width, rectangle.height, color.getAsInt());
+		io.github.axolotlclient.AxolotlClientConfig.util.DrawUtil.getInstance().drawRect(graphics, rectangle, color.getAsInt(), 10);
 	}
 
 	public static void fillRect(GuiGraphics graphics, int x, int y, int width, int height, int color) {
@@ -49,14 +49,11 @@ public class DrawUtil {
 	}
 
 	public static void outlineRect(GuiGraphics graphics, Rectangle rectangle, Color color) {
-		outlineRect(graphics, rectangle.x, rectangle.y, rectangle.width, rectangle.height, color.getAsInt());
+		io.github.axolotlclient.AxolotlClientConfig.util.DrawUtil.getInstance().outlineRect(graphics, rectangle, color.getAsInt(), 10);
 	}
 
 	public static void outlineRect(GuiGraphics graphics, int x, int y, int width, int height, int color) {
-		fillRect(graphics, x, y, 1, height - 1, color);
-		fillRect(graphics, x + width - 1, y + 1, 1, height - 1, color);
-		fillRect(graphics, x + 1, y, width - 1, 1, color);
-		fillRect(graphics, x, y + height - 1, width - 1, 1, color);
+		io.github.axolotlclient.AxolotlClientConfig.util.DrawUtil.getInstance().outlineRect(graphics, x, y, width, height, color, 10);
 	}
 
 	public static void drawCenteredString(GuiGraphics graphics, TextRenderer renderer, String text, int x, int y,

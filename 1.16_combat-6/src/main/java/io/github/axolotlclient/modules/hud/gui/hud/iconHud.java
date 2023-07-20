@@ -22,10 +22,13 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud;
 
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.hud.gui.entry.BoxHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
@@ -39,6 +42,10 @@ public class iconHud extends BoxHudEntry {
 
 	@Override
 	public void renderComponent(MatrixStack matrices, float delta) {
+		RenderSystem.enableTexture();
+		RenderSystem.enableBlend();
+		RenderSystem.defaultBlendFunc();
+		RenderSystem.color4f(1, 1, 1,1);
 		DrawPosition pos = getPos();
 		MinecraftClient.getInstance().getTextureManager().bindTexture(AxolotlClient.badgeIcon);
 
@@ -47,7 +54,7 @@ public class iconHud extends BoxHudEntry {
 
 	@Override
 	public void renderPlaceholderComponent(MatrixStack matrices, float delta) {
-		render(matrices, delta);
+		renderComponent(matrices, delta);
 	}
 
 	@Override

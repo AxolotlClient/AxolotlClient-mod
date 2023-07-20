@@ -29,7 +29,6 @@ import java.util.List;
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
-import io.github.axolotlclient.AxolotlClientConfig.common.util.Rectangle;
 import io.github.axolotlclient.mixin.SoundManagerAccessor;
 import io.github.axolotlclient.mixin.SoundSystemAccessor;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
@@ -313,7 +312,7 @@ public class CreditsScreen extends Screen {
 		public void render(int index, int x, int y, int rowWidth, int rowHeight, int mouseX, int mouseY,
 						   boolean hovered) {
 			if (hovered) {
-				io.github.axolotlclient.AxolotlClientConfig.util.DrawUtil.getInstance().outlineRect(new Rectangle(x-100, y, 200, 20),
+				io.github.axolotlclient.AxolotlClientConfig.util.DrawUtil.getInstance().outlineRect(x-100, y, 200, 20,
 					Color.ERROR.getAsInt(), 10);
 			}
 			this.hovered = hovered;
@@ -378,9 +377,8 @@ public class CreditsScreen extends Screen {
 		}
 
 		public void render() {
-			Rectangle rect = new Rectangle(x, y, width, height);
-			io.github.axolotlclient.AxolotlClientConfig.util.DrawUtil.getInstance().drawRect(rect, DARK_GRAY.getAsInt(), 10);
-			io.github.axolotlclient.AxolotlClientConfig.util.DrawUtil.getInstance().outlineRect(rect, Color.WHITE.getAsInt(), 10);
+			io.github.axolotlclient.AxolotlClientConfig.util.DrawUtil.getInstance().drawRect(x, y, width, height, DARK_GRAY.getAsInt(), 10);
+			io.github.axolotlclient.AxolotlClientConfig.util.DrawUtil.getInstance().outlineRect(x, y, width, height, Color.WHITE.getAsInt(), 10);
 
 			drawCenteredString(MinecraftClient.getInstance().textRenderer, credit.name, window.getWidth() / 2, y + 7,
 				-16784327);

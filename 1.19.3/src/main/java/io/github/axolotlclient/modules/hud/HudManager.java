@@ -25,7 +25,9 @@ package io.github.axolotlclient.modules.hud;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.InputUtil;
+import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.KeyBindOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
@@ -142,6 +144,11 @@ public class HudManager extends AbstractModule {
 			for (HudEntry hud : getEntries()) {
 				if (hud.isEnabled() && (!client.options.debugEnabled || hud.overridesF3())) {
 					client.getProfiler().push(hud.getName());
+					RenderSystem.setShaderColor(1, 1, 1, 1);
+					RenderSystem.enableBlend();
+					RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
+						GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
+						GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 					hud.render(matrices, delta);
 					client.getProfiler().pop();
 				}

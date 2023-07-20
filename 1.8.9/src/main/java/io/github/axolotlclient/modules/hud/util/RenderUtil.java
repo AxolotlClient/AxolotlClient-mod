@@ -26,6 +26,7 @@ import java.util.function.Supplier;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
+import io.github.axolotlclient.AxolotlClientConfig.util.DrawUtil;
 import io.github.axolotlclient.mixin.MinecraftClientAccessor;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.MinecraftClient;
@@ -49,7 +50,8 @@ public class RenderUtil {
 	 * Fills an outline with x/y width/height values
 	 */
 	public void drawOutline(int x, int y, int width, int height, int color) {
-		fillOutline(x, y, x + width, y + height, color);
+		io.github.axolotlclient.AxolotlClientConfig.util.DrawUtil.getInstance().outlineRect(x, y, width, height, color, 10);
+		//fillOutline(x, y, x + width, y + height, color);
 	}
 
 	/**
@@ -70,7 +72,8 @@ public class RenderUtil {
 	 * Fills in a rectangle with a color. Uses raw x/y values. x/y
 	 */
 	public void fill(int x1, int y1, int x2, int y2, int color) {
-		fill(x1, y1, x2, y2, color, () -> MinecraftClient.getInstance().gameRenderer.getShader());
+		io.github.axolotlclient.AxolotlClientConfig.util.DrawUtil.getInstance().drawRect(x1, y1, x2-x1, y2-y1, color, 10);
+		//fill(x1, y1, x2, y2, color, () -> MinecraftClient.getInstance().gameRenderer.getShader());
 	}
 
 	public void fill(int x1, int y1, int x2, int y2, int color, Supplier<ShaderEffect> shaderSupplier) {
@@ -109,7 +112,8 @@ public class RenderUtil {
 	}
 
 	public void drawOutline(int x, int y, int width, int height, Color color) {
-		fillOutline(x, y, x + width, y + height, color);
+		io.github.axolotlclient.AxolotlClientConfig.util.DrawUtil.getInstance().outlineRect(x, y, width, height, color, 10);
+		//fillOutline(x, y, x + width, y + height, color);
 	}
 
 	public void fillOutline(int x, int y, int x2, int y2, Color color) {

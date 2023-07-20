@@ -31,7 +31,6 @@ import com.mojang.blaze3d.platform.InputUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
-import io.github.axolotlclient.AxolotlClientConfig.common.util.Rectangle;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
@@ -271,7 +270,7 @@ public class CreditsScreen extends Screen {
 		public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX,
 						   int mouseY, boolean hovered, float tickDelta) {
 			if (hovered || c.isFocused()) {
-				io.github.axolotlclient.AxolotlClientConfig.util.DrawUtil.getInstance().outlineRect(new Rectangle(x-100, y, 200, 20),
+				io.github.axolotlclient.AxolotlClientConfig.util.DrawUtil.getInstance().outlineRect(matrices, x-100, y, 200, 20,
 					Color.ERROR.getAsInt(), 10);
 			}
 			this.hovered = hovered;
@@ -347,9 +346,8 @@ public class CreditsScreen extends Screen {
 		}
 
 		public void render(MatrixStack matrices) {
-			Rectangle rect = new Rectangle(x, y, width, height);
-			io.github.axolotlclient.AxolotlClientConfig.util.DrawUtil.getInstance().drawRect(rect, Color.DARK_GRAY.withAlpha(127).getAsInt(), 10);
-			io.github.axolotlclient.AxolotlClientConfig.util.DrawUtil.getInstance().outlineRect(rect, Color.WHITE.getAsInt(), 10);
+			io.github.axolotlclient.AxolotlClientConfig.util.DrawUtil.getInstance().drawRect(matrices, x, y, width, height, Color.DARK_GRAY.withAlpha(127).getAsInt(), 10);
+			io.github.axolotlclient.AxolotlClientConfig.util.DrawUtil.getInstance().outlineRect(matrices, x, y, width, height, Color.WHITE.getAsInt(), 10);
 
 			RenderSystem.setShaderColor(1, 1, 1, 1);
 

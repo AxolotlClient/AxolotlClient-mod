@@ -45,7 +45,7 @@ public class RenderUtil {
 	 * Fills an outline with x/y width/height values
 	 */
 	public void drawOutline(MatrixStack matrices, int x, int y, int width, int height, int color) {
-		fillOutline(matrices, x, y, x + width, y + height, color);
+		io.github.axolotlclient.AxolotlClientConfig.util.DrawUtil.getInstance().outlineRect(matrices, x, y, width, height, color, 10);
 	}
 
 	/**
@@ -66,7 +66,7 @@ public class RenderUtil {
 	 * Fills in a rectangle with a color. Uses raw x/y values. x/y
 	 */
 	public void fill(MatrixStack matrices, int x1, int y1, int x2, int y2, int color) {
-		fill(matrices.peek().getModel(), x1, y1, x2, y2, color);
+		io.github.axolotlclient.AxolotlClientConfig.util.DrawUtil.getInstance().drawRect(matrices, x1, y1, x2-x1, y2-y1, color, 10);
 	}
 
 	public void fill(Matrix4f matrix, int x1, int y1, int x2, int y2, int color) {
@@ -100,7 +100,7 @@ public class RenderUtil {
 	}
 
 	public void drawOutline(MatrixStack matrices, int x, int y, int width, int height, Color color) {
-		fillOutline(matrices, x, y, x + width, y + height, color);
+		io.github.axolotlclient.AxolotlClientConfig.util.DrawUtil.getInstance().outlineRect(matrices, x, y, width, height, color, 10);
 	}
 
 	public void fillOutline(MatrixStack matrices, int x, int y, int x2, int y2, Color color) {

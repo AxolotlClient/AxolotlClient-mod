@@ -22,7 +22,6 @@
 
 package io.github.axolotlclient.modules.hud.util;
 
-import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
@@ -36,20 +35,11 @@ import lombok.experimental.Accessors;
  * Stores a basic rectangle.
  */
 
-@Data
 @Accessors(fluent = true)
-public class Rectangle {
-
-	public int x;
-	public int y;
-	public int width;
-	public int height;
+public class Rectangle extends io.github.axolotlclient.AxolotlClientConfig.common.util.Rectangle {
 
 	public Rectangle(int x, int y, int width, int height) {
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
+		super(x, y, width, height);
 	}
 
 	public Rectangle offset(DrawPosition offset) {
@@ -60,14 +50,19 @@ public class Rectangle {
 		return new Rectangle(this.x + x, this.y + y, width, height);
 	}
 
-	public boolean isMouseOver(double mouseX, double mouseY) {
-		return mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height;
+	public int x(){
+		return x;
 	}
 
-	public void setData(int x, int y, int width, int height) {
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
+	public int y(){
+		return y;
+	}
+
+	public int width(){
+		return width;
+	}
+
+	public int height(){
+		return height;
 	}
 }

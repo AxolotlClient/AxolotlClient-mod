@@ -47,7 +47,7 @@ public class RenderUtil {
 	 * Fills an outline with x/y width/height values
 	 */
 	public void drawOutline(GuiGraphics graphics, int x, int y, int width, int height, int color) {
-		fillOutline(graphics, x, y, x + width, y + height, color);
+		io.github.axolotlclient.AxolotlClientConfig.util.DrawUtil.getInstance().outlineRect(graphics, x, y, width, height, color, 10);
 	}
 
 	/**
@@ -68,7 +68,7 @@ public class RenderUtil {
 	 * Fills in a rectangle with a color. Uses raw x/y values. x/y
 	 */
 	public void fill(GuiGraphics graphics, int x1, int y1, int x2, int y2, int color) {
-		fill(graphics.getMatrices().peek().getModel(), x1, y1, x2, y2, color);
+		io.github.axolotlclient.AxolotlClientConfig.util.DrawUtil.getInstance().drawRect(graphics, x1, y1, x2-x1, y2-y1, color, 10);
 	}
 
 	public void fill(Matrix4f matrix, int x1, int y1, int x2, int y2, int color) {
@@ -106,7 +106,7 @@ public class RenderUtil {
 	}
 
 	public void drawOutline(GuiGraphics graphics, int x, int y, int width, int height, Color color) {
-		fillOutline(graphics, x, y, x + width, y + height, color);
+		io.github.axolotlclient.AxolotlClientConfig.util.DrawUtil.getInstance().outlineRect(graphics, x, y, width, height, color, 10);
 	}
 
 	public void fillOutline(GuiGraphics graphics, int x, int y, int x2, int y2, Color color) {

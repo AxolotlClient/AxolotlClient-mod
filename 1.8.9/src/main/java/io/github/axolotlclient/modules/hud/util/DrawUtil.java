@@ -42,7 +42,7 @@ public class DrawUtil extends DrawableHelper {
 	}
 
 	public static void fillRect(int x, int y, int width, int height, int color) {
-		DrawableHelper.fill(x, y, x + width, y + height, color);
+		io.github.axolotlclient.AxolotlClientConfig.util.DrawUtil.getInstance().drawRect(x, y, width, height, color, 10);
 	}
 
 	public static void fillRect(int x, int y, int width, int height, Color color) {
@@ -54,10 +54,7 @@ public class DrawUtil extends DrawableHelper {
 	}
 
 	public static void outlineRect(int x, int y, int width, int height, int color) {
-		fillRect(x, y, 1, height - 1, color);
-		fillRect(x + width - 1, y + 1, 1, height - 1, color);
-		fillRect(x + 1, y, width - 1, 1, color);
-		fillRect(x, y + height - 1, width - 1, 1, color);
+		io.github.axolotlclient.AxolotlClientConfig.util.DrawUtil.getInstance().outlineRect(x, y, width, height, color, 10);
 	}
 
 	public static void drawCenteredString(TextRenderer renderer, String text, int x, int y, Color color,

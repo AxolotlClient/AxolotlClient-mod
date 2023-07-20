@@ -42,7 +42,7 @@ public class DrawUtil extends DrawableHelper {
 	}
 
 	public static void fillRect(MatrixStack matrices, int x, int y, int width, int height, int color) {
-		DrawableHelper.fill(matrices, x, y, x + width, y + height, color);
+		io.github.axolotlclient.AxolotlClientConfig.util.DrawUtil.getInstance().drawRect(matrices, x, y, width, height, color, 10);
 	}
 
 	public static void fillRect(MatrixStack matrices, int x, int y, int width, int height, Color color) {
@@ -54,10 +54,7 @@ public class DrawUtil extends DrawableHelper {
 	}
 
 	public static void outlineRect(MatrixStack matrices, int x, int y, int width, int height, int color) {
-		fillRect(matrices, x, y, 1, height - 1, color);
-		fillRect(matrices, x + width - 1, y + 1, 1, height - 1, color);
-		fillRect(matrices, x + 1, y, width - 1, 1, color);
-		fillRect(matrices, x, y + height - 1, width - 1, 1, color);
+		io.github.axolotlclient.AxolotlClientConfig.util.DrawUtil.getInstance().outlineRect(matrices, x, y, width, height, color, 10);
 	}
 
 	public static void drawCenteredString(MatrixStack matrices, TextRenderer renderer, String text, int x, int y,
