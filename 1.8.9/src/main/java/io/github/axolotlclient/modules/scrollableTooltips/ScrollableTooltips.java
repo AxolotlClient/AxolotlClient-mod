@@ -22,11 +22,14 @@
 
 package io.github.axolotlclient.modules.scrollableTooltips;
 
+import java.util.List;
+
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.IntegerOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.AbstractModule;
+import io.github.axolotlclient.util.Util;
 import net.minecraft.client.gui.screen.Screen;
 import org.lwjgl.input.Mouse;
 
@@ -38,9 +41,12 @@ public class ScrollableTooltips extends AbstractModule {
 		true);
 	protected final IntegerOption scrollAmount = new IntegerOption("scrollAmount", 5, 1, 20);
 	protected final BooleanOption inverse = new BooleanOption("inverse", false);
+	private final BooleanOption alignToBottom = new BooleanOption("alignToBottom", false);
 	private final OptionCategory category = new OptionCategory("scrollableTooltips");
 	public int tooltipOffsetX;
 	public int tooltipOffsetY;
+
+	private boolean alignedToBottom;
 
 	public static ScrollableTooltips getInstance() {
 		return instance;
@@ -52,12 +58,14 @@ public class ScrollableTooltips extends AbstractModule {
 		category.add(enableShiftHorizontalScroll);
 		category.add(scrollAmount);
 		category.add(inverse);
+		category.add(alignToBottom);
 
 		AxolotlClient.CONFIG.rendering.addSubCategory(category);
 	}
 
 	public void onRenderTooltip() {
 		if (enabled.get()) {
+
 			int i = Mouse.getDWheel();
 			if (i != 0) {
 				if (i < 0) {
@@ -95,6 +103,19 @@ public class ScrollableTooltips extends AbstractModule {
 	}
 
 	public void resetScroll() {
+		alignedToBottom = false;
 		tooltipOffsetY = tooltipOffsetX = 0;
+	}
+
+	public void alignToScreenBottom(List<String> tooltip, int y){
+		if(alignToBottom.get() && !alignedToBottom) {
+			int height = tooltip.size() * 10 - 4;
+
+			if(height + y > Util.getWindow().getHeight()){
+				tooltipOffsetY = Util.getWindow().getHeight() - y - height;
+			}
+
+			alignedToBottom = true;
+		}
 	}
 }

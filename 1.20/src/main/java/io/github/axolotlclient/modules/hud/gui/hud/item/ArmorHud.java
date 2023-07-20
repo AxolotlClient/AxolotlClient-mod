@@ -86,10 +86,12 @@ public class ArmorHud extends TextHudEntry {
 		if (total.equals("1")) {
 			total = null;
 		}
+		graphics.drawItem(stack, x, y);
 		graphics.drawItemInSlot(client.textRenderer, stack, x, y, total);
 	}
 
 	public void renderItem(GuiGraphics graphics, ItemStack stack, int x, int y) {
+		graphics.drawItem(stack, x, y);
 		graphics.drawItemInSlot(client.textRenderer, stack, x, y);
 	}
 

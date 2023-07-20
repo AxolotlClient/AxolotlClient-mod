@@ -62,7 +62,7 @@ public class MCPSkyboxInstance extends SkyboxInstance {
 		try {
 			String[] axis = json.get("axis").getAsString().split(" ");
 			for (int i = 0; i < axis.length; i++) {
-				this.rotationStatic[i] = Float.parseFloat(axis[i]);
+				this.rotationAxis[i] = Float.parseFloat(axis[i]);
 			}
 		} catch (Exception ignored) {
 		}

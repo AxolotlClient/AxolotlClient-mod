@@ -18,14 +18,15 @@ pluginManagement {
 
 boolean checkProp(String property) {
 
-	String value = getProperties().get("axolotlclient.modules."+property)
+	String value = getProperties().get("axolotlclient.modules." + property)
 	return !(value == null || value.isEmpty() || value == "false" || value == "f")
 }
 
 void optional(String project) {
-	if (checkProp(project) || checkProp("all"))
-		System.out.println("Adding "+project)
+	if (checkProp(project) || checkProp("all")) {
+		System.out.println("Adding " + project)
 		include project
+	}
 }
 
 include 'common'

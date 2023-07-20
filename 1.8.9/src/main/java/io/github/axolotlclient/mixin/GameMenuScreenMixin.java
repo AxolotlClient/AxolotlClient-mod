@@ -83,9 +83,9 @@ public abstract class GameMenuScreenMixin extends Screen {
 		if (axolotlclient$hasModMenu())
 			return;
 
-		if ((MinecraftClient.getInstance().getServer() != null
+		if (!MinecraftClient.getInstance().isInSingleplayer() && ((MinecraftClient.getInstance().getServer() != null
 			&& MinecraftClient.getInstance().getServer().isPublished())
-			|| MinecraftClient.getInstance().getCurrentServerEntry() != null) {
+			|| MinecraftClient.getInstance().getCurrentServerEntry() != null)) {
 			args.set(0, 20);
 			args.set(5, I18n.translate("title_short"));
 		}

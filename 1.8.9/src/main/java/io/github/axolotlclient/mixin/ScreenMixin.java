@@ -57,9 +57,11 @@ public abstract class ScreenMixin {
 				return;
 			}
 
+			int y = args.get(2);
 			ScrollableTooltips.getInstance().onRenderTooltip();
+			ScrollableTooltips.getInstance().alignToScreenBottom(args.get(0), y);
 			args.set(1, (int) args.get(1) + ScrollableTooltips.getInstance().tooltipOffsetX);
-			args.set(2, (int) args.get(2) + ScrollableTooltips.getInstance().tooltipOffsetY);
+			args.set(2, y + ScrollableTooltips.getInstance().tooltipOffsetY);
 		}
 	}
 

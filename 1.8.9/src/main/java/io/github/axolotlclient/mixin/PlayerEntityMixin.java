@@ -25,6 +25,7 @@ package io.github.axolotlclient.mixin;
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hud.gui.hud.simple.ComboHud;
 import io.github.axolotlclient.modules.hud.gui.hud.simple.ReachHud;
+import io.github.axolotlclient.modules.hypixel.bedwars.BedwarsMod;
 import io.github.axolotlclient.modules.particles.Particles;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.particle.ParticleType;
@@ -81,6 +82,19 @@ public abstract class PlayerEntityMixin extends Entity {
 		if (source.getAttacker() instanceof PlayerEntity) {
 			ComboHud comboHud = (ComboHud) HudManager.getInstance().get(ComboHud.ID);
 			comboHud.onEntityDamage(this);
+		}
+	}
+
+	@Inject(
+		method = "getArmorProtectionValue",
+		at = @At(
+			"HEAD"
+		),
+		cancellable = true
+	)
+	public void axolotlclient$disableArmor(CallbackInfoReturnable<Integer> ci) {
+		if (BedwarsMod.getInstance().isEnabled() && BedwarsMod.getInstance().inGame() && !BedwarsMod.getInstance().displayArmor.get()) {
+			ci.setReturnValue(0);
 		}
 	}
 }

@@ -32,6 +32,7 @@ import io.github.axolotlclient.api.requests.StatusUpdate;
 import io.github.axolotlclient.api.util.StatusUpdateProvider;
 import io.github.axolotlclient.modules.hypixel.HypixelLocation;
 import io.github.axolotlclient.util.GsonHelper;
+import io.github.axolotlclient.util.events.Events;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
@@ -43,6 +44,12 @@ import net.minecraft.entity.player.PlayerEntity;
 public class StatusUpdateProviderImpl implements StatusUpdateProvider {
 
 	private final Instant time = Instant.now();
+
+	@Override
+	public void initialize() {
+		Events.RECEIVE_CHAT_MESSAGE_EVENT.register(event ->
+			event.setCancelled(HypixelLocation.waitingForResponse(event.getOriginalMessage())));
+	}
 
 	@Override
 	public Request getStatus() {

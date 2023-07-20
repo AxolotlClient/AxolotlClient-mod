@@ -26,5 +26,7 @@ import io.github.axolotlclient.api.Request;
 
 public interface StatusUpdateProvider {
 
+	void initialize();
+
 	Request getStatus();
 }

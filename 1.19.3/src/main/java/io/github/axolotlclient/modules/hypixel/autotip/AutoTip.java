@@ -28,9 +28,10 @@ import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.modules.hypixel.AbstractHypixelMod;
 import io.github.axolotlclient.util.Util;
+import io.github.axolotlclient.util.events.Events;
+import io.github.axolotlclient.util.events.impl.ReceiveChatMessageEvent;
 import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Text;
 
 public class AutoTip implements AbstractHypixelMod {
 
@@ -52,6 +53,9 @@ public class AutoTip implements AbstractHypixelMod {
 	@Override
 	public void init() {
 		category.add(enabled, hideMessages);
+
+		Events.RECEIVE_CHAT_MESSAGE_EVENT.register(this::onChatMessage);
+
 		init = true;
 	}
 
@@ -80,8 +84,8 @@ public class AutoTip implements AbstractHypixelMod {
 		return true;
 	}
 
-	public boolean onChatMessage(Text text) {
-		return enabled.get() && hideMessages.get() && (messagePattern.matcher(text.getString()).matches()
-			|| tippedPattern.matcher(text.getString()).matches());
+	public void onChatMessage(ReceiveChatMessageEvent event) {
+		event.setCancelled(enabled.get() && hideMessages.get() && (messagePattern.matcher(event.getOriginalMessage()).matches()
+			|| tippedPattern.matcher(event.getOriginalMessage()).matches()));
 	}
 }

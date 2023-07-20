@@ -16,42 +16,42 @@ A Complete (nearly) mod to have various features on various Minecraft versions
 - Screenshot Utils
 - Zoom
 - Various Hud Modules (port of [KronHUD](https://github.com/DarkKronicle/KronHUD), but with additions)
-    - including, but not limited to:
-        - Ping
-        - FPS
-        - CPS
-        - Armor
-        - Potions
-        - Keystrokes
-        - ToggleModifiers
-        - Server IP
-        - Icon
-        - Speed
-        - Scoreboard
-        - Crosshair
-        - Coordinates
-        - ActionBar
-        - BossBar
-        - Arrow
-        - Item Update
-        - Pack Display
-        - Real Time
-        - Reach
-        - Hotbar
-        - Memory
-        - PlayerCount
-        - Compass
-        - TPS (Ticks per second)
-        - Combo
-        - Player
-        - Chat
+	- including, but not limited to:
+		- Ping
+		- FPS
+		- CPS
+		- Armor
+		- Potions
+		- Keystrokes
+		- ToggleModifiers
+		- Server IP
+		- Icon
+		- Speed
+		- Scoreboard
+		- Crosshair
+		- Coordinates
+		- ActionBar
+		- BossBar
+		- Arrow
+		- Item Update
+		- Pack Display
+		- Real Time
+		- Reach
+		- Hotbar
+		- Memory
+		- PlayerCount
+		- Compass
+		- TPS (Ticks per second)
+		- Combo
+		- Player
+		- Chat
 - Hypixel Features
-    - AutoGG / GF / GLHF
-    - LevelHead
-    - Nick Hider
-    - Skyblock
-    - AutoTip
-    - AutoBoop
+	- AutoGG / GF / GLHF
+	- LevelHead
+	- Nick Hider
+	- Skyblock
+	- AutoTip
+	- AutoBoop
 - Custom Block Outlines
 - Time Changer
 - Fullbright
@@ -75,9 +75,11 @@ A Complete (nearly) mod to have various features on various Minecraft versions
 - note your changes in CHANGELOG.md to be added to the next version's changelog.
 
 To build:
+
 ```
 ./gradlew build
 ```
+
 Use `-Paxolotlclient.modules.<version_name>=true` to add a version to the build. Add `-Paxolotlclient.modules.all=true`
 to build everything. In case you use an IDE, you can also add the respective properties to `gradle.properties` files
 (or remove them).

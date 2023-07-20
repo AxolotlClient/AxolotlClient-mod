@@ -24,36 +24,18 @@ package io.github.axolotlclient.mixin;
 
 import io.github.axolotlclient.modules.blur.MenuBlur;
 import io.github.axolotlclient.modules.screenshotUtils.ScreenshotUtils;
-import io.github.axolotlclient.modules.scrollableTooltips.ScrollableTooltips;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.Style;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Mixin(Screen.class)
 public abstract class ScreenMixin {
-
-	@ModifyArgs(method = "renderWithTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;drawTooltip(Lnet/minecraft/client/font/TextRenderer;Ljava/util/List;Lnet/minecraft/client/gui/tooltip/TooltipPositioner;II)V"))
-	private void axolotlclient$modifyTooltipPosition(Args args) {
-		if (ScrollableTooltips.getInstance().enabled.get()) {
-			if ((MinecraftClient.getInstance().currentScreen instanceof CreativeInventoryScreen)
-				&& ((CreativeInventoryScreen) MinecraftClient.getInstance().currentScreen).isInventoryOpen()) {
-				return;
-			}
-
-			args.set(3, (int) args.get(3) + ScrollableTooltips.getInstance().tooltipOffsetX);
-			args.set(4, (int) args.get(4) + ScrollableTooltips.getInstance().tooltipOffsetY);
-		}
-	}
 
 	@Inject(method = "handleTextClick", at = @At(value = "INVOKE", target = "Lnet/minecraft/text/ClickEvent;getAction()Lnet/minecraft/text/ClickEvent$Action;", ordinal = 0), cancellable = true)
 	private void axolotlclient$customClickEvents(Style style, CallbackInfoReturnable<Boolean> cir) {

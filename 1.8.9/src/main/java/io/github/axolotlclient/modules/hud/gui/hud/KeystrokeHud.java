@@ -36,8 +36,9 @@ import io.github.axolotlclient.modules.hud.gui.entry.TextHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
 import io.github.axolotlclient.modules.hud.util.Rectangle;
-import io.github.axolotlclient.util.Hooks;
 import io.github.axolotlclient.util.Util;
+import io.github.axolotlclient.util.events.Events;
+import io.github.axolotlclient.util.events.impl.PlayerDirectionChangeEvent;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.KeyBinding;
@@ -89,8 +90,8 @@ public class KeystrokeHud extends TextHudEntry {
 
 	public KeystrokeHud() {
 		super(53, 61, true);
-		Hooks.KEYBIND_CHANGE.register(key -> setKeystrokes());
-		Hooks.PLAYER_DIRECTION_CHANGE.register(this::onPlayerDirectionChange);
+		Events.KEYBIND_CHANGE.register(key -> setKeystrokes());
+		Events.PLAYER_DIRECTION_CHANGE.register(this::onPlayerDirectionChange);
 	}
 
 	public void setKeystrokes() {
@@ -131,12 +132,12 @@ public class KeystrokeHud extends TextHudEntry {
 		onMouseMovementOption(mouseMovement.get());
 	}
 
-	public void onPlayerDirectionChange(float prevPitch, float prevYaw, float pitch, float yaw) {
+	public void onPlayerDirectionChange(PlayerDirectionChangeEvent event) {
 		// Implementation credit goes to TheKodeToad
 		// This project has the author's approval to use this
 		// https://github.com/Sol-Client/Client/blob/main/game/src/main/java/io/github/solclient/client/mod/impl/hud/keystrokes/KeystrokesMod.java
-		mouseX += (yaw - prevYaw) / 7F;
-		mouseY += (pitch - prevPitch) / 7F;
+		mouseX += (event.getYaw() - event.getPrevYaw()) / 7F;
+		mouseY += (event.getPitch() - event.getPrevPitch()) / 7F;
 		// 0, 0 will be the center of the HUD element
 		float halfWidth = getWidth() / 2f;
 		mouseX = MathHelper.clamp(mouseX, -halfWidth + 4, halfWidth - 4);

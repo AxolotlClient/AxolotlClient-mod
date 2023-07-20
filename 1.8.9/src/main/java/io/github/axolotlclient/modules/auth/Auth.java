@@ -96,6 +96,8 @@ public class Auth extends Accounts implements Module {
 				if (!account.isOffline()) {
 					API.getInstance().startup(account);
 				}
+				client.getSessionProperties().clear();
+				client.getSessionProperties();
 				save();
 				current = account;
 				Notifications.getInstance().addStatus("auth.notif.title", "auth.notif.login.successful", current.getName());

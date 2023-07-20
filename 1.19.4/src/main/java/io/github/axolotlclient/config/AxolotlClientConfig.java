@@ -53,9 +53,9 @@ public class AxolotlClientConfig extends ConfigHolder {
 	public final BooleanOption timeChangerEnabled = new BooleanOption("enabled", false);
 	public final IntegerOption customTime = new IntegerOption("time", 0, 0, 24000);
 	public final BooleanOption customSky = new BooleanOption("customSky", true);
-	public final BooleanOption showSunMoon = new BooleanOption("showSunMoon", true);
 	public final BooleanOption dynamicFOV = new BooleanOption("dynamicFov", true);
 	public final BooleanOption fullBright = new BooleanOption("fullBright", false);
+	public final BooleanOption removeVignette = new BooleanOption("removeVignette", false);
 	public final BooleanOption lowFire = new BooleanOption("lowFire", false);
 	public final BooleanOption lowShield = new BooleanOption("lowShield", false);
 	public final ColorOption hitColor = new ColorOption("hitColor",
@@ -168,10 +168,10 @@ public class AxolotlClientConfig extends ConfigHolder {
 		general.addSubCategory(searchFilters);
 
 		rendering.add(customSky,
-			showSunMoon,
 			AxolotlClientConfigConfig.chromaSpeed,
 			dynamicFOV,
 			fullBright,
+			removeVignette,
 			lowFire,
 			lowShield,
 			hitColor,

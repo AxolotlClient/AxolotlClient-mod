@@ -53,6 +53,7 @@
 		"TextRendererMixin",
 		"TitleScreenMixin",
 		"TntEntityRendererMixin",
+		"VertexBufferMixin",
 		"WorldRendererAccessor",
 		"WorldRendererMixin"
 	],

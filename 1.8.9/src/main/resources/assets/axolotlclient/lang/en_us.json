@@ -13,5 +13,6 @@
 	"runGCOnUnfocus": "Run GC on Unfocus",
 	"scrollbarColor": "Scrollbar Color",
 	"unfocusedFPS": "Unfocused FPS",
-	"unfocusedVolumeMultiplier": "Unfocused Volume Multiplier"
+	"unfocusedVolumeMultiplier": "Unfocused Volume Multiplier",
+	"alignToBottom": "Align to Bottom Screen Edge"
 }

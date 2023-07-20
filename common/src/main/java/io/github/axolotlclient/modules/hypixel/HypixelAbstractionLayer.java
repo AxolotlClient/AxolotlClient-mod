@@ -23,15 +23,20 @@
 package io.github.axolotlclient.modules.hypixel;
 
 import java.util.HashMap;
+import java.util.Objects;
+import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
 import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.Request;
 import io.github.axolotlclient.api.util.BufferUtil;
+import com.google.gson.JsonObject;
 import io.github.axolotlclient.modules.hypixel.levelhead.LevelHeadMode;
 import net.hypixel.api.HypixelAPI;
 import net.hypixel.api.apache.ApacheHttpClient;
@@ -63,26 +68,51 @@ public class HypixelAbstractionLayer {
 		return validApiKey;
 	}
 
+	public static JsonObject getPlayerProperty(String uuid, String stat) {
+		if (loadPlayerDataIfAbsent(uuid)) {
+			PlayerReply.Player player = getPlayer(uuid);
+			return player == null ? null : player.getProperty(stat).getAsJsonObject();
+		}
+		return null;
+	}
+
 	public static int getPlayerLevel(String uuid, String mode) {
 		if (api == null) {
 			loadApiKey();
 		}
 		if (loadPlayerDataIfAbsent(uuid)) {
-			try {
-				PlayerReply.Player player = processRateLimit(cachedPlayerData.get(uuid).get()).getPlayer();
-				if (mode.equals(LevelHeadMode.NETWORK.toString())) {
+			PlayerReply.Player player = getPlayer(uuid);
+			if (player != null) {
+				if (Objects.equals(mode, LevelHeadMode.NETWORK.toString())) {
 					return (int) player.getNetworkLevel();
-				} else if (mode.equals(LevelHeadMode.BEDWARS.toString())) {
-					return (int) player.getFloatProperty("achievements.bedwars_level", 0F);
-				} else if (mode.equals(LevelHeadMode.SKYWARS.toString())) {
-					int exp = player.getIntProperty("stats.SkyWars.skywars_experience", 0);
-					return Math.round(ExpCalculator.getLevelForExp(exp));
+				} else if (Objects.equals(mode, LevelHeadMode.BEDWARS.toString())) {
+					int level = player.getIntProperty("achievements.bedwars_level", -1);
+					if(level != -1){
+						return level;
+					}
+				} else if (Objects.equals(mode, LevelHeadMode.SKYWARS.toString())) {
+					int exp = player
+						.getIntProperty("stats.SkyWars.skywars_experience", -1);
+					if(exp != -1) {
+						return Math.round(ExpCalculator.getLevelForExp(exp));
+					}
 				}
-			} catch (InterruptedException | ExecutionException e) {
-				return -1;
 			}
 		}
-		return 0;
+		return (int) (new Random().nextGaussian()+150*30);
+	}
+
+	private static PlayerReply.Player getPlayer(String uuid) {
+		if (api == null) {
+			loadApiKey();
+		}
+		if (loadPlayerDataIfAbsent(uuid)) {
+			try {
+				return processRateLimit(cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS)).getPlayer();
+			} catch (TimeoutException | InterruptedException | ExecutionException ignored) {
+			}
+		}
+		return null;
 	}
 
 	public static void loadApiKey() {

@@ -28,7 +28,7 @@ import java.util.List;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.Option;
 import io.github.axolotlclient.modules.hud.gui.entry.SimpleTextHudEntry;
-import io.github.axolotlclient.util.Hooks;
+import io.github.axolotlclient.util.events.Events;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 
@@ -48,20 +48,20 @@ public class CPSHud extends SimpleTextHudEntry {
 
 	public CPSHud() {
 		super();
-		Hooks.MOUSE_INPUT.register((window, button, action, mods) -> {
+		Events.MOUSE_INPUT.register(event -> {
 			if (!fromKeybindings.get()) {
-				if (button == 0) {
+				if (event.getButton() == 0) {
 					ClickList.LEFT.click();
-				} else if (button == 1) {
+				} else if (event.getButton() == 1) {
 					ClickList.RIGHT.click();
 				}
 			}
 		});
-		Hooks.KEYBIND_PRESS.register((key) -> {
+		Events.KEY_PRESS.register((event) -> {
 			if (fromKeybindings.get()) {
-				if (key.equals(client.options.attackKey)) {
+				if (event.getKey().equals(client.options.attackKey)) {
 					ClickList.LEFT.click();
-				} else if (key.equals(client.options.useKey)) {
+				} else if (event.getKey().equals(client.options.useKey)) {
 					ClickList.RIGHT.click();
 				}
 			}
