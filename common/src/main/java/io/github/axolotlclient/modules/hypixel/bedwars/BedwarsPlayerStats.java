@@ -78,13 +78,13 @@ public class BedwarsPlayerStats {
 		int star = (int) getGaussian(random, 150, 30);
 		double fkdr = Math.min(getGaussian(random, 1.3F, 0.5F), 0.6F);
 		double bblr = (fkdr * 8) / getGaussian(random, 10, 2);
-		int wins = (int) (star * (fkdr * 4) * random.nextFloat(0.95F, 1.05F));
-		int losses = (int) (wins * (2/fkdr) * random.nextFloat(0.95F, 1.05F));
+		int wins = (int) (star * (fkdr * 4) * getFloat(random, 0.95F, 1.05F));
+		int losses = (int) (wins * (2/fkdr) * getFloat(random, 0.95F, 1.05F));
 		int beds = (int) (bblr * losses);
-		int finalDeaths = (int) (losses * random.nextFloat(1F, 1.03F));
-		int deaths = (int) (finalDeaths * random.nextFloat(8, 20));
+		int finalDeaths = (int) (losses * getFloat(random, 1F, 1.03F));
+		int deaths = (int) (finalDeaths * getFloat(random, 8, 20));
 		int finalKills = (int) (deaths * fkdr);
-		int kills = (int) (finalKills * random.nextFloat(1, 2));
+		int kills = (int) (finalKills * getFloat(random, 1, 2));
 
 		return new BedwarsPlayerStats(finalKills, finalDeaths, beds, deaths, kills,
 			0, 0, 0, 0, 0,
@@ -92,7 +92,11 @@ public class BedwarsPlayerStats {
 	}
 
 	private static double getGaussian(Random random, float mean, float deviation){
-		return Math.max(Math.min(random.nextGaussian()+mean*deviation, mean - deviation*3), mean + deviation*3);
+		return Math.max(Math.min(random.nextGaussian()*deviation+mean, mean - deviation*3), mean + deviation*3);
+	}
+
+	private static float getFloat(Random random, float origin, float bound){
+		return random.nextFloat()*(bound - origin)+origin;
 	}
 
 	@Nullable

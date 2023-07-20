@@ -123,10 +123,14 @@ public class BedwarsGame {
 	}
 
 	private String calculateTopBarText() {
-		return getFormattedTime()+"\n"+
-			"K: "+me.getStats().getGameKills()+
-			" D: "+me.getStats().getGameDeaths()+
-			" B: "+me.getStats().getGameBedsBroken();
+		String topBar = getFormattedTime();
+		if(me.getStats() != null){
+			topBar += "\n"+
+				"K: "+me.getStats().getGameKills()+
+				" D: "+me.getStats().getGameDeaths()+
+				" B: "+me.getStats().getGameBedsBroken();
+		}
+		return topBar;
 	}
 
 	private String calculateBottomBarText() {
