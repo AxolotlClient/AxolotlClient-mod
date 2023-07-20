@@ -51,6 +51,7 @@ import net.hypixel.api.reply.PlayerReply;
 public class HypixelAbstractionLayer {
 
 	private static final HashMap<String, CompletableFuture<PlayerReply>> cachedPlayerData = new HashMap<>();
+	private static final HashMap<String, Integer> tempValues = new HashMap<>();
 	private static final AtomicInteger hypixelApiCalls = new AtomicInteger(0);
 	private static Supplier<String> keySupplier;
 	private static HypixelAPI api;
@@ -79,23 +80,25 @@ public class HypixelAbstractionLayer {
 		if (loadPlayerDataIfAbsent(uuid)) {
 			PlayerReply.Player player = getPlayer(uuid);
 			if (player != null) {
+				int value = -1;
 				if (Objects.equals(mode, LevelHeadMode.NETWORK.toString())) {
-					return (int) player.getNetworkLevel();
+					value = (int) player.getNetworkLevel();
 				} else if (Objects.equals(mode, LevelHeadMode.BEDWARS.toString())) {
-					int level = player.getIntProperty("achievements.bedwars_level", -1);
-					if(level != -1){
-						return level;
-					}
+					value = player.getIntProperty("achievements.bedwars_level", -1);
 				} else if (Objects.equals(mode, LevelHeadMode.SKYWARS.toString())) {
 					int exp = player
 						.getIntProperty("stats.SkyWars.skywars_experience", -1);
 					if(exp != -1) {
-						return Math.round(ExpCalculator.getLevelForExp(exp));
+						value = Math.round(ExpCalculator.getLevelForExp(exp));
 					}
+				}
+				if(value > -1){
+					tempValues.remove(uuid);
+					return value;
 				}
 			}
 		}
-		return (int) (new Random().nextGaussian()+150*30);
+		return tempValues.computeIfAbsent(uuid, s -> (int) (new Random().nextGaussian()*30+150));
 	}
 
 	private static PlayerReply.Player getPlayer(String uuid) {
