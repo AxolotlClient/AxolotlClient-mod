@@ -131,9 +131,9 @@ public abstract class InGameHudMixin {
 	public void axolotlclient$setItemNamePos(Args args) {
 		HotbarHUD hud = (HotbarHUD) HudManager.getInstance().get(HotbarHUD.ID);
 		if (hud.isEnabled()) {
-			args.set(2, ((Integer) hud.getX()).floatValue() + ((hud.getWidth() * hud.getScale())
+			args.set(2, hud.getX() + (int)((hud.getWidth() * hud.getScale())
 				- MinecraftClient.getInstance().textRenderer.getWidth((StringVisitable) args.get(1))) / 2);
-			args.set(3, ((Integer) hud.getY()).floatValue() - 36
+			args.set(3, hud.getY() - 36
 				+ (!MinecraftClient.getInstance().interactionManager.hasStatusBars() ? 14 : 0));
 		}
 	}

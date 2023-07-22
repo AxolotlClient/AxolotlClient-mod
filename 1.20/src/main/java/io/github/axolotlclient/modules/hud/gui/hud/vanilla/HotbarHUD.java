@@ -56,7 +56,7 @@ public class HotbarHUD extends TextHudEntry {
 			ItemStack itemStack = playerEntity.getOffHandStack();
 			Arm arm = playerEntity.getMainArm().getOpposite();
 			DrawPosition pos = getPos();
-			int i = (pos.x() + getWidth()) / 2;
+			int i = pos.x() + getWidth() / 2;
 			graphics.getMatrices().push();
 			graphics.getMatrices().translate(0.0F, 0.0F, -90.0F);
 			graphics.drawTexture(WIDGETS_TEXTURE, i - 91, pos.y(), 0, 0, 182, 22);
