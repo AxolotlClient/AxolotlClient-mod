@@ -89,8 +89,8 @@ public class MCPSkyboxInstance extends SkyboxInstance {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferBuilder = tessellator.getBuffer();
 
+		MinecraftClient.getInstance().getTextureManager().bindTexture(textures[0]);
 		for (int i = 0; i < 6; ++i) {
-			MinecraftClient.getInstance().getTextureManager().bindTexture(textures[0]);
 			GlStateManager.pushMatrix();
 
 			double u;
