@@ -23,14 +23,12 @@
 package io.github.axolotlclient.api.chat;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.ContextMenu;
 import io.github.axolotlclient.api.handlers.FriendHandler;
 import io.github.axolotlclient.api.requests.ChannelRequest;
-import io.github.axolotlclient.api.types.Channel;
 import io.github.axolotlclient.api.types.User;
 import io.github.axolotlclient.modules.auth.Auth;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
@@ -78,7 +76,7 @@ public class ChatUserListWidget extends AlwaysSelectedEntryListWidget<ChatUserLi
 		return this.screen.getFocused() == this;
 	}
 
-	public class UserListEntry extends Entry<UserListEntry> {
+	public class UserListEntry extends AlwaysSelectedEntryListWidget.Entry<UserListEntry> {
 
 		@Getter
 		private final User user;
@@ -141,10 +139,9 @@ public class ChatUserListWidget extends AlwaysSelectedEntryListWidget<ChatUserLi
 						.entry(Text.of(user.getName()), buttonWidget -> {
 						})
 						.spacer()
-						.entry(new TranslatableText("api.friends.chat"), buttonWidget -> {
-							Consumer<Channel> consumer = channel -> client.openScreen(new ChatScreen(screen.getParent(), channel));
-							ChannelRequest.getDM(consumer, user.getUuid());
-						});
+						.entry(new TranslatableText("api.friends.chat"), buttonWidget ->
+							ChannelRequest.getDM(user.getUuid()).whenComplete(((channel, throwable) ->
+							client.openScreen(new ChatScreen(screen.getParent(), channel)))));
 					if (FriendHandler.getInstance().isBlocked(user.getUuid())) {
 						menu.entry(new TranslatableText("api.users.block"), buttonWidget ->
 							FriendHandler.getInstance().blockUser(user.getUuid()));

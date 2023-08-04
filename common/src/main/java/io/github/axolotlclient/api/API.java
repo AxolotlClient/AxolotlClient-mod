@@ -26,6 +26,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -48,7 +49,7 @@ public class API {
 
 	@Getter
 	private static API Instance;
-	private final HashMap<Integer, Request> requests = new HashMap<>();
+	private final HashMap<Integer, CompletableFuture<ByteBuf>> requests = new HashMap<>();
 	private final Set<RequestHandler> handlers = new HashSet<>();
 	@Getter
 	private final Logger logger;
@@ -98,7 +99,7 @@ public class API {
 		AtomicBoolean mojangAuthSuccessful = new AtomicBoolean();
 		AtomicReference<String> serverId = new AtomicReference<>();
 
-		send(new Request(Request.Type.GET_PUBLIC_KEY, buf -> {
+		send(new Request(Request.Type.GET_PUBLIC_KEY)).whenComplete((buf, t) -> {
 			MojangAuth.Result result = MojangAuth.authenticate(account, buf.slice(0x09, buf.readableBytes() - 9).array());
 			if (result.getStatus() != MojangAuth.Status.SUCCESS) {
 				logger.error("Authentication with Mojang failed, aborting!");
@@ -107,14 +108,15 @@ public class API {
 				mojangAuthSuccessful.set(true);
 				serverId.set(result.getServerId());
 			}
-		}));
+		});
 
 		if (mojangAuthSuccessful.get()) {
-			Request request = new Request(Request.Type.HANDSHAKE, object -> {
-				if (requestFailed(object)) {
+			Request request = new Request(Request.Type.HANDSHAKE, account.getUuid(), serverId.get(), account.getName());
+			send(request).whenComplete((object, t) -> {
+				if (t != null) {
 					logger.error("Handshake failed, closing API!");
 					if (apiOptions.detailedLogging.get()) {
-						notificationProvider.addStatus("api.error.handshake", APIError.fromResponse(object));
+						notificationProvider.addStatus("api.error.handshake", t.getMessage());
 					}
 					shutdown();
 				} else if (object.getByte(0x09) == 0) {
@@ -124,8 +126,7 @@ public class API {
 						notificationProvider.addStatus("api.success.handshake", "api.success.handshake.desc");
 					}
 				}
-			}, account.getUuid(), serverId.get(), account.getName());
-			send(request);
+			});
 		}
 	}
 
@@ -144,10 +145,11 @@ public class API {
 		}
 	}
 
-	public void send(Request request) {
+	public CompletableFuture<ByteBuf> send(Request request) {
+		CompletableFuture<ByteBuf> future = new CompletableFuture<>();
 		if (isConnected()) {
 			if (!Constants.TESTING) {
-				requests.put(request.getId(), request);
+				requests.put(request.getId(), future);
 				ThreadExecuter.scheduleTask(() -> {
 					ByteBuf buf = request.getData();
 					if (apiOptions.detailedLogging.get()) {
@@ -160,6 +162,7 @@ public class API {
 		} else {
 			logger.warn("Not sending request because API is closed: " + request);
 		}
+		return future;
 	}
 
 	public boolean isConnected() {
@@ -187,13 +190,26 @@ public class API {
 			} catch (IndexOutOfBoundsException ignored) {
 			}
 
+
+			APIError error;
+
+			if(requestFailed(response)){
+				error = new APIError(response);
+			} else {
+				error = null;
+			}
+
 			if (requests.containsKey(id)) {
-				requests.get(id).getHandler().accept(response);
+				if(error != null){
+					requests.get(id).completeExceptionally(error);
+				} else {
+					requests.get(id).complete(response);
+				}
 				requests.remove(id);
 			} else if (id == null || id == 0) {
 				int type = response.getByte(0x03);
 				handlers.stream().filter(handler -> handler.isApplicable(type)).forEach(handler ->
-					handler.handle(response));
+					handler.handle(response, error));
 			} else {
 				logger.error("Unknown response: " + response.toString(StandardCharsets.UTF_8));
 			}

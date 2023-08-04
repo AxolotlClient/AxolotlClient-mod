@@ -26,6 +26,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 import io.github.axolotlclient.api.API;
+import io.github.axolotlclient.api.APIError;
 import io.github.axolotlclient.api.Request;
 import io.github.axolotlclient.api.requests.StatusUpdate;
 import io.github.axolotlclient.api.types.User;
@@ -39,10 +40,10 @@ public class StatusUpdateHandler implements RequestHandler {
 	}
 
 	@Override
-	public void handle(ByteBuf object) {
+	public void handle(ByteBuf object, APIError error) {
 		String uuid = getString(object, 0x09, 16);
 		AtomicReference<User> user = new AtomicReference<>();
-		FriendHandler.getInstance().getFriends(list -> user.set(list.stream().filter(u -> u.getUuid().equals(uuid)).collect(Collectors.toList()).get(0)));
+		FriendHandler.getInstance().getFriends().whenComplete((list, t) -> user.set(list.stream().filter(u -> u.getUuid().equals(uuid)).collect(Collectors.toList()).get(0)));
 		StatusUpdate.Type type = StatusUpdate.Type.fromCode(object.getByte(0x19));
 		if (type == StatusUpdate.Type.ONLINE) {
 			API.getInstance().getNotificationProvider()

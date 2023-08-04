@@ -62,10 +62,10 @@ public class ChatHandler implements RequestHandler {
 	}
 
 	@Override
-	public void handle(ByteBuf buf) {
+	public void handle(ByteBuf buf, APIError error) {
 
 		AtomicReference<User> u = new AtomicReference<>();
-		io.github.axolotlclient.api.requests.User.get(u::set, BufferUtil.getString(buf, 0x09, 16));
+		io.github.axolotlclient.api.requests.User.get(BufferUtil.getString(buf, 0x09, 16)).whenComplete((us, t) -> u.set(us));
 
 		ChatMessage message = new ChatMessage(u.get(), BufferUtil.getString(buf, 0x26, buf.getInt(0x22)),
 			ChatMessage.Type.fromCode(buf.getByte(0x21)), buf.getLong(0x19));
@@ -77,20 +77,19 @@ public class ChatHandler implements RequestHandler {
 	}
 
 	public void sendMessage(Channel channel, String message) {
-		API.getInstance().send(new Request(Request.Type.SEND_MESSAGE, buf -> {
-		},
+		API.getInstance().send(new Request(Request.Type.SEND_MESSAGE,
 			new Request.Data(channel.getId()).add(
 				(byte) Instant.now().getEpochSecond()).add((byte) message.length()).add(message)));
 		messageConsumer.accept(new ChatMessage(API.getInstance().getSelf(), message, Instant.now().getEpochSecond()));
 	}
 
 	public void getMessagesBefore(Channel channel, long getBefore) {
-		API.getInstance().send(new Request(Request.Type.GET_MESSAGES, this::handleMessages,
-			new Request.Data(channel.getId()).add((byte) 25).add((byte) getBefore).add((byte) 0x00)));
+		API.getInstance().send(new Request(Request.Type.GET_MESSAGES,
+			new Request.Data(channel.getId()).add((byte) 25).add((byte) getBefore).add((byte) 0x00))).whenComplete(this::handleMessages);
 	}
 
-	private void handleMessages(ByteBuf object) {
-		if (!API.getInstance().requestFailed(object)) {
+	private void handleMessages(ByteBuf object, Throwable t) {
+		if (t == null) {
 			List<ChatMessage> list = new ArrayList<>();
 
 			int i = 0x16;
@@ -102,21 +101,21 @@ public class ChatHandler implements RequestHandler {
 			messagesConsumer.accept(list);
 
 		} else {
-			APIError.display(object);
+			APIError.display(t);
 		}
 	}
 
 	private ChatMessage parseMessage(ByteBuf buf) {
 		AtomicReference<User> u = new AtomicReference<>();
-		io.github.axolotlclient.api.requests.User.get(u::set, BufferUtil.getString(buf, 0x00, 16));
+		io.github.axolotlclient.api.requests.User.get(BufferUtil.getString(buf, 0x00, 16)).whenComplete((us, t) -> u.set(us));
 
 		return new ChatMessage(u.get(), BufferUtil.getString(buf, 0x1D, buf.getInt(0x19)),
 			ChatMessage.Type.fromCode(buf.getByte(0x18)), buf.getLong(0x10));
 	}
 
 	public void getMessagesAfter(Channel channel, long getAfter) {
-		API.getInstance().send(new Request(Request.Type.GET_MESSAGES, this::handleMessages,
-			new Request.Data(channel.getId()).add((byte) 25).add((byte) getAfter).add((byte) 0x01)));
+		API.getInstance().send(new Request(Request.Type.GET_MESSAGES,
+			new Request.Data(channel.getId()).add((byte) 25).add((byte) getAfter).add((byte) 0x01))).whenComplete(this::handleMessages);
 	}
 
 	public interface NotificationsEnabler {

@@ -24,8 +24,8 @@ package io.github.axolotlclient.api.requests;
 
 import java.time.Instant;
 import java.util.WeakHashMap;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Consumer;
 
 import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.Request;
@@ -40,17 +40,17 @@ public class User {
 	public static boolean getOnline(String uuid) {
 		return onlineCache.computeIfAbsent(uuid, u -> {
 			AtomicBoolean result = new AtomicBoolean();
-			API.getInstance().send(new Request(Request.Type.USER, buf ->
-				result.set(buf.getBoolean(0x09)), u));
+			API.getInstance().send(new Request(Request.Type.USER, u)).whenComplete((buf, t) ->
+				result.set(buf.getBoolean(0x09)));
 			return result.get();
 		});
 	}
 
-	public static void get(Consumer<io.github.axolotlclient.api.types.User> responseConsumer, String uuid) {
+	public static CompletableFuture<io.github.axolotlclient.api.types.User> get(String uuid) {
 		if (userCache.containsKey(uuid)) {
-			responseConsumer.accept(userCache.get(uuid));
+			return CompletableFuture.completedFuture(userCache.get(uuid));
 		}
-		API.getInstance().send(new Request(Request.Type.GET_FRIEND, buf -> {
+		return API.getInstance().send(new Request(Request.Type.GET_FRIEND, uuid)).thenApply(buf -> {
 
 			Instant startTime = Instant.ofEpochSecond(buf.getLong(0x09));
 
@@ -60,7 +60,7 @@ public class User {
 					BufferUtil.getString(buf, 0x4A, 64).trim(),
 					BufferUtil.getString(buf, 0x8A, 32).trim(), startTime));
 			userCache.put(uuid, user);
-			responseConsumer.accept(user);
-		}, uuid));
+			return user;
+		});
 	}
 }

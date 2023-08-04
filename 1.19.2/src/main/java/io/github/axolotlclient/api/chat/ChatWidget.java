@@ -24,7 +24,6 @@ package io.github.axolotlclient.api.chat;
 
 import java.time.Instant;
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -175,8 +174,8 @@ public class ChatWidget extends AlwaysSelectedEntryListWidget<ChatWidget.ChatLin
 					})
 					.spacer()
 					.entry(Text.translatable("api.friends.chat"), buttonWidget -> {
-						Consumer<Channel> consumer = channel -> client.setScreen(new ChatScreen(screen.getParent(), channel));
-						ChannelRequest.getDM(consumer, origin.getSender().getUuid());
+						ChannelRequest.getDM(origin.getSender().getUuid()).whenComplete(((channel, throwable) ->
+							client.setScreen(new ChatScreen(screen.getParent(), channel))));
 					})
 					.spacer()
 					.entry(Text.translatable("action.copy"), buttonWidget -> {

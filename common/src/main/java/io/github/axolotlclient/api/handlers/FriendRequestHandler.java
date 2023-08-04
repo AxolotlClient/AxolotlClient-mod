@@ -39,18 +39,18 @@ public class FriendRequestHandler implements RequestHandler {
 	}
 
 	@Override
-	public void handle(ByteBuf object) {
+	public void handle(ByteBuf object, APIError error) {
 		if (API.getInstance().getApiOptions().friendRequestsEnabled.get()) {
 			byte[] uuid = new byte[16];
 			object.getBytes(0x09, uuid);
 			String fromUUID = new String(uuid, StandardCharsets.UTF_8);
 			API.getInstance().getNotificationProvider().addStatus("api.friends", "api.friends.request", UUIDHelper.getUsername(fromUUID));
 		} else {
-			API.getInstance().send(new Request(Request.Type.FRIEND_REQUEST_REACTION, o -> {
-				if (API.getInstance().requestFailed(o)) {
-					APIError.display(o);
+			API.getInstance().send(new Request(Request.Type.FRIEND_REQUEST_REACTION, (byte) 0)).whenComplete((o, t) -> {
+				if (t != null) {
+					APIError.display(t);
 				}
-			}, (byte) 0));
+			});
 		}
 	}
 }

@@ -24,7 +24,6 @@ package io.github.axolotlclient.api.chat;
 
 import java.util.function.Predicate;
 
-import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.requests.ChannelRequest;
 import io.github.axolotlclient.api.types.Channel;
 import net.minecraft.client.MinecraftClient;
@@ -44,10 +43,10 @@ public class ChatListWidget extends AlwaysSelectedEntryListWidget<ChatListWidget
 		left = x;
 		right = x + width;
 		this.screen = screen;
-		API.getInstance().send(ChannelRequest.getChannelList(list ->
+		ChannelRequest.getChannelList().whenComplete((list, t) ->
 			list.stream().filter(predicate).forEach(c ->
 				children().add(0, new ChatListEntry(c)))
-		));
+		);
 	}
 
 	public ChatListWidget(Screen screen, int screenWidth, int screenHeight, int x, int y, int width, int height) {

@@ -133,8 +133,8 @@ public class FriendsScreen extends Screen {
 	public void openChat() {
 		UserListWidget.UserListEntry entry = widget.getSelectedEntry();
 		if (entry != null) {
-			ChannelRequest.getDM(c -> client.setScreen(new ChatScreen(this, c)),
-				entry.getUser().getUuid());
+			ChannelRequest.getDM(entry.getUser().getUuid())
+				.whenComplete((c, t) -> client.setScreen(new ChatScreen(this, c)));
 		}
 	}
 
@@ -211,7 +211,7 @@ public class FriendsScreen extends Screen {
 		widget = new UserListWidget(this, client, width, height, 32, height - 64, 35);
 
 		if (current == Tab.ALL || current == Tab.ONLINE) {
-			FriendHandler.getInstance().getFriends(list -> widget.setUsers(list.stream().filter(user -> {
+			FriendHandler.getInstance().getFriends().whenComplete((list, t) -> widget.setUsers(list.stream().filter(user -> {
 				if (current == Tab.ONLINE) {
 					return user.getStatus().isOnline();
 				}

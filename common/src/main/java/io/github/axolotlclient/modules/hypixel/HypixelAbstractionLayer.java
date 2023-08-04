@@ -33,10 +33,10 @@ import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
+import com.google.gson.JsonObject;
 import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.Request;
 import io.github.axolotlclient.api.util.BufferUtil;
-import com.google.gson.JsonObject;
 import io.github.axolotlclient.modules.hypixel.levelhead.LevelHeadMode;
 import net.hypixel.api.HypixelAPI;
 import net.hypixel.api.apache.ApacheHttpClient;
@@ -122,13 +122,11 @@ public class HypixelAbstractionLayer {
 	public static void loadApiKey() {
 		AtomicReference<String> apiKey = new AtomicReference<>(keySupplier.get());
 		if (apiKey.get().isEmpty()) {
-			API.getInstance().send(new Request(Request.Type.GET_HYPIXEL_API_KEY,
-				buf -> {
-					api = new HypixelAPI(new ApacheHttpClient(
-						UUID.fromString(
-							BufferUtil.getString(buf, 0x9, 36))));
-					validApiKey = true;
-				}));
+			API.getInstance().send(new Request(Request.Type.GET_HYPIXEL_API_KEY)).thenApply(buf -> UUID.fromString(
+				BufferUtil.getString(buf, 0x9, 36))).whenComplete((uuid, t) -> {
+				api = new HypixelAPI(new ApacheHttpClient(uuid));
+				validApiKey = true;
+			});
 		} else {
 			try {
 				api = new HypixelAPI(new ApacheHttpClient(UUID.fromString(apiKey.get())));

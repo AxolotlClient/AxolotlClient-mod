@@ -37,8 +37,7 @@ import lombok.RequiredArgsConstructor;
 public class StatusUpdate {
 
 	private static Request createStatusUpdate(String titleString, String descriptionString, String iconString) {
-		return new Request(Request.Type.STATUS_UPDATE, byteBuf -> {
-		},
+		return new Request(Request.Type.STATUS_UPDATE,
 			BufferUtil.padString(titleString, 64),
 			BufferUtil.padString(descriptionString, 64),
 			BufferUtil.padString(iconString, 32)
@@ -91,7 +90,7 @@ public class StatusUpdate {
 	@RequiredArgsConstructor
 	@Getter
 	public enum SupportedServer {
-		HYPIXEL("HYPIXEL", Pattern.compile("^hypixel.$"));
+		HYPIXEL("HYPIXEL", Pattern.compile("^hypixel\\.net.$"));
 		private final String name;
 		private final Pattern adress;
 	}

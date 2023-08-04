@@ -25,9 +25,6 @@ package io.github.axolotlclient.mixin;
 import java.util.List;
 
 import io.github.axolotlclient.modules.hud.HudManager;
-import io.github.axolotlclient.modules.hypixel.autoboop.AutoBoop;
-import io.github.axolotlclient.modules.hypixel.autogg.AutoGG;
-import io.github.axolotlclient.modules.hypixel.autotip.AutoTip;
 import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
 import io.github.axolotlclient.util.Util;
 import io.github.axolotlclient.util.events.Events;

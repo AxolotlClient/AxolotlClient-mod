@@ -89,7 +89,7 @@ public class FriendsScreen extends Screen {
 		widget.children().clear();
 
 		if (current == Tab.ALL || current == Tab.ONLINE) {
-			FriendHandler.getInstance().getFriends(list -> widget.setUsers(list.stream().sorted((u1, u2) ->
+			FriendHandler.getInstance().getFriends().whenComplete((list, t) -> widget.setUsers(list.stream().sorted((u1, u2) ->
 				new AlphabeticalComparator().compare(u1.getName(), u2.getName())).filter(user -> {
 				if (current == Tab.ONLINE) {
 					return user.getStatus().isOnline();
@@ -208,8 +208,8 @@ public class FriendsScreen extends Screen {
 	public void openChat() {
 		UserListWidget.UserListEntry entry = widget.getSelectedOrNull();
 		if (entry != null) {
-			ChannelRequest.getDM(c -> client.setScreen(new ChatScreen(this, c)),
-				entry.getUser().getUuid());
+			ChannelRequest.getDM(entry.getUser().getUuid())
+				.whenComplete((c, t) -> client.setScreen(new ChatScreen(this, c)));
 		}
 	}
 

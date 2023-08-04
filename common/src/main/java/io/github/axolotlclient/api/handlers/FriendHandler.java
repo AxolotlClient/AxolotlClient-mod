@@ -26,6 +26,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -51,24 +52,24 @@ public class FriendHandler implements RequestHandler {
 	}
 
 	public void addFriend(String uuid) {
-		api.send(new Request(Request.Type.CREATE_FRIEND_REQUEST, object -> {
-			if (!API.getInstance().requestFailed(object)) {
+		api.send(new Request(Request.Type.CREATE_FRIEND_REQUEST, uuid)).whenComplete((object, t) -> {
+			if (t == null) {
 				api.getNotificationProvider()
 					.addStatus("api.success.requestSent", "api.success.requestSent.desc", UUIDHelper.getUsername(uuid));
 			} else {
-				APIError.display(object);
+				APIError.display(t);
 			}
-		}, "add", uuid));
+		});
 	}
 
 	public void removeFriend(User user) {
-		api.send(new Request(Request.Type.REMOVE_FRIEND, object -> {
-			if (API.getInstance().requestFailed(object)) {
+		api.send(new Request(Request.Type.REMOVE_FRIEND, API.getInstance().sanitizeUUID(user.getUuid()))).whenComplete((object, t) -> {
+			if (t == null) {
 				APIError.display(object);
 			} else {
 				api.getNotificationProvider().addStatus("api.success.removeFriend", "api.success.removeFriend.desc", user.getName());
 			}
-		}, API.getInstance().sanitizeUUID(user.getUuid())));
+		});
 	}
 
 	public void blockUser(String uuid) {
@@ -91,55 +92,56 @@ public class FriendHandler implements RequestHandler {
 		}, "unblock", uuid));*/
 	}
 
-	public void getFriends(Consumer<List<User>> responseConsumer) {
-		api.send(new Request(Request.Type.FRIENDS_LIST, object -> {
-			if (API.getInstance().requestFailed(object)) {
+	public CompletableFuture<List<User>> getFriends() {
+		return api.send(new Request(Request.Type.FRIENDS_LIST)).handle((object, t) -> {
+			if (t == null) {
 				APIError.display(object);
+				return Collections.emptyList();
 			} else {
 				List<User> list = new ArrayList<>();
 				for (int i = 0x0E; i <= object.getInt(0x0A); i += 16) {
-					getFriendInfo(list::add, getString(object, i, 16));
+					getFriendInfo(getString(object, i, 16)).whenComplete((u, th) -> list.add(u));
 				}
-				responseConsumer.accept(list);
+				return list;
 			}
-		}));
+		});
 	}
 
-	public void getFriendInfo(Consumer<User> responseConsumer, String uuid) {
-		api.send(new Request(Request.Type.GET_FRIEND, buf -> {
+	public CompletableFuture<User> getFriendInfo(String uuid) {
+		return api.send(new Request(Request.Type.GET_FRIEND, uuid)).thenApply(buf -> {
 
 			Instant startTime = Instant.ofEpochSecond(buf.getLong(0x09));
 
-			responseConsumer.accept(new User(uuid,
+			return new User(uuid,
 				new Status(buf.getBoolean(0x0D),
 					Keyword.get(getString(buf, 0x0E, 64).trim()),
 					Keyword.get(getString(buf, 0x4E, 64).trim()),
-					Keyword.get(getString(buf, 0x8E, 32).trim()), startTime)));
-		}, uuid));
+					Keyword.get(getString(buf, 0x8E, 32).trim()), startTime));
+		});
 	}
 
 	public void getFriendRequests(BiConsumer<List<User>, List<User>> responseConsumer) {
-		api.send(new Request(Request.Type.GET_FRIEND_REQUESTS, object -> {
-			if (API.getInstance().requestFailed(object)) {
-				APIError.display(object);
+		api.send(new Request(Request.Type.GET_FRIEND_REQUESTS)).whenComplete((object, th) -> {
+			if (th != null) {
+				APIError.display(th);
 			} else {
 				List<User> in = new ArrayList<>();
 				List<User> out = new ArrayList<>();
 				int i = 0x0E;
 				while (i < object.getInt(0x0A)) {
-					getFriendInfo(in::add, getString(object, i, 16));
+					getFriendInfo(getString(object, i, 16)).whenComplete((u, t) -> in.add(u));
 					i += 16;
 				}
 				int offset = i;
 				i += 4;
 				while (i < object.getInt(offset)) {
-					getFriendInfo(out::add, getString(object, i, 16));
+					getFriendInfo(getString(object, i, 16)).whenComplete((u, t) -> out.add(u));
 					i += 16;
 				}
 
 				responseConsumer.accept(in, out);
 			}
-		}));
+		});
 	}
 
 	public void getBlocked(Consumer<List<User>> responseConsumer) {
@@ -164,22 +166,24 @@ public class FriendHandler implements RequestHandler {
 	}
 
 	public void acceptFriendRequest(User from) {
-		api.send(new Request(Request.Type.FRIEND_REQUEST_REACTION, object -> {
-			if (API.getInstance().requestFailed(object)) {
-				APIError.display(object);
+		api.send(new Request(Request.Type.FRIEND_REQUEST_REACTION, new Request.Data(from.getUuid()).add((byte) 1)))
+			.whenComplete((object, t) -> {
+			if (t != null) {
+				APIError.display(t);
 			} else {
 				api.getNotificationProvider().addStatus("api.success.acceptFriend", "api.success.acceptFriend.desc", from.getName());
 			}
-		}, new Request.Data(from.getUuid()).add((byte) 1)));
+		});
 	}
 
 	public void denyFriendRequest(User from) {
-		api.send(new Request(Request.Type.FRIEND_REQUEST_REACTION, object -> {
-			if (API.getInstance().requestFailed(object)) {
-				APIError.display(object);
+		api.send(new Request(Request.Type.FRIEND_REQUEST_REACTION, new Request.Data(from.getUuid()).add((byte) 0)))
+			.whenComplete((object, t) -> {
+			if (t != null) {
+				APIError.display(t);
 			} else {
 				api.getNotificationProvider().addStatus("api.success.denyFriend", "api.success.denyFriend.desc", from.getName());
 			}
-		}, new Request.Data(from.getUuid()).add((byte) 0)));
+		});
 	}
 }

@@ -26,6 +26,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
@@ -41,12 +42,12 @@ import io.netty.buffer.ByteBuf;
 public class ChannelRequest {
 
 	public static Request getById(Consumer<Channel> handler, String id) {
-		return new Request(Request.Type.GET_CHANNEL_BY_ID, object -> handler.accept(parseChannelResponse(object)), id);
+		return new Request(Request.Type.GET_CHANNEL_BY_ID, id);
 	}
 
-	private static Channel parseChannelResponse(ByteBuf object) {
-		if (API.getInstance().requestFailed(object)) {
-			APIError.display(object);
+	private static Channel parseChannelResponse(ByteBuf object, Throwable t) {
+		if (t != null) {
+			APIError.display(t);
 			return null;
 		}
 		return parseChannel(object);
@@ -60,7 +61,7 @@ public class ChannelRequest {
 		int i = 0x4E;
 		while (i < channel.getInt(0x53)) {
 			String uuid = BufferUtil.getString(channel, i, 16);
-			io.github.axolotlclient.api.requests.User.get(users::add, uuid);
+			io.github.axolotlclient.api.requests.User.get(uuid).whenComplete((user, throwable) -> users.add(user));
 			i += 16;
 		}
 		List<ChatMessage> messages = new ArrayList<>();
@@ -82,19 +83,19 @@ public class ChannelRequest {
 
 	private static ChatMessage parseMessage(ByteBuf buf) {
 		AtomicReference<User> u = new AtomicReference<>();
-		io.github.axolotlclient.api.requests.User.get(u::set, BufferUtil.getString(buf, 0x00, 16));
+		io.github.axolotlclient.api.requests.User.get(BufferUtil.getString(buf, 0x00, 16)).whenComplete((us, t) -> u.set(us));
 
 		return new ChatMessage(u.get(), BufferUtil.getString(buf, 0x1D, buf.getInt(0x19)),
 			ChatMessage.Type.fromCode(buf.getByte(0x18)), buf.getLong(0x10));
 	}
 
-	public static Request getChannelList(Consumer<List<Channel>> handler) {
-		return new Request(Request.Type.GET_CHANNEL_LIST, object -> handler.accept(parseChannels(object)));
+	public static CompletableFuture<List<Channel>> getChannelList() {
+		return API.getInstance().send(new Request(Request.Type.GET_CHANNEL_LIST)).handle(ChannelRequest::parseChannels);
 	}
 
-	private static List<Channel> parseChannels(ByteBuf object) {
-		if (API.getInstance().requestFailed(object)) {
-			APIError.display(object);
+	private static List<Channel> parseChannels(ByteBuf object, Throwable t) {
+		if (t != null) {
+			APIError.display(t);
 			return Collections.emptyList();
 		}
 		List<Channel> channelList = new ArrayList<>();
@@ -117,14 +118,14 @@ public class ChannelRequest {
 			.addElement("include", include.getIdentifier()));
 	}*/
 
-	public static void getGroup(Consumer<Channel> handler, String... users) {
-		API.getInstance().send(new Request(Request.Type.GET_OR_CREATE_CHANNEL, b -> handler.accept(parseChannelResponse(b)),
-			new Request.Data((byte) users.length).add(users)));
+	public static CompletableFuture<Channel> getGroup(String... users) {
+		return API.getInstance().send(new Request(Request.Type.GET_OR_CREATE_CHANNEL,
+			new Request.Data((byte) users.length).add(users))).handle(ChannelRequest::parseChannelResponse);
 	}
 
-	public static void getDM(Consumer<Channel> handler, String uuid) {
-		API.getInstance().send(new Request(Request.Type.GET_OR_CREATE_CHANNEL, b -> handler.accept(parseChannelResponse(b)),
-			new Request.Data((byte) 1).add(uuid)));
+	public static CompletableFuture<Channel> getDM(String uuid) {
+		return API.getInstance().send(new Request(Request.Type.GET_OR_CREATE_CHANNEL,
+			new Request.Data((byte) 1).add(uuid))).handle(ChannelRequest::parseChannelResponse);
 	}
 
 	/*public static ChannelRequest getLatestMessages(Consumer<JsonObject> handler, int limit, String... include) {
@@ -142,8 +143,7 @@ public class ChannelRequest {
 	}*/
 
 	public static void createGroup(String... uuids) {
-		API.getInstance().send(new Request(Request.Type.CREATE_CHANNEL, b -> {
-		},
+		API.getInstance().send(new Request(Request.Type.CREATE_CHANNEL,
 			new Request.Data((byte) uuids.length).add(uuids)));
 	}
 }

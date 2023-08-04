@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.requests.ChannelRequest;
 import io.github.axolotlclient.api.types.Channel;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
@@ -46,10 +45,10 @@ public class ChatListWidget extends EntryListWidget {
 		xStart = x;
 		xEnd = x + width;
 		this.screen = screen;
-		API.getInstance().send(ChannelRequest.getChannelList(list ->
+		ChannelRequest.getChannelList().whenComplete((list, t) ->
 			list.stream().filter(predicate).forEach(c ->
 				entries.add(0, new ChatListEntry(c)))
-		));
+		);
 	}
 
 	public ChatListWidget(Screen screen, int screenWidth, int screenHeight, int x, int y, int width, int height) {

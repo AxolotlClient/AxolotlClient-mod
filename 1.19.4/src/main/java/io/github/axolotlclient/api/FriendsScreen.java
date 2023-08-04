@@ -22,8 +22,6 @@
 
 package io.github.axolotlclient.api;
 
-import java.util.stream.Collectors;
-
 import io.github.axolotlclient.api.chat.ChatScreen;
 import io.github.axolotlclient.api.handlers.FriendHandler;
 import io.github.axolotlclient.api.requests.ChannelRequest;
@@ -89,13 +87,13 @@ public class FriendsScreen extends Screen {
 		widget.children().clear();
 
 		if (current == Tab.ALL || current == Tab.ONLINE) {
-			FriendHandler.getInstance().getFriends(list -> widget.setUsers(list.stream().sorted((u1, u2) ->
+			FriendHandler.getInstance().getFriends().whenComplete((list, t) -> widget.setUsers(list.stream().sorted((u1, u2) ->
 				new AlphabeticalComparator().compare(u1.getName(), u2.getName())).filter(user -> {
 				if (current == Tab.ONLINE) {
 					return user.getStatus().isOnline();
 				}
 				return true;
-			}).collect(Collectors.toList())));
+			}).toList()));
 		} else if (current == Tab.PENDING) {
 			FriendHandler.getInstance().getFriendRequests((in, out) -> {
 
@@ -208,8 +206,8 @@ public class FriendsScreen extends Screen {
 	public void openChat() {
 		UserListWidget.UserListEntry entry = widget.getSelectedOrNull();
 		if (entry != null) {
-			ChannelRequest.getDM(c -> client.setScreen(new ChatScreen(this, c)),
-				entry.getUser().getUuid());
+			ChannelRequest.getDM(entry.getUser().getUuid()).whenComplete(((channel, throwable) ->
+				client.setScreen(new ChatScreen(this, channel))));
 		}
 	}
 

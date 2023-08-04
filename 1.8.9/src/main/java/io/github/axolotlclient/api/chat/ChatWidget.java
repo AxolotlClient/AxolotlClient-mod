@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -191,8 +190,8 @@ public class ChatWidget extends EntryListWidget {
 					})
 					.spacer()
 					.entry("api.friends.chat", buttonWidget -> {
-						Consumer<Channel> consumer = channel -> client.setScreen(new ChatScreen(screen.getParent(), channel));
-						ChannelRequest.getDM(consumer, origin.getSender().getUuid());
+						ChannelRequest.getDM(origin.getSender().getUuid())
+							.whenComplete((channel, throwable) -> client.setScreen(new ChatScreen(screen.getParent(), channel)));
 					})
 					// TODO reporting
 					.spacer()

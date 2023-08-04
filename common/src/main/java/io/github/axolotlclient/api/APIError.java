@@ -30,8 +30,32 @@ import io.netty.buffer.ByteBuf;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-public class APIError {
+public class APIError extends Exception {
 
+	@Getter
+	private final ErrorCode code;
+	@Getter
+	private final ByteBuf buf;
+
+	public APIError(ByteBuf buf){
+		super(fromCode(buf.getInt(0x09)));
+		code = ErrorCode.fromCode(buf.getInt(0x09));
+		this.buf = buf;
+
+	}
+
+	public void display(){
+		API.getInstance().getNotificationProvider().addStatus("api.error.requestGeneric", getMessage());
+	}
+
+	public static void display(Throwable t){
+		if(t instanceof APIError){
+			((APIError) t).display();
+		} else {
+			API.getInstance().getLogger().debug("APIError: " + t);
+			API.getInstance().getNotificationProvider().addStatus("api.error.requestGeneric", t.getMessage());
+		}
+	}
 	public static void display(ByteBuf object) {
 		API.getInstance().getLogger().debug("APIError: " + object);
 		API.getInstance().getNotificationProvider().addStatus("api.error.requestGeneric", fromResponse(object));

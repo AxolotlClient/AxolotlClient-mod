@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import io.netty.buffer.ByteBuf;
@@ -52,26 +51,22 @@ public class Request {
 	private final int id;
 	private final Data data;
 
-	@Getter
-	private final Consumer<ByteBuf> handler;
-
-	public Request(Type type, Consumer<ByteBuf> handler, Data data) {
+	public Request(Type type, Data data) {
 		this.type = type;
 		id = generateId();
 		this.data = data;
-		this.handler = handler;
 	}
 
-	public Request(Type type, Consumer<ByteBuf> handler) {
-		this(type, handler, new Data());
+	public Request(Type type) {
+		this(type, new Data());
 	}
 
-	public Request(Type type, Consumer<ByteBuf> handler, String... data) {
-		this(type, handler, new Data(data));
+	public Request(Type type, String... data) {
+		this(type, new Data(data));
 	}
 
-	public Request(Type type, Consumer<ByteBuf> handler, byte... data) {
-		this(type, handler, new Data(data));
+	public Request(Type type, byte... data) {
+		this(type, new Data(data));
 	}
 
 	private int generateId() {
