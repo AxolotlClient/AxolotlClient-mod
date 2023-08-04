@@ -118,12 +118,12 @@ public class ChannelRequest {
 	}*/
 
 	public static void getGroup(Consumer<Channel> handler, String... users) {
-		API.getInstance().send(new Request(Request.Type.GET_CHANNEL, b -> handler.accept(parseChannelResponse(b)),
+		API.getInstance().send(new Request(Request.Type.GET_OR_CREATE_CHANNEL, b -> handler.accept(parseChannelResponse(b)),
 			new Request.Data((byte) users.length).add(users)));
 	}
 
 	public static void getDM(Consumer<Channel> handler, String uuid) {
-		API.getInstance().send(new Request(Request.Type.GET_CHANNEL, b -> handler.accept(parseChannelResponse(b)),
+		API.getInstance().send(new Request(Request.Type.GET_OR_CREATE_CHANNEL, b -> handler.accept(parseChannelResponse(b)),
 			new Request.Data((byte) 1).add(uuid)));
 	}
 
