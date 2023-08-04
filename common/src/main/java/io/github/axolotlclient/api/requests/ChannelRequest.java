@@ -142,7 +142,7 @@ public class ChannelRequest {
 	}*/
 
 	public static void createGroup(String... uuids) {
-		API.getInstance().send(new Request(Request.Type.CREATE_CHAT, b -> {
+		API.getInstance().send(new Request(Request.Type.CREATE_CHANNEL, b -> {
 		},
 			new Request.Data((byte) uuids.length).add(uuids)));
 	}
