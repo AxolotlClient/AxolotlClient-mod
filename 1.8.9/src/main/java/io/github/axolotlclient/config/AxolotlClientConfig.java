@@ -53,6 +53,7 @@ public class AxolotlClientConfig extends ConfigHolder {
 	public final BooleanOption lowFire = new BooleanOption("lowFire", false);
 	public final ColorOption hitColor = new ColorOption("hitColor", new Color(255, 0, 0, 77));
 	public final BooleanOption minimalViewBob = new BooleanOption("minimalViewBob", false);
+	public final BooleanOption noHurtCam = new BooleanOption("noHurtCam", false);
 	public final BooleanOption flatItems = new BooleanOption("flatItems", false);
 
 	public final ColorOption loadingScreenColor = new ColorOption("loadingBgColor", new Color(-1));
@@ -138,7 +139,8 @@ public class AxolotlClientConfig extends ConfigHolder {
 			hitColor,
 			minimalViewBob,
 			flatItems,
-			showSaturation);
+			showSaturation,
+			noHurtCam);
 
 		timeChanger.add(timeChangerEnabled);
 		timeChanger.add(customTime);

@@ -244,7 +244,7 @@ public abstract class PlayerListHudMixin {
 	}
 
 	@Inject(method = "getPlayerName", at = @At("HEAD"), cancellable = true)
-	public void axolotlclient$getPlayerName(PlayerListEntry playerEntry, CallbackInfoReturnable<String> cir) {
+	public void axolotlclient$getPlayerName(PlayerListEntry playerEntry, CallbackInfoReturnable<Text> cir) {
 		if (!BedwarsMod.getInstance().isEnabled()) {
 			return;
 		}
@@ -256,10 +256,10 @@ public abstract class PlayerListHudMixin {
 		if (player == null) {
 			return;
 		}
-		cir.setReturnValue(player.getTabListDisplay());
+		cir.setReturnValue(Text.of(player.getTabListDisplay()));
 	}
 
-	@ModifyVariable(method = "render", at = @At(value = "STORE"), ordinal = 1)
+	@ModifyVariable(method = "render", at = @At(value = "STORE"), ordinal = 0)
 	public List<PlayerListEntry> axolotlclient$overrideSortedPlayers(List<PlayerListEntry> original) {
 		if (!BedwarsMod.getInstance().inGame()) {
 			return original;
