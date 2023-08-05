@@ -28,6 +28,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.modules.hud.util.ItemUtil;
@@ -41,6 +42,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.util.Identifier;
 
 /**
  * @author DarkKronicle
@@ -96,8 +98,9 @@ public class TrapUpgrade extends TeamUpgrade {
 	public void draw(MatrixStack stack, int x, int y, int width, int height) {
 		if (traps.size() == 0) {
 			Color color = Color.DARK_GRAY;
-			RenderSystem.color4f(color.getAlpha()/255F, color.getRed()/255F, color.getGreen()/255F, color.getBlue()/255F);
-			ItemUtil.renderGuiItemModel(BedwarsMod.getInstance().getUpgradesOverlay().getScale(), new ItemStack(Items.BARRIER), x, y);
+			GlStateManager.color4f(color.getAlpha()/255F, color.getRed()/255F, color.getGreen()/255F, color.getBlue()/255F);
+			MinecraftClient.getInstance().getTextureManager().bindTexture(new Identifier("textures/item/barrier.png"));
+			DrawableHelper.drawTexture(stack, x, y, 0, 0, 16, 16, 16, 16);
 		} else {
 			for (TrapType type : traps) {
 				RenderSystem.color4f(1, 1, 1, 1);

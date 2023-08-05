@@ -53,19 +53,15 @@ public class BedwarsTeamUpgrades {
 		} else {
 			ItemUtil.renderGuiItemModel(BedwarsMod.getInstance().getUpgradesOverlay().getScale(),new ItemStack(Items.DIAMOND_SWORD), x, y);
 		}
-	}
-	);
+	});
 
 	public final TeamUpgrade dragonBuff = new BinaryUpgrade(
 		"dragonbuff", Pattern.compile("^\\b[A-Za-z0-9_§]{3,16}\\b purchased Dragon Buff\\s*$"),
-		5, 5, (graphics, x, y, width, height, upgradeLevel) -> {
-		if(upgradeLevel == 0){
-			Color color = Color.DARK_GRAY;
-			RenderSystem.setShaderColor(color.getAlpha()/255F, color.getRed()/255F, color.getGreen()/255F, color.getBlue()/255F);
+		5, 5, (graphics, x, y, width, height, purchased) -> {
+		if (purchased > 0) {
+			ItemUtil.renderGuiItemModel(BedwarsMod.getInstance().getUpgradesOverlay().getScale(), new ItemStack(Items.END_CRYSTAL), x, y);
 		}
-		ItemUtil.renderGuiItemModel(BedwarsMod.getInstance().getUpgradesOverlay().getScale(), new ItemStack(Items.END_CRYSTAL), x, y);
-	}
-	);
+	});
 
 	public final TeamUpgrade healPool = new BinaryUpgrade(
 		"healpool", Pattern.compile("^\\b[A-Za-z0-9_§]{3,16}\\b purchased Heal Pool\\s*$"),
@@ -77,8 +73,7 @@ public class BedwarsTeamUpgrades {
 		Sprite sprite = MinecraftClient.getInstance().getStatusEffectSpriteManager().getSprite(StatusEffects.HEALTH_BOOST);
 		RenderSystem.setShaderTexture(0, sprite.getAtlas().getId());
 		DrawableHelper.drawSprite(graphics, x, y, 0, width, height, sprite);
-	}
-	);
+	});
 
 	public final TeamUpgrade protection = new TieredUpgrade(
 		"prot", Pattern.compile("^\\b[A-Za-z0-9_§]{3,16}\\b purchased Reinforced Armor .{1,3}\\s*$"),
@@ -109,8 +104,7 @@ public class BedwarsTeamUpgrades {
 				ItemUtil.renderGuiItemModel(BedwarsMod.getInstance().getUpgradesOverlay().getScale(), new ItemStack(Items.IRON_CHESTPLATE), x, y);
 				break;
 		}
-	}
-	);
+	});
 
 	public final TeamUpgrade maniacMiner = new TieredUpgrade(
 		"haste", Pattern.compile("^\\b[A-Za-z0-9_§]{3,16}\\b purchased Maniac Miner .{1,3}\\s*$"),
@@ -125,8 +119,7 @@ public class BedwarsTeamUpgrades {
 		Sprite sprite = MinecraftClient.getInstance().getStatusEffectSpriteManager().getSprite(StatusEffects.HASTE);
 		RenderSystem.setShaderTexture(0, sprite.getAtlas().getId());
 		DrawableHelper.drawSprite(graphics, x, y, 0, width, height, sprite);
-	}
-	);
+	});
 
 	public final TeamUpgrade forge = new TieredUpgrade(
 		"forge", Pattern.compile("^\\b[A-Za-z0-9_§]{3,16}\\b purchased (?:Iron|Golden|Emerald|Molten) Forge\\s*$"),
@@ -148,8 +141,7 @@ public class BedwarsTeamUpgrades {
 			RenderSystem.setShaderTexture(0, new Identifier("textures/block/furnace_front_on.png"));
 			DrawableHelper.drawTexture(graphics, x, y, 0, 0, width, height, width, height);
 		}
-	}
-	);
+	});
 
 	public final TeamUpgrade[] upgrades = {trap, sharpness, dragonBuff, healPool, protection, maniacMiner, forge};
 

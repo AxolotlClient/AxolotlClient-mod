@@ -29,15 +29,22 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import io.github.axolotlclient.AxolotlClientConfig.Color;
 import lombok.experimental.UtilityClass;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.DiffuseLighting;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.render.*;
+import net.minecraft.client.render.block.entity.BlockEntityItemStackRenderHelper;
+import net.minecraft.client.render.model.BakedModel;
+import net.minecraft.client.render.model.BakedQuad;
+import net.minecraft.client.render.model.json.ModelTransformation;
+import net.minecraft.client.texture.SpriteAtlasTexture;
+import net.minecraft.client.texture.TextureUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3i;
 
 /**
  * This implementation of Hud modules is based on KronHUD.
@@ -48,6 +55,8 @@ import net.minecraft.util.Formatting;
 
 @UtilityClass
 public class ItemUtil {
+
+	private static final Identifier ITEM_GLINT_TEXTURE = new Identifier("textures/misc/enchanted_item_glint.png");
 
 	public static int getTotal(MinecraftClient client, ItemStack stack) {
 		List<ItemStack> item = ItemUtil.getItems(client);
@@ -170,6 +179,151 @@ public class ItemUtil {
 		GlStateManager.popMatrix();
 		DiffuseLighting.disable();
 	}
+
+	public static void renderColoredGuiItemModel(ItemStack stack, int x, int y, Color color){
+		DiffuseLighting.enable();
+		GlStateManager.pushMatrix();
+
+		MinecraftClient client = MinecraftClient.getInstance();
+
+		if (stack != null && stack.getItem() != null) {
+			client.getItemRenderer().zOffset += 50.0F;
+
+
+			BakedModel bakedModel = client.getItemRenderer().getModels().getModel(stack);
+			GlStateManager.pushMatrix();
+			client.getTextureManager().bindTexture(SpriteAtlasTexture.BLOCK_ATLAS_TEX);
+			client.getTextureManager().getTexture(SpriteAtlasTexture.BLOCK_ATLAS_TEX).pushFilter(false, false);
+			GlStateManager.enableRescaleNormal();
+			GlStateManager.enableAlphaTest();
+			GlStateManager.alphaFunc(516, 0.1F);
+			GlStateManager.enableBlend();
+			GlStateManager.blendFunc(770, 771);
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+
+
+			GlStateManager.translate((float)x, (float)y, 100.0F + client.getItemRenderer().zOffset);
+			GlStateManager.translate(8.0F, 8.0F, 0.0F);
+			GlStateManager.scale(1.0F, 1.0F, -1.0F);
+			GlStateManager.scale(0.5F, 0.5F, 0.5F);
+			if (bakedModel.hasDepth()) {
+				GlStateManager.scale(40.0F, 40.0F, 40.0F);
+				GlStateManager.rotate(210.0F, 1.0F, 0.0F, 0.0F);
+				GlStateManager.rotate(-135.0F, 0.0F, 1.0F, 0.0F);
+				GlStateManager.enableLighting();
+			} else {
+				GlStateManager.scale(64.0F, 64.0F, 64.0F);
+				GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
+				GlStateManager.disableLighting();
+			}
+
+
+			bakedModel.getTransformation().apply(ModelTransformation.Mode.GUI);
+
+
+			GlStateManager.pushMatrix();
+			GlStateManager.scale(0.5F, 0.5F, 0.5F);
+			if (bakedModel.isBuiltin()) {
+				GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
+				GlStateManager.translate(-0.5F, -0.5F, -0.5F);
+				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+				GlStateManager.enableRescaleNormal();
+				BlockEntityItemStackRenderHelper.INSTANCE.renderItem(stack);
+			} else {
+				GlStateManager.translate(-0.5F, -0.5F, -0.5F);
+				renderBakedItemModel(bakedModel, color.getAsInt(), stack);
+				if (stack.hasEnchantmentGlint()) {
+					renderGlint(bakedModel);
+				}
+			}
+
+			GlStateManager.popMatrix();
+
+
+			GlStateManager.disableAlphaTest();
+			GlStateManager.disableRescaleNormal();
+			GlStateManager.disableLighting();
+			GlStateManager.popMatrix();
+			client.getTextureManager().bindTexture(SpriteAtlasTexture.BLOCK_ATLAS_TEX);
+			client.getTextureManager().getTexture(SpriteAtlasTexture.BLOCK_ATLAS_TEX).pop();
+
+
+			client.getItemRenderer().zOffset -= 50.0F;
+		}
+
+		GlStateManager.popMatrix();
+		DiffuseLighting.disable();
+	}
+
+	private void renderBakedItemModel(BakedModel bakedModel, int color, ItemStack itemStack) {
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder bufferBuilder = tessellator.getBuffer();
+		bufferBuilder.begin(7, VertexFormats.BLOCK_NORMALS);
+
+		for(Direction direction : Direction.values()) {
+			renderBakedItemQuads(bufferBuilder, bakedModel.getByDirection(direction), color, itemStack);
+		}
+
+		renderBakedItemQuads(bufferBuilder, bakedModel.getQuads(), color, itemStack);
+		tessellator.draw();
+	}
+
+	private void renderBakedItemQuads(BufferBuilder bufferBuilder, List<BakedQuad> list, int color, ItemStack itemStack) {
+		boolean bl = color == -1 && itemStack != null;
+		int j = 0;
+
+		for(int k = list.size(); j < k; ++j) {
+			BakedQuad bakedQuad = list.get(j);
+			int l = color;
+			if (bl && bakedQuad.hasColor()) {
+				l = itemStack.getItem().getDisplayColor(itemStack, bakedQuad.getColorIndex());
+				if (GameRenderer.anaglyphEnabled) {
+					l = TextureUtil.getAnaglyphColor(l);
+				}
+
+				l |= -16777216;
+			}
+
+			renderQuad(bufferBuilder, bakedQuad, l);
+		}
+	}
+
+	private void renderGlint(BakedModel bakedModel) {
+		GlStateManager.depthMask(false);
+		GlStateManager.depthFunc(514);
+		GlStateManager.disableLighting();
+		GlStateManager.blendFunc(768, 1);
+		MinecraftClient.getInstance().getTextureManager().bindTexture(ITEM_GLINT_TEXTURE);
+		GlStateManager.matrixMode(5890);
+		GlStateManager.pushMatrix();
+		GlStateManager.scale(8.0F, 8.0F, 8.0F);
+		float f = (float)(MinecraftClient.getTime() % 3000L) / 3000.0F / 8.0F;
+		GlStateManager.translate(f, 0.0F, 0.0F);
+		GlStateManager.rotate(-50.0F, 0.0F, 0.0F, 1.0F);
+		renderBakedItemModel(bakedModel, -8372020, null);
+		GlStateManager.popMatrix();
+		GlStateManager.pushMatrix();
+		GlStateManager.scale(8.0F, 8.0F, 8.0F);
+		float g = (float)(MinecraftClient.getTime() % 4873L) / 4873.0F / 8.0F;
+		GlStateManager.translate(-g, 0.0F, 0.0F);
+		GlStateManager.rotate(10.0F, 0.0F, 0.0F, 1.0F);
+		renderBakedItemModel(bakedModel, -8372020, null);
+		GlStateManager.popMatrix();
+		GlStateManager.matrixMode(5888);
+		GlStateManager.blendFunc(770, 771);
+		GlStateManager.enableLighting();
+		GlStateManager.depthFunc(515);
+		GlStateManager.depthMask(true);
+		MinecraftClient.getInstance().getTextureManager().bindTexture(SpriteAtlasTexture.BLOCK_ATLAS_TEX);
+	}
+
+	private void renderQuad(BufferBuilder bufferBuilder, BakedQuad bakedQuad, int color) {
+		bufferBuilder.putArray(bakedQuad.getVertexData());
+		bufferBuilder.putQuadColor(color);
+		Vec3i vec3i = bakedQuad.getFace().getVector();
+		bufferBuilder.putNormal((float)vec3i.getX(), (float)vec3i.getY(), (float)vec3i.getZ());
+	}
+
 
 	public static void renderGuiItemOverlay(TextRenderer renderer, ItemStack stack, int x, int y, String countLabel,
 											int textColor, boolean shadow) {

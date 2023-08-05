@@ -58,12 +58,10 @@ public class BedwarsTeamUpgrades {
 
 	public final TeamUpgrade dragonBuff = new BinaryUpgrade(
 		"dragonbuff", Pattern.compile("^\\b[A-Za-z0-9_§]{3,16}\\b purchased Dragon Buff\\s*$"),
-		5, 5, (x, y, width, height, upgradeLevel) -> {
-		if(upgradeLevel == 0){
-			Color color = Color.DARK_GRAY;
-			GlStateManager.color(color.getAlpha()/255F, color.getRed()/255F, color.getGreen()/255F, color.getBlue()/255F);
+		5, 5, (x, y, width, height, purchased) -> {
+		if (purchased > 0) {
+			ItemUtil.renderGuiItemModel(new ItemStack(Blocks.DRAGON_EGG), x, y);
 		}
-		ItemUtil.renderGuiItemModel(new ItemStack(Blocks.DRAGON_EGG), x, y);
 	}
 	);
 
@@ -85,19 +83,19 @@ public class BedwarsTeamUpgrades {
 		switch (upgradeLevel){
 			case 1:
 				ItemUtil.renderGuiItemModel(new ItemStack(Items.IRON_CHESTPLATE), x, y);
-				ConfigUtils.applyScissor(x, y+height/2, x+width/2, y+height);
+				ConfigUtils.applyScissor(x, y+height/2, width/2, height);
 				ItemUtil.renderGuiItemModel(new ItemStack(Items.DIAMOND_CHESTPLATE), x, y);
 				GL11.glDisable(GL11.GL_SCISSOR_TEST);
 				break;
 			case 2:
 				ItemUtil.renderGuiItemModel(new ItemStack(Items.IRON_CHESTPLATE), x, y);
-				ConfigUtils.applyScissor(x, y, x+width/2, y+height);
+				ConfigUtils.applyScissor(x, y, width/2, height);
 				ItemUtil.renderGuiItemModel(new ItemStack(Items.DIAMOND_CHESTPLATE), x, y);
 				GL11.glDisable(GL11.GL_SCISSOR_TEST);
 				break;
 			case 3:
 				ItemUtil.renderGuiItemModel(new ItemStack(Items.DIAMOND_CHESTPLATE), x, y);
-				ConfigUtils.applyScissor(x+width/2, y+height/2, x+width, y+height);
+				ConfigUtils.applyScissor(x+width/2, y+height/2, width/2, height/2);
 				ItemUtil.renderGuiItemModel(new ItemStack(Items.IRON_CHESTPLATE), x, y);
 				GL11.glDisable(GL11.GL_SCISSOR_TEST);
 				break;

@@ -54,14 +54,11 @@ public class BedwarsTeamUpgrades {
 
 	public final TeamUpgrade dragonBuff = new BinaryUpgrade(
 		"dragonbuff", Pattern.compile("^\\b[A-Za-z0-9_§]{3,16}\\b purchased Dragon Buff\\s*$"),
-		5, 5, (graphics, x, y, width, height, upgradeLevel) -> {
-			if(upgradeLevel == 0){
-				Color color = Color.DARK_GRAY;
-				RenderSystem.setShaderColor(color.getAlpha()/255F, color.getRed()/255F, color.getGreen()/255F, color.getBlue()/255F);
-			}
+		5, 5, (graphics, x, y, width, height, purchased) -> {
+		if (purchased > 0) {
 			graphics.drawItem(new ItemStack(Items.END_CRYSTAL), x, y);
 		}
-	);
+	});
 
 	public final TeamUpgrade healPool = new BinaryUpgrade(
 		"healpool", Pattern.compile("^\\b[A-Za-z0-9_§]{3,16}\\b purchased Heal Pool\\s*$"),

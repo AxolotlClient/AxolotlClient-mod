@@ -37,6 +37,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.util.Identifier;
 
 /**
  * @author DarkKronicle
@@ -95,7 +96,7 @@ public class TrapUpgrade extends TeamUpgrade {
 		if (traps.size() == 0) {
 			Color color = Color.DARK_GRAY;
 			RenderSystem.setShaderColor(color.getAlpha()/255F, color.getRed()/255F, color.getGreen()/255F, color.getBlue()/255F);
-			graphics.drawItem(new ItemStack(Items.BARRIER), x, y, 0);
+			graphics.drawTexture(new Identifier("textures/item/barrier.png"), x, y, 0, 0, 16, 16, 16, 16);
 		} else {
 			for (TrapType type : traps) {
 				RenderSystem.setShaderColor(1, 1, 1, 1);

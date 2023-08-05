@@ -33,7 +33,6 @@ import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.modules.hud.util.ItemUtil;
 import io.github.axolotlclient.modules.hypixel.bedwars.BedwarsMode;
 import lombok.AllArgsConstructor;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.item.ItemStack;
@@ -81,7 +80,6 @@ public class TrapUpgrade extends TeamUpgrade {
 			case 2:
 				return 4;
 		}
-		;
 		return 0;
 	}
 
@@ -95,7 +93,8 @@ public class TrapUpgrade extends TeamUpgrade {
 		if (traps.size() == 0) {
 			Color color = Color.DARK_GRAY;
 			GlStateManager.color(color.getAlpha()/255F, color.getRed()/255F, color.getGreen()/255F, color.getBlue()/255F);
-			ItemUtil.renderGuiItemModel(new ItemStack(Blocks.BARRIER), x, y);
+			MinecraftClient.getInstance().getTextureManager().bindTexture(new Identifier("textures/items/barrier.png"));
+			DrawableHelper.drawTexture(x, y, 0, 0, 16, 16, 16, 16);
 		} else {
 			for (TrapType type : traps) {
 				GlStateManager.color(1, 1, 1, 1);
