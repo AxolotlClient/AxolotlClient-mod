@@ -28,10 +28,17 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
+import io.github.axolotlclient.modules.hud.util.ItemUtil;
 import io.github.axolotlclient.modules.hypixel.bedwars.BedwarsMode;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import net.minecraft.block.Blocks;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.util.Identifier;
 
 /**
  * @author DarkKronicle
@@ -84,16 +91,18 @@ public class TrapUpgrade extends TeamUpgrade {
 	}
 
 	@Override
-	public TextureInfo[] getTexture() {
+	public void draw(int x, int y, int width, int height) {
 		if (traps.size() == 0) {
-			return new TextureInfo[]{new TextureInfo("textures/items/barrier.png", Color.DARK_GRAY)};
+			Color color = Color.DARK_GRAY;
+			GlStateManager.color(color.getAlpha()/255F, color.getRed()/255F, color.getGreen()/255F, color.getBlue()/255F);
+			ItemUtil.renderGuiItemModel(new ItemStack(Blocks.BARRIER), x, y);
+		} else {
+			for (TrapType type : traps) {
+				GlStateManager.color(1, 1, 1, 1);
+				type.draw(x, y, width, height);
+				x += width + 1;
+			}
 		}
-		TextureInfo[] trapTextures = new TextureInfo[traps.size()];
-		for (int i = 0; i < traps.size(); i++) {
-			TrapType type = traps.get(i);
-			trapTextures[i] = type.getTexInfo();
-		}
-		return trapTextures;
 	}
 
 	@Override
@@ -103,13 +112,24 @@ public class TrapUpgrade extends TeamUpgrade {
 
 	@AllArgsConstructor
 	public enum TrapType {
-		ITS_A_TRAP(new TextureInfo("textures/gui/container/inventory.png", 5*18, 198 + 18, 256, 256,18, 18)),
-		COUNTER_OFFENSIVE(new TextureInfo("textures/gui/container/inventory.png", 0, 198, 256, 256, 18, 18)),
-		ALARM(new TextureInfo("textures/items/ender_eye.png")),
-		MINER_FATIGUE(new TextureInfo("textures/gui/container/inventory.png", 3 * 18, 198, 256, 256, 18, 18));
 
-		@Getter
-		private final TextureInfo texInfo;
+		ITS_A_TRAP((x, y, width, height, unused) -> {
+			MinecraftClient.getInstance().getTextureManager().bindTexture(new Identifier("textures/gui/container/inventory.png"));
+			DrawableHelper.drawTexture(x, y, 5*18, 198 + 18, 18, 18, 16, 16, 256, 256);
+		}),
+		COUNTER_OFFENSIVE((x, y, width, height, unused) -> {
+			MinecraftClient.getInstance().getTextureManager().bindTexture(new Identifier("textures/gui/container/inventory.png"));
+			DrawableHelper.drawTexture(x, y, 0, 198, 18, 18, 16, 16, 256, 256);
+		}),
+		ALARM((x, y, width, height, unused) ->
+			ItemUtil.renderGuiItemModel(new ItemStack(Items.EYE_OF_ENDER), x, y)),
+		MINER_FATIGUE((x, y, width, height, unused) -> {
+			MinecraftClient.getInstance().getTextureManager().bindTexture(new Identifier("textures/gui/container/inventory.png"));
+			DrawableHelper.drawTexture(x, y, 3 * 18, 198, 18, 18, 16, 16, 256, 256);
+		})
+		;
+
+		private final TeamUpgradeRenderer renderer;
 
 		public static TrapType getFuzzy(String s) {
 			s = s.toLowerCase(Locale.ROOT);
@@ -123,6 +143,10 @@ public class TrapUpgrade extends TeamUpgrade {
 				return COUNTER_OFFENSIVE;
 			}
 			return ITS_A_TRAP;
+		}
+
+		public void draw(int x, int y, int width, int height){
+			renderer.render(x, y, width, height, 0);
 		}
 	}
 }
