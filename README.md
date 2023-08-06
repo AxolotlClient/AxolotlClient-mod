@@ -79,9 +79,39 @@ For more details and updates, visit the links below:
 
 We welcome all contributions to Axolotl Client. Join our Discord community to discuss new features or open a pull request if you have a feature or a new/updated translation to share. Remember to note your changes in `CHANGELOG.md` for inclusion in the next version's changelog.
 
-## Building
+## Building from Source
 
-Use `./gradlew build` to build the project. For building a specific version or all versions, use `-Paxolotlclient.modules.<version_name>=true` or `-Paxolotlclient.modules.all=true` respectively.
+For those interested in the most current version or building from the source directly, follow the instructions below:
+
+### Basic Build
+
+To build the project, use the following command:
+
+```bash
+./gradlew build
+```
+
+### Building Specific Versions
+
+If you wish to build a specific version, use:
+
+```bash
+./gradlew build -Paxolotlclient.modules.<version_name>=true
+```
+
+Replace `<version_name>` with the desired version name.
+
+### Building All Versions
+
+To build all available versions at once, use:
+
+```bash
+./gradlew build -Paxolotlclient.modules.all=true
+```
+
+### IDE Tips
+
+For those using an Integrated Development Environment (IDE), you can add the respective properties mentioned above to the `gradle.properties` files or remove them as required.
 
 ## API Requirements
 
