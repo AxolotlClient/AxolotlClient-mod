@@ -22,11 +22,13 @@
 
 package io.github.axolotlclient.api.chat;
 
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.api.ContextMenu;
 import io.github.axolotlclient.api.ContextMenuScreen;
 import io.github.axolotlclient.api.handlers.ChatHandler;
@@ -217,8 +219,13 @@ public class ChatWidget extends AlwaysSelectedEntryListWidget<ChatWidget.ChatLin
 
 	public class NameChatLine extends ChatLine {
 
+		private final String formattedTime;
+
 		public NameChatLine(ChatMessage message) {
 			super(Text.literal(message.getSender().getName()).setStyle(Style.EMPTY.withBold(true)).asOrderedText(), message);
+
+			SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("d/M/yyyy H:mm");
+			formattedTime = DATE_FORMAT.format(new Date(message.getTimestamp()*1000));
 		}
 
 		@Override
@@ -229,6 +236,7 @@ public class ChatWidget extends AlwaysSelectedEntryListWidget<ChatWidget.ChatLin
 			graphics.drawTexture(texture, x - 22, y, 18, 18, 8, 8, 8, 8, 64, 64);
 			graphics.drawTexture(texture, x - 22, y, 18, 18, 40, 8, 8, 8, 64, 64);
 			RenderSystem.enableBlend();
+			graphics.drawText(client.textRenderer, formattedTime, client.textRenderer.getWidth(getContent()) + x + 5, y, Color.GRAY.getAsInt(), false);
 		}
 	}
 }
