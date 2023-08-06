@@ -90,6 +90,8 @@ public class Request {
 	public static class Data {
 		private final List<Map.Entry<Integer, byte[]>> elements = new ArrayList<>();
 
+		public Data(){}
+
 		public Data(String... data) {
 			for (String s : data) {
 				add(s);
@@ -102,6 +104,10 @@ public class Request {
 
 		public Data(byte[] data) {
 			add(data);
+		}
+
+		public Data add(int i){
+			return add((byte) i);
 		}
 
 		public Data add(String e) {
@@ -166,6 +172,10 @@ public class Request {
 		GET_CHANNEL_BY_ID(0x11),
 		GET_PUBLIC_KEY(0x12),
 		GET_HYPIXEL_API_KEY(0x13),
+		GET_BLOCKED(0x14),
+		BLOCK_USER(0x15),
+		UNBLOCK_USER(0x16),
+		UPLOAD_SCREENSHOT(0x17),
 		ERROR(0xFF);
 
 		private final int type;

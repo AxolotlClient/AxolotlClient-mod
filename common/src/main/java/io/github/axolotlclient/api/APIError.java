@@ -24,6 +24,7 @@ package io.github.axolotlclient.api;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import io.netty.buffer.ByteBuf;
@@ -56,6 +57,15 @@ public class APIError extends Exception {
 			API.getInstance().getNotificationProvider().addStatus("api.error.requestGeneric", t.getMessage());
 		}
 	}
+
+	public static void displayOrElse(Throwable t, ByteBuf buf, Consumer<ByteBuf> action){
+		if(t != null){
+			display(t);
+		} else {
+			action.accept(buf);
+		}
+	}
+
 	public static void display(ByteBuf object) {
 		API.getInstance().getLogger().debug("APIError: " + object);
 		API.getInstance().getNotificationProvider().addStatus("api.error.requestGeneric", fromResponse(object));

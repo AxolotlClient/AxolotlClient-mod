@@ -97,15 +97,15 @@ public class FriendsScreen extends Screen {
 				return true;
 			}).collect(Collectors.toList())));
 		} else if (current == Tab.PENDING) {
-			FriendHandler.getInstance().getFriendRequests((in, out) -> {
+			FriendHandler.getInstance().getFriendRequests().whenComplete((con, th) -> {
 
-				in.stream().sorted((u1, u2) -> new AlphabeticalComparator().compare(u1.getName(), u2.getName()))
+				con.getLeft().stream().sorted((u1, u2) -> new AlphabeticalComparator().compare(u1.getName(), u2.getName()))
 					.forEach(user -> widget.addEntry(new UserListWidget.UserListEntry(user, new TranslatableText("api.friends.pending.incoming"))));
-				out.stream().sorted((u1, u2) -> new AlphabeticalComparator().compare(u1.getName(), u2.getName()))
+				con.getRight().stream().sorted((u1, u2) -> new AlphabeticalComparator().compare(u1.getName(), u2.getName()))
 					.forEach(user -> widget.addEntry(new UserListWidget.UserListEntry(user, new TranslatableText("api.friends.pending.outgoing"))));
 			});
 		} else if (current == Tab.BLOCKED) {
-			FriendHandler.getInstance().getBlocked(list -> widget.setUsers(list.stream().sorted((u1, u2) ->
+			FriendHandler.getInstance().getBlocked().whenComplete((list, th) -> widget.setUsers(list.stream().sorted((u1, u2) ->
 				new AlphabeticalComparator().compare(u1.getName(), u2.getName())).collect(Collectors.toList())));
 		}
 

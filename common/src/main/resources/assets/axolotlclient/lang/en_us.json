@@ -338,8 +338,6 @@
 	"secondtextcolor": "Second Color",
 	"semicardinalcolor": "Intercardinal Color",
 	"shadow": "Shadow",
-	"shareUrl": "Share Server URL",
-	"shareUrl.tooltip": "Must be a 'gartbin' server.",
 	"shiftHorizontalScroll": "Scroll Horizontally (Shift)",
 	"showA": "Show A",
 	"showActivity": "Show Activity",

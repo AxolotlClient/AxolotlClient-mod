@@ -27,9 +27,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.APIError;
@@ -37,6 +34,8 @@ import io.github.axolotlclient.api.Keyword;
 import io.github.axolotlclient.api.Request;
 import io.github.axolotlclient.api.types.Status;
 import io.github.axolotlclient.api.types.User;
+import io.github.axolotlclient.api.util.BiContainer;
+import io.github.axolotlclient.api.util.BufferUtil;
 import io.github.axolotlclient.api.util.RequestHandler;
 import io.github.axolotlclient.api.util.UUIDHelper;
 import lombok.Getter;
@@ -73,28 +72,28 @@ public class FriendHandler implements RequestHandler {
 	}
 
 	public void blockUser(String uuid) {
-		/*api.send(new Friends(object -> {
-			if (API.getInstance().requestFailed(object)) {
-				APIError.display(object);
-			} else {
-				api.getNotificationProvider().addStatus("api.success.blockUser", "api.success.blockUser.desc", UUIDHelper.getUsername(uuid));
-			}
-		}, "block", uuid));*/
+		api.send(new Request(Request.Type.BLOCK_USER, uuid)).whenComplete((buf, throwable) -> {
+			APIError.displayOrElse(throwable, buf, b -> {
+				if(b.getBoolean(0x09)) {
+					api.getNotificationProvider().addStatus("api.success.blockUser", "api.success.blockUser.desc", UUIDHelper.getUsername(uuid));
+				}
+			});
+		});
 	}
 
 	public void unblockUser(String uuid) {
-		/*api.send(new Friends(object -> {
-			if (API.getInstance().requestFailed(object)) {
-				APIError.display(object);
-			} else {
-				api.getNotificationProvider().addStatus("api.success.unblockUser", "api.success.unblockUser.desc", UUIDHelper.getUsername(uuid));
-			}
-		}, "unblock", uuid));*/
+		api.send(new Request(Request.Type.UNBLOCK_USER, uuid)).whenComplete((buf, throwable) -> {
+			APIError.displayOrElse(throwable, buf, b -> {
+				if(b.getBoolean(0x09)) {
+					api.getNotificationProvider().addStatus("api.success.unblockUser", "api.success.unblockUser.desc", UUIDHelper.getUsername(uuid));
+				}
+			});
+		});
 	}
 
 	public CompletableFuture<List<User>> getFriends() {
 		return api.send(new Request(Request.Type.FRIENDS_LIST)).handle((object, t) -> {
-			if (t == null) {
+			if (t != null) {
 				APIError.display(object);
 				return Collections.emptyList();
 			} else {
@@ -120,8 +119,8 @@ public class FriendHandler implements RequestHandler {
 		});
 	}
 
-	public void getFriendRequests(BiConsumer<List<User>, List<User>> responseConsumer) {
-		api.send(new Request(Request.Type.GET_FRIEND_REQUESTS)).whenComplete((object, th) -> {
+	public CompletableFuture<BiContainer<List<User>, List<User>>> getFriendRequests() {
+		return api.send(new Request(Request.Type.GET_FRIEND_REQUESTS)).handle((object, th) -> {
 			if (th != null) {
 				APIError.display(th);
 			} else {
@@ -139,30 +138,26 @@ public class FriendHandler implements RequestHandler {
 					i += 16;
 				}
 
-				responseConsumer.accept(in, out);
+				return BiContainer.of(in, out);
 			}
+			return BiContainer.of(Collections.emptyList(), Collections.emptyList());
 		});
 	}
 
-	public void getBlocked(Consumer<List<User>> responseConsumer) {
-		/*api.send(new Friends(object -> {
-			if (API.getInstance().requestFailed(object)) {
-				APIError.display(object);
-			} else {
-				JsonArray blocked = object.get("data").getAsJsonObject().get("blocked").getAsJsonArray();
+	public CompletableFuture<List<User>> getBlocked() {
+		return api.send(new Request(Request.Type.GET_BLOCKED)).handle((buf, th) -> {
+			int count = buf.getInt(0x09);
 
-				List<User> bl = new ArrayList<>();
-				blocked.forEach(e -> bl.add(new User(e.getAsJsonObject().get("uuid").getAsString(), Status.UNKNOWN)));
-				responseConsumer.accept(bl);
+			List<User> users = new ArrayList<>();
+			for(int i = 0;i<count;i++){
+				users.add(new User(BufferUtil.getString(buf, 0x0C + (i * 16), 16), Status.UNKNOWN));
 			}
-		}, "getBlocked"));*/
-		responseConsumer.accept(Collections.emptyList());
+			return users;
+		});
 	}
 
 	public boolean isBlocked(String uuid) {
-		AtomicBoolean bool = new AtomicBoolean(false);
-		getBlocked(list -> bool.set(list.stream().map(User::getUuid).anyMatch(uuid::equals)));
-		return bool.get();
+		return getBlocked().getNow(Collections.emptyList()).stream().map(User::getUuid).anyMatch(uuid::equals);
 	}
 
 	public void acceptFriendRequest(User from) {
