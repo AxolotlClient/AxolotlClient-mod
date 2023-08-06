@@ -22,14 +22,13 @@
 
 package io.github.axolotlclient.api.chat;
 
+import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.api.ContextMenu;
 import io.github.axolotlclient.api.ContextMenuScreen;
 import io.github.axolotlclient.api.handlers.ChatHandler;
@@ -38,6 +37,7 @@ import io.github.axolotlclient.api.types.Channel;
 import io.github.axolotlclient.api.types.ChatMessage;
 import io.github.axolotlclient.modules.auth.Auth;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
+import io.github.axolotlclient.util.ThreadExecuter;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.MinecraftClient;
@@ -69,8 +69,8 @@ public class ChatWidget extends EntryListWidget {
 		this.y = y;
 		this.width = width;
 		this.height = height;
-		Arrays.stream(channel.getMessages()).forEach(this::addMessage);
-
+		ThreadExecuter.scheduleTask(() ->
+			Arrays.stream(channel.getMessages()).forEach(this::addMessage));
 		ChatHandler.getInstance().setMessagesConsumer(chatMessages -> chatMessages.forEach(this::addMessage));
 		ChatHandler.getInstance().setMessageConsumer(this::addMessage);
 		ChatHandler.getInstance().setEnableNotifications(message -> !Arrays.stream(channel.getUsers()).collect(Collectors.toSet()).contains(message.getSender()));
@@ -191,7 +191,7 @@ public class ChatWidget extends EntryListWidget {
 					.spacer()
 					.entry("api.friends.chat", buttonWidget -> {
 						ChannelRequest.getOrCreateDM(origin.getSender().getUuid())
-							.whenComplete((channel, throwable) -> client.setScreen(new ChatScreen(screen.getParent(), channel)));
+							.whenCompleteAsync((channel, throwable) -> client.setScreen(new ChatScreen(screen.getParent(), channel)));
 					})
 					.spacer()
 					.entry("api.chat.report.message", buttonWidget -> {
@@ -241,8 +241,13 @@ public class ChatWidget extends EntryListWidget {
 
 	public class NameChatLine extends ChatLine {
 
+		private final String formattedTime;
+
 		public NameChatLine(ChatMessage message) {
 			super(new LiteralText(message.getSender().getName()).setStyle(new Style().setBold(true)).asFormattedString(), message);
+
+			SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("d/M/yyyy H:mm");
+			formattedTime = DATE_FORMAT.format(new Date(message.getTimestamp()*1000));
 		}
 
 		@Override
@@ -254,6 +259,7 @@ public class ChatWidget extends EntryListWidget {
 			drawTexture(x - 22, y, 8, 8, 8, 8, 18, 18, 64, 64);
 			drawTexture(x - 22, y, 40, 8, 8, 8, 18, 18, 64, 64);
 			GlStateManager.enableBlend();
+			client.textRenderer.draw(formattedTime, client.textRenderer.getStringWidth(getContent()) + x + 5, y, Color.GRAY.getAsInt());
 		}
 	}
 }

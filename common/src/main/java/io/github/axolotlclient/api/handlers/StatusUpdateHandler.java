@@ -43,7 +43,7 @@ public class StatusUpdateHandler implements RequestHandler {
 	public void handle(ByteBuf object, APIError error) {
 		String uuid = getString(object, 0x09, 16);
 		AtomicReference<User> user = new AtomicReference<>();
-		FriendHandler.getInstance().getFriends().whenComplete((list, t) -> user.set(list.stream().filter(u -> u.getUuid().equals(uuid)).collect(Collectors.toList()).get(0)));
+		FriendHandler.getInstance().getFriends().whenCompleteAsync((list, t) -> user.set(list.stream().filter(u -> u.getUuid().equals(uuid)).collect(Collectors.toList()).get(0)));
 		StatusUpdate.Type type = StatusUpdate.Type.fromCode(object.getByte(0x19));
 		if (type == StatusUpdate.Type.ONLINE) {
 			API.getInstance().getNotificationProvider()

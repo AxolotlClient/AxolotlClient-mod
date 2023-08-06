@@ -49,7 +49,7 @@ public class User {
 		}
 
 		return onlineCache.computeIfAbsent(uuid, u ->
-			API.getInstance().send(new Request(Request.Type.USER, u)).handle((buf, t) ->
+			API.getInstance().send(new Request(Request.Type.USER, u)).handleAsync((buf, t) ->
 			buf.getBoolean(0x09)).getNow(false));
 	}
 

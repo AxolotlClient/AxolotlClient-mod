@@ -158,7 +158,7 @@ public class ChatUserListWidget extends EntryListWidget {
 						.spacer()
 						.entry("api.friends.chat", buttonWidget -> {
 							ChannelRequest.getOrCreateDM(user.getUuid())
-								.whenComplete((channel, throwable) -> client.setScreen(new ChatScreen(screen.getParent(), channel)));
+								.whenCompleteAsync((channel, throwable) -> client.setScreen(new ChatScreen(screen.getParent(), channel)));
 						})
 						.spacer()
 						.entry("api.chat.report.user", buttonWidget -> {

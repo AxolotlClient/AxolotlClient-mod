@@ -47,7 +47,7 @@ public abstract class ImageNetworking {
 
 	protected CompletableFuture<String> upload(String name, byte[] data){
 		return API.getInstance().send(new Request(Request.Type.UPLOAD_SCREENSHOT,
-			new Request.Data().add(name.length()).add(name).add(data))).handle((buf, throwable) -> {
+			new Request.Data().add(name.length()).add(name).add(data))).handleAsync((buf, throwable) -> {
 				if(throwable != null){
 					APIError.display(throwable);
 					return "";
@@ -58,7 +58,7 @@ public abstract class ImageNetworking {
 	}
 
 	protected ImageData download(String url){
-		return API.getInstance().send(new Request(Request.Type.DOWNLOAD_SCREENSHOT, url)).handle((buf, throwable) -> {
+		return API.getInstance().send(new Request(Request.Type.DOWNLOAD_SCREENSHOT, url)).handleAsync((buf, throwable) -> {
 			int nameLength = buf.getInt(0x09);
 			return new ImageData(BufferUtil.getString(buf, 0x0C, nameLength), buf.slice(0x0C + nameLength, buf.readableBytes() - (0x0C + nameLength)).array());
 		}).getNow(ImageData.EMPTY);

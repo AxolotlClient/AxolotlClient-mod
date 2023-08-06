@@ -45,7 +45,7 @@ public class ImageShare extends ImageNetworking {
 
 	public void uploadImage(File file) {
 		Util.sendChatMessage(Text.translatable("imageUploadStarted"));
-		upload(file).whenComplete((downloadUrl, throwable) -> {
+		upload(file).whenCompleteAsync((downloadUrl, throwable) -> {
 			if (downloadUrl.isEmpty()) {
 				Util.sendChatMessage(Text.translatable("imageUploadFailure"));
 			} else {

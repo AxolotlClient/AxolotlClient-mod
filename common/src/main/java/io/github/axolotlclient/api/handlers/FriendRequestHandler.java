@@ -46,7 +46,7 @@ public class FriendRequestHandler implements RequestHandler {
 			String fromUUID = new String(uuid, StandardCharsets.UTF_8);
 			API.getInstance().getNotificationProvider().addStatus("api.friends", "api.friends.request", UUIDHelper.getUsername(fromUUID));
 		} else {
-			API.getInstance().send(new Request(Request.Type.FRIEND_REQUEST_REACTION, (byte) 0)).whenComplete((o, t) -> {
+			API.getInstance().send(new Request(Request.Type.FRIEND_REQUEST_REACTION, (byte) 0)).whenCompleteAsync((o, t) -> {
 				if (t != null) {
 					APIError.display(t);
 				}

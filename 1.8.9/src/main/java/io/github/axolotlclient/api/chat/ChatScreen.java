@@ -109,6 +109,7 @@ public class ChatScreen extends Screen implements ContextMenuScreen {
 
 		this.buttons.add(new ButtonWidget(1, this.width / 2 - 75, this.height - 28, 150, 20,
 			I18n.translate("gui.back")));
+		Keyboard.enableRepeatEvents(true);
 	}
 
 	@Override
@@ -121,6 +122,7 @@ public class ChatScreen extends Screen implements ContextMenuScreen {
 		if (widget != null) {
 			widget.remove();
 		}
+		Keyboard.enableRepeatEvents(false);
 	}
 
 	@Override

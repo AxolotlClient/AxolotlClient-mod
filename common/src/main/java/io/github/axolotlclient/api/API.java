@@ -99,7 +99,7 @@ public class API {
 		AtomicBoolean mojangAuthSuccessful = new AtomicBoolean();
 		AtomicReference<String> serverId = new AtomicReference<>();
 
-		send(new Request(Request.Type.GET_PUBLIC_KEY)).whenComplete((buf, t) -> {
+		send(new Request(Request.Type.GET_PUBLIC_KEY)).whenCompleteAsync((buf, t) -> {
 			MojangAuth.Result result = MojangAuth.authenticate(account, buf.slice(0x09, buf.readableBytes() - 9).array());
 			if (result.getStatus() != MojangAuth.Status.SUCCESS) {
 				logger.error("Authentication with Mojang failed, aborting!");
@@ -112,7 +112,7 @@ public class API {
 
 		if (mojangAuthSuccessful.get()) {
 			Request request = new Request(Request.Type.HANDSHAKE, account.getUuid(), serverId.get(), account.getName());
-			send(request).whenComplete((object, t) -> {
+			send(request).whenCompleteAsync((object, t) -> {
 				if (t != null) {
 					logger.error("Handshake failed, closing API!");
 					if (apiOptions.detailedLogging.get()) {
@@ -148,7 +148,6 @@ public class API {
 	public CompletableFuture<ByteBuf> send(Request request) {
 		CompletableFuture<ByteBuf> future = new CompletableFuture<>();
 		if (isConnected()) {
-			if (!Constants.TESTING) {
 				requests.put(request.getId(), future);
 				ThreadExecuter.scheduleTask(() -> {
 					ByteBuf buf = request.getData();
@@ -158,7 +157,6 @@ public class API {
 					channel.writeAndFlush(buf);
 					buf.release();
 				});
-			}
 		} else {
 			logger.warn("Not sending request because API is closed: " + request);
 		}
@@ -234,7 +232,9 @@ public class API {
 	}
 
 	private void createSession() {
-		new ClientEndpoint().run(Constants.API_URL, Constants.PORT);
+		if(!Constants.TESTING) {
+			new ClientEndpoint().run(Constants.API_URL, Constants.PORT);
+		}
 	}
 
 	public void restart() {
@@ -270,39 +270,46 @@ public class API {
 	void startupAPI() {
 		if (!isConnected()) {
 			self = new User(this.uuid, Status.UNKNOWN);
-			logger.debug("Starting API...");
-			createSession();
 
-			while (channel == null) {
-				try {
-					//noinspection BusyWait
-					Thread.sleep(100);
-				} catch (InterruptedException e) {
-					throw new RuntimeException(e);
-				}
+			if(Constants.TESTING){
+				return;
 			}
 
-			new Thread("Status Update Thread") {
-				@Override
-				public void run() {
-					try {
-						Thread.sleep(50);
-					} catch (InterruptedException ignored) {
-					}
-					while (API.getInstance().isConnected()) {
-						Request statusUpdate = statusUpdateProvider.getStatus();
-						if (statusUpdate != null) {
-							send(statusUpdate);
-						}
-						try {
-							//noinspection BusyWait
-							Thread.sleep(Constants.STATUS_UPDATE_DELAY * 1000);
-						} catch (InterruptedException ignored) {
+			logger.debug("Starting API...");
+			ThreadExecuter.scheduleTask(() -> {
+				createSession();
 
-						}
+				while (channel == null) {
+					try {
+						//noinspection BusyWait
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						throw new RuntimeException(e);
 					}
 				}
-			}.start();
+
+				new Thread("Status Update Thread") {
+					@Override
+					public void run() {
+						try {
+							Thread.sleep(50);
+						} catch (InterruptedException ignored) {
+						}
+						while (API.getInstance().isConnected()) {
+							Request statusUpdate = statusUpdateProvider.getStatus();
+							if (statusUpdate != null) {
+								send(statusUpdate);
+							}
+							try {
+								//noinspection BusyWait
+								Thread.sleep(Constants.STATUS_UPDATE_DELAY * 1000);
+							} catch (InterruptedException ignored) {
+
+							}
+						}
+					}
+				}.start();
+			});
 		} else {
 			logger.warn("API is already running!");
 		}

@@ -134,7 +134,7 @@ public class FriendsScreen extends Screen {
 		UserListWidget.UserListEntry entry = widget.getSelectedEntry();
 		if (entry != null) {
 			ChannelRequest.getOrCreateDM(entry.getUser().getUuid())
-				.whenComplete((c, t) -> client.setScreen(new ChatScreen(this, c)));
+				.whenCompleteAsync((c, t) -> client.setScreen(new ChatScreen(this, c)));
 		}
 	}
 
@@ -211,14 +211,14 @@ public class FriendsScreen extends Screen {
 		widget = new UserListWidget(this, client, width, height, 32, height - 64, 35);
 
 		if (current == Tab.ALL || current == Tab.ONLINE) {
-			FriendHandler.getInstance().getFriends().whenComplete((list, t) -> widget.setUsers(list.stream().filter(user -> {
+			FriendHandler.getInstance().getFriends().whenCompleteAsync((list, t) -> widget.setUsers(list.stream().filter(user -> {
 				if (current == Tab.ONLINE) {
 					return user.getStatus().isOnline();
 				}
 				return true;
 			}).sorted((u1, u2) -> new AlphabeticalComparator().compare(u1.getName(), u2.getName())).collect(Collectors.toList())));
 		} else if (current == Tab.PENDING) {
-			FriendHandler.getInstance().getFriendRequests().whenComplete((con, th) -> {
+			FriendHandler.getInstance().getFriendRequests().whenCompleteAsync((con, th) -> {
 
 				con.getLeft().stream().sorted((u1, u2) -> new AlphabeticalComparator().compare(u1.getName(), u2.getName()))
 					.forEach(user -> widget.addEntry(new UserListWidget.UserListEntry(user, I18n.translate("api.friends.pending.incoming"))));
@@ -226,7 +226,7 @@ public class FriendsScreen extends Screen {
 					.forEach(user -> widget.addEntry(new UserListWidget.UserListEntry(user, I18n.translate("api.friends.pending.outgoing"))));
 			});
 		} else if (current == Tab.BLOCKED) {
-			FriendHandler.getInstance().getBlocked().whenComplete((list, th) -> widget.setUsers(list.stream().sorted((u1, u2) ->
+			FriendHandler.getInstance().getBlocked().whenCompleteAsync((list, th) -> widget.setUsers(list.stream().sorted((u1, u2) ->
 				new AlphabeticalComparator().compare(u1.getName(), u2.getName())).collect(Collectors.toList())));
 		}
 

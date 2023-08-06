@@ -89,7 +89,7 @@ public class FriendsScreen extends Screen {
 		widget.children().clear();
 
 		if (current == Tab.ALL || current == Tab.ONLINE) {
-			FriendHandler.getInstance().getFriends().whenComplete((list, t) -> widget.setUsers(list.stream().sorted((u1, u2) ->
+			FriendHandler.getInstance().getFriends().whenCompleteAsync((list, t) -> widget.setUsers(list.stream().sorted((u1, u2) ->
 				new AlphabeticalComparator().compare(u1.getName(), u2.getName())).filter(user -> {
 				if (current == Tab.ONLINE) {
 					return user.getStatus().isOnline();
@@ -97,7 +97,7 @@ public class FriendsScreen extends Screen {
 				return true;
 			}).collect(Collectors.toList())));
 		} else if (current == Tab.PENDING) {
-			FriendHandler.getInstance().getFriendRequests().whenComplete((con, th) -> {
+			FriendHandler.getInstance().getFriendRequests().whenCompleteAsync((con, th) -> {
 
 				con.getLeft().stream().sorted((u1, u2) -> new AlphabeticalComparator().compare(u1.getName(), u2.getName()))
 					.forEach(user -> widget.addEntry(new UserListWidget.UserListEntry(user, new TranslatableText("api.friends.pending.incoming"))));
@@ -105,7 +105,7 @@ public class FriendsScreen extends Screen {
 					.forEach(user -> widget.addEntry(new UserListWidget.UserListEntry(user, new TranslatableText("api.friends.pending.outgoing"))));
 			});
 		} else if (current == Tab.BLOCKED) {
-			FriendHandler.getInstance().getBlocked().whenComplete((list, th) -> widget.setUsers(list.stream().sorted((u1, u2) ->
+			FriendHandler.getInstance().getBlocked().whenCompleteAsync((list, th) -> widget.setUsers(list.stream().sorted((u1, u2) ->
 				new AlphabeticalComparator().compare(u1.getName(), u2.getName())).collect(Collectors.toList())));
 		}
 
@@ -208,7 +208,7 @@ public class FriendsScreen extends Screen {
 		UserListWidget.UserListEntry entry = widget.getSelected();
 		if (entry != null) {
 			ChannelRequest.getOrCreateDM(entry.getUser().getUuid())
-				.whenComplete((c, t)-> client.openScreen(new ChatScreen(this, c)));
+				.whenCompleteAsync((c, t)-> client.openScreen(new ChatScreen(this, c)));
 		}
 	}
 

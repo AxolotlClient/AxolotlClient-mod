@@ -43,7 +43,7 @@ public class ChatListWidget extends AlwaysSelectedEntryListWidget<ChatListWidget
 		left = x;
 		right = x + width;
 		this.screen = screen;
-		ChannelRequest.getChannelList().whenComplete((list, t) ->
+		ChannelRequest.getChannelList().whenCompleteAsync((list, t) ->
 			list.stream().filter(predicate).forEach(c ->
 				children().add(0, new ChatListEntry(c)))
 		);

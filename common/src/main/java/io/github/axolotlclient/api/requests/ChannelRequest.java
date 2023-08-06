@@ -23,26 +23,28 @@
 package io.github.axolotlclient.api.requests;
 
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Consumer;
 
 import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.APIError;
 import io.github.axolotlclient.api.Request;
 import io.github.axolotlclient.api.types.Channel;
 import io.github.axolotlclient.api.types.ChatMessage;
+import io.github.axolotlclient.api.types.Status;
 import io.github.axolotlclient.api.types.User;
 import io.github.axolotlclient.api.util.BufferUtil;
 import io.netty.buffer.ByteBuf;
 
 public class ChannelRequest {
 
-	public static Request getById(Consumer<Channel> handler, String id) {
-		return new Request(Request.Type.GET_CHANNEL_BY_ID, id);
+	public static CompletableFuture<Channel> getById(String id) {
+		return API.getInstance().send(new Request(Request.Type.GET_CHANNEL_BY_ID, id)).handleAsync(ChannelRequest::parseChannelResponse);
 	}
 
 	private static Channel parseChannelResponse(ByteBuf object, Throwable t) {
@@ -61,7 +63,7 @@ public class ChannelRequest {
 		int i = 0x4E;
 		while (i < channel.getInt(0x53)) {
 			String uuid = BufferUtil.getString(channel, i, 16);
-			io.github.axolotlclient.api.requests.User.get(uuid).whenComplete((user, throwable) -> users.add(user));
+			io.github.axolotlclient.api.requests.User.get(uuid).whenCompleteAsync((user, throwable) -> users.add(user));
 			i += 16;
 		}
 		List<ChatMessage> messages = new ArrayList<>();
@@ -83,14 +85,14 @@ public class ChannelRequest {
 
 	private static ChatMessage parseMessage(ByteBuf buf) {
 		AtomicReference<User> u = new AtomicReference<>();
-		io.github.axolotlclient.api.requests.User.get(BufferUtil.getString(buf, 0x00, 16)).whenComplete((us, t) -> u.set(us));
+		io.github.axolotlclient.api.requests.User.get(BufferUtil.getString(buf, 0x00, 16)).whenCompleteAsync((us, t) -> u.set(us));
 
 		return new ChatMessage(u.get(), BufferUtil.getString(buf, 0x1D, buf.getInt(0x19)),
 			ChatMessage.Type.fromCode(buf.getByte(0x18)), buf.getLong(0x10));
 	}
 
 	public static CompletableFuture<List<Channel>> getChannelList() {
-		return API.getInstance().send(new Request(Request.Type.GET_CHANNEL_LIST)).handle(ChannelRequest::parseChannels);
+		return API.getInstance().send(new Request(Request.Type.GET_CHANNEL_LIST)).handleAsync(ChannelRequest::parseChannels);
 	}
 
 	private static List<Channel> parseChannels(ByteBuf object, Throwable t) {
@@ -102,7 +104,7 @@ public class ChannelRequest {
 
 		int i = object.getInt(0x0D);
 		while (i < object.getInt(0x09)) {
-			API.getInstance().send(getById(channelList::add, BufferUtil.getString(object, i, 5)));
+			getById(BufferUtil.getString(object, i, 5)).whenCompleteAsync((channel, throwable) -> channelList.add(channel));
 			i += 5;
 		}
 
@@ -111,12 +113,12 @@ public class ChannelRequest {
 
 	public static CompletableFuture<Channel> getOrCreateGroup(String... users) {
 		return API.getInstance().send(new Request(Request.Type.GET_OR_CREATE_CHANNEL,
-			new Request.Data((byte) users.length).add(users))).handle(ChannelRequest::parseChannelResponse);
+			new Request.Data((byte) users.length).add(users))).handleAsync(ChannelRequest::parseChannelResponse);
 	}
 
 	public static CompletableFuture<Channel> getOrCreateDM(String uuid) {
 		return API.getInstance().send(new Request(Request.Type.GET_OR_CREATE_CHANNEL,
-			new Request.Data((byte) 1).add(uuid))).handle(ChannelRequest::parseChannelResponse);
+			new Request.Data((byte) 1).add(uuid))).handleAsync(ChannelRequest::parseChannelResponse);
 	}
 
 	public static void createGroup(String... uuids) {

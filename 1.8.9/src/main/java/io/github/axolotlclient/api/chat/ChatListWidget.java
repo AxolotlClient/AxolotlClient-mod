@@ -45,7 +45,7 @@ public class ChatListWidget extends EntryListWidget {
 		xStart = x;
 		xEnd = x + width;
 		this.screen = screen;
-		ChannelRequest.getChannelList().whenComplete((list, t) ->
+		ChannelRequest.getChannelList().whenCompleteAsync((list, t) ->
 			list.stream().filter(predicate).forEach(c ->
 				entries.add(0, new ChatListEntry(c)))
 		);

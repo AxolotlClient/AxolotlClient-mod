@@ -123,7 +123,7 @@ public class HypixelAbstractionLayer {
 		AtomicReference<String> apiKey = new AtomicReference<>(keySupplier.get());
 		if (apiKey.get().isEmpty()) {
 			API.getInstance().send(new Request(Request.Type.GET_HYPIXEL_API_KEY)).thenApply(buf -> UUID.fromString(
-				BufferUtil.getString(buf, 0x9, 36))).whenComplete((uuid, t) -> {
+				BufferUtil.getString(buf, 0x9, 36))).whenCompleteAsync((uuid, t) -> {
 				api = new HypixelAPI(new ApacheHttpClient(uuid));
 				validApiKey = true;
 			});

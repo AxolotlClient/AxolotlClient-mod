@@ -168,7 +168,7 @@ public class ChatWidget extends AlwaysSelectedEntryListWidget<ChatWidget.ChatLin
 					.spacer()
 					.entry(Text.translatable("api.friends.chat"), buttonWidget -> {
 						ChannelRequest.getOrCreateDM(origin.getSender().getUuid())
-							.whenComplete((channel, throwable) -> client.setScreen(new ChatScreen(screen.getParent(), channel)));
+							.whenCompleteAsync((channel, throwable) -> client.setScreen(new ChatScreen(screen.getParent(), channel)));
 					})
 					.spacer()
 					.entry(Text.translatable("api.chat.report.message"), buttonWidget -> {

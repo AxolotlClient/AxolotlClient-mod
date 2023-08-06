@@ -111,7 +111,7 @@ public class FriendsSidebar extends Screen implements ContextMenuScreen {
 		}
 
 
-		ChannelRequest.getChannelList().whenComplete((list, t) -> this.list = new ListWidget(list, 10, 30, 50, height - 70));
+		ChannelRequest.getChannelList().whenCompleteAsync((list, t) -> this.list = new ListWidget(list, 10, 30, 50, height - 70));
 
 		buttons.add(new ButtonWidget(0, 10 - sidebarWidth, height - 30, 50, 20, I18n.translate("gui.back")));
 		Keyboard.enableRepeatEvents(true);

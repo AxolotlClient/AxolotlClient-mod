@@ -100,7 +100,7 @@ public class FriendsSidebar extends Screen implements ContextMenuScreen {
 				.map(e -> (ClickableWidget) e).filter(e -> e.getMessage().equals(Text.translatable("api.friends"))).forEach(e -> e.visible = false);
 		}
 
-		ChannelRequest.getChannelList().whenComplete((list, t) ->
+		ChannelRequest.getChannelList().whenCompleteAsync((list, t) ->
 			addDrawableChild(this.list = new ListWidget(list, 10, 30, 50, height - 60))
 		);
 
