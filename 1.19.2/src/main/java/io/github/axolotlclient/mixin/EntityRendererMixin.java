@@ -24,6 +24,7 @@ package io.github.axolotlclient.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.api.requests.User;
 import io.github.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
 import io.github.axolotlclient.modules.hypixel.bedwars.BedwarsMod;
 import io.github.axolotlclient.modules.hypixel.levelhead.LevelHead;
@@ -55,7 +56,7 @@ public abstract class EntityRendererMixin<T extends Entity> {
 										CallbackInfo ci) {
 		if (entity instanceof AbstractClientPlayerEntity && text.getString().contains(entity.getName().getString())) {
 			if (!entity.isSneaky()) {
-				if (AxolotlClient.CONFIG.showBadges.get() && AxolotlClient.isUsingClient(entity.getUuid())) {
+				if (AxolotlClient.CONFIG.showBadges.get() && User.getOnline(entity.getUuid().toString())) {
 					RenderSystem.enableDepthTest();
 					RenderSystem.setShaderTexture(0, AxolotlClient.badgeIcon);
 

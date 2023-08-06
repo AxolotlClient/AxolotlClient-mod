@@ -25,7 +25,6 @@ package io.github.axolotlclient;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 import io.github.axolotlclient.AxolotlClientConfig.AxolotlClientConfigManager;
 import io.github.axolotlclient.AxolotlClientConfig.DefaultConfigManager;
@@ -35,7 +34,6 @@ import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.APIOptions;
 import io.github.axolotlclient.api.StatusUpdateProviderImpl;
-import io.github.axolotlclient.api.requests.User;
 import io.github.axolotlclient.config.AxolotlClientConfig;
 import io.github.axolotlclient.modules.Module;
 import io.github.axolotlclient.modules.ModuleLoader;
@@ -60,7 +58,6 @@ import io.github.axolotlclient.util.LoggerImpl;
 import io.github.axolotlclient.util.UnsupportedMod;
 import io.github.axolotlclient.util.notifications.Notifications;
 import io.github.axolotlclient.util.translation.Translations;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
@@ -86,15 +83,6 @@ public class AxolotlClient implements ClientModInitializer {
 	public static UnsupportedMod badmod;
 	public static boolean titleDisclaimer = false;
 	public static boolean showWarning = true;
-
-	public static boolean isUsingClient(UUID uuid) {
-		assert MinecraftClient.getInstance().player != null;
-		if (uuid == MinecraftClient.getInstance().player.getUuid()) {
-			return true;
-		} else {
-			return User.getOnline(API.getInstance().sanitizeUUID(uuid.toString()));
-		}
-	}
 
 	@Override
 	public void onInitializeClient(ModContainer container) {

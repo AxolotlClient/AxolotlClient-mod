@@ -25,7 +25,6 @@ package io.github.axolotlclient.api.requests;
 import java.time.Instant;
 import java.util.WeakHashMap;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.Request;
@@ -38,12 +37,20 @@ public class User {
 	private static final WeakHashMap<String, Boolean> onlineCache = new WeakHashMap<>();
 
 	public static boolean getOnline(String uuid) {
-		return onlineCache.computeIfAbsent(uuid, u -> {
-			AtomicBoolean result = new AtomicBoolean();
-			API.getInstance().send(new Request(Request.Type.USER, u)).whenComplete((buf, t) ->
-				result.set(buf.getBoolean(0x09)));
-			return result.get();
-		});
+
+		if(uuid == null){
+			return false;
+		}
+
+		uuid = API.getInstance().sanitizeUUID(uuid);
+
+		if(uuid.equals(API.getInstance().getUuid())){
+			return true;
+		}
+
+		return onlineCache.computeIfAbsent(uuid, u ->
+			API.getInstance().send(new Request(Request.Type.USER, u)).handle((buf, t) ->
+			buf.getBoolean(0x09)).getNow(false));
 	}
 
 	public static CompletableFuture<io.github.axolotlclient.api.types.User> get(String uuid) {
