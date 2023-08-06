@@ -1,72 +1,107 @@
-# Axolotl - A Comprehensive Minecraft Client
-
-[![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) 
-
-## Introduction
-
-AxolotlClient-mod is a nearly complete mod for Minecraft that offers a multitude of features across different game versions.
+# Axolotl Client
 
 This README is also available in [Türkçe](https://github.com/AxolotlClient/AxolotlClient-mod/blob/multiversion/doc/README-tr.md) and [Deutsch](https://github.com/AxolotlClient/AxolotlClient-mod/blob/multiversion/doc/README-de.md).
 
+## Introduction
+
+Axolotl  is a Client for Minecraft that introduces a range of features across various game versions, promoting a better, customizable environment for the user. 
+
 ## Features
 
-AxolotlClient-mod provides a wide range of features including but not limited to:
+
+Axolotl Client offers a multitude of features including:
 
 - Custom Skies Implementation
-- Freelook (disabled on some servers)
-- Nametag, Beacon Beams, Dynamic FOV
-- Low Fire / Low Shield, Hit Color
-- Screenshot Utils, Zoom
-- Various Hud Modules (port of KronHUD)
-- Hypixel Features (AutoGG / GF / GLHF, LevelHead, Nick Hider, etc.)
+- Freelook (Disabled on some servers)
+- Nametag
+- Beacon Beams
+- Dynamic FOV
+- Low Fire / Low Shield
+- Hit Color
+- Screenshot Utils
+- Zoom
+- Various Hud Modules (port of KronHUD, but with additions)
+    - Including, but not limited to:
+        - Ping
+        - FPS
+        - CPS
+        - Armor
+        - Potions
+        - Keystrokes
+        - ToggleModifiers
+        - Server IP
+        - Icon
+        - Speed
+        - Scoreboard
+        - Crosshair
+        - Coordinates
+        - ActionBar
+        - BossBar
+        - Arrow
+        - Item Update
+        - Pack Display
+        - Real Time
+        - Reach
+        - Hotbar
+        - Memory
+        - PlayerCount
+        - Compass
+        - TPS (Ticks per second)
+        - Combo
+        - Player
+        - Chat
+- Hypixel Features
+    - AutoGG / GF / GLHF
+    - LevelHead
+    - Nick Hider
+    - Skyblock
+    - AutoTip
+    - AutoBoop
 - Custom Block Outlines
-- Time Changer, Fullbright, Motion Blur
-- TNT Time, Scrollable Tooltips, Particles
-- Discord RPC, Custom Badges
-- And many more!
-
-Refer to the complete list in the Features section for more details.
+- Time Changer
+- Fullbright
+- Motion Blur
+- TNT Time
+- Scrollable Tooltips
+- Particles
+- Discord RPC
+- Custom Badges
 
 ## Links
 
-For additional information and updates, visit the following links:
+For more details and updates, visit the links below:
 
-- [AxolotlClient Modrinth](https://modrinth.com/mod/axolotlclient)
-- [AxolotlClient GitHub Releases](https://github.com/AxolotlClient/AxolotlClient-mod/releases)
-- [AxolotlClient Discord](https://discord.gg/WyMjeX3vka)
+[![Modrinth](https://camo.githubusercontent.com/cbc928a24d8bfc17acc4dd4600e6b651e47d8106e9969f53cf5def874df1c95f/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f6e706d2f40696e746572677261762f646576696e732d62616467657340322f6173736574732f636f7a792f617661696c61626c652f6d6f6472696e74685f3634682e706e67)](https://modrinth.com/mod/axolotlclient)
+[![Github](https://camo.githubusercontent.com/b2b212fcee6a4bd63c24ebcb88087fd64b23e1c4e76bff1ec2b1bc9b1b70ebbc/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f6e706d2f40696e746572677261762f646576696e732d62616467657340322f6173736574732f636f7a792f617661696c61626c652f6769746875625f3634682e706e67)](https://github.com/AxolotlClient/AxolotlClient-mod/releases)
+[![Discord](https://camo.githubusercontent.com/1170b09fbb3ad106a8297b881d54adae5ec106729986ee560d0babcff15560e4/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f6e706d2f40696e746572677261762f646576696e732d62616467657340332f6173736574732f636f7a792f736f6369616c2f646973636f72642d706c7572616c5f3634682e706e67)](https://discord.gg/WyMjeX3vka)
 
 ## Contributing
 
-Contributions to AxolotlClient-mod are welcomed. Feel free to join the Discord to discuss new features or open a pull request with your feature or a new/updated translation. Please document your changes in CHANGELOG.md for inclusion in the next version's changelog.
+We welcome all contributions to Axolotl Client. Join our Discord community to discuss new features or open a pull request if you have a feature or a new/updated translation to share. Remember to note your changes in `CHANGELOG.md` for inclusion in the next version's changelog.
 
 ## Building
 
-To build the project, use the command `./gradlew build`. Use `-Paxolotlclient.modules.<version_name>=true` to add a version to the build or `-Paxolotlclient.modules.all=true` to build all versions.
-
-## Licensing
-
-AxolotlClient-mod is licensed under the LGPL-3.0 License. See the [LICENSE](https://github.com/AxolotlClient/AxolotlClient-mod/blob/main/LICENSE) file for more information.
+Use `./gradlew build` to build the project. For building a specific version or all versions, use `-Paxolotlclient.modules.<version_name>=true` or `-Paxolotlclient.modules.all=true` respectively.
 
 ## API Requirements
 
-Before downloading, please also download the respective API package for your version:
+Ensure to download the respective API package for your version before you download:
 
-- 1.8.9 requires Legacy Fabric API
-- 1.16.x requires Fabric API (necessary parts shipped with the mod)
-- 1.19+ requires QSL (necessary parts shipped with the mod)
-
-## Our Mission
-
-Our goal is to create a better environment for everyone, including you, the user. With AxolotlClient, you decide what to use and what not. Every aspect of the mod is toggleable with over 200 options. We believe in transparency and user empowerment.
+- 1.8.9: Legacy Fabric API
+- 1.16.x: Fabric API (necessary parts are shipped with the mod)
+- 1.19+: QSL (necessary parts are shipped with the mod)
 
 ## Disclaimers
 
-Please note, we do not endorse nor support cheats/hacks. If you believe any options packaged by this mod could be considered as such, let us know and we'll address the concern.
+We do not endorse or support cheats/hacks. If you believe any options packaged by this mod could be considered as such, please let us know.
 
-The only data sent to our server is your public Minecraft account UUID. It is not stored longer than one game session.
+The only data sent to our server is your public Minecraft account UUID, which isn't stored longer than one game session.
 
 ## Credits
 
-AxolotlClient-mod wouldn't be possible without the open-source contributions of many, including DarkKronicle, the creator of KronHUD on which our hud modules are based, and AMereBagatelle, the author of the wonderful FabricSkyBoxes mod.
+Our heartfelt thanks to the open-source contributors, particularly DarkKronicle, the creator of KronHUD, and AMereBagatelle, the author of the FabricSkyBoxes mod. Without their contributions, Axolotl Client would not be as comprehensive as it is.
 
-Enjoy AxolotlClient-mod, your customizable alternative to popular PvP clients!
+## License
+![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)
+
+Axolotl Client is licensed under the LGPL-3.0 License. For more details, see the [LICENSE](https://github.com/AxolotlClient/AxolotlClient-mod/blob/main/LICENSE) file. 
