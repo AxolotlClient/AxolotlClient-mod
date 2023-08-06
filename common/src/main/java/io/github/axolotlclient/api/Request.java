@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
+import com.google.common.primitives.Longs;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import lombok.*;
@@ -122,6 +123,10 @@ public class Request {
 			return this;
 		}
 
+		public Data add(long l){
+			return add(Longs.toByteArray(l));
+		}
+
 		public Data add(byte b) {
 			return add(new byte[]{b});
 		}
@@ -176,6 +181,8 @@ public class Request {
 		BLOCK_USER(0x15),
 		UNBLOCK_USER(0x16),
 		UPLOAD_SCREENSHOT(0x17),
+		REPORT_MESSAGE(0x18),
+		REPORT_USER(0x19),
 		ERROR(0xFF);
 
 		private final int type;

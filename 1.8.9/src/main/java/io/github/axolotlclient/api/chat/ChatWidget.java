@@ -190,10 +190,13 @@ public class ChatWidget extends EntryListWidget {
 					})
 					.spacer()
 					.entry("api.friends.chat", buttonWidget -> {
-						ChannelRequest.getDM(origin.getSender().getUuid())
+						ChannelRequest.getOrCreateDM(origin.getSender().getUuid())
 							.whenComplete((channel, throwable) -> client.setScreen(new ChatScreen(screen.getParent(), channel)));
 					})
-					// TODO reporting
+					.spacer()
+					.entry("api.chat.report.message", buttonWidget -> {
+						ChatHandler.getInstance().reportMessage(origin);
+					})
 					.spacer()
 					.entry("action.copy", buttonWidget -> {
 						Screen.setClipboard(origin.getContent());

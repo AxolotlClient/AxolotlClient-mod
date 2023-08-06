@@ -22,13 +22,11 @@
 
 package io.github.axolotlclient.api;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 import io.github.axolotlclient.api.chat.ChatScreen;
 import io.github.axolotlclient.api.handlers.FriendHandler;
 import io.github.axolotlclient.api.requests.ChannelRequest;
-import io.github.axolotlclient.api.types.User;
 import io.github.axolotlclient.api.util.AlphabeticalComparator;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ScreenTexts;
@@ -209,7 +207,7 @@ public class FriendsScreen extends Screen {
 	public void openChat() {
 		UserListWidget.UserListEntry entry = widget.getSelected();
 		if (entry != null) {
-			ChannelRequest.getDM(entry.getUser().getUuid())
+			ChannelRequest.getOrCreateDM(entry.getUser().getUuid())
 				.whenComplete((c, t) -> client.openScreen(new ChatScreen(this, c)));
 		}
 	}

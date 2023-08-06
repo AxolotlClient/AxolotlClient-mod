@@ -109,38 +109,15 @@ public class ChannelRequest {
 		return channelList;
 	}
 
-	/*public static ChannelRequest getChannelForAllUsers(Consumer<List<Channel>> handler, String[] users, SortBy sort, Include include) {
-		JsonArray u = new JsonArray();
-		Arrays.stream(users).map(JsonPrimitive::new).forEach(u::add);
-		return new ChannelRequest(object -> handler.accept(parseChannels(object)), new Data("method", "get")
-			.addElement("users", u)
-			.addElement("sortBy", sort.getIdentifier())
-			.addElement("include", include.getIdentifier()));
-	}*/
-
-	public static CompletableFuture<Channel> getGroup(String... users) {
+	public static CompletableFuture<Channel> getOrCreateGroup(String... users) {
 		return API.getInstance().send(new Request(Request.Type.GET_OR_CREATE_CHANNEL,
 			new Request.Data((byte) users.length).add(users))).handle(ChannelRequest::parseChannelResponse);
 	}
 
-	public static CompletableFuture<Channel> getDM(String uuid) {
+	public static CompletableFuture<Channel> getOrCreateDM(String uuid) {
 		return API.getInstance().send(new Request(Request.Type.GET_OR_CREATE_CHANNEL,
 			new Request.Data((byte) 1).add(uuid))).handle(ChannelRequest::parseChannelResponse);
 	}
-
-	/*public static ChannelRequest getLatestMessages(Consumer<JsonObject> handler, int limit, String... include) {
-		JsonArray array = new JsonArray();
-		Arrays.stream(include).map(JsonPrimitive::new).forEach(array::add);
-		return new ChannelRequest(handler, new Data("method", "messages")
-			.addElement("limit", new JsonPrimitive(limit)).addElement("include", array));
-	}
-
-	public static ChannelRequest createDM(Consumer<JsonObject> handler, String withUUID) {
-		JsonArray array = new JsonArray();
-		array.add(new JsonPrimitive(withUUID));
-		array.add(new JsonPrimitive(API.getInstance().getUuid()));
-		return new ChannelRequest(handler, new Data("method", "create", "type", "dm", "user", withUUID));
-	}*/
 
 	public static void createGroup(String... uuids) {
 		API.getInstance().send(new Request(Request.Type.CREATE_CHANNEL,

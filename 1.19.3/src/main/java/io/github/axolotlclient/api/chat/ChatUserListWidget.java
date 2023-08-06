@@ -27,6 +27,7 @@ import java.util.List;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.ContextMenu;
+import io.github.axolotlclient.api.handlers.ChatHandler;
 import io.github.axolotlclient.api.handlers.FriendHandler;
 import io.github.axolotlclient.api.requests.ChannelRequest;
 import io.github.axolotlclient.api.types.User;
@@ -163,8 +164,12 @@ public class ChatUserListWidget extends AlwaysSelectedEntryListWidget<ChatUserLi
 						})
 						.spacer()
 						.entry(Text.translatable("api.friends.chat"), buttonWidget -> {
-							ChannelRequest.getDM(user.getUuid())
+							ChannelRequest.getOrCreateDM(user.getUuid())
 								.whenComplete((c, t) -> client.setScreen(new ChatScreen(screen.getParent(), c)));
+						})
+						.spacer()
+						.entry(Text.translatable("api.chat.report.user"), buttonWidget -> {
+							ChatHandler.getInstance().reportUser(user);
 						});
 					if (FriendHandler.getInstance().isBlocked(user.getUuid())) {
 						menu.entry(Text.translatable("api.users.block"), buttonWidget ->

@@ -34,7 +34,6 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.EntryListWidget;
 import net.minecraft.client.gui.widget.ServerEntry;
 import net.minecraft.client.resource.language.I18n;
-import net.minecraft.text.TranslatableText;
 
 public class FriendsScreen extends Screen {
 
@@ -134,7 +133,7 @@ public class FriendsScreen extends Screen {
 	public void openChat() {
 		UserListWidget.UserListEntry entry = widget.getSelectedEntry();
 		if (entry != null) {
-			ChannelRequest.getDM(entry.getUser().getUuid())
+			ChannelRequest.getOrCreateDM(entry.getUser().getUuid())
 				.whenComplete((c, t) -> client.setScreen(new ChatScreen(this, c)));
 		}
 	}

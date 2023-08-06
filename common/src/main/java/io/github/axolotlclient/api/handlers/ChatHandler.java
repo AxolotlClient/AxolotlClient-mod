@@ -121,4 +121,14 @@ public class ChatHandler implements RequestHandler {
 	public interface NotificationsEnabler {
 		boolean showNotification(ChatMessage message);
 	}
+
+	public void reportMessage(ChatMessage message){
+		API.getInstance().send(new Request(Request.Type.REPORT_MESSAGE,
+			new Request.Data(message.getSender().getUuid()).add(message.getTimestamp())
+				.add(message.getContent().length()).add(message.getContent())));
+	}
+
+	public void reportUser(User user){
+		API.getInstance().send(new Request(Request.Type.REPORT_USER, user.getUuid()));
+	}
 }
