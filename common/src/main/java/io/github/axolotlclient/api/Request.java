@@ -181,8 +181,9 @@ public class Request {
 		BLOCK_USER(0x15),
 		UNBLOCK_USER(0x16),
 		UPLOAD_SCREENSHOT(0x17),
-		REPORT_MESSAGE(0x18),
-		REPORT_USER(0x19),
+		DOWNLOAD_SCREENSHOT(0x18),
+		REPORT_MESSAGE(0x19),
+		REPORT_USER(0x1A),
 		ERROR(0xFF);
 
 		private final int type;

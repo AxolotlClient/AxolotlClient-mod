@@ -22,10 +22,14 @@
 
 package io.github.axolotlclient.modules.screenshotUtils;
 
+import javax.imageio.ImageIO;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 
 import io.github.axolotlclient.util.Util;
 import lombok.Getter;
+import net.minecraft.client.texture.NativeImage;
 import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 
@@ -51,5 +55,16 @@ public class ImageShare extends ImageNetworking {
 							.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableText("clickToCopy"))))));
 			}
 		});
+	}
+
+	public ImageInstance downloadImage(String url){
+		ImageData data = download(url);
+		if(!data.getName().isEmpty()) {
+			try {
+				return new ImageInstance(NativeImage.read(new ByteArrayInputStream(data.getData())), data.getName());
+			} catch (IOException ignored) {
+			}
+		}
+		return null;
 	}
 }

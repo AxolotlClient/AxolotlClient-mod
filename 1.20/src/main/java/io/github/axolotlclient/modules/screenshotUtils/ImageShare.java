@@ -22,8 +22,11 @@
 
 package io.github.axolotlclient.modules.screenshotUtils;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 
+import com.mojang.blaze3d.texture.NativeImage;
 import io.github.axolotlclient.util.Util;
 import lombok.Getter;
 import net.minecraft.text.ClickEvent;
@@ -54,5 +57,16 @@ public class ImageShare extends ImageNetworking {
 							.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.translatable("clickToCopy"))))));
 			}
 		});
+	}
+
+	public ImageInstance downloadImage(String url){
+		ImageData data = download(url);
+		if(!data.getName().isEmpty()) {
+			try {
+				return new ImageInstance(NativeImage.read(new ByteArrayInputStream(data.getData())), data.getName());
+			} catch (IOException ignored) {
+			}
+		}
+		return null;
 	}
 }

@@ -22,9 +22,13 @@
 
 package io.github.axolotlclient.modules.screenshotUtils;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 
 import io.github.axolotlclient.util.Util;
 import lombok.Getter;
@@ -64,5 +68,16 @@ public class ImageShare extends ImageNetworking {
 							.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText(I18n.translate("clickToCopy")))))));
 			}
 		});
+	}
+
+	public ImageInstance downloadImage(String url){
+		ImageData data = download(url);
+		if(!data.getName().isEmpty()) {
+			try {
+				return new ImageInstance(ImageIO.read(new ByteArrayInputStream(data.getData())), data.getName());
+			} catch (IOException ignored) {
+			}
+		}
+		return null;
 	}
 }

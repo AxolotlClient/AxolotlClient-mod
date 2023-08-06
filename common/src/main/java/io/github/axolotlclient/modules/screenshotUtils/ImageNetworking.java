@@ -31,6 +31,7 @@ import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.APIError;
 import io.github.axolotlclient.api.Request;
 import io.github.axolotlclient.api.util.BufferUtil;
+import lombok.Data;
 
 public abstract class ImageNetworking {
 
@@ -54,5 +55,20 @@ public abstract class ImageNetworking {
 					return BufferUtil.getString(buf, 0x09, buf.readableBytes() - 0x09);
 				}
 		});
+	}
+
+	protected ImageData download(String url){
+		return API.getInstance().send(new Request(Request.Type.DOWNLOAD_SCREENSHOT, url)).handle((buf, throwable) -> {
+			int nameLength = buf.getInt(0x09);
+			return new ImageData(BufferUtil.getString(buf, 0x0C, nameLength), buf.slice(0x0C + nameLength, buf.readableBytes() - (0x0C + nameLength)).array());
+		}).getNow(ImageData.EMPTY);
+	}
+
+	@Data
+	public static class ImageData {
+		public static final ImageData EMPTY = new ImageData("", new byte[0]);
+
+		private final String name;
+		private final byte[] data;
 	}
 }
