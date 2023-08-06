@@ -474,6 +474,7 @@
 	"api.chat.newMessageFrom": "Chat: %s",
 	"api.chat.enterMessage": "Enter Message",
 	"api.chat.messageUser": "Message @%s",
+	"api.chat.messageGroup": "Message %s",
 	"api.error.requestGeneric": "API Error",
 	"action.copy": "Copy...",
 	"api.privacyNotice": "Privacy Notice",

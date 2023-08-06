@@ -101,7 +101,8 @@ public class ChatScreen extends Screen implements ContextMenuScreen {
 			public void render() {
 				super.render();
 				if (getText().isEmpty()) {
-					drawWithShadow(textRenderer, I18n.translate("api.chat.messageUser", channel.getName()), x + 2, y + height / 2, -8355712);
+					drawWithShadow(textRenderer, I18n.translate(channel.isDM() ? "api.chat.messageUser" : "api.chat.messageGroup", channel.getName()),
+						x + 2, y + 6, -8355712);
 				}
 			}
 		};

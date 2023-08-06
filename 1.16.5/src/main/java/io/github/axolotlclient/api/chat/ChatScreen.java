@@ -100,10 +100,10 @@ public class ChatScreen extends Screen implements ContextMenuScreen {
 			}
 		});
 
-		input.setSuggestion(new TranslatableText("api.chat.messageUser", (Object) channel.getName()).getString());
+		input.setSuggestion(new TranslatableText(channel.isDM() ? "api.chat.messageUser" : "api.chat.messageGroup", channel.getName()).getString());
 		input.setChangedListener(s -> {
 			if (s.isEmpty()) {
-				input.setSuggestion(new TranslatableText("api.chat.messageUser", (Object) channel.getName()).getString());
+				input.setSuggestion(new TranslatableText(channel.isDM() ? "api.chat.messageUser" : "api.chat.messageGroup", channel.getName()).getString());
 			} else {
 				input.setSuggestion("");
 			}
