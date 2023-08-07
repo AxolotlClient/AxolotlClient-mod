@@ -18,10 +18,6 @@ repositories {
 	}
 
 	maven {
-		url 'https://repo.hypixel.net/repository/Hypixel/'
-	}
-
-	maven {
 		name 'TerraformersMC Maven'
 		url 'https://maven.terraformersmc.com/releases/'
 	}
@@ -43,20 +39,10 @@ dependencies {
 	compileOnly("commons-io:commons-io:2.4")
 	compileOnly("org.apache.commons:commons-lang3:3.3.2")
 
-	shadow(implementation("net.hypixel:hypixel-api-core:4.3") {
-		exclude group: "com.google.code.gson", module: "gson"
-		exclude group: "org.apache.httpcomponents", module: "httpclient"
-	})
-
-	shadow(implementation("net.hypixel:hypixel-api-transport-apache:4.3") {
-		exclude group: "com.google.code.gson", module: "gson"
-		exclude group: "org.apache.httpcomponents", module: "httpclient"
-	})
-
 	shadow implementation("io.github.CDAGaming:DiscordIPC:0.6.5")
 	shadow implementation("com.kohlschutter.junixsocket:junixsocket-core:2.6.2")
 
-	shadow implementation("io.netty:netty-all:4.1.92.Final")
+	shadow implementation("io.netty:netty-all:4.1.96.Final")
 }
 
 build {
@@ -81,7 +67,6 @@ shadowJar {
 	archiveClassifier.set('')
 	minimize()
 
-	relocate 'net.hypixel', 'io.github.axolotlclient.shadow.hypixel'
 	relocate 'io.netty', 'io.github.axolotlclient.shadow.netty'
 	relocate 'com.jagrosh', 'io.github.axolotlclient.shadow.jagrosh'
 

@@ -20,31 +20,20 @@
  * For more information, see the LICENSE file.
  */
 
-package io.github.axolotlclient.api.util;
+package io.github.axolotlclient.modules.hypixel;
 
-import java.lang.reflect.Field;
-import java.nio.charset.StandardCharsets;
+import lombok.Data;
 
-import com.google.common.base.Strings;
-import io.netty.buffer.ByteBuf;
-import lombok.experimental.UtilityClass;
+@Data
+public class BedwarsData {
+	public static BedwarsData EMPTY = new BedwarsData(0, 0, 0, 0, 0, 0, 0, 0);
 
-@UtilityClass
-public class BufferUtil {
-
-	public String getString(ByteBuf buffer, int index, int byteLength) {
-		byte[] bytes = new byte[byteLength];
-		buffer.getBytes(index, bytes);
-		return new String(bytes, StandardCharsets.UTF_8);
-	}
-
-	public String padString(String s, int length) {
-		return Strings.padEnd(s, length, Character.MIN_VALUE).substring(0, length);
-	}
-
-	public byte[] toArray(ByteBuf buf){
-		byte[] bytes = new byte[buf.readableBytes()];
-		buf.getBytes(buf.readerIndex(), bytes);
-		return bytes;
-	}
+	private final int finalKills;
+	private final int finalDeaths;
+	private final int bedsBroken;
+	private final int deaths;
+	private final int kills;
+	private final int losses;
+	private final int wins;
+	private final int winstreak;
 }

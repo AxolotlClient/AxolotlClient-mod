@@ -33,6 +33,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import io.github.axolotlclient.api.handlers.*;
 import io.github.axolotlclient.api.types.Status;
 import io.github.axolotlclient.api.types.User;
+import io.github.axolotlclient.api.util.BufferUtil;
 import io.github.axolotlclient.api.util.MojangAuth;
 import io.github.axolotlclient.api.util.RequestHandler;
 import io.github.axolotlclient.api.util.StatusUpdateProvider;
@@ -100,7 +101,7 @@ public class API {
 		AtomicReference<String> serverId = new AtomicReference<>();
 
 		send(new Request(Request.Type.GET_PUBLIC_KEY)).whenCompleteAsync((buf, t) -> {
-			MojangAuth.Result result = MojangAuth.authenticate(account, buf.slice(0x09, buf.readableBytes() - 9).array());
+			MojangAuth.Result result = MojangAuth.authenticate(account, BufferUtil.toArray(buf.slice(0x09, buf.readableBytes() - 9)));
 			if (result.getStatus() != MojangAuth.Status.SUCCESS) {
 				logger.error("Authentication with Mojang failed, aborting!");
 				shutdown();

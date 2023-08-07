@@ -22,25 +22,18 @@
 
 package io.github.axolotlclient.modules.hypixel;
 
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
-import com.google.gson.JsonObject;
 import io.github.axolotlclient.api.API;
+import io.github.axolotlclient.api.APIError;
 import io.github.axolotlclient.api.Request;
-import io.github.axolotlclient.api.util.BufferUtil;
 import io.github.axolotlclient.modules.hypixel.levelhead.LevelHeadMode;
-import net.hypixel.api.HypixelAPI;
-import net.hypixel.api.apache.ApacheHttpClient;
-import net.hypixel.api.reply.PlayerReply;
+import io.netty.buffer.ByteBuf;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.experimental.UtilityClass;
 
 /**
  * Based on Osmium by Intro-Dev
@@ -51,106 +44,67 @@ import net.hypixel.api.reply.PlayerReply;
  * @implNote Provides a layer between the hypixel api and the client to obtain information with minimal api calls
  */
 
+@UtilityClass
 public class HypixelAbstractionLayer {
 
-	private static final HashMap<String, CompletableFuture<PlayerReply>> cachedPlayerData = new HashMap<>();
-	private static final HashMap<String, Integer> tempValues = new HashMap<>();
-
-	private static Supplier<String> keySupplier;
-	private static HypixelAPI api;
-	private static boolean validApiKey = false;
-
-	private static int rateLimitRemaining = 500;
-
-	public static void setApiKeyOverrideSupplier(Supplier<String> supplier) {
-		keySupplier = supplier;
-	}
-
-	public static boolean hasValidAPIKey() {
-		return validApiKey;
-	}
-
-	public static JsonObject getPlayerProperty(String uuid, String stat) {
-		if (loadPlayerDataIfAbsent(uuid)) {
-			PlayerReply.Player player = getPlayer(uuid);
-			return player == null ? null : player.getProperty(stat).getAsJsonObject();
-		}
-		return null;
-	}
+	private static final Map<String, Map<RequestDataType, Object>> cachedPlayerData = new HashMap<>();
+	private static final Map<String, Integer> tempValues = new HashMap<>();
 
 	public static int getPlayerLevel(String uuid, String mode) {
-		if (api == null) {
-			loadApiKey();
-		}
-		if (loadPlayerDataIfAbsent(uuid)) {
-			PlayerReply.Player player = getPlayer(uuid);
-			if (player != null) {
-				int value = -1;
-				if (Objects.equals(mode, LevelHeadMode.NETWORK.toString())) {
-					value = (int) player.getNetworkLevel();
-				} else if (Objects.equals(mode, LevelHeadMode.BEDWARS.toString())) {
-					value = player.getIntProperty("achievements.bedwars_level", -1);
-				} else if (Objects.equals(mode, LevelHeadMode.SKYWARS.toString())) {
-					int exp = player
-						.getIntProperty("stats.SkyWars.skywars_experience", -1);
-					if(exp != -1) {
-						value = Math.round(ExpCalculator.getLevelForExp(exp));
-					}
-				}
-				if(value > -1){
-					tempValues.remove(uuid);
-					return value;
-				}
+		int value = -1;
+		if (Objects.equals(mode, LevelHeadMode.NETWORK.toString())) {
+			value = getLevel(uuid, RequestDataType.NETWORK_LEVEL);
+		} else if (Objects.equals(mode, LevelHeadMode.BEDWARS.toString())) {
+			value = getLevel(uuid, RequestDataType.BEDWARS_LEVEL);
+		} else if (Objects.equals(mode, LevelHeadMode.SKYWARS.toString())) {
+			int exp = getLevel(uuid, RequestDataType.SKYWARS_EXPERIENCE);
+			if (exp != -1) {
+				value = Math.round(ExpCalculator.getLevelForExp(exp));
 			}
 		}
-		return tempValues.computeIfAbsent(uuid, s -> (int) (new Random().nextGaussian()*30+150));
+		if (value > -1) {
+			tempValues.remove(uuid);
+			return value;
+		}
+		return tempValues.computeIfAbsent(uuid, s -> (int) (new Random().nextGaussian() * 30 + 150));
 	}
 
-	private static PlayerReply.Player getPlayer(String uuid) {
-		if (api == null) {
-			loadApiKey();
-		}
-		if (loadPlayerDataIfAbsent(uuid)) {
-			try {
-				return processRateLimit(cachedPlayerData.get(uuid).get(1, TimeUnit.MICROSECONDS)).getPlayer();
-			} catch (TimeoutException | InterruptedException | ExecutionException ignored) {
+	private int getLevel(String uuid, RequestDataType type) {
+		return cache(uuid, type, () ->
+			getHypixelApiData(uuid, type).handleAsync((buf, throwable) -> {
+			if (throwable != null) {
+				APIError.display(throwable);
+				return -1;
 			}
-		}
-		return null;
+			return buf.getInt(0x09);
+		}).getNow(-1));
 	}
 
-	public static void loadApiKey() {
-		AtomicReference<String> apiKey = new AtomicReference<>(keySupplier.get());
-		if (apiKey.get().isEmpty()) {
-			API.getInstance().send(new Request(Request.Type.GET_HYPIXEL_API_KEY)).thenApply(buf -> UUID.fromString(
-				BufferUtil.getString(buf, 0x9, 36))).whenCompleteAsync((uuid, t) -> {
-				api = new HypixelAPI(new ApacheHttpClient(uuid));
-				validApiKey = true;
-			});
-		} else {
-			try {
-				api = new HypixelAPI(new ApacheHttpClient(UUID.fromString(apiKey.get())));
-				validApiKey = true;
-			} catch (Exception ignored) {
-				validApiKey = false;
+	public int getBedwarsLevel(String uuid){
+		return getLevel(uuid, RequestDataType.BEDWARS_LEVEL);
+	}
+
+	public BedwarsData getBedwarsData(String playerUuid) {
+		return cache(playerUuid, RequestDataType.BEDWARS_DATA, () ->
+			getHypixelApiData(playerUuid, RequestDataType.BEDWARS_DATA).handleAsync(((buf, throwable) -> {
+			if (throwable != null) {
+				APIError.display(throwable);
+				return BedwarsData.EMPTY;
 			}
-		}
+			ByteBuf data = buf.slice(0x09, buf.readableBytes() - 0x09);
+			return new BedwarsData(data.getInt(0x00), data.getInt(0x04), data.getInt(0x08),
+				data.getInt(0x0B), data.getInt(0x0F), data.getInt(0x14), data.getInt(0x18),
+				data.getInt(0x1B));
+		})).getNow(BedwarsData.EMPTY));
 	}
 
-	private static boolean loadPlayerDataIfAbsent(String uuid) {
-		if (cachedPlayerData.get(uuid) == null) {
-			if (rateLimitRemaining > 50) {
-				cachedPlayerData.put(uuid, api.getPlayerByUuid(uuid));
-				return true;
-			}
-			return false;
-		}
-		return true;
+	@SuppressWarnings("unchecked")
+	private <T> T cache(String uuid, RequestDataType type, Supplier<T> dataSupplier){
+		return (T) cachedPlayerData.computeIfAbsent(uuid, s -> new HashMap<>()).computeIfAbsent(type, t -> dataSupplier);
 	}
 
-	private static PlayerReply processRateLimit(PlayerReply reply) {
-		rateLimitRemaining = reply.getRateLimit().getRemaining();
-		return reply;
+	private CompletableFuture<ByteBuf> getHypixelApiData(String uuid, RequestDataType type) {
+		return API.getInstance().send(new Request(Request.Type.GET_HYPIXEL_API_DATA, new Request.Data(uuid).add(type.getId())));
 	}
 
 	public static void clearPlayerData() {
@@ -163,5 +117,15 @@ public class HypixelAbstractionLayer {
 
 	private static void freePlayerData(String uuid) {
 		cachedPlayerData.remove(uuid);
+	}
+
+	@AllArgsConstructor
+	@Getter
+	private enum RequestDataType {
+		NETWORK_LEVEL(0x1),
+		BEDWARS_LEVEL(0x2),
+		SKYWARS_EXPERIENCE(0x3),
+		BEDWARS_DATA(0x4);
+		private final int id;
 	}
 }
