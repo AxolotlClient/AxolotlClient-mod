@@ -36,7 +36,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class BufferUtil {
 
-	private final Map<Class<?>, Serializer<?>> serializators = new HashMap<>();
+	private final Map<Class<?>, Serializer<?>> serializers = new HashMap<>();
 
 	public String getString(ByteBuf buffer, int index, int byteLength) {
 		return buffer.toString(index, byteLength, StandardCharsets.UTF_8);
@@ -56,7 +56,7 @@ public class BufferUtil {
 	}
 
 	public <T> void registerSerializer(Class<T> clazz, Serializer<T> serializer){
-		serializators.put(clazz, serializer);
+		serializers.put(clazz, serializer);
 	}
 
 	/**
@@ -72,8 +72,8 @@ public class BufferUtil {
 	@SuppressWarnings("unchecked")
 	public ByteBuf wrap(Object o) {
 
-		if(serializators.containsKey(o.getClass())){
-			return ((Serializer<Object>) serializators.get(o.getClass())).serialize(o);
+		if(serializers.containsKey(o.getClass())){
+			return ((Serializer<Object>) serializers.get(o.getClass())).serialize(o);
 		}
 
 		return serialize(o);
@@ -174,8 +174,8 @@ public class BufferUtil {
 	@SuppressWarnings("unchecked")
 	public <T> T unwrap(ByteBuf buf, Class<T> clazz) {
 
-		if(serializators.containsKey(clazz)){
-			return ((Serializer<T>) serializators.get(clazz)).deserialize(buf);
+		if(serializers.containsKey(clazz)){
+			return ((Serializer<T>) serializers.get(clazz)).deserialize(buf);
 		}
 
 		return deserialize(buf, clazz);
