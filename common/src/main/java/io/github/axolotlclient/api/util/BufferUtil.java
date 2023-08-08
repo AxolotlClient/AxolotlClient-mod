@@ -270,7 +270,7 @@ public class BufferUtil {
 	private int getPrimitiveByteLength(Class<?> field) {
 		Class<?> c = Primitives.wrap(field);
 		try {
-			return (int) c.getDeclaredField("BYTES").get(null);
+			return (int) c.getField("BYTES").get(null);
 
 		} catch (NoSuchFieldException | IllegalAccessException ignored) {
 		}
