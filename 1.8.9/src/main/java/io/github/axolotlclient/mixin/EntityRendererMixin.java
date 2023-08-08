@@ -42,6 +42,7 @@ import net.minecraft.entity.Entity;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -84,17 +85,16 @@ public abstract class EntityRendererMixin<T extends Entity> {
 					if (levelhead != null) {
 						axolotlclient$drawLevelHead(levelhead);
 					}
-				} else if (HypixelAbstractionLayer.hasValidAPIKey() && LevelHead.getInstance().enabled.get()) {
+				} else if (LevelHead.getInstance().enabled.get()) {
 					String text = "Level: " + HypixelAbstractionLayer.getPlayerLevel(String.valueOf(entity.getUuid()), LevelHead.getInstance().mode.get());
 
 					axolotlclient$drawLevelHead(text);
-				} else if (!HypixelAbstractionLayer.hasValidAPIKey()) {
-					HypixelAbstractionLayer.loadApiKey();
 				}
 			}
 		}
 	}
 
+	@Unique
 	private void axolotlclient$drawLevelHead(String text) {
 		TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
 

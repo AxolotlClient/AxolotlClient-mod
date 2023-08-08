@@ -128,7 +128,7 @@ public abstract class EntityRendererMixin<T extends Entity> {
 							matrix4f, vertexConsumers, false, LevelHead.getInstance().background.get() ? 127 : 0,
 							light);
 					}
-				} else if (HypixelAbstractionLayer.hasValidAPIKey() && LevelHead.getInstance().enabled.get()) {
+				} else if (LevelHead.getInstance().enabled.get()) {
 					String text = "Level: " + HypixelAbstractionLayer.getPlayerLevel(String.valueOf(entity.getUuid()), LevelHead.getInstance().mode.get());
 
 					float x = -textRenderer.getWidth(text) / 2F;
@@ -139,8 +139,6 @@ public abstract class EntityRendererMixin<T extends Entity> {
 						LevelHead.getInstance().textColor.get().getAsInt(), AxolotlClient.CONFIG.useShadows.get(),
 						matrix4f, vertexConsumers, false, LevelHead.getInstance().background.get() ? 127 : 0,
 						light);
-				} else if (!HypixelAbstractionLayer.hasValidAPIKey()) {
-					HypixelAbstractionLayer.loadApiKey();
 				}
 			}
 		}
