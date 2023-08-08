@@ -28,7 +28,6 @@ import java.util.List;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.EnumOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
-import io.github.axolotlclient.AxolotlClientConfig.options.StringOption;
 import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.modules.hypixel.autoboop.AutoBoop;
 import io.github.axolotlclient.modules.hypixel.autogg.AutoGG;
@@ -41,8 +40,6 @@ import io.github.axolotlclient.modules.hypixel.skyblock.Skyblock;
 public class HypixelMods extends AbstractModule {
 
 	private static final HypixelMods INSTANCE = new HypixelMods();
-
-	public final StringOption hypixel_api_key = new StringOption("hypixel_api_key", "");
 	public final EnumOption cacheMode = new EnumOption("cache_mode", HypixelCacheMode.values(),
 		HypixelCacheMode.ON_CLIENT_DISCONNECT.toString());
 
@@ -55,7 +52,6 @@ public class HypixelMods extends AbstractModule {
 
 	@Override
 	public void init() {
-		category.add(hypixel_api_key);
 		category.add(cacheMode);
 
 		addSubModule(LevelHead.getInstance());
@@ -69,12 +65,6 @@ public class HypixelMods extends AbstractModule {
 		subModules.forEach(AbstractHypixelMod::init);
 
 		AxolotlClient.CONFIG.addCategory(category);
-	}
-
-	@Override
-	public void lateInit() {
-		HypixelAbstractionLayer.setApiKeyOverrideSupplier(hypixel_api_key::get);
-		HypixelAbstractionLayer.loadApiKey();
 	}
 
 	public void tick() {

@@ -23,14 +23,10 @@
 package io.github.axolotlclient.api;
 
 import java.nio.charset.StandardCharsets;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
 
-import com.google.common.primitives.Longs;
+import io.github.axolotlclient.api.util.BufferUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import lombok.*;
@@ -87,9 +83,8 @@ public class Request {
 			.setBytes(0x06, data.getData());
 	}
 
-	@Getter
 	public static class Data {
-		private final List<Map.Entry<Integer, byte[]>> elements = new ArrayList<>();
+		private final ByteBuf buf = Unpooled.buffer();
 
 		public Data(){}
 
@@ -108,11 +103,12 @@ public class Request {
 		}
 
 		public Data add(int i){
-			return add((byte) i);
+			buf.writeInt(i);
+			return this;
 		}
 
 		public Data add(String e) {
-			add(e.getBytes(StandardCharsets.UTF_8));
+			buf.writeCharSequence(e, StandardCharsets.UTF_8);
 			return this;
 		}
 
@@ -124,31 +120,32 @@ public class Request {
 		}
 
 		public Data add(long l){
-			return add(Longs.toByteArray(l));
-		}
-
-		public Data add(byte b) {
-			return add(new byte[]{b});
-		}
-
-		public Data add(byte[] data) {
-			int size = elements.size();
-			int index = size + (size > 0 ? elements.get(size - 1).getValue().length : 0);
-			elements.add(new AbstractMap.SimpleImmutableEntry<>(index, data));
+			buf.writeLong(l);
 			return this;
 		}
 
-		private ByteBuf getData() {
-			ByteBuf buf = Unpooled.buffer();
-			for (Map.Entry<Integer, byte[]> e : elements) {
-				buf.setBytes(e.getKey(), e.getValue());
-			}
-			return buf;
+		public Data add(byte b) {
+			buf.writeByte(b);
+			return this;
+		}
+
+		public Data add(byte[] data) {
+			buf.writeBytes(data);
+			return this;
+		}
+
+		public Data add(ByteBuf buf){
+			this.buf.writeBytes(buf);
+			return this;
+		}
+
+		ByteBuf getData() {
+			return buf.setIndex(0, buf.capacity());
 		}
 
 		@Override
 		public String toString() {
-			return "[" + elements.stream().map(Map.Entry::getValue).map(String::new).collect(Collectors.joining(", ")) + "]";
+			return Arrays.toString(BufferUtil.toArray(buf));
 		}
 	}
 
