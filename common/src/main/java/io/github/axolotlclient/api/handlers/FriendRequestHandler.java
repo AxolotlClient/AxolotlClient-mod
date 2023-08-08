@@ -22,8 +22,6 @@
 
 package io.github.axolotlclient.api.handlers;
 
-import java.nio.charset.StandardCharsets;
-
 import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.APIError;
 import io.github.axolotlclient.api.Request;
@@ -41,9 +39,7 @@ public class FriendRequestHandler implements RequestHandler {
 	@Override
 	public void handle(ByteBuf object, APIError error) {
 		if (API.getInstance().getApiOptions().friendRequestsEnabled.get()) {
-			byte[] uuid = new byte[16];
-			object.getBytes(0x09, uuid);
-			String fromUUID = new String(uuid, StandardCharsets.UTF_8);
+			String fromUUID = getString(object, 0x09, 16);
 			API.getInstance().getNotificationProvider().addStatus("api.friends", "api.friends.request", UUIDHelper.getUsername(fromUUID));
 		} else {
 			API.getInstance().send(new Request(Request.Type.FRIEND_REQUEST_REACTION, (byte) 0)).whenCompleteAsync((o, t) -> {

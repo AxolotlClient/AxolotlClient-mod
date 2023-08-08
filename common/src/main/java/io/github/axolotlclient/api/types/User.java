@@ -23,6 +23,7 @@
 package io.github.axolotlclient.api.types;
 
 import io.github.axolotlclient.api.API;
+import io.github.axolotlclient.api.util.Serializer;
 import io.github.axolotlclient.api.util.UUIDHelper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,7 +36,9 @@ import lombok.ToString;
 @AllArgsConstructor
 public class User {
 
+	@Serializer.Exclude
 	private String name;
+	@Serializer.Length(16)
 	private String uuid;
 	private Status status;
 

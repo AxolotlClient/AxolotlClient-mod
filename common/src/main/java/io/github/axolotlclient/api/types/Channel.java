@@ -25,6 +25,7 @@ package io.github.axolotlclient.api.types;
 import java.util.Arrays;
 
 import io.github.axolotlclient.api.API;
+import io.github.axolotlclient.api.util.Serializer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -32,7 +33,9 @@ import lombok.Getter;
 @Getter
 public abstract class Channel {
 
+	@Serializer.Length(5)
 	private final String id;
+	@Serializer.Length(64)
 	protected final String name;
 	private final User[] users;
 	private final ChatMessage[] messages;

@@ -26,18 +26,24 @@ import java.time.Instant;
 import java.util.Locale;
 
 import io.github.axolotlclient.api.API;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import io.github.axolotlclient.api.util.Serializer;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode
+@ToString
 @AllArgsConstructor
 public class Status {
 
 	public static Status UNKNOWN = new Status(false, "", "", "", Instant.EPOCH);
 
 	private boolean online;
+	@Serializer.Length(64)
 	private String title;
+	@Serializer.Length(64)
 	private String description;
+	@Serializer.Length(32)
 	private String icon;
 	private Instant startTime;
 

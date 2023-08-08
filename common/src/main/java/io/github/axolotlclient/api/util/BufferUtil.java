@@ -25,10 +25,7 @@ package io.github.axolotlclient.api.util;
 import java.lang.reflect.*;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 import com.google.common.base.Strings;
 import com.google.common.primitives.Primitives;
@@ -38,6 +35,8 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class BufferUtil {
+
+	private final Map<Class<?>, Serializer<?>> serializators = new HashMap<>();
 
 	public String getString(ByteBuf buffer, int index, int byteLength) {
 		return buffer.toString(index, byteLength, StandardCharsets.UTF_8);
@@ -56,6 +55,10 @@ public class BufferUtil {
 		return bytes;
 	}
 
+	public <T> void registerSerializer(Class<T> clazz, Serializer<T> serializer){
+		serializators.put(clazz, serializer);
+	}
+
 	/**
 	 * Serializes an object into a ByteBuf.
 	 *
@@ -66,10 +69,11 @@ public class BufferUtil {
 	 * @param o Object that should be serialized
 	 * @return the serialized ByteBuf
 	 */
+	@SuppressWarnings("unchecked")
 	public ByteBuf wrap(Object o) {
 
-		if(o instanceof Serializable){
-			return ((Serializable<?>) o).serialize();
+		if(serializators.containsKey(o.getClass())){
+			return ((Serializer<Object>) serializators.get(o.getClass())).serialize(o);
 		}
 
 		return serialize(o);
@@ -87,13 +91,17 @@ public class BufferUtil {
 		} else if (o instanceof CharSequence) {
 			buf.writeCharSequence((CharSequence) o, StandardCharsets.UTF_8);
 			return buf;
+		} else if (c.isArray()) {
+			for (int i=0;i<Array.getLength(o);i++){
+				buf.writeBytes(wrap(Array.get(o, i)));
+			}
 		}
 
 		for (Field f : o.getClass().getDeclaredFields()) {
 			f.setAccessible(true);
 
 			if (Modifier.isStatic(f.getModifiers()) ||
-				f.isAnnotationPresent(Serializable.Exclude.class)) {
+				f.isAnnotationPresent(Serializer.Exclude.class)) {
 				continue;
 			}
 
@@ -104,8 +112,8 @@ public class BufferUtil {
 				if (l != 0) {
 					buf.writeBytes(getPrimitiveBytes(obj, l));
 				} else if (obj instanceof String) {
-					if (f.isAnnotationPresent(Serializable.Length.class)) {
-						Serializable.Length s = f.getAnnotation(Serializable.Length.class);
+					if (f.isAnnotationPresent(Serializer.Length.class)) {
+						Serializer.Length s = f.getAnnotation(Serializer.Length.class);
 						int stringLength = s.value();
 						if (stringLength > 0) {
 							buf.writeCharSequence(padString((String) obj, stringLength), StandardCharsets.UTF_8);
@@ -118,6 +126,10 @@ public class BufferUtil {
 						break;
 					}
 
+				} else if (cl.isArray()) {
+					for (int i=0;i<Array.getLength(obj);i++){
+						buf.writeBytes(wrap(Array.get(obj, i)));
+					}
 				} else {
 					buf.writeBytes(wrap(obj));
 				}
@@ -153,12 +165,18 @@ public class BufferUtil {
 	 * be annotated with the <code>@Serializable.Length</code> annotation to be deserialized correctly,
 	 * otherwise it is assumed that they consume the entire rest length of the ByteBuf. Other Constructors can be marked
 	 * with <code>@Serializable.Exclude</code> to exclude them from being used in this process.
+	 * @apiNote Does not support arrays.
 	 * @param buf the buffer
 	 * @param clazz the target object's class
 	 * @return the deserialized object
 	 * @param <T> the target object
 	 */
+	@SuppressWarnings("unchecked")
 	public <T> T unwrap(ByteBuf buf, Class<T> clazz) {
+
+		if(serializators.containsKey(clazz)){
+			return ((Serializer<T>) serializators.get(clazz)).deserialize(buf);
+		}
 
 		return deserialize(buf, clazz);
 	}
@@ -179,17 +197,17 @@ public class BufferUtil {
 				params.add(o);
 			} else if (f.getType() == String.class) {
 				Field stringField = null;
-				if(f.isNamePresent()) {
+				if (f.isNamePresent()) {
 					try {
 						stringField = clazz.getDeclaredField(f.getName());
 					} catch (NoSuchFieldException ignored) {
 					}
 				}
-				if (f.isAnnotationPresent(Serializable.Length.class)
-					|| (stringField != null && stringField.isAnnotationPresent(Serializable.Length.class))) {
-					Serializable.Length s = f.getAnnotation(Serializable.Length.class);
-					if(s == null && stringField != null){
-						s = stringField.getAnnotation(Serializable.Length.class);
+				if (f.isAnnotationPresent(Serializer.Length.class)
+					|| (stringField != null && stringField.isAnnotationPresent(Serializer.Length.class))) {
+					Serializer.Length s = f.getAnnotation(Serializer.Length.class);
+					if (s == null && stringField != null) {
+						s = stringField.getAnnotation(Serializer.Length.class);
 					}
 					assert s != null;
 					int stringLength = s.value();
@@ -204,8 +222,10 @@ public class BufferUtil {
 					params.add(getString(buf, buf.readerIndex(), buf.readableBytes()).trim());
 					break;
 				}
+			} else if (f.getType().isArray()) {
+				throw new UnsupportedOperationException("Arrays are not supported for Deserialization");
 			} else {
-				params.add(unwrap(buf, f.getType()));
+				params.add(unwrap(buf.slice(), f.getType()));
 			}
 		}
 
@@ -223,7 +243,7 @@ public class BufferUtil {
 	@SuppressWarnings("unchecked")
 	private <T> Constructor<T> getConstructor(Class<T> clazz){
 		return (Constructor<T>) Arrays.stream(clazz.getDeclaredConstructors()).filter(c -> Modifier.isPublic(c.getModifiers()))
-			.filter(c -> !c.isAnnotationPresent(Serializable.Exclude.class))
+			.filter(c -> !c.isAnnotationPresent(Serializer.Exclude.class))
 			.sorted(Comparator.comparingInt(Constructor::getParameterCount)).toArray(Constructor[]::new)[0];
 	}
 

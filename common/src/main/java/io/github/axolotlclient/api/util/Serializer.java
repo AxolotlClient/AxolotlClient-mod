@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 import io.netty.buffer.ByteBuf;
 
-public interface Serializable<T> {
+public interface Serializer<T> {
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target({ElementType.PARAMETER, ElementType.FIELD})
 	@interface Length {
@@ -20,7 +20,9 @@ public interface Serializable<T> {
 
 	}
 
-	default ByteBuf serialize(){
-		return BufferUtil.serialize(this);
+	default ByteBuf serialize(T t){
+		return BufferUtil.serialize(t);
 	}
+
+	T deserialize(ByteBuf buf);
 }

@@ -23,6 +23,7 @@
 package io.github.axolotlclient.api;
 
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -33,10 +34,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import io.github.axolotlclient.api.handlers.*;
 import io.github.axolotlclient.api.types.Status;
 import io.github.axolotlclient.api.types.User;
-import io.github.axolotlclient.api.util.BufferUtil;
-import io.github.axolotlclient.api.util.MojangAuth;
-import io.github.axolotlclient.api.util.RequestHandler;
-import io.github.axolotlclient.api.util.StatusUpdateProvider;
+import io.github.axolotlclient.api.util.*;
 import io.github.axolotlclient.modules.auth.Account;
 import io.github.axolotlclient.util.Logger;
 import io.github.axolotlclient.util.ThreadExecuter;
@@ -81,6 +79,8 @@ public class API {
 		addHandler(FriendHandler.getInstance());
 		addHandler(new StatusUpdateHandler());
 		addHandler(ChatHandler.getInstance());
+
+		BufferUtil.registerSerializer(Instant.class, new InstantSerializer());
 	}
 
 	public void addHandler(RequestHandler handler) {

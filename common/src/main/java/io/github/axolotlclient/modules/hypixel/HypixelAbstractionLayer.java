@@ -29,6 +29,7 @@ import java.util.function.Supplier;
 import io.github.axolotlclient.api.API;
 import io.github.axolotlclient.api.APIError;
 import io.github.axolotlclient.api.Request;
+import io.github.axolotlclient.api.util.BufferUtil;
 import io.github.axolotlclient.modules.hypixel.levelhead.LevelHeadMode;
 import io.netty.buffer.ByteBuf;
 import lombok.AllArgsConstructor;
@@ -92,9 +93,7 @@ public class HypixelAbstractionLayer {
 				return BedwarsData.EMPTY;
 			}
 			ByteBuf data = buf.slice(0x09, buf.readableBytes() - 0x09);
-			return new BedwarsData(data.getInt(0x00), data.getInt(0x04), data.getInt(0x08),
-				data.getInt(0x0B), data.getInt(0x0F), data.getInt(0x14), data.getInt(0x18),
-				data.getInt(0x1B));
+			return BufferUtil.unwrap(data, BedwarsData.class);
 		})).getNow(BedwarsData.EMPTY));
 	}
 
