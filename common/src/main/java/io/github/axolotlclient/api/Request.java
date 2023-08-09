@@ -80,7 +80,7 @@ public class Request {
 			.setByte(0x03, type.getType())
 			.setByte(0x04, PROTOCOL_VERSION)
 			.setInt(0x05, id)
-			.setBytes(0x06, data.getData());
+			.setBytes(0x09, data.getData());
 	}
 
 	public static class Data {

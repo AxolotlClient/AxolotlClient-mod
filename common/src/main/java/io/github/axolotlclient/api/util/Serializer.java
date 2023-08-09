@@ -34,6 +34,8 @@ public interface Serializer<T> {
 	@Target({ElementType.PARAMETER, ElementType.FIELD})
 	@interface Length {
 		int value() default 0;
+
+		boolean usesIndex() default false;
 	}
 
 	@Retention(RetentionPolicy.RUNTIME)

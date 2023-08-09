@@ -25,7 +25,6 @@ package io.github.axolotlclient.api.handlers;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 import io.github.axolotlclient.api.API;
@@ -64,11 +63,7 @@ public class ChatHandler implements RequestHandler {
 	@Override
 	public void handle(ByteBuf buf, APIError error) {
 
-		AtomicReference<User> u = new AtomicReference<>();
-		io.github.axolotlclient.api.requests.User.get(BufferUtil.getString(buf, 0x09, 16)).whenCompleteAsync((us, t) -> u.set(us));
-
-		ChatMessage message = new ChatMessage(u.get(), BufferUtil.getString(buf, 0x26, buf.getInt(0x22)),
-			ChatMessage.Type.fromCode(buf.getByte(0x21)), buf.getLong(0x19));
+		ChatMessage message = BufferUtil.unwrap(BufferUtil.removeMetadata(buf), ChatMessage.class);
 
 		if (enableNotifications.showNotification(message)) {
 			API.getInstance().getNotificationProvider().addStatus(API.getInstance().getTranslationProvider().translate("api.chat.newMessageFrom", message.getSender().getName()), message.getContent());
@@ -79,13 +74,13 @@ public class ChatHandler implements RequestHandler {
 	public void sendMessage(Channel channel, String message) {
 		API.getInstance().send(new Request(Request.Type.SEND_MESSAGE,
 			new Request.Data(channel.getId()).add(
-				(byte) Instant.now().getEpochSecond()).add((byte) message.length()).add(message)));
+				Instant.now().getEpochSecond()).add(message.length()).add(message)));
 		messageConsumer.accept(new ChatMessage(API.getInstance().getSelf(), message, Instant.now().getEpochSecond()));
 	}
 
 	public void getMessagesBefore(Channel channel, long getBefore) {
 		API.getInstance().send(new Request(Request.Type.GET_MESSAGES,
-			new Request.Data(channel.getId()).add((byte) 25).add((byte) getBefore).add((byte) 0x00))).whenCompleteAsync(this::handleMessages);
+			new Request.Data(channel.getId()).add(25).add(getBefore).add(0x00))).whenCompleteAsync(this::handleMessages);
 	}
 
 	private void handleMessages(ByteBuf object, Throwable t) {
@@ -95,7 +90,7 @@ public class ChatHandler implements RequestHandler {
 			int i = 0x16;
 			while (i < object.getInt(0x0E)) {
 				int length = 0x1d + object.getInt(i + 0x19);
-				list.add(parseMessage(object.slice(i, length)));
+				list.add(BufferUtil.unwrap(object.slice(i, length), ChatMessage.class));
 				i += length;
 			}
 			messagesConsumer.accept(list);
@@ -105,17 +100,9 @@ public class ChatHandler implements RequestHandler {
 		}
 	}
 
-	private ChatMessage parseMessage(ByteBuf buf) {
-		AtomicReference<User> u = new AtomicReference<>();
-		io.github.axolotlclient.api.requests.User.get(BufferUtil.getString(buf, 0x00, 16)).whenCompleteAsync((us, t) -> u.set(us));
-
-		return new ChatMessage(u.get(), BufferUtil.getString(buf, 0x1D, buf.getInt(0x19)),
-			ChatMessage.Type.fromCode(buf.getByte(0x18)), buf.getLong(0x10));
-	}
-
 	public void getMessagesAfter(Channel channel, long getAfter) {
 		API.getInstance().send(new Request(Request.Type.GET_MESSAGES,
-			new Request.Data(channel.getId()).add((byte) 25).add((byte) getAfter).add((byte) 0x01))).whenCompleteAsync(this::handleMessages);
+			new Request.Data(channel.getId()).add(25).add(getAfter).add(0x01))).whenCompleteAsync(this::handleMessages);
 	}
 
 	public interface NotificationsEnabler {

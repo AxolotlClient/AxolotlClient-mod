@@ -55,6 +55,13 @@ public class BufferUtil {
 		return bytes;
 	}
 
+	public ByteBuf removeMetadata(ByteBuf buf){
+		if (buf.getCharSequence(0x00, 3, StandardCharsets.UTF_8).equals("AXO")) {
+			return buf.slice(0x09, buf.readableBytes()-0x09);
+		}
+		return buf;
+	}
+
 	public <T> void registerSerializer(Class<T> clazz, Serializer<T> serializer){
 		serializers.put(clazz, serializer);
 	}
@@ -127,7 +134,9 @@ public class BufferUtil {
 					}
 
 				} else if (cl.isArray()) {
-					for (int i=0;i<Array.getLength(obj);i++){
+					int arrayLength = Array.getLength(obj);
+					buf.writeInt(arrayLength);
+					for (int i=0;i<arrayLength;i++){
 						buf.writeBytes(wrap(Array.get(obj, i)));
 					}
 				} else {
@@ -214,6 +223,10 @@ public class BufferUtil {
 					if (stringLength > 0) {
 						params.add(getString(buf, buf.readerIndex(), stringLength).trim());
 						buf.setIndex(buf.readerIndex() + stringLength, buf.writerIndex());
+					} else if (s.usesIndex()) {
+						stringLength = buf.readInt();
+						params.add(getString(buf, buf.readerIndex(), stringLength).trim());
+						buf.setIndex(buf.readerIndex() + stringLength, buf.writerIndex());
 					} else {
 						params.add(getString(buf, buf.readerIndex(), buf.readableBytes()).trim());
 						break;
@@ -223,7 +236,12 @@ public class BufferUtil {
 					break;
 				}
 			} else if (f.getType().isArray()) {
-				throw new UnsupportedOperationException("Arrays are not supported for Deserialization");
+				int arrayLength = buf.readInt();
+				Object array = Array.newInstance(f.getType(), arrayLength);
+				for (int i=0;i<arrayLength;i++){
+					Array.set(array, i, unwrap(buf.slice(), f.getType().getComponentType()));
+				}
+				params.add(array);
 			} else {
 				params.add(unwrap(buf.slice(), f.getType()));
 			}

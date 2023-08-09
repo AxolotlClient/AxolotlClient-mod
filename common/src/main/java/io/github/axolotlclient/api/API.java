@@ -32,6 +32,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import io.github.axolotlclient.api.handlers.*;
+import io.github.axolotlclient.api.types.ChatMessage;
 import io.github.axolotlclient.api.types.Status;
 import io.github.axolotlclient.api.types.User;
 import io.github.axolotlclient.api.util.*;
@@ -81,6 +82,8 @@ public class API {
 		addHandler(ChatHandler.getInstance());
 
 		BufferUtil.registerSerializer(Instant.class, new InstantSerializer());
+		BufferUtil.registerSerializer(ChatMessage.class, new ChatMessageSerializer());
+		BufferUtil.registerSerializer(ChatMessage.Type.class, new ChatMessageSerializer.ChatMessageTypeSerializer());
 	}
 
 	public void addHandler(RequestHandler handler) {

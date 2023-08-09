@@ -38,3 +38,5 @@ src/main/resources/assets/minecraft/textures/entity/steve.png
 # JFR
 *.jfr
 .profileconfig.json
+
+common/src/test

@@ -27,8 +27,6 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import io.github.axolotlclient.api.Request;
 import io.github.axolotlclient.api.util.BufferUtil;
 import lombok.Getter;
@@ -45,8 +43,6 @@ public class StatusUpdate {
 	}
 
 	public static Request online(MenuId menuId) {
-		JsonObject data = new JsonObject();
-		data.add("location", new JsonPrimitive(menuId.getIdentifier()));
 		return createStatusUpdate(Type.ONLINE.getIdentifier(), menuId.getIdentifier(), "online");
 	}
 
