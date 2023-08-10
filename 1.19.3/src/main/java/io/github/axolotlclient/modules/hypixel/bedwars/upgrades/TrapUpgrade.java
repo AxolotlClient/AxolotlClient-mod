@@ -111,6 +111,10 @@ public class TrapUpgrade extends TeamUpgrade {
 		}
 	}
 
+	public int getTrapCount(){
+		return traps.size();
+	}
+
 	@Override
 	public boolean isMultiUpgrade() {
 		return true;

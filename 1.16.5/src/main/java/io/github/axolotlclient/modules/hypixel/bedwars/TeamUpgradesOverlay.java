@@ -97,6 +97,7 @@ public class TeamUpgradesOverlay extends BoxHudEntry {
 				x += 17;
 				normalUpgrades = true;
 			}
+			setWidth((x - position.x()) + 1);
 		}
 		x = position.x() + 1;
 		if (normalUpgrades) {
@@ -110,7 +111,9 @@ public class TeamUpgradesOverlay extends BoxHudEntry {
 			}
 		} else {
 			upgrades.trap.draw(stack, x, y, 16, 16);
+			setWidth(Math.max(((x + (upgrades.trap.getTrapCount()*16)) - position.x()) + 1, getWidth()));
 		}
+		setHeight((y - position.y())+19);
 	}
 
 	@Override
