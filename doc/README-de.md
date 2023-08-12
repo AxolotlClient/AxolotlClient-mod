@@ -48,7 +48,7 @@ Eine (fast) vollständige Mod mit verschiedenen Funktionen in verschiedenen Mine
 - Hypixel Funktionen
 	- AutoGG / GF / GLHF
 	- LevelHead
-	- Hickhider
+	- Nickhider
 	- Skyblock
 	- Autotip
 	- AutoBoop
