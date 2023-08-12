@@ -54,7 +54,7 @@ Eine (fast) vollständige Mod mit verschiedenen Funktionen in verschiedenen Mine
 	- AutoBoop
 - Eigene Blockränder
 - Zeitwechsler
-- Volle Helligkeit
+- Fullbright
 - Bewegungsschärfe
 - TNT Timer
 - Scrollbare Werkzeugtipps
@@ -86,12 +86,12 @@ Copyright (C) 2021-present moehreag + Contributors
 
 Dieses Programm ist freie Software; Sie können es weiterverteilen und/oder
 es unter den Bedingungen der GNU Lesser General Public
-Lizenz, wie sie von der Free Software Foundation veröffentlicht wurde, weitergeben und/oder verändern; entweder
+Lizenz, wie Sie von der Free Software Foundation veröffentlicht wurde, weitergeben und/oder verändern; entweder
 Version 3 der Lizenz, oder (nach Ihrer Wahl) jede spätere Version.
 
-Dieses Programm wird verteilt in der Hoffnung, dass es nutzen bringt,
+Dieses Programm wird verteilt in der Hoffnung, dass es Nutzen bringt,
 jedoch OHNE JEGLICHE GEWÄHRLEISTUNG; auch ohne die stillschweigende Garantie der
-MARKTGÄNGIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.  Siehe die GNU
+MARKTGÄNGIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK. Siehe die GNU
 Lesser General Public License für weitere Einzelheiten.
 
 Sie sollten ein Exemplar der GNU Lesser General Public License
