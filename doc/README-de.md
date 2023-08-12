@@ -1,6 +1,6 @@
 # AxolotlClient-mod
 
-Ein (fast) vollständiger mod mit verschiedene Funktionen auf verschiedenen Minecraft Versionen
+Eine (fast) vollständige Mod mit verschiedenen Funktionen in verschiedenen Minecraft Versionen
 
 *Auch in anderen Sprachen verfügbar: [English](../README.md), [Türkçe](doc/README-tr.md)*
 
@@ -15,7 +15,7 @@ Ein (fast) vollständiger mod mit verschiedene Funktionen auf verschiedenen Mine
 - Trefferfarben
 - Screenshot Werkzeuge
 - Zoom
-- Verschiede Hud Module (teile von [KronHUD](https://github.com/DarkKronicle/KronHUD), aber mit zusätzlichen Funktionen)
+- Verschiede Hud Module (Teile von [KronHUD](https://github.com/DarkKronicle/KronHUD), aber mit zusätzlichen Funktionen)
 	- zusätzlich, aber nicht aussschließlich:
 		- Ping
 		- FPS
@@ -30,11 +30,11 @@ Ein (fast) vollständiger mod mit verschiedene Funktionen auf verschiedenen Mine
 		- Scoreboard
 		- Fadenkreuz
 		- Koordinaten
-		- Aktions Anzeige
-		- Boss Anzeige
+		- Actionbar
+		- Bossbar
 		- Pfeile
 		- Item Update
-		- Pack Anzeige
+		- Resourcenpaket Anzeige
 		- Echtzeit
 		- Reichweite
 		- Hotbar
@@ -48,15 +48,15 @@ Ein (fast) vollständiger mod mit verschiedene Funktionen auf verschiedenen Mine
 - Hypixel Funktionen
 	- AutoGG / GF / GLHF
 	- LevelHead
-	- Spitznamen Verstecker
+	- Hickhider
 	- Skyblock
-	- Autotippen
+	- Autotip
 	- AutoBoop
 - Eigene Blockränder
 - Zeitwechsler
 - Volle Helligkeit
 - Bewegungsschärfe
-- TNT Zeit
+- TNT Timer
 - Scrollbare Werkzeugtipps
 - Partikel
 - Discord RPC
@@ -71,12 +71,12 @@ Ein (fast) vollständiger mod mit verschiedene Funktionen auf verschiedenen Mine
 ### Unterstützung
 
 - Tretet jederzeit unserem Discord bei um neue Funktionen zu diskutieren
-- Wenn du eine Funktion oder eine neue/überarbeitete Übersetzung hast erstelle jederzeit eine Pull Anfrage
-- Notier deine Änderungen in CHANGELOG.md damit diese bei der nächsten Version in der Versionshistorie stehen
+- Wenn du eine Funktion oder eine neue/überarbeitete Übersetzung hast erstelle jederzeit eine Pull Request
+- Notiere deine Änderungen in CHANGELOG.md damit diese bei der nächsten Version in der Versionshistorie stehen
 
 ### Lizensierung
 
-- Dieser Mod ist lizensiert unter der LGPL-3.0 Lizenz.
+- Diese Mod ist lizensiert unter der LGPL-3.0 Lizenz.
 - Die deutsche Übersetzung des Lizenztextes unten ist nicht rechtlich bindend.
   Die rechtlich bindende Version ist die [vollständige Englische Version](../LICENSE)
 
