@@ -77,6 +77,8 @@ public class TeamUpgradesOverlay extends BoxHudEntry {
 
 		int x = position.x() + 1;
 		int y = position.y() + 2;
+		int width = getWidth();
+		int height = getHeight();
 		GlStateManager.enableAlphaTest();
 		GlStateManager.enableBlend();
 		GlStateManager.color(1, 1, 1);
@@ -111,6 +113,9 @@ public class TeamUpgradesOverlay extends BoxHudEntry {
 			setWidth(Math.max(((x + (upgrades.trap.getTrapCount()*16)) - position.x()) + 1, getWidth()));
 		}
 		setHeight((y - position.y())+19);
+		if (getHeight() != height || getWidth() != width) {
+			onBoundsUpdate();
+		}
 	}
 
 	@Override

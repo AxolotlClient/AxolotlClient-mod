@@ -76,6 +76,8 @@ public class TeamUpgradesOverlay extends BoxHudEntry {
 
 		int x = position.x() + 1;
 		int y = position.y() + 2;
+		int width = getWidth();
+		int height = getHeight();
 		RenderSystem.enableBlend();
 		RenderSystem.setShaderColor(1, 1, 1, 1);
 		boolean normalUpgrades = false;
@@ -110,6 +112,9 @@ public class TeamUpgradesOverlay extends BoxHudEntry {
 		}
 		RenderSystem.setShaderColor(1, 1, 1, 1);
 		setHeight((y - position.y())+19);
+		if (getHeight() != height || getWidth() != width) {
+			onBoundsUpdate();
+		}
 	}
 
 	@Override
