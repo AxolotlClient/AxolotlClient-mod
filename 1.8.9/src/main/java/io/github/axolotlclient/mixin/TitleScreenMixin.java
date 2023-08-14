@@ -22,15 +22,21 @@
 
 package io.github.axolotlclient.mixin;
 
+import java.net.URI;
+
 import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.api.APIOptions;
+import io.github.axolotlclient.api.requests.GlobalDataRequest;
 import io.github.axolotlclient.modules.auth.AccountsScreen;
 import io.github.axolotlclient.modules.auth.Auth;
 import io.github.axolotlclient.modules.auth.AuthWidget;
 import io.github.axolotlclient.modules.hud.HudEditScreen;
+import io.github.axolotlclient.util.OSUtil;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.ClientBrandRetriever;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.screen.ConfirmChatLinkScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -56,6 +62,11 @@ public abstract class TitleScreenMixin extends Screen {
 		}
 		if (Auth.getInstance().showButton.get()) {
 			buttons.add(new AuthWidget());
+		}
+		if(APIOptions.getInstance().updateNotifications.get() &&
+			GlobalDataRequest.get().isSuccess() &&
+			GlobalDataRequest.get().getLatestVersion().isNewerThan(AxolotlClient.VERSION)){
+			buttons.add(new ButtonWidget(182, width - 125, 10, 120, 20, I18n.translate("api.new_version_available")));
 		}
 	}
 
@@ -84,6 +95,13 @@ public abstract class TitleScreenMixin extends Screen {
 			MinecraftClient.getInstance().setScreen(new HudEditScreen(this));
 		else if (button.id == 242)
 			MinecraftClient.getInstance().setScreen(new AccountsScreen(MinecraftClient.getInstance().currentScreen));
+		else if (button.id == 182)
+			MinecraftClient.getInstance().setScreen(new ConfirmChatLinkScreen((bl, i) -> {
+				if(bl && i == 353){
+					OSUtil.getOS().open(URI.create("https://modrinth.com/mod/axolotlclient/versions"), AxolotlClient.LOGGER);
+				}
+				MinecraftClient.getInstance().setScreen(this);
+			}, "https://modrinth.com/mod/axolotlclient/versions", 353, true));
 	}
 
 	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;drawWithShadow(Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V", ordinal = 0))

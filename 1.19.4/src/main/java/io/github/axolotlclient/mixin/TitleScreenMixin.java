@@ -22,15 +22,21 @@
 
 package io.github.axolotlclient.mixin;
 
+import java.net.URI;
+
 import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.api.APIOptions;
+import io.github.axolotlclient.api.requests.GlobalDataRequest;
 import io.github.axolotlclient.modules.auth.Auth;
 import io.github.axolotlclient.modules.auth.AuthWidget;
 import io.github.axolotlclient.modules.hud.HudEditScreen;
 import io.github.axolotlclient.modules.zoom.Zoom;
+import io.github.axolotlclient.util.OSUtil;
 import io.github.axolotlclient.util.UnsupportedMod;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ConfirmLinkScreen;
 import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
@@ -70,6 +76,17 @@ public abstract class TitleScreenMixin extends Screen {
 		}
 		if (Auth.getInstance().showButton.get()) {
 			addDrawableChild(new AuthWidget());
+		}
+		if(APIOptions.getInstance().updateNotifications.get() &&
+			GlobalDataRequest.get().isSuccess() &&
+			GlobalDataRequest.get().getLatestVersion().isNewerThan(AxolotlClient.VERSION)){
+			addDrawableChild(ButtonWidget.builder(Text.translatable("api.new_version_available"), widget ->
+					MinecraftClient.getInstance().setScreen(new ConfirmLinkScreen(r -> {
+						if (r){
+							OSUtil.getOS().open(URI.create("https://modrinth.com/mod/axolotlclient/versions"), AxolotlClient.LOGGER);
+						}
+					}, "https://modrinth.com/mod/axolotlclient/versions", true)))
+				.positionAndSize(width - 125, 10, 120, 20).build());
 		}
 	}
 

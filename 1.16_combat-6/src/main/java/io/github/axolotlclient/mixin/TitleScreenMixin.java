@@ -22,19 +22,26 @@
 
 package io.github.axolotlclient.mixin;
 
+import java.net.URI;
+
 import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.api.APIOptions;
+import io.github.axolotlclient.api.requests.GlobalDataRequest;
 import io.github.axolotlclient.modules.auth.Auth;
 import io.github.axolotlclient.modules.auth.AuthWidget;
 import io.github.axolotlclient.modules.hud.HudEditScreen;
 import io.github.axolotlclient.modules.zoom.Zoom;
+import io.github.axolotlclient.util.OSUtil;
 import io.github.axolotlclient.util.UnsupportedMod;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ConfirmChatLinkScreen;
 import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
@@ -65,6 +72,18 @@ public abstract class TitleScreenMixin extends Screen {
 		}
 		if (Auth.getInstance().showButton.get()) {
 			addButton(new AuthWidget());
+		}
+		if(APIOptions.getInstance().updateNotifications.get() &&
+			GlobalDataRequest.get().isSuccess() &&
+			GlobalDataRequest.get().getLatestVersion().isNewerThan(AxolotlClient.VERSION)){
+			addButton(new ButtonWidget(width - 125, 10, 120, 20,
+				new TranslatableText("api.new_version_available"), widget ->
+				MinecraftClient.getInstance().openScreen(new ConfirmChatLinkScreen(r -> {
+					if (r){
+						OSUtil.getOS().open(URI.create("https://modrinth.com/mod/axolotlclient/versions"), AxolotlClient.LOGGER);
+					}
+				}, "https://modrinth.com/mod/axolotlclient/versions", true))));
+
 		}
 	}
 

@@ -96,8 +96,6 @@ public class AxolotlClient implements ClientModInitializer {
 			badmod = new UnsupportedMod("Wurst Client", UnsupportedMod.UnsupportedReason.BAN_REASON);
 		} else if (FabricLoader.getInstance().isModLoaded("baritone")) {
 			badmod = new UnsupportedMod("Baritone", UnsupportedMod.UnsupportedReason.BAN_REASON);
-		} else if (FabricLoader.getInstance().isModLoaded("xaerominimap")) {
-			badmod = new UnsupportedMod("Xaero's Minimap", UnsupportedMod.UnsupportedReason.UNKNOWN_CONSEQUENSES);
 		} else if (FabricLoader.getInstance().isModLoaded("essential-container")) {
 			badmod = new UnsupportedMod("Essential", UnsupportedMod.UnsupportedReason.MIGHT_CRASH,
 				UnsupportedMod.UnsupportedReason.UNKNOWN_CONSEQUENSES);
