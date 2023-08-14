@@ -128,20 +128,20 @@ public class BedwarsTeamUpgrades {
 		"forge", Pattern.compile("^\\b[A-Za-z0-9_§]{3,16}\\b purchased (?:Iron|Golden|Emerald|Molten) Forge\\s*$"),
 		new int[]{2, 4}, new int[]{4, 6}, (x, y, width, height, upgradeLevel) -> {
 		if(upgradeLevel == 0){
-			MinecraftClient.getInstance().getTextureManager().bindTexture(new Identifier("textures/block/furnace_front.png"));
+			MinecraftClient.getInstance().getTextureManager().bindTexture(new Identifier("textures/blocks/furnace_front_off.png"));
 			DrawableHelper.drawTexture(x, y, 0, 0, width, height, width, height);
 		} else {
 			if(upgradeLevel == 2){
-				Color color = Color.parse("#FFFF00");
+				Color color = Color.parse("#FFFFFF00");
 				GlStateManager.color(color.getAlpha() / 255F, color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F);
 			} else if (upgradeLevel == 3) {
-				Color color = Color.parse("#00FF00");
+				Color color = Color.parse("#FF00FF00");
 				GlStateManager.color(color.getAlpha() / 255F, color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F);
 			} else if (upgradeLevel == 4){
-				Color color = Color.parse("#FF0000");
+				Color color = Color.parse("#FFFF0000");
 				GlStateManager.color(color.getAlpha() / 255F, color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F);
 			}
-			MinecraftClient.getInstance().getTextureManager().bindTexture(new Identifier("textures/block/furnace_front_on.png"));
+			MinecraftClient.getInstance().getTextureManager().bindTexture(new Identifier("textures/blocks/furnace_front_on.png"));
 			DrawableHelper.drawTexture(x, y, 0, 0, width, height, width, height);
 		}
 	}
