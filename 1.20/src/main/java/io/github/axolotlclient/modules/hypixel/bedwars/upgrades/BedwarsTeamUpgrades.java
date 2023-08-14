@@ -130,6 +130,7 @@ public class BedwarsTeamUpgrades {
 					RenderSystem.setShaderColor(color.getAlpha() / 255F, color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F);
 				}
 				graphics.drawTexture(new Identifier("textures/block/furnace_front_on.png"), x, y, 0, 0, width, height, width, height);
+				graphics.drawShadowedText(MinecraftClient.getInstance().textRenderer, String.valueOf(upgradeLevel), x+width-4, y+height-6, -1);
 			}
 		}
 	);

@@ -142,6 +142,7 @@ public class BedwarsTeamUpgrades {
 			}
 			MinecraftClient.getInstance().getTextureManager().bindTexture(new Identifier("textures/block/furnace_front_on.png"));
 			DrawableHelper.drawTexture(graphics, x, y, 0, 0, width, height, width, height);
+			MinecraftClient.getInstance().textRenderer.drawWithShadow(graphics, String.valueOf(upgradeLevel), x+width-4, y+height-6, -1);
 		}
 	});
 

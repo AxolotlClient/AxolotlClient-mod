@@ -92,7 +92,7 @@ public class TrapUpgrade extends TeamUpgrade {
 	public void draw(int x, int y, int width, int height) {
 		if (traps.size() == 0) {
 			Color color = Color.DARK_GRAY;
-			GlStateManager.color(color.getAlpha()/255F, color.getRed()/255F, color.getGreen()/255F, color.getBlue()/255F);
+			GlStateManager.color(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F, color.getAlpha() / 255F);
 			MinecraftClient.getInstance().getTextureManager().bindTexture(new Identifier("textures/items/barrier.png"));
 			DrawableHelper.drawTexture(x, y, 0, 0, 16, 16, 16, 16);
 		} else {

@@ -106,6 +106,7 @@ public class TeamUpgradesOverlay extends BoxHudEntry {
 				type.draw(stack, x, y, 16, 16);
 				x+=17;
 			}
+			setWidth(Math.max((x - position.x()) + 1, 18));
 		} else {
 			upgrades.trap.draw(stack, x, y, 16, 16);
 			setWidth(Math.max(((x + (upgrades.trap.getTrapCount()*16)) - position.x()) + 1, getWidth()));

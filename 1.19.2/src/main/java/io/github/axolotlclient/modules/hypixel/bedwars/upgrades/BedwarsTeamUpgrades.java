@@ -78,31 +78,29 @@ public class BedwarsTeamUpgrades {
 	public final TeamUpgrade protection = new TieredUpgrade(
 		"prot", Pattern.compile("^\\b[A-Za-z0-9_§]{3,16}\\b purchased Reinforced Armor .{1,3}\\s*$"),
 		new int[]{5, 10, 20, 30}, new int[]{2, 4, 8, 16}, (graphics, x, y, width, height, upgradeLevel) -> {
-		switch (upgradeLevel){
-			case 1:
+		switch (upgradeLevel) {
+			case 1 -> {
 				ItemUtil.renderGuiItemModel(BedwarsMod.getInstance().getUpgradesOverlay().getScale(), new ItemStack(Items.IRON_CHESTPLATE), x, y);
-				DrawableHelper.enableScissor(x, y+height/2, x+width/2, y+height);
+				DrawableHelper.enableScissor(x, y + height / 2, x + width / 2, y + height);
 				ItemUtil.renderGuiItemModel(BedwarsMod.getInstance().getUpgradesOverlay().getScale(), new ItemStack(Items.DIAMOND_CHESTPLATE), x, y);
 				DrawableHelper.disableScissor();
-				break;
-			case 2:
+			}
+			case 2 -> {
 				ItemUtil.renderGuiItemModel(BedwarsMod.getInstance().getUpgradesOverlay().getScale(), new ItemStack(Items.IRON_CHESTPLATE), x, y);
-				DrawableHelper.enableScissor(x, y, x+width/2, y+height);
+				DrawableHelper.enableScissor(x, y, x + width / 2, y + height);
 				ItemUtil.renderGuiItemModel(BedwarsMod.getInstance().getUpgradesOverlay().getScale(), new ItemStack(Items.DIAMOND_CHESTPLATE), x, y);
 				DrawableHelper.disableScissor();
-				break;
-			case 3:
+			}
+			case 3 -> {
 				ItemUtil.renderGuiItemModel(BedwarsMod.getInstance().getUpgradesOverlay().getScale(), new ItemStack(Items.DIAMOND_CHESTPLATE), x, y);
-				DrawableHelper.enableScissor(x+width/2, y+height/2, x+width, y+height);
+				DrawableHelper.enableScissor(x + width / 2, y + height / 2, x + width, y + height);
 				ItemUtil.renderGuiItemModel(BedwarsMod.getInstance().getUpgradesOverlay().getScale(), new ItemStack(Items.IRON_CHESTPLATE), x, y);
 				DrawableHelper.disableScissor();
-				break;
-			case 4:
+			}
+			case 4 ->
 				ItemUtil.renderGuiItemModel(BedwarsMod.getInstance().getUpgradesOverlay().getScale(), new ItemStack(Items.DIAMOND_CHESTPLATE), x, y);
-				break;
-			default:
+			default ->
 				ItemUtil.renderGuiItemModel(BedwarsMod.getInstance().getUpgradesOverlay().getScale(), new ItemStack(Items.IRON_CHESTPLATE), x, y);
-				break;
 		}
 	});
 
@@ -140,6 +138,7 @@ public class BedwarsTeamUpgrades {
 			}
 			RenderSystem.setShaderTexture(0, new Identifier("textures/block/furnace_front_on.png"));
 			DrawableHelper.drawTexture(graphics, x, y, 0, 0, width, height, width, height);
+			MinecraftClient.getInstance().textRenderer.drawWithShadow(graphics, String.valueOf(upgradeLevel), x+width-4, y+height-6, -1);
 		}
 	});
 
