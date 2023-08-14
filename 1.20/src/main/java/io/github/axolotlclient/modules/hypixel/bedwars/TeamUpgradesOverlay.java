@@ -97,7 +97,7 @@ public class TeamUpgradesOverlay extends BoxHudEntry {
 				x += 17;
 				normalUpgrades = true;
 			}
-			setWidth((x - position.x()) + 1);
+			setWidth(Math.max((x - position.x()) + 1, 18));
 		}
 		x = position.x() + 1;
 		if (normalUpgrades) {
