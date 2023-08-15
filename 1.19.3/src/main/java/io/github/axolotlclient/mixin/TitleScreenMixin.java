@@ -27,6 +27,7 @@ import java.net.URI;
 import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.api.APIOptions;
+import io.github.axolotlclient.api.NewsScreen;
 import io.github.axolotlclient.api.requests.GlobalDataRequest;
 import io.github.axolotlclient.modules.auth.Auth;
 import io.github.axolotlclient.modules.auth.AuthWidget;
@@ -80,6 +81,12 @@ public abstract class TitleScreenMixin extends Screen {
 					}
 				}, "https://modrinth.com/mod/axolotlclient/versions", true)))
 				.positionAndSize(width - 125, 10, 120, 20).build());
+		}
+		if (APIOptions.getInstance().displayNotes.get() &&
+			GlobalDataRequest.get().isSuccess() && !GlobalDataRequest.get().getNotes().isEmpty()) {
+			addDrawableChild(ButtonWidget.builder(Text.translatable("api.notes"), buttonWidget ->
+					MinecraftClient.getInstance().setScreen(new NewsScreen(this)))
+				.positionAndSize(width-125, 25, 120, 20).build());
 		}
 	}
 

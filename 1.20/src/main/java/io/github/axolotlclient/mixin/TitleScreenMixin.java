@@ -27,6 +27,7 @@ import java.net.URI;
 import com.mojang.blaze3d.platform.InputUtil;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.api.APIOptions;
+import io.github.axolotlclient.api.NewsScreen;
 import io.github.axolotlclient.api.requests.GlobalDataRequest;
 import io.github.axolotlclient.modules.auth.Auth;
 import io.github.axolotlclient.modules.auth.AuthWidget;
@@ -42,7 +43,11 @@ import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.MultilineScrollableWidget;
+import net.minecraft.client.gui.widget.MultilineTextWidget;
 import net.minecraft.client.realms.gui.screen.RealmsNotificationsScreen;
+import net.minecraft.text.CommonTexts;
+import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.Nullable;
@@ -87,6 +92,12 @@ public abstract class TitleScreenMixin extends Screen {
 						}
 					}, "https://modrinth.com/mod/axolotlclient/versions", true)))
 				.positionAndSize(width - 125, 10, 120, 20).build());
+		}
+		if (APIOptions.getInstance().displayNotes.get() &&
+			GlobalDataRequest.get().isSuccess() && !GlobalDataRequest.get().getNotes().isEmpty()) {
+			addDrawableChild(ButtonWidget.builder(Text.translatable("api.notes"), buttonWidget ->
+				MinecraftClient.getInstance().setScreen(new NewsScreen(this)))
+				.positionAndSize(width-125, 25, 120, 20).build());
 		}
 	}
 
@@ -158,5 +169,6 @@ public abstract class TitleScreenMixin extends Screen {
 			graphics.drawCenteredShadowedText(this.textRenderer, "Things could break!", this.width / 2, 15,
 				0xFFCC8888);
 		}
+
 	}
 }

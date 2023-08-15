@@ -26,6 +26,7 @@ import java.net.URI;
 
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.api.APIOptions;
+import io.github.axolotlclient.api.NewsScreen;
 import io.github.axolotlclient.api.requests.GlobalDataRequest;
 import io.github.axolotlclient.modules.auth.Auth;
 import io.github.axolotlclient.modules.auth.AuthWidget;
@@ -79,6 +80,12 @@ public abstract class TitleScreenMixin extends Screen {
 						OSUtil.getOS().open(URI.create("https://modrinth.com/mod/axolotlclient/versions"), AxolotlClient.LOGGER);
 					}
 				}, "https://modrinth.com/mod/axolotlclient/versions", true))));
+		}
+		if (APIOptions.getInstance().displayNotes.get() &&
+			GlobalDataRequest.get().isSuccess() && !GlobalDataRequest.get().getNotes().isEmpty()) {
+			addButton(new ButtonWidget(width-125, 25, 120, 20,
+				new TranslatableText("api.notes"), buttonWidget ->
+				MinecraftClient.getInstance().openScreen(new NewsScreen(this))));
 		}
 	}
 

@@ -26,6 +26,7 @@ import java.net.URI;
 
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.api.APIOptions;
+import io.github.axolotlclient.api.NewsScreen;
 import io.github.axolotlclient.api.requests.GlobalDataRequest;
 import io.github.axolotlclient.modules.auth.AccountsScreen;
 import io.github.axolotlclient.modules.auth.Auth;
@@ -68,6 +69,11 @@ public abstract class TitleScreenMixin extends Screen {
 			GlobalDataRequest.get().getLatestVersion().isNewerThan(AxolotlClient.VERSION)){
 			buttons.add(new ButtonWidget(182, width - 125, 10, 120, 20, I18n.translate("api.new_version_available")));
 		}
+		if (APIOptions.getInstance().displayNotes.get() &&
+			GlobalDataRequest.get().isSuccess() && !GlobalDataRequest.get().getNotes().isEmpty()) {
+			buttons.add(new ButtonWidget(253, width-125, 25, 120, 20,
+				I18n.translate("api.notes")));
+		}
 	}
 
 	private boolean axolotlclient$alternateLayout() {
@@ -102,6 +108,8 @@ public abstract class TitleScreenMixin extends Screen {
 				}
 				MinecraftClient.getInstance().setScreen(this);
 			}, "https://modrinth.com/mod/axolotlclient/versions", 353, true));
+		else if (button.id == 253)
+			MinecraftClient.getInstance().setScreen(new NewsScreen(this));
 	}
 
 	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/TitleScreen;drawWithShadow(Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V", ordinal = 0))

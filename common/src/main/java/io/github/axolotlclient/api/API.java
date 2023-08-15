@@ -255,6 +255,11 @@ public class API {
 	public void startup(Account account) {
 		this.uuid = account.getUuid();
 		this.account = account;
+
+		if(account.isOffline()){
+			return;
+		}
+
 		if (apiOptions.enabled.get()) {
 			switch (apiOptions.privacyAccepted.get()) {
 				case "unset":

@@ -494,5 +494,7 @@
 	"api.chat.report.message": "Report Message",
 	"api.chat.report.user": "Report User",
 	"api.new_version_available": "New Version Available!",
-	"api.update_notifications": "Update Notifications"
+	"api.update_notifications": "Update Notifications",
+	"api.notes": "News",
+	"api.notes.title": "News"
 }
