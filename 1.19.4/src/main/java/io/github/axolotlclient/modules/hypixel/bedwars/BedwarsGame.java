@@ -462,7 +462,7 @@ public class BedwarsGame {
 			color = new Color(200, 200, 200).getAsInt();
 		} else {
 			int health = objective.getScoreboard().getPlayerScore(playerName, objective).getScore();
-			color = Color.blend(new Color(255, 255, 255), new Color(215, 0, 64), (int) ((1 - (health / 20f)) * 100)).getAsInt();
+			color = Color.blend(new Color(255, 255, 255), new Color(215, 0, 64), (int) (1 - (health / 20f))).getAsInt();
 			render = String.valueOf(health);
 		}
 		// Health
