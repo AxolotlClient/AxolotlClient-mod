@@ -86,12 +86,14 @@ public class Particles extends AbstractModule {
 
 	public void applyOptions(Particle particle) {
 		if (enabled.get() && particleMap.containsKey(particle)) {
-			HashMap<String, Option<?>> options = particleOptions.get(particleMap.get(particle));
-
-			if (((BooleanOption) options.get("customColor")).get()) {
-				Color color = ((ColorOption) options.get("color")).get();
-				particle.setColor(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F);
-				((ParticleAccessor) particle).axolotlclient$setColorAlpha(color.getAlpha() / 255F);
+			ParticleType<?> type = particleMap.get(particle);
+			if (particleOptions.containsKey(type)) {
+				HashMap<String, Option<?>> options = particleOptions.get(type);
+				if (((BooleanOption) options.get("customColor")).get()) {
+					Color color = ((ColorOption) options.get("color")).get();
+					particle.setColor(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F);
+					((ParticleAccessor) particle).setColorAlpha(color.getAlpha() / 255F);
+				}
 			}
 		}
 	}
