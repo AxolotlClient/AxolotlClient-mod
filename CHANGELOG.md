@@ -137,6 +137,12 @@
 - fix a client lockup issue on 1.8.9
 - fix PlayerHud scaling on 1.8.9
 
+### 3.0.5
+
+- the TeamUpgradesHud now uses texture atlases provided by the game
+to improve performance
+- fix issues with the Bedwars Module
+
 ### 3.1.0
 
 - Add a new Backend (made by gart)

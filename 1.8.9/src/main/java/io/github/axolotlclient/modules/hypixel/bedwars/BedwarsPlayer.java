@@ -24,7 +24,6 @@ package io.github.axolotlclient.modules.hypixel.bedwars;
 
 
 import lombok.Data;
-import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.PlayerListEntry;
 
@@ -36,7 +35,6 @@ import net.minecraft.client.network.PlayerListEntry;
 public class BedwarsPlayer {
 
 	private final BedwarsTeam team;
-	@Getter
 	private PlayerListEntry profile;
 	private boolean alive = true;
 	private boolean disconnected = false;
@@ -94,7 +92,9 @@ public class BedwarsPlayer {
 			triedStats = true;
 			try {
 				stats = BedwarsPlayerStats.fromAPI(profile.getProfile().getId().toString().replace("-", ""));
-			} catch (Exception e) {
+			} catch (Exception ignored) {
+			}
+			if (stats == null){
 				stats = BedwarsPlayerStats.generateFake(profile.getProfile().getName());
 			}
 		}

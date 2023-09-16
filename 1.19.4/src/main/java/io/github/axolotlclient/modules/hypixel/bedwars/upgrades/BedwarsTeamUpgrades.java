@@ -25,7 +25,15 @@ package io.github.axolotlclient.modules.hypixel.bedwars.upgrades;
 
 import java.util.regex.Pattern;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.texture.Sprite;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.util.Identifier;
 
 /**
  * @author DarkKronicle
@@ -37,51 +45,101 @@ public class BedwarsTeamUpgrades {
 
 	public final TeamUpgrade sharpness = new BinaryUpgrade(
 		"sharp", Pattern.compile("^\\b[A-Za-z0-9_§]{3,16}\\b purchased Sharpened Swords"),
-		8, 4, new TextureInfo("textures/item/stone_sword.png"), new TextureInfo("textures/item/diamond_sword.png")
-	);
+		8, 4, (stack, x, y, width, height, upgradeLevel) -> {
+		if(upgradeLevel == 0){
+			MinecraftClient.getInstance().getItemRenderer().renderItemInGui(stack, new ItemStack(Items.STONE_SWORD), x, y);
+		} else {
+			MinecraftClient.getInstance().getItemRenderer().renderItemInGui(stack, new ItemStack(Items.DIAMOND_SWORD), x, y);
+		}
+	});
 
 	public final TeamUpgrade dragonBuff = new BinaryUpgrade(
 		"dragonbuff", Pattern.compile("^\\b[A-Za-z0-9_§]{3,16}\\b purchased Dragon Buff\\s*$"),
-		5, 5, new TextureInfo("textures/item/end_crystal.png", Color.DARK_GRAY),
-		new TextureInfo("textures/item/end_crystal.png")
-	);
+		5, 5, (graphics, x, y, width, height, purchased) -> {
+		if (purchased > 0) {
+			MinecraftClient.getInstance().getItemRenderer().renderItemInGui(graphics, new ItemStack(Items.END_CRYSTAL), x, y);
+		}
+	});
 
 	public final TeamUpgrade healPool = new BinaryUpgrade(
 		"healpool", Pattern.compile("^\\b[A-Za-z0-9_§]{3,16}\\b purchased Heal Pool\\s*$"),
-		3, 1, new TextureInfo("textures/mob_effect/health_boost.png", 0, 0, 18, 18, Color.DARK_GRAY),
-		new TextureInfo("textures/mob_effect/health_boost.png", 0, 0, 18, 18)
-	);
+		3, 1, (graphics, x, y, width, height, upgradeLevel) -> {
+		if(upgradeLevel == 0){
+			Color color = Color.DARK_GRAY;
+			RenderSystem.setShaderColor(color.getAlpha()/255F, color.getRed()/255F, color.getGreen()/255F, color.getBlue()/255F);
+		}
+		Sprite sprite = MinecraftClient.getInstance().getStatusEffectSpriteManager().getSprite(StatusEffects.HEALTH_BOOST);
+		RenderSystem.setShaderTexture(0, sprite.getId());
+		DrawableHelper.drawSprite(graphics, x, y, 0, width, height, sprite);
+	});
 
 	public final TeamUpgrade protection = new TieredUpgrade(
 		"prot", Pattern.compile("^\\b[A-Za-z0-9_§]{3,16}\\b purchased Reinforced Armor .{1,3}\\s*$"),
-		new int[]{5, 10, 20, 30}, new int[]{2, 4, 8, 16}, new TextureInfo[]{
-		new TextureInfo("textures/mob_effect/resistance.png", 0, 0, 18, 18, Color.DARK_GRAY),
-		new TextureInfo("textures/mob_effect/resistance.png", 0, 0, 18, 18),
-		new TextureInfo("textures/mob_effect/resistance.png", 0, 0, 18, 18, Color.parse("#FFFF00")),
-		new TextureInfo("textures/mob_effect/resistance.png", 0, 0, 18, 18, Color.parse("#00FF00")),
-		new TextureInfo("textures/mob_effect/resistance.png", 0, 0, 18, 18, Color.parse("#FF0000")),
-	}
-	);
+		new int[]{5, 10, 20, 30}, new int[]{2, 4, 8, 16}, (graphics, x, y, width, height, upgradeLevel) -> {
+		switch (upgradeLevel) {
+			case 1 -> {
+				MinecraftClient.getInstance().getItemRenderer().renderItemInGui(graphics, new ItemStack(Items.IRON_CHESTPLATE), x, y);
+				DrawableHelper.enableScissor(x, y + height / 2, x + width / 2, y + height);
+				MinecraftClient.getInstance().getItemRenderer().renderItemInGui(graphics, new ItemStack(Items.DIAMOND_CHESTPLATE), x, y);
+				DrawableHelper.disableScissor();
+			}
+			case 2 -> {
+				MinecraftClient.getInstance().getItemRenderer().renderItemInGui(graphics, new ItemStack(Items.IRON_CHESTPLATE), x, y);
+				DrawableHelper.enableScissor(x, y, x + width / 2, y + height);
+				MinecraftClient.getInstance().getItemRenderer().renderItemInGui(graphics, new ItemStack(Items.DIAMOND_CHESTPLATE), x, y);
+				DrawableHelper.disableScissor();
+			}
+			case 3 -> {
+				MinecraftClient.getInstance().getItemRenderer().renderItemInGui(graphics, new ItemStack(Items.DIAMOND_CHESTPLATE), x, y);
+				DrawableHelper.enableScissor(x + width / 2, y + height / 2, x + width, y + height);
+				MinecraftClient.getInstance().getItemRenderer().renderItemInGui(graphics, new ItemStack(Items.IRON_CHESTPLATE), x, y);
+				DrawableHelper.disableScissor();
+			}
+			case 4 ->
+				MinecraftClient.getInstance().getItemRenderer().renderItemInGui(graphics, new ItemStack(Items.DIAMOND_CHESTPLATE), x, y);
+			default ->
+				MinecraftClient.getInstance().getItemRenderer().renderItemInGui(graphics, new ItemStack(Items.IRON_CHESTPLATE), x, y);
+		}
+	});
 
 	public final TeamUpgrade maniacMiner = new TieredUpgrade(
 		"haste", Pattern.compile("^\\b[A-Za-z0-9_§]{3,16}\\b purchased Maniac Miner .{1,3}\\s*$"),
-		new int[]{2, 4}, new int[]{4, 6}, new TextureInfo[]{
-		new TextureInfo("textures/mob_effect/haste.png", 0, 0, 18, 18, Color.DARK_GRAY),
-		new TextureInfo("textures/mob_effect/haste.png", 0, 0, 18, 18, Color.GRAY),
-		new TextureInfo("textures/mob_effect/haste.png", 0, 0, 18, 18),
-	}
-	);
+		new int[]{2, 4}, new int[]{4, 6}, (graphics, x, y, width, height, upgradeLevel) -> {
+		if (upgradeLevel == 1) {
+			Color color = Color.GRAY;
+			RenderSystem.setShaderColor(color.getAlpha() / 255F, color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F);
+		} else if (upgradeLevel == 0) {
+			Color color = Color.DARK_GRAY;
+			RenderSystem.setShaderColor(color.getAlpha() / 255F, color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F);
+		}
+
+		Sprite sprite = MinecraftClient.getInstance().getStatusEffectSpriteManager().getSprite(StatusEffects.HASTE);
+		RenderSystem.setShaderTexture(0, sprite.getId());
+		DrawableHelper.drawSprite(graphics, x, y, 0, width, height, sprite);
+	});
 
 	public final TeamUpgrade forge = new TieredUpgrade(
 		"forge", Pattern.compile("^\\b[A-Za-z0-9_§]{3,16}\\b purchased (?:Iron|Golden|Emerald|Molten) Forge\\s*$"),
-		new int[]{2, 4}, new int[]{4, 6}, new TextureInfo[]{
-		new TextureInfo("textures/block/furnace_front.png", 198 + 18, 6*18, 18, 18),
-		new TextureInfo("textures/block/furnace_front_on.png", 198 + 18, 6*18, 18, 18),
-		new TextureInfo("textures/block/furnace_front_on.png", 198 + 18, 6*18, 18, 18, Color.parse("#FFFF00")),
-		new TextureInfo("textures/block/furnace_front_on.png", 198 + 18, 6*18, 18, 18, Color.parse("#00FF00")),
-		new TextureInfo("textures/block/furnace_front_on.png", 198 + 18, 6*18, 18, 18, Color.parse("#FF0000")),
-	}
-	);
+		new int[]{2, 4}, new int[]{4, 6}, (graphics, x, y, width, height, upgradeLevel) -> {
+		if(upgradeLevel == 0){
+			RenderSystem.setShaderTexture(0, new Identifier("textures/block/furnace_front.png"));
+			DrawableHelper.drawTexture(graphics, x, y, 0, 0, width, height, width, height);
+		} else {
+			if(upgradeLevel == 2){
+				Color color = Color.parse("#FFFF00");
+				RenderSystem.setShaderColor(color.getAlpha() / 255F, color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F);
+			} else if (upgradeLevel == 3) {
+				Color color = Color.parse("#00FF00");
+				RenderSystem.setShaderColor(color.getAlpha() / 255F, color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F);
+			} else if (upgradeLevel == 4){
+				Color color = Color.parse("#FF0000");
+				RenderSystem.setShaderColor(color.getAlpha() / 255F, color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F);
+			}
+			RenderSystem.setShaderTexture(0, new Identifier("textures/block/furnace_front_on.png"));
+			DrawableHelper.drawTexture(graphics, x, y, 0, 0, width, height, width, height);
+			MinecraftClient.getInstance().textRenderer.drawWithShadow(graphics, String.valueOf(upgradeLevel), x+width-4, y+height-6, -1);
+		}
+	});
 
 	public final TeamUpgrade[] upgrades = {trap, sharpness, dragonBuff, healPool, protection, maniacMiner, forge};
 

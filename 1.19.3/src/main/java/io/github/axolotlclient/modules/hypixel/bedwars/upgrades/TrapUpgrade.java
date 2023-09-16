@@ -28,10 +28,20 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClientConfig.Color;
+import io.github.axolotlclient.modules.hud.util.ItemUtil;
+import io.github.axolotlclient.modules.hypixel.bedwars.BedwarsMod;
 import io.github.axolotlclient.modules.hypixel.bedwars.BedwarsMode;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.texture.Sprite;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.util.Identifier;
 
 /**
  * @author DarkKronicle
@@ -67,14 +77,16 @@ public class TrapUpgrade extends TeamUpgrade {
 	@Override
 	public int getPrice(BedwarsMode mode) {
 		switch (traps.size()) {
-			case 0:
+			case 0 -> {
 				return 1;
-			case 1:
+			}
+			case 1 -> {
 				return 2;
-			case 2:
+			}
+			case 2 -> {
 				return 4;
+			}
 		}
-		;
 		return 0;
 	}
 
@@ -84,16 +96,23 @@ public class TrapUpgrade extends TeamUpgrade {
 	}
 
 	@Override
-	public TextureInfo[] getTexture() {
+	public void draw(MatrixStack stack, int x, int y, int width, int height) {
 		if (traps.size() == 0) {
-			return new TextureInfo[]{new TextureInfo("textures/items/barrier.png", Color.DARK_GRAY)};
+			Color color = Color.DARK_GRAY;
+			RenderSystem.setShaderColor(color.getAlpha()/255F, color.getRed()/255F, color.getGreen()/255F, color.getBlue()/255F);
+			RenderSystem.setShaderTexture(0, new Identifier("textures/item/barrier.png"));
+			DrawableHelper.drawTexture(stack, x, y, 0, 0, 16, 16, 16, 16);
+		} else {
+			for (TrapType type : traps) {
+				RenderSystem.setShaderColor(1, 1, 1, 1);
+				type.draw(stack, x, y, width, height);
+				x += width + 1;
+			}
 		}
-		TextureInfo[] trapTextures = new TextureInfo[traps.size()];
-		for (int i = 0; i < traps.size(); i++) {
-			TrapType type = traps.get(i);
-			trapTextures[i] = type.getTexInfo();
-		}
-		return trapTextures;
+	}
+
+	public int getTrapCount(){
+		return traps.size();
 	}
 
 	@Override
@@ -103,13 +122,27 @@ public class TrapUpgrade extends TeamUpgrade {
 
 	@AllArgsConstructor
 	public enum TrapType {
-		ITS_A_TRAP(new TextureInfo("textures/mob_effect/blindness.png", 0, 0, 18, 18)),
-		COUNTER_OFFENSIVE(new TextureInfo("textures/mob_effect/speed.png", 0, 0, 18, 18)),
-		ALARM(new TextureInfo("textures/item/ender_eye.png")),
-		MINER_FATIGUE(new TextureInfo("textures/mob_effect/mining_fatigue.png", 0, 0, 18, 18));
 
-		@Getter
-		private final TextureInfo texInfo;
+		ITS_A_TRAP((graphics, x, y, width, height, unused) -> {
+			Sprite sprite = MinecraftClient.getInstance().getStatusEffectSpriteManager().getSprite(StatusEffects.BLINDNESS);
+			RenderSystem.setShaderTexture(0, sprite.getId());
+			DrawableHelper.drawSprite(graphics, x, y, 0, width, height, sprite);
+		}),
+		COUNTER_OFFENSIVE((graphics, x, y, width, height, unused) -> {
+			Sprite sprite = MinecraftClient.getInstance().getStatusEffectSpriteManager().getSprite(StatusEffects.SPEED);
+			RenderSystem.setShaderTexture(0, sprite.getId());
+			DrawableHelper.drawSprite(graphics, x, y, 0, width, height, sprite);
+		}),
+		ALARM((graphics, x, y, width, height, unused) ->
+			ItemUtil.renderGuiItemModel(BedwarsMod.getInstance().getUpgradesOverlay().getScale(), new ItemStack(Items.ENDER_EYE), x, y)),
+		MINER_FATIGUE((graphics, x, y, width, height, unused) -> {
+			Sprite sprite = MinecraftClient.getInstance().getStatusEffectSpriteManager().getSprite(StatusEffects.MINING_FATIGUE);
+			RenderSystem.setShaderTexture(0, sprite.getId());
+			DrawableHelper.drawSprite(graphics, x, y, 0, width, height, sprite);
+		}),
+		;
+
+		private final TeamUpgradeRenderer renderer;
 
 		public static TrapType getFuzzy(String s) {
 			s = s.toLowerCase(Locale.ROOT);
@@ -123,6 +156,10 @@ public class TrapUpgrade extends TeamUpgrade {
 				return COUNTER_OFFENSIVE;
 			}
 			return ITS_A_TRAP;
+		}
+
+		public void draw(MatrixStack graphics, int x, int y, int width, int height){
+			renderer.render(graphics, x, y, width, height, 0);
 		}
 	}
 }
