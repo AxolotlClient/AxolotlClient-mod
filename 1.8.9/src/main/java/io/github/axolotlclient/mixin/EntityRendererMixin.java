@@ -28,6 +28,7 @@ import io.github.axolotlclient.modules.freelook.Perspective;
 import io.github.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
 import io.github.axolotlclient.modules.hypixel.bedwars.BedwarsMod;
 import io.github.axolotlclient.modules.hypixel.levelhead.LevelHead;
+import io.github.axolotlclient.modules.hypixel.levelhead.LevelHeadMode;
 import io.github.axolotlclient.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -41,6 +42,7 @@ import net.minecraft.entity.Entity;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -86,6 +88,10 @@ public abstract class EntityRendererMixin<T extends Entity> {
 				} else if (HypixelAbstractionLayer.hasValidAPIKey() && LevelHead.getInstance().enabled.get()) {
 					String text = "Level: " + HypixelAbstractionLayer.getPlayerLevel(String.valueOf(entity.getUuid()), LevelHead.getInstance().mode.get());
 
+					if(LevelHead.getInstance().mode.get().equals(LevelHeadMode.BEDWARS.toString())){
+						text += "☆";
+					}
+
 					axolotlclient$drawLevelHead(text);
 				} else if (!HypixelAbstractionLayer.hasValidAPIKey()) {
 					HypixelAbstractionLayer.loadApiKey();
@@ -94,6 +100,7 @@ public abstract class EntityRendererMixin<T extends Entity> {
 		}
 	}
 
+	@Unique
 	private void axolotlclient$drawLevelHead(String text) {
 		TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
 

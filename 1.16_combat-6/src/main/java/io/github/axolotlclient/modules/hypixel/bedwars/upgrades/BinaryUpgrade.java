@@ -26,6 +26,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import io.github.axolotlclient.modules.hypixel.bedwars.BedwarsMode;
+import net.minecraft.client.util.math.MatrixStack;
 
 /**
  * @author DarkKronicle
@@ -38,14 +39,13 @@ public class BinaryUpgrade extends TeamUpgrade {
 	private final int foursPrice;
 	private final int doublesPrice;
 
-	private final TextureInfo inactiveTexture, activeTexture;
+	private final TeamUpgradeRenderer drawer;
 
-	public BinaryUpgrade(String name, Pattern regex, int foursPrice, int doublesPrice, TextureInfo inactiveTexture, TextureInfo activeTexture) {
+	public BinaryUpgrade(String name, Pattern regex, int foursPrice, int doublesPrice, TeamUpgradeRenderer drawer) {
 		super(name, regex);
 		this.foursPrice = foursPrice;
 		this.doublesPrice = doublesPrice;
-		this.inactiveTexture = inactiveTexture;
-		this.activeTexture = activeTexture;
+		this.drawer = drawer;
 	}
 
 	@Override
@@ -54,8 +54,8 @@ public class BinaryUpgrade extends TeamUpgrade {
 	}
 
 	@Override
-	public TextureInfo[] getTexture() {
-		return new TextureInfo[]{(purchased ? activeTexture : inactiveTexture)};
+	public void draw(MatrixStack stack, int x, int y, int width, int height) {
+		drawer.render(stack, x, y, width, height, purchased ? 1 : 0);
 	}
 
 	@Override

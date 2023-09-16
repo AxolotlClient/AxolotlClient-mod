@@ -26,55 +26,48 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import io.github.axolotlclient.modules.hypixel.bedwars.BedwarsMode;
-import lombok.Getter;
 
 /**
  * @author DarkKronicle
  */
 
-public class TieredUpgrade extends TeamUpgrade {
+public class BinaryUpgrade extends TeamUpgrade {
 
-	private final int[] doublesPrice;
-	private final int[] foursPrice;
-	@Getter
-	private int level = 0;
+	private boolean purchased = false;
 
-	private final TextureInfo[] textures;
+	private final int foursPrice;
+	private final int doublesPrice;
 
-	public TieredUpgrade(String name, Pattern regex, int[] foursPrice, int[] doublesPrice, TextureInfo[] textures) {
+	private final TeamUpgradeRenderer drawer;
+
+	public BinaryUpgrade(String name, Pattern regex, int foursPrice, int doublesPrice, TeamUpgradeRenderer drawer) {
 		super(name, regex);
 		this.foursPrice = foursPrice;
 		this.doublesPrice = doublesPrice;
-		this.textures = textures;
-	}
-
-	@Override
-	public TextureInfo[] getTexture() {
-		return new TextureInfo[]{textures[level]};
-	}
-
-	@Override
-	public boolean isPurchased() {
-		return level > 0;
+		this.drawer = drawer;
 	}
 
 	@Override
 	protected void onMatch(TeamUpgrade upgrade, Matcher matcher) {
-		level += 1;
+		purchased = true;
 	}
 
-	public boolean isMaxedOut(BedwarsMode mode) {
-		if (mode.getTeams().length == 8) {
-			return level >= doublesPrice.length;
-		}
-		return level >= foursPrice.length;
+	@Override
+	public void draw(int x, int y, int width, int height) {
+		drawer.render(x, y, width, height, purchased ? 1 : 0);
+	}
+
+	@Override
+	public boolean isPurchased() {
+		return purchased;
 	}
 
 	@Override
 	public int getPrice(BedwarsMode mode) {
 		if (mode.getTeams().length == 8) {
-			return doublesPrice[level];
+			return doublesPrice;
 		}
-		return foursPrice[level];
+		return foursPrice;
 	}
+
 }

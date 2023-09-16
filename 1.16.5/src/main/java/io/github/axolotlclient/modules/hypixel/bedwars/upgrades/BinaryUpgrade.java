@@ -25,45 +25,50 @@ package io.github.axolotlclient.modules.hypixel.bedwars.upgrades;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import io.github.axolotlclient.modules.hypixel.bedwars.BedwarsMessages;
 import io.github.axolotlclient.modules.hypixel.bedwars.BedwarsMode;
-import lombok.Getter;
+import net.minecraft.client.util.math.MatrixStack;
 
 /**
  * @author DarkKronicle
  */
 
+public class BinaryUpgrade extends TeamUpgrade {
 
-public abstract class TeamUpgrade {
-	@Getter
-	protected final String name;
-	protected final Pattern[] regex;
+	private boolean purchased = false;
 
-	public TeamUpgrade(String name, Pattern pattern) {
-		this(name, new Pattern[]{pattern});
+	private final int foursPrice;
+	private final int doublesPrice;
+
+	private final TeamUpgradeRenderer drawer;
+
+	public BinaryUpgrade(String name, Pattern regex, int foursPrice, int doublesPrice, TeamUpgradeRenderer drawer) {
+		super(name, regex);
+		this.foursPrice = foursPrice;
+		this.doublesPrice = doublesPrice;
+		this.drawer = drawer;
 	}
 
-	public TeamUpgrade(String name, Pattern[] pattern) {
-		this.name = name;
-		this.regex = pattern;
+	@Override
+	protected void onMatch(TeamUpgrade upgrade, Matcher matcher) {
+		purchased = true;
 	}
 
-	public boolean match(String unformatedMessage) {
-		return BedwarsMessages.matched(regex, unformatedMessage, matcher -> onMatch(this, matcher));
+	@Override
+	public void draw(MatrixStack stack, int x, int y, int width, int height) {
+		drawer.render(stack, x, y, width, height, purchased ? 1 : 0);
 	}
 
-	public abstract TextureInfo[] getTexture();
-
-	public boolean isMultiUpgrade() {
-		// Basically only trap
-		return false;
+	@Override
+	public boolean isPurchased() {
+		return purchased;
 	}
 
-	protected abstract void onMatch(TeamUpgrade upgrade, Matcher matcher);
+	@Override
+	public int getPrice(BedwarsMode mode) {
+		if (mode.getTeams().length == 8) {
+			return doublesPrice;
+		}
+		return foursPrice;
+	}
 
-	public abstract int getPrice(BedwarsMode mode);
-
-
-	public abstract boolean isPurchased();
 }
-
