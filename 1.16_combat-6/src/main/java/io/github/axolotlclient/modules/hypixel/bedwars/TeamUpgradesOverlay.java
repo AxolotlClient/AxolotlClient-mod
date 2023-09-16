@@ -31,10 +31,8 @@ import io.github.axolotlclient.modules.hud.gui.entry.BoxHudEntry;
 import io.github.axolotlclient.modules.hud.util.DrawPosition;
 import io.github.axolotlclient.modules.hypixel.bedwars.upgrades.BedwarsTeamUpgrades;
 import io.github.axolotlclient.modules.hypixel.bedwars.upgrades.TeamUpgrade;
-import io.github.axolotlclient.modules.hypixel.bedwars.upgrades.TextureInfo;
 import io.github.axolotlclient.modules.hypixel.bedwars.upgrades.TrapUpgrade;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
@@ -51,7 +49,7 @@ public class TeamUpgradesOverlay extends BoxHudEntry {
 	private BedwarsTeamUpgrades upgrades = null;
 	private final BedwarsMod mod;
 	private final MinecraftClient mc;
-	private final static TextureInfo[] trapEdit = {TrapUpgrade.TrapType.MINER_FATIGUE.getTexInfo(), TrapUpgrade.TrapType.ITS_A_TRAP.getTexInfo()};
+	private final static TrapUpgrade.TrapType[] trapEdit = {TrapUpgrade.TrapType.MINER_FATIGUE, TrapUpgrade.TrapType.ITS_A_TRAP};
 
 	public TeamUpgradesOverlay(BedwarsMod mod) {
 		super(60, 40, true);
@@ -81,6 +79,8 @@ public class TeamUpgradesOverlay extends BoxHudEntry {
 
 		int x = position.x() + 1;
 		int y = position.y() + 2;
+		int width = getWidth();
+		int height = getHeight();
 		RenderSystem.enableAlphaTest();
 		RenderSystem.enableBlend();
 		RenderSystem.color4f(1, 1, 1, 1);
@@ -93,26 +93,31 @@ public class TeamUpgradesOverlay extends BoxHudEntry {
 				if (u instanceof TrapUpgrade) {
 					continue;
 				}
-				TextureInfo texture;
-				texture = u.getTexture()[0];
-				RenderSystem.color4f(texture.getColor().getAlpha(), texture.getColor().getRed(), texture.getColor().getBlue(), texture.getColor().getGreen());
-				mc.getTextureManager().bindTexture(new Identifier("minecraft", texture.getTexture()));
-				DrawableHelper.drawTexture(stack, x, y, 16, 16, texture.getU(), texture.getV(), texture.getRegionWidth(), texture.getRegionHeight(), texture.getWidth(), texture.getHeight());
 				RenderSystem.color4f(1, 1, 1, 1);
+				u.draw(stack, x, y, 16, 16);
 				x += 17;
 				normalUpgrades = true;
 			}
+			setWidth(Math.max((x - position.x()) + 1, 18));
 		}
 		x = position.x() + 1;
 		if (normalUpgrades) {
 			y += 17;
 		}
-		for (TextureInfo texture : (editMode ? trapEdit : upgrades.trap.getTexture())) {
-			RenderSystem.color4f(texture.getColor().getAlpha(), texture.getColor().getRed(), texture.getColor().getBlue(), texture.getColor().getGreen());
-			mc.getTextureManager().bindTexture(new Identifier("minecraft", texture.getTexture()));
-			DrawableHelper.drawTexture(stack, x, y, 16, 16, texture.getU(), texture.getV(), texture.getRegionWidth(), texture.getRegionHeight(), texture.getWidth(), texture.getHeight());
-			RenderSystem.color4f(1, 1, 1, 1);
-			x += 17;
+		if (editMode) {
+			for(TrapUpgrade.TrapType type : trapEdit){
+				RenderSystem.color4f(1, 1, 1, 1);
+				type.draw(stack, x, y, 16, 16);
+				x+=17;
+			}
+			setWidth(Math.max((x - position.x()) + 1, 18));
+		} else {
+			upgrades.trap.draw(stack, x, y, 16, 16);
+			setWidth(Math.max(((x + (upgrades.trap.getTrapCount()*16)) - position.x()) + 1, getWidth()));
+		}
+		setHeight((y - position.y())+19);
+		if (getHeight() != height || getWidth() != width) {
+			onBoundsUpdate();
 		}
 	}
 

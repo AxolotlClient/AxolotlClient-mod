@@ -140,7 +140,7 @@ public class BedwarsMod implements AbstractHypixelMod {
 					event.setNewMessage(new LiteralText(time).append(event.getFormattedMessage()));
 				}
 			}
-		} else if (targetTick < 0 && BedwarsMessages.matched(GAME_START, rawMessage).isPresent()) {
+		} else if (enabled.get() && targetTick < 0 && BedwarsMessages.matched(GAME_START, rawMessage).isPresent()) {
 			// Give time for Hypixel to sync
 			targetTick = MinecraftClient.getInstance().inGameHud.getTicks() + 10;
 		}
