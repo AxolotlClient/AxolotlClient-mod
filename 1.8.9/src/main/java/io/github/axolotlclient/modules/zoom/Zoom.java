@@ -51,6 +51,8 @@ public class Zoom extends AbstractModule {
 	private static float originalSensitivity;
 	private static boolean originalSmoothCamera;
 	private static KeyBinding keyBinding;
+	private static KeyBinding increase;
+	private static KeyBinding decrease;
 	private static double targetFactor = 1;
 	private static double divisor;
 	private static float lastAnimatedFactor = 1;
@@ -78,6 +80,12 @@ public class Zoom extends AbstractModule {
 			start();
 		} else if (shouldStop()) {
 			stop();
+		}
+
+		if(increase.isPressed()){
+			scroll(zoomSpeed.get()/2);
+		} else if (decrease.isPressed()){
+			scroll(-zoomSpeed.get()/2);
 		}
 	}
 
@@ -155,6 +163,12 @@ public class Zoom extends AbstractModule {
 		keyBinding = new KeyBinding("key.zoom", Keyboard.KEY_C, "category.axolotlclient");
 		KeyBindingHelper.registerKeyBinding(keyBinding);
 		active = false;
+
+		increase = new KeyBinding("key.zoom.increase", Keyboard.KEY_NONE, "category.axolotlclient");
+		decrease = new KeyBinding("key.zoom.decrease", Keyboard.KEY_NONE, "category.axolotlclient");
+
+		KeyBindingHelper.registerKeyBinding(increase);
+		KeyBindingHelper.registerKeyBinding(decrease);
 	}
 
 	@Override
