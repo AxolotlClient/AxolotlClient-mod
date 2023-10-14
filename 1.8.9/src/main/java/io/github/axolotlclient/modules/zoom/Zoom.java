@@ -82,9 +82,9 @@ public class Zoom extends AbstractModule {
 			stop();
 		}
 
-		if(increase.isPressed()){
+		if(increase.wasPressed()){
 			scroll(zoomSpeed.get()/2);
-		} else if (decrease.isPressed()){
+		} else if (decrease.wasPressed()){
 			scroll(-zoomSpeed.get()/2);
 		}
 	}
@@ -95,6 +95,7 @@ public class Zoom extends AbstractModule {
 
 	private static void start() {
 		active = true;
+		Keyboard.enableRepeatEvents(true);
 		setDivisor(zoomDivisor.get());
 		setOptions();
 	}
@@ -105,6 +106,7 @@ public class Zoom extends AbstractModule {
 
 	private static void stop() {
 		active = false;
+		Keyboard.enableRepeatEvents(false);
 		targetFactor = 1;
 		restoreOptions();
 	}

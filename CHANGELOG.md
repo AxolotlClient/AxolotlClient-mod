@@ -139,6 +139,9 @@
 
 ### 3.0.5
 
-- the TeamUpgradesHud now uses texture atlases provided by the game
-to improve performance
+- the TeamUpgradesHud now uses texture atlases provided by the game to improve performance
 - fix issues with the Bedwars Module
+
+### 3.0.6
+
+- add more Zoom keybinds
