@@ -81,12 +81,6 @@ public class Zoom extends AbstractModule {
 		} else if (shouldStop()) {
 			stop();
 		}
-
-		if(increase.wasPressed()){
-			scroll(zoomSpeed.get()/2);
-		} else if (decrease.wasPressed()){
-			scroll(-zoomSpeed.get()/2);
-		}
 	}
 
 	private static boolean shouldStart() {
@@ -95,7 +89,6 @@ public class Zoom extends AbstractModule {
 
 	private static void start() {
 		active = true;
-		Keyboard.enableRepeatEvents(true);
 		setDivisor(zoomDivisor.get());
 		setOptions();
 	}
@@ -106,7 +99,6 @@ public class Zoom extends AbstractModule {
 
 	private static void stop() {
 		active = false;
-		Keyboard.enableRepeatEvents(false);
 		targetFactor = 1;
 		restoreOptions();
 	}
@@ -177,5 +169,11 @@ public class Zoom extends AbstractModule {
 	public void tick() {
 		lastAnimatedFactor = animatedFactor;
 		animatedFactor += (targetFactor - animatedFactor) * (zoomSpeed.get() / 10F);
+
+		if (increase.isPressed()){
+			scroll(zoomSpeed.get()/2);
+		} else if (decrease.isPressed()){
+			scroll(-zoomSpeed.get()/2);
+		}
 	}
 }
