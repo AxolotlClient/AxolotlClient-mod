@@ -413,5 +413,7 @@
 	"zoomScrollStep": "Scroll Step",
 	"zoomScrolling": "Zoom Scrolling",
 	"zoomScrolling.tooltip": "Whether to allow scrolling to modify the zoom factor.",
-	"zoomSpeed": "Animation Speed"
+	"zoomSpeed": "Animation Speed",
+	"key.zoom.increase": "Increase Zoom Divisor",
+	"key.zoom.decrease": "Decrease Zoom Divisor"
 }

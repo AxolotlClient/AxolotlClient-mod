@@ -156,6 +156,10 @@ public class Zoom extends AbstractModule {
 		//KeyBindingHelper.registerKeyBinding(keyBinding);
 
 		active = false;
+
+		zoom.add(new KeyBindOption("key.zoom.increase", InputUtil.UNKNOWN_KEY.getKeyCode(), key -> scroll(zoomSpeed.get()/2)));
+
+		zoom.add(new KeyBindOption("key.zoom.decrease", InputUtil.UNKNOWN_KEY.getKeyCode(), key -> scroll(-zoomSpeed.get()/2)));
 	}
 
 	public void tick() {
