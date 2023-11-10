@@ -154,6 +154,10 @@ public class Zoom extends AbstractModule {
 		AxolotlClient.CONFIG.rendering.addSubCategory(zoom);
 
 		active = false;
+
+		zoom.add(new KeyBindOption("key.zoom.increase", InputUtil.UNKNOWN_KEY.getKeyCode(), key -> scroll(zoomSpeed.get()/2)));
+
+		zoom.add(new KeyBindOption("key.zoom.decrease", InputUtil.UNKNOWN_KEY.getKeyCode(), key -> scroll(-zoomSpeed.get()/2)));
 	}
 
 	public void tick() {

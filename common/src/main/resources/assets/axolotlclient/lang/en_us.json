@@ -414,6 +414,8 @@
 	"zoomScrolling": "Zoom Scrolling",
 	"zoomScrolling.tooltip": "Whether to allow scrolling to modify the zoom factor.",
 	"zoomSpeed": "Animation Speed",
+	"key.zoom.increase": "Increase Zoom Divisor",
+	"key.zoom.decrease": "Decrease Zoom Divisor",
 	"api.error.handshake": "Handshake failed!",
 	"api.success.handshake": "Handshake successful!",
 	"api.success.handshake.desc": "The API Handshake was successful.",
