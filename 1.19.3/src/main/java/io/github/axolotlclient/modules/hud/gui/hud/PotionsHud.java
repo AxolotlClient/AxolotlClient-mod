@@ -62,6 +62,7 @@ public class PotionsHud extends TextHudEntry implements DynamicallyPositionable 
 	private final EnumOption order = DefaultOptions.getCardinalOrder(CardinalOrder.TOP_DOWN);
 
 	private final BooleanOption iconsOnly = new BooleanOption("iconsonly", ID.getPath(), false);
+	private final BooleanOption showEffectName = new BooleanOption("showEffectNames", true);
 
 	public PotionsHud() {
 		super(50, 200, false);
@@ -101,8 +102,8 @@ public class PotionsHud extends TextHudEntry implements DynamicallyPositionable 
 			StatusEffectInstance effect = effects.get(direction.getDirection() == -1 ? i : effects.size() - i - 1);
 			if (direction.isXAxis()) {
 				renderPotion(matrices, effect, x + lastPos + 1, y + 1);
-				lastPos += (iconsOnly.get() ? 20 : 20 + client.textRenderer.getWidth(Text.translatable(effect.getTranslationKey()).append(" ")
-					.append(Util.toRoman(effect.getAmplifier()))));
+				lastPos += (iconsOnly.get() ? 20 : (showEffectName.get() ? 20 + client.textRenderer.getWidth(Text.translatable(effect.getTranslationKey()).append(" ")
+					.append(Util.toRoman(effect.getAmplifier()))) : 50));
 			} else {
 				renderPotion(matrices, effect, x + 1, y + 1 + lastPos);
 				lastPos += 20;
@@ -115,12 +116,18 @@ public class PotionsHud extends TextHudEntry implements DynamicallyPositionable 
 			if (iconsOnly.get()) {
 				return 20 * effects.size() + 2;
 			}
+			if (!showEffectName.get()) {
+				return 50 * effects.size() + 2;
+			}
 			return effects.stream()
 				.map(effect -> Text.translatable(effect.getTranslationKey()).append(" ").append(Util.toRoman(effect.getAmplifier())))
 				.mapToInt(client.textRenderer::getWidth).map(i -> i+20).sum() + 2;
 		} else {
 			if (iconsOnly.get()) {
 				return 20;
+			}
+			if (!showEffectName.get()){
+				return 50;
 			}
 			return effects.stream()
 				.map(effect -> Text.translatable(effect.getTranslationKey()).append(" ").append(Util.toRoman(effect.getAmplifier())))
@@ -144,11 +151,16 @@ public class PotionsHud extends TextHudEntry implements DynamicallyPositionable 
 		RenderSystem.setShaderColor(1, 1, 1, 1);
 		DrawableHelper.drawSprite(matrices, x, y, 0, 18, 18, sprite);
 		if (!iconsOnly.get()) {
-			Text string = Text.translatable(effect.getTranslationKey()).append(" ").append(Util.toRoman(effect.getAmplifier()));
+			if (showEffectName.get()) {
+				Text string = Text.translatable(effect.getTranslationKey()).append(" ").append(Util.toRoman(effect.getAmplifier()));
 
-			drawText(matrices, string, (float)(x+19), (float)(y + 6), 16777215, shadow.get());
-			String duration = StatusEffectUtil.durationToString(effect, 1);
-			drawString(matrices, duration, (float)(x+19), (float)(y + 6 + 10), textColor.get().getAsInt(), shadow.get());
+				drawText(matrices, string, (float) (x + 19), (float) (y + 6), 16777215, shadow.get());
+				String duration = StatusEffectUtil.durationToString(effect, 1);
+				drawString(matrices, duration, (float) (x + 19), (float) (y + 6 + 10), textColor.get().getAsInt(), shadow.get());
+			} else {
+				drawString(matrices, StatusEffectUtil.durationToString(effect, 1), x + 19, y + 5,
+					textColor.get().getAsInt(), shadow.get());
+			}
 		}
 	}
 

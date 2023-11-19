@@ -39,7 +39,6 @@ import io.github.axolotlclient.util.Util;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 /**
@@ -56,6 +55,7 @@ public class PotionsHud extends TextHudEntry implements DynamicallyPositionable 
 	private final EnumOption anchor = DefaultOptions.getAnchorPoint();
 	private final EnumOption order = DefaultOptions.getCardinalOrder(CardinalOrder.TOP_DOWN);
 	private final BooleanOption iconsOnly = new BooleanOption("iconsonly", false);
+	private final BooleanOption showEffectName = new BooleanOption("showEffectNames", true);
 	private final List<StatusEffectInstance> placeholder = Util.make(() -> {
 		List<StatusEffectInstance> list = new ArrayList<>();
 		StatusEffectInstance effect = new StatusEffectInstance(StatusEffect.SPEED.id, 9999);
@@ -106,8 +106,8 @@ public class PotionsHud extends TextHudEntry implements DynamicallyPositionable 
 			StatusEffectInstance effect = effects.get(direction.getDirection() == -1 ? i : effects.size() - i - 1);
 			if (direction.isXAxis()) {
 				renderPotion(effect, x + lastPos + 1, y + 1);
-				lastPos += (iconsOnly.get() ? 20 : 20 + client.textRenderer.getStringWidth(I18n.translate(effect.getTranslationKey()) + " " +
-					Util.toRoman(effect.getAmplifier())));
+				lastPos += (iconsOnly.get() ? 20 : (showEffectName.get() ? 20 + client.textRenderer.getStringWidth(I18n.translate(effect.getTranslationKey()) + " " +
+					Util.toRoman(effect.getAmplifier())) : 50));
 			} else {
 				renderPotion(effect, x + 1, y + 1 + lastPos);
 				lastPos += 20;
@@ -120,12 +120,18 @@ public class PotionsHud extends TextHudEntry implements DynamicallyPositionable 
 			if (iconsOnly.get()) {
 				return 20 * effects.size() + 2;
 			}
+			if (!showEffectName.get()) {
+				return 50 * effects.size() + 2;
+			}
 			return effects.stream()
 				.map(effect -> I18n.translate(effect.getTranslationKey()) + " " + Util.toRoman(effect.getAmplifier()))
-				.mapToInt(client.textRenderer::getStringWidth).map(i -> i+20).sum() + 2;
+				.mapToInt(client.textRenderer::getStringWidth).map(i -> i + 20).sum() + 2;
 		} else {
 			if (iconsOnly.get()) {
 				return 20;
+			}
+			if (!showEffectName.get()){
+				return 50;
 			}
 			return effects.stream()
 				.map(effect -> I18n.translate(effect.getTranslationKey()) + " " + Util.toRoman(effect.getAmplifier()))
@@ -148,11 +154,15 @@ public class PotionsHud extends TextHudEntry implements DynamicallyPositionable 
 		int m = type.getIconLevel();
 		this.drawTexture(x, y, m % 8 * 18, 198 + m / 8 * 18, 18, 18);
 		if (!iconsOnly.get()) {
-			String string = I18n.translate(effect.getTranslationKey()) + " " + Util.toRoman(effect.getAmplifier());
+			if (showEffectName.get()) {
+				String string = I18n.translate(effect.getTranslationKey()) + " " + Util.toRoman(effect.getAmplifier());
 
-			drawString(string, (float)(x+19), (float)(y + 6), 16777215, shadow.get());
-			String duration = StatusEffect.getFormattedDuration(effect);
-			drawString(duration, (float)(x+19), (float)(y + 6 + 10), textColor.get().getAsInt(), shadow.get());
+				drawString(string, (float) (x + 19), (float) (y + 6), 16777215, shadow.get());
+				String duration = StatusEffect.getFormattedDuration(effect);
+				drawString(duration, (float) (x + 19), (float) (y + 6 + 10), textColor.get().getAsInt(), shadow.get());
+			} else {
+				drawString(StatusEffect.getFormattedDuration(effect), x + 19, y + 5, textColor.get().getAsInt(), shadow.get());
+			}
 		}
 	}
 
