@@ -44,8 +44,8 @@ import net.minecraft.util.Identifier;
 
 public class HypixelMessages implements SimpleSynchronousResourceReloadListener {
 
-	@Getter()
-	private static final HypixelMessages Instance = new HypixelMessages();
+	@Getter
+	private static final HypixelMessages instance = new HypixelMessages();
 
 	@Getter
 	private final Map<String, Map<String, Pattern>> languageMessageMap = new HashMap<>();
@@ -69,12 +69,12 @@ public class HypixelMessages implements SimpleSynchronousResourceReloadListener 
 				String lang = resource.getId().getPath().substring(i, i+5);
 			JsonObject lines = GsonHelper.GSON.fromJson(new InputStreamReader(resource.getInputStream()), JsonObject.class);
 			AxolotlClient.LOGGER.debug("Found message file: "+resource.getId());
-			languageMessageMap.computeIfAbsent(lang, l -> new HashMap<>());
+			languageMessageMap.putIfAbsent(lang, new HashMap<>());
 			Map<String, Pattern> map = languageMessageMap.get(lang);
 			lines.entrySet().forEach(entry -> {
 				Pattern pattern = Pattern.compile(entry.getValue().getAsString());
-				map.computeIfAbsent(entry.getKey(), s -> pattern);
-				messageLanguageMap.computeIfAbsent(entry.getKey(), s -> new HashMap<>());
+				map.putIfAbsent(entry.getKey(), pattern);
+				messageLanguageMap.putIfAbsent(entry.getKey(), new HashMap<>());
 				messageLanguageMap.get(entry.getKey()).put(lang, pattern);
 			});
 		});

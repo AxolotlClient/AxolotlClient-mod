@@ -45,8 +45,8 @@ import org.quiltmc.qsl.resource.loader.api.reloader.SimpleSynchronousResourceRel
 
 public class HypixelMessages implements SimpleSynchronousResourceReloader {
 
-	@Getter()
-	private static final HypixelMessages Instance = new HypixelMessages();
+	@Getter
+	private static final HypixelMessages instance = new HypixelMessages();
 
 	@Getter
 	private final Map<String, Map<String, Pattern>> languageMessageMap = new HashMap<>();
@@ -71,12 +71,12 @@ public class HypixelMessages implements SimpleSynchronousResourceReloader {
 				lines = new JsonObject();
 			}
 			AxolotlClient.LOGGER.debug("Found message file: "+id);
-			languageMessageMap.computeIfAbsent(lang, l -> new HashMap<>());
+			languageMessageMap.putIfAbsent(lang, new HashMap<>());
 			Map<String, Pattern> map = languageMessageMap.get(lang);
 			lines.entrySet().forEach(entry -> {
 				Pattern pattern = Pattern.compile(entry.getValue().getAsString());
-				map.computeIfAbsent(entry.getKey(), s -> pattern);
-				messageLanguageMap.computeIfAbsent(entry.getKey(), s -> new HashMap<>());
+				map.putIfAbsent(entry.getKey(), pattern);
+				messageLanguageMap.putIfAbsent(entry.getKey(), new HashMap<>());
 				messageLanguageMap.get(entry.getKey()).put(lang, pattern);
 			});
 		});
