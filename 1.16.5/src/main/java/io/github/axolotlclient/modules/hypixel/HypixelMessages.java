@@ -51,7 +51,7 @@ public class HypixelMessages implements SimpleSynchronousResourceReloadListener 
 	private final Map<String, Map<String, Pattern>> languageMessageMap = new HashMap<>();
 	private final Map<String, Map<String, Pattern>> messageLanguageMap = new HashMap<>();
 
-	public void load(){
+	public void load() {
 		languageMessageMap.clear();
 		messageLanguageMap.clear();
 
@@ -65,36 +65,36 @@ public class HypixelMessages implements SimpleSynchronousResourceReloadListener 
 					return null;
 				}
 			}).filter(Objects::nonNull).forEach(resource -> {
-				int i = resource.getId().getPath().lastIndexOf("/")+1;
-				String lang = resource.getId().getPath().substring(i, i+5);
-			JsonObject lines = GsonHelper.GSON.fromJson(new InputStreamReader(resource.getInputStream()), JsonObject.class);
-			AxolotlClient.LOGGER.debug("Found message file: "+resource.getId());
-			languageMessageMap.putIfAbsent(lang, new HashMap<>());
-			Map<String, Pattern> map = languageMessageMap.get(lang);
-			lines.entrySet().forEach(entry -> {
-				Pattern pattern = Pattern.compile(entry.getValue().getAsString());
-				map.putIfAbsent(entry.getKey(), pattern);
-				messageLanguageMap.putIfAbsent(entry.getKey(), new HashMap<>());
-				messageLanguageMap.get(entry.getKey()).put(lang, pattern);
+				int i = resource.getId().getPath().lastIndexOf("/") + 1;
+				String lang = resource.getId().getPath().substring(i, i + 5);
+				JsonObject lines = GsonHelper.GSON.fromJson(new InputStreamReader(resource.getInputStream()), JsonObject.class);
+				AxolotlClient.LOGGER.debug("Found message file: " + resource.getId());
+				languageMessageMap.putIfAbsent(lang, new HashMap<>());
+				Map<String, Pattern> map = languageMessageMap.get(lang);
+				lines.entrySet().forEach(entry -> {
+					Pattern pattern = Pattern.compile(entry.getValue().getAsString());
+					map.putIfAbsent(entry.getKey(), pattern);
+					messageLanguageMap.putIfAbsent(entry.getKey(), new HashMap<>());
+					messageLanguageMap.get(entry.getKey()).put(lang, pattern);
+				});
 			});
-		});
 	}
 
-	public void process(BooleanOption option, String messageKey, ReceiveChatMessageEvent event){
+	public void process(BooleanOption option, String messageKey, ReceiveChatMessageEvent event) {
 		if (option.get() && matchesAnyLanguage(messageKey, event.getOriginalMessage())) {
 			event.setCancelled(true);
 		}
 	}
 
-	public boolean matchesAnyLanguage(String key, String message){
+	public boolean matchesAnyLanguage(String key, String message) {
 		return messageLanguageMap.get(key).values().stream().map(pattern -> pattern.matcher(message)).anyMatch(Matcher::matches);
 	}
 
-	public boolean matchesAnyMessage(String lang, String message){
+	public boolean matchesAnyMessage(String lang, String message) {
 		return languageMessageMap.get(lang).values().stream().map(pattern -> pattern.matcher(message)).anyMatch(Matcher::matches);
 	}
 
-	public boolean matchesAny(String message){
+	public boolean matchesAny(String message) {
 		return languageMessageMap.values().stream().map(Map::values).anyMatch(patterns -> patterns.stream()
 			.map(pattern -> pattern.matcher(message)).anyMatch(Matcher::matches));
 	}
@@ -103,6 +103,7 @@ public class HypixelMessages implements SimpleSynchronousResourceReloadListener 
 	public Identifier getFabricId() {
 		return new Identifier("axolotlclient", "hypixel_messages");
 	}
+
 	@Override
 	public void reload(ResourceManager manager) {
 		load();

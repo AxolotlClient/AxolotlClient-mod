@@ -26,10 +26,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import com.google.gson.JsonObject;
 import io.github.axolotlclient.AxolotlClient;
@@ -52,7 +50,7 @@ public class HypixelMessages implements SimpleSynchronousResourceReloader {
 	private final Map<String, Map<String, Pattern>> languageMessageMap = new HashMap<>();
 	private final Map<String, Map<String, Pattern>> messageLanguageMap = new HashMap<>();
 
-	public void load(){
+	public void load() {
 		languageMessageMap.clear();
 		messageLanguageMap.clear();
 
@@ -60,43 +58,43 @@ public class HypixelMessages implements SimpleSynchronousResourceReloader {
 		ResourceManager manager = MinecraftClient.getInstance().getResourceManager();
 		manager.findResources("lang", id -> id.getPath().endsWith(".hypixel.json"))
 			.forEach((id, resource) -> {
-				int i = id.getPath().lastIndexOf("/")+1;
-			String lang = id.getPath().substring(i, i+5);
-			JsonObject lines = null;
-			try {
-				lines = GsonHelper.GSON.fromJson(new InputStreamReader(resource.open()), JsonObject.class);
-			} catch (IOException ignored) {
-			}
-			if (lines == null){
-				lines = new JsonObject();
-			}
-			AxolotlClient.LOGGER.debug("Found message file: "+id);
-			languageMessageMap.putIfAbsent(lang, new HashMap<>());
-			Map<String, Pattern> map = languageMessageMap.get(lang);
-			lines.entrySet().forEach(entry -> {
-				Pattern pattern = Pattern.compile(entry.getValue().getAsString());
-				map.putIfAbsent(entry.getKey(), pattern);
-				messageLanguageMap.putIfAbsent(entry.getKey(), new HashMap<>());
-				messageLanguageMap.get(entry.getKey()).put(lang, pattern);
+				int i = id.getPath().lastIndexOf("/") + 1;
+				String lang = id.getPath().substring(i, i + 5);
+				JsonObject lines = null;
+				try {
+					lines = GsonHelper.GSON.fromJson(new InputStreamReader(resource.open()), JsonObject.class);
+				} catch (IOException ignored) {
+				}
+				if (lines == null) {
+					lines = new JsonObject();
+				}
+				AxolotlClient.LOGGER.debug("Found message file: " + id);
+				languageMessageMap.putIfAbsent(lang, new HashMap<>());
+				Map<String, Pattern> map = languageMessageMap.get(lang);
+				lines.entrySet().forEach(entry -> {
+					Pattern pattern = Pattern.compile(entry.getValue().getAsString());
+					map.putIfAbsent(entry.getKey(), pattern);
+					messageLanguageMap.putIfAbsent(entry.getKey(), new HashMap<>());
+					messageLanguageMap.get(entry.getKey()).put(lang, pattern);
+				});
 			});
-		});
 	}
 
-	public void process(BooleanOption option, String messageKey, ReceiveChatMessageEvent event){
+	public void process(BooleanOption option, String messageKey, ReceiveChatMessageEvent event) {
 		if (option.get() && matchesAnyLanguage(messageKey, event.getOriginalMessage())) {
 			event.setCancelled(true);
 		}
 	}
 
-	public boolean matchesAnyLanguage(String key, String message){
+	public boolean matchesAnyLanguage(String key, String message) {
 		return messageLanguageMap.get(key).values().stream().map(pattern -> pattern.matcher(message)).anyMatch(Matcher::matches);
 	}
 
-	public boolean matchesAnyMessage(String lang, String message){
+	public boolean matchesAnyMessage(String lang, String message) {
 		return languageMessageMap.get(lang).values().stream().map(pattern -> pattern.matcher(message)).anyMatch(Matcher::matches);
 	}
 
-	public boolean matchesAny(String message){
+	public boolean matchesAny(String message) {
 		return languageMessageMap.values().stream().map(Map::values).anyMatch(patterns -> patterns.stream()
 			.map(pattern -> pattern.matcher(message)).anyMatch(Matcher::matches));
 	}
@@ -105,6 +103,7 @@ public class HypixelMessages implements SimpleSynchronousResourceReloader {
 	public @NotNull Identifier getQuiltId() {
 		return new Identifier("axolotlclient", "hypixel_messages");
 	}
+
 	@Override
 	public void reload(ResourceManager manager) {
 		load();

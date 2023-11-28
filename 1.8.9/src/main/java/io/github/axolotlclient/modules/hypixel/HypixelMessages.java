@@ -49,7 +49,7 @@ public class HypixelMessages implements IdentifiableResourceReloadListener {
 	private final Map<String, Map<String, Pattern>> languageMessageMap = new HashMap<>();
 	private final Map<String, Map<String, Pattern>> messageLanguageMap = new HashMap<>();
 
-	public void load(){
+	public void load() {
 		languageMessageMap.clear();
 		messageLanguageMap.clear();
 
@@ -57,10 +57,10 @@ public class HypixelMessages implements IdentifiableResourceReloadListener {
 		ResourceManager manager = MinecraftClient.getInstance().getResourceManager();
 		((SearchableResourceManager) manager).findResources("axolotlclient", "lang",
 			identifier -> identifier.getPath().endsWith(".hypixel.json")).values().forEach(resource -> {
-			int i = resource.getId().getPath().lastIndexOf("/")+1;
-			String lang = resource.getId().getPath().substring(i, i+5);
+			int i = resource.getId().getPath().lastIndexOf("/") + 1;
+			String lang = resource.getId().getPath().substring(i, i + 5);
 			JsonObject lines = GsonHelper.GSON.fromJson(new InputStreamReader(resource.getInputStream()), JsonObject.class);
-			AxolotlClient.LOGGER.debug("Found message file: "+resource.getId());
+			AxolotlClient.LOGGER.debug("Found message file: " + resource.getId());
 			languageMessageMap.put(lang, new HashMap<>());
 			Map<String, Pattern> map = languageMessageMap.get(lang);
 			lines.entrySet().forEach(entry -> {
@@ -72,21 +72,21 @@ public class HypixelMessages implements IdentifiableResourceReloadListener {
 		});
 	}
 
-	public void process(BooleanOption option, String messageKey, ReceiveChatMessageEvent event){
+	public void process(BooleanOption option, String messageKey, ReceiveChatMessageEvent event) {
 		if (option.get() && matchesAnyLanguage(messageKey, event.getOriginalMessage())) {
 			event.setCancelled(true);
 		}
 	}
 
-	public boolean matchesAnyLanguage(String key, String message){
+	public boolean matchesAnyLanguage(String key, String message) {
 		return messageLanguageMap.get(key).values().stream().map(pattern -> pattern.matcher(message)).anyMatch(Matcher::matches);
 	}
 
-	public boolean matchesAnyMessage(String lang, String message){
+	public boolean matchesAnyMessage(String lang, String message) {
 		return languageMessageMap.get(lang).values().stream().map(pattern -> pattern.matcher(message)).anyMatch(Matcher::matches);
 	}
 
-	public boolean matchesAny(String message){
+	public boolean matchesAny(String message) {
 		return languageMessageMap.values().stream().map(Map::values).anyMatch(patterns -> patterns.stream()
 			.map(pattern -> pattern.matcher(message)).anyMatch(Matcher::matches));
 	}
