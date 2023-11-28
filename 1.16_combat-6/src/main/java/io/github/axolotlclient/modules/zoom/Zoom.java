@@ -157,6 +157,10 @@ public class Zoom extends AbstractModule {
 		//KeyBindingHelper.registerKeyBinding(keyBinding);
 
 		active = false;
+
+		zoom.add(new KeyBindOption("key.zoom.increase", GLFW.GLFW_KEY_UNKNOWN, key -> scroll(zoomSpeed.get()/2)));
+
+		zoom.add(new KeyBindOption("key.zoom.decrease", GLFW.GLFW_KEY_UNKNOWN, key -> scroll(-zoomSpeed.get()/2)));
 	}
 
 	public void tick() {
