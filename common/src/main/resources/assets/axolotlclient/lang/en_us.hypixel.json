@@ -1,4 +1,4 @@
 {
-	"lobby_join": "\"\\[[^\\]]*\\] (?<!\\[)\\b[A-Za-z0-9_§]{3,16}\\b(?!\\])§f §6joined the lobby!",
-	"mysterybox_find": "✦ \\[[^\\]]*\\] (?<!\\[)\\b[A-Za-z0-9_§]{3,16}\\b(?!\\]) found a(n)? ([A-Za-z]+( [A-Za-z]+)+)!"
+	"lobby_join": ".*§f §6joined the lobby!( §a<§c<§b<)?",
+	"mysterybox_find": "✦ .* found a(n)? .*Mystery Box(.*)?!"
 }

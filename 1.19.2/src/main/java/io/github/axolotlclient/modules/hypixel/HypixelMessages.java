@@ -1,3 +1,25 @@
+/*
+ * Copyright © 2021-2023 moehreag <moehreag@gmail.com> & Contributors
+ *
+ * This file is part of AxolotlClient.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ * For more information, see the LICENSE file.
+ */
+
 package io.github.axolotlclient.modules.hypixel;
 
 import java.io.IOException;
@@ -9,7 +31,9 @@ import java.util.regex.Pattern;
 
 import com.google.gson.JsonObject;
 import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.util.GsonHelper;
+import io.github.axolotlclient.util.events.impl.ReceiveChatMessageEvent;
 import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.resource.ResourceManager;
@@ -54,6 +78,12 @@ public class HypixelMessages implements SimpleSynchronousResourceReloader {
 				messageLanguageMap.get(entry.getKey()).put(lang, pattern);
 			});
 		});
+	}
+
+	public void process(BooleanOption option, String messageKey, ReceiveChatMessageEvent event){
+		if (option.get() && matchesAnyLanguage(messageKey, event.getOriginalMessage())) {
+			event.setCancelled(true);
+		}
 	}
 
 	public boolean matchesAnyLanguage(String key, String message){

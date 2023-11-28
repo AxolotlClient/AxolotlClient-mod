@@ -50,6 +50,7 @@ public class HypixelMods extends AbstractModule {
 	public EnumOption cacheMode = new EnumOption("cache_mode", HypixelApiCacheMode.values(),
 		HypixelApiCacheMode.ON_CLIENT_DISCONNECT.toString());
 	private final BooleanOption removeLobbyJoinMessages = new BooleanOption("removeLobbyJoinMessages", false);
+	private final BooleanOption removeMysteryBoxFindings = new BooleanOption("removeMysteryBoxFindings", false);
 
 
 	public static HypixelMods getInstance() {
@@ -61,6 +62,7 @@ public class HypixelMods extends AbstractModule {
 		category.add(hypixel_api_key);
 		category.add(cacheMode);
 		category.add(removeLobbyJoinMessages);
+		category.add(removeMysteryBoxFindings);
 
 		addSubModule(LevelHead.getInstance());
 		addSubModule(AutoGG.getInstance());
@@ -79,9 +81,8 @@ public class HypixelMods extends AbstractModule {
 
 
 		Events.RECEIVE_CHAT_MESSAGE_EVENT.register(event -> {
-			if(removeLobbyJoinMessages.get() && HypixelMessages.getInstance().matchesAnyLanguage("lobby_join", event.getOriginalMessage())){
-				event.setCancelled(true);
-			}
+			HypixelMessages.getInstance().process(removeLobbyJoinMessages, "lobby_join", event);
+			HypixelMessages.getInstance().process(removeMysteryBoxFindings, "mysterybox_find", event);
 		});
 	}
 
