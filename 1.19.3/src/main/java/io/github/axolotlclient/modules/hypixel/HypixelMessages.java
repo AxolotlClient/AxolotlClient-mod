@@ -68,14 +68,14 @@ public class HypixelMessages implements SimpleSynchronousResourceReloader {
 				if (lines == null) {
 					lines = new JsonObject();
 				}
-				languageMessageMap.putIfAbsent(lang, new HashMap<>());
+				languageMessageMap.computeIfAbsent(lang, s -> new HashMap<>());
 				AxolotlClient.LOGGER.debug("Found message file: " + id);
 				Map<String, Pattern> map = languageMessageMap.get(lang);
 				lines.entrySet().forEach(entry -> {
 					Pattern pattern = Pattern.compile(entry.getValue().getAsString());
 					map.putIfAbsent(entry.getKey(), pattern);
-					messageLanguageMap.putIfAbsent(entry.getKey(), new HashMap<>());
-					messageLanguageMap.get(entry.getKey()).put(lang, pattern);
+					messageLanguageMap.computeIfAbsent(entry.getKey(), s -> new HashMap<>())
+						.put(lang, pattern);
 				});
 			});
 	}

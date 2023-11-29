@@ -61,13 +61,13 @@ public class HypixelMessages implements IdentifiableResourceReloadListener {
 			String lang = resource.getId().getPath().substring(i, i + 5);
 			JsonObject lines = GsonHelper.GSON.fromJson(new InputStreamReader(resource.getInputStream()), JsonObject.class);
 			AxolotlClient.LOGGER.debug("Found message file: " + resource.getId());
-			languageMessageMap.put(lang, new HashMap<>());
+			languageMessageMap.computeIfAbsent(lang, s -> new HashMap<>());
 			Map<String, Pattern> map = languageMessageMap.get(lang);
 			lines.entrySet().forEach(entry -> {
 				Pattern pattern = Pattern.compile(entry.getValue().getAsString());
 				map.putIfAbsent(entry.getKey(), pattern);
-				messageLanguageMap.putIfAbsent(entry.getKey(), new HashMap<>());
-				messageLanguageMap.get(entry.getKey()).put(lang, pattern);
+				messageLanguageMap.computeIfAbsent(entry.getKey(), s -> new HashMap<>())
+					.put(lang, pattern);
 			});
 		});
 	}
