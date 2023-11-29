@@ -416,5 +416,7 @@
 	"zoomScrollStep": "Scroll Step",
 	"zoomScrolling": "Zoom Scrolling",
 	"zoomScrolling.tooltip": "Whether to allow scrolling to modify the zoom factor.",
-	"zoomSpeed": "Animation Speed"
+	"zoomSpeed": "Animation Speed",
+	"removeLobbyJoinMessages": "Remove Lobby Join Messages",
+	"removeMysteryBoxFindings": "Remove Mystery Box Findings Messages"
 }

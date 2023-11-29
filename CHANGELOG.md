@@ -1,4 +1,4 @@
-## Changelog (1.19.2):
+## Changelog:
 
 ### 1.0.0 - 2.0.0
 
@@ -145,3 +145,4 @@
 ### 3.0.6
 
 - add more Zoom keybinds
+- add option(s) to remove certain messages on hypixel (join, mystery box)
