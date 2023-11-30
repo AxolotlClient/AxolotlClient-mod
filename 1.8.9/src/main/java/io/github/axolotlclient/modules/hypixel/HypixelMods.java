@@ -48,8 +48,6 @@ public class HypixelMods extends AbstractModule {
 
 	private final OptionCategory category = new OptionCategory("hypixel-mods");
 	private final List<AbstractHypixelMod> subModules = new ArrayList<>();
-	public EnumOption cacheMode = new EnumOption("cache_mode", HypixelApiCacheMode.values(),
-		HypixelApiCacheMode.ON_CLIENT_DISCONNECT.toString());
 	private final BooleanOption removeLobbyJoinMessages = new BooleanOption("removeLobbyJoinMessages", false);
 	private final BooleanOption removeMysteryBoxFindings = new BooleanOption("removeMysteryBoxFindings", false);
 
