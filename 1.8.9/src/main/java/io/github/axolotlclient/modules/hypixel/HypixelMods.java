@@ -29,7 +29,6 @@ import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.EnumOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
-import io.github.axolotlclient.AxolotlClientConfig.options.StringOption;
 import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.modules.hypixel.autoboop.AutoBoop;
 import io.github.axolotlclient.modules.hypixel.autogg.AutoGG;
@@ -44,11 +43,11 @@ import net.legacyfabric.fabric.api.resource.ResourceManagerHelper;
 public class HypixelMods extends AbstractModule {
 
 	public static final HypixelMods INSTANCE = new HypixelMods();
+	public final EnumOption cacheMode = new EnumOption("cache_mode", HypixelApiCacheMode.values(),
+		HypixelApiCacheMode.ON_CLIENT_DISCONNECT.toString());
+
 	private final OptionCategory category = new OptionCategory("hypixel-mods");
 	private final List<AbstractHypixelMod> subModules = new ArrayList<>();
-	public StringOption hypixel_api_key = new StringOption("hypixel_api_key", "");
-	public EnumOption cacheMode = new EnumOption("cache_mode", HypixelApiCacheMode.values(),
-		HypixelApiCacheMode.ON_CLIENT_DISCONNECT.toString());
 	private final BooleanOption removeLobbyJoinMessages = new BooleanOption("removeLobbyJoinMessages", false);
 	private final BooleanOption removeMysteryBoxFindings = new BooleanOption("removeMysteryBoxFindings", false);
 
@@ -59,7 +58,6 @@ public class HypixelMods extends AbstractModule {
 
 	@Override
 	public void init() {
-		category.add(hypixel_api_key);
 		category.add(cacheMode);
 		category.add(removeLobbyJoinMessages);
 		category.add(removeMysteryBoxFindings);
@@ -78,18 +76,10 @@ public class HypixelMods extends AbstractModule {
 
 		ResourceManagerHelper.getInstance().registerReloadListener(HypixelMessages.getInstance());
 
-
-
 		Events.RECEIVE_CHAT_MESSAGE_EVENT.register(event -> {
 			HypixelMessages.getInstance().process(removeLobbyJoinMessages, "lobby_join", event);
 			HypixelMessages.getInstance().process(removeMysteryBoxFindings, "mysterybox_find", event);
 		});
-	}
-
-	@Override
-	public void lateInit() {
-		HypixelAbstractionLayer.setApiKeySupplier(() -> hypixel_api_key.get());
-		HypixelAbstractionLayer.loadApiKey();
 	}
 
 	@Override

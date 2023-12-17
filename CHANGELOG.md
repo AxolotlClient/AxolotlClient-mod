@@ -147,3 +147,12 @@
 - add more Zoom keybinds
 - add option(s) to remove certain messages on hypixel (join, mystery box)
 - Removed freelook on MCC island (#118 )
+
+### 3.1.0
+
+- Add a new Backend (made by gart)
+- Features:
+	- Friends
+	- Direct/Group Chats
+	- Status update notifications
+- rewrite DiscordRPC

@@ -29,7 +29,6 @@ import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.EnumOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
-import io.github.axolotlclient.AxolotlClientConfig.options.StringOption;
 import io.github.axolotlclient.modules.AbstractModule;
 import io.github.axolotlclient.modules.hypixel.autoboop.AutoBoop;
 import io.github.axolotlclient.modules.hypixel.autogg.AutoGG;
@@ -49,7 +48,6 @@ public class HypixelMods extends AbstractModule {
 		HypixelCacheMode.ON_CLIENT_DISCONNECT.toString());
 	private final OptionCategory category = new OptionCategory("hypixel-mods");
 	private final List<AbstractHypixelMod> subModules = new ArrayList<>();
-	public StringOption hypixel_api_key = new StringOption("hypixel_api_key", "");
 	private final BooleanOption removeLobbyJoinMessages = new BooleanOption("removeLobbyJoinMessages", false);
 	private final BooleanOption removeMysteryBoxFindings = new BooleanOption("removeMysteryBoxFindings", false);
 
@@ -59,7 +57,6 @@ public class HypixelMods extends AbstractModule {
 
 	@Override
 	public void init() {
-		category.add(hypixel_api_key);
 		category.add(cacheMode);
 		category.add(removeLobbyJoinMessages);
 		category.add(removeMysteryBoxFindings);
@@ -84,12 +81,6 @@ public class HypixelMods extends AbstractModule {
 		});
 	}
 
-	@Override
-	public void lateInit() {
-		HypixelAbstractionLayer.setApiKeySupplier(() -> hypixel_api_key.get());
-		HypixelAbstractionLayer.loadApiKey();
-	}
-
 	public void tick() {
 		subModules.forEach(abstractHypixelMod -> {
 			if (abstractHypixelMod.tickable())
@@ -100,10 +91,6 @@ public class HypixelMods extends AbstractModule {
 	private void addSubModule(AbstractHypixelMod mod) {
 		this.subModules.add(mod);
 		this.category.addSubCategory(mod.getCategory());
-	}
-
-	public OptionCategory getCategory() {
-		return null;
 	}
 
 	public enum HypixelCacheMode {
