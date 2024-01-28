@@ -146,4 +146,5 @@
 
 - add more Zoom keybinds
 - add option(s) to remove certain messages on hypixel (join, mystery box)
-- Removed freelook on MCC island (#118 )
+- Removed freelook on MCC island (#118)
+- update to 1.20.2

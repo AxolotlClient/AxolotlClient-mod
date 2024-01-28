@@ -70,8 +70,6 @@ import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.loader.api.QuiltLoader;
 import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
 import org.quiltmc.qsl.lifecycle.api.client.event.ClientTickEvents;
-import org.quiltmc.qsl.resource.loader.api.ResourceLoader;
-import org.quiltmc.qsl.resource.loader.api.ResourcePackActivationType;
 
 public class AxolotlClient implements ClientModInitializer {
 
@@ -187,8 +185,6 @@ public class AxolotlClient implements ClientModInitializer {
 
 		modules.forEach(Module::lateInit);
 
-		ResourceLoader.registerBuiltinResourcePack(new Identifier("axolotlclient", "axolotlclient-ui"), container,
-			ResourcePackActivationType.NORMAL);
 		ClientTickEvents.END.register(client -> tickClient());
 
 		FeatureDisabler.init();

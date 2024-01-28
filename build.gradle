@@ -32,6 +32,10 @@ allprojects {
 			url 'https://maven.terraformersmc.com/releases/'
 		}
 
+		maven {
+			name = 'Quilt-Snapshots'
+			url = 'https://maven.quiltmc.org/repository/snapshot/'
+		}
 		mavenLocal()
 		maven { url 'https://jitpack.io' }
 		mavenCentral()

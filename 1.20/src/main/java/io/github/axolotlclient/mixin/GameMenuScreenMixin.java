@@ -30,7 +30,7 @@ import io.github.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
 import io.github.axolotlclient.modules.hypixel.HypixelMods;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.button.ButtonWidget;
 import net.minecraft.text.Text;
 import org.quiltmc.loader.api.QuiltLoader;
 import org.spongepowered.asm.mixin.Mixin;
@@ -42,7 +42,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(GameMenuScreen.class)
 public abstract class GameMenuScreenMixin {
 
-	@Redirect(method = "initWidgets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/GameMenuScreen;createLinkConfirmationButton(Lnet/minecraft/text/Text;Ljava/lang/String;)Lnet/minecraft/client/gui/widget/ButtonWidget;", ordinal = 1))
+	@Redirect(method = "initWidgets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/GameMenuScreen;createLinkConfirmationButton(Lnet/minecraft/text/Text;Ljava/lang/String;)Lnet/minecraft/client/gui/widget/button/ButtonWidget;", ordinal = 1))
 	private ButtonWidget axolotlclient$addClientOptionsButton(GameMenuScreen instance, Text text, String string) {
 		if (axolotlclient$hasModMenu())
 			return createLinkConfirmationButton(text, string);
@@ -60,7 +60,7 @@ public abstract class GameMenuScreenMixin {
 	@Shadow
 	protected abstract ButtonWidget createButton(Text par1, Supplier<Screen> par2);
 
-	@ModifyArg(method = "initWidgets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget;builder(Lnet/minecraft/text/Text;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;)Lnet/minecraft/client/gui/widget/ButtonWidget$Builder;", ordinal = 1), index = 1)
+	@ModifyArg(method = "initWidgets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/button/ButtonWidget;builder(Lnet/minecraft/text/Text;Lnet/minecraft/client/gui/widget/button/ButtonWidget$PressAction;)Lnet/minecraft/client/gui/widget/button/ButtonWidget$Builder;", ordinal = 1), index = 1)
 	private ButtonWidget.PressAction axolotlclient$clearFeatureRestrictions(ButtonWidget.PressAction onPress) {
 		return (buttonWidget) -> {
 			if (Objects.equals(HypixelMods.getInstance().cacheMode.get(),

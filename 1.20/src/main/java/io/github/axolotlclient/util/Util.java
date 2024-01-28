@@ -29,10 +29,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.glfw.Window;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.scoreboard.ScoreboardObjective;
-import net.minecraft.scoreboard.ScoreboardPlayerScore;
-import net.minecraft.scoreboard.Team;
+import net.minecraft.scoreboard.*;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.ChatUtil;
@@ -102,7 +99,7 @@ public class Util {
 		Scoreboard scoreboard = client.world.getScoreboard();
 		if (scoreboard == null)
 			return lines;
-		ScoreboardObjective sidebar = scoreboard.getObjectiveForSlot(1);
+		ScoreboardObjective sidebar = scoreboard.getObjectiveForSlot(ScoreboardDisplaySlot.SIDEBAR);
 		if (sidebar == null)
 			return lines;
 

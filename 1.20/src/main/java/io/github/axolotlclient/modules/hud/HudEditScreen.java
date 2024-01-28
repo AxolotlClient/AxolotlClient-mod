@@ -22,11 +22,11 @@
 
 package io.github.axolotlclient.modules.hud;
 
-import java.awt.*;
 import java.util.List;
 import java.util.Optional;
 
 import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.AxolotlClientConfig.Color;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.OptionCategory;
 import io.github.axolotlclient.AxolotlClientConfig.screen.OptionsScreenBuilder;
@@ -37,7 +37,7 @@ import io.github.axolotlclient.modules.hud.util.Rectangle;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.button.ButtonWidget;
 import net.minecraft.text.CommonTexts;
 import net.minecraft.text.Text;
 
@@ -87,13 +87,6 @@ public class HudEditScreen extends Screen {
 
 	@Override
 	public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
-		if (MinecraftClient.getInstance().world != null)
-			graphics.fillGradient(0, 0, width, height, new Color(0xB0100E0E, true).hashCode(),
-				new Color(0x46212020, true).hashCode());
-		else {
-			renderBackgroundTexture(graphics);
-		}
-
 		super.render(graphics, mouseX, mouseY, delta);
 
 		Optional<HudEntry> entry = HudManager.getInstance().getEntryXY(mouseX, mouseY);
@@ -105,8 +98,18 @@ public class HudEditScreen extends Screen {
 	}
 
 	@Override
+	public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+		if (MinecraftClient.getInstance().world != null)
+			graphics.fillGradient(0, 0, width, height, new Color(0xB0100E0E).getAsInt(),
+				new Color(0x46212020).getAsInt());
+		else {
+			renderBackgroundTexture(graphics);
+		}
+	}
+
+	@Override
 	public void init() {
-		this.addDrawableChild(new ButtonWidget.Builder(Text.translatable("hud.snapping").append(": ")
+		this.addDrawableSelectableElement(new ButtonWidget.Builder(Text.translatable("hud.snapping").append(": ")
 			.append(Text.translatable(snapping.get() ? "options.on" : "options.off")),
 			buttonWidget -> {
 				snapping.toggle();
@@ -115,16 +118,16 @@ public class HudEditScreen extends Screen {
 				AxolotlClient.configManager.save();
 			}).positionAndSize(width / 2 - 50, height / 2 + 12, 100, 20).build());
 
-		this.addDrawableChild(new ButtonWidget.Builder(Text.translatable("hud.clientOptions"),
+		this.addDrawableSelectableElement(new ButtonWidget.Builder(Text.translatable("hud.clientOptions"),
 			buttonWidget -> MinecraftClient.getInstance().setScreen(new OptionsScreenBuilder(this,
 				(OptionCategory) new OptionCategory("config", false).addSubCategories(AxolotlClient.CONFIG.getCategories()),
 				AxolotlClient.modid))).positionAndSize(width / 2 - 75, height / 2 - 10, 150, 20).build());
 
 		if (parent != null)
-			addDrawableChild(new ButtonWidget.Builder(CommonTexts.BACK, buttonWidget -> MinecraftClient.getInstance().setScreen(parent))
+			addDrawableSelectableElement(new ButtonWidget.Builder(CommonTexts.BACK, buttonWidget -> MinecraftClient.getInstance().setScreen(parent))
 				.positionAndSize(width / 2 - 75, height - 50 + 22, 150, 20).build());
 		else
-			addDrawableChild(new ButtonWidget.Builder(Text.translatable("close"),
+			addDrawableSelectableElement(new ButtonWidget.Builder(Text.translatable("close"),
 				buttonWidget -> MinecraftClient.getInstance().setScreen(null))
 				.positionAndSize(width / 2 - 75, height - 50 + 22, 150, 20).build());
 	}

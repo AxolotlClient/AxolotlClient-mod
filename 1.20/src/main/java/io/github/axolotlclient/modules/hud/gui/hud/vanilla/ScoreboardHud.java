@@ -66,7 +66,7 @@ public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionab
 		ScoreboardPlayerScore kode = placeScore.getPlayerScore("TheKodeToad", objective);
 		kode.setScore(2948);
 
-		placeScore.setObjectiveSlot(1, objective);
+		placeScore.setObjectiveSlot(ScoreboardDisplaySlot.SIDEBAR, objective);
 		return objective;
 	});
 
@@ -98,12 +98,12 @@ public class ScoreboardHud extends TextHudEntry implements DynamicallyPositionab
 		if (team != null) {
 			int t = team.getColor().getColorIndex();
 			if (t >= 0) {
-				scoreboardObjective = scoreboard.getObjectiveForSlot(3 + t);
+				scoreboardObjective = scoreboard.getObjectiveForSlot(ScoreboardDisplaySlot.fromFormatting(team.getColor()));
 			}
 		}
 
 		ScoreboardObjective scoreboardObjective2 = scoreboardObjective != null ? scoreboardObjective
-			: scoreboard.getObjectiveForSlot(1);
+			: scoreboard.getObjectiveForSlot(ScoreboardDisplaySlot.SIDEBAR);
 		if (scoreboardObjective2 != null) {
 			this.renderScoreboardSidebar(graphics, scoreboardObjective2);
 		}

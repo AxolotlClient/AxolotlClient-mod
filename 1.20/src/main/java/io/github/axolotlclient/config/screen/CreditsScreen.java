@@ -40,9 +40,9 @@ import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.screen.narration.NarrationPart;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.ElementListWidget;
-import net.minecraft.client.gui.widget.EntryListWidget;
+import net.minecraft.client.gui.widget.button.ButtonWidget;
+import net.minecraft.client.gui.widget.list.ElementListWidget;
+import net.minecraft.client.gui.widget.list.EntryListWidget;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.sound.SoundInstance;
@@ -75,16 +75,6 @@ public class CreditsScreen extends Screen {
 			MinecraftClient.getInstance().getSoundManager().play(bgm);
 		}
 
-		renderBackground(graphics);
-		if (AxolotlClient.someNiceBackground.get()) { // Credit to pridelib for the colors
-			graphics.fill(0, 0, width, height / 6, 0xFFff0018);
-			graphics.fill(0, height / 6, width, height * 2 / 6, 0xFFffa52c);
-			graphics.fill(0, height * 2 / 6, width, height / 2, 0xFFffff41);
-			graphics.fill(0, height * 2 / 3, width, height * 5 / 6, 0xFF0000f9);
-			graphics.fill(0, height / 2, width, height * 2 / 3, 0xFF008018);
-			graphics.fill(0, height * 5 / 6, width, height, 0xFF86007d);
-		}
-
 		super.render(graphics, mouseX, mouseY, tickDelta);
 
 		DrawUtil.drawCenteredString(graphics, this.textRenderer, I18n.translate("credits"), width / 2, 20, -1, true);
@@ -93,6 +83,19 @@ public class CreditsScreen extends Screen {
 			creditOverlay.render(graphics);
 		} else {
 			creditsList.render(graphics, mouseX, mouseY, tickDelta);
+		}
+	}
+
+	@Override
+	public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+		super.renderBackground(graphics, mouseX, mouseY, delta);
+		if (AxolotlClient.someNiceBackground.get()) { // Credit to pridelib for the colors
+			graphics.fill(0, 0, width, height / 6, 0xFFff0018);
+			graphics.fill(0, height / 6, width, height * 2 / 6, 0xFFffa52c);
+			graphics.fill(0, height * 2 / 6, width, height / 2, 0xFFffff41);
+			graphics.fill(0, height * 2 / 3, width, height * 5 / 6, 0xFF0000f9);
+			graphics.fill(0, height / 2, width, height * 2 / 3, 0xFF008018);
+			graphics.fill(0, height * 5 / 6, width, height, 0xFF86007d);
 		}
 	}
 
@@ -125,9 +128,9 @@ public class CreditsScreen extends Screen {
 		initCredits();
 
 		creditsList = new CreditsList(client, width, height, 50, height - 50, 25);
-		addSelectableChild(creditsList);
+		addSelectableElement(creditsList);
 
-		this.addDrawableChild(new ButtonWidget.Builder(CommonTexts.BACK, buttonWidget -> {
+		this.addDrawableSelectableElement(new ButtonWidget.Builder(CommonTexts.BACK, buttonWidget -> {
 			if (creditOverlay == null) {
 				MinecraftClient.getInstance().setScreen(parent);
 				stopBGM();
@@ -136,7 +139,7 @@ public class CreditsScreen extends Screen {
 			}
 		}).positionAndSize(width / 2 - 75, height - 50 + 22, 150, 20).build());
 
-		this.addDrawableChild(new ButtonWidget.Builder(Text.translatable("creditsBGM").append(": ")
+		this.addDrawableSelectableElement(new ButtonWidget.Builder(Text.translatable("creditsBGM").append(": ")
 			.append(Text.translatable(AxolotlClient.CONFIG.creditsBGM.get() ? "options.on" : "options.off")),
 			buttonWidget -> {
 				AxolotlClient.CONFIG.creditsBGM.toggle();
@@ -207,8 +210,8 @@ public class CreditsScreen extends Screen {
 	}
 
 	@Override
-	public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
-		return super.mouseScrolled(mouseX, mouseY, amount) || creditsList.mouseScrolled(mouseX, mouseY, amount);
+	public boolean mouseScrolled(double mouseX, double mouseY, double amountX, double amountY) {
+		return super.mouseScrolled(mouseX, mouseY, amountX, amountY) || creditsList.mouseScrolled(mouseX, mouseY, amountX, amountY);
 	}
 
 	private class CreditsList extends ElementListWidget<Credit> {
@@ -218,7 +221,6 @@ public class CreditsScreen extends Screen {
 			super(minecraftClient, width, height, top, bottom, entryHeight);
 
 			this.setRenderBackground(false);
-			this.setRenderHorizontalShadows(false);
 			this.setRenderHeader(false, 0);
 
 			for (Credit c : credits) {

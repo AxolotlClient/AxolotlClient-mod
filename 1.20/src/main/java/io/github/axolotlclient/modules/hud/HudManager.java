@@ -139,7 +139,7 @@ public class HudManager extends AbstractModule {
 		client.getProfiler().push("Hud Modules");
 		if (!(client.currentScreen instanceof HudEditScreen)) {
 			for (HudEntry hud : getEntries()) {
-				if (hud.isEnabled() && (!client.options.debugEnabled || hud.overridesF3())) {
+				if (hud.isEnabled() && (!client.method_53526().chartsVisible() || hud.overridesF3())) {
 					client.getProfiler().push(hud.getName());
 					hud.render(graphics, delta);
 					client.getProfiler().pop();

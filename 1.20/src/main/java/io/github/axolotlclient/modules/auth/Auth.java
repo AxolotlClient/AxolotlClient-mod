@@ -29,8 +29,8 @@ import java.util.Optional;
 
 import com.mojang.authlib.exceptions.AuthenticationException;
 import com.mojang.authlib.minecraft.UserApiService;
-import com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService;
 import com.mojang.blaze3d.texture.NativeImage;
+import com.mojang.util.UndashedUuid;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.options.GenericOption;
@@ -63,14 +63,14 @@ public class Auth extends Accounts implements Module {
 	public void init() {
 		load();
 		this.auth = new MSAuth(AxolotlClient.LOGGER, this);
-		if (isContained(client.getSession().getUuid())) {
-			current = getAccounts().stream().filter(account -> account.getUuid().equals(client.getSession().getUuid())).toList().get(0);
+		if (isContained(UndashedUuid.toString(client.getSession().getPlayerUuid()))) {
+			current = getAccounts().stream().filter(account -> account.getUuid().equals(UndashedUuid.toString(client.getSession().getPlayerUuid()))).toList().get(0);
 			if (current.isExpired()) {
 				current.refresh(auth, () -> {
 				});
 			}
 		} else {
-			current = new MSAccount(client.getSession().getUsername(), client.getSession().getUuid(), client.getSession().getAccessToken());
+			current = new MSAccount(client.getSession().getUsername(), UndashedUuid.toString(client.getSession().getPlayerUuid()), client.getSession().getAccessToken());
 		}
 
 		OptionCategory category = new OptionCategory("auth");
@@ -91,14 +91,14 @@ public class Auth extends Accounts implements Module {
 
 		Runnable runnable = () -> {
 			try {
-				((MinecraftClientAccessor) client).setSession(new Session(account.getName(), account.getUuid(), account.getAuthToken(),
+				((MinecraftClientAccessor) client).setSession(new Session(account.getName(), UndashedUuid.fromString(account.getUuid()), account.getAuthToken(),
 					Optional.empty(), Optional.empty(),
 					Session.AccountType.MSA));
 				UserApiService service;
 				if (account.isOffline()) {
 					service = UserApiService.OFFLINE;
 				} else {
-					service = ((YggdrasilMinecraftSessionService) MinecraftClient.getInstance().getSessionService()).getAuthenticationService().createUserApiService(client.getSession().getAccessToken());
+					service = ((MinecraftClientAccessor) MinecraftClient.getInstance()).getAuthService().createUserApiService(client.getSession().getAccessToken());
 				}
 				((MinecraftClientAccessor) client).setUserApiService(service);
 				((MinecraftClientAccessor) client).setSocialInteractionsManager(new SocialInteractionsManager(client, service));

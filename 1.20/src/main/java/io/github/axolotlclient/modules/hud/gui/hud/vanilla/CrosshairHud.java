@@ -153,7 +153,7 @@ public class CrosshairHud extends AbstractHudEntry implements DynamicallyPositio
 
 		// Need to not enable blend while the debug HUD is open because it does weird stuff. Why? no idea.
 		if (color == defaultColor.get() && !type.get().equals(Crosshair.DIRECTION.toString()) && applyBlend.get()
-			&& !client.options.debugEnabled) {
+			&& !client.method_53526().chartsVisible()) {
 			RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.ONE_MINUS_DST_COLOR,
 				GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SourceFactor.ONE,
 				GlStateManager.DestFactor.ZERO);

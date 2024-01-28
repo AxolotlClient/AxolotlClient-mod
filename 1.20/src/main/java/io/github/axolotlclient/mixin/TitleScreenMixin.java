@@ -35,8 +35,8 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.realms.gui.screen.RealmsNotificationsScreen;
+import net.minecraft.client.gui.screen.realms.RealmsNotificationsScreen;
+import net.minecraft.client.gui.widget.button.ButtonWidget;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.Nullable;
@@ -69,7 +69,7 @@ public abstract class TitleScreenMixin extends Screen {
 			AxolotlClient.LOGGER.info("Unbound \"Save Toolbar Activator\" to resolve conflict with the zoom key!");
 		}
 		if (Auth.getInstance().showButton.get()) {
-			addDrawableChild(new AuthWidget());
+			addDrawableSelectableElement(new AuthWidget());
 		}
 	}
 
@@ -81,7 +81,7 @@ public abstract class TitleScreenMixin extends Screen {
 
 	@ModifyArgs(method = "initWidgetsNormal",
 		at = @At(value = "INVOKE",
-			target = "Lnet/minecraft/client/gui/widget/ButtonWidget;builder(Lnet/minecraft/text/Text;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;)Lnet/minecraft/client/gui/widget/ButtonWidget$Builder;", ordinal = 2))
+			target = "Lnet/minecraft/client/gui/widget/button/ButtonWidget;builder(Lnet/minecraft/text/Text;Lnet/minecraft/client/gui/widget/button/ButtonWidget$PressAction;)Lnet/minecraft/client/gui/widget/button/ButtonWidget$Builder;", ordinal = 2))
 	public void axolotlclient$noRealmsbutOptionsButton(Args args) {
 		if (!QuiltLoader.isModLoaded("modmenu")) {
 			args.set(0, Text.translatable("config"));

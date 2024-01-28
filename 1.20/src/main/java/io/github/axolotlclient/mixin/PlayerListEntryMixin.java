@@ -26,8 +26,8 @@ import com.mojang.authlib.GameProfile;
 import io.github.axolotlclient.modules.hypixel.nickhider.NickHider;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.client.texture.PlayerSkin;
 import net.minecraft.client.util.DefaultSkinHelper;
-import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -42,14 +42,14 @@ public abstract class PlayerListEntryMixin {
 	@Final
 	private GameProfile profile;
 
-	@Inject(method = "getSkinTexture", at = @At("RETURN"), cancellable = true)
-	public void axolotlclient$hideSkins(CallbackInfoReturnable<Identifier> cir) {
+	@Inject(method = "getSkin", at = @At("RETURN"), cancellable = true)
+	private void axolotlclient$hideSkins(CallbackInfoReturnable<PlayerSkin> cir) {
 		if (profile.equals(MinecraftClient.getInstance().player.getGameProfile())
 			&& NickHider.getInstance().hideOwnSkin.get()) {
-			cir.setReturnValue(DefaultSkinHelper.getTexture(profile.getId()));
+			cir.setReturnValue(DefaultSkinHelper.getSkin(profile));
 		} else if (!profile.equals(MinecraftClient.getInstance().player.getGameProfile())
 			&& NickHider.getInstance().hideOtherSkins.get()) {
-			cir.setReturnValue(DefaultSkinHelper.getTexture(profile.getId()));
+			cir.setReturnValue(DefaultSkinHelper.getSkin(profile));
 		}
 	}
 }
