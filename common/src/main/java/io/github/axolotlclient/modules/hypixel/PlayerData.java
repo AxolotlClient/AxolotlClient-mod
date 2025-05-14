@@ -54,7 +54,6 @@ public final class PlayerData {
 	private final double level;
 	private final int karma;
 
-
 	public String formattedName() {
 		StringBuilder builder = new StringBuilder();
 		builder.append(rankFormatted());

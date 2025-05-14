@@ -736,6 +736,7 @@
 	"playerstats.duels.uhc_duel": "UHC (Duel)",
 	"playerstats.duels.uhc_four": "UHC (Fours)",
 	"playerstats.duels.mode_title": "Stats in %s:",
+	"playerstats.error.query_failed": "Failed to fetch stats!3",
 	"itemupdatehud.bracket_color": "Separator (Bracket) Color",
 	"armorhud.durability_num_color": "Durability Number Color",
 	"armorhud.custom_durability_num_color": "Custom Durability Number Color",

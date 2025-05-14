@@ -115,6 +115,7 @@ public class HudManager extends AbstractModule {
 		add(new DayCounterHud());
 		entries.put(BedwarsMod.getInstance().getUpgradesOverlay().getId(), BedwarsMod.getInstance().getUpgradesOverlay());
 		entries.put(BedwarsMod.getInstance().getResourceOverlay().getId(), BedwarsMod.getInstance().getResourceOverlay());
+		entries.put(BedwarsMod.getInstance().getStatsOverlay().getId(), BedwarsMod.getInstance().getStatsOverlay());
 
 		((ReachHud) get(ReachHud.ID)).getEnabled().setForceOff(true, "feature.broken");
 		((ComboHud) get(ComboHud.ID)).getEnabled().setForceOff(true, "feature.broken");
@@ -189,10 +190,22 @@ public class HudManager extends AbstractModule {
 	}
 
 	public void tick() {
-		if (key.isPressed())
+		client.profiler.push("Hud Modules");
+		if (key.isPressed()) {
 			Minecraft.getInstance().openScreen(new HudEditScreen());
-		entries.values().stream().filter(hudEntry -> hudEntry.isEnabled() && hudEntry.tickable())
-			.forEach(HudEntry::tick);
+		}
+
+		entries.values().stream()
+			.filter(hudEntry -> hudEntry.isEnabled() && hudEntry.tickable())
+			.forEach(hudEntry -> {
+				client.profiler.push(hudEntry.getName());
+				client.profiler.push("tick");
+				hudEntry.tick();
+				client.profiler.pop();
+				client.profiler.pop();
+			});
+
+		client.profiler.pop();
 	}
 
 	public HudManager add(AbstractHudEntry entry) {

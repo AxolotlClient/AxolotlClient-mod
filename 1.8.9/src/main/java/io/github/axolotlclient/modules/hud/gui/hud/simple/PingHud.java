@@ -22,6 +22,7 @@
 
 package io.github.axolotlclient.modules.hud.gui.hud.simple;
 
+import io.github.axolotlclient.util.SingleElementCache;
 import java.net.InetAddress;
 import java.util.List;
 
@@ -58,6 +59,9 @@ public class PingHud extends SimpleTextHudEntry {
 	private int currentServerPing;
 	private int second;
 
+	// for some reason, ServerAddress::parse is very slow...
+	private SingleElementCache<String, ServerAddress> parseCache = new SingleElementCache<>(ServerAddress::parse);
+
 	public PingHud() {
 		super();
 	}
@@ -77,19 +81,20 @@ public class PingHud extends SimpleTextHudEntry {
 		if (second >= refreshDelay.get() * 20) {
 			updatePing();
 			second = 0;
-		} else
+		} else {
 			second++;
+		}
 	}
 
 	private void updatePing() {
-		if (Minecraft.getInstance().getCurrentServerEntry() != null) {
-			ServerAddress address = ServerAddress
-				.parse(Minecraft.getInstance().getCurrentServerEntry().address);
+		final var accessor = ((MinecraftClientAccessor) client);
+
+		if (accessor.getServerAddress() != null) {
+			getRealTimeServerPing(accessor.getServerAddress(), accessor.getServerPort());
+		} else if (client.getCurrentServerEntry() != null) {
+			ServerAddress address = parseCache.get(client.getCurrentServerEntry().address);
 			getRealTimeServerPing(address.getAddress(), address.getPort());
-		} else if (((MinecraftClientAccessor) Minecraft.getInstance()).getServerAddress() != null) {
-			getRealTimeServerPing(((MinecraftClientAccessor) Minecraft.getInstance()).getServerAddress(),
-				((MinecraftClientAccessor) Minecraft.getInstance()).getServerPort());
-		} else if (Minecraft.getInstance().isIntegratedServerRunning()) {
+		} else if (client.isIntegratedServerRunning()) {
 			currentServerPing = 1;
 		}
 	}

@@ -151,7 +151,11 @@ public class AxolotlClient implements ClientModInitializer {
 
 		modules.forEach(Module::lateInit);
 
-		MinecraftClientEvents.TICK_END.register(client -> modules.forEach(Module::tick));
+		MinecraftClientEvents.TICK_END.register(client -> {
+			client.profiler.push("AxolotlClient");
+			modules.forEach(Module::tick);
+			client.profiler.pop();
+		});
 
 		FeatureDisabler.init();
 

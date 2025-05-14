@@ -76,6 +76,7 @@ public class BedwarsGame {
 
 	public void onStart() {
 		mod.upgradesOverlay.onStart(upgrades);
+
 		players.clear();
 		playersById.clear();
 		Map<BedwarsTeam, List<PlayerInfo>> teamPlayers = new HashMap<>();
@@ -112,6 +113,9 @@ public class BedwarsGame {
 			}
 		}
 		this.started = true;
+
+		// after data loads...
+		mod.statsOverlay.onStart();
 	}
 
 	public Text getTopBarText() {
