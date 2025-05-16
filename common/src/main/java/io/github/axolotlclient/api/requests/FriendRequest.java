@@ -106,6 +106,10 @@ public class FriendRequest {
 			.thenApply(r -> r.stream().map(UserRequest::get).map(CompletableFuture::join).map(Optional::orElseThrow).toList());
 	}
 
+	public CompletableFuture<Long> getOnlineFriendCount() {
+		return getFriends().thenApply(list -> list.stream().filter(u -> u.getStatus().isOnline()).count());
+	}
+
 	public CompletableFuture<BiContainer<List<User>, List<User>>> getFriendRequests() {
 		return api.get(Request.Route.ACCOUNT_RELATIONS_REQUESTS.create())
 			.thenApply(res -> {

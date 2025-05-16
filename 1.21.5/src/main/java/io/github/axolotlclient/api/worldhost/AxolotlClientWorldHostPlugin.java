@@ -30,8 +30,10 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.serialization.JsonOps;
 import com.mojang.util.UndashedUuid;
 import io.github.axolotlclient.api.API;
+import io.github.axolotlclient.api.e4mc.E4mcStatusDescription;
 import io.github.axolotlclient.api.handlers.StatusUpdateHandler;
 import io.github.axolotlclient.api.requests.FriendRequest;
+import io.github.axolotlclient.api.requests.StatusUpdate;
 import io.github.axolotlclient.api.requests.UserRequest;
 import io.github.axolotlclient.api.types.User;
 import io.github.axolotlclient.api.util.UUIDHelper;
@@ -42,7 +44,9 @@ import io.github.gaming32.worldhost.gui.screen.PlayerInfoScreen;
 import io.github.gaming32.worldhost.plugin.*;
 import io.github.gaming32.worldhost.plugin.vanilla.GameProfileBasedProfilable;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.ConnectScreen;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.multiplayer.resolver.ServerAddress;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.status.ServerStatus;
 import org.jetbrains.annotations.Nullable;
@@ -57,7 +61,7 @@ public class AxolotlClientWorldHostPlugin implements WorldHostPlugin {
 		API.addStartupListener(() -> WorldHost.reconnect(false, true));
 		StatusUpdateHandler.addUpdateListener(user -> {
 			if (user.getStatus().isOnline() && user.getStatus().getActivity() != null) {
-				if (user.getStatus().getActivity().title().equals("api.status.title.world_host")) {
+				if (user.getStatus().getActivity().title().startsWith(StatusUpdate.SPECIAL_STATUS_PREFIX)) {
 					AxolotlClientOnlineFriend friend = AxolotlClientOnlineFriend.of(user);
 					WorldHost.ONLINE_FRIENDS.put(friend.uuid(), friend);
 					WorldHost.ONLINE_FRIEND_UPDATES.forEach(FriendsListUpdate::friendsListUpdate);
@@ -94,7 +98,7 @@ public class AxolotlClientWorldHostPlugin implements WorldHostPlugin {
 			FriendRequest.getInstance().getFriends().thenAccept(list -> {
 				list.stream()
 					.filter(u -> u.getStatus().isOnline()).filter(u -> u.getStatus().getActivity() != null)
-					.filter(u -> u.getStatus().getActivity().title().equals("api.status.title.world_host"))
+					.filter(u -> u.getStatus().getActivity().title().startsWith(StatusUpdate.SPECIAL_STATUS_PREFIX))
 					.map(AxolotlClientOnlineFriend::of)
 					.forEach(friend -> WorldHost.ONLINE_FRIENDS.put(friend.profile.getId(), friend));
 				WorldHost.ONLINE_FRIEND_UPDATES.forEach(FriendsListUpdate::friendsListUpdate);
@@ -113,7 +117,7 @@ public class AxolotlClientWorldHostPlugin implements WorldHostPlugin {
 											 long connectionId) implements OnlineFriend, GameProfileBasedProfilable {
 		private static AxolotlClientOnlineFriend of(User user) {
 			if (user.getStatus().isOnline() && user.getStatus().getActivity() != null) {
-				if (user.getStatus().getActivity().title().equals("api.status.title.world_host")) {
+				if (user.getStatus().getActivity().title().startsWith(StatusUpdate.SPECIAL_STATUS_PREFIX)) {
 					String data = user.getStatus().getActivity().rawDescription();
 					long connectionId = AxolotlClientUserInfo.parse(data).connectionId();
 					return new AxolotlClientOnlineFriend(user, new GameProfile(UndashedUuid.fromStringLenient(user.getUuid()), user.getName()), connectionId);
@@ -129,7 +133,18 @@ public class AxolotlClientWorldHostPlugin implements WorldHostPlugin {
 
 		@Override
 		public void joinWorld(Screen screen) {
-			WorldHost.join(connectionId, screen);
+			if (connectionId != -1) {
+				WorldHost.join(connectionId, screen);
+			}
+			if (user.getStatus().getActivity() != null) {
+				if (StatusUpdate.E4MC_STATUS_TITLE.equals(user.getStatus().getActivity().title())) {
+					var status = E4mcStatusDescription.read(user.getStatus().getActivity().rawDescription());
+					ConnectScreen.startConnecting(screen, Minecraft.getInstance(), ServerAddress.parseString(status.domain()), status.getServerData(user().getName()), false, null);
+				} else if (user.getStatus().getActivity().title().startsWith(StatusUpdate.SPECIAL_STATUS_PREFIX)) {
+					var domain = GsonHelper.fromJson(user.getStatus().getActivity().rawDescription()).get("server_ip").getAsString();
+					ConnectScreen.startConnecting(screen, Minecraft.getInstance(), ServerAddress.parseString(domain), );
+				}
+			}
 		}
 
 		@Override
@@ -139,7 +154,20 @@ public class AxolotlClientWorldHostPlugin implements WorldHostPlugin {
 
 		@Override
 		public Joinability joinability() {
-			return connectionId == -1 ? new Joinability.Unjoinable(Component.translatable("api.worldhost.joinability.not_published")) : Joinability.Joinable.INSTANCE;
+			if (connectionId != -1) {
+				return Joinability.Joinable.INSTANCE;
+			}
+			if (user.getStatus().getActivity() != null) {
+				if (user.getStatus().getActivity().title().equals(StatusUpdate.E4MC_STATUS_TITLE)) {
+					var status = E4mcStatusDescription.read(user.getStatus().getActivity().rawDescription());
+					if (status.domain() != null) {
+						return Joinability.Joinable.INSTANCE;
+					}
+				} else if (user.getStatus().getActivity().title().startsWith(StatusUpdate.SPECIAL_STATUS_PREFIX)) {
+					return Joinability.Joinable.INSTANCE;
+				}
+			}
+			return new Joinability.Unjoinable(Component.translatable("api.worldhost.joinability.not_published"));
 		}
 	}
 

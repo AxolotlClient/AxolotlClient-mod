@@ -23,6 +23,7 @@
 package io.github.axolotlclient.api.requests;
 
 import java.time.Instant;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import io.github.axolotlclient.api.API;
@@ -50,7 +51,7 @@ public class StatusUpdate {
 		}
 		if (status.getActivity() != null) {
 			Status.Activity prev = status.getActivity();
-			if (prev.title().equals(titleString) && prev.description().equals(description)) {
+			if (prev.title().equals(titleString) && prev.description().equals(description) && prev.rawDescription().equals(descriptionString)) {
 				return null;
 			} else {
 				status.setActivity(new Status.Activity(titleString, description, descriptionString, Instant.now()));
@@ -72,23 +73,40 @@ public class StatusUpdate {
 		boolean mp = !map.isEmpty();
 		String description;
 		if (gm && mp) {
-			description = tr.translate("api.status.description.in_game.game_mode_map", gameType, gameMode, map);
+			description = tr.translate("api.status.description.in_game.game_mode_map", server.name, gameType, gameMode, map);
 		} else if (gm) {
-			description = tr.translate("api.status.description.in_game.game_mode_map", gameType, gameMode, map);
+			description = tr.translate("api.status.description.in_game.game_mode_map", server.name, gameType, gameMode, map);
 		} else if (mp) {
-			description = tr.translate("api.status.description.in_game.map", gameType, map);
+			description = tr.translate("api.status.description.in_game.map", server.name, gameType, map);
 		} else {
-			description = tr.translate("api.status.description.in_game", gameType);
+			description = tr.translate("api.status.description.in_game", server.name, gameType);
 		}
-		return createStatusUpdate(tr.translate("api.status.title.in_game", server.name), description);
+		return createStatusUpdate("api.status.title.detailed.in_game", GsonHelper.GSON.toJson(Map.of("value", description, "server_name", server.name, "server_ip", server.ip)));
 	}
 
 	public static Request inGameUnknown(String description) {
 		return createStatusUpdate("api.status.title.in_game_unknown", description);
 	}
 
+	public static final String SPECIAL_STATUS_PREFIX = "api.status.title.detailed";
+
+	public static final String WORLD_HOST_STATUS_TITLE = "api.status.title.detailed.world_host";
+
 	public static Request worldHostStatusUpdate(String description) {
-		return createStatusUpdate("api.status.title.world_host", description);
+		return createStatusUpdate(WORLD_HOST_STATUS_TITLE, description);
+	}
+
+	public static final String E4MC_STATUS_TITLE = "api.status.title.detailed.e4mc";
+
+	public static Request e4mcStatusUpdate(String description) {
+		return createStatusUpdate(E4MC_STATUS_TITLE, description);
+	}
+
+	public static Request inGameServer(String name, String ip) {
+		if (API.getInstance().getApiOptions().allowFriendsServerJoin.get()) {
+			return createStatusUpdate("api.status.title.detailed.unknown_server", GsonHelper.GSON.toJson(Map.of("value", name, "server_ip", ip)));
+		}
+		return createStatusUpdate("api.status.title.detailed.unknown_server", name);
 	}
 
 	@Getter
@@ -104,9 +122,10 @@ public class StatusUpdate {
 	@RequiredArgsConstructor
 	@Getter
 	public enum SupportedServer {
-		HYPIXEL("Hypixel", Pattern.compile("^(?:mc\\.)?hypixel\\.net$")),
-		MCC_ISLAND("MCC Island", Pattern.compile("^play\\.mccisland\\.net$"));
+		HYPIXEL("Hypixel", Pattern.compile("^(?:mc\\.)?hypixel\\.net$"), "mc.hypixel.net"),
+		MCC_ISLAND("MCC Island", Pattern.compile("^play\\.mccisland\\.net$"), "play.mccisland.net");
 		private final String name;
 		private final Pattern address;
+		private final String ip;
 	}
 }

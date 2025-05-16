@@ -56,6 +56,7 @@ public class StatusUpdateProviderImpl implements StatusUpdateProvider {
 						return HypixelMods.getInstance().getStatus();
 					}
 				}
+				return StatusUpdate.inGameServer(entry.name, entry.address);
 			}
 			return StatusUpdate.inGameUnknown(entry.name);
 		} else if (Minecraft.getInstance().isInSingleplayer()) {

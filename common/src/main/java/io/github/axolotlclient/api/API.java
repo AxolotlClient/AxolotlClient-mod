@@ -459,9 +459,13 @@ public class API {
 			statusUpdateFuture.cancel(true);
 		}
 		statusUpdateFuture = statusUpdateExecutor.scheduleAtFixedRate(() -> {
-			Request request = statusUpdateProvider.getStatus();
-			if (request != null) {
-				post(request);
+			try {
+				Request request = statusUpdateProvider.getStatus();
+				if (request != null) {
+					post(request);
+				}
+			} catch (Throwable e) {
+				logger.warn("Failed to send status update! Skipping... ", e);
 			}
 		}, 50, Constants.STATUS_UPDATE_DELAY * 1000, TimeUnit.MILLISECONDS);
 	}

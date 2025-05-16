@@ -30,8 +30,10 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.serialization.JsonOps;
 import com.mojang.util.UndashedUuid;
 import io.github.axolotlclient.api.API;
+import io.github.axolotlclient.api.e4mc.E4mcStatusDescription;
 import io.github.axolotlclient.api.handlers.StatusUpdateHandler;
 import io.github.axolotlclient.api.requests.FriendRequest;
+import io.github.axolotlclient.api.requests.StatusUpdate;
 import io.github.axolotlclient.api.requests.UserRequest;
 import io.github.axolotlclient.api.types.User;
 import io.github.axolotlclient.api.util.UUIDHelper;
@@ -42,7 +44,9 @@ import io.github.gaming32.worldhost.gui.screen.PlayerInfoScreen;
 import io.github.gaming32.worldhost.plugin.*;
 import io.github.gaming32.worldhost.plugin.vanilla.GameProfileBasedProfilable;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ConnectScreen;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.network.ServerAddress;
 import net.minecraft.server.ServerMetadata;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
@@ -135,7 +139,12 @@ public class AxolotlClientWorldHostPlugin implements WorldHostPlugin {
 
 		@Override
 		public void joinWorld(Screen screen) {
-			WorldHost.join(connectionId, screen);
+			if (connectionId != -1) {
+				WorldHost.join(connectionId, screen);
+			} else if (user.getStatus().getTitle().equals(StatusUpdate.E4MC_STATUS_TITLE)) {
+				var status = E4mcStatusDescription.read(user.getStatus().getActivity().rawDescription());
+				ConnectScreen.connect(screen, MinecraftClient.getInstance(), ServerAddress.parse(status.domain()), status.getServerData(user().getName()), false, null);
+			}
 		}
 
 		@Override
@@ -145,7 +154,16 @@ public class AxolotlClientWorldHostPlugin implements WorldHostPlugin {
 
 		@Override
 		public Joinability joinability() {
-			return connectionId == -1 ? new Joinability.Unjoinable(Text.translatable("api.worldhost.joinability.not_published")) : Joinability.Joinable.INSTANCE;
+			if (connectionId != -1) {
+				return Joinability.Joinable.INSTANCE;
+			}
+			if (user.getStatus().getTitle().equals(StatusUpdate.E4MC_STATUS_TITLE)) {
+				var status = E4mcStatusDescription.read(user.getStatus().getActivity().rawDescription());
+				if (status.domain() != null) {
+					return Joinability.Joinable.INSTANCE;
+				}
+			}
+			return new Joinability.Unjoinable(Text.translatable("api.worldhost.joinability.not_published"));
 		}
 	}
 

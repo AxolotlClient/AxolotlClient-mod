@@ -34,14 +34,15 @@
 		]
 	},
 	"mixins": [
-		"axolotlclient.mixins.json"
+		"axolotlclient.mixins.json",
+		"axolotlclient.e4mc.mixins.json"
 	],
 	"custom": {
 		"modmenu:clientsideOnly": true
 	},
 	"depends": {
 		"fabricloader": ">=0.15.11",
-		"minecraft": "1.21 1.21.1",
+		"minecraft": ">=1.21 <=1.21.1",
 		"fabric-api": "*",
 		"axolotlclientconfig": "*",
 		"axolotlclient-common": "*"

@@ -9,8 +9,8 @@ val minecraft = "1.21.5"
 val minecraftFriendly = minecraft
 val parchmentMinecraft = "1.21.5"
 val parchment = "2025.04.19"
-val modmenu = "14.0.0-rc.1"
-val fapi = "0.119.5"
+val modmenu = "14.0.0-rc.2"
+val fapi = "0.124.0"
 group = project.property("maven_group") as String
 version = "${project.property("version")}+$minecraftFriendly"
 base.archivesName = "AxolotlClient"
@@ -72,6 +72,10 @@ dependencies {
 	modCompileOnly("maven.modrinth:noxesium:$noxesiumVersion")
 	//modImplementation("com.noxcrew.noxesium:api:$noxesiumVersion")
 	//localRuntime("org.khelekore:prtree:1.5")
+
+	modCompileOnly("link.e4mc:e4mc_minecraft-fabric:5.3.1") {
+		isTransitive = false
+	}
 
 	implementation("net.hypixel:mod-api:1.0.1")
 	include(modImplementation("maven.modrinth:hypixel-mod-api:1.0.1+build.1+mc1.21")!!)

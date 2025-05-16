@@ -23,6 +23,7 @@
 package io.github.axolotlclient.modules.hud.util;
 
 import lombok.Data;
+import lombok.With;
 import lombok.experimental.Accessors;
 
 /**
@@ -38,6 +39,7 @@ import lombok.experimental.Accessors;
 
 @Data
 @Accessors(fluent = true)
+@With
 public class Rectangle {
 
 	public int x;
@@ -77,5 +79,13 @@ public class Rectangle {
 
 	public Rectangle scale(double scale) {
 		return new Rectangle((int) (x() * scale), (int) (y() * scale), (int) (width() * scale), (int) (height() * scale));
+	}
+
+	public int xEnd() {
+		return x() + width();
+	}
+
+	public int yEnd() {
+		return y() + height();
 	}
 }

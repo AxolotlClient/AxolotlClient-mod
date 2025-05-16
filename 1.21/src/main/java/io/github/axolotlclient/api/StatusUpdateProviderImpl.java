@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import com.google.gson.JsonObject;
+import io.github.axolotlclient.api.e4mc.E4mcStatusProvider;
 import io.github.axolotlclient.api.requests.StatusUpdate;
 import io.github.axolotlclient.api.util.StatusUpdateProvider;
 import io.github.axolotlclient.api.worldhost.WorldHostStatusProvider;
@@ -59,11 +60,17 @@ public class StatusUpdateProviderImpl implements StatusUpdateProvider {
 						return MccIslandMods.getInstance().getMccIStatus();
 					}
 				}
+				return StatusUpdate.inGameServer(entry.name, entry.address);
 			}
 			return StatusUpdate.inGameUnknown(entry.name);
 		} else if (MinecraftClient.getInstance().getServer() != null) {
-			if (WorldHostStatusProvider.getWHStatusDescription() != null) {
-				return StatusUpdate.worldHostStatusUpdate(WorldHostStatusProvider.getWHStatusDescription());
+			String worldHostStatus = WorldHostStatusProvider.getWHStatusDescription();
+			if (worldHostStatus != null) {
+				return StatusUpdate.worldHostStatusUpdate(worldHostStatus);
+			}
+			String e4mcStatus = E4mcStatusProvider.getStatusDescription();
+			if (e4mcStatus != null) {
+				return StatusUpdate.e4mcStatusUpdate(e4mcStatus);
 			}
 			return StatusUpdate.inGameUnknown(MinecraftClient.getInstance().getServer().getSaveProperties().getWorldName());
 		}
@@ -76,9 +83,5 @@ public class StatusUpdateProviderImpl implements StatusUpdateProvider {
 			return StatusUpdate.online(StatusUpdate.MenuId.SETTINGS);
 		}
 		return null;
-	}
-
-	private String getOrEmpty(JsonObject object, String name) {
-		return object.has(name) ? object.get(name).getAsString() : "";
 	}
 }
