@@ -39,13 +39,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import net.minecraft.client.options.KeyBinding;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.resource.Identifier;
 import net.minecraft.text.Formatting;
 import net.ornithemc.osl.keybinds.api.KeyBindingEvents;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.input.Keyboard;
 
-// TODO: maybe i18n this
 public class StatsOverlay extends BoxHudEntry implements DynamicallyPositionable {
 	@FunctionalInterface
 	private interface EntryRenderer {
@@ -56,11 +55,11 @@ public class StatsOverlay extends BoxHudEntry implements DynamicallyPositionable
 	}
 
 	private static final List<Entry> RENDER_ENTRIES = List.of(
-		new Entry(true, "Player", (t, n, bw, ws) -> t.getColorSection() + n),
-		new Entry(false, "FKDR", (t, n, bw, ws) -> (Formatting.GOLD + "%.2f (%s/%s)").formatted(bw.fkdr(), bw.finalKills(), bw.finalDeaths())),
-		new Entry(false, "KDR", (t, n, bw, ws) -> (Formatting.GOLD + "%.2f (%s/%s)").formatted(bw.kdr(), bw.kills(), bw.deaths())),
-		new Entry(false, "WLR", (t, n, bw, ws) -> (Formatting.GOLD + "%.2f (%s/%s)").formatted(bw.wlr(), bw.wins(), bw.losses())),
-		new Entry(false, "WS", (t, n, bw, ws) -> Formatting.GOLD.toString() + ws)
+		new Entry(true, "bedwars.stats_overlay.header.player", (t, n, bw, ws) -> t.getColorSection() + n),
+		new Entry(false, "bedwars.stats_overlay.header.fkdr", (t, n, bw, ws) -> (Formatting.GOLD + "%.2f (%s/%s)").formatted(bw.fkdr(), bw.finalKills(), bw.finalDeaths())),
+		new Entry(false, "bedwars.stats_overlay.header.kdr", (t, n, bw, ws) -> (Formatting.GOLD + "%.2f (%s/%s)").formatted(bw.kdr(), bw.kills(), bw.deaths())),
+		new Entry(false, "bedwars.stats_overlay.header.wlr", (t, n, bw, ws) -> (Formatting.GOLD + "%.2f (%s/%s)").formatted(bw.wlr(), bw.wins(), bw.losses())),
+		new Entry(false, "bedwars.stats_overlay.header.ws", (t, n, bw, ws) -> Formatting.GOLD.toString() + ws)
 	);
 
 	private class RenderHelper {
@@ -79,7 +78,7 @@ public class StatsOverlay extends BoxHudEntry implements DynamicallyPositionable
 			final var dy = client.textRenderer.fontHeight + rowMargin.get();
 
 			int currY = getPos().y + padding.get();
-			int newXCursor = drawString(renderEntry.name, xCursor, currY, 0xffffffff, shadow);
+			int newXCursor = drawString(I18n.translate(renderEntry.name), xCursor, currY, 0xffffffff, shadow);
 
 			currY += dy;
 
@@ -108,8 +107,17 @@ public class StatsOverlay extends BoxHudEntry implements DynamicallyPositionable
 			}
 
 			// don't multiply the padding by two, since it's already accounted for by the cursors
-			setWidth(xCursor - getPos().x + padding.get() - columnMargin.get());
-			setHeight(yFinal - getPos().y + padding.get() - rowMargin.get());
+			int newWidth = xCursor - getPos().x + padding.get() - columnMargin.get();
+			int newHeight = yFinal - getPos().y + padding.get() - rowMargin.get();
+
+			boolean dirty = newWidth != getWidth() || newHeight != getHeight();
+
+			setWidth(newWidth);
+			setHeight(newHeight);
+
+			if (dirty) {
+				onBoundsUpdate();
+			}
 		}
 	}
 
@@ -134,7 +142,7 @@ public class StatsOverlay extends BoxHudEntry implements DynamicallyPositionable
 	private final BedwarsMod mod;
 	private Map<String, IntObjectPair<CombinedGameData>> stats = new HashMap<>();
 	private final Map<BedwarsTeam, List<String>> playersByTeam = new EnumMap<>(BedwarsTeam.class);
-	private final KeyBinding toggle = new KeyBinding("bedwars.toggle_stats_overlay", Keyboard.KEY_K, "category.axolotlclient");
+	private final KeyBinding toggle = new KeyBinding("bedwars.toggle_stats_overlay", 0, "category.axolotlclient");
 	private boolean shouldRender = false;
 	@Nullable
 	private String errorMessage = null;
@@ -168,19 +176,14 @@ public class StatsOverlay extends BoxHudEntry implements DynamicallyPositionable
 			final var uuid = playerInfo.getProfile().getId();
 			final var name = playerInfo.getProfile().getName();
 
-			System.out.printf("StatsOverlay: 0 %s %s\n", uuid, name);
-
 			// TODO: maybe merge this into BedwarsGame?
 			mod.getGame().flatMap(game -> game.getPlayer(uuid)).ifPresent(bwPlayer -> {
 				final var team = playersByTeam.computeIfAbsent(bwPlayer.getTeam(), ignored -> new ArrayList<>());
 				team.add(name);
-				System.out.printf("StatsOverlay: 1 %s %s\n", name, team);
 			});
 
 			// begin resolving players
 			api.getAsync(uuid.toString()).whenCompleteAsync((playerData, throwable) -> {
-				System.out.printf("StatsOverlay: 2 %s\n", name);
-
 				if (playerData == null || playerData.isEmpty()) {
 					return;
 				}
@@ -196,15 +199,13 @@ public class StatsOverlay extends BoxHudEntry implements DynamicallyPositionable
 	@Override
 	public void init() {
 		super.init();
-		KeyBindingEvents.REGISTER_KEYBINDS.register(keyBindingRegistry -> {
-			keyBindingRegistry.register(toggle);
-		});
+		KeyBindingEvents.REGISTER_KEYBINDS.register(keyBindingRegistry -> keyBindingRegistry.register(toggle));
 	}
 
 	@Override
 	public void render(float delta) {
 		if(errorMessage != null) {
-			drawString(Formatting.RED + errorMessage, getX(), getY(), 0xffffffff, true);
+			drawString(Formatting.RED + errorMessage, getPos().x, getPos().y, 0xffffffff, true);
 		}
 
 		if (mod.inGame() && shouldRender) {

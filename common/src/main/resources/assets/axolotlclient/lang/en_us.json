@@ -736,7 +736,7 @@
 	"playerstats.duels.uhc_duel": "UHC (Duel)",
 	"playerstats.duels.uhc_four": "UHC (Fours)",
 	"playerstats.duels.mode_title": "Stats in %s:",
-	"playerstats.error.query_failed": "Failed to fetch stats!3",
+	"playerstats.error.query_failed": "Failed to fetch stats!",
 	"itemupdatehud.bracket_color": "Separator (Bracket) Color",
 	"armorhud.durability_num_color": "Durability Number Color",
 	"armorhud.custom_durability_num_color": "Custom Durability Number Color",
@@ -747,5 +747,10 @@
 	"armorhud.main_hand_item_position": "Main Hand Item Position",
 	"armorhud.main_hand_item_position.top": "Top",
 	"armorhud.main_hand_item_position.bottom": "Bottom",
-	"armorhud.main_hand_item_position.disabled": "Disabled"
+	"armorhud.main_hand_item_position.disabled": "Disabled",
+	"bedwars.stats_overlay.header.player": "Player",
+	"bedwars.stats_overlay.header.fkdr": "FKDR",
+	"bedwars.stats_overlay.header.kdr": "KDR",
+	"bedwars.stats_overlay.header.wlr": "WLR",
+	"bedwars.stats_overlay.header.ws": "WS"
 }
