@@ -22,10 +22,9 @@
 
 package io.github.axolotlclient.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.llamalad7.mixinextras.sugar.Local;
-import com.llamalad7.mixinextras.sugar.ref.LocalDoubleRef;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.blur.MenuBlur;
 import io.github.axolotlclient.modules.blur.MotionBlur;
@@ -43,7 +42,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(GameRenderer.class)
@@ -53,6 +51,9 @@ public abstract class GameRendererMixin {
 	@Shadow
 	MinecraftClient client;
 
+	@Shadow
+	private boolean renderingPanorama;
+
 	@WrapOperation(method = "getFov", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;lerp(FFF)F"))
 	private float disableDynamicFov(float delta, float start, float end, Operation<Float> original) {
 		if (!AxolotlClient.CONFIG.dynamicFOV.get()) {
@@ -61,10 +62,13 @@ public abstract class GameRendererMixin {
 		return original.call(delta, start, end);
 	}
 
-	@Inject(method = "getFov", at = @At(value = "RETURN", ordinal = 1))
-	public void axolotlclient$setZoom(Camera camera, float tickDelta, boolean changingFov, CallbackInfoReturnable<Double> cir, @Local LocalDoubleRef fov) {
+	@WrapMethod(method = "getFov")
+	private double getFov(Camera camera, float partialTick, boolean useFovSetting, Operation<Double> original) {
+		if (this.renderingPanorama) {
+			return original.call(camera, partialTick, useFovSetting);
+		}
 		Zoom.update();
-		fov.set(Zoom.getFov(fov.get(), tickDelta));
+		return Zoom.getFov(original.call(camera, partialTick, useFovSetting), partialTick);
 	}
 
 	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getFramebuffer()Lcom/mojang/blaze3d/framebuffer/Framebuffer;"))

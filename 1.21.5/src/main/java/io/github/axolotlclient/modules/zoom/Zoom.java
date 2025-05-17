@@ -61,7 +61,7 @@ public class Zoom extends AbstractModule {
 
 	public static float getFov(float current, float tickDelta) {
 		float result =
-			current * (zoomSpeed.get() == 10 ? targetFactor : Mth.lerp(lastAnimatedFactor, animatedFactor, tickDelta));
+			current * (zoomSpeed.get() == 10 ? targetFactor : Mth.lerp(tickDelta, lastAnimatedFactor, animatedFactor));
 
 		if (lastReturnedFov != 0 && lastReturnedFov != result) {
 			Minecraft.getInstance().levelRenderer.needsUpdate();

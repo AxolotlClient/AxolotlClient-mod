@@ -30,7 +30,8 @@
 		]
 	},
 	"mixins": [
-		"axolotlclient.mixins.json"
+		"axolotlclient.mixins.json",
+		"axolotlclient.e4mc.mixins.json"
 	],
 	"custom": {
 		"modmenu:clientsideOnly": true

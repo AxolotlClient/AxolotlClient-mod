@@ -39,7 +39,7 @@ public class AxolotlClientE4mcPlugin {
 
 	public Status.Activity.E4mcMetadata getStatusDescription() {
 		MinecraftClient mc = MinecraftClient.getInstance();
-		var levelName = mc.getServer().getSaveProperties().getWorldName();
+		var levelName = mc.getServer().getSaveProperties().getLevelName();
 		if (E4mcClient.session == null || E4mcClient.session.state != QuiclimeSession.State.STARTED) {
 			if (mc.getServer().getServerMetadata() != null) {
 				return new Status.Activity.E4mcMetadata(null, ServerInfoUtil.getServerInfo(levelName, mc.getServer().getServerMetadata()));

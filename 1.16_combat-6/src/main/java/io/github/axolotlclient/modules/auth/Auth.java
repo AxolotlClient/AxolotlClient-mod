@@ -30,6 +30,7 @@ import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.OptionCategory;
 import io.github.axolotlclient.AxolotlClientConfig.impl.options.BooleanOption;
 import io.github.axolotlclient.api.API;
+import io.github.axolotlclient.api.types.User;
 import io.github.axolotlclient.api.util.UUIDHelper;
 import io.github.axolotlclient.mixin.MinecraftClientAccessor;
 import io.github.axolotlclient.modules.Module;
@@ -154,6 +155,10 @@ public class Auth extends Accounts implements Module {
 
 	public Identifier getSkinTexture(Account account) {
 		return getSkinTexture(account.getUuid(), account.getName());
+	}
+
+	public Identifier getSkinTexture(User user) {
+		return getSkinTexture(user.getUuid(), user.getName());
 	}
 
 	public Identifier getSkinTexture(String uuid, String name) {
