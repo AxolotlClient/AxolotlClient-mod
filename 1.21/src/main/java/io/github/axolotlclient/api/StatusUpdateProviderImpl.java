@@ -25,7 +25,6 @@ package io.github.axolotlclient.api;
 import java.util.Arrays;
 import java.util.Optional;
 
-import com.google.gson.JsonObject;
 import io.github.axolotlclient.api.e4mc.E4mcStatusProvider;
 import io.github.axolotlclient.api.requests.StatusUpdate;
 import io.github.axolotlclient.api.util.StatusUpdateProvider;
@@ -64,11 +63,11 @@ public class StatusUpdateProviderImpl implements StatusUpdateProvider {
 			}
 			return StatusUpdate.inGameUnknown(entry.name);
 		} else if (MinecraftClient.getInstance().getServer() != null) {
-			String worldHostStatus = WorldHostStatusProvider.getWHStatusDescription();
+			var worldHostStatus = WorldHostStatusProvider.getWHStatusDescription();
 			if (worldHostStatus != null) {
 				return StatusUpdate.worldHostStatusUpdate(worldHostStatus);
 			}
-			String e4mcStatus = E4mcStatusProvider.getStatusDescription();
+			var e4mcStatus = E4mcStatusProvider.getStatusDescription();
 			if (e4mcStatus != null) {
 				return StatusUpdate.e4mcStatusUpdate(e4mcStatus);
 			}

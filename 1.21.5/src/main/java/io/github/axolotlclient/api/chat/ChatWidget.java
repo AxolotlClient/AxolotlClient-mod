@@ -255,7 +255,7 @@ public class ChatWidget extends ObjectSelectionList<ChatWidget.ChatLine> {
 			graphics.pose().pushPose();
 			graphics.pose().translate(0, 0, 5);
 			ResourceLocation texture =
-				Auth.getInstance().getSkinTexture(getOrigin().sender().getUuid(), getOrigin().sender().getName());
+				Auth.getInstance().getSkinTexture(getOrigin().sender().getUuid());
 			PlayerFaceRenderer.draw(graphics, texture, x - 22, y, 18, true, false, -1);
 			graphics.drawString(client.font, formattedTime, client.font.width(getContent()) + x + 5, y,
 				ClientColors.GRAY.toInt(), false

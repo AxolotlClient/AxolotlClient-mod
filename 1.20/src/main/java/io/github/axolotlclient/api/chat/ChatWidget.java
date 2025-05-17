@@ -242,8 +242,8 @@ public class ChatWidget extends AlwaysSelectedEntryListWidget<ChatWidget.ChatLin
 		@Override
 		protected void renderExtras(GuiGraphics graphics, int x, int y, int mouseX, int mouseY) {
 			RenderSystem.disableBlend();
-			Identifier texture = Auth.getInstance().getSkinTexture(getOrigin().sender().getUuid(),
-				getOrigin().sender().getName());
+			Identifier texture = Auth.getInstance().getSkinTexture(getOrigin().sender().getUuid()
+			);
 			graphics.drawTexture(texture, x - 22, y, 18, 18, 8, 8, 8, 8, 64, 64);
 			graphics.drawTexture(texture, x - 22, y, 18, 18, 40, 8, 8, 8, 64, 64);
 			RenderSystem.enableBlend();

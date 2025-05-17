@@ -159,10 +159,14 @@ public class Auth extends Accounts implements Module {
 	}
 
 	public ResourceLocation getSkinTexture(Account account) {
-		return getSkinTexture(account.getUuid(), account.getName());
+		return getSkinTexture(account.getUuid());
 	}
 
-	public ResourceLocation getSkinTexture(String uuid, String name) {
+	public ResourceLocation getSkinTexture(io.github.axolotlclient.api.types.User user) {
+		return getSkinTexture(user.getUuid());
+	}
+
+	public ResourceLocation getSkinTexture(String uuid) {
 		if (!textures.containsKey(uuid)) {
 			loadTexture(uuid);
 			return Objects.requireNonNullElseGet(textures.get(uuid), () -> DefaultPlayerSkin.get(UUIDHelper.fromUndashed(uuid)).texture());

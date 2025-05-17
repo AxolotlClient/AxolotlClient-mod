@@ -136,7 +136,7 @@ public class ChatUserListWidget extends ObjectSelectionList<ChatUserListWidget.U
 			drawScrollableText(graphics, client.font, Component.literal(user.getStatus().getTitle()), x + 3 + entryHeight,
 				y + 12, x + entryWidth - 6, y + 12 + client.font.lineHeight + 2, 8421504);
 
-			ResourceLocation texture = Auth.getInstance().getSkinTexture(user.getUuid(), user.getName());
+			ResourceLocation texture = Auth.getInstance().getSkinTexture(user.getUuid());
 			PlayerFaceRenderer.draw(graphics, texture, x, y, entryHeight, true, false, -1);
 		}
 

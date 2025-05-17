@@ -131,7 +131,7 @@ public class UserListWidget extends AlwaysSelectedEntryListWidget<UserListWidget
 				graphics.drawText(client.textRenderer, note, x + entryWidth - client.textRenderer.getWidth(note) - 4, y + entryHeight - 10, 8421504, false);
 			}
 
-			Identifier texture = Auth.getInstance().getSkinTexture(user.getUuid(), user.getName());
+			Identifier texture = Auth.getInstance().getSkinTexture(user.getUuid());
 			RenderSystem.enableBlend();
 			graphics.drawTexture(texture, x - 1, y - 1, 33, 33, 8, 8, 8, 8, 64, 64);
 			graphics.drawTexture(texture, x - 1, y - 1, 33, 33, 40, 8, 8, 8, 64, 64);

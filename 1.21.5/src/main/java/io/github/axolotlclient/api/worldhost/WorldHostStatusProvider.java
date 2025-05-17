@@ -22,10 +22,11 @@
 
 package io.github.axolotlclient.api.worldhost;
 
+import io.github.axolotlclient.api.types.Status;
 import net.fabricmc.loader.api.FabricLoader;
 
 public class WorldHostStatusProvider {
-	public static String getWHStatusDescription() {
+	public static Status.Activity.WorldHostMetadata getWHStatusDescription() {
 		if (FabricLoader.getInstance().isModLoaded("world-host") && AxolotlClientWorldHostPlugin.Instance != null) {
 			return AxolotlClientWorldHostPlugin.Instance.getWhStatusDescription();
 		}

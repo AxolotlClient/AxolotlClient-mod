@@ -140,7 +140,7 @@ public class UserListWidget extends ObjectSelectionList<UserListWidget.UserListE
 				);
 			}
 
-			ResourceLocation texture = Auth.getInstance().getSkinTexture(user.getUuid(), user.getName());
+			ResourceLocation texture = Auth.getInstance().getSkinTexture(user.getUuid());
 			PlayerFaceRenderer.draw(graphics, texture, x - 1, y - 1, 33, true, false, -1);
 		}
 

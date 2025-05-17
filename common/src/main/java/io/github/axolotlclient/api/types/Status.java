@@ -22,12 +22,23 @@
 
 package io.github.axolotlclient.api.types;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.ZoneId;
+import java.util.Base64;
+import java.util.List;
 
+import com.google.gson.JsonObject;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
+import com.google.gson.stream.JsonWriter;
 import io.github.axolotlclient.AxolotlClientCommon;
 import io.github.axolotlclient.api.API;
+import io.github.axolotlclient.util.GsonHelper;
 import lombok.*;
+import lombok.experimental.Accessors;
 import org.jetbrains.annotations.Nullable;
 
 @Getter
@@ -37,13 +48,17 @@ import org.jetbrains.annotations.Nullable;
 @AllArgsConstructor
 public class Status {
 
-	public static final Status UNKNOWN = new Status(false, null, Activity.UNKNOWN);
+	public static final Status UNKNOWN = new Status("offline", null, Activity.UNKNOWN);
 
-	private boolean online;
+	private String type;
 	@Nullable
 	private final Instant lastOnline;
 	@Nullable
 	private Activity activity;
+
+	public boolean isOnline() {
+		return "online".equals(type);
+	}
 
 	public String getDescription() {
 		return activity == null || activity.description.isEmpty() ? "" :
@@ -66,7 +81,221 @@ public class Status {
 				.translate("api.status.last_online", lastOnline.atZone(ZoneId.systemDefault()).format(AxolotlClientCommon.getInstance().formatter));
 	}
 
-	public record Activity(String title, String description, String rawDescription, Instant started) {
-		private static final Activity UNKNOWN = new Activity("", "", "", Instant.EPOCH);
+	public void setOnline(boolean online) {
+		if (online) {
+			type = "online";
+		} else {
+			type = "offline";
+		}
+	}
+
+	@AllArgsConstructor
+	@Getter
+	@Accessors(fluent = true)
+	@ToString
+	@EqualsAndHashCode
+	public static final class Activity {
+		private static final Activity UNKNOWN = new Activity("", "", null, Instant.EPOCH);
+		private final String title;
+		private final String description;
+		private final Metadata metadata;
+		@EqualsAndHashCode.Exclude
+		private final Instant started;
+
+		public Activity(String title, String description) {
+			this(title, description, (Metadata) null);
+		}
+
+		public Activity(String title, String description, Metadata metadata) {
+			this(title, description, metadata, Instant.now());
+		}
+
+		public Activity(String title, String description, MetadataAttributes attributes) {
+			this(title, description, new Metadata(attributes));
+		}
+
+		public boolean hasMetadata() {
+			return metadata != null;
+		}
+
+		public boolean hasMetadata(String id) {
+			return hasMetadata() && metadata.type.equals(id);
+		}
+
+		public interface MetadataAttributes {
+			String typeId();
+		}
+
+		@AllArgsConstructor(access = AccessLevel.PRIVATE)
+		@Getter
+		@Accessors(fluent = true)
+		@ToString
+		@EqualsAndHashCode
+		public static class Metadata {
+			public final String type;
+			public final MetadataAttributes attributes;
+
+			public Metadata(MetadataAttributes attributes) {
+				this(attributes.typeId(), attributes);
+			}
+
+			public static class MetadataTypeAdapter extends TypeAdapter<Metadata> {
+
+				@Override
+				public void write(JsonWriter out, Metadata value) throws IOException {
+					if (value == null) {
+						out.nullValue();
+						return;
+					}
+					out.beginObject();
+					out.name("type").value(value.type);
+					out.name("attributes").jsonValue(GsonHelper.GSON.toJson(value.attributes));
+					out.endObject();
+				}
+
+				@Override
+				public Metadata read(JsonReader in) throws IOException {
+					if (in.peek() == JsonToken.NULL) {
+						return null;
+					}
+					JsonObject metadataObj = GsonHelper.GSON.fromJson(in, JsonObject.class);
+					String type = metadataObj.get("type").getAsString();
+					MetadataAttributes attributes = switch (type) {
+						case WorldHostMetadata.ID -> GsonHelper.GSON.fromJson(metadataObj.get("attributes"), WorldHostMetadata.class);
+						case E4mcMetadata.ID -> GsonHelper.GSON.fromJson(metadataObj.get("attributes"), E4mcMetadata.class);
+						case ExternalServerMetadata.ID -> GsonHelper.GSON.fromJson(metadataObj.get("attributes"), ExternalServerMetadata.class);
+						default -> throw new IllegalArgumentException("Unsupported attributes id: "+type);
+					};
+					return new Metadata(type, attributes);
+				}
+			}
+		}
+
+		@AllArgsConstructor
+		@Getter
+		@Accessors(fluent = true)
+		@ToString
+		@EqualsAndHashCode
+		public static final class WorldHostMetadata implements MetadataAttributes {
+			public static final String ID = "world_host";
+			private final String connectionId;
+			private final String externalIp;
+			private final ServerInfo serverInfo;
+
+			@Override
+			public String typeId() {
+				return ID;
+			}
+		}
+
+		@AllArgsConstructor
+		@Getter
+		@Accessors(fluent = true)
+		@ToString
+		@EqualsAndHashCode
+		public static final class E4mcMetadata implements MetadataAttributes {
+			public static final String ID = "e4mc";
+			private final String domain;
+			private final ServerInfo serverInfo;
+
+			@Override
+			public String typeId() {
+				return ID;
+			}
+		}
+
+		@AllArgsConstructor
+		@Getter
+		@Accessors(fluent = true)
+		@ToString
+		@EqualsAndHashCode
+		public static final class ExternalServerMetadata implements MetadataAttributes {
+			public static final String ID = "external_server";
+			private final String serverName;
+			private final String address;
+
+			@Override
+			public String typeId() {
+				return ID;
+			}
+		}
+
+		@AllArgsConstructor
+		@Getter
+		@Accessors(fluent = true)
+		@ToString
+		@EqualsAndHashCode
+		public static class ServerInfo {
+			private final String levelName;
+			private final String description;
+			private final Favicon icon;
+			private final Players players;
+			private final Version version;
+
+			@AllArgsConstructor
+			@Getter
+			@Accessors(fluent = true)
+			@EqualsAndHashCode
+			public static class Favicon {
+				private static final String PREFIX = "data:image/png;base64,";
+				private final byte[] iconBytes;
+
+
+				@Override
+				public String toString() {
+					return PREFIX + new String(Base64.getEncoder().encode(iconBytes), StandardCharsets.UTF_8);
+				}
+
+				public static Favicon fromString(String base64String) {
+					return new Favicon(Base64.getDecoder().decode(base64String.substring(PREFIX.length()).replaceAll("\n", "").getBytes(StandardCharsets.UTF_8)));
+				}
+
+				public static class FaviconTypeAdapter extends TypeAdapter<Favicon> {
+
+					@Override
+					public void write(JsonWriter out, Favicon value) throws IOException {
+						out.value(value.toString());
+					}
+
+					@Override
+					public Favicon read(JsonReader in) throws IOException {
+						return fromString(in.nextString());
+					}
+				}
+			}
+
+			@AllArgsConstructor
+			@Getter
+			@Accessors(fluent = true)
+			@ToString
+			@EqualsAndHashCode
+			public static class Players {
+				private final int max;
+				private final int online;
+				private final List<Player> sample;
+
+				@AllArgsConstructor
+				@Getter
+				@Accessors(fluent = true)
+				@ToString
+				@EqualsAndHashCode
+				public static class Player {
+					private final String name;
+					private final String uuid;
+				}
+
+			}
+
+			@AllArgsConstructor
+			@Getter
+			@Accessors(fluent = true)
+			@ToString
+			@EqualsAndHashCode
+			public static class Version {
+				private final String name;
+				private final int protocol;
+			}
+
+		}
 	}
 }

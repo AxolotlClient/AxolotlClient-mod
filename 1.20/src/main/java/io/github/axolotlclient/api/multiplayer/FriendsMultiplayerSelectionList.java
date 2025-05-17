@@ -26,22 +26,18 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.texture.NativeImage;
 import com.mojang.logging.LogUtils;
-import io.github.axolotlclient.api.e4mc.E4mcStatusDescription;
-import io.github.axolotlclient.api.requests.StatusUpdate;
 import io.github.axolotlclient.api.types.PkSystem;
+import io.github.axolotlclient.api.types.Status;
 import io.github.axolotlclient.api.types.User;
 import io.github.axolotlclient.modules.auth.Auth;
-import io.github.axolotlclient.util.GsonHelper;
 import lombok.Setter;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -112,11 +108,11 @@ public class FriendsMultiplayerSelectionList extends AlwaysSelectedEntryListWidg
 
 		for (User friend : friends) {
 			if (friend.getStatus().isOnline()) {
-				if (friend.getStatus().getActivity().title().startsWith(StatusUpdate.SPECIAL_STATUS_PREFIX)) {
-					if (StatusUpdate.E4MC_STATUS_TITLE.equals(friend.getStatus().getActivity().title())) {
-						this.friendEntries.add(new E4mcFriendServerEntry(this.screen, friend));
+				if (friend.getStatus().getActivity() != null && friend.getStatus().getActivity().hasMetadata()) {
+					if (friend.getStatus().getActivity().hasMetadata(Status.Activity.E4mcMetadata.ID)) {
+						this.friendEntries.add(e4mcServerFriendEntry(this.screen, friend));
 					} else {
-						this.friendEntries.add(new ExternalServerFriendEntry(this.screen, friend));
+						this.friendEntries.add(externalServerEntry(this.screen, friend));
 					}
 				} else {
 					this.friendEntries.add(new StatusFriendEntry(screen, friend));
@@ -182,7 +178,7 @@ public class FriendsMultiplayerSelectionList extends AlwaysSelectedEntryListWidg
 				graphics.drawText(client.textRenderer, user.getStatus().getLastOnline(), left + 3 + 33, top + 12, 8421504, false);
 			}
 
-			Identifier texture = Auth.getInstance().getSkinTexture(user.getUuid(), user.getName());
+			Identifier texture = Auth.getInstance().getSkinTexture(user);
 			PlayerFaceRenderer.draw(graphics, texture, left - 1, top - 1, 33, true, false);
 		}
 
@@ -191,10 +187,12 @@ public class FriendsMultiplayerSelectionList extends AlwaysSelectedEntryListWidg
 	private static final int STATUS_ICON_HEIGHT = 8;
 	private static final int STATUS_ICON_WIDTH = 10;
 
-	public class ExternalServerFriendEntry extends Entry {
+	protected class ServerEntry extends Entry {
 		private static final int ICON_WIDTH = 32;
 		private static final int ICON_HEIGHT = 32;
 		private static final int SPACING = 5;
+		private static final int STATUS_ICON_WIDTH = 10;
+		private static final int STATUS_ICON_HEIGHT = 8;
 		private final FriendsMultiplayerScreen screen;
 		private final MinecraftClient minecraft;
 		protected final ServerInfoEx serverData;
@@ -203,130 +201,25 @@ public class FriendsMultiplayerSelectionList extends AlwaysSelectedEntryListWidg
 		private long lastClickTime;
 		@Nullable
 		private List<Text> onlinePlayersTooltip;
-		@Nullable
 		private Sprite statusIcon;
 		@Nullable
 		private Text statusIconTooltip;
-		private final StatusDescription statusDescription;
-		private final User friend;
+		protected final User friend;
 
-
-		protected ExternalServerFriendEntry(final FriendsMultiplayerScreen screen, final User friend) {
+		protected ServerEntry(FriendsMultiplayerScreen screen, ServerInfo serverData, User friend) {
 			this.screen = screen;
-			this.statusDescription = StatusDescription.read(friend.getStatus().getActivity().rawDescription());
-			this.friend = friend;
-			serverData = new ServerInfoEx(new ServerInfo(statusDescription.serverName(), statusDescription.serverIp(), false));
-
 			this.minecraft = MinecraftClient.getInstance();
-			this.icon = FaviconTexture.createServerFaviconTexture(this.minecraft.getTextureManager(), serverData.serverInfo.address);
-			this.refreshStatus();
+			this.serverData = new ServerInfoEx(serverData);
+			this.icon = FaviconTexture.createServerFaviconTexture(minecraft.getTextureManager(), serverData.address != null ? serverData.address : friend.getUuid() + "_" + serverData.name);
+			this.friend = friend;
 		}
 
-		@Override
-		public void render(GuiGraphics guiGraphics, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
-			if (serverData.pingResult == PingResult.INITIAL) {
-				serverData.pingResult = PingResult.PINGING;
-				this.serverData.serverInfo.ping = -2L;
-				this.serverData.serverInfo.label = CommonTexts.EMPTY;
-				this.serverData.serverInfo.playerCountLabel = CommonTexts.EMPTY;
-				FriendsMultiplayerSelectionList.THREAD_POOL.submit(() -> {
-					try {
-						this.screen.getPinger().add(this.serverData.serverInfo, () -> {
-						});
-					} catch (UnknownHostException var2) {
-						this.serverData.setPingResult(PingResult.UNREACHABLE);
-						this.serverData.serverInfo.label = FriendsMultiplayerSelectionList.CANT_RESOLVE_TEXT;
-						this.minecraft.execute(this::refreshStatus);
-					} catch (Exception var3) {
-						this.serverData.setPingResult(PingResult.UNREACHABLE);
-						this.serverData.serverInfo.label = FriendsMultiplayerSelectionList.CANT_CONNECT_TEXT;
-						this.minecraft.execute(this::refreshStatus);
-					}
-				});
-			}
-			if (serverData.pingResult == PingResult.PINGING && serverData.serverInfo.ping != -2) {
-				this.serverData.setPingResult(
-					this.serverData.serverInfo.protocolVersion == SharedConstants.getGameVersion().getProtocolVersion() ? PingResult.SUCCESSFUL : PingResult.INCOMPATIBLE
-				);
-				if (friend.isSystem()) {
-					serverData.serverInfo.name = friend.getSystem().getFronters().stream().map(PkSystem.Member::getDisplayName)
-						.collect(Collectors.joining("/")) + "(" + friend.getSystem().getName() + "/" + friend.getName() + ")";
-				} else {
-					serverData.serverInfo.name = friend.getName();
-				}
-			}
-			refreshStatus();
 
-			guiGraphics.drawShadowedText(this.minecraft.textRenderer, this.serverData.serverInfo.name, left + ICON_WIDTH + 3, top + 1, -1);
-			List<OrderedText> list = this.minecraft.textRenderer.wrapLines(this.serverData.serverInfo.label, width - ICON_WIDTH - 2);
-
-			for (int i = 0; i < Math.min(list.size(), 2); i++) {
-				guiGraphics.drawShadowedText(this.minecraft.textRenderer, list.get(i), left + ICON_WIDTH + 3, top + 12 + 9 * i, -8355712);
-			}
-
-			this.drawIcon(guiGraphics, left, top, this.icon.getTextureId());
-			if (this.serverData.pingResult() == PingResult.PINGING) {
-				int i = (int) (Util.getMeasuringTimeMs() / 100L + index * 2 & 7L);
-				if (i > 4) {
-					i = 8 - i;
-				}
-				this.statusIcon = switch (i) {
-					case 1 -> Sprite.PINGING_2_SPRITE;
-					case 2 -> Sprite.PINGING_3_SPRITE;
-					case 3 -> Sprite.PINGING_4_SPRITE;
-					case 4 -> Sprite.PINGING_5_SPRITE;
-					default -> Sprite.PINGING_1_SPRITE;
-				};
-			}
-
-			int i = left + width - 10 - 5;
-			if (this.statusIcon != null) {
-				statusIcon.draw(guiGraphics, i, top);
-			}
-
-			byte[] bs = this.serverData.serverInfo.getFavicon();
-			if (!Arrays.equals(bs, this.lastIconBytes)) {
-				if (this.uploadIcon(bs)) {
-					this.lastIconBytes = bs;
-				} else {
-					this.serverData.serverInfo.setFavicon(null);
-					this.updateServerList();
-				}
-			}
-
-			Text component;
-
-			if (this.serverData.pingResult() == PingResult.INCOMPATIBLE) {
-				component = this.serverData.serverInfo.version.copy().formatted(Formatting.RED);
-			} else {
-				component = this.serverData.serverInfo.playerCountLabel;
-			}
-			int j = this.minecraft.textRenderer.getWidth(component);
-			int k = i - j - 5;
-			guiGraphics.drawShadowedText(this.minecraft.textRenderer, component, k, top + 1, -8355712);
-			if (this.statusIconTooltip != null && mouseX >= i && mouseX <= i + STATUS_ICON_WIDTH && mouseY >= top && mouseY <= top + STATUS_ICON_HEIGHT) {
-				this.screen.setDeferredTooltip(this.statusIconTooltip);
-			} else if (this.onlinePlayersTooltip != null && mouseX >= k && mouseX <= k + j && mouseY >= top && mouseY <= top - 1 + 9) {
-				this.screen.setDeferredTooltip(Lists.transform(this.onlinePlayersTooltip, Text::asOrderedText));
-			}
-
-			if (this.minecraft.options.getTouchscreen().get() || hovering) {
-				guiGraphics.fill(left, top, left + ICON_WIDTH, top + ICON_HEIGHT, -1601138544);
-				int l = mouseX - left;
-				int m = mouseY - top;
-				if (this.canJoin()) {
-					if (l < 32 && l > 16) {
-						Sprite.JOIN_HIGHLIGHTED_SPRITE.draw(guiGraphics, left, top);
-					} else {
-						Sprite.JOIN_SPRITE.draw(guiGraphics, left, top);
-					}
-				}
-			}
-		}
-
-		private void refreshStatus() {
+		protected void refreshStatus() {
 			this.onlinePlayersTooltip = null;
-
+			if (!isPublished()) {
+				this.serverData.setPingResult(PingResult.UNREACHABLE);
+			}
 			switch (this.serverData.pingResult()) {
 				case INITIAL:
 				case PINGING:
@@ -340,7 +233,9 @@ public class FriendsMultiplayerSelectionList extends AlwaysSelectedEntryListWidg
 					break;
 				case UNREACHABLE:
 					this.statusIcon = Sprite.UNREACHABLE_SPRITE;
-
+					if (!isPublished()) {
+						break;
+					}
 					this.statusIconTooltip = FriendsMultiplayerSelectionList.NO_CONNECTION_STATUS;
 					break;
 				case SUCCESSFUL:
@@ -361,12 +256,121 @@ public class FriendsMultiplayerSelectionList extends AlwaysSelectedEntryListWidg
 			}
 		}
 
-		public void updateServerList() {
+		@Override
+		public void render(GuiGraphics guiGraphics, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
+			if (this.serverData.pingResult() == PingResult.INITIAL) {
+				this.serverData.setPingResult(PingResult.PINGING);
+				this.serverData.serverInfo.label = CommonTexts.EMPTY;
+				this.serverData.serverInfo.playerCountLabel = CommonTexts.EMPTY;
+				FriendsMultiplayerSelectionList.THREAD_POOL
+					.submit(
+						() -> {
+							try {
+								this.screen
+									.getPinger()
+									.add(
+										this.serverData.serverInfo,
+										() -> {
+										}
+									);
+							} catch (UnknownHostException var2) {
+								this.serverData.setPingResult(PingResult.UNREACHABLE);
+								this.serverData.serverInfo.label = FriendsMultiplayerSelectionList.CANT_RESOLVE_TEXT;
+								this.minecraft.execute(this::refreshStatus);
+							} catch (Exception var3) {
+								this.serverData.setPingResult(PingResult.UNREACHABLE);
+								this.serverData.serverInfo.label = FriendsMultiplayerSelectionList.CANT_CONNECT_TEXT;
+								this.minecraft.execute(this::refreshStatus);
+							}
+						}
+					);
+			}
 
+			if (serverData.pingResult == PingResult.PINGING && serverData.serverInfo.ping != -2) {
+				this.serverData.setPingResult(
+					this.serverData.serverInfo.protocolVersion == SharedConstants.getGameVersion().getProtocolVersion() ? PingResult.SUCCESSFUL : PingResult.INCOMPATIBLE
+				);
+			}
+			refreshStatus();
+
+			guiGraphics.drawShadowedText(this.minecraft.textRenderer, this.serverData.serverInfo.name, left + ICON_WIDTH + 3, top + 1, -1);
+			List<OrderedText> list = this.minecraft.textRenderer.wrapLines(this.serverData.serverInfo.label, width - ICON_WIDTH - 2);
+
+			for (int i = 0; i < Math.min(list.size(), 2); i++) {
+				guiGraphics.drawShadowedText(this.minecraft.textRenderer, list.get(i), left + ICON_WIDTH + 3, top + 12 + 9 * i, -8355712);
+			}
+
+			guiGraphics.drawTexture(this.icon.getTextureId(), left, top, 0.0F, 0.0F, 32, 32, 32, 32);
+			Identifier texture = Auth.getInstance().getSkinTexture(friend);
+			PlayerFaceRenderer.draw(guiGraphics, texture, left + ICON_WIDTH - 10, top + ICON_HEIGHT - 10, 10, true, false);
+			if (this.serverData.pingResult() == PingResult.PINGING) {
+				int i = (int) (Util.getMeasuringTimeMs() / 100L + index * 2 & 7L);
+				if (i > 4) {
+					i = 8 - i;
+				}
+				this.statusIcon = switch (i) {
+					case 1 -> Sprite.PINGING_2_SPRITE;
+					case 2 -> Sprite.PINGING_3_SPRITE;
+					case 3 -> Sprite.PINGING_4_SPRITE;
+					case 4 -> Sprite.PINGING_5_SPRITE;
+					default -> Sprite.PINGING_1_SPRITE;
+				};
+			}
+
+			int i = left + width - STATUS_ICON_WIDTH - SPACING;
+			if (this.statusIcon != null) {
+				statusIcon.draw(guiGraphics, i, top);
+			}
+
+			byte[] bs = this.serverData.serverInfo.getFavicon();
+			if (!Arrays.equals(bs, this.lastIconBytes)) {
+				if (this.uploadIcon(bs)) {
+					this.lastIconBytes = bs;
+				} else {
+					this.serverData.serverInfo.setFavicon(null);
+				}
+			}
+
+			Text component;
+			if (!isPublished()) {
+				component = NOT_PUBLISHED_STATUS;
+			} else {
+				if (this.serverData.pingResult() == PingResult.INCOMPATIBLE) {
+					component = this.serverData.serverInfo.version.copy().formatted(Formatting.RED);
+				} else {
+					component = this.serverData.serverInfo.playerCountLabel;
+				}
+			}
+			int j = this.minecraft.textRenderer.getWidth(component);
+			int k = i - j - SPACING;
+			guiGraphics.drawShadowedText(this.minecraft.textRenderer, component, k, top + 1, -8355712);
+			if (this.statusIconTooltip != null && mouseX >= i && mouseX <= i + STATUS_ICON_WIDTH && mouseY >= top && mouseY <= top + STATUS_ICON_HEIGHT) {
+				this.screen.setDeferredTooltip(this.statusIconTooltip);
+			} else if (this.onlinePlayersTooltip != null && mouseX >= k && mouseX <= k + j && mouseY >= top && mouseY <= top - 1 + 9) {
+				this.screen.setDeferredTooltip(Lists.transform(this.onlinePlayersTooltip, Text::asOrderedText));
+			}
+
+			if (this.minecraft.options.getTouchscreen().get() || hovering) {
+				int l = mouseX - left;
+				int m = mouseY - top;
+				if (this.canJoin()) {
+					guiGraphics.fill(left, top, left + ICON_WIDTH, top + ICON_HEIGHT, -1601138544);
+					if (l < ICON_WIDTH && l > ICON_WIDTH / 2) {
+						Sprite.JOIN_HIGHLIGHTED_SPRITE.draw(guiGraphics, left, top);
+					} else {
+						Sprite.JOIN_SPRITE.draw(guiGraphics, left, top);
+					}
+				}
+			}
 		}
 
-		protected void drawIcon(GuiGraphics guiGraphics, int x, int y, Identifier icon) {
-			guiGraphics.drawTexture(icon, x, y, 0.0F, 0.0F, 32, 32, 32, 32);
+		protected boolean isPublished() {
+			return true;
+		}
+
+		@Override
+		public boolean canJoin() {
+			return serverData.pingResult() == PingResult.SUCCESSFUL && isPublished();
 		}
 
 		private boolean uploadIcon(byte @Nullable [] iconBytes) {
@@ -447,314 +451,53 @@ public class FriendsMultiplayerSelectionList extends AlwaysSelectedEntryListWidg
 		public void close() {
 			this.icon.close();
 		}
-
-		private record StatusDescription(String serverIp, String serverName) {
-			@SuppressWarnings("unchecked")
-			public static StatusDescription read(String json) {
-				try {
-					var map = (Map<String, String>) GsonHelper.read(json);
-					return new StatusDescription(map.get("server_ip"), map.get("server_name"));
-				} catch (Exception e) {
-					return null;
-				}
-			}
-		}
-
-		@Override
-		public boolean canJoin() {
-			return statusDescription.serverIp() != null;
-		}
-
-		@Override
-		public ServerInfo getServerData() {
-			return serverData.serverInfo();
-		}
 	}
 
-	@Environment(EnvType.CLIENT)
-	public class E4mcFriendServerEntry extends Entry {
-		private static final int ICON_WIDTH = 32;
-		private static final int ICON_HEIGHT = 32;
-		private static final int SPACING = 5;
-		private static final int STATUS_ICON_WIDTH = 10;
-		private static final int STATUS_ICON_HEIGHT = 8;
-		private final FriendsMultiplayerScreen screen;
-		private final MinecraftClient minecraft;
-		private final E4mcStatusDescription statusDescription;
-		private final ServerInfoEx serverData;
-		private final FaviconTexture icon;
-		private byte @Nullable [] lastIconBytes;
-		private long lastClickTime;
-		@Nullable
-		private List<Text> onlinePlayersTooltip;
-		@Nullable
-		private FriendsMultiplayerSelectionList.Sprite statusIcon;
-		@Nullable
-		private Text statusIconTooltip;
+	private ExternalServerFriendEntry externalServerEntry(FriendsMultiplayerScreen screen, User friend) {
+		Status.Activity.ExternalServerMetadata metadata = (Status.Activity.ExternalServerMetadata) friend.getStatus().getActivity().metadata().attributes();
+		return new ExternalServerFriendEntry(screen, metadata, new ServerInfo(metadata.serverName(), metadata.address(), false), friend);
+	}
 
-		protected E4mcFriendServerEntry(final FriendsMultiplayerScreen screen, final User friend) {
-			this.screen = screen;
-			statusDescription = E4mcStatusDescription.read(friend.getStatus().getActivity().rawDescription());
-			String name;
-			if (friend.isSystem()) {
-				name = friend.getSystem().getFronters().stream().map(PkSystem.Member::getDisplayName)
-					.collect(Collectors.joining("/")) + "(" + friend.getSystem().getName() + "/" + friend.getName() + ")";
-			} else {
-				name = friend.getName();
-			}
-			this.serverData = new ServerInfoEx(statusDescription.getServerData(name));
-			this.minecraft = MinecraftClient.getInstance();
-			this.icon = FaviconTexture.createServerFaviconTexture(this.minecraft.getTextureManager(), serverData.serverInfo.address != null ? serverData.serverInfo.address : friend.getUuid() + "_" + serverData.serverInfo.name);
-			this.refreshStatus();
+	public class ExternalServerFriendEntry extends ServerEntry {
+		private final Status.Activity.ExternalServerMetadata statusDescription;
+
+		private ExternalServerFriendEntry(FriendsMultiplayerScreen screen, Status.Activity.ExternalServerMetadata statusDescription, ServerInfo serverData, User friend) {
+			super(screen, serverData, friend);
+			this.statusDescription = statusDescription;
+			refreshStatus();
 		}
 
 		@Override
-		public void render(GuiGraphics guiGraphics, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
-			if (this.serverData.pingResult() == PingResult.INITIAL) {
-				this.serverData.setPingResult(PingResult.PINGING);
-				this.serverData.serverInfo.label = CommonTexts.EMPTY;
-				this.serverData.serverInfo.playerCountLabel = CommonTexts.EMPTY;
-				FriendsMultiplayerSelectionList.THREAD_POOL
-					.submit(
-						() -> {
-							try {
-								this.screen
-									.getPinger()
-									.add(
-										this.serverData.serverInfo,
-										() -> {
-										}
-									);
-							} catch (UnknownHostException var2) {
-								this.serverData.setPingResult(PingResult.UNREACHABLE);
-								this.serverData.serverInfo.label = FriendsMultiplayerSelectionList.CANT_RESOLVE_TEXT;
-								this.minecraft.execute(this::refreshStatus);
-							} catch (Exception var3) {
-								this.serverData.setPingResult(PingResult.UNREACHABLE);
-								this.serverData.serverInfo.label = FriendsMultiplayerSelectionList.CANT_CONNECT_TEXT;
-								this.minecraft.execute(this::refreshStatus);
-							}
-						}
-					);
-			}
-
-			if (serverData.pingResult == PingResult.PINGING && serverData.serverInfo.ping != -2) {
-				this.serverData.setPingResult(
-					this.serverData.serverInfo.protocolVersion == SharedConstants.getGameVersion().getProtocolVersion() ? PingResult.SUCCESSFUL : PingResult.INCOMPATIBLE
-				);
-			}
-			refreshStatus();
-
-			guiGraphics.drawShadowedText(this.minecraft.textRenderer, this.serverData.serverInfo.name, left + ICON_WIDTH + 3, top + 1, -1);
-			List<OrderedText> list = this.minecraft.textRenderer.wrapLines(this.serverData.serverInfo.label, width - ICON_WIDTH - 2);
-
-			for (int i = 0; i < Math.min(list.size(), 2); i++) {
-				guiGraphics.drawShadowedText(this.minecraft.textRenderer, list.get(i), left + ICON_WIDTH + 3, top + 12 + 9 * i, -8355712);
-			}
-
-			this.drawIcon(guiGraphics, left, top, this.icon.getTextureId());
-			if (this.serverData.pingResult() == PingResult.PINGING) {
-				int i = (int) (Util.getMeasuringTimeMs() / 100L + index * 2 & 7L);
-				if (i > 4) {
-					i = 8 - i;
-				}
-				this.statusIcon = switch (i) {
-					case 1 -> Sprite.PINGING_2_SPRITE;
-					case 2 -> Sprite.PINGING_3_SPRITE;
-					case 3 -> Sprite.PINGING_4_SPRITE;
-					case 4 -> Sprite.PINGING_5_SPRITE;
-					default -> Sprite.PINGING_1_SPRITE;
-				};
-			}
-
-			int i = left + width - 10 - 5;
-			if (this.statusIcon != null) {
-				statusIcon.draw(guiGraphics, i, top);
-			}
-
-			byte[] bs = this.serverData.serverInfo.getFavicon();
-			if (!Arrays.equals(bs, this.lastIconBytes)) {
-				if (this.uploadServerIcon(bs)) {
-					this.lastIconBytes = bs;
-				} else {
-					this.serverData.serverInfo.setFavicon(null);
-					this.updateServerList();
-				}
-			}
-
-			Text component;
-			if (statusDescription.domain() == null) {
-				component = NOT_PUBLISHED_STATUS;
-			} else {
-				if (this.serverData.pingResult() == PingResult.INCOMPATIBLE) {
-					component = this.serverData.serverInfo.version.copy().formatted(Formatting.RED);
-				} else {
-					component = this.serverData.serverInfo.playerCountLabel;
-				}
-			}
-			int j = this.minecraft.textRenderer.getWidth(component);
-			int k = i - j - SPACING;
-			guiGraphics.drawShadowedText(this.minecraft.textRenderer, component, k, top + 1, -8355712);
-			if (this.statusIconTooltip != null && mouseX >= i && mouseX <= i + STATUS_ICON_WIDTH && mouseY >= top && mouseY <= top + STATUS_ICON_HEIGHT) {
-				this.screen.setDeferredTooltip(this.statusIconTooltip);
-			} else if (this.onlinePlayersTooltip != null && mouseX >= k && mouseX <= k + j && mouseY >= top && mouseY <= top - 1 + 9) {
-				this.screen.setDeferredTooltip(Lists.transform(this.onlinePlayersTooltip, Text::asOrderedText));
-			}
-
-			if (this.minecraft.options.getTouchscreen().get() || hovering) {
-				guiGraphics.fill(left, top, left + ICON_WIDTH, top + ICON_HEIGHT, -1601138544);
-				int l = mouseX - left;
-				int m = mouseY - top;
-				if (this.canJoin()) {
-					if (l < 32 && l > 16) {
-						Sprite.JOIN_HIGHLIGHTED_SPRITE.draw(guiGraphics, left, top);
-					} else {
-						Sprite.JOIN_SPRITE.draw(guiGraphics, left, top);
-					}
-				}
-			}
-		}
-
-		private void refreshStatus() {
-			this.onlinePlayersTooltip = null;
-			if (statusDescription.domain() == null) {
-				this.serverData.setPingResult(PingResult.UNREACHABLE);
-			}
-			switch (this.serverData.pingResult()) {
-				case INITIAL:
-				case PINGING:
-					this.statusIcon = Sprite.PING_1_SPRITE;
-					this.statusIconTooltip = PINGING_STATUS;
-					break;
-				case INCOMPATIBLE:
-					this.statusIcon = Sprite.INCOMPATIBLE_SPRITE;
-					this.onlinePlayersTooltip = this.serverData.serverInfo.playerListSummary;
-					this.statusIconTooltip = INCOMPATIBLE_STATUS;
-					break;
-				case UNREACHABLE:
-					this.statusIcon = Sprite.UNREACHABLE_SPRITE;
-					if (statusDescription.domain() == null) {
-						break;
-					}
-					this.statusIconTooltip = NO_CONNECTION_STATUS;
-					break;
-				case SUCCESSFUL:
-					if (this.serverData.serverInfo.ping < 150L) {
-						this.statusIcon = Sprite.PING_5_SPRITE;
-					} else if (this.serverData.serverInfo.ping < 300L) {
-						this.statusIcon = Sprite.PING_4_SPRITE;
-					} else if (this.serverData.serverInfo.ping < 600L) {
-						this.statusIcon = Sprite.PING_3_SPRITE;
-					} else if (this.serverData.serverInfo.ping < 1000L) {
-						this.statusIcon = Sprite.PING_2_SPRITE;
-					} else {
-						this.statusIcon = Sprite.PING_1_SPRITE;
-					}
-
-					this.statusIconTooltip = Text.translatable("multiplayer.status.ping", this.serverData.serverInfo.ping);
-					this.onlinePlayersTooltip = this.serverData.serverInfo.playerListSummary;
-			}
-		}
-
-		public void updateServerList() {
-
-		}
-
-		protected void drawIcon(GuiGraphics guiGraphics, int x, int y, Identifier icon) {
-			RenderSystem.enableBlend();
-			guiGraphics.drawTexture(icon, x, y, 0.0F, 0.0F, 32, 32, 32, 32);
-			RenderSystem.disableBlend();
-		}
-
 		public boolean canJoin() {
+			return statusDescription.address() != null;
+		}
+
+	}
+
+	private E4mcServerFriendEntry e4mcServerFriendEntry(FriendsMultiplayerScreen screen, User friend) {
+		Status.Activity.E4mcMetadata metadata = (Status.Activity.E4mcMetadata) friend.getStatus().getActivity().metadata().attributes();
+		return new E4mcServerFriendEntry(screen, metadata, ServerInfoUtil.getServerData(friend.getName(), metadata), friend);
+	}
+
+	public class E4mcServerFriendEntry extends ServerEntry {
+
+		private final Status.Activity.E4mcMetadata statusDescription;
+
+		protected E4mcServerFriendEntry(FriendsMultiplayerScreen screen, Status.Activity.E4mcMetadata statusDescription, ServerInfo serverData, User friend) {
+			super(screen, serverData, friend);
+			this.statusDescription = statusDescription;
+			refreshStatus();
+		}
+
+		@Override
+		protected boolean isPublished() {
 			return statusDescription.domain() != null;
 		}
 
-		private boolean uploadServerIcon(byte @Nullable [] iconBytes) {
-			if (iconBytes == null) {
-				this.icon.clear();
-			} else {
-				try {
-					this.icon.upload(NativeImage.read(iconBytes));
-				} catch (Throwable var3) {
-					FriendsMultiplayerSelectionList.LOGGER.error("Invalid icon for server {} ({})", this.serverData.serverInfo.name, this.serverData.serverInfo.address, var3);
-					return false;
-				}
-			}
-
-			return true;
-		}
-
 		@Override
-		public boolean mouseClicked(double mouseX, double mouseY, int button) {
-			double d = mouseX - FriendsMultiplayerSelectionList.this.getRowLeft();
-			double e = mouseY - FriendsMultiplayerSelectionList.this.getRowTop(FriendsMultiplayerSelectionList.this.children().indexOf(this));
-			if (d <= 32.0) {
-				if (d < 32.0 && d > 16.0 && this.canJoin()) {
-					this.screen.setSelected(this);
-					this.screen.joinSelectedServer();
-					return true;
-				}
-			}
-
-			this.screen.setSelected(this);
-			if (Util.getMeasuringTimeMs() - this.lastClickTime < 250L && canJoin()) {
-				this.screen.joinSelectedServer();
-			}
-
-			this.lastClickTime = Util.getMeasuringTimeMs();
-			return super.mouseClicked(mouseX, mouseY, button);
-		}
-
-		@Override
-		public @NotNull Text getNarration() {
-			MutableText mutableText = Text.empty();
-			mutableText.append(Text.translatable("narrator.select", this.serverData.serverInfo.name));
-			mutableText.append(CommonTexts.SENTENCE_SEPARATOR);
-			switch (this.serverData.pingResult()) {
-				case PINGING:
-					mutableText.append(FriendsMultiplayerSelectionList.PINGING_STATUS);
-					break;
-				case INCOMPATIBLE:
-					mutableText.append(FriendsMultiplayerSelectionList.INCOMPATIBLE_STATUS);
-					mutableText.append(CommonTexts.SENTENCE_SEPARATOR);
-					mutableText.append(Text.translatable("multiplayer.status.version.narration", this.serverData.serverInfo.version));
-					mutableText.append(CommonTexts.SENTENCE_SEPARATOR);
-					mutableText.append(Text.translatable("multiplayer.status.motd.narration", this.serverData.serverInfo.label));
-					break;
-				case UNREACHABLE:
-					mutableText.append(FriendsMultiplayerSelectionList.NO_CONNECTION_STATUS);
-					if (statusDescription.domain() == null) {
-						mutableText.append(NOT_PUBLISHED_STATUS);
-					}
-					break;
-				default:
-					mutableText.append(FriendsMultiplayerSelectionList.ONLINE_STATUS);
-					mutableText.append(CommonTexts.SENTENCE_SEPARATOR);
-					mutableText.append(Text.translatable("multiplayer.status.ping.narration", this.serverData.serverInfo.ping));
-					mutableText.append(CommonTexts.SENTENCE_SEPARATOR);
-					mutableText.append(Text.translatable("multiplayer.status.motd.narration", this.serverData.serverInfo.label));
-					if (this.serverData.serverInfo.players != null) {
-						mutableText.append(CommonTexts.SENTENCE_SEPARATOR);
-						mutableText.append(
-							Text.translatable("multiplayer.status.player_count.narration", this.serverData.serverInfo.players.online(), this.serverData.serverInfo.players.max())
-						);
-						mutableText.append(CommonTexts.SENTENCE_SEPARATOR);
-						mutableText.append(Texts.join(this.serverData.serverInfo.playerListSummary, Text.literal(", ")));
-					}
-			}
-
-			return mutableText;
-		}
-
-		@Override
-		public void close() {
-			this.icon.close();
-		}
-
-		@Override
-		public ServerInfo getServerData() {
-			return serverData.serverInfo();
+		protected void refreshStatus() {
+			super.refreshStatus();
+			serverData.serverInfo.label = Text.of(statusDescription.serverInfo().levelName());
 		}
 	}
 
@@ -776,7 +519,7 @@ public class FriendsMultiplayerSelectionList extends AlwaysSelectedEntryListWidg
 		}
 	}
 
-	static final class ServerInfoEx {
+	protected static final class ServerInfoEx {
 		private final ServerInfo serverInfo;
 		@Setter
 		private PingResult pingResult;
@@ -796,7 +539,7 @@ public class FriendsMultiplayerSelectionList extends AlwaysSelectedEntryListWidg
 
 	}
 
-	enum PingResult {
+	protected enum PingResult {
 		INITIAL,
 		PINGING,
 		UNREACHABLE,

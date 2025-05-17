@@ -22,7 +22,6 @@
 
 package io.github.axolotlclient.api.handlers;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -35,6 +34,11 @@ import io.github.axolotlclient.api.types.User;
 import io.github.axolotlclient.api.util.SocketMessageHandler;
 import io.github.axolotlclient.api.util.UUIDHelper;
 import io.github.axolotlclient.util.GsonHelper;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+import lombok.experimental.Accessors;
 
 public class StatusUpdateHandler implements SocketMessageHandler {
 
@@ -49,26 +53,23 @@ public class StatusUpdateHandler implements SocketMessageHandler {
 		return "activity_update".equals(target) && API.getInstance().getApiOptions().statusUpdateNotifs.get();
 	}
 
+	@AllArgsConstructor
+	@Getter
+	@Accessors(fluent = true)
+	@ToString
+	@EqualsAndHashCode
+	private static class StatusUpdateMessage {
+		private final String user;
+		private final Status.Activity activity;
+	}
+
 	@Override
 	public void handle(Response response) {
-		String uuid = response.getBody("user");
-		String title = response.getBody("activity.title");
-		String desc = response.getBody("activity.description");
-		String description;
-		if (desc.contains("{")) {
-			try {
-				var json = GsonHelper.fromJson(desc);
-				description = json.has("value") ? json.get("value").getAsString() : "";
-			} catch (Throwable t) {
-				description = desc;
-			}
-		} else {
-			description = desc;
-		}
-		Instant started = response.getBody("activity.started", Instant::parse);
-		Status.Activity activity = new Status.Activity(title, description, desc, started);
-		notification("api.friends.activity.update", translate(title) + ": " + translate(description), UUIDHelper.tryGetUsernameAsync(uuid).join());
-		UserRequest.get(uuid).thenAccept(u -> {
+		var status = GsonHelper.GSON.fromJson(response.getPlainBody(), StatusUpdateMessage.class);
+
+		Status.Activity activity = status.activity();
+		notification("api.friends.activity.update", translate(activity.title()) + ": " + translate(activity.description()), UUIDHelper.tryGetUsernameAsync(status.user()).join());
+		UserRequest.get(status.user()).thenAccept(u -> {
 			User user = u.orElseThrow();
 			user.getStatus().setOnline(true);
 			user.getStatus().setActivity(activity);

@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -34,10 +35,17 @@ import java.util.stream.Stream;
 
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
+import io.github.axolotlclient.api.types.Status;
+import io.github.axolotlclient.api.util.InstantTypeAdapter;
 
 public class GsonHelper {
 
-	public static final Gson GSON = new GsonBuilder().create();
+	public static final Gson GSON = new GsonBuilder()
+		.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+		.registerTypeAdapter(Status.Activity.ServerInfo.Favicon.class, new Status.Activity.ServerInfo.Favicon.FaviconTypeAdapter())
+		.registerTypeAdapter(Status.Activity.Metadata.class, new Status.Activity.Metadata.MetadataTypeAdapter())
+		.registerTypeAdapter(Instant.class, new InstantTypeAdapter())
+		.create();
 
 	public static JsonObject fromJson(String s) {
 		if (s == null || s.isEmpty()) {

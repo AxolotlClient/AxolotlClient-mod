@@ -23,32 +23,33 @@
 package io.github.axolotlclient.api.e4mc;
 
 import io.github.axolotlclient.api.API;
+import io.github.axolotlclient.api.multiplayer.ServerInfoUtil;
+import io.github.axolotlclient.api.types.Status;
 import link.e4mc.E4mcClient;
 import link.e4mc.QuiclimeSession;
 import lombok.Setter;
 import net.minecraft.client.Minecraft;
 
+@Setter
 public class AxolotlClientE4mcPlugin {
 
-	@Setter
 	private String e4mcDomain = null;
 
 	public static final AxolotlClientE4mcPlugin INSTANCE = new AxolotlClientE4mcPlugin();
 
-	public String getStatusDescription() {
+	public Status.Activity.E4mcMetadata getStatusDescription() {
 		Minecraft mc = Minecraft.getInstance();
 		var levelName = mc.getSingleplayerServer().getWorldData().getLevelName();
 		if (E4mcClient.session == null || E4mcClient.session.state != QuiclimeSession.State.STARTED) {
 			if (mc.getSingleplayerServer().getStatus() != null) {
-				return new E4mcStatusDescription(levelName, null, mc.getSingleplayerServer().getStatus()).write();
+				return new Status.Activity.E4mcMetadata(null, ServerInfoUtil.getServerInfo(levelName, mc.getSingleplayerServer().getStatus()));
 			}
-			return new E4mcStatusDescription(levelName, null, null).write();
+			return new Status.Activity.E4mcMetadata(null, ServerInfoUtil.getServerInfo(levelName, null));
 		}
 		if (!API.getInstance().getApiOptions().allowFriendsServerJoin.get()) {
-			return new E4mcStatusDescription(levelName, null, mc.getSingleplayerServer().getStatus()).write();
+			return new Status.Activity.E4mcMetadata(null, ServerInfoUtil.getServerInfo(levelName, mc.getSingleplayerServer().getStatus()));
 		}
-		return new E4mcStatusDescription(levelName,
-			e4mcDomain, mc.getSingleplayerServer().getStatus()).write();
+		return new Status.Activity.E4mcMetadata(e4mcDomain, ServerInfoUtil.getServerInfo(levelName, mc.getSingleplayerServer().getStatus()));
 	}
 
 }

@@ -34,9 +34,8 @@ import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.logging.LogUtils;
-import io.github.axolotlclient.api.e4mc.E4mcStatusDescription;
-import io.github.axolotlclient.api.requests.StatusUpdate;
 import io.github.axolotlclient.api.types.PkSystem;
+import io.github.axolotlclient.api.types.Status;
 import io.github.axolotlclient.api.types.User;
 import io.github.axolotlclient.modules.auth.Auth;
 import net.fabricmc.api.EnvType;
@@ -122,8 +121,8 @@ public class FriendsMultiplayerSelectionList extends ObjectSelectionList<Friends
 
 		for (User friend : friends) {
 			if (friend.getStatus().isOnline()) {
-				if (friend.getStatus().getActivity().title().startsWith(StatusUpdate.SPECIAL_STATUS_PREFIX)) {
-					if (StatusUpdate.E4MC_STATUS_TITLE.equals(friend.getStatus().getActivity().title())) {
+				if (friend.getStatus().getActivity() != null && friend.getStatus().getActivity().hasMetadata()) {
+					if (friend.getStatus().getActivity().hasMetadata(Status.Activity.E4mcMetadata.ID)) {
 						this.friendEntries.add(e4mcServerFriendEntry(this.screen, friend));
 					} else {
 						this.friendEntries.add(externalServerEntry(this.screen, friend));
@@ -189,7 +188,7 @@ public class FriendsMultiplayerSelectionList extends ObjectSelectionList<Friends
 				graphics.drawString(minecraft.font, user.getStatus().getLastOnline(), left + 3 + 33, top + 12, 8421504, false);
 			}
 
-			ResourceLocation texture = Auth.getInstance().getSkinTexture(user.getUuid(), user.getName());
+			ResourceLocation texture = Auth.getInstance().getSkinTexture(user);
 			PlayerFaceRenderer.draw(graphics, texture, left - 1, top - 1, 33, true, false, -1);
 		}
 	}
@@ -218,11 +217,10 @@ public class FriendsMultiplayerSelectionList extends ObjectSelectionList<Friends
 			this.screen = screen;
 			this.minecraft = Minecraft.getInstance();
 			this.serverData = serverData;
-			this.icon = FaviconTexture.forServer(minecraft.getTextureManager(), serverData.ip);
+			this.icon = FaviconTexture.forServer(minecraft.getTextureManager(), serverData.ip != null ? serverData.ip : friend.getUuid() + "_" + serverData.name);
 			this.friend = friend;
 			refreshStatus();
 		}
-
 
 
 		protected void refreshStatus() {
@@ -273,34 +271,34 @@ public class FriendsMultiplayerSelectionList extends ObjectSelectionList<Friends
 				this.serverData.motd = CommonComponents.EMPTY;
 				this.serverData.status = CommonComponents.EMPTY;
 				FriendsMultiplayerSelectionList.THREAD_POOL
-						.submit(
-								() -> {
-									try {
-										this.screen
-												.getPinger()
-												.pingServer(
-														this.serverData,
-														() -> {
-														},
-														() -> {
-															this.serverData
-																	.setState(
-																			this.serverData.protocol == SharedConstants.getCurrentVersion().getProtocolVersion() ? ServerData.State.SUCCESSFUL : ServerData.State.INCOMPATIBLE
-																	);
-															this.minecraft.execute(this::refreshStatus);
-														}
+					.submit(
+						() -> {
+							try {
+								this.screen
+									.getPinger()
+									.pingServer(
+										this.serverData,
+										() -> {
+										},
+										() -> {
+											this.serverData
+												.setState(
+													this.serverData.protocol == SharedConstants.getCurrentVersion().getProtocolVersion() ? ServerData.State.SUCCESSFUL : ServerData.State.INCOMPATIBLE
 												);
-									} catch (UnknownHostException var2) {
-										this.serverData.setState(ServerData.State.UNREACHABLE);
-										this.serverData.motd = FriendsMultiplayerSelectionList.CANT_RESOLVE_TEXT;
-										this.minecraft.execute(this::refreshStatus);
-									} catch (Exception var3) {
-										this.serverData.setState(ServerData.State.UNREACHABLE);
-										this.serverData.motd = FriendsMultiplayerSelectionList.CANT_CONNECT_TEXT;
-										this.minecraft.execute(this::refreshStatus);
-									}
-								}
-						);
+											this.minecraft.execute(this::refreshStatus);
+										}
+									);
+							} catch (UnknownHostException var2) {
+								this.serverData.setState(ServerData.State.UNREACHABLE);
+								this.serverData.motd = FriendsMultiplayerSelectionList.CANT_RESOLVE_TEXT;
+								this.minecraft.execute(this::refreshStatus);
+							} catch (Exception var3) {
+								this.serverData.setState(ServerData.State.UNREACHABLE);
+								this.serverData.motd = FriendsMultiplayerSelectionList.CANT_CONNECT_TEXT;
+								this.minecraft.execute(this::refreshStatus);
+							}
+						}
+					);
 			}
 
 			guiGraphics.drawString(this.minecraft.font, this.serverData.name, left + ICON_WIDTH + 3, top + 1, -1);
@@ -310,7 +308,9 @@ public class FriendsMultiplayerSelectionList extends ObjectSelectionList<Friends
 				guiGraphics.drawString(this.minecraft.font, list.get(i), left + ICON_WIDTH + 3, top + 12 + 9 * i, -8355712);
 			}
 
-			this.drawIcon(guiGraphics, left, top, this.icon.textureLocation());
+			guiGraphics.blit(RenderType::guiTextured, this.icon.textureLocation(), left, top, 0.0F, 0.0F, ICON_WIDTH, ICON_HEIGHT, ICON_WIDTH, ICON_HEIGHT);
+			ResourceLocation texture = Auth.getInstance().getSkinTexture(friend);
+			PlayerFaceRenderer.draw(guiGraphics, texture, left + ICON_WIDTH - 10, top + ICON_HEIGHT - 10, 10, true, false, -1);
 			if (this.serverData.state() == ServerData.State.PINGING) {
 				int i = (int) (Util.getMillis() / 100L + index * 2 & 7L);
 				if (i > 4) {
@@ -325,7 +325,7 @@ public class FriendsMultiplayerSelectionList extends ObjectSelectionList<Friends
 				};
 			}
 
-			int i = left + width - 10 - 5;
+			int i = left + width - STATUS_ICON_WIDTH - SPACING;
 			if (this.statusIcon != null) {
 				guiGraphics.blitSprite(RenderType::guiTextured, this.statusIcon, i, top, STATUS_ICON_WIDTH, STATUS_ICON_HEIGHT);
 			}
@@ -350,7 +350,7 @@ public class FriendsMultiplayerSelectionList extends ObjectSelectionList<Friends
 				}
 			}
 			int j = this.minecraft.font.width(component);
-			int k = i - j - 5;
+			int k = i - j - SPACING;
 			guiGraphics.drawString(this.minecraft.font, component, k, top + 1, -8355712);
 			if (this.statusIconTooltip != null && mouseX >= i && mouseX <= i + STATUS_ICON_WIDTH && mouseY >= top && mouseY <= top + STATUS_ICON_HEIGHT) {
 				this.screen.setTooltipForNextRenderPass(this.statusIconTooltip);
@@ -359,11 +359,11 @@ public class FriendsMultiplayerSelectionList extends ObjectSelectionList<Friends
 			}
 
 			if (this.minecraft.options.touchscreen().get() || hovering) {
-				guiGraphics.fill(left, top, left + ICON_WIDTH, top + ICON_HEIGHT, -1601138544);
 				int l = mouseX - left;
 				int m = mouseY - top;
 				if (this.canJoin()) {
-					if (l < 32 && l > 16) {
+					guiGraphics.fill(left, top, left + ICON_WIDTH, top + ICON_HEIGHT, -1601138544);
+					if (l < ICON_WIDTH && l > ICON_WIDTH/2) {
 						guiGraphics.blitSprite(RenderType::guiTextured, FriendsMultiplayerSelectionList.JOIN_HIGHLIGHTED_SPRITE, left, top, ICON_WIDTH, ICON_HEIGHT);
 					} else {
 						guiGraphics.blitSprite(RenderType::guiTextured, FriendsMultiplayerSelectionList.JOIN_SPRITE, left, top, ICON_WIDTH, ICON_HEIGHT);
@@ -378,11 +378,7 @@ public class FriendsMultiplayerSelectionList extends ObjectSelectionList<Friends
 
 		@Override
 		public boolean canJoin() {
-			return isPublished();
-		}
-
-		protected void drawIcon(GuiGraphics guiGraphics, int x, int y, ResourceLocation icon) {
-			guiGraphics.blit(RenderType::guiTextured, icon, x, y, 0.0F, 0.0F, 32, 32, 32, 32);
+			return serverData.state() == ServerData.State.SUCCESSFUL && isPublished();
 		}
 
 		private boolean uploadIcon(byte @Nullable [] iconBytes) {
@@ -449,7 +445,7 @@ public class FriendsMultiplayerSelectionList extends ObjectSelectionList<Friends
 					if (this.serverData.players != null) {
 						mutableComponent.append(CommonComponents.NARRATION_SEPARATOR);
 						mutableComponent.append(
-								Component.translatable("multiplayer.status.player_count.narration", this.serverData.players.online(), this.serverData.players.max())
+							Component.translatable("multiplayer.status.player_count.narration", this.serverData.players.online(), this.serverData.players.max())
 						);
 						mutableComponent.append(CommonComponents.NARRATION_SEPARATOR);
 						mutableComponent.append(ComponentUtils.formatList(this.serverData.playerList, Component.literal(", ")));
@@ -466,37 +462,43 @@ public class FriendsMultiplayerSelectionList extends ObjectSelectionList<Friends
 	}
 
 	private ExternalServerFriendEntry externalServerEntry(FriendsMultiplayerScreen screen, User friend) {
-		StatusDescription statusDescription = StatusDescription.read(friend.getStatus().getActivity().rawDescription());
-		return new ExternalServerFriendEntry(screen, statusDescription, new ServerData(statusDescription.serverName(), statusDescription.serverIp(), ServerData.Type.OTHER), friend);
+		Status.Activity.ExternalServerMetadata metadata = (Status.Activity.ExternalServerMetadata) friend.getStatus().getActivity().metadata().attributes();
+		return new ExternalServerFriendEntry(screen, metadata, new ServerData(metadata.serverName(), metadata.address(), ServerData.Type.OTHER), friend);
 	}
 
 	public class ExternalServerFriendEntry extends ServerEntry {
-		private final StatusDescription statusDescription;
+		private final Status.Activity.ExternalServerMetadata statusDescription;
 
-		private ExternalServerFriendEntry(FriendsMultiplayerScreen screen, StatusDescription statusDescription, ServerData serverData, User friend) {
+		private ExternalServerFriendEntry(FriendsMultiplayerScreen screen, Status.Activity.ExternalServerMetadata statusDescription, ServerData serverData, User friend) {
 			super(screen, serverData, friend);
 			this.statusDescription = statusDescription;
 		}
 
 		@Override
 		public boolean canJoin() {
-			return statusDescription.serverIp() != null;
+			return statusDescription.address() != null;
 		}
 
 	}
 
 	private E4mcServerFriendEntry e4mcServerFriendEntry(FriendsMultiplayerScreen screen, User friend) {
-		E4mcStatusDescription statusDescription = E4mcStatusDescription.read(friend.getStatus().getActivity().rawDescription());
-		return new E4mcServerFriendEntry(screen, statusDescription, statusDescription.getServerData(friend.getName()),friend);
+		Status.Activity.E4mcMetadata metadata = (Status.Activity.E4mcMetadata) friend.getStatus().getActivity().metadata().attributes();
+		return new E4mcServerFriendEntry(screen, metadata, ServerInfoUtil.getServerData(friend.getName(), metadata), friend);
 	}
 
 	public class E4mcServerFriendEntry extends ServerEntry {
 
-		private final E4mcStatusDescription statusDescription;
+		private final Status.Activity.E4mcMetadata statusDescription;
 
-		protected E4mcServerFriendEntry(FriendsMultiplayerScreen screen, E4mcStatusDescription statusDescription, ServerData serverData, User friend) {
+		protected E4mcServerFriendEntry(FriendsMultiplayerScreen screen, Status.Activity.E4mcMetadata statusDescription, ServerData serverData, User friend) {
 			super(screen, serverData, friend);
 			this.statusDescription = statusDescription;
+		}
+
+		@Override
+		protected void refreshStatus() {
+			super.refreshStatus();
+			serverData.motd = Component.nullToEmpty(statusDescription.serverInfo().levelName());
 		}
 
 		@Override

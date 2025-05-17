@@ -63,7 +63,7 @@ public class StatusUpdateProviderImpl implements StatusUpdateProvider {
 			}
 			return StatusUpdate.inGameUnknown(entry.name);
 		} else if (MinecraftClient.getInstance().getServer() != null) {
-			String e4mcStatus = E4mcStatusProvider.getStatusDescription();
+			var e4mcStatus = E4mcStatusProvider.getStatusDescription();
 			if (e4mcStatus != null) {
 				return StatusUpdate.e4mcStatusUpdate(e4mcStatus);
 			}

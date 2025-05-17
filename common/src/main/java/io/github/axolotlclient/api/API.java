@@ -162,7 +162,7 @@ public class API {
 					.thenAccept(r -> {
 						self = new User(sanitizeUUID(r.getBody("uuid")),
 							r.getBody("username"), Relation.NONE,
-							r.getBody("registered", TimestampParser::parse),
+							r.getBody("registered", Instant::parse),
 							Status.UNKNOWN,
 							r.ifBodyHas("previous_usernames", () -> {
 								List<Map<?, ?>> previous = r.getBody("previous_usernames");

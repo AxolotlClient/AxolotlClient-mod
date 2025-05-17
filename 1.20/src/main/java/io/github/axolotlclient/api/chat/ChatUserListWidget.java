@@ -129,9 +129,9 @@ public class ChatUserListWidget extends AlwaysSelectedEntryListWidget<ChatUserLi
 				y + 12, x + entryWidth - 6, y + 12 + client.textRenderer.fontHeight + 2, 8421504);
 
 			RenderSystem.enableBlend();
-			graphics.drawTexture(Auth.getInstance().getSkinTexture(user.getUuid(), user.getName()),
+			graphics.drawTexture(Auth.getInstance().getSkinTexture(user.getUuid()),
 				x, y, entryHeight, entryHeight, 8, 8, 8, 8, 64, 64);
-			graphics.drawTexture(Auth.getInstance().getSkinTexture(user.getUuid(), user.getName()),
+			graphics.drawTexture(Auth.getInstance().getSkinTexture(user.getUuid()),
 				x, y, entryHeight, entryHeight, 40, 8, 8, 8, 64, 64);
 			RenderSystem.disableBlend();
 		}
