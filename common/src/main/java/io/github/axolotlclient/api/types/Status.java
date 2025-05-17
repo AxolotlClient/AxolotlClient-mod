@@ -186,6 +186,10 @@ public class Status {
 			public String typeId() {
 				return ID;
 			}
+
+			public ExternalServerMetadata asExternalServer() {
+				return new ExternalServerMetadata(serverInfo.levelName(), externalIp);
+			}
 		}
 
 		@AllArgsConstructor

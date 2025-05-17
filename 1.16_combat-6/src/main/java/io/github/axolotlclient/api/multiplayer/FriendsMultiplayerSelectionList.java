@@ -434,7 +434,13 @@ public class FriendsMultiplayerSelectionList extends AlwaysSelectedEntryListWidg
 	}
 
 	private ExternalServerFriendEntry externalServerEntry(FriendsMultiplayerScreen screen, User friend) {
-		Status.Activity.ExternalServerMetadata metadata = (Status.Activity.ExternalServerMetadata) friend.getStatus().getActivity().metadata().attributes();
+		var activity = friend.getStatus().getActivity();
+		Status.Activity.ExternalServerMetadata metadata;
+		if (activity.hasMetadata(Status.Activity.WorldHostMetadata.ID)) {
+			metadata = ((Status.Activity.WorldHostMetadata) activity.metadata().attributes()).asExternalServer();
+		} else {
+			metadata = (Status.Activity.ExternalServerMetadata) friend.getStatus().getActivity().metadata().attributes();
+		}
 		return new ExternalServerFriendEntry(screen, metadata, new ServerInfo(metadata.serverName(), metadata.address(), false), friend);
 	}
 

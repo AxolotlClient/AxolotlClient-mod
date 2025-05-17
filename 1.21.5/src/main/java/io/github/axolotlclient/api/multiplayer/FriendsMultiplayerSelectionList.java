@@ -363,7 +363,7 @@ public class FriendsMultiplayerSelectionList extends ObjectSelectionList<Friends
 				int m = mouseY - top;
 				if (this.canJoin()) {
 					guiGraphics.fill(left, top, left + ICON_WIDTH, top + ICON_HEIGHT, -1601138544);
-					if (l < ICON_WIDTH && l > ICON_WIDTH/2) {
+					if (l < ICON_WIDTH && l > ICON_WIDTH / 2) {
 						guiGraphics.blitSprite(RenderType::guiTextured, FriendsMultiplayerSelectionList.JOIN_HIGHLIGHTED_SPRITE, left, top, ICON_WIDTH, ICON_HEIGHT);
 					} else {
 						guiGraphics.blitSprite(RenderType::guiTextured, FriendsMultiplayerSelectionList.JOIN_SPRITE, left, top, ICON_WIDTH, ICON_HEIGHT);
@@ -462,7 +462,13 @@ public class FriendsMultiplayerSelectionList extends ObjectSelectionList<Friends
 	}
 
 	private ExternalServerFriendEntry externalServerEntry(FriendsMultiplayerScreen screen, User friend) {
-		Status.Activity.ExternalServerMetadata metadata = (Status.Activity.ExternalServerMetadata) friend.getStatus().getActivity().metadata().attributes();
+		var activity = friend.getStatus().getActivity();
+		Status.Activity.ExternalServerMetadata metadata;
+		if (activity.hasMetadata(Status.Activity.WorldHostMetadata.ID)) {
+			metadata = ((Status.Activity.WorldHostMetadata) activity.metadata().attributes()).asExternalServer();
+		} else {
+			metadata = (Status.Activity.ExternalServerMetadata) friend.getStatus().getActivity().metadata().attributes();
+		}
 		return new ExternalServerFriendEntry(screen, metadata, new ServerData(metadata.serverName(), metadata.address(), ServerData.Type.OTHER), friend);
 	}
 
