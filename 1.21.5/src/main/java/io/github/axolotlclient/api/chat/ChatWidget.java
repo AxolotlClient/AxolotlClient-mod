@@ -194,9 +194,7 @@ public class ChatWidget extends ObjectSelectionList<ChatWidget.ChatLine> {
 						}
 						client.setScreen(previous);
 					}, Component.translatable("api.channels.confirm_report"), Component.translatable("api.channels.confirm_report.desc", origin.content())));
-				}).spacer().entry(Component.translatable("action.copy"), buttonWidget -> {
-					client.keyboardHandler.setClipboard(origin.content());
-				});
+				}).spacer().entry(Component.translatable("action.copy"), buttonWidget -> client.keyboardHandler.setClipboard(origin.content()));
 				screen.setContextMenu(builder.build());
 				return true;
 			}

@@ -64,7 +64,7 @@ public abstract class ButtonWidgetMixin {
 	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget;drawCenteredString(Lnet/minecraft/client/render/TextRenderer;Ljava/lang/String;III)V"))
 	private void drawScrollableString(ButtonWidget instance, TextRenderer renderer, String message, int centerX, int y_original, int color) {
 		int left = x + 2;
-		int right = x + width - 1 - 2;
+		int right = x + width - 2;
 		DrawUtil.drawScrollableText(Minecraft.getInstance().textRenderer, message, left, y, right, y + height, color);
 	}
 

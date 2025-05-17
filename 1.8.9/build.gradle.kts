@@ -88,6 +88,8 @@ dependencies {
 	api("net.hypixel:mod-api:1.0.1")
 	include(modImplementation("io.github.moehreag.hypixel:mod-api-fabric:1.0.1+build.4+mc1.8.9")!!)
 	include(implementation("com.mojang:brigadier:1.0.18")!!)
+
+	compileOnly("link.e4mc:e4mc_minecraft:5.3.1")
 }
 
 configurations.configureEach {

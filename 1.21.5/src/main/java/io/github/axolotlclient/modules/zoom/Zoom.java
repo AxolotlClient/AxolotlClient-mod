@@ -165,6 +165,6 @@ public class Zoom extends AbstractModule {
 
 	public void tick() {
 		lastAnimatedFactor = animatedFactor;
-		animatedFactor += (float) ((targetFactor - animatedFactor) * (zoomSpeed.get() / 10F));
+		animatedFactor += (targetFactor - animatedFactor) * (zoomSpeed.get() / 10F);
 	}
 }

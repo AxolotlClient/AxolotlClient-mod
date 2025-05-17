@@ -25,6 +25,7 @@ package io.github.axolotlclient.mixin;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.blur.MenuBlur;
@@ -96,12 +97,12 @@ public abstract class GameRendererMixin {
 		this.client.getProfiler().pop();
 	}
 
-	@Inject(method = "bobView", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;translate(DDD)V"), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
-	private void axolotlclient$minimalViewBob(MatrixStack matrixStack, float f, CallbackInfo ci, PlayerEntity playerEntity, float g, float h, float i) {
+	@Inject(method = "bobView", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;translate(DDD)V"), cancellable = true)
+	private void axolotlclient$minimalViewBob(MatrixStack matrixStack, float f, CallbackInfo ci, @Local(ordinal = 2) float h, @Local(ordinal = 3) float i) {
 		if (AxolotlClient.CONFIG.minimalViewBob.get()) {
 			h /= 2;
 			i /= 2;
-			matrixStack.translate((double) (MathHelper.sin(h * (float) Math.PI) * i * 0.5F), (double) (-Math.abs(MathHelper.cos(h * (float) Math.PI) * i)), 0.0);
+			matrixStack.translate(MathHelper.sin(h * (float) Math.PI) * i * 0.5F, -Math.abs(MathHelper.cos(h * (float) Math.PI) * i), 0.0);
 			matrixStack.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(MathHelper.sin(h * (float) Math.PI) * i * 3.0F));
 			matrixStack.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(Math.abs(MathHelper.cos(h * (float) Math.PI - 0.2F) * i) * 5.0F));
 			ci.cancel();

@@ -66,7 +66,8 @@
 		"commands.ChatScreenMixin",
 		"commands.LocalClientPlayerEntityMixin",
 		"translation.LanguageMixin",
-		"translation.TranslationStorageMixin"
+		"translation.TranslationStorageMixin",
+		"api.JoinMulitplayerScreenMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

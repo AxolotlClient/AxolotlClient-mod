@@ -20,23 +20,17 @@
  * For more information, see the LICENSE file.
  */
 
-package io.github.axolotlclient.api.util;
+package io.github.axolotlclient.api.e4mc;
 
-import java.io.IOException;
-import java.time.Instant;
+import io.github.axolotlclient.api.types.Status;
+import net.fabricmc.loader.api.FabricLoader;
 
-import com.google.gson.TypeAdapter;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
+public class E4mcStatusProvider {
 
-public class InstantTypeAdapter extends TypeAdapter<Instant> {
-	@Override
-	public void write(JsonWriter out, Instant value) throws IOException {
-		out.value(value.toString());
-	}
-
-	@Override
-	public Instant read(JsonReader in) throws IOException {
-		return Instant.parse(in.nextString());
+	public static Status.Activity.E4mcMetadata getStatusDescription() {
+		if (FabricLoader.getInstance().isModLoaded("e4mc_minecraft")) {
+			return AxolotlClientE4mcPlugin.INSTANCE.getStatusDescription();
+		}
+		return null;
 	}
 }

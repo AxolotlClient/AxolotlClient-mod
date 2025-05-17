@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import com.google.gson.JsonObject;
+import io.github.axolotlclient.api.e4mc.E4mcStatusProvider;
 import io.github.axolotlclient.api.requests.StatusUpdate;
 import io.github.axolotlclient.api.util.StatusUpdateProvider;
 import io.github.axolotlclient.modules.hypixel.HypixelMods;
@@ -60,6 +61,10 @@ public class StatusUpdateProviderImpl implements StatusUpdateProvider {
 			}
 			return StatusUpdate.inGameUnknown(entry.name);
 		} else if (Minecraft.getInstance().isInSingleplayer()) {
+			var e4mcStatus = E4mcStatusProvider.getStatusDescription();
+			if (e4mcStatus != null) {
+				return StatusUpdate.e4mcStatusUpdate(e4mcStatus);
+			}
 			return StatusUpdate.inGameUnknown(Minecraft.getInstance().getServer().getWorldName());
 		}
 		Screen current = Minecraft.getInstance().screen;

@@ -58,6 +58,7 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 
 public class FriendsMultiplayerSelectionList extends AlwaysSelectedEntryListWidget<FriendsMultiplayerSelectionList.Entry> {
+	private static final Identifier UNKNOWN_SERVER_TEXTURE = new Identifier("textures/misc/unknown_server.png");
 	static final Identifier SERVER_SELECTION_TEXTURE = new Identifier("textures/gui/server_selection.png");
 	static final Identifier ICONS = new Identifier("textures/gui/icons.png");
 	static final Logger LOGGER = LogManager.getLogger();
@@ -74,7 +75,6 @@ public class FriendsMultiplayerSelectionList extends AlwaysSelectedEntryListWidg
 	static final Text INCOMPATIBLE_STATUS = new TranslatableText("multiplayer.status.incompatible");
 	static final Text NO_CONNECTION_STATUS = new TranslatableText("multiplayer.status.no_connection");
 	static final Text PINGING_STATUS = new TranslatableText("multiplayer.status.pinging");
-	static final Text ONLINE_STATUS = new TranslatableText("multiplayer.status.online");
 	static final Text NOT_PUBLISHED_STATUS = new TranslatableText("api.worldhost.joinability.not_published").formatted(Formatting.RED);
 	private final FriendsMultiplayerScreen screen;
 	private final List<Entry> friendEntries = new ArrayList<>();
@@ -298,7 +298,7 @@ public class FriendsMultiplayerSelectionList extends AlwaysSelectedEntryListWidg
 				minecraft.textRenderer.drawWithShadow(guiGraphics, list.get(i), left + ICON_WIDTH + 3, top + 12 + 9 * i, -8355712);
 			}
 
-			client.getTextureManager().bindTexture(this.iconId);
+			client.getTextureManager().bindTexture(this.icon != null ? this.iconId : UNKNOWN_SERVER_TEXTURE);
 			drawTexture(guiGraphics, left, top, 0.0F, 0.0F, 32, 32, 32, 32);
 			client.getTextureManager().bindTexture(Auth.getInstance().getSkinTexture(friend));
 			RenderSystem.enableBlend();
@@ -398,7 +398,7 @@ public class FriendsMultiplayerSelectionList extends AlwaysSelectedEntryListWidg
 
 					this.minecraft.getTextureManager().registerTexture(this.iconId, this.icon);
 				} catch (Throwable var3) {
-					FriendsMultiplayerSelectionList.LOGGER.error("Invalid icon for server {} ({})", this.serverData.serverInfo.name, this.serverData.serverInfo.address, var3);
+					FriendsMultiplayerSelectionList.LOGGER.error("Invalid icon for server {} ({})", this.serverData.serverInfo.name, this.serverData.serverInfo().address, var3);
 					return false;
 				}
 			}

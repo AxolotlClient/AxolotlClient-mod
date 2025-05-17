@@ -23,6 +23,7 @@
 package io.github.axolotlclient.api;
 
 import com.google.gson.JsonObject;
+import io.github.axolotlclient.api.e4mc.E4mcStatusProvider;
 import io.github.axolotlclient.api.requests.StatusUpdate;
 import io.github.axolotlclient.api.util.StatusUpdateProvider;
 import net.minecraft.client.MinecraftClient;
@@ -54,6 +55,10 @@ public class StatusUpdateProviderImpl implements StatusUpdateProvider {
 			}
 			return StatusUpdate.inGameUnknown(entry.name);
 		} else if (MinecraftClient.getInstance().getServer() != null) {
+			var e4mcStatus = E4mcStatusProvider.getStatusDescription();
+			if (e4mcStatus != null) {
+				return StatusUpdate.e4mcStatusUpdate(e4mcStatus);
+			}
 			return StatusUpdate.inGameUnknown(MinecraftClient.getInstance().getServer().getSaveProperties().getLevelName());
 		}
 		Screen current = MinecraftClient.getInstance().currentScreen;

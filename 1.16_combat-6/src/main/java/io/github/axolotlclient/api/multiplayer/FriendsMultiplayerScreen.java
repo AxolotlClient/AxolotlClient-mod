@@ -88,12 +88,12 @@ public class FriendsMultiplayerScreen extends io.github.axolotlclient.AxolotlCli
 		this.selectButton = this.addDrawableChild(
 			new VanillaButtonWidget(width / 2 - 154, height - 64 + 12, 100, 20,
 				new TranslatableText("selectServer.select"), buttonx -> this.joinSelectedServer()));
-		ButtonWidget directConnect = this.addDrawableChild(new VanillaButtonWidget(width / 2 - 50, height - 64 + 12, 100, 20,
+		this.addDrawableChild(new VanillaButtonWidget(width / 2 - 50, height - 64 + 12, 100, 20,
 			new TranslatableText("selectServer.direct"), buttonx -> {
 			this.editingServer = new ServerInfo(I18n.translate("selectServer.defaultName"), "", false);
 			this.client.openScreen(new DirectConnectScreen(this, this::directJoinCallback, this.editingServer));
 		}));
-		ButtonWidget friends = this.addDrawableChild(new VanillaButtonWidget(width / 2 + 50 + 4, height - 64 + 12, 100, 20,
+		this.addDrawableChild(new VanillaButtonWidget(width / 2 + 50 + 4, height - 64 + 12, 100, 20,
 			new TranslatableText("api.friends"), buttonx ->
 			this.client.openScreen(new FriendsScreen(this))));
 		ButtonWidget editButton = this.addDrawableChild(new VanillaButtonWidget(width / 2 - 154, height - 64 + 12 + 20 + 4, 74, 20,
@@ -104,10 +104,10 @@ public class FriendsMultiplayerScreen extends io.github.axolotlclient.AxolotlCli
 			new TranslatableText("selectServer.delete"), buttonx -> {
 		}));
 		deleteButton.active = false;
-		ButtonWidget refreshList = this.addDrawableChild(
+		this.addDrawableChild(
 			new VanillaButtonWidget(width / 2 + 2, height - 64 + 12 + 20 + 4, 74, 20,
 				new TranslatableText("selectServer.refresh"), buttonx -> this.refreshServerList()));
-		ButtonWidget back = this.addDrawableChild(new VanillaButtonWidget(width / 2 + 80, height - 64 + 12 + 20 + 4, 74, 20,
+		this.addDrawableChild(new VanillaButtonWidget(width / 2 + 80, height - 64 + 12 + 20 + 4, 74, 20,
 			ScreenTexts.BACK, buttonx -> this.onClose()));
 
 		this.onSelectedChange();

@@ -25,7 +25,6 @@ package io.github.axolotlclient.api;
 import java.util.Arrays;
 import java.util.Optional;
 
-import com.google.gson.JsonObject;
 import io.github.axolotlclient.api.e4mc.E4mcStatusProvider;
 import io.github.axolotlclient.api.requests.StatusUpdate;
 import io.github.axolotlclient.api.util.StatusUpdateProvider;

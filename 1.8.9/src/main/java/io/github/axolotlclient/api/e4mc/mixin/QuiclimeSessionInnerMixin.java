@@ -20,23 +20,21 @@
  * For more information, see the LICENSE file.
  */
 
-package io.github.axolotlclient.api.util;
+package io.github.axolotlclient.api.e4mc.mixin;
 
-import java.io.IOException;
-import java.time.Instant;
+import com.llamalad7.mixinextras.sugar.Local;
+import io.github.axolotlclient.api.e4mc.AxolotlClientE4mcPlugin;
+import io.netty.channel.ChannelHandlerContext;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.google.gson.TypeAdapter;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
+@Mixin(targets = "link/e4mc/QuiclimeSession$3$1", remap = false)
+public class QuiclimeSessionInnerMixin {
 
-public class InstantTypeAdapter extends TypeAdapter<Instant> {
-	@Override
-	public void write(JsonWriter out, Instant value) throws IOException {
-		out.value(value.toString());
-	}
-
-	@Override
-	public Instant read(JsonReader in) throws IOException {
-		return Instant.parse(in.nextString());
+	@Inject(method = "channelRead0", at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;info(Ljava/lang/String;Ljava/lang/Object;)V"))
+	private void axolotlclient$hookE4mcDomain(ChannelHandlerContext ctx, Object msg, CallbackInfo ci, @Local String domain) {
+		AxolotlClientE4mcPlugin.INSTANCE.setE4mcDomain(domain);
 	}
 }

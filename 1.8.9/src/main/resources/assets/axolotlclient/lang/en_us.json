@@ -17,5 +17,21 @@
 	"alignToBottom": "Align to Bottom Screen Edge",
 	"animate_chat": "Animate chat",
 	"keep_messages_on_disconnect": "Keep messages after disconnect",
-	"lcu.command.parse_error": "Failed to parse Command: %s at %s: %s"
+	"lcu.command.parse_error": "Failed to parse Command: %s at %s: %s",
+	"multiplayer.status.and_more": "... and %s more ...",
+	"multiplayer.status.cancelled": "Cancelled",
+	"multiplayer.status.cannot_connect": "Can't connect to server",
+	"multiplayer.status.cannot_resolve": "Can't resolve hostname",
+	"multiplayer.status.finished": "Finished",
+	"multiplayer.status.incompatible": "Incompatible version!",
+	"multiplayer.status.no_connection": "(no connection)",
+	"multiplayer.status.old": "Old",
+	"multiplayer.status.online": "Online",
+	"multiplayer.status.ping": "%s ms",
+	"multiplayer.status.pinging": "Pinging...",
+	"multiplayer.status.player_count": "%s/%s",
+	"multiplayer.status.quitting": "Quitting",
+	"multiplayer.status.request_handled": "Status request has been handled",
+	"multiplayer.status.unknown": "???",
+	"multiplayer.status.unrequested": "Received unrequested status"
 }

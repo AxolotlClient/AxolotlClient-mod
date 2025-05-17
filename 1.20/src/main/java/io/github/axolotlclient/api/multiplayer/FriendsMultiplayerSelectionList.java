@@ -437,7 +437,7 @@ public class FriendsMultiplayerSelectionList extends AlwaysSelectedEntryListWidg
 					if (this.serverData.serverInfo.players != null) {
 						mutableComponent.append(CommonTexts.SENTENCE_SEPARATOR);
 						mutableComponent.append(
-							Text.translatable("multiplayer.status.player_count.narration", this.serverData.serverInfo.players.online(), this.serverData.serverInfo.players.max())
+							Text.translatable("multiplayer.status.player_count.narration", this.serverData.serverInfo.players.online(), this.serverData.serverInfo().players.max())
 						);
 						mutableComponent.append(CommonTexts.SENTENCE_SEPARATOR);
 						mutableComponent.append(Texts.join(this.serverData.serverInfo.playerListSummary, Text.literal(", ")));
