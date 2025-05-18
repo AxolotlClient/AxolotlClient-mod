@@ -57,7 +57,7 @@ public class AxolotlClientWorldHostPlugin implements WorldHostPlugin {
 	public AxolotlClientWorldHostPlugin() {
 		Instance = this;
 		API.addStartupListener(() -> WorldHost.reconnect(false, true));
-		StatusUpdateHandler.addUpdateListener(user -> {
+		StatusUpdateHandler.addUpdateListener("world_host_plugin", user -> {
 			if (user.getStatus().isOnline() && user.getStatus().getActivity() != null) {
 				if (user.getStatus().getActivity().hasMetadata()) {
 					AxolotlClientOnlineFriend friend = AxolotlClientOnlineFriend.of(user);
@@ -71,8 +71,9 @@ public class AxolotlClientWorldHostPlugin implements WorldHostPlugin {
 	Status.Activity.WorldHostMetadata getWhStatusDescription() {
 		var server = MinecraftClient.getInstance().getServer();
 		var status = server.getServerMetadata();
-		String externalIp = API.getInstance().getApiOptions().allowFriendsServerJoin.get() ? WorldHost.getExternalIp() : null;
-		return new Status.Activity.WorldHostMetadata(WorldHost.connectionIdToString(WorldHost.CONNECTION_ID), externalIp,
+		String connectionId = server.isRemote() ? WorldHost.connectionIdToString(WorldHost.CONNECTION_ID) : null;
+		String externalIp = server.isRemote() && API.getInstance().getApiOptions().allowFriendsServerJoin.get() ? WorldHost.getExternalIp() : null;
+		return new Status.Activity.WorldHostMetadata(connectionId, externalIp,
 			ServerInfoUtil.getServerInfo(server.getSaveProperties().getWorldName(), status));
 	}
 
@@ -93,7 +94,7 @@ public class AxolotlClientWorldHostPlugin implements WorldHostPlugin {
 				case Status.Activity.WorldHostMetadata wh -> wh.serverInfo();
 				case Status.Activity.E4mcMetadata e4 -> e4.serverInfo();
 				case Status.Activity.ExternalServerMetadata ex ->
-					new Status.Activity.ServerInfo(ex.serverName(), "", null, null, null);
+					new Status.Activity.ServerInfo(ex.serverName(), ex.serverName(), null, null, null);
 				default ->
 					throw new IllegalStateException("Unexpected value: " + ((AxolotlClientOnlineFriend) friend).metadata.attributes());
 			};

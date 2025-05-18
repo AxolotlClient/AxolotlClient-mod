@@ -27,6 +27,7 @@ import java.util.List;
 
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.widgets.VanillaButtonWidget;
 import io.github.axolotlclient.api.FriendsScreen;
+import io.github.axolotlclient.api.handlers.StatusUpdateHandler;
 import io.github.axolotlclient.api.requests.FriendRequest;
 import lombok.Getter;
 import net.minecraft.client.gui.screen.ConnectScreen;
@@ -68,6 +69,7 @@ public class FriendsMultiplayerScreen extends io.github.axolotlclient.AxolotlCli
 		} else {
 			this.serverSelectionList = new FriendsMultiplayerSelectionList(this, this.client, this.width, this.height - 64 - 60, 60, 36);
 		}
+		StatusUpdateHandler.addUpdateListener("friends_multiplayer_screen", serverSelectionList::updateEntry);
 		this.addDrawableChild(this.serverSelectionList);
 		addDrawableChild(new VanillaButtonWidget(this.width / 2 - 102, 32, 100, 20, new TranslatableText("api.servers"), button ->
 			client.openScreen(new MultiplayerScreen(lastScreen))));
@@ -127,7 +129,7 @@ public class FriendsMultiplayerScreen extends io.github.axolotlclient.AxolotlCli
 	@Override
 	public void removed() {
 		this.pinger.cancel();
-		serverSelectionList.removed();
+		StatusUpdateHandler.removeUpdateListener("friends_multiplayer_screen");
 	}
 
 	@Override

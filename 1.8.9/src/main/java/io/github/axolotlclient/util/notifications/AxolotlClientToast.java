@@ -25,6 +25,8 @@ package io.github.axolotlclient.util.notifications;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.platform.Lighting;
 import io.github.axolotlclient.AxolotlClient;
 import io.github.axolotlclient.modules.hud.util.DrawUtil;
 import io.github.axolotlclient.util.notifications.toasts.Toast;
@@ -96,6 +98,8 @@ public class AxolotlClientToast extends DrawUtil implements Toast {
 
 	@Override
 	public void render(TextRenderer font, long startTime) {
+		GlStateManager.disableBlend();
+		Lighting.turnOff();
 		blitSprite(BACKGROUND_SPRITE, 0, 0, width(), height(), new NineSlice(160, 64, new Border(17, 30, 4, 4), false));
 		Minecraft.getInstance().getTextureManager().bind(AxolotlClient.badgeIcon);
 		drawTexture(4, 4, 0, 0, 15, 15, 15, 15);
@@ -109,5 +113,6 @@ public class AxolotlClientToast extends DrawUtil implements Toast {
 				drawString(this.messageLines.get(i), textOffset, 18 + i * LINE_SPACING, -1, false);
 			}
 		}
+		Lighting.turnOn();
 	}
 }

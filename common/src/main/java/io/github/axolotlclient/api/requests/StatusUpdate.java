@@ -72,7 +72,8 @@ public class StatusUpdate {
 		} else {
 			description = tr.translate("api.status.description.in_game", server.name, gameType);
 		}
-		return createStatusUpdate(new Status.Activity("api.status.title.in_game", description, new Status.Activity.ExternalServerMetadata(server.name, server.ip)));
+		var metadata = new Status.Activity.ExternalServerMetadata(server.name, server.ip);
+		return createStatusUpdate(new Status.Activity("api.status.title.in_game", description, API.getInstance().getApiOptions().allowFriendsServerJoin.get() ? metadata : null));
 	}
 
 	public static Request inGameUnknown(String description) {

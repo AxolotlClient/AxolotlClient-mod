@@ -32,7 +32,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = QuiclimeSession.class, remap = false)
 public class QuiclimeSessionMixin {
 
-	@Inject(method = "stop", at=@At("HEAD"))
+	@Inject(method = "stop", at = @At("HEAD"))
 	private void axolotlclient$stopListener(CallbackInfo ci) {
 		AxolotlClientE4mcPlugin.INSTANCE.setE4mcDomain(null);
 	}

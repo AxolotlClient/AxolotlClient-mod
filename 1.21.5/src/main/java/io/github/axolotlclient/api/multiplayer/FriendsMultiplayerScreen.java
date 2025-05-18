@@ -23,6 +23,7 @@
 package io.github.axolotlclient.api.multiplayer;
 
 import io.github.axolotlclient.api.FriendsScreen;
+import io.github.axolotlclient.api.handlers.StatusUpdateHandler;
 import io.github.axolotlclient.api.requests.FriendRequest;
 import lombok.Getter;
 import net.minecraft.client.gui.GuiGraphics;
@@ -67,6 +68,7 @@ public class FriendsMultiplayerScreen extends Screen {
 		} else {
 			this.serverSelectionList = new FriendsMultiplayerSelectionList(this, this.minecraft, this.width, this.height - 64 - 60, 60, 36);
 		}
+		StatusUpdateHandler.addUpdateListener("friends_multiplayer_screen", serverSelectionList::updateEntry);
 
 		this.addRenderableWidget(this.serverSelectionList);
 		addRenderableWidget(Button.builder(Component.translatable("api.servers"), button ->
@@ -130,6 +132,7 @@ public class FriendsMultiplayerScreen extends Screen {
 
 	@Override
 	public void removed() {
+		StatusUpdateHandler.removeUpdateListener("friends_multiplayer_screen");
 		this.pinger.removeAll();
 	}
 

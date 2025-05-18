@@ -25,10 +25,10 @@ package io.github.axolotlclient.api.multiplayer;
 import java.util.Collections;
 import java.util.List;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.ButtonWidget;
 import io.github.axolotlclient.AxolotlClientConfig.impl.ui.vanilla.widgets.VanillaButtonWidget;
 import io.github.axolotlclient.api.FriendsScreen;
+import io.github.axolotlclient.api.handlers.StatusUpdateHandler;
 import io.github.axolotlclient.api.requests.FriendRequest;
 import lombok.Getter;
 import net.minecraft.client.gui.screen.ConfirmationListener;
@@ -69,6 +69,7 @@ public class FriendsMultiplayerScreen extends io.github.axolotlclient.AxolotlCli
 		} else {
 			this.serverSelectionList = new FriendsMultiplayerSelectionList(this, this.minecraft, this.width, this.height - 64 - 60, 60, 36);
 		}
+		StatusUpdateHandler.addUpdateListener("friends_multiplayer_screen", serverSelectionList::updateEntry);
 		this.addDrawableChild(this.serverSelectionList);
 		addDrawableChild(new VanillaButtonWidget(this.width / 2 - 102, 32, 100, 20, I18n.translate("api.servers"), button ->
 			minecraft.openScreen(new MultiplayerScreen(lastScreen))));
@@ -89,13 +90,13 @@ public class FriendsMultiplayerScreen extends io.github.axolotlclient.AxolotlCli
 		this.selectButton = this.addDrawableChild(
 			new VanillaButtonWidget(width / 2 - 154, height - 64 + 12, 100, 20,
 				I18n.translate("selectServer.select"), buttonx -> this.joinSelectedServer()));
-		ButtonWidget directConnect = this.addDrawableChild(new VanillaButtonWidget(width / 2 - 50, height - 64 + 12, 100, 20,
+		this.addDrawableChild(new VanillaButtonWidget(width / 2 - 50, height - 64 + 12, 100, 20,
 			I18n.translate("selectServer.direct"), buttonx -> {
 			directConnectDialog = true;
 			this.editingServer = new ServerListEntry(I18n.translate("selectServer.defaultName"), "", false);
 			this.minecraft.openScreen(new DirectConnectScreen(this, this.editingServer));
 		}));
-		ButtonWidget friends = this.addDrawableChild(new VanillaButtonWidget(width / 2 + 50 + 4, height - 64 + 12, 100, 20,
+		this.addDrawableChild(new VanillaButtonWidget(width / 2 + 50 + 4, height - 64 + 12, 100, 20,
 			I18n.translate("api.friends"), buttonx ->
 			this.minecraft.openScreen(new FriendsScreen(this))));
 		ButtonWidget editButton = this.addDrawableChild(new VanillaButtonWidget(width / 2 - 154, height - 64 + 12 + 20 + 4, 74, 20,
@@ -106,10 +107,10 @@ public class FriendsMultiplayerScreen extends io.github.axolotlclient.AxolotlCli
 			I18n.translate("selectServer.delete"), buttonx -> {
 		}));
 		deleteButton.active = false;
-		ButtonWidget refreshList = this.addDrawableChild(
+		this.addDrawableChild(
 			new VanillaButtonWidget(width / 2 + 2, height - 64 + 12 + 20 + 4, 74, 20,
 				I18n.translate("selectServer.refresh"), buttonx -> this.refreshServerList()));
-		ButtonWidget back = this.addDrawableChild(new VanillaButtonWidget(width / 2 + 80, height - 64 + 12 + 20 + 4, 74, 20,
+		this.addDrawableChild(new VanillaButtonWidget(width / 2 + 80, height - 64 + 12 + 20 + 4, 74, 20,
 			I18n.translate("gui.back"), buttonx -> this.minecraft.openScreen(this.lastScreen)));
 
 		this.onSelectedChange();
@@ -125,7 +126,7 @@ public class FriendsMultiplayerScreen extends io.github.axolotlclient.AxolotlCli
 	public void removed() {
 		Keyboard.enableRepeatEvents(false);
 		this.pinger.cancel();
-		serverSelectionList.removed();
+		StatusUpdateHandler.removeUpdateListener("friends_multiplayer_screen");
 	}
 
 	@Override
@@ -139,7 +140,6 @@ public class FriendsMultiplayerScreen extends io.github.axolotlclient.AxolotlCli
 		}
 		if (this.tooltipText != null) {
 			this.renderTooltip(this.tooltipText, mouseX, mouseY);
-			GlStateManager.color4f(1, 1, 1, 1);
 		}
 	}
 

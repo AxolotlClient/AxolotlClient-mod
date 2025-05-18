@@ -22,8 +22,8 @@
 
 package io.github.axolotlclient.api.handlers;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
 import io.github.axolotlclient.api.API;
@@ -42,10 +42,14 @@ import lombok.experimental.Accessors;
 
 public class StatusUpdateHandler implements SocketMessageHandler {
 
-	private static final List<Consumer<User>> updateListeners = new ArrayList<>();
+	private static final Map<String, Consumer<User>> updateListeners = new HashMap<>();
 
-	public static void addUpdateListener(Consumer<User> listener) {
-		updateListeners.add(listener);
+	public static void addUpdateListener(String id, Consumer<User> listener) {
+		updateListeners.put(id, listener);
+	}
+
+	public static void removeUpdateListener(String id) {
+		updateListeners.remove(id);
 	}
 
 	@Override
@@ -73,7 +77,7 @@ public class StatusUpdateHandler implements SocketMessageHandler {
 			User user = u.orElseThrow();
 			user.getStatus().setOnline(true);
 			user.getStatus().setActivity(activity);
-			updateListeners.forEach(c -> c.accept(user));
+			updateListeners.values().forEach(c -> c.accept(user));
 		});
 	}
 }

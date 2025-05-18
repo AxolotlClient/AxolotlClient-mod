@@ -37,6 +37,7 @@ import io.github.axolotlclient.api.types.PkSystem;
 import io.github.axolotlclient.api.types.Status;
 import io.github.axolotlclient.api.types.User;
 import io.github.axolotlclient.modules.auth.Auth;
+import lombok.Getter;
 import lombok.Setter;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -107,27 +108,41 @@ public class FriendsMultiplayerSelectionList extends AlwaysSelectedEntryListWidg
 
 		for (User friend : friends) {
 			if (friend.getStatus().isOnline()) {
-				if (friend.getStatus().getActivity() != null && friend.getStatus().getActivity().hasMetadata()) {
-					if (friend.getStatus().getActivity().hasMetadata(Status.Activity.E4mcMetadata.ID)) {
-						this.friendEntries.add(e4mcServerFriendEntry(this.screen, friend));
-					} else {
-						this.friendEntries.add(externalServerEntry(this.screen, friend));
-					}
-				} else {
-					this.friendEntries.add(new StatusFriendEntry(screen, friend));
-				}
+				this.friendEntries.add(createEntry(friend));
 			}
 		}
 
 		this.refreshEntries();
 	}
 
+	private Entry createEntry(User friend) {
+		if (friend.getStatus().getActivity() != null && friend.getStatus().getActivity().hasMetadata()) {
+			if (friend.getStatus().getActivity().hasMetadata(Status.Activity.ExternalServerMetadata.ID)) {
+				return externalServerEntry(this.screen, friend);
+			} else {
+				return e4mcServerFriendEntry(this.screen, friend);
+			}
+		}
+		return new StatusFriendEntry(screen, friend);
+	}
+
+	public void updateEntry(User user) {
+		this.friendEntries.stream().filter(e1 -> {
+			if (e1 instanceof StatusFriendEntry statusFriendEntry) {
+				return statusFriendEntry.getUser().equals(user);
+			} else if (e1 instanceof ServerEntry serverEntry) {
+				return serverEntry.getUser().equals(user);
+			}
+			return false;
+		}).findFirst().ifPresent(e -> {
+			this.friendEntries.set(friendEntries.indexOf(e), createEntry(user));
+			refreshEntries();
+		});
+	}
+
 	@Override
 	public int getRowWidth() {
 		return 305;
-	}
-
-	public void removed() {
 	}
 
 	@Environment(EnvType.CLIENT)
@@ -144,6 +159,7 @@ public class FriendsMultiplayerSelectionList extends AlwaysSelectedEntryListWidg
 		}
 	}
 
+	@Getter
 	public class StatusFriendEntry extends Entry {
 
 		private final User user;
@@ -162,20 +178,20 @@ public class FriendsMultiplayerSelectionList extends AlwaysSelectedEntryListWidg
 					.setStyle(Style.EMPTY.withItalic(true).withColor(Formatting.GRAY));
 				client.textRenderer.draw(graphics, fronters.append(tag), left + 3, top + 1, -1);
 			} else {
-				client.textRenderer.draw(graphics, user.getName(), left + 3 + 33, top + 1, -1);
+				client.textRenderer.draw(graphics, user.getName(), left + 3 + 32, top + 1, -1);
 			}
 
 			if (user.getStatus().isOnline() && user.getStatus().getActivity() != null) {
-				client.textRenderer.draw(graphics, user.getStatus().getTitle(), left + 3 + 33, top + 12, 8421504);
+				client.textRenderer.draw(graphics, user.getStatus().getTitle(), left + 3 + 32, top + 12, 8421504);
 				client.textRenderer.draw(graphics, user.getStatus().getDescription(), left + 3 + 40, top + 23, 8421504);
 			} else if (user.getStatus().getLastOnline() != null) {
-				client.textRenderer.draw(graphics, user.getStatus().getLastOnline(), left + 3 + 33, top + 12, 8421504);
+				client.textRenderer.draw(graphics, user.getStatus().getLastOnline(), left + 3 + 32, top + 12, 8421504);
 			}
 
 			client.getTextureManager().bindTexture(Auth.getInstance().getSkinTexture(user));
 			RenderSystem.enableBlend();
-			drawTexture(graphics, left - 1, top - 1, 33, 33, 8, 8, 8, 8, 64, 64);
-			drawTexture(graphics, left - 1, top - 1, 33, 33, 40, 8, 8, 8, 64, 64);
+			drawTexture(graphics, left - 1, top - 1, 32, 32, 8, 8, 8, 8, 64, 64);
+			drawTexture(graphics, left - 1, top - 1, 32, 32, 40, 8, 8, 8, 64, 64);
 			RenderSystem.disableBlend();
 		}
 	}
@@ -201,15 +217,16 @@ public class FriendsMultiplayerSelectionList extends AlwaysSelectedEntryListWidg
 		private Sprite statusIcon;
 		@Nullable
 		private Text statusIconTooltip;
-		protected final User friend;
+		@Getter
+		protected final User user;
 
 		@SuppressWarnings("UnstableApiUsage")
-		protected ServerEntry(FriendsMultiplayerScreen screen, ServerInfo serverData, User friend) {
+		protected ServerEntry(FriendsMultiplayerScreen screen, ServerInfo serverData, User user) {
 			this.screen = screen;
 			this.minecraft = MinecraftClient.getInstance();
 			this.serverData = new ServerInfoEx(serverData);
-			this.iconId = new Identifier("servers/" + Hashing.sha1().hashUnencodedChars(serverData.address != null ? serverData.address : friend.getUuid() + "_" + serverData.name) + "/icon");
-			this.friend = friend;
+			this.iconId = new Identifier("servers/" + Hashing.sha1().hashUnencodedChars(serverData.address != null ? serverData.address : user.getUuid() + "_" + serverData.name) + "/icon");
+			this.user = user;
 		}
 
 
@@ -300,7 +317,7 @@ public class FriendsMultiplayerSelectionList extends AlwaysSelectedEntryListWidg
 
 			client.getTextureManager().bindTexture(this.icon != null ? this.iconId : UNKNOWN_SERVER_TEXTURE);
 			drawTexture(guiGraphics, left, top, 0.0F, 0.0F, 32, 32, 32, 32);
-			client.getTextureManager().bindTexture(Auth.getInstance().getSkinTexture(friend));
+			client.getTextureManager().bindTexture(Auth.getInstance().getSkinTexture(user));
 			RenderSystem.enableBlend();
 			drawTexture(guiGraphics, left + ICON_WIDTH - 10, top + ICON_HEIGHT - 10, 10, 10, 8, 8, 8, 8, 64, 64);
 			drawTexture(guiGraphics, left + ICON_WIDTH - 10, top + ICON_HEIGHT - 10, 10, 10, 40, 8, 8, 8, 64, 64);
@@ -434,13 +451,7 @@ public class FriendsMultiplayerSelectionList extends AlwaysSelectedEntryListWidg
 	}
 
 	private ExternalServerFriendEntry externalServerEntry(FriendsMultiplayerScreen screen, User friend) {
-		var activity = friend.getStatus().getActivity();
-		Status.Activity.ExternalServerMetadata metadata;
-		if (activity.hasMetadata(Status.Activity.WorldHostMetadata.ID)) {
-			metadata = ((Status.Activity.WorldHostMetadata) activity.metadata().attributes()).asExternalServer();
-		} else {
-			metadata = (Status.Activity.ExternalServerMetadata) friend.getStatus().getActivity().metadata().attributes();
-		}
+		Status.Activity.ExternalServerMetadata metadata = (Status.Activity.ExternalServerMetadata) friend.getStatus().getActivity().metadata().attributes();
 		return new ExternalServerFriendEntry(screen, metadata, new ServerInfo(metadata.serverName(), metadata.address(), false), friend);
 	}
 
@@ -461,7 +472,13 @@ public class FriendsMultiplayerSelectionList extends AlwaysSelectedEntryListWidg
 	}
 
 	private E4mcServerFriendEntry e4mcServerFriendEntry(FriendsMultiplayerScreen screen, User friend) {
-		Status.Activity.E4mcMetadata metadata = (Status.Activity.E4mcMetadata) friend.getStatus().getActivity().metadata().attributes();
+		var activity = friend.getStatus().getActivity();
+		Status.Activity.E4mcMetadata metadata;
+		if (activity.hasMetadata(Status.Activity.WorldHostMetadata.ID)) {
+			metadata = ((Status.Activity.WorldHostMetadata) activity.metadata().attributes()).asE4mcMetadata();
+		} else {
+			metadata = (Status.Activity.E4mcMetadata) activity.metadata().attributes();
+		}
 		return new E4mcServerFriendEntry(screen, metadata, ServerInfoUtil.getServerData(friend.getName(), metadata), friend);
 	}
 

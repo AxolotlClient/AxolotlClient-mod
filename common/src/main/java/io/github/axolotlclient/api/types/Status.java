@@ -111,7 +111,7 @@ public class Status {
 		}
 
 		public Activity(String title, String description, MetadataAttributes attributes) {
-			this(title, description, new Metadata(attributes));
+			this(title, description, attributes != null ? new Metadata(attributes) : null);
 		}
 
 		public boolean hasMetadata() {
@@ -187,8 +187,8 @@ public class Status {
 				return ID;
 			}
 
-			public ExternalServerMetadata asExternalServer() {
-				return new ExternalServerMetadata(serverInfo.levelName(), externalIp);
+			public E4mcMetadata asE4mcMetadata() {
+				return new E4mcMetadata(externalIp, serverInfo);
 			}
 		}
 
