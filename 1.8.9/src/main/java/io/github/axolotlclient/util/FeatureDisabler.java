@@ -22,88 +22,30 @@
 
 package io.github.axolotlclient.util;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.function.Supplier;
 
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.modules.freelook.Freelook;
-import io.github.axolotlclient.modules.hud.HudManager;
-import io.github.axolotlclient.modules.hud.gui.hud.simple.ToggleSprintHud;
-import io.github.axolotlclient.util.options.ForceableBooleanOption;
-import net.minecraft.client.resource.language.I18n;
+import lombok.Getter;
 import net.ornithemc.osl.networking.api.client.ClientPlayNetworking;
 
-public class FeatureDisabler {
+public class FeatureDisabler extends FeatureDisablerCommon {
+	@Getter
+	private static final FeatureDisablerCommon instance = new FeatureDisabler();
 
-	private static final HashMap<ForceableBooleanOption, String[]> disabledServers = new HashMap<>();
-	private static final HashMap<ForceableBooleanOption, Supplier<Boolean>> conditions = new HashMap<>();
+	private static final String CHANNEL_NAME = "AXO|block_mods";
 
-	private static final Supplier<Boolean> NONE = () -> true;
-	private static final String channelName = "AXO|block_mods";
-	// Features that can be disabled on the server's behalf
-	// If something should be added here, feel free to ping us via your favorite way.
-	private static final HashMap<String, ForceableBooleanOption> features = Util.make(() -> {
-		HashMap<String, ForceableBooleanOption> features = new HashMap<>();
-		features.put("freelook", Freelook.getInstance().enabled);
-		features.put("timechanger", AxolotlClient.config().timeChangerEnabled);
-		features.put("fullbright", AxolotlClient.config().fullBright);
-		features.put("lowfire", AxolotlClient.config().lowFire);
-		return features;
-	});
-	private static String currentAddress = "";
-
-	@SuppressWarnings("unchecked")
-	public static void init() {
-		setServers(AxolotlClient.config().lowFire, NONE, "gommehd");
-		setServers(AxolotlClient.config().timeChangerEnabled, NONE, "gommehd");
-		setServers(Freelook.getInstance().enabled, () -> Freelook.getInstance().needsDisabling(), "hypixel", "mineplex", "gommehd", "nucleoid");
-		setServers(((ToggleSprintHud) HudManager.getInstance().get(ToggleSprintHud.ID)).toggleSneak, NONE, "hypixel");
-
-		ClientPlayNetworking.registerListener(channelName, (client, handler, buf) -> {
+	@Override
+	protected void registerChannel() {
+		ClientPlayNetworking.registerListener(CHANNEL_NAME, (client, handler, buf) -> {
 			List<String> array = (List<String>) GsonHelper.read(buf.readString(32767));
 			for (String element : array) {
 				try {
-					features.get(element).setForceOff(true, "ban_reason");
+					FEATURES.get(element).setForceOff(true, "ban_reason");
 				} catch (Exception e) {
 					AxolotlClient.LOGGER.error("Failed to disable " + element + "!");
 				}
 			}
 			return true;
 		});
-	}
-
-	private static void setServers(ForceableBooleanOption option, Supplier<Boolean> condition, String... servers) {
-		disabledServers.put(option, servers);
-		conditions.put(option, condition);
-	}
-
-	public static void onServerJoin(String address) {
-		currentAddress = address;
-		update();
-	}
-
-	public static void update() {
-		disabledServers.forEach((option, strings) -> disableOption(option, strings, currentAddress));
-	}
-
-	private static void disableOption(ForceableBooleanOption option, String[] servers, String currentServer) {
-		boolean ban = false;
-		for (String s : servers) {
-			if (currentServer.toLowerCase(Locale.ROOT).contains(s.toLowerCase(Locale.ROOT))) {
-				ban = conditions.get(option).get();
-				break;
-			}
-		}
-
-		if (option.isForceOff() != ban) {
-			option.setForceOff(ban, I18n.translate("ban_reason"));
-		}
-	}
-
-	public static void clear() {
-		disabledServers.keySet().forEach(option -> option.setForceOff(false, ""));
-		features.values().forEach(option -> option.setForceOff(false, ""));
 	}
 }

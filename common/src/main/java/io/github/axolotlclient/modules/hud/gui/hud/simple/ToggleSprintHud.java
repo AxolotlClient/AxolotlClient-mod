@@ -105,11 +105,11 @@ public class ToggleSprintHud extends SimpleTextHudEntry {
 
 	@Override
 	public String getValue() {
-		if (client.br$getKeybinds().br$getSneakKeybind().br$isPressed()) {
+		if (client.br$getGameOptions().br$getSneakKeybind().br$isPressed()) {
 			return AxoI18n.translate("sneaking_pressed");
 		}
 
-		if (client.br$getKeybinds().br$getSprintKeybind().br$isPressed()) {
+		if (client.br$getGameOptions().br$getSprintKeybind().br$isPressed()) {
 			return AxoI18n.translate("sprinting_pressed");
 		}
 

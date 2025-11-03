@@ -22,17 +22,18 @@
 
 package io.github.axolotlclient.bridge.mixin;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ListenableFuture;
+import io.github.axolotlclient.bridge.AxoGameOptions;
 import io.github.axolotlclient.bridge.AxoMinecraftClient;
 import io.github.axolotlclient.bridge.AxoPlayerListEntry;
 import io.github.axolotlclient.bridge.AxoSession;
+import io.github.axolotlclient.bridge.entity.AxoEntity;
 import io.github.axolotlclient.bridge.entity.AxoPlayer;
-import io.github.axolotlclient.bridge.key.AxoClientKeybinds;
 import io.github.axolotlclient.bridge.render.AxoFont;
 import io.github.axolotlclient.bridge.resource.AxoResourceManager;
 import io.github.axolotlclient.bridge.util.AxoText;
@@ -45,8 +46,14 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.options.ServerListEntry;
 import net.minecraft.client.render.TextRenderer;
+import net.minecraft.client.render.world.WorldRenderer;
 import net.minecraft.client.resource.manager.ResourceManager;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.Entity;
+import net.minecraft.scoreboard.Scoreboard;
+import net.minecraft.scoreboard.ScoreboardObjective;
+import net.minecraft.scoreboard.ScoreboardScore;
+import net.minecraft.scoreboard.team.Team;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -90,6 +97,15 @@ public abstract class MinecraftClientMixin implements AxoMinecraftClient {
 	@Shadow
 	public abstract ListenableFuture<Object> submit(Runnable runnable);
 
+	@Shadow
+	public WorldRenderer worldRenderer;
+
+	@Shadow
+	private Entity camera;
+
+	@Shadow
+	private String serverAddress;
+
 	@Override
 	public @Nullable AxoPlayer br$getPlayer() {
 		return player;
@@ -107,7 +123,7 @@ public abstract class MinecraftClientMixin implements AxoMinecraftClient {
 
 	@Override
 
-	public AxoClientKeybinds br$getKeybinds() {
+	public AxoGameOptions br$getGameOptions() {
 		return options;
 	}
 
@@ -123,7 +139,16 @@ public abstract class MinecraftClientMixin implements AxoMinecraftClient {
 
 	@Override
 	public String br$getServerAddress() {
-		return Optional.ofNullable(getCurrentServerEntry()).map(x -> x.address).orElse(null);
+		return Optional.ofNullable(getCurrentServerEntry())
+			.map(x -> x.address)
+			.orElse(serverAddress);
+	}
+
+	@Override
+	public String br$getServerName() {
+		return Optional.ofNullable(getCurrentServerEntry())
+			.map(x -> x.name)
+			.orElse(null);
 	}
 
 	@Override
@@ -162,5 +187,55 @@ public abstract class MinecraftClientMixin implements AxoMinecraftClient {
 	@Override
 	public Object br$getScreen() {
 		return screen;
+	}
+
+	@Override
+	public void br$notifyLevelRenderer() {
+		worldRenderer.onViewChanged();
+	}
+
+	@Override
+	public AxoEntity br$getCameraEntity() {
+		return camera;
+	}
+
+	@Override
+	public List<String> br$getSidebar() {
+		List<String> lines = new ArrayList<>();
+		Minecraft client = Minecraft.getInstance();
+		if (client.world == null)
+			return lines;
+
+		Scoreboard scoreboard = client.world.getScoreboard();
+		if (scoreboard == null)
+			return lines;
+		ScoreboardObjective sidebar = scoreboard.getDisplayObjective(1);
+		if (sidebar == null)
+			return lines;
+
+		Collection<ScoreboardScore> scores = scoreboard.getScores(sidebar);
+		List<ScoreboardScore> list = scores.stream().filter(
+				input -> input != null && input.getOwner() != null && !input.getOwner().startsWith("#"))
+			.collect(Collectors.toList());
+
+		if (list.size() > 15) {
+			scores = Lists.newArrayList(Iterables.skip(list, scores.size() - 15));
+		} else {
+			scores = list;
+		}
+
+		for (ScoreboardScore score : scores) {
+			Team team = scoreboard.getTeamOfMember(score.getOwner());
+			if (team == null)
+				return lines;
+			String text = team.getPrefix() + team.getSuffix();
+			if (!text.trim().isEmpty())
+				lines.add(text);
+		}
+
+		lines.add(sidebar.getDisplayName());
+		Collections.reverse(lines);
+
+		return lines;
 	}
 }

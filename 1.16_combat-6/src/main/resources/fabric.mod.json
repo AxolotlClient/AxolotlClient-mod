@@ -74,7 +74,7 @@
 				"io/github/axolotlclient/bridge/key/AxoKeybinding"
 			],
 			"net/minecraft/class_315": [
-				"io/github/axolotlclient/bridge/key/AxoClientKeybinds"
+				"io/github/axolotlclient/bridge/AxoGameOptions"
 			],
 			"net/minecraft/class_3675\u0024class_306": [
 				"io/github/axolotlclient/bridge/key/AxoKey"

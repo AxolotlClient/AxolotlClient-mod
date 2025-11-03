@@ -48,10 +48,8 @@ public abstract class CameraMixin {
 	@Inject(method = "update", at = @At(value = "INVOKE", target = "net/minecraft/client/render/Camera.moveBy(DDD)V", ordinal = 0))
 	private void axolotlclient$perspectiveUpdatePitchYaw(BlockView area, Entity focusedEntity, boolean thirdPerson,
 														 boolean inverseView, float tickDelta, CallbackInfo ci) {
-		this.pitch = Freelook.getInstance().pitch(pitch)
-		;//* (inverseView && Freelook.getInstance().enabled.get() && Freelook.getInstance().isActive() ? -1 : 1);
-		this.yaw = Freelook.getInstance().yaw(yaw)
-		;//+ (inverseView && Freelook.getInstance().enabled.get() && Freelook.getInstance().isActive() ? 180 : 0);
+		this.pitch = Freelook.getInstance().pitch(pitch);
+		this.yaw = Freelook.getInstance().yaw(yaw);
 	}
 
 	@ModifyArgs(method = "update", at = @At(value = "INVOKE", target = "net/minecraft/client/render/Camera.setRotation(FF)V", ordinal = 0))

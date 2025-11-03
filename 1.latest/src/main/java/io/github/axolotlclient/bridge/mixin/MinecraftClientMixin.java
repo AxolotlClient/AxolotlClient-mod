@@ -22,14 +22,17 @@
 
 package io.github.axolotlclient.bridge.mixin;
 
-import java.util.Collection;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import io.github.axolotlclient.bridge.AxoGameOptions;
 import io.github.axolotlclient.bridge.AxoMinecraftClient;
 import io.github.axolotlclient.bridge.AxoPlayerListEntry;
 import io.github.axolotlclient.bridge.AxoSession;
+import io.github.axolotlclient.bridge.entity.AxoEntity;
 import io.github.axolotlclient.bridge.entity.AxoPlayer;
-import io.github.axolotlclient.bridge.key.AxoClientKeybinds;
 import io.github.axolotlclient.bridge.render.AxoFont;
 import io.github.axolotlclient.bridge.resource.AxoResourceManager;
 import io.github.axolotlclient.bridge.util.AxoText;
@@ -43,8 +46,11 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.scores.*;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -86,6 +92,13 @@ public abstract class MinecraftClientMixin implements AxoMinecraftClient {
 	@Shadow
 	public abstract ResourceManager getResourceManager();
 
+	@Shadow
+	@Final
+	public LevelRenderer levelRenderer;
+
+	@Shadow
+	private Entity cameraEntity;
+
 	@Override
 	public @Nullable AxoPlayer br$getPlayer() {
 		return player;
@@ -104,7 +117,7 @@ public abstract class MinecraftClientMixin implements AxoMinecraftClient {
 
 	@Override
 
-	public AxoClientKeybinds br$getKeybinds() {
+	public AxoGameOptions br$getGameOptions() {
 		return options;
 	}
 
@@ -116,6 +129,11 @@ public abstract class MinecraftClientMixin implements AxoMinecraftClient {
 	@Override
 	public String br$getServerAddress() {
 		return Optional.ofNullable(getCurrentServer()).map(x -> x.ip).orElse(null);
+	}
+
+	@Override
+	public String br$getServerName() {
+		return Optional.ofNullable(getCurrentServer()).map(x -> x.name).orElse(null);
 	}
 
 	@Override
@@ -158,5 +176,53 @@ public abstract class MinecraftClientMixin implements AxoMinecraftClient {
 	@Override
 	public Object br$getScreen() {
 		return screen;
+	}
+
+	@Override
+	public void br$notifyLevelRenderer() {
+		levelRenderer.needsUpdate();
+	}
+
+	@Override
+	public AxoEntity br$getCameraEntity() {
+		return cameraEntity;
+	}
+
+	@Override
+	public List<String> br$getSidebar() {
+		List<String> lines = new ArrayList<>();
+		Minecraft client = Minecraft.getInstance();
+		if (client.level == null)
+			return lines;
+
+		Scoreboard scoreboard = client.level.getScoreboard();
+		Objective sidebar = scoreboard.getDisplayObjective(DisplaySlot.SIDEBAR);
+		if (sidebar == null)
+			return lines;
+
+		Collection<PlayerScoreEntry> scores = scoreboard.listPlayerScores(sidebar);
+		List<PlayerScoreEntry> list = scores.stream().filter(
+				input -> input != null && !input.isHidden())
+			.collect(Collectors.toList());
+
+		if (list.size() > 15) {
+			scores = Lists.newArrayList(Iterables.skip(list, scores.size() - 15));
+		} else {
+			scores = list;
+		}
+
+		for (PlayerScoreEntry score : scores) {
+			PlayerTeam team = scoreboard.getPlayerTeam(score.owner());
+			if (team == null)
+				return lines;
+			String text = team.getPlayerPrefix().getString() + team.getPlayerSuffix().getString();
+			if (!text.trim().isEmpty())
+				lines.add(text);
+		}
+
+		lines.add(sidebar.getDisplayName().getString());
+		Collections.reverse(lines);
+
+		return lines;
 	}
 }

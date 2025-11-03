@@ -22,7 +22,7 @@
 
 package io.github.axolotlclient.mixin;
 
-import io.github.axolotlclient.util.FeatureDisabler;
+import io.github.axolotlclient.bridge.events.Events;
 import net.minecraft.client.gui.screen.ConnectScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -34,6 +34,7 @@ public abstract class ConnectScreenMixin {
 
 	@Inject(method = "connect", at = @At("HEAD"))
 	private void axolotlclient$onServerJoin(String address, int port, CallbackInfo ci) {
-		FeatureDisabler.onServerJoin(address);
+		// TODO: the semantics for this event isn't super clear
+		Events.BEGIN_JOIN_SERVER.invoker().accept(new Events.ServerJoinInfo(address));
 	}
 }

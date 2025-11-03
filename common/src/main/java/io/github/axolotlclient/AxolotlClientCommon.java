@@ -44,7 +44,12 @@ import io.github.axolotlclient.bridge.util.AxoProfiler;
 import io.github.axolotlclient.config.profiles.ProfileAware;
 import io.github.axolotlclient.config.profiles.Profiles;
 import io.github.axolotlclient.modules.Module;
+import io.github.axolotlclient.modules.freelook.Freelook;
 import io.github.axolotlclient.modules.hud.ClickInputTracker;
+import io.github.axolotlclient.modules.render.BeaconBeam;
+import io.github.axolotlclient.modules.rpc.DiscordRPC;
+import io.github.axolotlclient.modules.tnttime.TntTime;
+import io.github.axolotlclient.util.FeatureDisablerCommon;
 import io.github.axolotlclient.util.Logger;
 import io.github.axolotlclient.util.OSUtil;
 import io.github.axolotlclient.util.notifications.NotificationProvider;
@@ -123,6 +128,10 @@ public abstract class AxolotlClientCommon {
 
 	private void addBuiltinCommonModules() {
 		registerModule(ClickInputTracker.getInstance());
+		registerModule(BeaconBeam.getInstance());
+		registerModule(Freelook.getInstance());
+		registerModule(TntTime.getInstance());
+		registerModule(DiscordRPC.getInstance());
 	}
 
 	// init logic
@@ -248,7 +257,8 @@ public abstract class AxolotlClientCommon {
 			modules.forEach(Module::tick);
 			AxoProfiler.get().br$pop();
 		});
-		initFeatureDisabler();
+
+		getFeatureDisabler().init();
 
 		// register events
 
@@ -260,7 +270,7 @@ public abstract class AxolotlClientCommon {
 		modules.add(module);
 	}
 
-	protected abstract void initFeatureDisabler();
+	protected abstract FeatureDisablerCommon getFeatureDisabler();
 
 	protected abstract AxolotlClientConfigCommon createConfig();
 

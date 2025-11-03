@@ -22,7 +22,7 @@
 
 package io.github.axolotlclient.mixin;
 
-import io.github.axolotlclient.modules.renderOptions.BeaconBeam;
+import io.github.axolotlclient.modules.render.BeaconBeam;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BeaconBlockEntityRenderer;
 import net.minecraft.client.util.math.MatrixStack;

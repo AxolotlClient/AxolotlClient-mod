@@ -28,6 +28,7 @@ public class AxoKeys {
 	public static final AxoKey KEY_UNKNOWN = BridgeUtil.noImplValue();
 	public static final AxoKey KEY_K = BridgeUtil.noImplValue();
 	public static final AxoKey KEY_I = BridgeUtil.noImplValue();
+	public static final AxoKey KEY_V = BridgeUtil.noImplValue();
 	public static final AxoKey MOUSE_LEFT = BridgeUtil.noImplValue();
 	public static final AxoKey MOUSE_RIGHT = BridgeUtil.noImplValue();
 	public static final AxoKey KEY_RSHIFT = BridgeUtil.noImplValue();

@@ -29,6 +29,7 @@ import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.TntEntityRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.TntEntity;
+import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -45,7 +46,7 @@ public abstract class TntEntityRendererMixin extends EntityRenderer<TntEntity> {
 	private void axolotlclient$render(TntEntity entity, float yaw, float delta, MatrixStack matrixStack,
 									  VertexConsumerProvider vertexConsumerProvider, int light, CallbackInfo ci) {
 		if (TntTime.getInstance().enabled.get()) {
-			super.renderLabelIfPresent(entity, TntTime.getInstance().getFuseTime(entity.getFuse()), matrixStack,
+			super.renderLabelIfPresent(entity, (Text) TntTime.getInstance().getFuseTime(entity.getFuse()), matrixStack,
 				vertexConsumerProvider, light, 0);
 		}
 	}

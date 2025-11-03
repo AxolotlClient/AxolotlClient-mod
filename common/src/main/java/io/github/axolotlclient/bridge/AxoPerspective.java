@@ -1,5 +1,5 @@
 /*
- * Copyright © 2024 moehreag <moehreag@gmail.com> & Contributors
+ * Copyright © 2025 moehreag <moehreag@gmail.com> & Contributors
  *
  * This file is part of AxolotlClient.
  *
@@ -20,31 +20,21 @@
  * For more information, see the LICENSE file.
  */
 
-package io.github.axolotlclient.modules.renderOptions;
+package io.github.axolotlclient.bridge;
 
-import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.AxolotlClientConfig.api.options.OptionCategory;
-import io.github.axolotlclient.AxolotlClientConfig.impl.options.BooleanOption;
-import io.github.axolotlclient.modules.AbstractModule;
 import lombok.Getter;
 
-public class BeaconBeam extends AbstractModule {
+@Getter
+public enum AxoPerspective {
+	FIRST_PERSON(true, false),
+	THIRD_PERSON_BACK(false, false),
+	THIRD_PERSON_FRONT(false, true);
 
-	@Getter
-	private final static BeaconBeam Instance = new BeaconBeam();
+	private final boolean firstPerson;
+	private final boolean mirrored;
 
-	private final BooleanOption showBeaconBeams = new BooleanOption("showBeaconBeams", true);
-
-	private final OptionCategory beams = OptionCategory.create("beams");
-
-	@Override
-	public void init() {
-		beams.add(showBeaconBeams);
-
-		AxolotlClient.config().rendering.add(beams);
-	}
-
-	public boolean showBeam() {
-		return showBeaconBeams.get();
+	AxoPerspective(final boolean firstPerson, final boolean mirrored) {
+		this.firstPerson = firstPerson;
+		this.mirrored = mirrored;
 	}
 }

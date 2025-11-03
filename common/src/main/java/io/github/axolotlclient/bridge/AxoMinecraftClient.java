@@ -23,13 +23,14 @@
 package io.github.axolotlclient.bridge;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.Executor;
 
+import io.github.axolotlclient.bridge.entity.AxoEntity;
 import io.github.axolotlclient.bridge.entity.AxoPlayer;
 import io.github.axolotlclient.bridge.internal.BridgeUtil;
 import io.github.axolotlclient.bridge.internal.PlatformImplInternal;
 import io.github.axolotlclient.bridge.internal.RequiresImpl;
-import io.github.axolotlclient.bridge.key.AxoClientKeybinds;
 import io.github.axolotlclient.bridge.render.AxoFont;
 import io.github.axolotlclient.bridge.resource.AxoResourceManager;
 import io.github.axolotlclient.bridge.util.AxoText;
@@ -64,7 +65,7 @@ public interface AxoMinecraftClient extends Executor {
 	}
 
 	@RequiresImpl
-	default AxoClientKeybinds br$getKeybinds() {
+	default AxoGameOptions br$getGameOptions() {
 		throw BridgeUtil.noImpl();
 	}
 
@@ -75,6 +76,11 @@ public interface AxoMinecraftClient extends Executor {
 
 	@RequiresImpl
 	default String br$getServerAddress() {
+		throw BridgeUtil.noImpl();
+	}
+
+	@RequiresImpl
+	default String br$getServerName() {
 		throw BridgeUtil.noImpl();
 	}
 
@@ -126,6 +132,21 @@ public interface AxoMinecraftClient extends Executor {
 	 */
 	@RequiresImpl
 	default Object br$getScreen() {
+		throw BridgeUtil.noImpl();
+	}
+
+	@RequiresImpl
+	default AxoEntity br$getCameraEntity() {
+		throw BridgeUtil.noImpl();
+	}
+
+	@RequiresImpl
+	default void br$notifyLevelRenderer() {
+		throw BridgeUtil.noImpl();
+	}
+
+	@RequiresImpl
+	default List<String> br$getSidebar() {
 		throw BridgeUtil.noImpl();
 	}
 }

@@ -75,7 +75,7 @@
 				"io/github/axolotlclient/bridge/key/AxoKeybinding"
 			],
 			"net/minecraft/unmapped/C_1331819": [
-				"io/github/axolotlclient/bridge/key/AxoClientKeybinds"
+				"io/github/axolotlclient/bridge/AxoGameOptions"
 			],
 			"net/minecraft/unmapped/C_9550253": [
 				"io/github/axolotlclient/bridge/util/AxoText\u0024Mutable"

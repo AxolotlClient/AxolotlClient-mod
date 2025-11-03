@@ -20,15 +20,16 @@
  * For more information, see the LICENSE file.
  */
 
-package io.github.axolotlclient.modules.renderOptions;
+package io.github.axolotlclient.modules.render;
 
-import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.AxolotlClientCommon;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.OptionCategory;
 import io.github.axolotlclient.AxolotlClientConfig.impl.options.BooleanOption;
-import io.github.axolotlclient.modules.AbstractModule;
+import io.github.axolotlclient.bridge.BridgeVersion;
+import io.github.axolotlclient.modules.AbstractCommonModule;
 import lombok.Getter;
 
-public class BeaconBeam extends AbstractModule {
+public class BeaconBeam extends AbstractCommonModule {
 
 	@Getter
 	private final static BeaconBeam Instance = new BeaconBeam();
@@ -40,9 +41,13 @@ public class BeaconBeam extends AbstractModule {
 
 	@Override
 	public void init() {
-		beams.add(showBeaconBeams, showEndGatewayBeams);
+		beams.add(showBeaconBeams);
 
-		AxolotlClient.config().rendering.add(beams);
+		if(!BridgeVersion.V1_8.isCurrent()) {
+			beams.add(showEndGatewayBeams);
+		}
+
+		AxolotlClientCommon.getInstance().getConfig().rendering.add(beams);
 	}
 
 	public boolean showBeam(boolean endGateway) {

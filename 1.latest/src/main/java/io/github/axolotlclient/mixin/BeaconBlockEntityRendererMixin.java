@@ -23,7 +23,7 @@
 package io.github.axolotlclient.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import io.github.axolotlclient.modules.renderOptions.BeaconBeam;
+import io.github.axolotlclient.modules.render.BeaconBeam;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BeaconRenderer;
 import net.minecraft.resources.ResourceLocation;

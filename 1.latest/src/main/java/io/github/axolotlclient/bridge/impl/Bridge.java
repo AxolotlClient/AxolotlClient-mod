@@ -22,6 +22,8 @@
 
 package io.github.axolotlclient.bridge.impl;
 
+import java.util.Objects;
+
 import com.mojang.brigadier.CommandDispatcher;
 import io.github.axolotlclient.bridge.events.Events;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
@@ -41,6 +43,9 @@ public class Bridge {
 		ClientTickEvents.END_CLIENT_TICK.register(minecraft -> Events.TICK.invoker().run());
 		ResourceLoader.get(PackType.CLIENT_RESOURCES).registerReloader(ResourceLocation.fromNamespaceAndPath("axolotlclient", "bridge/resource_listener"),
 			(ResourceManagerReloadListener) resourceManager -> Events.END_RESOURCE_RELOAD.invoker().run());
+
+		ClientPlayConnectionEvents.INIT.register((handler, client) ->
+			Events.BEGIN_JOIN_SERVER.invoker().accept(new Events.ServerJoinInfo(Objects.requireNonNull(handler.getServerData()).ip)));
 		ClientPlayConnectionEvents.JOIN.register((clientPlayNetworkHandler, sender, minecraftClient) -> Events.CONNECTION_PLAY_READY.invoker().run());
 		ClientPlayConnectionEvents.DISCONNECT.register((clientPlayNetworkHandler, minecraftClient) -> Events.DISCONNECT.invoker().run());
 

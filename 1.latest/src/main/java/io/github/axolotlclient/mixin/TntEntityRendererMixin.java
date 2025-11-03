@@ -30,6 +30,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.TntRenderer;
 import net.minecraft.client.renderer.entity.state.TntRenderState;
 import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
@@ -61,7 +62,7 @@ public abstract class TntEntityRendererMixin extends EntityRenderer<PrimedTnt, T
 				poseStack,
 				tntRenderState.nameTagAttachment,
 				0,
-				TntTime.getInstance().getFuseTime(tntRenderState.fuseRemainingInTicks),
+				(Component) TntTime.getInstance().getFuseTime(tntRenderState.fuseRemainingInTicks),
 				!tntRenderState.isDiscrete,
 				tntRenderState.lightCoords,
 				tntRenderState.distanceToCameraSq,

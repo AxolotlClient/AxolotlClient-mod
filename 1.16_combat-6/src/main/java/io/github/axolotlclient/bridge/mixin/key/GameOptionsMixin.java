@@ -22,16 +22,18 @@
 
 package io.github.axolotlclient.bridge.mixin.key;
 
-import io.github.axolotlclient.bridge.key.AxoClientKeybinds;
+import io.github.axolotlclient.bridge.AxoGameOptions;
+import io.github.axolotlclient.bridge.AxoPerspective;
 import io.github.axolotlclient.bridge.key.AxoKeybinding;
 import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.options.KeyBinding;
+import net.minecraft.client.options.Perspective;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(GameOptions.class)
-public abstract class GameOptionsMixin implements AxoClientKeybinds {
+public abstract class GameOptionsMixin implements AxoGameOptions {
 	@Shadow
 	@Final
 	public KeyBinding keyAttack;
@@ -47,6 +49,12 @@ public abstract class GameOptionsMixin implements AxoClientKeybinds {
 	@Shadow
 	@Final
 	public KeyBinding keyUse;
+
+	@Shadow
+	public abstract Perspective getPerspective();
+
+	@Shadow
+	public abstract void method_31043(Perspective par1);
 
 	@Override
 	public AxoKeybinding br$getSprintKeybind() {
@@ -66,5 +74,23 @@ public abstract class GameOptionsMixin implements AxoClientKeybinds {
 	@Override
 	public AxoKeybinding br$getUseKey() {
 		return keyUse;
+	}
+
+	@Override
+	public AxoPerspective br$getCameraType() {
+		return switch (getPerspective()) {
+			case FIRST_PERSON -> AxoPerspective.FIRST_PERSON;
+			case THIRD_PERSON_BACK -> AxoPerspective.THIRD_PERSON_BACK;
+			case THIRD_PERSON_FRONT -> AxoPerspective.THIRD_PERSON_FRONT;
+		};
+	}
+
+	@Override
+	public void br$setCameraType(AxoPerspective perspective) {
+		method_31043(switch (perspective) {
+			case FIRST_PERSON -> Perspective.FIRST_PERSON;
+			case THIRD_PERSON_BACK -> Perspective.THIRD_PERSON_BACK;
+			case THIRD_PERSON_FRONT -> Perspective.THIRD_PERSON_FRONT;
+		});
 	}
 }

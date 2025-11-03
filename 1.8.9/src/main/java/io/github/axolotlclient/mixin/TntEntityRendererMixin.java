@@ -27,6 +27,7 @@ import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.TntRenderer;
 import net.minecraft.entity.PrimedTntEntity;
+import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -42,8 +43,11 @@ public abstract class TntEntityRendererMixin extends EntityRenderer<PrimedTntEnt
 	@Inject(method = "render(Lnet/minecraft/entity/PrimedTntEntity;DDDFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/EntityRenderer;render(Lnet/minecraft/entity/Entity;DDDFF)V"), cancellable = true)
 	public void axolotlclient$render(PrimedTntEntity entity, double x, double y, double z, float g, float h, CallbackInfo ci) {
 		if (TntTime.getInstance().enabled.get()) {
-			super.renderNameTag(entity, TntTime.getInstance().getFuseTime(entity.fuseTimer).getFormattedString(),
-				x, y, z, 64);
+			super.renderNameTag(
+				entity,
+				((Text) TntTime.getInstance().getFuseTime(entity.fuseTimer)).getFormattedString(),
+				x, y, z, 64
+			);
 			ci.cancel();
 		}
 	}

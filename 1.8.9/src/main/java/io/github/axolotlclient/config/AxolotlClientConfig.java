@@ -50,26 +50,11 @@ import net.ornithemc.osl.keybinds.api.KeyBindingEvents;
 import net.ornithemc.osl.lifecycle.api.client.MinecraftClientEvents;
 
 public class AxolotlClientConfig extends AxolotlClientConfigCommon {
-
-	public final BooleanOption showOwnNametag = new BooleanOption("showOwnNametag", false);
-	public final BooleanOption useShadows = new BooleanOption("useShadows", false);
-	public final BooleanOption nametagBackground = new BooleanOption("nametagBackground", true);
-
-	public final BooleanOption showBadges = new BooleanOption("showBadges", true);
-	public final BooleanOption customBadge = new BooleanOption("customBadge", false);
-	public final StringOption badgeText = new StringOption("badgeText", "");
-
-	public final ForceableBooleanOption timeChangerEnabled = new ForceableBooleanOption("enabled", false);
-	public final IntegerOption customTime = new IntegerOption("time", 0, 0, 24000);
 	public final BooleanOption customSky = new BooleanOption("customSky", true);
 	public final IntegerOption cloudHeight = new IntegerOption("cloudHeight", 128, 100, 512);
-	public final BooleanOption dynamicFOV = new BooleanOption("dynamicFov", true);
-	public final ForceableBooleanOption fullBright = new ForceableBooleanOption("fullBright", false);
-	public final BooleanOption removeVignette = new BooleanOption("removeVignette", false);
-	public final ForceableBooleanOption lowFire = new ForceableBooleanOption("lowFire", false);
+
 	public final ColorOption hitColor = new ColorOption("hitColor", new Color(255, 0, 0, 77));
-	public final BooleanOption minimalViewBob = new BooleanOption("minimalViewBob", false);
-	public final BooleanOption noHurtCam = new BooleanOption("noHurtCam", false);
+
 	public final BooleanOption flatItems = new BooleanOption("flatItems", false);
 	public final BooleanOption inventoryPotionEffectOffset = new BooleanOption("inventory.potion_effect_offset", true);
 
@@ -78,56 +63,25 @@ public class AxolotlClientConfig extends AxolotlClientConfigCommon {
 	public final BooleanOption rawMouseInput = new BooleanOption("rawMouseInput", false, v ->
 		WindowAccess.getInstance().setRawMouseMotion(v));
 
-	public final BooleanOption enableCustomOutlines = new BooleanOption("enabled", false);
-	public final ColorOption outlineColor = new ColorOption("color", Color.parse("#DD000000"));
 	public final IntegerOption outlineWidth = new IntegerOption("outlineWidth", 1, 1, 10);
 
-	public final BooleanOption noRain = new BooleanOption("noRain", false);
-
-	public final BooleanOption debugLogOutput = new BooleanOption("debugLogOutput", false);
 	public final GenericOption openCredits = new GenericOption("Credits", "Open Credits",
 		() -> Minecraft.getInstance()
 			.openScreen(new CreditsScreen(Minecraft.getInstance().screen)));
-	public final BooleanOption creditsBGM = new BooleanOption("creditsBGM", true);
-	public final BooleanOption customWindowTitle = new BooleanOption("customWindowTitle", true);
 
 	public final BooleanOption scaleTitles = new BooleanOption("titles.scaling", false);
 	public final IntegerOption titlePadding = new IntegerOption("titles.padding", 4, 1, 10);
 
-	public final OptionCategory general = OptionCategory.create("general");
-	public final OptionCategory nametagOptions = OptionCategory.create("nametagOptions");
-	public final OptionCategory rendering = OptionCategory.create("rendering");
-	public final OptionCategory outlines = OptionCategory.create("blockOutlines");
-	public final OptionCategory timeChanger = OptionCategory.create("timeChanger");
 	public final OptionCategory titles = OptionCategory.create("titles");
 
 	@Getter
 	private final List<Option<?>> options = new ArrayList<>();
 
 	public AxolotlClientConfig() {
-		config.add(general);
-		config.add(nametagOptions);
-		config.add(rendering);
-		config.add(hidden);
-
-		nametagOptions.add(showOwnNametag);
-		nametagOptions.add(useShadows);
-		nametagOptions.add(nametagBackground);
-
-		nametagOptions.add(showBadges);
-		nametagOptions.add(customBadge);
-		nametagOptions.add(badgeText);
-
 		general.add(loadingScreenColor);
 		general.add(nightMode);
-		general.add(customWindowTitle);
 		general.add(rawMouseInput);
 		general.add(openCredits);
-		general.add(debugLogOutput);
-
-		general.add(datetimeFormat);
-		general.add(titleScreenOptionButtonMode);
-		general.add(gameMenuScreenOptionButtonMode);
 
 		ConfigUI.getInstance().runWhenLoaded(() -> {
 			general.getOptions().removeIf(o -> "configStyle".equals(o.getName()));
@@ -152,30 +106,14 @@ public class AxolotlClientConfig extends AxolotlClientConfigCommon {
 
 		rendering.add(customSky,
 			cloudHeight,
-			dynamicFOV,
-			fullBright,
-			removeVignette,
-			lowFire,
 			hitColor,
-			minimalViewBob,
 			flatItems,
-			noHurtCam,
 			inventoryPotionEffectOffset);
 
-		timeChanger.add(timeChangerEnabled);
-		timeChanger.add(customTime);
-		rendering.add(timeChanger);
-
-		outlines.add(enableCustomOutlines);
-		outlines.add(outlineColor);
 		outlines.add(outlineWidth);
-		rendering.add(outlines);
 
-		rendering.add(noRain);
 		titles.add(scaleTitles, titlePadding);
 		rendering.add(titles);
-
-		hidden.add(creditsBGM, someNiceBackground);
 
 		AxolotlClient.getInstance().modules.add(new Module() {
 			@Override

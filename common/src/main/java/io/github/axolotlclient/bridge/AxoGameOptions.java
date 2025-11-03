@@ -20,12 +20,13 @@
  * For more information, see the LICENSE file.
  */
 
-package io.github.axolotlclient.bridge.key;
+package io.github.axolotlclient.bridge;
 
 import io.github.axolotlclient.bridge.internal.BridgeUtil;
 import io.github.axolotlclient.bridge.internal.RequiresImpl;
+import io.github.axolotlclient.bridge.key.AxoKeybinding;
 
-public interface AxoClientKeybinds {
+public interface AxoGameOptions {
 	@RequiresImpl
 	default AxoKeybinding br$getSprintKeybind() {
 		throw BridgeUtil.noImpl();
@@ -43,6 +44,16 @@ public interface AxoClientKeybinds {
 
 	@RequiresImpl
 	default AxoKeybinding br$getUseKey() {
+		throw BridgeUtil.noImpl();
+	}
+
+	@RequiresImpl
+	default AxoPerspective br$getCameraType() {
+		throw BridgeUtil.noImpl();
+	}
+
+	@RequiresImpl
+	default void br$setCameraType(AxoPerspective perspective) {
 		throw BridgeUtil.noImpl();
 	}
 }

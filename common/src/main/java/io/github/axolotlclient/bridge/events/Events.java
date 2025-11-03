@@ -52,6 +52,11 @@ public class Events {
 	public static final EventBus<Runnable> TICK = EventBus.broadcast0();
 	public static final EventBus<Runnable> END_RESOURCE_RELOAD = EventBus.broadcast0();
 	public static final EventBus<Runnable> CONNECTION_PLAY_READY = EventBus.broadcast0();
+
+	public record ServerJoinInfo(@Nullable String address) {
+	}
+
+	public static final EventBus<Consumer<ServerJoinInfo>> BEGIN_JOIN_SERVER = EventBus.broadcast1();
 	public static final EventBus<Runnable> DISCONNECT = EventBus.broadcast0();
 
 	public static final EventBus<Consumer<ReceiveChatMessageEvent>> RECEIVE_CHAT_MESSAGE = EventBus.broadcast1();

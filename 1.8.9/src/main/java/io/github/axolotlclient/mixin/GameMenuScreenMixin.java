@@ -32,7 +32,7 @@ import io.github.axolotlclient.api.FriendsScreen;
 import io.github.axolotlclient.modules.hud.HudEditScreen;
 import io.github.axolotlclient.modules.hypixel.HypixelAbstractionLayer;
 import io.github.axolotlclient.modules.hypixel.HypixelMods;
-import io.github.axolotlclient.util.FeatureDisabler;
+import io.github.axolotlclient.util.FeatureDisablerCommon;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.Screen;
@@ -103,7 +103,7 @@ public abstract class GameMenuScreenMixin extends Screen {
 		if (button.id == 20 && !axolotlclient$hasModMenu()) {
 			minecraft.openScreen(new HudEditScreen(this));
 		} else if (button.id == 1) {
-			FeatureDisabler.clear();
+			FeatureDisablerCommon.getInstance().clear();
 			if (HypixelMods.getInstance().cacheMode.get() != null
 				&& Objects.equals(HypixelMods.getInstance().cacheMode.get(),
 				HypixelMods.HypixelApiCacheMode.ON_CLIENT_DISCONNECT.toString())) {

@@ -24,70 +24,66 @@ package io.github.axolotlclient.modules.tnttime;
 
 import java.text.DecimalFormat;
 
-import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.AxolotlClientCommon;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.OptionCategory;
 import io.github.axolotlclient.AxolotlClientConfig.impl.options.IntegerOption;
-import io.github.axolotlclient.modules.AbstractModule;
+import io.github.axolotlclient.bridge.util.AxoText;
+import io.github.axolotlclient.modules.AbstractCommonModule;
 import io.github.axolotlclient.util.options.ForceableBooleanOption;
 import lombok.Getter;
-import net.minecraft.text.Formatting;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
 
-public class TntTime extends AbstractModule {
-
+public class TntTime extends AbstractCommonModule {
 	@Getter
-	private static final TntTime Instance = new TntTime();
+	private static final TntTime instance = new TntTime();
+
 	public final ForceableBooleanOption enabled = new ForceableBooleanOption("enabled", false);
 	private final OptionCategory category = OptionCategory.create("tnttime");
 	private final IntegerOption decimalPlaces = new IntegerOption("decimalplaces", 2, 0, 6);
-	private DecimalFormat format = new DecimalFormat("##");
+	private DecimalFormat format;
 	private int decimals;
 
 	@Override
 	public void init() {
 		category.add(enabled, decimalPlaces);
-		AxolotlClient.config().rendering.add(category);
+		AxolotlClientCommon.getInstance().getConfig().rendering.add(category);
 	}
 
 	@Override
 	public void tick() {
-		if (decimalPlaces.get() != decimals) {
+		if (decimalPlaces.get() != decimals || format == null) {
 			StringBuilder string = new StringBuilder("#0");
 			if (decimalPlaces.get() > 0) {
 				string.append(".");
-				for (int i = 0; i < decimalPlaces.get(); i++) {
-					string.append("0");
-				}
+				string.append("0".repeat(Math.max(0, decimalPlaces.get())));
 			}
 			format = new DecimalFormat(string.toString());
 			decimals = decimalPlaces.get();
 		}
 	}
 
-	public Text getFuseTime(int time) {
+	public AxoText getFuseTime(float time) {
 		float secs = time / 20F;
-		return new LiteralText(format.format(secs)).copy().setStyle(new Style().setColor(getCurrentColor(secs)));
+		return AxoText.literal(String.valueOf(format.format(secs)))
+			.br$color(getCurrentColor(secs));
 	}
 
-	private Formatting getCurrentColor(float seconds) {
+	private AxoText.Color getCurrentColor(float seconds) {
 		if (seconds > 7d) {
-			return Formatting.DARK_AQUA;
+			return AxoText.Color.DARK_AQUA;
 		} else if (seconds > 6d) {
-			return Formatting.AQUA;
+			return AxoText.Color.AQUA;
 		} else if (seconds > 4d) {
-			return Formatting.DARK_GREEN;
+			return AxoText.Color.DARK_GREEN;
 		} else if (seconds > 3d) {
-			return Formatting.GREEN;
+			return AxoText.Color.GREEN;
 		} else if (seconds > 2d) {
-			return Formatting.GOLD;
+			return AxoText.Color.GOLD;
 		} else if (seconds > 1d) {
-			return Formatting.RED;
+			return AxoText.Color.RED;
 		} else if (seconds > 0d) {
-			return Formatting.DARK_RED;
+			return AxoText.Color.DARK_RED;
 		} else {
-			return Formatting.WHITE;
+			return AxoText.Color.WHITE;
 		}
 	}
 }

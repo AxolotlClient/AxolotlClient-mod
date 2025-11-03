@@ -25,43 +25,39 @@ package io.github.axolotlclient.modules.freelook;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-import com.mojang.blaze3d.platform.InputConstants;
-import io.github.axolotlclient.AxolotlClient;
+import io.github.axolotlclient.AxolotlClientCommon;
 import io.github.axolotlclient.AxolotlClientConfig.api.options.OptionCategory;
 import io.github.axolotlclient.AxolotlClientConfig.impl.options.BooleanOption;
 import io.github.axolotlclient.AxolotlClientConfig.impl.options.EnumOption;
 import io.github.axolotlclient.AxolotlClientConfig.impl.options.StringArrayOption;
-import io.github.axolotlclient.modules.AbstractModule;
-import io.github.axolotlclient.util.FeatureDisabler;
-import io.github.axolotlclient.util.keybinds.KeyBinds;
+import io.github.axolotlclient.bridge.AxoPerspective;
+import io.github.axolotlclient.bridge.entity.AxoEntity;
+import io.github.axolotlclient.bridge.key.AxoKeybinding;
+import io.github.axolotlclient.bridge.key.AxoKeys;
+import io.github.axolotlclient.modules.AbstractCommonModule;
+import io.github.axolotlclient.util.FeatureDisablerCommon;
 import io.github.axolotlclient.util.options.ForceableBooleanOption;
-import net.minecraft.client.CameraType;
-import net.minecraft.client.KeyMapping;
-import net.minecraft.client.Minecraft;
-import net.minecraft.world.entity.Entity;
 
-public class Freelook extends AbstractModule {
-
+public class Freelook extends AbstractCommonModule {
 	private static final Freelook INSTANCE = new Freelook();
-	private static final KeyMapping KEY = KeyBinds.getInstance().register(new KeyMapping("key.freelook", InputConstants.KEY_V, KeyBinds.CATEGORY_AXOLOTLCLIENT));
-	private static final KeyMapping KEY_ALT = KeyBinds.getInstance().register(new KeyMapping("key.freelook.alt", InputConstants.UNKNOWN.getValue(), KeyBinds.CATEGORY_AXOLOTLCLIENT));
+	private static final AxoKeybinding KEY = AxoKeybinding.create(AxoKeys.KEY_V, "key.freelook");
+	private static final AxoKeybinding KEY_ALT = AxoKeybinding.create(null, "key.freelook.alt");
 	public final ForceableBooleanOption enabled = new ForceableBooleanOption("enabled", false);
-	private final Minecraft client = Minecraft.getInstance();
 	private final OptionCategory category = OptionCategory.create("freelook");
 	private final StringArrayOption mode =
-		new StringArrayOption("mode", new String[]{"snap_perspective", "freelook"}, "freelook",
-			value -> FeatureDisabler.update()
+		new StringArrayOption("mode", new String[]{"snap_AxoPerspective", "freelook"}, "freelook",
+			value -> FeatureDisablerCommon.getInstance().update()
 		);
 	private final BooleanOption invert = new BooleanOption("invert", false);
-	private final EnumOption<CameraType> perspective =
-		new EnumOption<>("perspective", CameraType.class, CameraType.THIRD_PERSON_BACK);
+	private final EnumOption<AxoPerspective> perspective =
+		new EnumOption<>("AxoPerspective", AxoPerspective.class, AxoPerspective.THIRD_PERSON_BACK);
 	private final BooleanOption toggle = new BooleanOption("toggle", "freelook.toggle.tooltip", false);
-	private final EnumOption<CameraType> perspectiveAlt = new EnumOption<>("perspective.alt", CameraType.class,
-		CameraType.THIRD_PERSON_FRONT);
+	private final EnumOption<AxoPerspective> AxoPerspectiveAlt = new EnumOption<>("AxoPerspective.alt", AxoPerspective.class,
+		AxoPerspective.THIRD_PERSON_FRONT);
 	private final BooleanOption toggleAlt = new BooleanOption("toggle.alt", false);
 	private final WrappedValue active = new WrappedValue(), activeAlt = new WrappedValue();
 	private float yaw, pitch;
-	private final Deque<CameraType> previousPerspectives = new ArrayDeque<>();
+	private final Deque<AxoPerspective> previousAxoPerspectives = new ArrayDeque<>();
 
 	public static Freelook getInstance() {
 		return INSTANCE;
@@ -70,20 +66,20 @@ public class Freelook extends AbstractModule {
 	@Override
 	public void init() {
 		category.add(enabled, mode, perspective, invert, toggle);
-		category.add(perspectiveAlt, toggleAlt);
-		AxolotlClient.config().addCategory(category);
+		category.add(AxoPerspectiveAlt, toggleAlt);
+		AxolotlClientCommon.getInstance().getConfig().addCategory(category);
 	}
 
 	@Override
 	public void tick() {
-		if (!enabled.get() || client.screen != null) return;
+		if (!enabled.get() || client.br$getScreen() != null) return;
 		tickSet(toggle, KEY, perspective, active);
-		tickSet(toggleAlt, KEY_ALT, perspectiveAlt, activeAlt);
+		tickSet(toggleAlt, KEY_ALT, AxoPerspectiveAlt, activeAlt);
 	}
 
-	private void tickSet(BooleanOption toggle, KeyMapping key, EnumOption<CameraType> perspective, WrappedValue active) {
+	private void tickSet(BooleanOption toggle, AxoKeybinding key, EnumOption<AxoPerspective> perspective, WrappedValue active) {
 		if (toggle.get()) {
-			if (key.consumeClick()) {
+			if (key.br$consumeClick()) {
 				if (active.val) {
 					stop(active);
 				} else {
@@ -91,7 +87,7 @@ public class Freelook extends AbstractModule {
 				}
 			}
 		} else {
-			if (key.isDown()) {
+			if (key.br$isPressed()) {
 				if (!active.val) {
 					start(perspective.get(), active);
 				}
@@ -103,35 +99,36 @@ public class Freelook extends AbstractModule {
 
 	private void stop(WrappedValue active) {
 		active.val = false;
-		client.levelRenderer.needsUpdate();
-		setPerspective(previousPerspectives.pop());
+		client.br$notifyLevelRenderer();
+		setAxoPerspective(previousAxoPerspectives.pop());
 	}
 
-	private void start(CameraType perspective, WrappedValue active) {
-		previousPerspectives.push(client.options.getCameraType());
+	private void start(AxoPerspective AxoPerspective, WrappedValue active) {
+		previousAxoPerspectives.push(client.br$getGameOptions().br$getCameraType());
 		active.val = true;
-		setPerspective(perspective);
+		setAxoPerspective(AxoPerspective);
 
-		Entity camera = client.getCameraEntity();
+		AxoEntity camera = client.br$getCameraEntity();
 
-		if (camera == null) camera = client.player;
+		if (camera == null) camera = client.br$getPlayer();
 		if (camera == null) return;
 
-		yaw = camera.getYRot();
-		pitch = camera.getXRot();
+		yaw = camera.br$getYaw();
+		pitch = camera.br$getPitch();
 	}
 
-	private void setPerspective(CameraType perspective) {
-		Minecraft.getInstance().options.setCameraType(perspective);
+	private void setAxoPerspective(AxoPerspective AxoPerspective) {
+		client.br$getGameOptions().br$setCameraType(AxoPerspective);
 	}
 
 	public boolean consumeRotation(double dx, double dy) {
 		if (!(active.val || activeAlt.val) || !enabled.get() || !mode.get().equals("freelook")) return false;
 
 		if (!invert.get()) dy = -dy;
-
-		if (Minecraft.getInstance().options.getCameraType().isMirrored() ||
-			Minecraft.getInstance().options.getCameraType().isFirstPerson()) dy *= -1;
+		if (client.br$getGameOptions().br$getCameraType().isMirrored() ||
+			client.br$getGameOptions().br$getCameraType().isFirstPerson()) {
+			dy *= -1;
+		}
 
 		yaw += (float) (dx * 0.15F);
 		pitch += (float) (dy * 0.15F);
@@ -142,7 +139,7 @@ public class Freelook extends AbstractModule {
 			pitch = -90;
 		}
 
-		client.levelRenderer.needsUpdate();
+		client.br$notifyLevelRenderer();
 		return true;
 	}
 

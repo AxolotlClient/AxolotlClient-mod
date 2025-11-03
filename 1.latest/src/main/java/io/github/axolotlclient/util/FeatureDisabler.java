@@ -22,73 +22,37 @@
 
 package io.github.axolotlclient.util;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.function.Supplier;
 
 import com.mojang.serialization.Codec;
 import io.github.axolotlclient.AxolotlClient;
-import io.github.axolotlclient.modules.freelook.Freelook;
-import io.github.axolotlclient.modules.hud.HudManager;
-import io.github.axolotlclient.modules.hud.gui.hud.simple.ReachHud;
-import io.github.axolotlclient.modules.hud.gui.hud.simple.ToggleSprintHud;
-import io.github.axolotlclient.modules.tnttime.TntTime;
 import io.github.axolotlclient.util.options.ForceableBooleanOption;
 import io.netty.buffer.ByteBuf;
+import lombok.Getter;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
-import net.minecraft.Util;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
-public class FeatureDisabler {
+public class FeatureDisabler extends FeatureDisablerCommon {
+	@Getter
+	private static final FeatureDisablerCommon instance = new FeatureDisabler();
 
-	private static final HashMap<ForceableBooleanOption, String[]> disabledServers = new HashMap<>();
-	private static final HashMap<ForceableBooleanOption, Supplier<Boolean>> conditions = new HashMap<>();
+	private static final CustomPacketPayload.Type<FeaturePayload> CHANNEL_ID =
+		new CustomPacketPayload.Type<>((ResourceLocation) CHANNEL_NAME);
 
-	private static final Supplier<Boolean> NONE = () -> true;
-	private static final CustomPacketPayload.Type<FeaturePayload> channelId =
-		new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath("axolotlclient", "block_mods"));
-	// Features that can be disabled on the server's behalf
-	// If something should be added here, feel free to ping us via your favorite way.
-	private static final HashMap<String, ForceableBooleanOption> features = Util.make(() -> {
-		HashMap<String, ForceableBooleanOption> features = new HashMap<>();
-		features.put("freelook", Freelook.getInstance().enabled);
-		features.put("timechanger", AxolotlClient.config().timeChangerEnabled);
-		features.put("lowfire", AxolotlClient.config().lowFire);
-		features.put("fullbright", AxolotlClient.config().fullBright);
-		return features;
-	});
-	private static String currentAddress = "";
-
-	public static void init() {
-		setServers(AxolotlClient.config().fullBright, NONE, "gommehd");
-		setServers(AxolotlClient.config().lowFire, NONE, "gommehd");
-		setServers(Freelook.getInstance().enabled, () -> Freelook.getInstance().needsDisabling(), "hypixel", "mineplex",
-			"gommehd", "nucleoid", "mccisland"
-		);
-		setServers(((ToggleSprintHud) HudManager.getInstance().get(ToggleSprintHud.ID)).toggleSneak, NONE, "hypixel");
-		setServers(((ReachHud) HudManager.getInstance().get(ReachHud.ID)).getEnabled(), NONE, "mccisland");
-		setServers(TntTime.getInstance().enabled, NONE, "mccisland");
-
-		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
-			if (handler.getServerData() != null) {
-				onServerJoin(Objects.requireNonNull(handler.getServerData()).ip);
-			}
-		});
-		ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> clear());
-
-		PayloadTypeRegistry.playS2C().register(channelId, FeaturePayload.CODEC);
+	@Override
+	protected void registerChannel() {
+		PayloadTypeRegistry.playS2C().register(CHANNEL_ID, FeaturePayload.CODEC);
 		ClientPlayConnectionEvents.INIT.register((handler0, client0) -> {
-			ClientPlayNetworking.registerGlobalReceiver(channelId, (payload, ctx) -> {
+			ClientPlayNetworking.registerGlobalReceiver(CHANNEL_ID, (payload, ctx) -> {
 				for (String feature : payload.features) {
 					try {
-						ForceableBooleanOption e = features.get(feature);
+						ForceableBooleanOption e = FEATURES.get(feature);
 						e.setForceOff(true, "ban_reason");
 					} catch (Exception e) {
 						AxolotlClient.LOGGER.error("Failed to disable " + feature + "!");
@@ -98,46 +62,13 @@ public class FeatureDisabler {
 		});
 	}
 
-	private static void setServers(ForceableBooleanOption option, Supplier<Boolean> condition, String... servers) {
-		disabledServers.put(option, servers);
-		conditions.put(option, condition);
-	}
-
-	public static void onServerJoin(String address) {
-		currentAddress = address;
-		update();
-	}
-
-	public static void clear() {
-		disabledServers.keySet().forEach(option -> option.setForceOff(false, ""));
-		features.values().forEach(option -> option.setForceOff(false, ""));
-	}
-
-	public static void update() {
-		disabledServers.forEach((option, strings) -> disableOption(option, strings, currentAddress));
-	}
-
-	private static void disableOption(ForceableBooleanOption option, String[] servers, String currentServer) {
-		boolean ban = false;
-		for (String s : servers) {
-			if (currentServer.toLowerCase(Locale.ROOT).contains(s.toLowerCase(Locale.ROOT))) {
-				ban = conditions.get(option).get();
-				break;
-			}
-		}
-
-		if (option.isForceOff() != ban) {
-			option.setForceOff(ban, "ban_reason");
-		}
-	}
-
 	private record FeaturePayload(List<String> features) implements CustomPacketPayload {
 		public static final StreamCodec<ByteBuf, FeaturePayload> CODEC =
 			ByteBufCodecs.fromCodec(Codec.STRING.listOf().xmap(FeaturePayload::new, FeaturePayload::features));
 
 		@Override
-		public Type<? extends CustomPacketPayload> type() {
-			return channelId;
+		public @NotNull Type<? extends CustomPacketPayload> type() {
+			return CHANNEL_ID;
 		}
 	}
 }

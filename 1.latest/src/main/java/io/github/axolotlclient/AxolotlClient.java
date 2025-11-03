@@ -30,18 +30,15 @@ import io.github.axolotlclient.api.StatusUpdateProviderImpl;
 import io.github.axolotlclient.bridge.impl.Bridge;
 import io.github.axolotlclient.modules.ModuleLoader;
 import io.github.axolotlclient.modules.auth.Auth;
-import io.github.axolotlclient.modules.freelook.Freelook;
 import io.github.axolotlclient.modules.hud.HudManager;
 import io.github.axolotlclient.modules.hypixel.HypixelMods;
 import io.github.axolotlclient.modules.particles.Particles;
-import io.github.axolotlclient.modules.renderOptions.BeaconBeam;
-import io.github.axolotlclient.modules.rpc.DiscordRPC;
 import io.github.axolotlclient.modules.screenshotUtils.ScreenshotUtils;
 import io.github.axolotlclient.modules.scrollableTooltips.ScrollableTooltips;
 import io.github.axolotlclient.modules.tablist.Tablist;
-import io.github.axolotlclient.modules.tnttime.TntTime;
 import io.github.axolotlclient.modules.zoom.Zoom;
 import io.github.axolotlclient.util.FeatureDisabler;
+import io.github.axolotlclient.util.FeatureDisablerCommon;
 import io.github.axolotlclient.util.Logger;
 import io.github.axolotlclient.util.LoggerImpl;
 import io.github.axolotlclient.util.notifications.Notifications;
@@ -61,12 +58,8 @@ public class AxolotlClient extends AxolotlClientCommon implements ClientModIniti
 		registerModule(HypixelMods.getInstance());
 		//registerModule(MotionBlur.getInstance()); // TODO this is broken since 1.21.2
 		registerModule(ScrollableTooltips.getInstance());
-		registerModule(DiscordRPC.getInstance());
-		registerModule(Freelook.getInstance());
-		registerModule(TntTime.getInstance());
 		registerModule(Particles.getInstance());
 		registerModule(ScreenshotUtils.getInstance());
-		registerModule(BeaconBeam.getInstance());
 		registerModule(Tablist.getInstance());
 		registerModule(Auth.getInstance());
 		registerModule(APIOptions.getInstance());
@@ -91,8 +84,8 @@ public class AxolotlClient extends AxolotlClientCommon implements ClientModIniti
 	}
 
 	@Override
-	protected void initFeatureDisabler() {
-		FeatureDisabler.init();
+	protected FeatureDisablerCommon getFeatureDisabler() {
+		return FeatureDisabler.getInstance();
 	}
 
 	@Override

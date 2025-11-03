@@ -22,7 +22,8 @@
 
 package io.github.axolotlclient.bridge.mixin.key;
 
-import io.github.axolotlclient.bridge.key.AxoClientKeybinds;
+import io.github.axolotlclient.bridge.AxoGameOptions;
+import io.github.axolotlclient.bridge.AxoPerspective;
 import io.github.axolotlclient.bridge.key.AxoKeybinding;
 import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.options.KeyBinding;
@@ -30,7 +31,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(GameOptions.class)
-public abstract class GameOptionsMixin implements AxoClientKeybinds {
+public abstract class GameOptionsMixin implements AxoGameOptions {
 	@Shadow
 	public KeyBinding sprintKey;
 
@@ -42,6 +43,9 @@ public abstract class GameOptionsMixin implements AxoClientKeybinds {
 
 	@Shadow
 	public KeyBinding useKey;
+
+	@Shadow
+	public int perspective;
 
 	@Override
 	public AxoKeybinding br$getSprintKeybind() {
@@ -61,5 +65,15 @@ public abstract class GameOptionsMixin implements AxoClientKeybinds {
 	@Override
 	public AxoKeybinding br$getUseKey() {
 		return useKey;
+	}
+
+	@Override
+	public AxoPerspective br$getCameraType() {
+		return AxoPerspective.values()[perspective];
+	}
+
+	@Override
+	public void br$setCameraType(AxoPerspective perspective) {
+		this.perspective = perspective.ordinal();
 	}
 }

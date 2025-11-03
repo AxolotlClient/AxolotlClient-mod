@@ -43,9 +43,9 @@ public class ClickInputTracker extends AbstractCommonModule {
 	@Override
 	public void init() {
 		Events.KEY_INPUT.register(key -> {
-			if (key.equals(client.br$getKeybinds().br$getAttackKey().br$getBoundKey())) {
+			if (key.equals(client.br$getGameOptions().br$getAttackKey().br$getBoundKey())) {
 				leftBind.click();
-			} else if (key.equals(client.br$getKeybinds().br$getUseKey().br$getBoundKey())) {
+			} else if (key.equals(client.br$getGameOptions().br$getUseKey().br$getBoundKey())) {
 				rightBind.click();
 			}
 
