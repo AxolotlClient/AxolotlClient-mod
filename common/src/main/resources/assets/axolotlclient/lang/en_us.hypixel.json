@@ -1,3 +1,0 @@
-{
-	"lobby_join": "^.*§f §6(?:joined|slid into) the lobby!(?: §a<§c<§b<)?$"
-}
